@@ -276,7 +276,7 @@ const Search: React.FC = () => {
                                 <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
                                               type="text" value={searchText} onIonChange={e => {
                                     setSearchText(e.detail.value!)
-                                }} animated placeholder="Add text to search" disabled={isLoading}/>
+                                }} animated placeholder="Type to search" disabled={isLoading}/>
                                 <div className="xs:flex items-center px-2 rounded-lg space-x-4 mx-auto ">
                                     <IonButton className=" text-white text-base rounded-lg" onClick={onClick}
                                                animate-bounce disabled={searchText === ''}>
@@ -294,39 +294,39 @@ const Search: React.FC = () => {
                             note that heights of the chart are hardcoded below, while heights of the message list is on the Display.jsx.getMessageListHeight() */}
                         {!isLoading && foundResults && width > 1536 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(50)} total={total} totalCountHeight={18} showPie={false}
+                                     height={Number(35)} total={total} totalCountHeight={18} showPie={false}
                                      width={width}></Display>
-                            // height={Number(10 + 65)}
+                            // height={Number(10 + 65)}   75
                         )}
                         {!isLoading && foundResults && width <= 1536 && width > 1280 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(50)} total={total} totalCountHeight={22} showPie={false}
+                                     height={Number(45)} total={total} totalCountHeight={22} showPie={false}
                                      width={width}></Display>
-                            // height={Number(75 + 10)}
+                            // height={Number(75 + 10)} 85
                         )}
                         {!isLoading && foundResults && width <= 1280 && width > 1024 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(50)} total={total} totalCountHeight={25} showPie={false}
+                                     height={Number(55)} total={total} totalCountHeight={25} showPie={false}
                                      width={width}></Display>
-                            // height={Number(5 + 100)}
+                            // height={Number(5 + 100)}     105
                         )}
                         {!isLoading && foundResults && width <= 1024 && width > 768 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(50)} total={total} totalCountHeight={28} showPie={false}
+                                     height={Number(65)} total={total} totalCountHeight={28} showPie={false}
                                      width={width}></Display>
-                            // height={Number(5 + 100)}
+                            // height={Number(5 + 100)}     105
                         )}
                         {!isLoading && foundResults && width <= 768 && width > 640 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(50)} total={total} totalCountHeight={35} showPie={false}
+                                     height={Number(230)} total={total} totalCountHeight={35} showPie={false}
                                      width={width}></Display>
-                            // height={Number(5 + 225)}
+                            // height={Number(5 + 225)}     230
                         )}
                         {!isLoading && foundResults && width <= 640 && (
                             <MobileDisplay chartData={chartData} doughnutData={doughnutData} position='right'
-                                           height={Number(50)} total={total} totalCountHeight={30} showPie={false}
+                                           height={Number(310)} total={total} totalCountHeight={30} showPie={false}
                                            width={width}></MobileDisplay>
-                            // height={Number(30 + 275)}
+                            // height={Number(30 + 275)}       310
                         )}
 
                         {/* error bar */}

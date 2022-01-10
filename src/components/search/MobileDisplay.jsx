@@ -20,8 +20,9 @@ import {
 } from 'chart.js';
 import './MobileDisplay.css';
 
-ChartJS.register(...registerables);
+// NOTE: any changes made here must be made in both Display.jsx & MobileDisplay.jsx!
 
+ChartJS.register(...registerables);
 ChartJS.register(
     ArcElement,
     LinearScale,
@@ -45,10 +46,15 @@ interface DisplayProps {
 defaults.color = '#FFFFFF';
 const MobileDisplay = ({chartData, height, doughnutData, position, total, totalCountHeight, showPie}) => {
     const {messages, word} = useContext(MessageContext);
-    console.log({messages});
+
+    // console.log({messages});
+
+    // not sure why we have showPie & showDoughnut
     const [doughnutHeight, setDoughnutHeight] = React.useState(0);
+
     const [showBar, setShowBar] = React.useState(!showPie);
     const [showDoughnut, setShowDoughnut] = React.useState(showPie);
+
     const ref = useRef();
     window.onresize = () => {
         updateSize();
@@ -74,6 +80,7 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
         <IonGrid>
             <IonRow>
 
+                {/* bar & line chart */}
                 {showBar && <IonCol size="12">
                     <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
                         <Chart type='bar' data={chartData} height={Number(height - totalCountHeight)} options={{
@@ -107,10 +114,10 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
                         }}/>
                     </div>
 
-
                 </IonCol>}
             </IonRow>
 
+            {/* pie chart */}
             {showDoughnut &&
                 <IonRow>
                     <IonCol size="12">
@@ -154,6 +161,8 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
             }
 
             <IonRow>
+
+                {/* pie chart */}
                 {showPie && <IonCol size="12">
                     <div className="flex items-center justify-center w-full pt-3">
 
@@ -173,6 +182,8 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
 
                     </div>
                 </IonCol>}
+
+                {/* list of messages */}
                 <IonCol>
                     <div
                         className="overflow-y-scroll shadow-lg  bg-cbg rounded-l flex flex-col divide-y divide-gray-400"
@@ -185,6 +196,7 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
                         </div>
                     </div>
                 </IonCol>
+
             </IonRow>
         </IonGrid>
     );

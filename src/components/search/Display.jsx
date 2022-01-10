@@ -19,6 +19,8 @@ import {
     defaults,
 } from 'chart.js';
 
+// NOTE: any changes made here must be made in both Display.jsx & MobileDisplay.jsx!
+
 ChartJS.register(...registerables);
 ChartJS.register(
     ArcElement,
@@ -35,12 +37,8 @@ interface DisplayProps {
     chartData: any;
     height: number;
     doughnutData:any,
-        position
-:
-    string,
-        total
-:
-    number;
+    position: string,
+    total: number;
     totalCountHeight: number;
     showPie: boolean;
     width: number;
@@ -53,7 +51,9 @@ const Display = ({chartData, height, doughnutData, position, total, totalCountHe
 
     const {messages, word} = useContext(MessageContext);
     // console.log({messages});
+
     const [doughnutHeight, setDoughnutHeight] = React.useState(0);
+
     const ref = useRef();
     window.onresize = () => {
         updateSize();
@@ -68,10 +68,10 @@ const Display = ({chartData, height, doughnutData, position, total, totalCountHe
         }, 100);
     }
 
-    // TODO: how to have this fill the screen better?
-    // get the height of the
+    // TODO: how to have this fill the screen better? if user has a small vertical window, they will have two scrollbars to see all messages
+    // get the height of the message list
     function getMessageListHeight() {
-        return 600;
+        return 640;
         // return height * 4;
     }
 
