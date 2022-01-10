@@ -1,5 +1,5 @@
 import {IonCol, IonGrid, IonRow} from "@ionic/react";
-import {MessageContext} from "../context/context";
+import {MessageContext} from "../../context/context";
 import {useContext} from 'react';
 import MessageListItem from "./MessageListItem";
 import React, {useEffect, useRef} from "react";
@@ -33,7 +33,6 @@ ChartJS.register(
     Tooltip
 );
 
-
 interface DisplayProps {
     chartData: any;
     height: number;
@@ -65,9 +64,8 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
     }
 
     useEffect(() => {
-        console.log("Display");
-        console.log(defaults);
-
+        // console.log("Display");
+        // console.log(defaults);
 
         updateSize();
 

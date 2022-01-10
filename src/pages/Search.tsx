@@ -1,5 +1,5 @@
-import Loader from '../components/Loader';
-import Display from '../components/Display';
+import Loader from '../components/search/Loader';
+import Display from '../components/search/Display';
 import {useState, useEffect, useContext} from 'react';
 import {Message} from '../data/messages';
 import {
@@ -12,7 +12,7 @@ import './Search.css';
 import faker from 'faker';
 import {setTimeout} from 'timers';
 import {MessageContext} from '../context/context';
-import MobileDisplay from '../components/MobileDisplay';
+import MobileDisplay from '../components/search/MobileDisplay';
 import {environment} from "../environments/environment";
 
 const Search: React.FC = () => {
@@ -25,7 +25,7 @@ const Search: React.FC = () => {
     const [width, setWidth] = useState(window.innerWidth);
     window.onresize = () => {
         setWidth(window.innerWidth);
-        console.log(window.innerWidth);
+        // console.log(window.innerWidth);
     };
 
     function re() {
@@ -290,39 +290,43 @@ const Search: React.FC = () => {
                             <Loader></Loader>
                         </div>)}
 
-                        {/* results, based on screen width */}
+                        {/* chart / search results, based on screen width
+                            note that heights of the chart are hardcoded below, while heights of the message list is on the Display.jsx.getMessageListHeight() */}
                         {!isLoading && foundResults && width > 1536 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(10 + 65)} total={total} totalCountHeight={18} showPie={false}
+                                     height={Number(50)} total={total} totalCountHeight={18} showPie={false}
                                      width={width}></Display>
+                            // height={Number(10 + 65)}
                         )}
                         {!isLoading && foundResults && width <= 1536 && width > 1280 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(75 + 10)} total={total} totalCountHeight={22} showPie={false}
+                                     height={Number(50)} total={total} totalCountHeight={22} showPie={false}
                                      width={width}></Display>
+                            // height={Number(75 + 10)}
                         )}
                         {!isLoading && foundResults && width <= 1280 && width > 1024 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(5 + 100)} total={total} totalCountHeight={25} showPie={false}
+                                     height={Number(50)} total={total} totalCountHeight={25} showPie={false}
                                      width={width}></Display>
-
+                            // height={Number(5 + 100)}
                         )}
                         {!isLoading && foundResults && width <= 1024 && width > 768 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(5 + 100)} total={total} totalCountHeight={28} showPie={false}
+                                     height={Number(50)} total={total} totalCountHeight={28} showPie={false}
                                      width={width}></Display>
-
+                            // height={Number(5 + 100)}
                         )}
                         {!isLoading && foundResults && width <= 768 && width > 640 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(5 + 225)} total={total} totalCountHeight={35} showPie={false}
+                                     height={Number(50)} total={total} totalCountHeight={35} showPie={false}
                                      width={width}></Display>
-
+                            // height={Number(5 + 225)}
                         )}
                         {!isLoading && foundResults && width <= 640 && (
                             <MobileDisplay chartData={chartData} doughnutData={doughnutData} position='right'
-                                           height={Number(30 + 275)} total={total} totalCountHeight={30} showPie={false}
+                                           height={Number(50)} total={total} totalCountHeight={30} showPie={false}
                                            width={width}></MobileDisplay>
+                            // height={Number(30 + 275)}
                         )}
 
                         {/* error bar */}
