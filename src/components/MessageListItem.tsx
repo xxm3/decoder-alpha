@@ -11,10 +11,12 @@ interface MessageListItemProps {
 const MessageListItem: React.FC<MessageListItemProps> = ({message, idx, word}) => {
     const [msgArr, setMsgArr] = useState<string[]>();
     useEffect(() => {
-        console.log(`MessageListItem ${JSON.stringify(message)} rendered`);
+        // console.log(`MessageListItem ${JSON.stringify(message)} rendered`);
+
         const msg = message;
         setMsgArr(msg.message.split(word));
     }, []);
+
     // let msg=message.message;
     // let msgArr2=msg.toLowerCase().split(word);
     // let stringBefore;
@@ -42,31 +44,6 @@ const MessageListItem: React.FC<MessageListItemProps> = ({message, idx, word}) =
             {/* </Link> */}
         </div>
 
-
-        // <div className={`flex items-center gap-4 p-4 ${idx%2?'bg-cbmd hover:bg-cb':'bg-cbgld hover:bg-cb'}`}>
-        //     <div className="flex flex-col">
-        //     <a href={`/message/${message.id}`}>
-        //       <strong className="text-white text-sm font-medium">{message.message.substring(0,100)}</strong>
-        //     </a>
-        //     </div>
-        // </div>
-
-
-        //     <IonItem routerLink={`/message/${message.id}`} detail={false}>
-        //   {/* <div slot="start" className="dot dot-unread"></div>
-        //   <IonLabel className="ion-text-wrap">
-        //     <h2>
-        //       {message.fromName}
-        //       <span className="date">
-        //         <IonNote>{message.date}</IonNote>
-        //       </span>
-        //     </h2>
-        //     <h3>{message.subject}</h3>
-        //     <p>
-        //       Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        //     </p>
-        //   </IonLabel> */}
-        // </IonItem>
     );
 };
 

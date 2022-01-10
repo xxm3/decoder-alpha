@@ -25,6 +25,7 @@ const Search: React.FC = () => {
     const [width, setWidth] = useState(window.innerWidth);
     window.onresize = () => {
         setWidth(window.innerWidth);
+        console.log(window.innerWidth);
     };
 
     function re() {
@@ -130,7 +131,7 @@ const Search: React.FC = () => {
                 })
             });
             let fetchedData = await res.json().then(data => {
-                console.log(data);
+                // console.log(data);
 
                 return data;
             });
@@ -211,7 +212,9 @@ const Search: React.FC = () => {
                     time: msg.time,
                 };
             });
-            console.log(messages);
+
+            // console.log(messages);
+
             setShowHelp(false);
             setTimeout(() => {
                 setFoundResults(true);
@@ -231,19 +234,21 @@ const Search: React.FC = () => {
                 setIsLoading(false)
             }, 2000);
         } catch (e) {
-            console.log(e);
+            console.error(e);
+
             setIsLoading(false);
             setError(String(e.body));
             setFoundResults(false);
         }
     }
     useEffect(() => {
-        console.log("Inside useEffect");
-        console.log(error);
+        // console.log("Inside useEffect");
+        // console.log(error);
     }, [error]);
     useEffect(() => {
-        console.log(error);
-        console.log({messages});
+        // console.log(error);
+        // console.log({messages});
+
         window.addEventListener('resize', re);
         return () => window.removeEventListener('resize', re);
     }, []);
@@ -251,29 +256,41 @@ const Search: React.FC = () => {
     return (
 
         <IonPage id="home-page">
+
             <IonContent fullscreen>
+
                 <div className="min-h-screen font-sans  bg-gradient-to-b from-tp to-tg flex justify-center items-center p-4 pt-2">
+
                     <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+
+                        {/* search bar / form */}
                         <form onSubmit={(e) => onClick(e)}>
-                            {(!foundResults || isLoading) && (<><h1
-                                className="text-center font-bold text-white text-4xl">{isLoading ?
-                                <p>Searching for <b className="text-cb">{searchText}</b></p> : 'Search for a word'}</h1>
-                                <p className="mx-auto font-normal text-center text-sm my-6 max-w-lg">This app will last 10 days count and last 100 messages.</p></>)}
-                            <div
-                                className="xs:flex items-center bg-cbgd rounded-lg overflow-hidden px-2 py-1 justify-between">
+                            {(!foundResults || isLoading) && (<>
+                                <h1 className="text-center font-bold text-white text-4xl">{isLoading ?
+                                    <p>Searching for <b className="text-cb">{searchText}</b></p> : 'Search:'}
+                                </h1>
+                                {/*<p className="mx-auto font-normal text-center text-sm my-6 max-w-lg">This app will last 10 days count and last 100 messages.</p>*/}
+                                </>
+                            )}
+                            <div className="xs:flex items-center bg-cbgd rounded-lg overflow-hidden px-2 py-1 justify-between">
                                 <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
                                               type="text" value={searchText} onIonChange={e => {
                                     setSearchText(e.detail.value!)
                                 }} animated placeholder="Add text to search" disabled={isLoading}/>
                                 <div className="xs:flex items-center px-2 rounded-lg space-x-4 mx-auto ">
-                                    <IonButton className=" text-white text-base rounded-lg font-thin" onClick={onClick}
-                                               animate-bounce disabled={searchText === ''}>Search</IonButton>
+                                    <IonButton className=" text-white text-base rounded-lg" onClick={onClick}
+                                               animate-bounce disabled={searchText === ''}>
+                                        Search</IonButton>
                                 </div>
                             </div>
                         </form>
+
+                        {/* loading bar */}
                         {isLoading && (<div className="pt-10 flex justify-center items-center">
                             <Loader></Loader>
                         </div>)}
+
+                        {/* results, based on screen width */}
                         {!isLoading && foundResults && width > 1536 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
                                      height={Number(10 + 65)} total={total} totalCountHeight={18} showPie={false}
@@ -307,6 +324,8 @@ const Search: React.FC = () => {
                                            height={Number(30 + 275)} total={total} totalCountHeight={30} showPie={false}
                                            width={width}></MobileDisplay>
                         )}
+
+                        {/* error bar */}
                         {!isLoading && !foundResults && error !== '' && (
                             <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                                 <p className="text-lg text-red-700 font-medium"><b>{error}</b></p>

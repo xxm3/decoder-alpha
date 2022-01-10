@@ -31,7 +31,6 @@ ChartJS.register(
     Tooltip
   );
 
-// @ts-ignore
 interface DisplayProps {
     chartData: any;
     height: number;
@@ -71,48 +70,39 @@ const Display = ({chartData, height,doughnutData,position, total, totalCountHeig
     return (
         <IonGrid >
             <IonRow>
-                <IonCol size="12">
-                {/* <div className="relative bg-cbg p-6 rounded-xl">
-                    <p className="text-lg text-white">Total count of <b className="text-cb">{word}</b> is <b className="text-cb">{total}</b> </p>
-                    <span className="absolute bg-green-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">{total}</span>
-                    <div className="absolute top-0 right-0 flex space-x-2 p-4">
+                <IonCol size="12" >
+                    <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
+                        <Chart type='bar' data={chartData} height={height} options={{
+                            plugins: {
+                                legend:{
+                                    labels: {
+                                        color: 'white',
+                                    }
+                                },
+                                title: {
+                                  color:'red',
+                                },
+                                scales: {
+                                    yAxes: [{
+                                       ticks: {
+                                          beginAtZero: true,
+                                          display:false,
+                                          color: 'white'
+                                       },
+                                    }],
+                                    xAxes: [{
+                                       ticks: {
+                                        display:false,
+                                          color: 'white'
+                                       },
+                                    }]
+                                 },
+                              },
+                            responsive: true,
+                            maintainAspectRatio: true,
+                        }}/>
                     </div>
-                </div> */}
                 </IonCol>
-            
-            <IonCol size="12" >
-                <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
-                    <Chart type='bar' data={chartData} height={height} options={{
-                        plugins: {
-                            legend:{
-                                labels: {
-                                    color: 'white',
-                                }
-                            },
-                            title: {
-                              color:'red',
-                            },
-                            scales: {
-                                yAxes: [{
-                                   ticks: {
-                                      beginAtZero: true,
-                                      display:false,
-                                      color: 'white'
-                                   },
-                                }],
-                                xAxes: [{
-                                   ticks: {
-                                    display:false,
-                                      color: 'white'
-                                   },
-                                }]
-                             },
-                          },
-                        responsive: true,
-                        maintainAspectRatio: true,
-                    }}/>
-                </div>
-            </IonCol>
             </IonRow>
             
                 {showPie && (<IonRow>

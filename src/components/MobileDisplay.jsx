@@ -34,9 +34,7 @@ ChartJS.register(
 );
 
 
-interface
-DisplayProps
-{
+interface DisplayProps {
     chartData: any;
     height: number;
     doughnutData:any;
@@ -77,14 +75,6 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
     return (
         <IonGrid>
             <IonRow>
-                {/* <IonCol size="12">
-                <div className="relative bg-cbg p-6 rounded-xl">
-                    <p className="text-lg text-white">Total count of <b className="text-cb">{word}</b> is <b className="text-cb">{total}</b> </p>
-                    <span className="absolute bg-green-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">{total}</span>
-                    <div className="absolute top-0 right-0 flex space-x-2 p-4">
-                    </div>
-                </div>
-                </IonCol> */}
 
                 {showBar && <IonCol size="12">
                     <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
@@ -122,6 +112,7 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
 
                 </IonCol>}
             </IonRow>
+
             {showDoughnut &&
                 <IonRow>
                     <IonCol size="12">
@@ -163,6 +154,7 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
                     </IonCol>
                 </IonRow>
             }
+
             <IonRow>
                 {showPie && <IonCol size="12">
                     <div className="flex items-center justify-center w-full pt-3">
@@ -174,8 +166,7 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
                                     setShowDoughnut(!showDoughnut);
                                 }}/>
                                 <div className="block bg-cp w-14 h-8 rounded-full"></div>
-                                <div
-                                    className="dot absolute left-1 top-1 bg-black w-6 h-6 rounded-full transition"></div>
+                                <div className="dot absolute left-1 top-1 bg-black w-6 h-6 rounded-full transition"></div>
                             </div>
                             <div className="ml-3 text-white font-medium">
                                 Toggle to <b className="text-cb">{showBar ? 'Doughnut' : 'Bar'}</b>
@@ -190,7 +181,7 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
                         style={{height: `${showPie ? doughnutHeight > 380 ? String(Number(doughnutHeight) - 100) : doughnutHeight : height}px`}}>
                         <div className="space-y-6 pb-10 p-4">
                             {messages.map((m, idx) => {
-                                console.log(`Passing ${JSON.stringify(m)}`);
+                                // console.log(`Passing ${JSON.stringify(m)}`);
                                 return (<MessageListItem idx={idx + 1} key={m.id} message={m} word={word}/>)
                             })}
                         </div>
