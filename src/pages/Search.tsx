@@ -253,13 +253,15 @@ const Search: React.FC = () => {
         return () => window.removeEventListener('resize', re);
     }, []);
 
+    // TODO: change favicon
+
     return (
 
         <IonPage id="home-page">
 
             <IonContent fullscreen>
 
-                <div className="min-h-screen font-sans  bg-gradient-to-b from-tp to-tg flex justify-center items-center p-4 pt-2">
+                <div className="min-h-screen font-sans  bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2">
 
                     <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 

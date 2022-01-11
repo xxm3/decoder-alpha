@@ -68,10 +68,9 @@ const Display = ({chartData, height, doughnutData, position, total, totalCountHe
         }, 100);
     }
 
-    // TODO: how to have this fill the screen better? if user has a small vertical window, they will have two scrollbars to see all messages
     // get the height of the message list
     function getMessageListHeight() {
-        return 640;
+        return 620;
         // return height * 4;
     }
 
