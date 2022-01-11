@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "frontend-ts-ionic-analytic-and-home/build",
+    "public": "build",
     "ignore": [
       "firebase.json",
       "**/.*",
