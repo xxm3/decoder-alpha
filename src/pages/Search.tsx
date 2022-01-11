@@ -178,7 +178,9 @@ const Search: React.FC = () => {
             //     }
             // }
 
-            var datasetForChart = Array.from({length: 10}, () => 0)
+            // repeated on constants.js & Search.tsx
+            const numDaysBackGraphs = 10;
+            var datasetForChart = Array.from({length: numDaysBackGraphs}, () => 0)
             for (let i = 0; i < sample.ten_day_count.length; i++) {
                 var labels = [];
                 labels = generateLabels();
