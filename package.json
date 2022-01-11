@@ -7,6 +7,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "react-scripts test",
+    "test-mocha": "mocha --timeout 10000 --recursive",
     "eject": "react-scripts eject",
     "ionic:build": "craco build",
     "ionic:serve": "craco start"
@@ -27,6 +28,7 @@
     "@types/react-dom": "^16.9.10",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
+    "chai": "^4.3.4",
     "chart.js": "^3.7.0",
     "faker": "^5.5.3",
     "firebase": "^8.8.0",
