@@ -258,7 +258,6 @@ const Search: React.FC = () => {
     return (
 
         <IonPage id="home-page">
-
             <IonContent fullscreen>
 
                 <div className="min-h-screen font-sans  bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2">
