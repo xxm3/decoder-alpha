@@ -172,10 +172,10 @@ const Display = ({chartData, height, doughnutData, position, total, totalCountHe
             {/* list of messages */}
             {!showPie && (<IonRow>
                 <IonCol size="12">
-                    <div
-                        className="overflow-y-scroll shadow-lg  bg-cbg rounded-l flex flex-col divide-y divide-gray-400"
+                    {/* shadow-lg */}
+                    <div className="overflow-y-scroll bg-inherit rounded-l flex flex-col divide-y divide-gray-400"
                         style={{height: `${getMessageListHeight()}px`}}>
-                        <div className="space-y-6 pb-10 p-4">
+                        <div className="space-y-3 pb-10 p-2">
                             {messages.map((m, idx) => {
                                 return (<MessageListItem idx={idx + 1} key={m.id} message={m} word={word}/>)
                             })}

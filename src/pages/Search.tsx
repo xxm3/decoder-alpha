@@ -271,7 +271,8 @@ const Search: React.FC = () => {
                                 {/*<p className="mx-auto font-normal text-center text-sm my-6 max-w-lg">This app will last 10 days count and last 100 messages.</p>*/}
                                 </>
                             )}
-                            <div className="xs:flex items-center bg-cbgd rounded-lg overflow-hidden px-2 py-1 justify-between">
+                            {/* bg-cbgd bg-bg-secondary */}
+                            <div className="xs:flex items-center  rounded-lg overflow-hidden px-2 py-1 justify-between">
                                 <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
                                               type="text" value={searchText} onIonChange={e => {
                                     setSearchText(e.detail.value!)
