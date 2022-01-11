@@ -17,6 +17,7 @@ import {environment} from "../environments/environment";
 
 const Search: React.FC = () => {
 
+    // @ts-ignore
     const {messages, setMessages, setWord} = useContext(MessageContext);
 
     const [total, setTotal] = useState(0);
@@ -121,6 +122,7 @@ const Search: React.FC = () => {
         e.preventDefault();
         try {
             setIsLoading(true);
+
             const res = await fetch(environment.backendApi + '/search/', {
                 method: 'POST',
                 'headers': {
@@ -130,25 +132,25 @@ const Search: React.FC = () => {
                     "word": searchText,
                 })
             });
+
             let fetchedData = await res.json().then(data => {
                 // console.log(data);
-
                 return data;
             });
             if (res.status !== 200 || fetchedData?.error) {
                 setIsLoading(false);
                 throw fetchedData;
             }
-            let smaple = fetchedData;
-            setTotal(smaple.totalCount);
+            let sample = fetchedData;
+            setTotal(sample.totalCount);
 
             setDoughnutData({
                 ...doughnutData,
-                // labels: smaple.ten_day_count.map(x => x.date),
+                // labels: sample.ten_day_count.map(x => x.date),
                 // datasets: [
                 //     {
                 //         label: '10 days count',
-                //         data: smaple.ten_day_count.map(x => x.count),
+                //         data: sample.ten_day_count.map(x => x.count),
                 //         backgroundColor: [
                 //             'rgba(255, 99, 132, 0.8)',
                 //             'rgba(54, 162, 235, 0.8)',
@@ -170,18 +172,18 @@ const Search: React.FC = () => {
                 // ]
             });
 
-            const handleKeyDown = (event) => {
-                if (event.key === 'Enter') {
-                    onClick(event);
-                }
-            }
+            // const handleKeyDown = (event: any) => {
+            //     if (event.key === 'Enter') {
+            //         onClick(event);
+            //     }
+            // }
 
             var datasetForChart = Array.from({length: 10}, () => 0)
-            for (let i = 0; i < smaple.ten_day_count.length; i++) {
+            for (let i = 0; i < sample.ten_day_count.length; i++) {
                 var labels = [];
                 labels = generateLabels();
-                var idx = labels.findIndex((val) => val === smaple.ten_day_count[i].date);
-                datasetForChart[idx] = smaple.ten_day_count[i].count;
+                var idx = labels.findIndex((val) => val === sample.ten_day_count[i].date);
+                datasetForChart[idx] = sample.ten_day_count[i].count;
             }
             setChartData({
                 ...chartData,
@@ -205,7 +207,7 @@ const Search: React.FC = () => {
                     }
                 ],
             });
-            smaple.messages.forEach((msg, idx) => {
+            sample.messages.forEach((msg: any, idx: any) => {
                 messages[idx] = {
                     message: msg.message,
                     id: idx,
@@ -220,20 +222,20 @@ const Search: React.FC = () => {
                 setFoundResults(true);
             }, 2000);
             let tempMsg: Message[] = [];
-            smaple.messages.forEach((msg, idx) => {
-                let msgg: Message = {
+            sample.messages.forEach((msg: any, idx: any) => {
+                let newMsg: Message = {
                     message: msg.message,
                     id: idx,
                     time: msg.time,
                 }
-                tempMsg.push(msgg);
+                tempMsg.push(newMsg);
             });
-            setWord(smaple.word);
+            setWord(sample.word);
             setMessages(tempMsg);
             setTimeout(() => {
                 setIsLoading(false)
             }, 2000);
-        } catch (e) {
+        } catch (e: any) {
             console.error(e);
 
             setIsLoading(false);
@@ -325,8 +327,8 @@ const Search: React.FC = () => {
                         {!isLoading && foundResults && width <= 640 && (
                             <MobileDisplay chartData={chartData} doughnutData={doughnutData} position='right'
                                            height={Number(310)} total={total} totalCountHeight={30} showPie={false}
-                                           width={width}></MobileDisplay>
-                            // height={Number(30 + 275)}       310
+                                          ></MobileDisplay>
+                            // height={Number(30 + 275)}       310      width={width}
                         )}
 
                         {/* error bar */}
@@ -335,8 +337,7 @@ const Search: React.FC = () => {
                                 <p className="text-lg text-red-700 font-medium"><b>{error}</b></p>
                                 <span
                                     className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">!</span>
-                                <div className="absolute top-0 right-0 flex space-x-2 p-4">
-                                </div>
+                                <div className="absolute top-0 right-0 flex space-x-2 p-4"></div>
                             </div>
                         )}
 
