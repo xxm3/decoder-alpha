@@ -123,6 +123,10 @@ const Search: React.FC = () => {
         try {
             setIsLoading(true);
 
+            // testing CORS stuff...
+            // await fetch(environment.backendApi + '/receiver/urlParser?url=https://google.com/', { method: 'GET' });
+
+
             const res = await fetch(environment.backendApi + '/search/', {
                 method: 'POST',
                 'headers': {
@@ -139,6 +143,10 @@ const Search: React.FC = () => {
             });
             if (res.status !== 200 || fetchedData?.error) {
                 setIsLoading(false);
+                setFoundResults(false);
+
+                setError('Unable to connect. Please try again later');
+
                 throw fetchedData;
             }
             let sample = fetchedData;
@@ -238,10 +246,15 @@ const Search: React.FC = () => {
                 setIsLoading(false)
             }, 2000);
         } catch (e: any) {
-            console.error(e);
+            console.error("try/catch in Search.tsx: ", e);
+
+            if(e && e.body){
+                setError(String(e.body));
+            }else{
+                setError('Unable to connect. Please try again later');
+            }
 
             setIsLoading(false);
-            setError(String(e.body));
             setFoundResults(false);
         }
     }
