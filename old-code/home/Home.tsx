@@ -35,6 +35,11 @@ const Home = () => {
 
                 {/*
                     TODO:
+                    - fix match[2] error... more try catch (and/or that pmn2s thing...)
+
+                    - monitor & post about chromium error...
+
+                    TODO:
                     - reenable this, just link to search for now
                     - test out wallet, comment both this and above line into the ticket
 
