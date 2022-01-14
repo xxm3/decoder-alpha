@@ -26,34 +26,19 @@ const Home = () => {
      * Renders
      */
 
-
     return (
         <IonPage>
             <HeaderContainer mintAddrToParent={mintAddrToParent} />
             <IonContent className="ion-padding" fullscreen>
 
-
                 {/*
                     TODO:
-                    - fix match[2] error... more try catch (and/or that pmn2s thing...)
 
-                    - monitor & post about chromium error...
+                    - new card to do pulling from firebase for found mints (also show the source the mint came from)
 
-                    TODO:
-                    - reenable this, just link to search for now
-                    - test out wallet, comment both this and above line into the ticket
-
-                    - new card to do pulling from firebase for found mints ... Even if something has one single link - we can show it here
-                        - do now or TODO - show the source the mint came from
-
-                    - fix the DB so it stores a single mint multiple times... not just one and done
-
-                    - fix Jessica script so it deletes files after creating
                     - Be able to show the CM ID next to each of these mints URLs, in frontend (by passing it to the script)
-                    - https://gitlab.com/nft-relay-group/functions/-/issues/55 to pull the live data from it
-
+                        - https://gitlab.com/nft-relay-group/functions/-/issues/55 to pull the live data from it
                 */}
-
 
                 <br/> {walletAddress}
 
