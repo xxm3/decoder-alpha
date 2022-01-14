@@ -1,7 +1,7 @@
 import Loader from '../components/search/Loader';
 import Display from '../components/search/Display';
-import {useState, useEffect, useContext} from 'react';
-import {Message} from '../data/messages';
+import { useState, useEffect, useContext } from 'react';
+import { Message } from '../data/messages';
 import {
     IonContent,
     IonPage,
@@ -10,33 +10,36 @@ import {
 } from '@ionic/react';
 import './Search.css';
 import faker from 'faker';
-import {setTimeout} from 'timers';
-import {MessageContext} from '../context/context';
+import { setTimeout } from 'timers';
+import { MessageContext } from '../context/context';
 import MobileDisplay from '../components/search/MobileDisplay';
-import {environment} from "../environments/environment";
+import { environment } from "../environments/environment";
+import { useParams, useHistory } from 'react-router';
 
 const Search: React.FC = () => {
 
     // @ts-ignore
-    const {messages, setMessages, setWord} = useContext(MessageContext);
 
+    const { messages, setMessages, setWord } = useContext(MessageContext);
     const [total, setTotal] = useState(0);
-
+    const history = useHistory();
     const [showHelp, setShowHelp] = useState(true);
     const [width, setWidth] = useState(window.innerWidth);
+
     window.onresize = () => {
-        setWidth(window.innerWidth);
-        // console.log(window.innerWidth);
+        resizeWidth();
     };
 
-    function re() {
+    function resizeWidth() {
         setWidth(window.innerWidth);
     }
+    const { id } = useParams();
+    const [searchText, setSearchText] = useState(id);
 
-    const [searchText, setSearchText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [foundResults, setFoundResults] = useState(false);
     const [error, setError] = useState("");
+
     const generateLabels = () => {
         let date = new Date();
         var dates = [];
@@ -105,13 +108,13 @@ const Search: React.FC = () => {
                 borderColor: 'rgb(255, 99, 132)',
                 borderWidth: 2,
                 fill: false,
-                data: labels.map(() => faker.datatype.number({min: -1000, max: 1000})),
+                data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
             },
             {
                 type: 'bar' as const,
                 label: 'Bar Graph',
                 backgroundColor: 'rgb(75, 192, 192)',
-                data: labels.map(() => faker.datatype.number({min: -1000, max: 1000})),
+                data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
                 borderColor: 'white',
                 borderWidth: 2,
             }
@@ -120,6 +123,11 @@ const Search: React.FC = () => {
 
     const onClick = async (e: any) => {
         e.preventDefault();
+        doSearch();
+    }
+
+    const doSearch = async () => {
+
         try {
             setIsLoading(true);
 
@@ -138,9 +146,9 @@ const Search: React.FC = () => {
             });
 
             let fetchedData = await res.json().then(data => {
-                // console.log(data);
                 return data;
             });
+
             if (res.status !== 200 || fetchedData?.error) {
                 setIsLoading(false);
                 setFoundResults(false);
@@ -188,7 +196,7 @@ const Search: React.FC = () => {
 
             // repeated on constants.js & Search.tsx
             const numDaysBackGraphs = 10;
-            var datasetForChart = Array.from({length: numDaysBackGraphs}, () => 0)
+            var datasetForChart = Array.from({ length: numDaysBackGraphs }, () => 0);
             for (let i = 0; i < sample.ten_day_count.length; i++) {
                 var labels = [];
                 labels = generateLabels();
@@ -231,6 +239,7 @@ const Search: React.FC = () => {
             setTimeout(() => {
                 setFoundResults(true);
             }, 2000);
+
             let tempMsg: Message[] = [];
             sample.messages.forEach((msg: any, idx: any) => {
                 let newMsg: Message = {
@@ -242,15 +251,16 @@ const Search: React.FC = () => {
             });
             setWord(sample.word);
             setMessages(tempMsg);
+
             setTimeout(() => {
-                setIsLoading(false)
+                setIsLoading(false);
             }, 2000);
         } catch (e: any) {
             console.error("try/catch in Search.tsx: ", e);
 
-            if(e && e.body){
+            if (e && e.body) {
                 setError(String(e.body));
-            }else{
+            } else {
                 setError('Unable to connect. Please try again later');
             }
 
@@ -258,27 +268,21 @@ const Search: React.FC = () => {
             setFoundResults(false);
         }
     }
-    useEffect(() => {
-        // console.log("Inside useEffect");
-        // console.log(error);
-    }, [error]);
-    useEffect(() => {
-        // console.log(error);
-        // console.log({messages});
 
-        window.addEventListener('resize', re);
-        return () => window.removeEventListener('resize', re);
+    useEffect(() => {
+        window.addEventListener('resize', resizeWidth);
+        return () => window.removeEventListener('resize', resizeWidth);
     }, []);
 
-    return (
+    useEffect(() => {
+        doSearch();
+    }, [searchText]);
 
+    return (
         <IonPage id="home-page">
             <IonContent fullscreen>
-
                 <div className="min-h-screen font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2">
-
                     <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
-
                         {/* search bar / form */}
                         <form onSubmit={(e) => onClick(e)}>
                             {(!foundResults || isLoading) && (<>
@@ -286,17 +290,17 @@ const Search: React.FC = () => {
                                     <p>Searching for <b className="text-cb">{searchText}</b></p> : 'Search:'}
                                 </h1>
                                 {/*<p className="mx-auto font-normal text-center text-sm my-6 max-w-lg">This app will last 10 days count and last 100 messages.</p>*/}
-                                </>
+                            </>
                             )}
                             {/* bg-cbgd bg-bg-secondary */}
-                            <div className="xs:flex items-center  rounded-lg overflow-hidden px-2 py-1 justify-between">
+                            <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 justify-between">
                                 <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
-                                              type="text" value={searchText} onIonChange={e => {
-                                    setSearchText(e.detail.value!)
-                                }} animated placeholder="Type to search" disabled={isLoading}/>
+                                    type="text" value={searchText} onIonChange={e => {
+                                        setSearchText(e.detail.value!)
+                                    }} animated placeholder="Type to search" disabled={isLoading} />
                                 <div className="xs:flex items-center px-2 rounded-lg space-x-4 mx-auto ">
                                     <IonButton className=" text-white text-base rounded-lg" onClick={onClick}
-                                               animate-bounce disabled={searchText === ''}>
+                                        animate-bounce disabled={searchText === ''}>
                                         Search</IonButton>
                                 </div>
                             </div>
@@ -311,41 +315,40 @@ const Search: React.FC = () => {
                             note that heights of the chart are hardcoded below, while heights of the message list is on the Display.jsx.getMessageListHeight() */}
                         {!isLoading && foundResults && width > 1536 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(35)} total={total} totalCountHeight={18} showPie={false}
-                                     width={width}></Display>
+                                height={Number(35)} total={total} totalCountHeight={18} showPie={false}
+                                width={width}></Display>
                             // height={Number(10 + 65)}   75
                         )}
                         {!isLoading && foundResults && width <= 1536 && width > 1280 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(45)} total={total} totalCountHeight={22} showPie={false}
-                                     width={width}></Display>
+                                height={Number(45)} total={total} totalCountHeight={22} showPie={false}
+                                width={width}></Display>
                             // height={Number(75 + 10)} 85
                         )}
                         {!isLoading && foundResults && width <= 1280 && width > 1024 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(55)} total={total} totalCountHeight={25} showPie={false}
-                                     width={width}></Display>
+                                height={Number(55)} total={total} totalCountHeight={25} showPie={false}
+                                width={width}></Display>
                             // height={Number(5 + 100)}     105
                         )}
                         {!isLoading && foundResults && width <= 1024 && width > 768 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(65)} total={total} totalCountHeight={28} showPie={false}
-                                     width={width}></Display>
+                                height={Number(65)} total={total} totalCountHeight={28} showPie={false}
+                                width={width}></Display>
                             // height={Number(5 + 100)}     105
                         )}
                         {!isLoading && foundResults && width <= 768 && width > 640 && (
                             <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                     height={Number(230)} total={total} totalCountHeight={35} showPie={false}
-                                     width={width}></Display>
+                                height={Number(230)} total={total} totalCountHeight={35} showPie={false}
+                                width={width}></Display>
                             // height={Number(5 + 225)}     230
                         )}
                         {!isLoading && foundResults && width <= 640 && (
                             <MobileDisplay chartData={chartData} doughnutData={doughnutData} position='right'
-                                           height={Number(310)} total={total} totalCountHeight={30} showPie={false}
-                                          ></MobileDisplay>
+                                height={Number(310)} total={total} totalCountHeight={30} showPie={false}
+                            ></MobileDisplay>
                             // height={Number(30 + 275)}       310      width={width}
                         )}
-
                         {/* error bar */}
                         {!isLoading && !foundResults && error !== '' && (
                             <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
@@ -355,10 +358,8 @@ const Search: React.FC = () => {
                                 <div className="absolute top-0 right-0 flex space-x-2 p-4"></div>
                             </div>
                         )}
-
                     </div>
                 </div>
-
             </IonContent>
         </IonPage>
     );
