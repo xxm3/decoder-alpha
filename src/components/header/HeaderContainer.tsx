@@ -95,7 +95,7 @@ const HeaderContainer = ({ mintAddrToParent }) => {
     );
 
     function handleSearch() {
-        console.log("asdfsdfadsdfsdf----------------", searchvalue);
+        // console.log("asdfsdfadsdfsdf----------------", searchvalue);
         if (typeof (searchvalue) !== "undefined" && searchvalue !== '') {
             history.push(`/search/${searchvalue}`);
             window.location.reload();

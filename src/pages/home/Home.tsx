@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRouterLink } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRouterLink, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent } from '@ionic/react';
 import { IonList, IonItem, IonCheckbox, IonLabel, IonNote, IonBadge } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import './Home.css';
@@ -30,6 +30,19 @@ const Home = () => {
         <IonPage>
             <HeaderContainer mintAddrToParent={mintAddrToParent} />
             <IonContent className="ion-padding" fullscreen>
+
+                {/* EXAMPLE CARD */}
+                <IonCard>
+                    <IonCardHeader>
+                        <IonCardSubtitle>Card Subtitle</IonCardSubtitle>
+                        <IonCardTitle>Card Title</IonCardTitle>
+                    </IonCardHeader>
+
+                    <IonCardContent>
+                        Keep close to Nature's heart... and break clear away, once in awhile,
+                        and climb a mountain or spend a week in the woods. Wash your spirit clean.
+                    </IonCardContent>
+                </IonCard>
 
 
             </IonContent>
