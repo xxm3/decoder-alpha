@@ -1,6 +1,6 @@
-import {IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRouterLink} from '@ionic/react';
-import {IonList, IonItem, IonCheckbox, IonLabel, IonNote, IonBadge} from '@ionic/react';
-import React, {useEffect, useState} from 'react';
+import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRouterLink } from '@ionic/react';
+import { IonList, IonItem, IonCheckbox, IonLabel, IonNote, IonBadge } from '@ionic/react';
+import React, { useEffect, useState } from 'react';
 import './Home.css';
 import HeaderContainer from "../../components/header/HeaderContainer";
 
@@ -50,7 +50,7 @@ const Home = () => {
                 */}
 
 
-                <br/> {walletAddress}
+                <br /> {walletAddress}
 
 
             </IonContent>

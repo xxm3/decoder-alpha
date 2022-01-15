@@ -1,12 +1,15 @@
 import Loader from '../components/search/Loader';
+import React, { useRef } from 'react';
 import Display from '../components/search/Display';
 import { useState, useEffect, useContext } from 'react';
 import { Message } from '../data/messages';
+
 import {
     IonContent,
     IonPage,
     IonSearchbar,
     IonButton,
+    IonIcon
 } from '@ionic/react';
 import './Search.css';
 import faker from 'faker';
@@ -15,6 +18,7 @@ import { MessageContext } from '../context/context';
 import MobileDisplay from '../components/search/MobileDisplay';
 import { environment } from "../environments/environment";
 import { useParams, useHistory } from 'react-router';
+import HeaderContainer from "../components/header/HeaderContainer";
 
 const Search: React.FC = () => {
 
@@ -277,91 +281,108 @@ const Search: React.FC = () => {
     useEffect(() => {
         doSearch();
     }, [searchText]);
+    const [walletAddress, setWalletAddress] = useState('');
+
+    /**
+     * Actions
+     */
+    const mintAddrToParent = (walletAddress: any) => {
+        setWalletAddress(walletAddress);
+    }
+
+    const contentRef = useRef<HTMLIonContentElement | null>(null);
+    const scrollToTop = () => {
+        contentRef.current && contentRef.current.scrollToTop();
+    };
 
     return (
-        <IonPage id="home-page">
-            <IonContent fullscreen>
-                <div className="min-h-screen font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2">
-                    <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
-                        {/* search bar / form */}
-                        <form onSubmit={(e) => onClick(e)}>
-                            {(!foundResults || isLoading) && (<>
-                                <h1 className="text-center font-bold text-white text-4xl">{isLoading ?
-                                    <p>Searching for <b className="text-cb">{searchText}</b></p> : 'Search:'}
-                                </h1>
-                                {/*<p className="mx-auto font-normal text-center text-sm my-6 max-w-lg">This app will last 10 days count and last 100 messages.</p>*/}
-                            </>
-                            )}
-                            {/* bg-cbgd bg-bg-secondary */}
-                            <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 justify-between">
-                                <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
-                                    type="text" value={searchText} onIonChange={e => {
-                                        setSearchText(e.detail.value!)
-                                    }} animated placeholder="Type to search" disabled={isLoading} />
-                                <div className="xs:flex items-center px-2 rounded-lg space-x-4 mx-auto ">
-                                    <IonButton className=" text-white text-base rounded-lg" onClick={onClick}
-                                        animate-bounce disabled={searchText === ''}>
-                                        Search</IonButton>
+        <React.Fragment>
+            <IonPage id="home-page">
+                <IonContent ref={contentRef} scrollEvents={true} fullscreen>
+                    <HeaderContainer mintAddrToParent={mintAddrToParent} />
+                    <div className="min-h-screen font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2">
+                        <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+                            {/* search bar / form */}
+                            <form onSubmit={(e) => onClick(e)}>
+                                {(!foundResults || isLoading) && (<>
+                                    <h1 className="text-center font-bold text-white text-4xl">{isLoading ?
+                                        <p>Searching for <b className="text-cb">{searchText}</b></p> : 'Search:'}
+                                    </h1>
+                                    {/*<p className="mx-auto font-normal text-center text-sm my-6 max-w-lg">This app will last 10 days count and last 100 messages.</p>*/}
+                                </>
+                                )}
+                                {/* bg-cbgd bg-bg-secondary */}
+                                <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 justify-between">
+                                    <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
+                                        type="text" value={searchText} onIonChange={e => {
+                                            setSearchText(e.detail.value!)
+                                        }} animated placeholder="Type to search" disabled={isLoading} />
+                                    <div className="xs:flex items-center px-2 rounded-lg space-x-4 mx-auto ">
+                                        <IonButton className=" text-white text-base rounded-lg" onClick={onClick}
+                                            animate-bounce disabled={searchText === ''}>
+                                            Search</IonButton>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
 
-                        {/* loading bar */}
-                        {isLoading && (<div className="pt-10 flex justify-center items-center">
-                            <Loader></Loader>
-                        </div>)}
+                            {/* loading bar */}
+                            {isLoading && (<div className="pt-10 flex justify-center items-center">
+                                <Loader></Loader>
+                            </div>)}
 
-                        {/* chart / search results, based on screen width
-                            note that heights of the chart are hardcoded below, while heights of the message list is on the Display.jsx.getMessageListHeight() */}
-                        {!isLoading && foundResults && width > 1536 && (
-                            <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                height={Number(35)} total={total} totalCountHeight={18} showPie={false}
-                                width={width}></Display>
-                            // height={Number(10 + 65)}   75
-                        )}
-                        {!isLoading && foundResults && width <= 1536 && width > 1280 && (
-                            <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                height={Number(45)} total={total} totalCountHeight={22} showPie={false}
-                                width={width}></Display>
-                            // height={Number(75 + 10)} 85
-                        )}
-                        {!isLoading && foundResults && width <= 1280 && width > 1024 && (
-                            <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                height={Number(55)} total={total} totalCountHeight={25} showPie={false}
-                                width={width}></Display>
-                            // height={Number(5 + 100)}     105
-                        )}
-                        {!isLoading && foundResults && width <= 1024 && width > 768 && (
-                            <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                height={Number(65)} total={total} totalCountHeight={28} showPie={false}
-                                width={width}></Display>
-                            // height={Number(5 + 100)}     105
-                        )}
-                        {!isLoading && foundResults && width <= 768 && width > 640 && (
-                            <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
-                                height={Number(230)} total={total} totalCountHeight={35} showPie={false}
-                                width={width}></Display>
-                            // height={Number(5 + 225)}     230
-                        )}
-                        {!isLoading && foundResults && width <= 640 && (
-                            <MobileDisplay chartData={chartData} doughnutData={doughnutData} position='right'
-                                height={Number(310)} total={total} totalCountHeight={30} showPie={false}
-                            ></MobileDisplay>
-                            // height={Number(30 + 275)}       310      width={width}
-                        )}
-                        {/* error bar */}
-                        {!isLoading && !foundResults && error !== '' && (
-                            <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
-                                <p className="text-lg text-red-700 font-medium"><b>{error}</b></p>
-                                <span
-                                    className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">!</span>
-                                <div className="absolute top-0 right-0 flex space-x-2 p-4"></div>
-                            </div>
-                        )}
+                            {/* chart / search results, based on screen width
+                                note that heights of the chart are hardcoded below, while heights of the message list is on the Display.jsx.getMessageListHeight() */}
+                            {!isLoading && foundResults && width > 1536 && (
+                                <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
+                                    height={Number(35)} total={total} totalCountHeight={18} showPie={false}
+                                    width={width}></Display>
+                                // height={Number(10 + 65)}   75
+                            )}
+                            {!isLoading && foundResults && width <= 1536 && width > 1280 && (
+                                <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
+                                    height={Number(45)} total={total} totalCountHeight={22} showPie={false}
+                                    width={width}></Display>
+                                // height={Number(75 + 10)} 85
+                            )}
+                            {!isLoading && foundResults && width <= 1280 && width > 1024 && (
+                                <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
+                                    height={Number(55)} total={total} totalCountHeight={25} showPie={false}
+                                    width={width}></Display>
+                                // height={Number(5 + 100)}     105
+                            )}
+                            {!isLoading && foundResults && width <= 1024 && width > 768 && (
+                                <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
+                                    height={Number(65)} total={total} totalCountHeight={28} showPie={false}
+                                    width={width}></Display>
+                                // height={Number(5 + 100)}     105
+                            )}
+                            {!isLoading && foundResults && width <= 768 && width > 640 && (
+                                <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
+                                    height={Number(230)} total={total} totalCountHeight={35} showPie={false}
+                                    width={width}></Display>
+                                // height={Number(5 + 225)}     230
+                            )}
+                            {!isLoading && foundResults && width <= 640 && (
+                                <MobileDisplay chartData={chartData} doughnutData={doughnutData} position='right'
+                                    height={Number(310)} total={total} totalCountHeight={30} showPie={false}
+                                ></MobileDisplay>
+                                // height={Number(30 + 275)}       310      width={width}
+                            )}
+                            {/* error bar */}
+                            {!isLoading && !foundResults && error !== '' && (
+                                <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
+                                    <p className="text-lg text-red-700 font-medium"><b>{error}</b></p>
+                                    <span
+                                        className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">!</span>
+                                    <div className="absolute top-0 right-0 flex space-x-2 p-4"></div>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
-            </IonContent>
-        </IonPage>
+                    <IonButton onClick={() => scrollToTop()}>Scroll Top</IonButton>
+                </IonContent>
+            </IonPage>
+        </React.Fragment>
     );
 };
 

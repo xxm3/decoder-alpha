@@ -1,5 +1,6 @@
 .header{
-    padding-right: 5px;
+    top:30px;
+    position: absolute;
 }
 .search {
     border-radius: 25px;
@@ -20,5 +21,15 @@
     background-color:violet;
     text-align: center;
     /* margin: 0 auto; */
+}
+
+.searchbar{
+    width: 20px;
+    height: 30px;
+}
+.s\:flex .items-center .rounded-lg .overflow-hidden .px-2 .py-1 .justify-between{
+    height: 40px;
+    width: 50%;
+    
 }
 
