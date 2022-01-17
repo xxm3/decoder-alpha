@@ -1,5 +1,5 @@
 import './HeaderContainer.css';
-import { IonButton, IonContent, IonHeader, IonRouterLink, IonTitle, IonToolbar, IonSearchbar } from "@ionic/react";
+import { IonButton, IonContent, IonHeader, IonRouterLink, IonTitle, IonToolbar, IonSearchbar, IonGrid, IonRow, IonCol } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { useHistory } from 'react-router';
 import { attachProps } from '@ionic/react/dist/types/components/utils';
@@ -108,36 +108,36 @@ const HeaderContainer = ({ mintAddrToParent }) => {
     return (
         <React.Fragment>
             <IonHeader className="all">
-                <IonToolbar>
-                    <IonTitle class="flex">
-                        <IonRouterLink className=" relative top-10 left-10 w-1/4 " routerLink="/">SOL Decoder</IonRouterLink>
-
-                        {/*- <IonRouterLink routerLink="/mint">Mint</IonRouterLink> -*/}
-                        {/*<IonRouterLink routerLink="/game">Game</IonRouterLink>*/}
-                        <div className=" relative top-10 left-20  w-2/4 " id="searchbar">
-                            <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
-                                type="text" value={searchvalue} onIonChange={e => {
-                                    setInput(e.target.value)
-                                }} animated placeholder="Type to search" />
-                            <div className="xs:flex items-center px-2 rounded-lg space-x-4 mx-auto ">
-                                <IonButton className=" text-white bg-orange-500" value={searchvalue} onClick={() => handleSearch()}
-                                    animate-bounce disabled={searchvalue === ''}>
-                                    Search</IonButton>
-                            </div>
-                        </div>
-
-                        <span className="w-1/4" style={{ "float": "right" }}>
-                            {/* Add the condition to show this only if we don't have a wallet address */}
-                            {!walletAddress && renderNotConnectedContainer()}
-                            {/* We just need to add the inverse here! */}
-                            {walletAddress && renderConnectedContainer()}
-                        </span>
-
-
-                    </IonTitle>
-
-
-                </IonToolbar>
+                    {/* <IonToolbar>
+                        <IonTitle class="flex"> */}
+                            <IonGrid>
+                                <IonRow>
+                                    <IonCol>
+                                        <IonRouterLink className="text-6xl" routerLink="/">SOL Decoder</IonRouterLink>
+                                    </IonCol>
+                                {/*- <IonRouterLink routerLink="/mint">Mint</IonRouterLink> -*/}
+                                {/*<IonRouterLink routerLink="/game">Game</IonRouterLink>*/}
+                                    <IonCol>
+                                        <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
+                                            type="text" value={searchvalue} onIonChange={e => {
+                                                setInput(e.target.value)
+                                            }} animated placeholder="Type to search" />
+                                    </IonCol>
+                                    <IonCol>
+                                        <IonButton className=" text-white bg-orange-500" value={searchvalue} onClick={() => handleSearch()}
+                                            animate-bounce disabled={searchvalue === ''}>
+                                            Search</IonButton>
+                                    </IonCol>
+                                    <IonCol>
+                                        {/* Add the condition to show this only if we don't have a wallet address */}
+                                        {!walletAddress && renderNotConnectedContainer()}
+                                        {/* We just need to add the inverse here! */}
+                                        {walletAddress && renderConnectedContainer()}
+                                    </IonCol>       
+                                </IonRow>
+                            </IonGrid>
+                        {/* </IonTitle>
+                    </IonToolbar> */}
             </IonHeader>
         </React.Fragment>
     );

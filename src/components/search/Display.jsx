@@ -132,7 +132,7 @@ const Display = ({ chartData, height, doughnutData, position, total, totalCountH
                 <IonGrid >
                     {/* bar & line chart */}
                     {
-                        !showchart && (
+                        showchart && (
                             <IonRow>
                                 <IonCol size="12">
                                     <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">

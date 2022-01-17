@@ -61,7 +61,7 @@ const Home = () => {
     return (
         <IonPage>
             <HeaderContainer mintAddrToParent={mintAddrToParent} />
-            <IonContent className="ion-padding" fullscreen>
+            {/* <IonContent className="ion-padding" fullscreen> */}
                 {/*
                     TODO:
                     - reenable this, just link to search for now
@@ -77,9 +77,7 @@ const Home = () => {
                     - https://gitlab.com/nft-relay-group/functions/-/issues/55 to pull the live data from it
 
                 */}
-
-                <br />
-            </IonContent>
+            {/* </IonContent> */}
             {/* <IonHeader>
                 <IonToolbar>
                 <IonTitle></IonTitle>
