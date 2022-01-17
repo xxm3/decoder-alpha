@@ -1,9 +1,9 @@
-import {IonCol, IonGrid, IonRow} from "@ionic/react";
-import {MessageContext} from "../context/context";
-import {useContext} from 'react';
+import { IonCol, IonGrid, IonRow } from "@ionic/react";
+import { MessageContext } from "../../context/context";
+import { useContext } from 'react';
 import MessageListItem from "./MessageListItem";
-import React, {useEffect, useRef} from "react";
-import {Doughnut, Chart} from 'react-chartjs-2';
+import React, { useEffect, useRef } from "react";
+import { Doughnut, Chart } from 'react-chartjs-2';
 import './Display.css';
 import {
     Chart as ChartJS,
@@ -20,8 +20,9 @@ import {
 } from 'chart.js';
 import './MobileDisplay.css';
 
-ChartJS.register(...registerables);
+// NOTE: any changes made here must be made in both Display.jsx & MobileDisplay.jsx!
 
+ChartJS.register(...registerables);
 ChartJS.register(
     ArcElement,
     LinearScale,
@@ -33,25 +34,27 @@ ChartJS.register(
     Tooltip
 );
 
-
-interface
-DisplayProps
-{
+interface DisplayProps {
     chartData: any;
     height: number;
-    doughnutData:any;
+    doughnutData: any;
     position: string;
     totalCountHeight: number;
     showPie: boolean;
 }
 
 defaults.color = '#FFFFFF';
-const MobileDisplay = ({chartData, height, doughnutData, position, total, totalCountHeight, showPie}) => {
-    const {messages, word} = useContext(MessageContext);
-    console.log({messages});
+const MobileDisplay = ({ chartData, height, doughnutData, position, total, totalCountHeight, showPie }) => {
+    const { messages, word } = useContext(MessageContext);
+
+    // console.log({messages});
+
+    // not sure why we have showPie & showDoughnut
     const [doughnutHeight, setDoughnutHeight] = React.useState(0);
+
     const [showBar, setShowBar] = React.useState(!showPie);
     const [showDoughnut, setShowDoughnut] = React.useState(showPie);
+
     const ref = useRef();
     window.onresize = () => {
         updateSize();
@@ -67,9 +70,8 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
     }
 
     useEffect(() => {
-        console.log("Display");
-        console.log(defaults);
-
+        // console.log("Display");
+        // console.log(defaults);
 
         updateSize();
 
@@ -77,15 +79,8 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
     return (
         <IonGrid>
             <IonRow>
-                {/* <IonCol size="12">
-                <div className="relative bg-cbg p-6 rounded-xl">
-                    <p className="text-lg text-white">Total count of <b className="text-cb">{word}</b> is <b className="text-cb">{total}</b> </p>
-                    <span className="absolute bg-green-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">{total}</span>
-                    <div className="absolute top-0 right-0 flex space-x-2 p-4">
-                    </div>
-                </div>
-                </IonCol> */}
 
+                {/* bar & line chart */}
                 {showBar && <IonCol size="12">
                     <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
                         <Chart type='bar' data={chartData} height={Number(height - totalCountHeight)} options={{
@@ -116,17 +111,18 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
                             },
                             responsive: true,
                             maintainAspectRatio: true,
-                        }}/>
+                        }} />
                     </div>
-
 
                 </IonCol>}
             </IonRow>
+
+            {/* pie chart */}
             {showDoughnut &&
                 <IonRow>
                     <IonCol size="12">
                         <div className="p-2 h-fit text-white justify-center items-center shadow-lg rounded-l bg-cbg"
-                             ref={ref} id="doughnut">
+                            ref={ref} id="doughnut">
                             <IonRow>
                                 <IonCol size="8" offset="2">
                                     <Doughnut data={doughnutData} options={{
@@ -156,14 +152,17 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
                                         },
                                         responsive: true,
                                         maintainAspectRatio: true,
-                                    }}/>
+                                    }} />
                                 </IonCol>
                             </IonRow>
                         </div>
                     </IonCol>
                 </IonRow>
             }
+
             <IonRow>
+
+                {/* pie chart */}
                 {showPie && <IonCol size="12">
                     <div className="flex items-center justify-center w-full pt-3">
 
@@ -172,10 +171,9 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
                                 <input type="checkbox" id="toggleB" className="sr-only" onClick={(e) => {
                                     setShowBar(!showBar);
                                     setShowDoughnut(!showDoughnut);
-                                }}/>
+                                }} />
                                 <div className="block bg-cp w-14 h-8 rounded-full"></div>
-                                <div
-                                    className="dot absolute left-1 top-1 bg-black w-6 h-6 rounded-full transition"></div>
+                                <div className="dot absolute left-1 top-1 bg-black w-6 h-6 rounded-full transition"></div>
                             </div>
                             <div className="ml-3 text-white font-medium">
                                 Toggle to <b className="text-cb">{showBar ? 'Doughnut' : 'Bar'}</b>
@@ -184,18 +182,21 @@ const MobileDisplay = ({chartData, height, doughnutData, position, total, totalC
 
                     </div>
                 </IonCol>}
+
+                {/* list of messages */}
                 <IonCol>
                     <div
                         className="overflow-y-scroll shadow-lg  bg-cbg rounded-l flex flex-col divide-y divide-gray-400"
-                        style={{height: `${showPie ? doughnutHeight > 380 ? String(Number(doughnutHeight) - 100) : doughnutHeight : height}px`}}>
+                        style={{ height: `${showPie ? doughnutHeight > 380 ? String(Number(doughnutHeight) - 100) : doughnutHeight : height}px` }}>
                         <div className="space-y-6 pb-10 p-4">
                             {messages.map((m, idx) => {
-                                console.log(`Passing ${JSON.stringify(m)}`);
-                                return (<MessageListItem idx={idx + 1} key={m.id} message={m} word={word}/>)
+                                // console.log(`Passing ${JSON.stringify(m)}`);
+                                return (<MessageListItem idx={idx + 1} key={m.id} message={m} word={word} />)
                             })}
                         </div>
                     </div>
                 </IonCol>
+
             </IonRow>
         </IonGrid>
     );

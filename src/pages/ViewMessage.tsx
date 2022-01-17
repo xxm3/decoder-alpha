@@ -14,6 +14,8 @@ import {useParams} from 'react-router';
 import './ViewMessage.css';
 
 function ViewMessage() {
+
+    // @ts-ignore
     const {messages, word} = useContext(MessageContext);
     const [message, setMessage] = useState<Message>();
     const [msgArr, setMsgArr] = useState<string[]>();
@@ -21,10 +23,11 @@ function ViewMessage() {
 
     useIonViewWillEnter(() => {
         console.clear();
-        console.log(messages);
-        const msg = messages.find(m => m.id === parseInt(params.id));
+        // console.log(messages);
+
+        const msg = messages.find((m: { id: number; }) => m.id === parseInt(params.id));
         setMessage(msg);
-        setMsgArr(msg.message.split(word).filter(v => v !== ''));
+        setMsgArr(msg.message.split(word).filter((v: string) => v !== ''));
         console.log(msg);
         console.log(msgArr);
     });
