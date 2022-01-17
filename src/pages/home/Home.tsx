@@ -86,6 +86,52 @@ const Home = () => {
 
                 */}
                 <></>
+            {/* </IonContent> */}
+            {/* <IonHeader>
+                <IonToolbar>
+                <IonTitle></IonTitle>
+                </IonToolbar>
+            </IonHeader> */}
+
+            <IonContent>
+                {
+                    products.map((product: any, index: any) => (
+                        <Card key={index} url={product.url} source={product.source} timestamp={product.timestamp} readableTimestamp={product.readableTimestamp} />
+                ))}
+                <IonCard>
+                    <IonItem>
+                        <IonIcon icon={pin} slot="start" />
+                        <IonLabel>ion-item in a card, icon left, button right</IonLabel>
+                        <IonButton fill="outline" slot="end">View</IonButton>
+                    </IonItem>
+                    <IonCardContent>
+                        This is content, without any paragraph or header tags,
+                        within an ion-cardContent element.
+                    </IonCardContent>
+                </IonCard>
+
+                {/* <IonCard>
+                            <IonItem href="#" className="ion-activated">
+                                <IonIcon icon={wifi} slot="start" />
+                                <IonLabel>Card Link Item 1 activated</IonLabel>
+                            </IonItem>
+
+                            <IonItem href="#">
+                                <IonIcon icon={wine} slot="start" />
+                                <IonLabel>Card Link Item 2</IonLabel>
+                            </IonItem>
+
+                            <IonItem className="ion-activated">
+                                <IonIcon icon={warning} slot="start" />
+                                <IonLabel>Card Button Item 1 activated</IonLabel>
+                            </IonItem>
+
+                            <IonItem>
+                                <IonIcon icon={walk} slot="start" />
+                                <IonLabel>Card Button Item 2</IonLabel>
+                            </IonItem>
+                        </IonCard> */}
+            </IonContent>
             <IonContent>
                 <IonRow>
                     <IonLabel className="text-7xl text-blue-600">NewCollection</IonLabel>
@@ -133,52 +179,6 @@ const Home = () => {
                             </IonCol>
                     ))}
                 </IonRow>    
-            </IonContent>
-            {/* </IonContent> */}
-            {/* <IonHeader>
-                <IonToolbar>
-                <IonTitle></IonTitle>
-                </IonToolbar>
-            </IonHeader> */}
-
-            <IonContent>
-                {
-                    products.map((product: any, index: any) => (
-                        <Card key={index} url={product.url} source={product.source} timestamp={product.timestamp} readableTimestamp={product.readableTimestamp} />
-                ))}
-                <IonCard>
-                    <IonItem>
-                        <IonIcon icon={pin} slot="start" />
-                        <IonLabel>ion-item in a card, icon left, button right</IonLabel>
-                        <IonButton fill="outline" slot="end">View</IonButton>
-                    </IonItem>
-                    <IonCardContent>
-                        This is content, without any paragraph or header tags,
-                        within an ion-cardContent element.
-                    </IonCardContent>
-                </IonCard>
-
-                {/* <IonCard>
-                            <IonItem href="#" className="ion-activated">
-                                <IonIcon icon={wifi} slot="start" />
-                                <IonLabel>Card Link Item 1 activated</IonLabel>
-                            </IonItem>
-
-                            <IonItem href="#">
-                                <IonIcon icon={wine} slot="start" />
-                                <IonLabel>Card Link Item 2</IonLabel>
-                            </IonItem>
-
-                            <IonItem className="ion-activated">
-                                <IonIcon icon={warning} slot="start" />
-                                <IonLabel>Card Button Item 1 activated</IonLabel>
-                            </IonItem>
-
-                            <IonItem>
-                                <IonIcon icon={walk} slot="start" />
-                                <IonLabel>Card Button Item 2</IonLabel>
-                            </IonItem>
-                        </IonCard> */}
             </IonContent>
         </IonPage>
     );

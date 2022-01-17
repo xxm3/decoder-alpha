@@ -28,14 +28,24 @@ interface CollectionCardProps {
 const CollectionCard: React.FC<CollectionCardProps> = ({ name, description, image, twitter, discord, categories, splitName, link, timestamp, readableTimestamp  }) => {
 
   return (
-    <IonCard className="bg-lime-700">
-      <img src={image} />
+    <IonCard>
+      <img src={image} className="w-100 h-100" />
       <IonCardHeader> 
         <IonCardSubtitle>Destination</IonCardSubtitle>
         <IonCardTitle>{name}</IonCardTitle>
       </IonCardHeader>
       <IonCardContent>
         {description}
+      </IonCardContent>
+      <IonCardContent>
+        <IonItem href={link}>{link}</IonItem>
+      </IonCardContent>
+      <IonCardContent>
+        <IonLabel>Keyword</IonLabel>
+        {
+          splitName.map((item: any, index: any) => (
+            <IonItem key={index}>{item}</IonItem>
+        ))}
       </IonCardContent>
     </IonCard>
   );
