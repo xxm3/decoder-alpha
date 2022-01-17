@@ -11,6 +11,7 @@ import {
 } from '@ionic/react';
 import { readdir } from 'fs';
 import { pin, wifi, wine, warning, walk } from 'ionicons/icons';
+import React from "react";
 interface CardProps {
   url: any;
   source: any;

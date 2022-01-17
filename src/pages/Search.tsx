@@ -37,6 +37,7 @@ const Search: React.FC = () => {
     function resizeWidth() {
         setWidth(window.innerWidth);
     }
+    // @ts-ignore
     const { id } = useParams();
     const [searchText, setSearchText] = useState(id);
 
@@ -312,7 +313,7 @@ const Search: React.FC = () => {
                                 </>
                                 )}
                                 {/* bg-cbgd bg-bg-secondary */}
-                                <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 justify-between">
+                                <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 justify-center">
                                     <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
                                         type="text" value={searchText} onIonChange={e => {
                                             setSearchText(e.detail.value!)

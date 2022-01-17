@@ -66,29 +66,33 @@ const Home = () => {
                 console.log(err);
             });
     };
+    // @ts-ignore
     return (
         <IonPage className="bg-sky">
             <HeaderContainer mintAddrToParent={mintAddrToParent} showflag={true}/>
             {/* <IonContent className="ion-padding" fullscreen> */}
                 {/*
                     TODO:
-                    - reenable this, just link to search for now
-                    - test out wallet, comment both this and above line into the ticket
-
-                    - new card to do pulling from firebase for found mints ... Even if something has one single link - we can show it here
-                        - do now or TODO - show the source the mint came from
-
-                    - fix the DB so it stores a single mint multiple times... not just one and done
-
-                    - fix Jessica script so it deletes files after creating
-                    - Be able to show the CM ID next to each of these mints URLs, in frontend (by passing it to the script)
-                    - https://gitlab.com/nft-relay-group/functions/-/issues/55 to pull the live data from it
-
+                    DONE - make the title of the site smaller
+                    - line up the "type to search" and "search" button
+                    - make the "connect to wallet" smaller
+                    - completely reformat the list on top:
+                    - give it a title of "Possible Mints"
+                    - get rid of all icons
+                    - make it look closer to the search results - get rid of the "1642430722680" timestamp, get rid of the other timestamp and make it show "5 minutes ago" etc...
+                    DONE - get rid of the "S" and rather say "Source: S", followed by the link
+                    - make the link a click-able URL
+                    - when you type in the search on the "search" page, its searching before you even press enter
+                    - on the search page - the "click to toggle" is off by default - should be on
+                    - on home page need loading bars for everything
+                    completely reformat new collection (and give it a space in the title), and reformat popular collection, to make it look closer to magiceden and make it much smaller
+                    reformat in the collection how we're looping over keywords
+                    get rid of "Destination" in collection
                 */}
                 <></>
             <IonContent>
                 <IonRow>
-                    <IonLabel className="text-7xl text-blue-600">NewCollection</IonLabel>
+                    <IonLabel className="text-7xl text-blue-600">New Collection</IonLabel>
                 </IonRow>
                 <IonRow className="bg-lime-700">
                     {
@@ -111,7 +115,7 @@ const Home = () => {
                     ))}
                 </IonRow>
                 <IonRow>
-                        <IonLabel className="text-7xl text-blue-600">PopularCollection</IonLabel>
+                        <IonLabel className="text-7xl text-blue-600">Popular Collection</IonLabel>
                 </IonRow>
                 <IonRow>
                     {
@@ -144,7 +148,8 @@ const Home = () => {
             <IonContent>
                 {
                     products.map((product: any, index: any) => (
-                        <Card key={index} url={product.url} source={product.source} timestamp={product.timestamp} readableTimestamp={product.readableTimestamp} />
+                        <Card key={index} url={product.url} source={"Source: " + product.source}
+                              timestamp={product.timestamp} readableTimestamp={product.readableTimestamp} />
                 ))}
                 <IonCard>
                     <IonItem>

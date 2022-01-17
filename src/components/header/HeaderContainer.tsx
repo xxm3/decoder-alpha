@@ -84,7 +84,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
      * Renders
      */
     const renderNotConnectedContainer = () => (
-        <IonButton onClick={connectWallet}>Connect to Wallet</IonButton>
+        <IonButton onClick={connectWallet} classn={""}>Connect to Wallet</IonButton>
     );
 
     const renderConnectedContainer = () => (
@@ -113,7 +113,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                             <IonGrid>
                                 <IonRow>
                                     <IonCol >
-                                        <IonRouterLink className="text-8xl" routerLink="/">SOL Decoder</IonRouterLink>
+                                        <IonRouterLink className="text-6xl" routerLink="/">SOL Decoder</IonRouterLink>
                                     </IonCol>
                                 {/*- <IonRouterLink routerLink="/mint">Mint</IonRouterLink> -*/}
                                 {/*<IonRouterLink routerLink="/game">Game</IonRouterLink>*/}
