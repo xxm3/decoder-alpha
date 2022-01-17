@@ -1,4 +1,6 @@
 import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRouterLink } from '@ionic/react';
+import { pin, wifi, wine, warning, walk, colorFill } from 'ionicons/icons';
+import React, { useEffect, useState } from 'react';
 import {
     IonList,
     IonItem,
@@ -11,15 +13,17 @@ import {
     IonCardHeader,
     IonCardSubtitle,
     IonCardTitle,
-    IonIcon
+    IonIcon,
+    IonGrid,
+    IonRow,
+    IonCol,
 } from '@ionic/react';
-import { pin, wifi, wine, warning, walk } from 'ionicons/icons';
-import React, { useEffect, useState } from 'react';
-import Card from './Card';
 import axios from 'axios';
 import './Home.css';
 import HeaderContainer from "../../components/header/HeaderContainer";
 import { attachProps } from '@ionic/react/dist/types/components/utils';
+import Card from './Card';
+import CollectionCard from './CollectionCard';
 
 const Home = () => {
 
@@ -29,6 +33,8 @@ const Home = () => {
     const [walletAddress, setWalletAddress] = useState('');
 
     const [products, setProducts] = useState([]);
+    const [newcollections, setNewCollection] = useState([]);
+    const [popularcollections, setPopularCollection] = useState([]);
     /**
      * Actions
      */
@@ -52,6 +58,8 @@ const Home = () => {
             .get('https://us-central1-nft-discord-relay.cloudfunctions.net/api/homeData')
             .then((res) => {
                 setProducts(res.data.data.possibleMintLinks[0]);
+                setNewCollection(res.data.data.new_collections);
+                setPopularCollection(res.data.data.popular_collections);
                 console.log("res1----------------", products);
             })
             .catch((err) => {
@@ -59,8 +67,8 @@ const Home = () => {
             });
     };
     return (
-        <IonPage>
-            <HeaderContainer mintAddrToParent={mintAddrToParent} />
+        <IonPage className="bg-sky">
+            <HeaderContainer mintAddrToParent={mintAddrToParent} showflag={true}/>
             {/* <IonContent className="ion-padding" fullscreen> */}
                 {/*
                     TODO:
@@ -77,6 +85,55 @@ const Home = () => {
                     - https://gitlab.com/nft-relay-group/functions/-/issues/55 to pull the live data from it
 
                 */}
+                <></>
+            <IonContent>
+                <IonRow>
+                    <IonLabel className="text-7xl text-blue-600">NewCollection</IonLabel>
+                </IonRow>
+                <IonRow className="bg-lime-700">
+                    {
+                        newcollections.map((collection: any ,index: any) =>(
+                            <IonCol >
+                                <CollectionCard key={index} 
+                                    name={collection.name} 
+                                    description={collection.description} 
+                                    image={collection.image} 
+                                    website={collection.website} 
+                                    twitter={collection.twitter} 
+                                    discord={collection.discord} 
+                                    categories={collection.categories}
+                                    splitName={collection.splitName}
+                                    link={collection.link}
+                                    timestamp={collection.timestamp}
+                                    readableTimestamp={collection.readableTimestamp}
+                                />
+                            </IonCol>
+                    ))}
+                </IonRow>
+                <IonRow>
+                        <IonLabel className="text-7xl text-blue-600">PopularCollection</IonLabel>
+                </IonRow>
+                <IonRow>
+                    {
+                        popularcollections.map((collection: any, index: any)=>(
+                            <IonCol>
+                                <CollectionCard key={index} 
+                                    name={collection.name} 
+                                    description={collection.description} 
+                                    image={collection.image} 
+                                    website={collection.website} 
+                                    twitter={collection.twitter} 
+                                    discord={collection.discord} 
+                                    categories={collection.categories}
+                                    splitName={collection.splitName}
+                                    link={collection.link}
+                                    timestamp={collection.timestamp}
+                                    readableTimestamp={collection.readableTimestamp}
+                                />
+                            </IonCol>
+                    ))}
+                </IonRow>    
+            </IonContent>
             {/* </IonContent> */}
             {/* <IonHeader>
                 <IonToolbar>
@@ -88,8 +145,7 @@ const Home = () => {
                 {
                     products.map((product: any, index: any) => (
                         <Card key={index} url={product.url} source={product.source} timestamp={product.timestamp} readableTimestamp={product.readableTimestamp} />
-                    ))}
-
+                ))}
                 <IonCard>
                     <IonItem>
                         <IonIcon icon={pin} slot="start" />

@@ -1,7 +1,7 @@
 import Loader from '../components/search/Loader';
 import React, { useRef } from 'react';
 import Display from '../components/search/Display';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext} from 'react';
 import { Message } from '../data/messages';
 
 import {
@@ -294,12 +294,12 @@ const Search: React.FC = () => {
     const scrollToTop = () => {
         contentRef.current && contentRef.current.scrollToTop();
     };
-
+    const childRef = useRef <typeof HeaderContainer>(HeaderContainer);
     return (
         <React.Fragment>
             <IonPage id="home-page">
                 <IonContent ref={contentRef} scrollEvents={true} fullscreen>
-                    <HeaderContainer mintAddrToParent={mintAddrToParent} showflag={true} />
+                    <HeaderContainer mintAddrToParent={mintAddrToParent} onClick={onClick} showflag={false} />
                     <div className="min-h-screen font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2">
                         <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
                             {/* search bar / form */}
@@ -318,7 +318,7 @@ const Search: React.FC = () => {
                                             setSearchText(e.detail.value!)
                                         }} animated placeholder="Type to search" disabled={isLoading} />
                                     <div className="xs:flex items-center px-2 rounded-lg space-x-4 mx-auto ">
-                                        <IonButton className=" text-white text-base rounded-lg" onClick={onClick}
+                                        <IonButton className=" text-white text-base rounded-lg" onClick={() => onClick}
                                             animate-bounce disabled={searchText === ''}>
                                             Search</IonButton>
                                     </div>

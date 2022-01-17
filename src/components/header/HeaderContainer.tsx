@@ -1,11 +1,11 @@
 import './HeaderContainer.css';
 import { IonButton, IonContent, IonHeader, IonRouterLink, IonTitle, IonToolbar, IonSearchbar, IonGrid, IonRow, IonCol, IonItem } from "@ionic/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,forwardRef, useRef, useImperativeHandle } from "react";
 import { useHistory } from 'react-router';
 import { attachProps } from '@ionic/react/dist/types/components/utils';
 
 // @ts-ignore
-const HeaderContainer = ({ mintAddrToParent, showflag }) => {
+const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
 
     let history = useHistory();
 
@@ -14,7 +14,6 @@ const HeaderContainer = ({ mintAddrToParent, showflag }) => {
      */
     const [walletAddress, setWalletAddress] = useState(null);
     const [searchvalue, setInput] = useState('');
-    const [searchflag,showSearch] = useState(!showflag);
     /**s
      * Actions
      */
@@ -96,7 +95,6 @@ const HeaderContainer = ({ mintAddrToParent, showflag }) => {
     );
 
     function handleSearch() {
-        showSearch(!searchflag);
         console.log("handleSearch ----------------", searchvalue);
         if (typeof (searchvalue) !== "undefined" && searchvalue !== '') {
             history.push(`/search/${searchvalue}`);
@@ -121,7 +119,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag }) => {
                                 {/*<IonRouterLink routerLink="/game">Game</IonRouterLink>*/}
                                     <IonCol >
                                     {
-                                        searchflag&& (
+                                        showflag && (
                                             <form className="ion-padding" onSubmit={() => handleSearch()}>
                                                 <IonRow>
                                                     <IonCol>

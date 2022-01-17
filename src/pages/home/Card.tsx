@@ -19,6 +19,7 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ url, source, timestamp, readableTimestamp }) => {
+
   return (
     <>
       <IonCard>
