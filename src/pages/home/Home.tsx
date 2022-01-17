@@ -74,14 +74,14 @@ const Home = () => {
                 {/*
                     TODO:
                     DONE - make the title of the site smaller
-                    - line up the "type to search" and "search" button
-                    - make the "connect to wallet" smaller
+                    HalfDone- line up the "type to search" and "search" button
+                    DONE - make the "connect to wallet" smaller
                     - completely reformat the list on top:
                     - give it a title of "Possible Mints"
                     - get rid of all icons
                     - make it look closer to the search results - get rid of the "1642430722680" timestamp, get rid of the other timestamp and make it show "5 minutes ago" etc...
                     DONE - get rid of the "S" and rather say "Source: S", followed by the link
-                    - make the link a click-able URL
+                    DONE - make the link a click-able URL
                     - when you type in the search on the "search" page, its searching before you even press enter
                     - on the search page - the "click to toggle" is off by default - should be on
                     - on home page need loading bars for everything
