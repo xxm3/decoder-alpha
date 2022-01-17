@@ -1,29 +1,31 @@
 import './HeaderContainer.css';
-import {IonButton, IonContent, IonHeader, IonRouterLink, IonTitle, IonToolbar} from "@ionic/react";
-import React, {useEffect, useState} from "react";
+import { IonButton, IonContent, IonHeader, IonRouterLink, IonTitle, IonToolbar, IonSearchbar, IonGrid, IonRow, IonCol, IonItem } from "@ionic/react";
+import React, { useEffect, useState,forwardRef, useRef, useImperativeHandle } from "react";
+import { useHistory } from 'react-router';
+import { attachProps } from '@ionic/react/dist/types/components/utils';
 
 // @ts-ignore
-const HeaderContainer = ({mintAddrToParent}) => {
+const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
+
+    let history = useHistory();
 
     /**
      * State Variables
      */
     const [walletAddress, setWalletAddress] = useState(null);
-
-    /**
+    const [searchvalue, setInput] = useState('');
+    /**s
      * Actions
      */
+
     const checkIfWalletIsConnected = async () => {
         try {
             // @ts-ignore
-            const {solana} = window;
-
+            const { solana } = window;
             if (solana) {
                 if (solana.isPhantom) {
                     console.log('Phantom wallet found!');
-
-                    const response = await solana.connect({onlyIfTrusted: true});
-
+                    const response = await solana.connect({ onlyIfTrusted: true });
                     console.log(
                         'Connected with Public Key:',
                         response.publicKey.toString()
@@ -48,7 +50,7 @@ const HeaderContainer = ({mintAddrToParent}) => {
     const connectWallet = async () => {
 
         // @ts-ignore
-        const {solana} = window;
+        const { solana } = window;
 
         if (solana) {
             const response = await solana.connect();
@@ -92,27 +94,63 @@ const HeaderContainer = ({mintAddrToParent}) => {
         </span>
     );
 
+    function handleSearch() {
+        console.log("handleSearch ----------------", searchvalue);
+        if (typeof (searchvalue) !== "undefined" && searchvalue !== '') {
+            history.push(`/search/${searchvalue}`);
+            window.location.reload();
+        }
+        else {
+            history.push('/');
+        }
+    }
 
     return (
-        <IonHeader>
-            <IonToolbar>
-                <IonTitle>
-                    <IonRouterLink className="header" routerLink="/">SOL Decoder</IonRouterLink>
-
-                    {/*- <IonRouterLink routerLink="/mint">Mint</IonRouterLink> -*/}
-                    {/*<IonRouterLink routerLink="/game">Game</IonRouterLink>*/}
-
-                    <span style={{"float": "right"}}>
-                        {/* Add the condition to show this only if we don't have a wallet address */}
-                        {!walletAddress && renderNotConnectedContainer()}
-                        {/* We just need to add the inverse here! */}
-                        {walletAddress && renderConnectedContainer()}
-                </span>
-                </IonTitle>
-            </IonToolbar>
-        </IonHeader>
+        <React.Fragment>
+            <IonHeader className="all">
+                    {/* <IonToolbar>
+                        <IonTitle class="flex"> */}
+                            <IonGrid>
+                                <IonRow>
+                                    <IonCol >
+                                        <IonRouterLink className="text-8xl" routerLink="/">SOL Decoder</IonRouterLink>
+                                    </IonCol>
+                                {/*- <IonRouterLink routerLink="/mint">Mint</IonRouterLink> -*/}
+                                {/*<IonRouterLink routerLink="/game">Game</IonRouterLink>*/}
+                                    <IonCol >
+                                    {
+                                        showflag && (
+                                            <form className="ion-padding" onSubmit={() => handleSearch()}>
+                                                <IonRow>
+                                                    <IonCol>
+                                                        <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
+                                                            type="text" value={searchvalue} onIonChange={e => {
+                                                                setInput(e.target.value)
+                                                            }} animated placeholder="Type to search" />
+                                                    </IonCol>
+                                                    <IonCol>
+                                                        <IonButton className=" text-white bg-orange-500" value={searchvalue} onClick={() => handleSearch()}
+                                                            animate-bounce disabled={searchvalue === ''}>
+                                                            Search</IonButton>
+                                                    </IonCol>
+                                                </IonRow>
+                                            </form>)
+                                    }
+                                    </IonCol>  
+                                    <IonCol className="ion-align-self-end">
+                                        {/* Add the condition to show this only if we don't have a wallet address */}
+                                        {!walletAddress && renderNotConnectedContainer()}
+                                        {/* We just need to add the inverse here! */}
+                                        {walletAddress && renderConnectedContainer()}
+                                    </IonCol>     
+                                </IonRow>                   
+                            </IonGrid>
+                        {/* </IonTitle>
+                    </IonToolbar> */}
+                    
+            </IonHeader>
+        </React.Fragment>
     );
-
 };
 
 export default HeaderContainer;
