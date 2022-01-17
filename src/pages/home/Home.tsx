@@ -69,29 +69,6 @@ const Home = () => {
     return (
         <IonPage className="bg-sky">
             <HeaderContainer mintAddrToParent={mintAddrToParent} showflag={true}/>
-            {/* <IonContent className="ion-padding" fullscreen> */}
-                {/*
-                    TODO:
-                    - reenable this, just link to search for now
-                    - test out wallet, comment both this and above line into the ticket
-
-                    - new card to do pulling from firebase for found mints ... Even if something has one single link - we can show it here
-                        - do now or TODO - show the source the mint came from
-
-                    - fix the DB so it stores a single mint multiple times... not just one and done
-
-                    - fix Jessica script so it deletes files after creating
-                    - Be able to show the CM ID next to each of these mints URLs, in frontend (by passing it to the script)
-                    - https://gitlab.com/nft-relay-group/functions/-/issues/55 to pull the live data from it
-
-                */}
-                <></>
-            {/* </IonContent> */}
-            {/* <IonHeader>
-                <IonToolbar>
-                <IonTitle></IonTitle>
-                </IonToolbar>
-            </IonHeader> */}
 
             <IonContent>
                 {
@@ -110,27 +87,6 @@ const Home = () => {
                     </IonCardContent>
                 </IonCard>
 
-                {/* <IonCard>
-                            <IonItem href="#" className="ion-activated">
-                                <IonIcon icon={wifi} slot="start" />
-                                <IonLabel>Card Link Item 1 activated</IonLabel>
-                            </IonItem>
-
-                            <IonItem href="#">
-                                <IonIcon icon={wine} slot="start" />
-                                <IonLabel>Card Link Item 2</IonLabel>
-                            </IonItem>
-
-                            <IonItem className="ion-activated">
-                                <IonIcon icon={warning} slot="start" />
-                                <IonLabel>Card Button Item 1 activated</IonLabel>
-                            </IonItem>
-
-                            <IonItem>
-                                <IonIcon icon={walk} slot="start" />
-                                <IonLabel>Card Button Item 2</IonLabel>
-                            </IonItem>
-                        </IonCard> */}
             </IonContent>
             <IonContent>
                 <IonRow>
