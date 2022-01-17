@@ -1,11 +1,11 @@
 import './HeaderContainer.css';
-import { IonButton, IonContent, IonHeader, IonRouterLink, IonTitle, IonToolbar, IonSearchbar, IonGrid, IonRow, IonCol } from "@ionic/react";
+import { IonButton, IonContent, IonHeader, IonRouterLink, IonTitle, IonToolbar, IonSearchbar, IonGrid, IonRow, IonCol, IonItem } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { useHistory } from 'react-router';
 import { attachProps } from '@ionic/react/dist/types/components/utils';
 
 // @ts-ignore
-const HeaderContainer = ({ mintAddrToParent }) => {
+const HeaderContainer = ({ mintAddrToParent, showflag }) => {
 
     let history = useHistory();
 
@@ -14,7 +14,8 @@ const HeaderContainer = ({ mintAddrToParent }) => {
      */
     const [walletAddress, setWalletAddress] = useState(null);
     const [searchvalue, setInput] = useState('');
-    /**
+    const [searchflag,showSearch] = useState(!showflag);
+    /**s
      * Actions
      */
 
@@ -95,6 +96,7 @@ const HeaderContainer = ({ mintAddrToParent }) => {
     );
 
     function handleSearch() {
+        showSearch(!searchflag);
         console.log("handleSearch ----------------", searchvalue);
         if (typeof (searchvalue) !== "undefined" && searchvalue !== '') {
             history.push(`/search/${searchvalue}`);
@@ -112,32 +114,42 @@ const HeaderContainer = ({ mintAddrToParent }) => {
                         <IonTitle class="flex"> */}
                             <IonGrid>
                                 <IonRow>
-                                    <IonCol>
-                                        <IonRouterLink className="text-6xl" routerLink="/">SOL Decoder</IonRouterLink>
+                                    <IonCol >
+                                        <IonRouterLink className="text-8xl" routerLink="/">SOL Decoder</IonRouterLink>
                                     </IonCol>
                                 {/*- <IonRouterLink routerLink="/mint">Mint</IonRouterLink> -*/}
                                 {/*<IonRouterLink routerLink="/game">Game</IonRouterLink>*/}
-                                    <IonCol>
-                                        <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
-                                            type="text" value={searchvalue} onIonChange={e => {
-                                                setInput(e.target.value)
-                                            }} animated placeholder="Type to search" />
-                                    </IonCol>
-                                    <IonCol>
-                                        <IonButton className=" text-white bg-orange-500" value={searchvalue} onClick={() => handleSearch()}
-                                            animate-bounce disabled={searchvalue === ''}>
-                                            Search</IonButton>
-                                    </IonCol>
-                                    <IonCol>
+                                    <IonCol >
+                                    {
+                                        searchflag&& (
+                                            <form className="ion-padding" onSubmit={() => handleSearch()}>
+                                                <IonRow>
+                                                    <IonCol>
+                                                        <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
+                                                            type="text" value={searchvalue} onIonChange={e => {
+                                                                setInput(e.target.value)
+                                                            }} animated placeholder="Type to search" />
+                                                    </IonCol>
+                                                    <IonCol>
+                                                        <IonButton className=" text-white bg-orange-500" value={searchvalue} onClick={() => handleSearch()}
+                                                            animate-bounce disabled={searchvalue === ''}>
+                                                            Search</IonButton>
+                                                    </IonCol>
+                                                </IonRow>
+                                            </form>)
+                                    }
+                                    </IonCol>  
+                                    <IonCol className="ion-align-self-end">
                                         {/* Add the condition to show this only if we don't have a wallet address */}
                                         {!walletAddress && renderNotConnectedContainer()}
                                         {/* We just need to add the inverse here! */}
                                         {walletAddress && renderConnectedContainer()}
-                                    </IonCol>       
-                                </IonRow>
+                                    </IonCol>     
+                                </IonRow>                   
                             </IonGrid>
                         {/* </IonTitle>
                     </IonToolbar> */}
+                    
             </IonHeader>
         </React.Fragment>
     );

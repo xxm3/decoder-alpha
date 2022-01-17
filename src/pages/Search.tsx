@@ -29,7 +29,7 @@ const Search: React.FC = () => {
     const history = useHistory();
     const [showHelp, setShowHelp] = useState(true);
     const [width, setWidth] = useState(window.innerWidth);
-
+    
     window.onresize = () => {
         resizeWidth();
     };
@@ -299,7 +299,7 @@ const Search: React.FC = () => {
         <React.Fragment>
             <IonPage id="home-page">
                 <IonContent ref={contentRef} scrollEvents={true} fullscreen>
-                    <HeaderContainer mintAddrToParent={mintAddrToParent} />
+                    <HeaderContainer mintAddrToParent={mintAddrToParent} showflag={true} />
                     <div className="min-h-screen font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2">
                         <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
                             {/* search bar / form */}
