@@ -328,7 +328,7 @@ const Search: React.FC = () => {
 
                             {/* loading bar */}
                             {isLoading && (<div className="pt-10 flex justify-center items-center">
-                                <Loader></Loader>
+                                <Loader/>
                             </div>)}
 
                             {/* chart / search results, based on screen width
@@ -336,19 +336,19 @@ const Search: React.FC = () => {
                             {!isLoading && foundResults && width > 1536 && (
                                 <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
                                     height={Number(35)} total={total} totalCountHeight={18} showPie={false}
-                                    width={width}></Display>
+                                     width={width}/>
                                 // height={Number(10 + 65)}   75
                             )}
                             {!isLoading && foundResults && width <= 1536 && width > 1280 && (
                                 <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
                                     height={Number(45)} total={total} totalCountHeight={22} showPie={false}
-                                    width={width}></Display>
+                                    width={width}/>
                                 // height={Number(75 + 10)} 85
                             )}
                             {!isLoading && foundResults && width <= 1280 && width > 1024 && (
                                 <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
                                     height={Number(55)} total={total} totalCountHeight={25} showPie={false}
-                                    width={width}></Display>
+                                    width={width}/>
                                 // height={Number(5 + 100)}     105
                             )}
                             {!isLoading && foundResults && width <= 1024 && width > 768 && (

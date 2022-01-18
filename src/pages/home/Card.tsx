@@ -14,33 +14,20 @@ import { pin, wifi, wine, warning, walk } from 'ionicons/icons';
 import React from "react";
 interface CardProps {
   url: any;
-  source: any;
-  timestamp: any;
   readableTimestamp: any;
+  source: any;
 }
 
-const Card: React.FC<CardProps> = ({ url, source, timestamp, readableTimestamp }) => {
+const Card: React.FC<CardProps> = ({ url, readableTimestamp, source }) => {
 
   return (
     <>
       <IonCard>
-        <IonItem href={url} className="ion-activated">
-          <IonIcon icon={wifi} slot="start" />
-          <IonLabel>{url}</IonLabel>
+        <IonItem onClick={()=> window.open(url, "_blank")} className="ion-activated" href="#/">
+          <IonLabel>{"Source: " + source + " " + url}</IonLabel>
         </IonItem>
 
-        <IonItem className="ion-activated">
-          <IonIcon icon={wine} slot="start" />
-          <IonLabel>{source}</IonLabel>
-        </IonItem>
-
-        <IonItem className="ion-activated">
-          <IonIcon icon={warning} slot="start" />
-          <IonLabel>{timestamp}</IonLabel>
-        </IonItem>
-
-        <IonItem>
-          <IonIcon icon={walk} slot="start" />
+        <IonItem href="#/">
           <IonLabel>{readableTimestamp}</IonLabel>
         </IonItem>
       </IonCard>

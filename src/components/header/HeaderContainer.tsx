@@ -48,10 +48,8 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
     };
 
     const connectWallet = async () => {
-
         // @ts-ignore
         const { solana } = window;
-
         if (solana) {
             const response = await solana.connect();
             console.log('Connected with Public Key:', response.publicKey.toString());
@@ -84,7 +82,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
      * Renders
      */
     const renderNotConnectedContainer = () => (
-        <IonButton onClick={connectWallet} classn={""}>Connect to Wallet</IonButton>
+        <IonButton onClick={connectWallet} className={"text-white bg-orange-500 absolute inset-y-0 right-0 w-32 text-xs"}>Select Wallet</IonButton>
     );
 
     const renderConnectedContainer = () => (
@@ -105,6 +103,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
         }
     }
 
+    // @ts-ignore
     return (
         <React.Fragment>
             <IonHeader className="all">
@@ -121,28 +120,27 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                                     {
                                         showflag && (
                                             <form className="ion-padding" onSubmit={() => handleSearch()}>
-                                                <IonRow>
+                                                <IonRow className="xs::flex items-center rounded-lg overflow-hidden px-2 py-1 justify-center">
                                                     <IonCol>
                                                         <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
                                                             type="text" value={searchvalue} onIonChange={e => {
-                                                                setInput(e.target.value)
+                                                                // @ts-ignore
+                                                            setInput(e.target.value)
                                                             }} animated placeholder="Type to search" />
                                                     </IonCol>
                                                     <IonCol>
-                                                        <IonButton className=" text-white bg-orange-500" value={searchvalue} onClick={() => handleSearch()}
+                                                        <IonButton className="text-white bg-orange-500" value={searchvalue} onClick={() => handleSearch()}
                                                             animate-bounce disabled={searchvalue === ''}>
                                                             Search</IonButton>
                                                     </IonCol>
                                                 </IonRow>
                                             </form>)
                                     }
+                                    {/* Add the condition to show this only if we don't have a wallet address */}
+                                    {!walletAddress && renderNotConnectedContainer()}
+                                    {/* We just need to add the inverse here! */}
+                                    {walletAddress && renderConnectedContainer()}
                                     </IonCol>  
-                                    <IonCol className="ion-align-self-end">
-                                        {/* Add the condition to show this only if we don't have a wallet address */}
-                                        {!walletAddress && renderNotConnectedContainer()}
-                                        {/* We just need to add the inverse here! */}
-                                        {walletAddress && renderConnectedContainer()}
-                                    </IonCol>     
                                 </IonRow>                   
                             </IonGrid>
                         {/* </IonTitle>
