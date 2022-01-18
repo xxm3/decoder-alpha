@@ -37,6 +37,7 @@ const Search: React.FC = () => {
     function resizeWidth() {
         setWidth(window.innerWidth);
     }
+    
     // @ts-ignore
     const { id } = useParams();
     const [searchText, setSearchText] = useState(id);
