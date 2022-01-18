@@ -163,6 +163,7 @@ const Search: React.FC = () => {
 
                 throw fetchedData;
             }
+
             let sample = fetchedData;
             setTotal(sample.totalCount);
 
