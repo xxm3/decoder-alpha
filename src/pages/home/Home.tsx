@@ -16,6 +16,7 @@ import HeaderContainer from "../../components/header/HeaderContainer";
 import Card from './Card';
 import CollectionCard from './CollectionCard';
 import Loader from "../../components/search/Loader";
+import { environment } from "../../environments/environment";
 import {setTimeout} from "timers";
 import {
     resolveToWalletAddress,
@@ -27,6 +28,7 @@ const Home = () => {
     /**
      * State Variables
      */
+    // TODO-vinit: need this error fixed - https://sentry.io/answers/unique-key-prop/
     const [walletAddress, setWalletAddress] = useState('');
     const [products, setProducts] = useState([]);
     const [newcollections, setNewCollection] = useState([]);
@@ -48,23 +50,46 @@ const Home = () => {
     /**
      * UseEffects
      */
-    const getNfts = async (passedWalletAddress: string) => {
-        // from https://github.com/NftEyez/sol-rayz
 
-        // const address = "...";
-        // const publicAddress = await resolveToWalletAddress(address);
+    // gets the user's nft's from their wallet
+    // from https://github.com/NftEyez/sol-rayz
+    const getNfts = async (passedWalletAddress: string) => {
 
         const publicAddress = passedWalletAddress;
-        // console.log(`---looking up nft for address '${publicAddress}'`)
 
-        const nftArray = await getParsedNftAccountsByOwner({
+        const rawNftArray = await getParsedNftAccountsByOwner({
             publicAddress,
         });
 
-        // @ts-ignore
-        setUserNfts(nftArray);
+        console.log("raw user nfts: ", rawNftArray);
 
-        console.log("found user nfts: ", nftArray);
+        let modifiedUserNfts: any = [];
+
+        for(let i in rawNftArray){
+            const uri = rawNftArray[i].data.uri;
+
+            if(uri.indexOf("arweave") !== -1){
+                let moreData: any = {};
+
+                await axios.get(uri).then((res) => {
+                    // push unique collections only
+                    if(!modifiedUserNfts.map(item => item.name).includes(res.data.collection.name)){
+                        modifiedUserNfts.push({
+                            img: res.data.image,
+                            name: res.data.collection.name
+                        });
+                    }
+                })
+                .catch((err) => {
+                    console.error("error when getting arweave data: " + err);
+                });
+            }
+        }
+
+        console.log("modified user nfts: ", modifiedUserNfts);
+
+        // @ts-ignore
+        setUserNfts(modifiedUserNfts);
     }
 
 
@@ -78,8 +103,9 @@ const Home = () => {
 
     const fetchProducts = () => {
         setIsLoading(true);
+
         axios
-            .get('https://us-central1-nft-discord-relay.cloudfunctions.net/api/homeData')
+            .get(environment.backendApi + '/homeData')
             .then((res) => {
                 setProducts(res.data.data.possibleMintLinks[0]);
                 setNewCollection(res.data.data.new_collections);
@@ -92,7 +118,7 @@ const Home = () => {
             .catch((err) => {
                 setIsLoading(false);
                 // setTimeout(() => { setIsLoading(false); }, 2000);
-                console.error(err);
+                console.error("error when getting home page data: " + err);
             });
     };
 
@@ -114,20 +140,6 @@ const Home = () => {
                 )}
 
                 <div hidden={isLoading}>
-
-
-
-                    <IonRow className="bg-lime-700">
-                        {
-                            userNfts.map((collection: any, index: any) =>(
-                                <IonCol >
-                                    { collection.data.name }
-                                </IonCol>
-                            ))}
-                    </IonRow>
-
-
-
 
                     <IonRow className="bg-lime-700">
                         {
@@ -199,5 +211,17 @@ const Home = () => {
         </IonPage>
     );
 };
+
+{/* show user's NFTs */}
+{/*<IonRow className="bg-lime-700" hidden={ userNfts.length === 0 }>*/}
+{/*    {*/}
+{/*        userNfts.map((collection: any, index: any) =>(*/}
+{/*            <IonCol >*/}
+{/*                { collection.name }*/}
+{/*                <br/>*/}
+{/*                <img style={{ height: "100px" }} src={ collection.img } />*/}
+{/*            </IonCol>*/}
+{/*        ))}*/}
+{/*</IonRow>*/}
 
 export default Home;

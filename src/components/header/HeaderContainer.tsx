@@ -39,7 +39,6 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                     setWalletAddress(walletAddress);
                 }
             } else {
-                // TODO-vinit: need to show something that we only support phantom
                 console.error('Solana object not found! Get a Phantom Wallet');
             }
         } catch (error) {
