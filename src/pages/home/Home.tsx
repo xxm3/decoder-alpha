@@ -208,20 +208,25 @@ const Home = () => {
                 </div>
             </IonContent>
 
+
+            {/*show user's NFTs*/}
+            <IonCard>
+                <IonContent>
+                    <IonRow className="bg-lime-700" hidden={ userNfts.length === 0 }>
+                        {
+                            userNfts.map((collection: any, index: any) =>(
+                                <IonCol >
+                                    { collection.name }
+                                    <br/>
+                                    <img style={{ height: "100px" }} src={ collection.img } />
+                                </IonCol>
+                            ))}
+                    </IonRow>
+                </IonContent>
+            </IonCard>
+
         </IonPage>
     );
 };
-
-{/* show user's NFTs */}
-{/*<IonRow className="bg-lime-700" hidden={ userNfts.length === 0 }>*/}
-{/*    {*/}
-{/*        userNfts.map((collection: any, index: any) =>(*/}
-{/*            <IonCol >*/}
-{/*                { collection.name }*/}
-{/*                <br/>*/}
-{/*                <img style={{ height: "100px" }} src={ collection.img } />*/}
-{/*            </IonCol>*/}
-{/*        ))}*/}
-{/*</IonRow>*/}
 
 export default Home;
