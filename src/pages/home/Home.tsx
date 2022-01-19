@@ -119,9 +119,9 @@ const Home = () => {
 
                     <IonRow className="bg-lime-700">
                         {
-                            userNfts.map((collection: any ,index: any) =>(
+                            userNfts.map((collection: any, index: any) =>(
                                 <IonCol >
-                                    {{ collection.data.name }}
+                                    { collection.data.name }
                                 </IonCol>
                             ))}
                     </IonRow>
@@ -131,7 +131,7 @@ const Home = () => {
 
                     <IonRow className="bg-lime-700">
                         {
-                            newcollections.map((collection: any ,index: any) =>(
+                            newcollections.map((collection: any, index: any) =>(
                             <IonCol >
                                 <CollectionCard key={index}
                                     name={collection.name}
