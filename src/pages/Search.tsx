@@ -75,33 +75,11 @@ const Search: React.FC = () => {
         return labels.reverse();
     }
     const labels = generateLabels();
-    // const [messages, setMessages] = useState<Message[]>([]);
 
 
     const [doughnutData, setDoughnutData] = useState({
         labels: labels,
         datasets: [
-            // {
-            //     label: '# of Votes',
-            //     data: [12, 19, 3, 5, 2, 3],
-            //     backgroundColor: [
-            //         'rgba(255, 99, 132, 0.8)',
-            //         'rgba(54, 162, 235, 0.8)',
-            //         'rgba(255, 206, 86, 0.8)',
-            //         'rgba(75, 192, 192, 0.8)',
-            //         'rgba(153, 102, 255, 0.8)',
-            //         'rgba(255, 159, 64, 0.8)',
-            //     ],
-            //     borderColor: [
-            //         'rgba(255, 99, 132, 1)',
-            //         'rgba(54, 162, 235, 1)',
-            //         'rgba(255, 206, 86, 1)',
-            //         'rgba(75, 192, 192, 1)',
-            //         'rgba(153, 102, 255, 1)',
-            //         'rgba(255, 159, 64, 1)',
-            //     ],
-            //     borderWidth: 2,
-            // },
         ],
     });
 
@@ -169,30 +147,6 @@ const Search: React.FC = () => {
 
             setDoughnutData({
                 ...doughnutData,
-                // labels: sample.ten_day_count.map(x => x.date),
-                // datasets: [
-                //     {
-                //         label: '10 days count',
-                //         data: sample.ten_day_count.map(x => x.count),
-                //         backgroundColor: [
-                //             'rgba(255, 99, 132, 0.8)',
-                //             'rgba(54, 162, 235, 0.8)',
-                //             'rgba(255, 206, 86, 0.8)',
-                //             'rgba(75, 192, 192, 0.8)',
-                //             'rgba(153, 102, 255, 0.8)',
-                //             'rgba(255, 159, 64, 0.8)',
-                //         ],
-                //         borderColor: [
-                //             'rgba(255, 99, 132, 1)',
-                //             'rgba(54, 162, 235, 1)',
-                //             'rgba(255, 206, 86, 1)',
-                //             'rgba(75, 192, 192, 1)',
-                //             'rgba(153, 102, 255, 1)',
-                //             'rgba(255, 159, 64, 1)',
-                //         ],
-                //         borderWidth: 2,
-                //     },
-                // ]
             });
 
             // const handleKeyDown = (event: any) => {
@@ -243,9 +197,8 @@ const Search: React.FC = () => {
             // console.log(messages);
 
             setShowHelp(false);
-            setTimeout(() => {
-                setFoundResults(true);
-            }, 2000);
+            setFoundResults(true);
+            // setTimeout(() => { setFoundResults(true); }, 2000);
 
             let tempMsg: Message[] = [];
             sample.messages.forEach((msg: any, idx: any) => {
@@ -259,9 +212,8 @@ const Search: React.FC = () => {
             setWord(sample.word);
             setMessages(tempMsg);
 
-            setTimeout(() => {
-                setIsLoading(false);
-            }, 2000);
+            setIsLoading(false);
+            // setTimeout(() => { setIsLoading(false); }, 2000);
         } catch (e: any) {
             console.error("try/catch in Search.tsx: ", e);
 
@@ -298,6 +250,7 @@ const Search: React.FC = () => {
         contentRef.current && contentRef.current.scrollToTop();
     };
     const childRef = useRef <typeof HeaderContainer>(HeaderContainer);
+
     return (
         <React.Fragment>
             <IonPage id="home-page">
@@ -307,6 +260,7 @@ const Search: React.FC = () => {
                         <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
                             {/* search bar / form */}
                             <form onSubmit={(e) => onClick(e)}>
+
                                 {(!foundResults || isLoading) && (<>
                                     <h1 className="text-center font-bold text-white text-4xl">{isLoading ?
                                         <p>Searching for <b className="text-cb">{searchText}</b></p> : 'Search:'}
@@ -314,7 +268,7 @@ const Search: React.FC = () => {
                                     {/*<p className="mx-auto font-normal text-center text-sm my-6 max-w-lg">This app will last 10 days count and last 100 messages.</p>*/}
                                 </>
                                 )}
-                                {/* bg-cbgd bg-bg-secondary */}
+
                                 <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 justify-center">
                                     <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
                                         type="text" value={searchText} onIonChange={e => {
@@ -371,6 +325,7 @@ const Search: React.FC = () => {
                                 ></MobileDisplay>
                                 // height={Number(30 + 275)}       310      width={width}
                             )}
+
                             {/* error bar */}
                             {!isLoading && !foundResults && error !== '' && (
                                 <div className="relative mt-6 bg-red-100 p-6 rounded-xl">

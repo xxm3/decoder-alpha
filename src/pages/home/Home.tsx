@@ -1,5 +1,5 @@
 import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRouterLink } from '@ionic/react';
-import { pin} from 'ionicons/icons';
+import { pin } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import {
     IonItem,
@@ -17,6 +17,10 @@ import Card from './Card';
 import CollectionCard from './CollectionCard';
 import Loader from "../../components/search/Loader";
 import {setTimeout} from "timers";
+import {
+    resolveToWalletAddress,
+    getParsedNftAccountsByOwner,
+} from "@nfteyez/sol-rayz";
 
 const Home = () => {
 
@@ -27,20 +31,47 @@ const Home = () => {
     const [products, setProducts] = useState([]);
     const [newcollections, setNewCollection] = useState([]);
     const [popularcollections, setPopularCollection] = useState([]);
+    const [userNfts, setUserNfts] = useState([]);
+
     const [isLoading, setIsLoading] = useState(false);
+
     /**
      * Actions
      */
+    // called from the child, after their wallet is connected
     const mintAddrToParent = (walletAddress: any) => {
+        // console.log(`----got wallet address from child: '${walletAddress}'`);
         setWalletAddress(walletAddress);
+        getNfts(walletAddress);
     }
 
     /**
      * UseEffects
      */
+    const getNfts = async (passedWalletAddress: string) => {
+        // from https://github.com/NftEyez/sol-rayz
+
+        // const address = "...";
+        // const publicAddress = await resolveToWalletAddress(address);
+
+        const publicAddress = passedWalletAddress;
+        // console.log(`---looking up nft for address '${publicAddress}'`)
+
+        const nftArray = await getParsedNftAccountsByOwner({
+            publicAddress,
+        });
+
+        // @ts-ignore
+        setUserNfts(nftArray);
+
+        console.log("found user nfts: ", nftArray);
+    }
+
+
     /**
      * Renders
      */
+
     useEffect(() => {
         fetchProducts();
     }, []);
@@ -53,18 +84,18 @@ const Home = () => {
                 setProducts(res.data.data.possibleMintLinks[0]);
                 setNewCollection(res.data.data.new_collections);
                 setPopularCollection(res.data.data.popular_collections);
-                console.log("res1----------------", products);
-                setTimeout(() => {
-                    setIsLoading(false);
-                }, 2000);
+                // console.log("res1----------------", products);
+
+                setIsLoading(false);
+                // setTimeout(() => { setIsLoading(false); }, 2000);
             })
             .catch((err) => {
-                setTimeout(() => {
-                    setIsLoading(false);
-                }, 2000);
-                console.log(err);
+                setIsLoading(false);
+                // setTimeout(() => { setIsLoading(false); }, 2000);
+                console.error(err);
             });
     };
+
     // @ts-ignore
     return (
         <IonPage className="bg-sky">
@@ -74,13 +105,30 @@ const Home = () => {
                 <IonRow>
                     <IonLabel className="text-7xl text-blue-600">New Collection</IonLabel>
                 </IonRow>
+
                 {/* loading bar */}
                 {isLoading && (
                     <div className="pt-10 flex justify-center items-center">
                         <Loader/>
                     </div>
                 )}
+
                 <div hidden={isLoading}>
+
+
+
+                    <IonRow className="bg-lime-700">
+                        {
+                            userNfts.map((collection: any ,index: any) =>(
+                                <IonCol >
+                                    {{ collection.data.name }}
+                                </IonCol>
+                            ))}
+                    </IonRow>
+
+
+
+
                     <IonRow className="bg-lime-700">
                         {
                             newcollections.map((collection: any ,index: any) =>(
@@ -101,6 +149,7 @@ const Home = () => {
                             </IonCol>
                         ))}
                     </IonRow>
+
                     <IonRow>
                             <IonLabel className="text-7xl text-blue-600">Popular Collection</IonLabel>
                     </IonRow>
@@ -124,8 +173,10 @@ const Home = () => {
                             </IonCol>
                         ))}
                     </IonRow>
+
                 </div>
             </IonContent>
+
             <IonContent>
                 <IonLabel className="text-7xl text-blue-600 fixed">Possible Mints</IonLabel>
                 {/* loading bar */}
@@ -134,6 +185,7 @@ const Home = () => {
                         <Loader/>
                     </div>
                 )}
+
                 <div hidden={isLoading}>
                     {
                         products.map((product: any, index: any) => (
@@ -141,41 +193,9 @@ const Home = () => {
                             <Card key={index} url={product.url} readableTimestamp={product.timestamp} source={product.source}/>
                         </>
                     ))}
-                    <IonCard>
-                        <IonItem>
-                            <IonIcon icon={pin} slot="start" />
-                            <IonLabel>ion-item in a card, icon left, button right</IonLabel>
-                            <IonButton fill="outline" slot="end">View</IonButton>
-                        </IonItem>
-                        <IonCardContent>
-                            This is content, without any paragraph or header tags,
-                            within an ion-cardContent element.
-                        </IonCardContent>
-                    </IonCard>
-
-                    {/* <IonCard>
-                                <IonItem href="#" className="ion-activated">
-                                    <IonIcon icon={wifi} slot="start" />
-                                    <IonLabel>Card Link Item 1 activated</IonLabel>
-                                </IonItem>
-
-                                <IonItem href="#">
-                                    <IonIcon icon={wine} slot="start" />
-                                    <IonLabel>Card Link Item 2</IonLabel>
-                                </IonItem>
-
-                                <IonItem className="ion-activated">
-                                    <IonIcon icon={warning} slot="start" />
-                                    <IonLabel>Card Button Item 1 activated</IonLabel>
-                                </IonItem>
-
-                                <IonItem>
-                                    <IonIcon icon={walk} slot="start" />
-                                    <IonLabel>Card Button Item 2</IonLabel>
-                                </IonItem>
-                            </IonCard> */}
                 </div>
             </IonContent>
+
         </IonPage>
     );
 };
