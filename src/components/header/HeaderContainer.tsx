@@ -24,12 +24,11 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
             const { solana } = window;
             if (solana) {
                 if (solana.isPhantom) {
-                    console.log('Phantom wallet found!');
+                    // console.log('Phantom wallet found!');
                     const response = await solana.connect({ onlyIfTrusted: true });
-                    console.log(
-                        'Connected with Public Key:',
-                        response.publicKey.toString()
-                    );
+
+                    const walletAddress = response.publicKey.toString();
+                    // console.log( 'Connected with Public Key:', walletAddress);
 
                     // send the wallet address to the parent
                     mintAddrToParent(walletAddress);
@@ -37,10 +36,10 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                     /*
                      * Set the user's publicKey in state to be used later!
                      */
-                    setWalletAddress(response.publicKey.toString());
+                    setWalletAddress(walletAddress);
                 }
             } else {
-                alert('Solana object not found! Get a Phantom Wallet 👻');
+                console.error('Solana object not found! Get a Phantom Wallet');
             }
         } catch (error) {
             console.error(error);
@@ -52,7 +51,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
         const { solana } = window;
         if (solana) {
             const response = await solana.connect();
-            console.log('Connected with Public Key:', response.publicKey.toString());
+            // console.log('Connected with Public Key:', response.publicKey.toString());
             setWalletAddress(response.publicKey.toString());
         }
     };
@@ -87,13 +86,13 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
 
     const renderConnectedContainer = () => (
         <span>
-            <span>${walletAddress}</span>
+            {/*<span>{walletAddress}</span>*/}
             {/*<IonButton onClick={() => mintAddrToParent(walletAddress)}>Click Child</IonButton>*/}
         </span>
     );
 
     function handleSearch() {
-        console.log("handleSearch ----------------", searchvalue);
+        // console.log("handleSearch ----------------", searchvalue);
         if (typeof (searchvalue) !== "undefined" && searchvalue !== '') {
             history.push(`/search/${searchvalue}`);
             window.location.reload();
