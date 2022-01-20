@@ -181,7 +181,6 @@ const Home = () => {
                 console.error("error when getting home page data: " + err);
             });
     };
-<<<<<<< HEAD
 
 
     // // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
@@ -207,11 +206,11 @@ const Home = () => {
     // );
 
 
-=======
     const getDateAgo = function (time: any){
         return moment(time).fromNow();
     }
->>>>>>> e430dbfd6658c863c9a32b885841f92e7d913cb7
+
+
     // @ts-ignore
     return (
         <IonPage className="bg-sky">
