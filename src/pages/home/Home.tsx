@@ -8,9 +8,10 @@ import Card from './Card';
 import CollectionCard from './CollectionCard';
 import Loader from "../../components/search/Loader";
 import {environment} from "../../environments/environment";
+import moment from "moment";
 import {
     resolveToWalletAddress,
-    getParsedNftAccountsByOwner,
+    getParsedNftAccountsByOwner
 } from "@nfteyez/sol-rayz";
 
 // import { PublicKey } from '@solana/web3.js';
@@ -38,7 +39,7 @@ import {
 
 // Default styles that can be overridden by your app
 // require('@solana/wallet-adapter-react-ui/styles.css');
-
+// import {Connection, programs} from '@metaplex/js';
 
 const Home = () => {
 
@@ -180,6 +181,7 @@ const Home = () => {
                 console.error("error when getting home page data: " + err);
             });
     };
+<<<<<<< HEAD
 
 
     // // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
@@ -205,6 +207,11 @@ const Home = () => {
     // );
 
 
+=======
+    const getDateAgo = function (time: any){
+        return moment(time).fromNow();
+    }
+>>>>>>> e430dbfd6658c863c9a32b885841f92e7d913cb7
     // @ts-ignore
     return (
         <IonPage className="bg-sky">
@@ -213,7 +220,7 @@ const Home = () => {
             <IonContent>
 
                 <IonRow>
-                    <IonLabel className="text-7xl text-blue-600">New Collection</IonLabel>
+                    <IonLabel className="text-6xl text-blue-600">New Collection</IonLabel>
                 </IonRow>
 
                 {/* loading bar */}
@@ -274,7 +281,7 @@ const Home = () => {
             </IonContent>
 
             <IonContent>
-                <IonLabel className="text-7xl text-blue-600 fixed">Possible Mints</IonLabel>
+                <IonLabel className="text-6xl text-blue-600">Possible Mints</IonLabel>
                 {/* loading bar */}
                 {isLoading && (
                     <div className="pt-10 flex justify-center items-center">
@@ -285,11 +292,47 @@ const Home = () => {
                 <div hidden={isLoading}>
                     {
                         products.map((product: any, index: any) => (
+                        <>
+                            <Card key={index} url={product.url} readableTimestamp={getDateAgo(product.timestamps)} source={product.source}/>
+                        </>
+                    ))}
+                    <IonCard>
+                        <IonItem>
+                            <IonIcon icon={pin} slot="start" />
+                            <IonLabel>ion-item in a card, icon left, button right</IonLabel>
+                            <IonButton fill="outline" slot="end">View</IonButton>
+                        </IonItem>
+                        <IonCardContent>
+                            This is content, without any paragraph or header tags,
+                            within an ion-cardContent element.
+                        </IonCardContent>
+                    </IonCard>
+
+                    {/* <IonCard>
+                                <IonItem href="#" className="ion-activated">
+                                    <IonIcon icon={wifi} slot="start" />
+                                    <IonLabel>Card Link Item 1 activated</IonLabel>
+                                </IonItem>
+
+                                <IonItem href="#">
+                                    <IonIcon icon={wine} slot="start" />
+                                    <IonLabel>Card Link Item 2</IonLabel>
+                                </IonItem>
+
+                                <IonItem className="ion-activated">
+                                    <IonIcon icon={warning} slot="start" />
+                                    <IonLabel>Card Button Item 1 activated</IonLabel>
+                                </IonItem>
+
+                                <IonItem>
+                                    <IonIcon icon={walk} slot="start" />
+                                    <IonLabel>Card Button Item 2</IonLabel>
+                                </IonItem>
+                            </IonCard> */}
                             <>
                                 <Card key={index} url={product.url} readableTimestamp={product.timestamp}
                                       source={product.source}/>
                             </>
-                        ))}
                 </div>
             </IonContent>
 
