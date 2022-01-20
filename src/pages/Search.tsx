@@ -133,14 +133,8 @@ const Search: React.FC = () => {
     }
 
     const doSearch = async () => {
-
         try {
             setIsLoading(true);
-
-            // testing CORS stuff...
-            // await fetch(environment.backendApi + '/receiver/urlParser?url=https://google.com/', { method: 'GET' });
-
-
             const res = await fetch(environment.backendApi + '/search/', {
                 method: 'POST',
                 'headers': {
@@ -301,8 +295,11 @@ const Search: React.FC = () => {
         <React.Fragment>
             <IonPage id="home-page">
                 <IonContent ref={contentRef} scrollEvents={true} fullscreen>
+                    {/* Header */}
                     <HeaderContainer mintAddrToParent={mintAddrToParent} onClick={onClick} showflag={false} />
-                    <div className="min-h-screen font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2">
+                    {/* Main Content After Header */}
+                    <div className="min-h-screen font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2  fixed top-20 left-0 right-0">
+                        {/* The Gray Container */}
                         <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
                             {/* search bar / form */}
                             <form onSubmit={(e) => onClick(e)}>

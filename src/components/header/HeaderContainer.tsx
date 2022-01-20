@@ -1,5 +1,5 @@
 import './HeaderContainer.css';
-import { IonButton, IonContent, IonHeader, IonRouterLink, IonTitle, IonToolbar, IonSearchbar, IonGrid, IonRow, IonCol, IonItem } from "@ionic/react";
+import { IonButton, IonContent, IonHeader, IonRouterLink, IonTitle, IonToolbar, IonSearchbar, IonGrid, IonRow, IonCol, IonItem, IonLabel } from "@ionic/react";
 import React, { useEffect, useState,forwardRef, useRef, useImperativeHandle } from "react";
 import { useHistory } from 'react-router';
 import { attachProps } from '@ionic/react/dist/types/components/utils';
@@ -82,7 +82,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
      * Renders
      */
     const renderNotConnectedContainer = () => (
-        <IonButton onClick={connectWallet} className={"text-white bg-orange-500 absolute inset-y-0 right-0 w-32 text-xs"}>Select Wallet</IonButton>
+        <IonButton color="sucess" onClick={connectWallet} className={"text-white bg-orange-500 absolute inset-y-0 right-0 w-32 text-xs"}>Select Wallet</IonButton>
     );
 
     const renderConnectedContainer = () => (
@@ -112,7 +112,10 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                             <IonGrid>
                                 <IonRow>
                                     <IonCol >
-                                        <IonRouterLink className="text-6xl" routerLink="/">SOL Decoder</IonRouterLink>
+                                        {/* <IonRouterLink className="text-6xl text-blue-600" routerLink="/">SOL Decoder</IonRouterLink> */}
+                                        <IonLabel className="text-6xl text-blue-600">
+                                            <IonRouterLink className="text-6xl text-blue-600" routerLink="/">SOL Decoder</IonRouterLink>
+                                        </IonLabel>
                                     </IonCol>
                                 {/*- <IonRouterLink routerLink="/mint">Mint</IonRouterLink> -*/}
                                 {/*<IonRouterLink routerLink="/game">Game</IonRouterLink>*/}
@@ -129,7 +132,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                                                             }} animated placeholder="Type to search" />
                                                     </IonCol>
                                                     <IonCol>
-                                                        <IonButton className="text-white bg-orange-500" value={searchvalue} onClick={() => handleSearch()}
+                                                        <IonButton color="sucess" className="text-white bg-orange-500" value={searchvalue} onClick={() => handleSearch()}
                                                             animate-bounce disabled={searchvalue === ''}>
                                                             Search</IonButton>
                                                     </IonCol>

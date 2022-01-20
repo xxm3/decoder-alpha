@@ -17,7 +17,7 @@ import Card from './Card';
 import CollectionCard from './CollectionCard';
 import Loader from "../../components/search/Loader";
 import {setTimeout} from "timers";
-
+import moment from "moment";
 const Home = () => {
 
     /**
@@ -65,6 +65,9 @@ const Home = () => {
                 console.log(err);
             });
     };
+    const getDateAgo = function (time: any){
+        return moment(time).fromNow();
+    }
     // @ts-ignore
     return (
         <IonPage className="bg-sky">
@@ -72,7 +75,7 @@ const Home = () => {
             <HeaderContainer mintAddrToParent={mintAddrToParent} showflag={true} onClick={undefined}/>
             <IonContent>
                 <IonRow>
-                    <IonLabel className="text-7xl text-blue-600">New Collection</IonLabel>
+                    <IonLabel className="text-6xl text-blue-600">New Collection</IonLabel>
                 </IonRow>
                 {/* loading bar */}
                 {isLoading && (
@@ -127,7 +130,7 @@ const Home = () => {
                 </div>
             </IonContent>
             <IonContent>
-                <IonLabel className="text-7xl text-blue-600 fixed">Possible Mints</IonLabel>
+                <IonLabel className="text-6xl text-blue-600">Possible Mints</IonLabel>
                 {/* loading bar */}
                 {isLoading && (
                     <div className="pt-10 flex justify-center items-center">
@@ -138,7 +141,7 @@ const Home = () => {
                     {
                         products.map((product: any, index: any) => (
                         <>
-                            <Card key={index} url={product.url} readableTimestamp={product.timestamp} source={product.source}/>
+                            <Card key={index} url={product.url} readableTimestamp={getDateAgo(product.timestamps)} source={product.source}/>
                         </>
                     ))}
                     <IonCard>
