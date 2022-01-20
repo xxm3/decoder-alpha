@@ -111,19 +111,19 @@ const Home = () => {
         //     console.error(err);
         // }
 
-        const connection = new Connection('devnet');
-        const tokenPublicKey = 'Gz3vYbpsB2agTsAwedtvtTkQ1CG9vsioqLW3r9ecNpvZ';
-        
-        const metadata = await Metadata.load(connection, tokenPublicKey);
-        const auction = await Auction.load(connection, tokenPublicKey);
-        const vault = await Vault.load(connection, tokenPublicKey);
-        const auctionManager = await AuctionManager.load(connection, tokenPublicKey);
-        const store = await Store.load(connection, tokenPublicKey);
-        console.log(metadata);
-        console.log(auction);
-        console.log(vault);
-        console.log(auctionManager);
-        console.log(store);
+        // const connection = new Connection('devnet');
+        // const tokenPublicKey = 'Gz3vYbpsB2agTsAwedtvtTkQ1CG9vsioqLW3r9ecNpvZ';
+        //
+        // const metadata = await Metadata.load(connection, tokenPublicKey);
+        // const auction = await Auction.load(connection, tokenPublicKey);
+        // const vault = await Vault.load(connection, tokenPublicKey);
+        // const auctionManager = await AuctionManager.load(connection, tokenPublicKey);
+        // const store = await Store.load(connection, tokenPublicKey);
+        // console.log(metadata);
+        // console.log(auction);
+        // console.log(vault);
+        // console.log(auctionManager);
+        // console.log(store);
 
 
     };
