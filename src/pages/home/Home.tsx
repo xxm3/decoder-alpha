@@ -12,7 +12,10 @@ import {
 } from '@ionic/react';
 import axios from 'axios';
 import './Home.css';
-import HeaderContainer from "../../components/header/HeaderContainer";
+// Old Header
+// import HeaderContainer from "../../components/header/HeaderContainer";
+// New Header
+import Header from '../../components/header/Header';
 import Card from './Card';
 import CollectionCard from './CollectionCard';
 import Loader from "../../components/search/Loader";
@@ -29,7 +32,7 @@ const Home = () => {
     /**
      * State Variables
      */
-        // TODO-vinit: need this error fixed - https://sentry.io/answers/unique-key-prop/
+    // TODO-vinit: need this error fixed - https://sentry.io/answers/unique-key-prop/
     const [walletAddress, setWalletAddress] = useState('');
     const [products, setProducts] = useState([]);
     const [newcollections, setNewCollection] = useState([]);
@@ -41,19 +44,18 @@ const Home = () => {
     /**
      * Actions
      */
-        // called from the child, after their wallet is connected
+    // called from the child, after their wallet is connected
     const mintAddrToParent = (walletAddress: any) => {
             // console.log(`----got wallet address from child: '${walletAddress}'`);
             setWalletAddress(walletAddress);
             getNfts(walletAddress);
-        }
+    }
 
     /**
      * UseEffects
      */
-
-        // gets the user's nft's from their wallet
-        // from https://github.com/NftEyez/sol-rayz
+    // gets the user's nft's from their wallet
+    // from https://github.com/NftEyez/sol-rayz
     const getNfts = async (passedWalletAddress: string) => {
 
             const publicAddress = passedWalletAddress;
@@ -92,7 +94,7 @@ const Home = () => {
 
             // @ts-ignore
             setUserNfts(modifiedUserNfts);
-        }
+    }
 
 
     const getCmidDetails = async () => {
@@ -128,8 +130,6 @@ const Home = () => {
 
     };
     getCmidDetails();
-
-
     /**
      * Renders
      */
@@ -140,7 +140,6 @@ const Home = () => {
 
     const fetchProducts = () => {
         setIsLoading(true);
-
         axios
             .get(environment.backendApi + '/homeData')
             .then((res) => {
@@ -164,8 +163,10 @@ const Home = () => {
     // @ts-ignore
     return (
         <IonPage className="bg-sky">
-
-            <HeaderContainer mintAddrToParent={mintAddrToParent} showflag={true} onClick={undefined}/>
+            {/* Old Header */}
+            {/* <HeaderContainer mintAddrToParent={mintAddrToParent} showflag={true} onClick={undefined}/> */}
+            {/* New Header */}
+            <Header mintAddrToParent={mintAddrToParent} showflag={true} onClick={undefined}/>
             <IonContent>
                 <IonRow>
                     <IonLabel className="text-6xl text-blue-600">New Collection</IonLabel>
@@ -179,7 +180,6 @@ const Home = () => {
                 )}
 
                 <div hidden={isLoading}>
-
                     <IonRow className="bg-lime-700">
                         {
                             newcollections.map((collection: any, index: any) => (
@@ -200,7 +200,6 @@ const Home = () => {
                                 </IonCol>
                             ))}
                     </IonRow>
-
                     <IonRow>
                         <IonLabel className="text-7xl text-blue-600">Popular Collection</IonLabel>
                     </IonRow>
@@ -236,7 +235,6 @@ const Home = () => {
                         <Loader/>
                     </div>
                 )}
-
                 <div hidden={isLoading}>
                     {
                         products.map((product: any, index: any) => (
@@ -255,32 +253,10 @@ const Home = () => {
                             within an ion-cardContent element.
                         </IonCardContent>
                     </IonCard>
-
-                    {/* <IonCard>
-                                <IonItem href="#" className="ion-activated">
-                                    <IonIcon icon={wifi} slot="start" />
-                                    <IonLabel>Card Link Item 1 activated</IonLabel>
-                                </IonItem>
-
-                                <IonItem href="#">
-                                    <IonIcon icon={wine} slot="start" />
-                                    <IonLabel>Card Link Item 2</IonLabel>
-                                </IonItem>
-
-                                <IonItem className="ion-activated">
-                                    <IonIcon icon={warning} slot="start" />
-                                    <IonLabel>Card Button Item 1 activated</IonLabel>
-                                </IonItem>
-
-                                <IonItem>
-                                    <IonIcon icon={walk} slot="start" />
-                                    <IonLabel>Card Button Item 2</IonLabel>
-                                </IonItem>
-                            </IonCard> */}
-                            <>
+                            {/* <>
                                 <Card key={index} url={product.url} readableTimestamp={product.timestamp}
                                       source={product.source}/>
-                            </>
+                            </> */}
                 </div>
             </IonContent>
 
