@@ -3,9 +3,6 @@ import { IonItem, IonLabel, IonCard, IonCardContent, IonIcon, IonRow, IonCol } f
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import './Home.css';
-// Old Header
-// import HeaderContainer from "../../components/header/HeaderContainer";
-// New Header
 import Header from '../../components/header/Header';
 import Card from './Card';
 import CollectionCard from './CollectionCard';
@@ -24,7 +21,6 @@ const Home = () => {
     /**
      * State Variables
      */
-    // TODO-vinit: need this error fixed - https://sentry.io/answers/unique-key-prop/
     const [walletAddress, setWalletAddress] = useState('');
     const [userNfts, setUserNfts] = useState([]); // from user wallet
     const [homePageData, setHomePageData] = useState([]); // ie. possible mints...
@@ -72,75 +68,9 @@ const Home = () => {
             // console.log("modified user nfts: ", modifiedUserNfts);
             // @ts-ignore
             setUserNfts(modifiedUserNfts);
-            }
+        }
     }
-        // const connection = new Connection('mainnet-beta');
-        // const tokenPublicKey = '9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41';
 
-        // try {
-        //     const ownedMetadata = await Metadata.load(connection, tokenPublicKey);
-        //     console.log(ownedMetadata);
-        // } catch(err) {
-        //     console.error('Failed to fetch metadata');
-        //     console.error(err);
-        // }
-
-        // const connection = new Connection('devnet');
-        // const tokenPublicKey = 'Gz3vYbpsB2agTsAwedtvtTkQ1CG9vsioqLW3r9ecNpvZ';
-        //
-        // const metadata = await Metadata.load(connection, tokenPublicKey);
-        // const auction = await Auction.load(connection, tokenPublicKey);
-        // const vault = await Vault.load(connection, tokenPublicKey);
-        // const auctionManager = await AuctionManager.load(connection, tokenPublicKey);
-        // const store = await Store.load(connection, tokenPublicKey);
-        // console.log(metadata);
-        // console.log(auction);
-        // console.log(vault);
-        // console.log(auctionManager);
-        // console.log(store);
-
-
-    const getCmidDetails = async () => {
-        // const { metadata: { Metadata } } = programs;
-        const {metaplex: {Store, AuctionManager}, metadata: {Metadata}, auction: {Auction}, vault: {Vault}} = programs;
-
-
-        // const connection = new Connection('mainnet-beta');
-        // const tokenPublicKey = '9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41';
-
-        // try {
-        //     const ownedMetadata = await Metadata.load(connection, tokenPublicKey);
-        //     console.log(ownedMetadata);
-        // } catch(err) {
-        //     console.error('Failed to fetch metadata');
-        //     console.error(err);
-        // }
-
-        const connection = new Connection('devnet');
-        const tokenPublicKey = 'Gz3vYbpsB2agTsAwedtvtTkQ1CG9vsioqLW3r9ecNpvZ';
-        
-        const metadata = await Metadata.load(connection, tokenPublicKey);
-        const auction = await Auction.load(connection, tokenPublicKey);
-        const vault = await Vault.load(connection, tokenPublicKey);
-        const auctionManager = await AuctionManager.load(connection, tokenPublicKey);
-        const store = await Store.load(connection, tokenPublicKey);
-        console.log(metadata);
-        console.log(auction);
-        console.log(vault);
-        console.log(auctionManager);
-        console.log(store);
-
-
-    };
-    getCmidDetails();
-
-    /**
-     * Renders
-     */
-
-    useEffect(() => {
-        fetchHomePageData();
-    }, []);
     // get data for home page
     const fetchHomePageData = () => {
         setIsLoading(true);
@@ -159,10 +89,16 @@ const Home = () => {
                 console.error("error when getting home page data: " + err);
             });
     };
-    
+
     const getDateAgo = function (time: any){
         return moment(time).fromNow();
     }
+
+
+    /**
+     * Renders
+     */
+
 
     /**
      * UseEffects
@@ -171,27 +107,33 @@ const Home = () => {
         fetchHomePageData();
     }, []);
 
+    useEffect(() => {
+        fetchHomePageData();
+    }, []);
 
     /**
-     * Renders
+     * HTML etc...
      */
     return (
         <IonPage className="bg-sky">
-            {/* Old Header */}
-            {/* <HeaderContainer mintAddrToParent={mintAddrToParent} showflag={true} onClick={undefined}/> */}
-            {/* New Header */}
             <Header mintAddrToParent={mintAddrToParent} showflag={true} onClick={undefined}/>
+
             <IonContent>
+
                 <IonRow>
                     <IonLabel className="text-6xl text-blue-600">New Collection</IonLabel>
                 </IonRow>
+
                 {/* loading bar */}
                 {isLoading && (
                     <div className="pt-10 flex justify-center items-center">
                         <Loader/>
                     </div>
                 )}
+
                 <div hidden={isLoading}>
+
+                    {/* New Collections */}
                     <IonRow className="bg-lime-700">
                         {newCollections.map((collection: any, index: any) => (
                             <IonCol>
@@ -211,6 +153,8 @@ const Home = () => {
                             </IonCol>
                         ))}
                     </IonRow>
+
+                    {/* Popular Collections */}
                     <IonRow>
                         <IonLabel className="text-7xl text-blue-600">Popular Collection</IonLabel>
                     </IonRow>
@@ -236,6 +180,8 @@ const Home = () => {
 
                 </div>
             </IonContent>
+
+            {/* Possible Mints */}
             <IonContent>
                 <IonLabel className="text-6xl text-blue-600">Possible Mints</IonLabel>
 
@@ -246,36 +192,15 @@ const Home = () => {
                     </div>
                 )}
                 <div hidden={isLoading}>
-                    {
-                        homePageData.map((product: any, index: any) => (
+                    {homePageData.map((product: any, index: any) => (
                         <>
                             <Card key={index} url={product.url} readableTimestamp={getDateAgo(product.timestamp)} source={product.source}/>
                         </>
                     ))}
-                    {/* <IonCard>
-                        <IonItem>
-                            <IonIcon icon={pin} slot="start" />
-                            <IonLabel>ion-item in a card, icon left, button right</IonLabel>
-                            <IonButton fill="outline" slot="end">View</IonButton>
-                        </IonItem>
-                        <IonCardContent>
-                            This is content, without any paragraph or header tags,
-                            within an ion-cardContent element.
-                        </IonCardContent>
-                    </IonCard> */}
-                            {/* <>
-                                <Card key={index} url={product.url} readableTimestamp={product.timestamp}
-                                      source={product.source}/>
-                            </> */}
-                    {homePageData.map((product: any, index: any) => (
-                    <>
-                        <Card key={index} url={product.url} readableTimestamp={getDateAgo(product.timestamp)} source={product.source}/>
-                    </>
-                ))}
                 </div>
             </IonContent>
 
-            {/* show user's NFTs */}
+            {/* user's NFTs */}
             <h3>User NFTs:</h3>
             <IonCard>
                 <IonContent>
