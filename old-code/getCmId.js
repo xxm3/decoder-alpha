@@ -1,3 +1,17 @@
+message could send that guy on professor....
+
+sorry for bothering again =D I got that working, neat stuff. Just wondering your opinion - how do you think someone would start this on a running nodejs server though? I want to have a website where someone can put in a CM ID, and it returns the mint info.
+
+from what I've seen with the code, this requries you to be logged in with your wallet. and my nodejs server
+
+
+
+
+below code gets errors that i googled from the package.. wasn't any solution
+
+
+
+
 // import { PublicKey } from '@solana/web3.js';
 // import { useWallet } from '@solana/wallet-adapter-react';
 // import * as anchor from '@project-serum/anchor';
