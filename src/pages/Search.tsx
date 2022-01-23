@@ -156,7 +156,7 @@ const Search: React.FC = () => {
                 var labels = [];
                 labels = generateLabels();
                 var idx = labels.findIndex((val) => val === sample.ten_day_count[i].date);
-                datasetForChart[idx] = sample.ten_day_count[i].count;
+                datasetForChart[idx + 1] = sample.ten_day_count[i].count;
             }
             setChartData({
                 ...chartData,

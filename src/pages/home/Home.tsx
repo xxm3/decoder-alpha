@@ -21,7 +21,6 @@ const Home = () => {
     /**
      * State Variables
      */
-    // TODO-vinit: need this error fixed - https://sentry.io/answers/unique-key-prop/
     const [walletAddress, setWalletAddress] = useState('');
     const [userNfts, setUserNfts] = useState([]); // from user wallet
 
