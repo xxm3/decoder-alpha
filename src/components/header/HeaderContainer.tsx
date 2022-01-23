@@ -20,6 +20,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
 
     const checkIfWalletIsConnected = async () => {
         try {
+            //@ts-ignore
             const { solana } = window;
             if (solana) {
                 if (solana.isPhantom) {

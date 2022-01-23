@@ -92,17 +92,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
     }, [walletAddress]);
     //endregion
     //region Renders
-    const renderNotConnectedContainer = () => (
-        <IonButton onClick={connectWallet} className={"text-white bg-orange-500 absolute inset-y-0 right-0 w-32 text-xs"}>Select Wallet</IonButton>
-    );
-    const renderConnectedContainer = () => (
-        <span>
-            <span>${walletAddress}</span>
-            {/*<IonButton onClick={() => mintAddrToParent(walletAddress)}>Click Child</IonButton>*/}
-        </span>
-    );
     function handleSearch() {
-        console.log("handleSearch ----------------", searchvalue);
         if (typeof (searchvalue) !== "undefined" && searchvalue !== '') {
             history.push(`/search/${searchvalue}`);
             window.location.reload();
@@ -115,33 +105,24 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
     // @ts-ignore
     return (
         <React.Fragment>
-
-            <IonHeader className="all">
-                <IonToolbar color="Dark">
-
+            <IonHeader className="m-4 ">
+                <IonToolbar className="bg-card rounded-lg">
                     <IonItem>
-                        <h3>SOL Decoder</h3>
-
+                        <h3 className="text-2xl">SOL Decoder</h3>
                         {/* TODO: could be some variable width or something, IF want to keep this in here... */}
                         <span style={{width: '400px' }}></span>
-
-                        {/*<IonInput color="success"  minlength={3} value={searchvalue} placeholder="Search" onIonChange={e => setInput(e.detail.value!)}></IonInput>*/}
-                        {/*<IonButton color="success" className="rounded-lg">*/}
-                        {/*    <IonIcon slot="icon-only" icon={search} className="rounded-b-3xl"/>*/}
-                        {/*</IonButton>*/}
-
-                        {/* big screens */}
+                        {/* Big Screens */}
                         {width > 750 && (
                         <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 ">
                             <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
                                           type="text" value={searchText} onIonChange={e => {
-                                setSearchText(e.detail.value!)
-                            }} animated placeholder="Type to search" disabled={isLoading}  style={{width: '600px' }} />
-                                                                    {/* TODO: probably don't want this to be 600px ... maybe a min and max width? */}
-
-                            <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto ">
+                                setSearchText(e.detail.value!); 
+                                setInput(e.detail.value!);
+                            }} animated placeholder="Type to search" disabled={isLoading}  style={{width: '600px' }} ionInput={() => handleSearch()}/>
+                            {/* TODO: probably don't want this to be 600px ... maybe a min and max width? */}
+                            <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-green-400" onClick={() => handleSearch()}>
                                 {/*TODO: needs a green background on this button */}
-                                <IonIcon slot="icon-only" icon={search} className="rounded-b-3xl"/>
+                                <IonIcon slot="icon-only" icon={search} className=" "/>
                                 {/*<IonButton className=" text-white text-base rounded-lg" onClick={() => onClick}*/}
                                 {/*           animate-bounce disabled={searchText === ''}>*/}
                                 {/*    Search*/}
@@ -150,14 +131,17 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
 
                             {/*TODO: need this to float right */}
                             {!isWalletConnected &&
-                                <IonButton color="success" className="float-right">
+                                <IonButton color="success" className="float-right" onClick={() => connectWallet()}>
                                     Connect Wallet
                                 </IonButton>
+                            }
+                            {isWalletConnected && 
+                                <span>${walletAddress}</span>
                             }
                         </div>
                         )}
 
-                        {/* small screens */}
+                        {/* Small Screens */}
                         {width < 750 && (
                         <div className="float-right">
                             <div className="xs:flex items-center px-2 rounded-lg space-x-4 mx-auto ">
@@ -175,10 +159,8 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                         )}
 
                     </IonItem>
-
                 </IonToolbar>
             </IonHeader>
-
         </React.Fragment>
     );
 };

@@ -46,7 +46,11 @@ module.exports = {
         'satin-7' :'rgba(0,0,0,0.7)',
         'satin-8' :'rgba(0,0,0,0.8)',
         'satin-9' :'rgba(0,0,0,0.9)',
-         
+        'primary' :'#7ED957',
+        'secondary' : '#8C52FF',
+        'background': '#3B5C6E',
+        'card': '#1f2e3c',
+        'text': '#FFFFFF'
       },
     }
   },

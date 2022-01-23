@@ -3,7 +3,6 @@ import React, { useRef } from 'react';
 import Display from '../components/search/Display';
 import { useState, useEffect, useContext} from 'react';
 import { Message } from '../data/messages';
-
 import {
     IonContent,
     IonPage,
@@ -18,7 +17,7 @@ import { MessageContext } from '../context/context';
 import MobileDisplay from '../components/search/MobileDisplay';
 import { environment } from "../environments/environment";
 import { useParams, useHistory } from 'react-router';
-import HeaderContainer from "../components/header/HeaderContainer";
+import Header from "../components/header/Header";
 
 const Search: React.FC = () => {
 
@@ -242,30 +241,30 @@ const Search: React.FC = () => {
     const scrollToTop = () => {
         contentRef.current && contentRef.current.scrollToTop();
     };
-    const childRef = useRef <typeof HeaderContainer>(HeaderContainer);
+    const childRef = useRef <typeof Header>(Header);
 
     return (
         <React.Fragment>
             <IonPage id="home-page">
                 <IonContent ref={contentRef} scrollEvents={true} fullscreen>
                     {/* Header */}
-                    <HeaderContainer mintAddrToParent={mintAddrToParent} onClick={onClick} showflag={false} />
+                    <Header mintAddrToParent={mintAddrToParent} onClick={onClick} showflag={false} />
                     {/* Main Content After Header */}
-                    <div className="min-h-screen font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2  fixed top-20 left-0 right-0">
+                    <div className="min-h-screen font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2">
                         {/* The Gray Container */}
                         <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
                             {/* search bar / form */}
-                            <form onSubmit={(e) => onClick(e)}>
+                            {/* <form onSubmit={(e) => onClick(e)}>
 
                                 {(!foundResults || isLoading) && (<>
                                     <h1 className="text-center font-bold text-white text-4xl">{isLoading ?
                                         <p>Searching for <b className="text-cb">{searchText}</b></p> : 'Search:'}
                                     </h1>
                                     {/*<p className="mx-auto font-normal text-center text-sm my-6 max-w-lg">This app will last 10 days count and last 100 messages.</p>*/}
-                                </>
-                                )}
+                                {/* </> */}
+                                {/* )} */}
 
-                                <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 justify-center">
+                                {/* <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 justify-center">
                                     <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
                                         type="text" value={searchText} onIonChange={e => {
                                             setSearchText(e.detail.value!)
@@ -273,10 +272,10 @@ const Search: React.FC = () => {
                                     <div className="xs:flex items-center px-2 rounded-lg space-x-4 mx-auto ">
                                         <IonButton className=" text-white text-base rounded-lg" onClick={() => onClick}
                                             animate-bounce disabled={searchText === ''}>
-                                            Search</IonButton>
-                                    </div>
+                                            Search</IonButton> */}
+                                    {/*</div>
                                 </div>
-                            </form>
+                            </form> */}
 
                             {/* loading bar */}
                             {isLoading && (<div className="pt-10 flex justify-center items-center">

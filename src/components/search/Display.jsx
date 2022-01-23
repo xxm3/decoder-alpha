@@ -6,7 +6,7 @@ import React, { useEffect, useRef } from "react";
 import { Doughnut, Chart } from 'react-chartjs-2';
 import { IonButton } from '@ionic/react';
 import { useHistory, useNavigate } from 'react-router-dom';
-
+import Cookies from 'universal-cookie';
 import './Display.css';
 import {
     Chart as ChartJS,
@@ -51,18 +51,26 @@ ChartJS.register(
 defaults.color = '#FFFFFF';
 
 const Display = ({ chartData, height, doughnutData, position, total, totalCountHeight, showPie, width }) => {
-
-    // console.log(height);
-
+    const cookies = new Cookies();
     const { messages, word } = useContext(MessageContext);
     // console.log({messages});
     const [doughnutHeight, setDoughnutHeight] = React.useState(0);
-    const [showchart, onChart] = React.useState(false);
+    const [showchart, onChart] = React.useState(true);
     const history = useHistory();
     const ref = useRef();
     const refScrollUp = useRef();
     const [scrollPosition, setSrollPosition] = useState(0);
     const [showButton, setShowButton] = useState(true);
+    // TODO: Cookie Fix
+    // console.log(cookies.get('showChart'));
+    // console.log(String(cookies.get('showChart')));
+    // if (String(cookies.get('showChart')) == 'undefined'){
+    //     cookies.set('showChart', String(showchart));
+    // } else if(String(cookies.get('showChart') == 'true')){
+    //     onChart(true);
+    // } else if(String(cookies.get('showChart') == 'false')){
+    //     onChart(true);
+    // }
     useEffect(() => {
         window.addEventListener("scroll", () => {
             console.log(window.pageYOffset)
@@ -91,13 +99,10 @@ const Display = ({ chartData, height, doughnutData, position, total, totalCountH
           top: 0,
           behavior: 'smooth' // for smoothly scrolling
         });
-      };
- 
-
+    };
     window.onresize = () => {
         updateSize();
     };
-
     function updateSize() {
         const stop = setTimeout(() => {
             if (ref.current) {
@@ -106,116 +111,113 @@ const Display = ({ chartData, height, doughnutData, position, total, totalCountH
             }
         }, 100);
     }
-
-    // get the height of the message list
-    function getMessageListHeight() {
-        return height * 4;
-    }
-
     function handleClick() {
         onChart(!showchart);
     }
-
-    function redirectClick() {
-        history.push('/');
-    }
-
     return (
         <React.Fragment>
             <div>
                 {/* <IonButton onClick={() => redirectClick()}>Home</IonButton> */}
                         {/* <IonLabel>Checked: {JSON.stringify(checked)}</IonLabel> */}
                     <IonItem>
-                        <IonToggle color="dark" checked={showchart} onIonChange={() => handleClick()}/>
+                        <IonToggle color="dark" checked={showchart} onIonChange={() => {
+                            handleClick();
+                            onChart(!showchart);
+                            // TODO: Cookie Fix
+                            // if(showchart) {
+                            //     console.log(String(showchart));
+                            //     cookies.set('showChart', 'true');
+                            // } else {
+                            //     cookies.set('showChart', 'false');
+                            // }
+                            }} defaultChecked={true}/>
                     </IonItem>
             </div>
                 <IonGrid >
                     {/* bar & line chart */}
-                    {
-                        showchart && (
-                            <IonRow>
-                                <IonCol size="12">
-                                    <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
-                                        <Chart type='bar' data={chartData} height={height} options={{
-                                            plugins: {
-                                                legend: {
-                                                    labels: {
-                                                        color: 'white',
-                                                    }
-                                                },
-                                                title: {
-                                                    color: 'red',
-                                                },
-                                                scales: {
-                                                    yAxes: [{
-                                                        ticks: {
-                                                            beginAtZero: true,
-                                                            display: false,
-                                                            color: 'white'
-                                                        },
-                                                    }],
-                                                    xAxes: [{
-                                                        ticks: {
-                                                            display: false,
-                                                            color: 'white'
-                                                        },
-                                                    }]
-                                                },
+                    {showchart && (
+                        <IonRow>
+                            <IonCol size="12">
+                                <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
+                                    <Chart type='bar' data={chartData} height={height} options={{
+                                        plugins: {
+                                            legend: {
+                                                labels: {
+                                                    color: 'white',
+                                                }
                                             },
-                                            responsive: true,
-                                            maintainAspectRatio: true,
-                                        }} />
-                                    </div>
-                                </IonCol>
-                            </IonRow>)}
-                    {/* pie chart */}
-                    {showPie && (<IonRow>
-                        <IonCol size-xl="4" size-lg="5" size-md="6" size-sm="7">
-                            <div className="p-4 h-full shadow-lg rounded-l bg-cbg" ref={ref} id="doughnut">
-                                <Doughnut data={doughnutData} options={{
-                                    plugins: {
-                                        legend: {
-                                            labels: {
-                                                color: 'white',
+                                            title: {
+                                                color: 'red',
                                             },
-                                            position: `${position}`,
+                                            scales: {
+                                                yAxes: [{
+                                                    ticks: {
+                                                        beginAtZero: true,
+                                                        display: false,
+                                                        color: 'white'
+                                                    },
+                                                }],
+                                                xAxes: [{
+                                                    ticks: {
+                                                        display: false,
+                                                        color: 'white'
+                                                    },
+                                                }]
+                                            },
                                         },
-                                        title: {
-                                            color: 'red',
-                                        },
-                                        scales: {
-                                            yAxes: [{
-                                                ticks: {
-                                                    beginAtZero: true,
-                                                    color: 'white'
-                                                },
-                                            }],
-                                            xAxes: [{
-                                                ticks: {
-                                                    color: 'white'
-                                                },
-                                            }]
-                                        },
-                                    },
-                                    responsive: true,
-                                    maintainAspectRatio: true,
-                                }} />
-                            </div>
-                        </IonCol>
-                        <IonCol size-xl="8" size-lg="7" size-md="6" size-sm="5">
-                            <div
-                                className="overflow-y-scroll shadow-lg  bg-cbg rounded-l flex flex-col divide-y divide-gray-400"
-                                style={{ height: `${doughnutHeight}px` }}>
-                                <div className="space-y-6 pb-10 p-4">
-                                    {messages.map((m, idx) => {
-                                        return (<MessageListItem idx={idx + 1} key={m.id} message={m} word={word} />)
-                                    })}
+                                        responsive: true,
+                                        maintainAspectRatio: true,
+                                    }} />
                                 </div>
-                            </div>
-                        </IonCol>
-                        )
-                    </IonRow>
-                    )}
+                            </IonCol>
+                        </IonRow>)}
+                    {/* pie chart */}
+                    {showPie && (
+                        <IonRow>
+                            <IonCol size-xl="4" size-lg="5" size-md="6" size-sm="7">
+                                <div className="p-4 h-full shadow-lg rounded-l bg-cbg" ref={ref} id="doughnut">
+                                    <Doughnut data={doughnutData} options={{
+                                        plugins: {
+                                            legend: {
+                                                labels: {
+                                                    color: 'white',
+                                                },
+                                                position: `${position}`,
+                                            },
+                                            title: {
+                                                color: 'red',
+                                            },
+                                            scales: {
+                                                yAxes: [{
+                                                    ticks: {
+                                                        beginAtZero: true,
+                                                        color: 'white'
+                                                    },
+                                                }],
+                                                xAxes: [{
+                                                    ticks: {
+                                                        color: 'white'
+                                                    },
+                                                }]
+                                            },
+                                        },
+                                        responsive: true,
+                                        maintainAspectRatio: true,
+                                    }} />
+                                </div>
+                            </IonCol>
+                            <IonCol size-xl="8" size-lg="7" size-md="6" size-sm="5">
+                                <div
+                                    className="overflow-y-scroll shadow-lg  bg-cbg rounded-l flex flex-col divide-y divide-gray-400"
+                                    style={{ height: `${doughnutHeight}px` }}>
+                                    <div className="space-y-6 pb-10 p-4">
+                                        {messages.map((m, idx) => {
+                                            return (<MessageListItem idx={idx + 1} key={m.id} message={m} word={word} />)
+                                        })}
+                                    </div>
+                                </div>
+                            </IonCol>)
+                        </IonRow>)}
 
                     {/* list of messages */}
                     {!showPie && (<IonRow>

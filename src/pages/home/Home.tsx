@@ -17,7 +17,6 @@ import {
 import {Connection, programs} from '@metaplex/js';
 
 const Home = () => {
-
     /**
      * State Variables
      */
@@ -94,12 +93,6 @@ const Home = () => {
         return moment(time).fromNow();
     }
 
-
-    /**
-     * Renders
-     */
-
-
     /**
      * UseEffects
      */
@@ -117,22 +110,17 @@ const Home = () => {
     return (
         <IonPage className="bg-sky">
             <Header mintAddrToParent={mintAddrToParent} showflag={true} onClick={undefined}/>
-
             <IonContent>
-
                 <IonRow>
-                    <IonLabel className="text-6xl text-blue-600">New Collection</IonLabel>
+                    <IonLabel className="text-4xl text-blue-600">New Collection</IonLabel>
                 </IonRow>
-
                 {/* loading bar */}
                 {isLoading && (
                     <div className="pt-10 flex justify-center items-center">
                         <Loader/>
                     </div>
                 )}
-
                 <div hidden={isLoading}>
-
                     {/* New Collections */}
                     <IonRow className="bg-lime-700">
                         {newCollections.map((collection: any, index: any) => (
@@ -153,11 +141,11 @@ const Home = () => {
                             </IonCol>
                         ))}
                     </IonRow>
-
                     {/* Popular Collections */}
                     <IonRow>
-                        <IonLabel className="text-7xl text-blue-600">Popular Collection</IonLabel>
+                        <IonLabel className="text-4xl text-blue-600">Popular Collection</IonLabel>
                     </IonRow>
+                    {/* Possible Mints */}
                     <IonRow>
                         {popularCollections.map((collection: any, index: any) => (
                             <IonCol>
@@ -183,7 +171,7 @@ const Home = () => {
 
             {/* Possible Mints */}
             <IonContent>
-                <IonLabel className="text-6xl text-blue-600">Possible Mints</IonLabel>
+                <IonLabel className="text-4xl text-blue-600">Possible Mints</IonLabel>
 
                 {/* loading bar */}
                 {isLoading && (
