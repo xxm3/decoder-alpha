@@ -110,7 +110,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                     <IonItem>
                         <h3 className="text-2xl">SOL Decoder</h3>
 
-                        {/* TODO: could be some variable width or something, IF we want to keep this below line in here... */}
+                        {/* TODO-vinit: could be some variable width or something, IF we want to keep this below line in here... */}
                         <span style={{width: '400px' }}> </span>
 
                         {/* Big Screens */}
@@ -121,7 +121,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                                 setSearchText(e.detail.value!); 
                                 setInput(e.detail.value!);
                             }} animated placeholder="Type to search" disabled={isLoading}  style={{width: '600px' }} ionInput={() => handleSearch()}/>
-                            {/* TODO: probably don't want above to be 600px ... maybe a min and max width? */}
+                            {/* TODO-vinit: probably don't want above to be 600px ... maybe a min and max width? */}
 
                             <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-green-400" onClick={() => handleSearch()}>
                                 <IonIcon slot="icon-only" icon={search} className=" "/>
@@ -131,7 +131,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                                 {/*</IonButton>*/}
                             </div>
 
-                            {/*TODO: need this to float right, like magiceden */}
+                            {/*TODO-vinit: need this to float right, like magiceden */}
                             {!isWalletConnected &&
                                 <IonButton color="success" className="float-right" onClick={() => connectWallet()}>
                                     Connect Wallet
