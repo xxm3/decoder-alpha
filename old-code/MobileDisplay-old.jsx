@@ -1,3 +1,8 @@
+
+// most changes from https://gitlab.com/nft-relay-group/frontend-app/-/merge_requests/6/diffs?commit_id=6e219fe0b7360257bb31584ee3976792108a91dc
+
+
+
 import {IonCol, IonRow} from "@ionic/react";
 import {Doughnut} from "react-chartjs-2";
 import React from "react";

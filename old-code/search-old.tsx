@@ -1,4 +1,7 @@
 
+// most changes from https://gitlab.com/nft-relay-group/frontend-app/-/merge_requests/6/diffs?commit_id=6e219fe0b7360257bb31584ee3976792108a91dc
+
+
 
 // const history = useHistory();
 // const [showHelp, setShowHelp] = useState(true);
@@ -6,17 +9,17 @@
 
 import {useState} from "react";
 
-const [doughnutData, setDoughnutData] = useState({
-    labels: labels,
-    datasets: [
-    ],
-});
+// const [doughnutData, setDoughnutData] = useState({
+//     labels: labels,
+//     datasets: [
+//     ],
+// });
 
 
 
-setDoughnutData({
-    ...doughnutData,
-});
+// setDoughnutData({
+//     ...doughnutData,
+// });
 
 // const handleKeyDown = (event: any) => {
 //     if (event.key === 'Enter') {
