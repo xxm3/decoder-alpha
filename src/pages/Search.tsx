@@ -23,7 +23,6 @@ import HeaderContainer from "../components/header/HeaderContainer";
 const Search: React.FC = () => {
 
     // @ts-ignore
-
     const { messages, setMessages, setWord } = useContext(MessageContext);
     const [total, setTotal] = useState(0);
     const history = useHistory();
