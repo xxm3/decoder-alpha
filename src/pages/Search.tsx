@@ -6,13 +6,10 @@ import { Message } from '../data/messages';
 import {
     IonContent,
     IonPage,
-    IonSearchbar,
     IonButton,
-    IonIcon
 } from '@ionic/react';
 import './Search.css';
 import faker from 'faker';
-import { setTimeout } from 'timers';
 import { MessageContext } from '../context/context';
 import MobileDisplay from '../components/search/MobileDisplay';
 import { environment } from "../environments/environment";
@@ -24,8 +21,6 @@ const Search: React.FC = () => {
     // @ts-ignore
     const { messages, setMessages, setWord } = useContext(MessageContext);
     const [total, setTotal] = useState(0);
-    const history = useHistory();
-    const [showHelp, setShowHelp] = useState(true);
     const [width, setWidth] = useState(window.innerWidth);
     
     window.onresize = () => {
@@ -73,13 +68,6 @@ const Search: React.FC = () => {
         return labels.reverse();
     }
     const labels = generateLabels();
-
-
-    const [doughnutData, setDoughnutData] = useState({
-        labels: labels,
-        datasets: [
-        ],
-    });
 
     const [chartData, setChartData] = useState({
         labels: dispLabels(),
@@ -137,16 +125,6 @@ const Search: React.FC = () => {
             let sample = fetchedData;
             setTotal(sample.totalCount);
 
-            setDoughnutData({
-                ...doughnutData,
-            });
-
-            // const handleKeyDown = (event: any) => {
-            //     if (event.key === 'Enter') {
-            //         onClick(event);
-            //     }
-            // }
-
             // repeated on constants.js & Search.tsx
             const numDaysBackGraphs = 10;
             var datasetForChart = Array.from({ length: numDaysBackGraphs }, () => 0);
@@ -186,11 +164,8 @@ const Search: React.FC = () => {
                 };
             });
 
-            // console.log(messages);
-
-            setShowHelp(false);
+            // setShowHelp(false);
             setFoundResults(true);
-            // setTimeout(() => { setFoundResults(true); }, 2000);
 
             let tempMsg: Message[] = [];
             sample.messages.forEach((msg: any, idx: any) => {
@@ -205,7 +180,6 @@ const Search: React.FC = () => {
             setMessages(tempMsg);
 
             setIsLoading(false);
-            // setTimeout(() => { setIsLoading(false); }, 2000);
         } catch (e: any) {
             console.error("try/catch in Search.tsx: ", e);
 
@@ -228,6 +202,7 @@ const Search: React.FC = () => {
     useEffect(() => {
         doSearch();
     }, [searchText]);
+
     const [walletAddress, setWalletAddress] = useState('');
 
     /**
@@ -241,41 +216,20 @@ const Search: React.FC = () => {
     const scrollToTop = () => {
         contentRef.current && contentRef.current.scrollToTop();
     };
-    const childRef = useRef <typeof Header>(Header);
 
     return (
         <React.Fragment>
             <IonPage id="home-page">
                 <IonContent ref={contentRef} scrollEvents={true} fullscreen>
+
                     {/* Header */}
                     <Header mintAddrToParent={mintAddrToParent} onClick={onClick} showflag={false} />
+
                     {/* Main Content After Header */}
                     <div className="min-h-screen font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2">
+
                         {/* The Gray Container */}
                         <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
-                            {/* search bar / form */}
-                            {/* <form onSubmit={(e) => onClick(e)}>
-
-                                {(!foundResults || isLoading) && (<>
-                                    <h1 className="text-center font-bold text-white text-4xl">{isLoading ?
-                                        <p>Searching for <b className="text-cb">{searchText}</b></p> : 'Search:'}
-                                    </h1>
-                                    {/*<p className="mx-auto font-normal text-center text-sm my-6 max-w-lg">This app will last 10 days count and last 100 messages.</p>*/}
-                                {/* </> */}
-                                {/* )} */}
-
-                                {/* <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 justify-center">
-                                    <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
-                                        type="text" value={searchText} onIonChange={e => {
-                                            setSearchText(e.detail.value!)
-                                        }} animated placeholder="Type to search" disabled={isLoading} />
-                                    <div className="xs:flex items-center px-2 rounded-lg space-x-4 mx-auto ">
-                                        <IonButton className=" text-white text-base rounded-lg" onClick={() => onClick}
-                                            animate-bounce disabled={searchText === ''}>
-                                            Search</IonButton> */}
-                                    {/*</div>
-                                </div>
-                            </form> */}
 
                             {/* loading bar */}
                             {isLoading && (<div className="pt-10 flex justify-center items-center">
@@ -285,40 +239,34 @@ const Search: React.FC = () => {
                             {/* chart / search results, based on screen width
                                 note that heights of the chart are hardcoded below, while heights of the message list is on the Display.jsx.getMessageListHeight() */}
                             {!isLoading && foundResults && width > 1536 && (
-                                <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
+                                <Display chartData={chartData} position='bottom'
                                     height={Number(35)} total={total} totalCountHeight={18} showPie={false}
                                      width={width}/>
-                                // height={Number(10 + 65)}   75
                             )}
                             {!isLoading && foundResults && width <= 1536 && width > 1280 && (
-                                <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
+                                <Display chartData={chartData}  position='bottom'
                                     height={Number(45)} total={total} totalCountHeight={22} showPie={false}
                                     width={width}/>
-                                // height={Number(75 + 10)} 85
                             )}
                             {!isLoading && foundResults && width <= 1280 && width > 1024 && (
-                                <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
+                                <Display chartData={chartData} position='bottom'
                                     height={Number(55)} total={total} totalCountHeight={25} showPie={false}
                                     width={width}/>
-                                // height={Number(5 + 100)}     105
                             )}
                             {!isLoading && foundResults && width <= 1024 && width > 768 && (
-                                <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
+                                <Display chartData={chartData} position='bottom'
                                     height={Number(65)} total={total} totalCountHeight={28} showPie={false}
-                                    width={width}></Display>
-                                // height={Number(5 + 100)}     105
+                                    width={width} />
                             )}
                             {!isLoading && foundResults && width <= 768 && width > 640 && (
-                                <Display chartData={chartData} doughnutData={doughnutData} position='bottom'
+                                <Display chartData={chartData} position='bottom'
                                     height={Number(230)} total={total} totalCountHeight={35} showPie={false}
-                                    width={width}></Display>
-                                // height={Number(5 + 225)}     230
+                                    width={width} />
                             )}
                             {!isLoading && foundResults && width <= 640 && (
-                                <MobileDisplay chartData={chartData} doughnutData={doughnutData} position='right'
+                                <MobileDisplay chartData={chartData} position='right'
                                     height={Number(310)} total={total} totalCountHeight={30} showPie={false}
-                                ></MobileDisplay>
-                                // height={Number(30 + 275)}       310      width={width}
+                                 />
                             )}
 
                             {/* error bar */}
@@ -327,12 +275,17 @@ const Search: React.FC = () => {
                                     <p className="text-lg text-red-700 font-medium"><b>{error}</b></p>
                                     <span
                                         className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">!</span>
-                                    <div className="absolute top-0 right-0 flex space-x-2 p-4"></div>
+                                    {/*<div className="absolute top-0 right-0 flex space-x-2 p-4"></div>*/}
                                 </div>
                             )}
+
+                            {!isLoading && foundResults && (
+                                <IonButton onClick={() => scrollToTop()} className="float-right">Scroll to Top</IonButton>
+                            )}
+
                         </div>
                     </div>
-                    <IonButton onClick={() => scrollToTop()}>Scroll Top</IonButton>
+
                 </IonContent>
             </IonPage>
         </React.Fragment>

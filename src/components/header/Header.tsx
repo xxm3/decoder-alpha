@@ -109,8 +109,10 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                 <IonToolbar className="bg-card rounded-lg">
                     <IonItem>
                         <h3 className="text-2xl">SOL Decoder</h3>
-                        {/* TODO: could be some variable width or something, IF want to keep this in here... */}
-                        <span style={{width: '400px' }}></span>
+
+                        {/* TODO: could be some variable width or something, IF we want to keep this below line in here... */}
+                        <span style={{width: '400px' }}> </span>
+
                         {/* Big Screens */}
                         {width > 750 && (
                         <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 ">
@@ -119,9 +121,9 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                                 setSearchText(e.detail.value!); 
                                 setInput(e.detail.value!);
                             }} animated placeholder="Type to search" disabled={isLoading}  style={{width: '600px' }} ionInput={() => handleSearch()}/>
-                            {/* TODO: probably don't want this to be 600px ... maybe a min and max width? */}
+                            {/* TODO: probably don't want above to be 600px ... maybe a min and max width? */}
+
                             <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-green-400" onClick={() => handleSearch()}>
-                                {/*TODO: needs a green background on this button */}
                                 <IonIcon slot="icon-only" icon={search} className=" "/>
                                 {/*<IonButton className=" text-white text-base rounded-lg" onClick={() => onClick}*/}
                                 {/*           animate-bounce disabled={searchText === ''}>*/}
@@ -129,7 +131,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                                 {/*</IonButton>*/}
                             </div>
 
-                            {/*TODO: need this to float right */}
+                            {/*TODO: need this to float right, like magiceden */}
                             {!isWalletConnected &&
                                 <IonButton color="success" className="float-right" onClick={() => connectWallet()}>
                                     Connect Wallet
