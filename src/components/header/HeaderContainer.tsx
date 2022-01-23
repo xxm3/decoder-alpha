@@ -20,22 +20,16 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
 
     const checkIfWalletIsConnected = async () => {
         try {
-            // @ts-ignore
             const { solana } = window;
             if (solana) {
                 if (solana.isPhantom) {
                     // console.log('Phantom wallet found!');
                     const response = await solana.connect({ onlyIfTrusted: true });
-
-                    const walletAddress = response.publicKey.toString();
                     // console.log( 'Connected with Public Key:', walletAddress);
-
+                    const walletAddress = response.publicKey.toString();
                     // send the wallet address to the parent
                     mintAddrToParent(walletAddress);
-
-                    /*
-                     * Set the user's publicKey in state to be used later!
-                     */
+                    // Set the user's publicKey in state to be used later!
                     setWalletAddress(walletAddress);
                 }
             } else {
@@ -56,9 +50,8 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
         }
     };
 
-    /**
-     * UseEffects
-     */
+
+    // UseEffects
     useEffect(() => {
         const onLoad = async () => {
             await checkIfWalletIsConnected();
@@ -66,22 +59,17 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
         window.addEventListener('load', onLoad);
         return () => window.removeEventListener('load', onLoad);
     }, []);
-
     useEffect(() => {
         if (walletAddress) {
-
             // Call Solana program here.
-
             // Set state
-
         }
     }, [walletAddress]);
 
-    /**
-     * Renders
-     */
+
+    // Renders
     const renderNotConnectedContainer = () => (
-        <IonButton color="sucess" onClick={connectWallet} className={"text-white bg-orange-500 absolute inset-y-0 right-0 w-32 text-xs"}>Select Wallet</IonButton>
+        <IonButton color="success" onClick={connectWallet} className={"text-white bg-orange-500 absolute inset-y-0 right-0 w-32 text-xs"}>Select Wallet</IonButton>
     );
 
     const renderConnectedContainer = () => (

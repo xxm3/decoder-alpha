@@ -1,3 +1,5 @@
+import {Connection, programs} from "@metaplex/js";
+
 message could send that guy on professor....
 
 sorry for bothering again =D I got that working, neat stuff. Just wondering your opinion - how do you think someone would start this on a running nodejs server though? I want to have a website where someone can put in a CM ID, and it returns the mint info.
@@ -7,7 +9,12 @@ from what I've seen with the code, this requries you to be logged in with your w
 
 
 
+
+
 below code gets errors that i googled from the package.. wasn't any solution
+
+
+
 
 
 
@@ -77,3 +84,48 @@ const getCmidDetails = async () => {
     console.log(state);
 };
 // getCmidDetails();
+
+
+
+
+
+
+
+
+// this is metaplex code - doesn't relally help as just pulls nft info...
+
+const getCmidDetails = async () => {
+    // const { metadata: { Metadata } } = programs;
+    const {metaplex: {Store, AuctionManager}, metadata: {Metadata}, auction: {Auction}, vault: {Vault}} = programs;
+
+
+    // const connection = new Connection('mainnet-beta');
+    // const tokenPublicKey = '9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41';
+
+    // try {
+    //     const ownedMetadata = await Metadata.load(connection, tokenPublicKey);
+    //     console.log(ownedMetadata);
+    // } catch(err) {
+    //     console.error('Failed to fetch metadata');
+    //     console.error(err);
+    // }
+
+    const connection = new Connection('devnet');
+    const tokenPublicKey = 'Gz3vYbpsB2agTsAwedtvtTkQ1CG9vsioqLW3r9ecNpvZ';
+
+    const metadata = await Metadata.load(connection, tokenPublicKey);
+    const auction = await Auction.load(connection, tokenPublicKey);
+    const vault = await Vault.load(connection, tokenPublicKey);
+    const auctionManager = await AuctionManager.load(connection, tokenPublicKey);
+    const store = await Store.load(connection, tokenPublicKey);
+    console.log(metadata);
+    console.log(auction);
+    console.log(vault);
+    console.log(auctionManager);
+    console.log(store);
+
+
+};
+getCmidDetails();
+
+
