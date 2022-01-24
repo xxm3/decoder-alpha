@@ -26,25 +26,34 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 import Search from './pages/Search';
-import Home from './pages/home/Home';
 import ViewMessage from './pages/ViewMessage';
+// Old Home
+// import Home from './pages/home/Home';
+
+// New Home
+import HomePage from './pages/home/HomePage';
 
 const App = () => (
     <IonApp>
         <IonReactRouter>
             <IonRouterOutlet>
-
                 { /* <Route path="/" component={isLoggedIn ? home : Login} exact /> */}
-                <Route path="/" component={Home} exact />
+
+                {/* Old Home */}
+                {/* <Route path="/" component={Home} exact /> */}
+                
+                {/* New Home */}
+                <Route path="/" component={HomePage} exact />
+
+                {/* Search */}
                 <Route path="/search/:id" exact={true}>
                     <Search />
                 </Route>
                 {/* <Route path="/message/:id">
-            <ViewMessage />
-          </Route> */}
+                    <ViewMessage />
+                </Route> */}
                 {/* <Route path="/mint" component={ Mint } /> */}
                 {/* <Route path="/game" component={ Game } /> */}
-
             </IonRouterOutlet>
         </IonReactRouter>
     </IonApp>
