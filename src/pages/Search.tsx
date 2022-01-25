@@ -4,28 +4,21 @@ import Display from "../components/search/Display";
 import { useState, useEffect, useContext } from "react";
 import { Message } from "../data/messages";
 
-import {
-	IonContent,
-	IonPage,
-	IonSearchbar,
-	IonButton,
-	IonIcon,
-} from "@ionic/react";
+import { IonContent, IonPage, IonSearchbar, IonButton } from "@ionic/react";
 import "./Search.css";
 import faker from "faker";
 import { setTimeout } from "timers";
 import { MessageContext } from "../context/context";
 import MobileDisplay from "../components/search/MobileDisplay";
-import { environment } from "../environments/environment";
-import { useParams, useHistory } from "react-router";
+import { useParams } from "react-router";
 import HeaderContainer from "../components/header/HeaderContainer";
+import { instance } from "../axios";
 
 const Search: React.FC = () => {
 	// @ts-ignore
 
 	const { messages, setMessages, setWord } = useContext(MessageContext);
 	const [total, setTotal] = useState(0);
-	const history = useHistory();
 	const [showHelp, setShowHelp] = useState(true);
 	const [width, setWidth] = useState(window.innerWidth);
 
@@ -141,28 +134,18 @@ const Search: React.FC = () => {
 			// testing CORS stuff...
 			// await fetch(environment.backendApi + '/receiver/urlParser?url=https://google.com/', { method: 'GET' });
 
-			const res = await fetch(environment.backendApi + "/search/", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
+			const { data: fetchedData } = await instance.post(
+				"/search/",
+				{
 					word: searchText,
-				}),
-			});
+				},
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
 
-			let fetchedData = await res.json().then((data) => {
-				return data;
-			});
-
-			if (res.status !== 200 || fetchedData?.error) {
-				setIsLoading(false);
-				setFoundResults(false);
-
-				setError("Unable to connect. Please try again later");
-
-				throw fetchedData;
-			}
 			let sample = fetchedData;
 			setTotal(sample.totalCount);
 
@@ -269,8 +252,8 @@ const Search: React.FC = () => {
 		} catch (e: any) {
 			console.error("try/catch in Search.tsx: ", e);
 
-			if (e && e.body) {
-				setError(String(e.body));
+			if (e && e.response) {
+				setError(String(e.response.data.body));
 			} else {
 				setError("Unable to connect. Please try again later");
 			}

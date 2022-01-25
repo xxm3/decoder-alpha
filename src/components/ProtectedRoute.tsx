@@ -10,7 +10,7 @@ const ProtectedRoute = (props: RouteProps) => {
 		<Route
 			{...props}
 			render={({ location }) => (
-				<Redirect to={`/landing?next=${location.pathname}`} />
+				<Redirect to={`/login?next=${location.pathname}`} />
 			)}
 			component={undefined}
 			children={undefined}

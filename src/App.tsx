@@ -25,7 +25,7 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 
 import Search from "./pages/Search";
-import Landing from "./pages/Landing";
+import Login from "./pages/Login";
 import Home from "./pages/home/Home";
 import { useEffect, useState } from "react";
 import { auth } from "./firebase";
@@ -59,8 +59,8 @@ const App = () => {
 				setUser(null);
 				// if user is not authenticated, redirect them to the login page
 				// let next = window.location.pathname;
-				// if (next === "/landing") next = "/";
-				// history.push(`/landing?next=${next}`);
+				// if (next === "/Login") next = "/";
+				// history.push(`/Login?next=${next}`);
 			}
 		});
 	}, []);
@@ -89,11 +89,7 @@ const App = () => {
 									exact={true}
 									component={Search}
 								/>
-								<Route
-									exact
-									path="/landing"
-									component={Landing}
-								/>
+								<Route exact path="/Login" component={Login} />
 							</Switch>
 
 							{/* <Route path="/message/:id">
