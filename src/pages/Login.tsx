@@ -11,16 +11,24 @@ function Login() {
 	const user = useUser();
 	const { next, code, discordError } = useMemo(() => {
 		const params = new URLSearchParams(window.location.search);
+		// the login page also works as the redirect page for discord oauth
+
+		// authorization code returned by discord in the search query after user authorises the site
 		const code = params.get("code");
+
+		// the url to redirect to after user succesfully logs in
 		const next = params.get("next") || params.get("state") || "/";
+		// the error , if any, returned by discord
 		const discordError = params.get("error_description");
 		return { code, next, discordError };
 	}, []);
 
 	const [error, setError] = useState(discordError);
+	// loading state which stores whether an access token is being issued or not
 	const [loading, setLoading] = useState(!!code);
 	useEffect(() => {
 		if (code && !error && !user) {
+			// exchange authorization code given by discord for an access token which we can sign in with using firebase
 			instance
 				.post(
 					"/getToken",
@@ -47,6 +55,8 @@ function Login() {
 		}
 	}, [code, error, user]);
 	// if user is already authenticated redirect them to the last page they were on if any. or otherwise to the home page
+
+	// if user is authenticated, redirect user to previous page
 	return user ? (
 		<Redirect to={next} />
 	) : (

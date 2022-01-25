@@ -8,6 +8,7 @@ export const instance = axios.create({
 });
 
 instance.interceptors.request.use(async (config) => {
+	// add firebase id bearer token to authorization header
 	const token = await auth.currentUser?.getIdToken();
 	return token
 		? {
