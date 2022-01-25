@@ -226,7 +226,7 @@ const Search: React.FC = () => {
                     <Header mintAddrToParent={mintAddrToParent} onClick={onClick} showflag={false} />
 
                     {/* Main Content After Header */}
-                    <div className="min-h-screen font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2">
+                    <div className="min-h-screen font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2 sticky">
 
                         {/* The Gray Container */}
                         <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
@@ -262,6 +262,7 @@ const Search: React.FC = () => {
                                 <Display chartData={chartData} position='bottom'
                                     height={Number(230)} total={total} totalCountHeight={35} showPie={false}
                                     width={width} />
+
                             )}
                             {!isLoading && foundResults && width <= 640 && (
                                 <MobileDisplay chartData={chartData} position='right'

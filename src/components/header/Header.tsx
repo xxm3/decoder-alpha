@@ -123,7 +123,7 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                             }} animated placeholder="Type to search" disabled={isLoading}  style={{width: '600px' }} ionInput={() => handleSearch()}/>
                             {/* TODO-vinit: probably don't want above to be 600px ... maybe a min and max width? */}
 
-                            <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-green-400" onClick={() => handleSearch()}>
+                            <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1" onClick={() => handleSearch()}>
                                 <IonIcon slot="icon-only" icon={search} className=" "/>
                                 {/*<IonButton className=" text-white text-base rounded-lg" onClick={() => onClick}*/}
                                 {/*           animate-bounce disabled={searchText === ''}>*/}
