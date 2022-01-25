@@ -1,11 +1,6 @@
 import { IonApp, IonButton, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 
-// /* Pages */
-// import Home from './pages/home/Home';
-// import Mint from "./pages/mint/Mint";
-// import Game from "./pages/game/Game";
-
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 
@@ -35,10 +30,6 @@ import "./App.css";
 import Loader from "./components/Loader";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UserContext from "./context/UserContext";
-
-// import { createBrowserHistory } from "history";
-
-// const history = createBrowserHistory();
 
 const App = () => {
 	/* 
