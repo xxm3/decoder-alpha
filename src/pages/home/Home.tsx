@@ -18,7 +18,7 @@ import {Connection, programs} from '@metaplex/js';
 
 const Home = () => {
     /**
-     * State Variables
+     * State Variables.
      */
     const [walletAddress, setWalletAddress] = useState('');
     const [userNfts, setUserNfts] = useState([]); // from user wallet
