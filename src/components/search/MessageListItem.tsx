@@ -32,7 +32,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({message, idx, word}) =
 
     return (
         <div className="relative bg-bg-primary p-2 rounded-xl"> {/* bg-slate-200 */}
-            {/* <Link to={`/message/${message.id}`} > */}
+                {/* <Link to={`/message/${message.id}`} > */}
 
             <p className="text-lg font-bold text-white">
                 <span className="text-gray-500">{`${getDateAgo(message.time)}: `}</span>

@@ -25,8 +25,8 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 
 import Search from "./pages/Search";
+import HomePage from "./pages/home/HomePage";
 import Login from "./pages/Login";
-import Home from "./pages/home/Home";
 import { useEffect, useState } from "react";
 import { auth } from "./firebase";
 import { IUser } from "./types/User";
@@ -82,6 +82,11 @@ const App = () => {
 											Sign out
 										</IonButton>
 									)}
+								/>
+								<ProtectedRoute
+									path="/"
+									component={HomePage}
+									exact
 								/>
 
 								<ProtectedRoute

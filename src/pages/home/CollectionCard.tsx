@@ -28,8 +28,8 @@ interface CollectionCardProps {
 const CollectionCard: React.FC<CollectionCardProps> = ({ name, description, image, twitter, discord, categories, splitName, link, timestamp, readableTimestamp  }) => {
 
   return (
-    <IonCard>
-      <img src={image} className="w-100 h-100" />
+    <IonCard className="w-1/2 h-1/2">
+      <img src={image} className="" />
       <IonCardHeader> 
         <IonCardSubtitle>Destination</IonCardSubtitle>
         <IonCardTitle>{name}</IonCardTitle>
@@ -42,8 +42,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ name, description, imag
       </IonCardContent>
       <IonCardContent>
         <IonLabel>Keyword</IonLabel>
-        {
-          splitName.map((item: any, index: any) => (
+        {splitName.map((item: any, index: any) => (
             <IonItem key={index}>{item}</IonItem>
         ))}
       </IonCardContent>
