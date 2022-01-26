@@ -4,6 +4,7 @@ import { Redirect } from 'react-router';
 import { instance } from '../axios';
 import Loader from '../components/Loader';
 import { useUser } from '../context/UserContext';
+import { environment } from '../environments/environment';
 import { auth } from '../firebase';
 
 // The "Login" page to which all unauthenticated users are redirected to
@@ -46,7 +47,7 @@ function Login() {
                 .catch((e) => {
                     console.log(e);
                     if (e.response?.status === 403)
-                        setError("Ypu aren't authorised to view this site");
+                        setError("You aren't authorised to view this site");
                     else setError('Something went wrong. Please try again');
                 })
                 .finally(() => {
@@ -73,10 +74,12 @@ function Login() {
                                     const params = new URLSearchParams();
                                     params.set(
                                         'redirect_uri',
-                                        `http://localhost:3000/login`
+                                        `${window.location.origin}/login`
                                     );
                                     params.set('state', next);
-                                    const url = `https://discord.com/api/oauth2/authorize?client_id=818767746141126656&response_type=code&scope=identify&${params.toString()}`;
+                                    const url = `https://discord.com/api/oauth2/authorize?client_id=${
+                                        environment.clientId
+                                    }&response_type=code&scope=identify&${params.toString()}`;
                                     window.location.href = url;
                                 }}
                             >
