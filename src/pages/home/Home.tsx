@@ -19,7 +19,7 @@ import {Connection, programs} from '@metaplex/js';
 const Home = () => {
 
     /**
-     * State Variables.
+     * States & Variables
      */
     const [walletAddress, setWalletAddress] = useState('');
     const [userNfts, setUserNfts] = useState([]); // from user wallet
@@ -30,7 +30,18 @@ const Home = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     /**
-     * Actions
+     * Use Effects
+     */
+    useEffect(() => {
+        fetchHomePageData();
+    }, []);
+
+    useEffect(() => {
+        fetchHomePageData();
+    }, []);
+
+    /**
+     * Functions
      */
     // called from the child, after their wallet is connected
     const mintAddrToParent = (walletAddress: any) => {
@@ -95,19 +106,9 @@ const Home = () => {
     }
 
     /**
-     * UseEffects
+     * Renders
      */
-    useEffect(() => {
-        fetchHomePageData();
-    }, []);
 
-    useEffect(() => {
-        fetchHomePageData();
-    }, []);
-
-    /**
-     * HTML etc...
-     */
     return (
 
         <IonPage className="bg-sky">
