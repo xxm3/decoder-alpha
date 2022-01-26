@@ -152,69 +152,79 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
             <IonHeader className="m-4 ">
                 <IonToolbar className="bg-card rounded-lg">
 
-                    {/* Big Screens */}
-                    {( // width > 750 &&
-                        <IonItem>
-                            <IonRouterLink className="text-2xl" routerLink="/" hidden={width < 750 && showMobileSearch}>SOL
-                                Decoder</IonRouterLink>
+                    <IonItem>
+                        <IonRouterLink className="text-2xl" routerLink="/" hidden={width < 750 && showMobileSearch}>SOL
+                            Decoder</IonRouterLink>
 
-                            <span style={{width: '100px'}}> </span>
+                        <span style={{width: '75px'}}> </span>
 
-                            <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 ">
+                        <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 ">
 
-                                {/* search bar */}
-                                <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
-                                              type="text"
-                                              value={searchValue}
-                                              onKeyPress={handleKeyDown}
-                                              onIonChange={e => setSearchValue(e.detail.value!)}
-                                              animated placeholder="Type to search" disabled={isLoading}
-                                              style={{width: '450px'}}
-                                              hidden={width < 750 && !showMobileSearch} />
+                            {/* search bar */}
+                            <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
+                                          type="text"
+                                          value={searchValue}
+                                          onKeyPress={handleKeyDown}
+                                          onIonChange={e => setSearchValue(e.detail.value!)}
+                                          animated placeholder="Type to search" disabled={isLoading}
+                                          style={{width: '450px'}}
+                                          hidden={width < 750 && !showMobileSearch} />
 
-                                {/* mobile search stuff */}
-                                {width < 750 && (
-                                <>
-                                    {/*show search*/}
-                                    <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"
-                                         onClick={mobileSearchClicked} hidden={showMobileSearch}>
-                                        <IonIcon slot="icon-only" icon={search} className=" " />
-                                    </div>
+                            {/* search button for big screens, to do the actual search*/}
+                            {width >= 750 && (
+                                <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"
+                                     onClick={() => handleSearch(searchValue)}>
+                                    <IonIcon slot="icon-only" icon={search} className=" " />
+                                </div>
+                            )}
 
-                                    {/*hide search*/}
-                                    <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"
-                                        onClick={mobileSearchClicked}>
-                                        <IonIcon slot="icon-only" icon={closeOutline} className=" " hidden={!showMobileSearch} />
-                                    </div>
-                                </>
-                                )}
+                            {/* mobile search stuff */}
+                            {width < 750 && (
+                            <>
+                                {/* show search button, for mobile screens */}
+                                <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"
+                                     onClick={mobileSearchClicked} hidden={showMobileSearch}>
+                                    <IonIcon slot="icon-only" icon={search} className=" " />
+                                </div>
+                                {/* do the actual search, for mobile screens */}
+                                <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"
+                                     onClick={() => handleSearch(searchValue)} hidden={!showMobileSearch}>
+                                    <IonIcon slot="icon-only" icon={search} className=" " />
+                                </div>
 
-                                {/*wallet stuff*/}
-                                {!isWalletConnected &&
-                                    <span></span>
-                                    // <IonButton color="success" className="float-right" onClick={() => connectWallet()}>
-                                    //     Connect Wallet
-                                    // </IonButton>
-                                }
-                                {isWalletConnected &&
-                                    <span></span>
-                                    // ${walletAddress}
-                                }
+                                {/*hide search*/}
+                                <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"
+                                    onClick={mobileSearchClicked}>
+                                    <IonIcon slot="icon-only" icon={closeOutline} className=" " hidden={!showMobileSearch} />
+                                </div>
+                            </>
+                            )}
 
-                                {/* hamburger, to connect wallet on mobile */}
+                            {/*wallet stuff*/}
+                            {!isWalletConnected &&
+                                <span></span>
+                                // <IonButton color="success" className="float-right" onClick={() => connectWallet()}>
+                                //     Connect Wallet
+                                // </IonButton>
+                            }
+                            {isWalletConnected &&
+                                <span></span>
+                                // ${walletAddress}
+                            }
 
-                                {/*
-                                    TO.DO: don't implement - will be implemented in https://gitlab.com/nft-relay-group/frontend-app/-/issues/16
-                                */}
-                                {/*{width < 750 && (*/}
-                                {/*    <div className="xs:flex items-center px-2 rounded-lg space-x-4 mx-auto bg-success-1">*/}
-                                {/*        <IonIcon slot="icon-only" icon={menuOutline} className="rounded-b-3xl"/>*/}
-                                {/*    </div>*/}
-                                {/*})*/}
+                            {/* hamburger, to connect wallet on mobile */}
 
-                            </div>
-                        </IonItem>
-                    )}
+                            {/*
+                                TO.DO: don't implement - will be implemented in https://gitlab.com/nft-relay-group/frontend-app/-/issues/16
+                            */}
+                            {/*{width < 750 && (*/}
+                            {/*    <div className="xs:flex items-center px-2 rounded-lg space-x-4 mx-auto bg-success-1">*/}
+                            {/*        <IonIcon slot="icon-only" icon={menuOutline} className="rounded-b-3xl"/>*/}
+                            {/*    </div>*/}
+                            {/*})*/}
+
+                        </div>
+                    </IonItem>
 
                 </IonToolbar>
             </IonHeader>
