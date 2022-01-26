@@ -17,6 +17,7 @@ import {
 import {Connection, programs} from '@metaplex/js';
 
 const Home = () => {
+
     /**
      * State Variables.
      */
@@ -108,12 +109,52 @@ const Home = () => {
      * HTML etc...
      */
     return (
+
         <IonPage className="bg-sky">
             <Header mintAddrToParent={mintAddrToParent} showflag={true} onClick={undefined}/>
+
+            <IonContent>
+                <h1 style={{'paddingLeft': '30px'}}>More content coming soon! Use the search above in meantime</h1>
+                <br/>
+
+
+                {/* Possible Mints */}
+                <IonCard hidden={true}>
+                    <IonLabel className="text-4xl text-blue-600">Possible Mints</IonLabel>
+
+                    {/* loading bar */}
+                    {isLoading && (
+                        <div className="pt-10 flex justify-center items-center">
+                            <Loader/>
+                        </div>
+                    )}
+                    <div hidden={isLoading}>
+                        {homePageData.map((product: any, index: any) => (
+                            <>
+                                <Card key={index} url={product.url} readableTimestamp={getDateAgo(product.timestamp)} source={product.source}/>
+                            </>
+                        ))}
+                    </div>
+                </IonCard>
+
+            </IonContent>
+
+
+
+
+
+
+
+
+
+            {/* SHITTY FORMATTED CODE: */}
+
+            <div hidden={true}>
             <IonContent>
                 <IonRow>
                     <IonLabel className="text-4xl text-blue-600">New Collection</IonLabel>
                 </IonRow>
+
                 {/* loading bar */}
                 {isLoading && (
                     <div className="pt-10 flex justify-center items-center">
@@ -121,6 +162,7 @@ const Home = () => {
                     </div>
                 )}
                 <div hidden={isLoading}>
+
                     {/* New Collections */}
                     <IonRow className="bg-lime-700">
                         {newCollections.map((collection: any, index: any) => (
@@ -141,11 +183,12 @@ const Home = () => {
                             </IonCol>
                         ))}
                     </IonRow>
+
                     {/* Popular Collections */}
                     <IonRow>
                         <IonLabel className="text-4xl text-blue-600">Popular Collection</IonLabel>
                     </IonRow>
-                    {/* Possible Mints */}
+
                     <IonRow>
                         {popularCollections.map((collection: any, index: any) => (
                             <IonCol>
@@ -169,24 +212,7 @@ const Home = () => {
                 </div>
             </IonContent>
 
-            {/* Possible Mints */}
-            <IonContent>
-                <IonLabel className="text-4xl text-blue-600">Possible Mints</IonLabel>
 
-                {/* loading bar */}
-                {isLoading && (
-                    <div className="pt-10 flex justify-center items-center">
-                        <Loader/>
-                    </div>
-                )}
-                <div hidden={isLoading}>
-                    {homePageData.map((product: any, index: any) => (
-                        <>
-                            <Card key={index} url={product.url} readableTimestamp={getDateAgo(product.timestamp)} source={product.source}/>
-                        </>
-                    ))}
-                </div>
-            </IonContent>
 
             {/* user's NFTs */}
             <h3>User NFTs:</h3>
@@ -203,6 +229,7 @@ const Home = () => {
                     </IonRow>
                 </IonContent>
             </IonCard>
+            </div>
 
         </IonPage>
     );

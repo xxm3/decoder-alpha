@@ -21,12 +21,6 @@ import {useState} from "react";
 //     ...doughnutData,
 // });
 
-// const handleKeyDown = (event: any) => {
-//     if (event.key === 'Enter') {
-//         onClick(event);
-//     }
-// }
-
 
 
 

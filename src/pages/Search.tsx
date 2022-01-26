@@ -18,19 +18,14 @@ import Header from "../components/header/Header";
 
 const Search: React.FC = () => {
 
+    /**
+     * States & Variables
+     */
     // @ts-ignore
     const { messages, setMessages, setWord } = useContext(MessageContext);
     const [total, setTotal] = useState(0);
     const [width, setWidth] = useState(window.innerWidth);
-    
-    window.onresize = () => {
-        resizeWidth();
-    };
 
-    function resizeWidth() {
-        setWidth(window.innerWidth);
-    }
-    
     // @ts-ignore
     const { id } = useParams();
     const [searchText, setSearchText] = useState(id);
@@ -39,6 +34,34 @@ const Search: React.FC = () => {
     const [foundResults, setFoundResults] = useState(false);
     const [error, setError] = useState("");
 
+    const [walletAddress, setWalletAddress] = useState('');
+
+    /**
+     * Use Effects
+     */
+    // resize window
+    useEffect(() => {
+        window.addEventListener('resize', resizeWidth);
+        return () => window.removeEventListener('resize', resizeWidth);
+    }, []);
+
+    // for searching...
+    useEffect(() => {
+        doSearch();
+    }, [searchText]);
+
+    /**
+     * Functions
+     */
+    // window resize
+    window.onresize = () => {
+        resizeWidth();
+    };
+    function resizeWidth() {
+        setWidth(window.innerWidth);
+    }
+
+    // chart stuff
     const generateLabels = () => {
         let date = new Date();
         var dates = [];
@@ -69,6 +92,7 @@ const Search: React.FC = () => {
     }
     const labels = generateLabels();
 
+    // data for charts
     const [chartData, setChartData] = useState({
         labels: dispLabels(),
         datasets: [
@@ -96,6 +120,7 @@ const Search: React.FC = () => {
         doSearch();
     }
 
+    // load search data from backend
     const doSearch = async () => {
         try {
             setIsLoading(true);
@@ -132,8 +157,9 @@ const Search: React.FC = () => {
                 var labels = [];
                 labels = generateLabels();
                 var idx = labels.findIndex((val) => val === sample.ten_day_count[i].date);
-                datasetForChart[idx + 1] = sample.ten_day_count[i].count;
+                datasetForChart[idx] = sample.ten_day_count[i].count; // + 1
             }
+
             setChartData({
                 ...chartData,
                 labels: dispLabels(),
@@ -194,20 +220,6 @@ const Search: React.FC = () => {
         }
     }
 
-    useEffect(() => {
-        window.addEventListener('resize', resizeWidth);
-        return () => window.removeEventListener('resize', resizeWidth);
-    }, []);
-
-    useEffect(() => {
-        doSearch();
-    }, [searchText]);
-
-    const [walletAddress, setWalletAddress] = useState('');
-
-    /**
-     * Actions
-     */
     const mintAddrToParent = (walletAddress: any) => {
         setWalletAddress(walletAddress);
     }
@@ -216,6 +228,10 @@ const Search: React.FC = () => {
     const scrollToTop = () => {
         contentRef.current && contentRef.current.scrollToTop();
     };
+
+    /**
+     * Renders
+     */
 
     return (
         <React.Fragment>
@@ -232,9 +248,13 @@ const Search: React.FC = () => {
                         <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
                             {/* loading bar */}
-                            {isLoading && (<div className="pt-10 flex justify-center items-center">
-                                <Loader/>
-                            </div>)}
+                            {isLoading && (
+                                <div>
+                                    <h1>Searching for {searchText}</h1>
+                                    <div className="pt-10 flex justify-center items-center">
+                                        <Loader/>
+                                    </div>
+                                </div>)}
 
                             {/* chart / search results, based on screen width
                                 note that heights of the chart are hardcoded below, while heights of the message list is on the Display.jsx.getMessageListHeight() */}
@@ -280,7 +300,8 @@ const Search: React.FC = () => {
                                 </div>
                             )}
 
-                            {!isLoading && foundResults && (
+                            {/* scroll bar */}
+                            {!isLoading && foundResults && total > 5 && (
                                 <IonButton onClick={() => scrollToTop()} className="float-right">Scroll to Top</IonButton>
                             )}
 
