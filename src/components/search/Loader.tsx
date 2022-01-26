@@ -2,7 +2,7 @@ import React from "react";
 
 const Loader: React.FC = () => {
     return (
-        <div className="flex-col">
+        <div className="flex-col ">
             <svg viewBox="0 0 860.1 876.5">
                 <path
                     className="animate-spin from-blue-300"

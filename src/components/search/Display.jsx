@@ -59,10 +59,15 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
         <React.Fragment>
 
             <IonItem>
-                Toggle Chart
-                <IonToggle color="dark"
-                           checked={showChart}
-                           onClick={ () => handleChartToggleClick(!showChart) } />
+
+                <span>Searched on {word}</span>
+                <span style={{width: "100px"}}> </span>
+                <span>
+                    <span style={{marginBottom: "10px"}}>Toggle Chart</span>
+                    <IonToggle color="dark"
+                               checked={showChart}
+                               onClick={ () => handleChartToggleClick(!showChart) } />
+                </span>
             </IonItem>
             <IonGrid>
 

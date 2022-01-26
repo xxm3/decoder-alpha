@@ -32,6 +32,7 @@ import ViewMessage from './pages/ViewMessage';
 
 // New Home
 import HomePage from './pages/home/HomePage';
+import Home from "./pages/home/Home";
 
 const App = () => (
     <IonApp>
@@ -40,10 +41,10 @@ const App = () => (
                 { /* <Route path="/" component={isLoggedIn ? home : Login} exact /> */}
 
                 {/* Old Home */}
-                {/* <Route path="/" component={Home} exact /> */}
+                 <Route path="/" component={Home} exact />
                 
                 {/* New Home */}
-                <Route path="/" component={HomePage} exact />
+                {/*<Route path="/" component={HomePage} exact />*/}
 
                 {/* Search */}
                 <Route path="/search/:id" exact={true}>
