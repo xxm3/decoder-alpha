@@ -20,7 +20,7 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 
 import Search from "./pages/Search";
-import HomePage from "./pages/home/HomePage";
+// import HomePage from "./pages/home/HomePage";
 import Login from "./pages/Login";
 import { useEffect, useState } from "react";
 import { auth } from "./firebase";
@@ -30,6 +30,7 @@ import "./App.css";
 import Loader from "./components/Loader";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UserContext from "./context/UserContext";
+import { instance } from "./axios";
 
 const App = () => {
 	/* 
@@ -43,16 +44,17 @@ const App = () => {
 	useEffect(() => {
 		return auth.onAuthStateChanged((user) => {
 			if (user) {
-				setUser({
-					id: user.uid,
-				});
-			} else {
-				setUser(null);
-				// if user is not authenticated, redirect them to the login page
-				// let next = window.location.pathname;
-				// if (next === "/Login") next = "/";
-				// history.push(`/Login?next=${next}`);
-			}
+                setUser({
+                    id: user.uid,
+                });
+                user.getIdToken().then(
+                    (token) =>
+                        (instance.defaults.headers.common.Authorization = `Bearer ${token}`)
+                );
+            } else {
+                setUser(null);
+                instance.defaults.headers.common = {};
+            }
 		});
 	}, []);
 
@@ -74,11 +76,11 @@ const App = () => {
 										</IonButton>
 									)}
 								/>
-								<ProtectedRoute
+								{/* <ProtectedRoute
 									path="/"
 									component={HomePage}
 									exact
-								/>
+								/> */}
 
 								<ProtectedRoute
 									path="/search/:id"
