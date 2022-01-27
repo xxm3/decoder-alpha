@@ -1,4 +1,4 @@
-import Loader from '../components/search/Loader';
+import Loader from '../components/Loader';
 import React, { useRef } from 'react';
 import Display from '../components/search/Display';
 import { useState, useEffect, useContext} from 'react';
@@ -11,10 +11,14 @@ import {
 import './Search.css';
 import faker from 'faker';
 import { MessageContext } from '../context/context';
-// import MobileDisplay from '../components/search/MobileDisplay';
+
+
 import { environment } from "../environments/environment";
 import { useParams } from 'react-router';
+
+
 import Header from "../components/header/Header";
+import { instance } from '../axios';
 
 const Search: React.FC = () => {
 
@@ -124,28 +128,17 @@ const Search: React.FC = () => {
     const doSearch = async () => {
         try {
             setIsLoading(true);
-            const res = await fetch(environment.backendApi + '/search/', {
-                method: 'POST',
-                'headers': {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "word": searchText,
-                })
-            });
-
-            let fetchedData = await res.json().then(data => {
-                return data;
-            });
-
-            if (res.status !== 200 || fetchedData?.error) {
-                setIsLoading(false);
-                setFoundResults(false);
-
-                setError('Unable to connect. Please try again later');
-
-                throw fetchedData;
-            }
+			const { data: fetchedData } = await instance.post(
+				"/search/",
+				{
+					word: searchText,
+				},
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
 
             let sample = fetchedData;
             setTotal(sample.totalCount);
@@ -209,8 +202,8 @@ const Search: React.FC = () => {
         } catch (e: any) {
             console.error("try/catch in Search.tsx: ", e);
 
-            if (e && e.body) {
-                setError(String(e.body));
+            if (e && e.response) {
+				setError(String(e.response.data.body));
             } else {
                 setError('Unable to connect. Please try again later');
             }
