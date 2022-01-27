@@ -11,7 +11,7 @@ import {
 import './Search.css';
 import faker from 'faker';
 import { MessageContext } from '../context/context';
-import MobileDisplay from '../components/search/MobileDisplay';
+// import MobileDisplay from '../components/search/MobileDisplay';
 import { environment } from "../environments/environment";
 import { useParams } from 'react-router';
 import Header from "../components/header/Header";
