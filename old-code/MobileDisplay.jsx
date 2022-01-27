@@ -3,7 +3,7 @@ import { MessageContext } from "../../context/context";
 import { useContext } from 'react';
 import MessageListItem from "./MessageListItem";
 import React, { useEffect, useRef } from "react";
-import { Doughnut, Chart } from 'react-chartjs-2';
+import { Chart } from 'react-chartjs-2';
 import './Display.css';
 import {
     Chart as ChartJS,
@@ -34,26 +34,22 @@ ChartJS.register(
     Tooltip
 );
 
-interface DisplayProps {
-    chartData: any;
-    height: number;
-    doughnutData: any;
-    position: string;
-    totalCountHeight: number;
-    showPie: boolean;
-}
+// interface DisplayProps {
+//     chartData: any;
+//     height: number;
+//     doughnutData: any;
+//     position: string;
+//     totalCountHeight: number;
+//     showPie: boolean;
+// }
 
 defaults.color = '#FFFFFF';
 const MobileDisplay = ({ chartData, height, position, total, totalCountHeight, showPie }) => {
     const { messages, word } = useContext(MessageContext);
 
-    // console.log({messages});
-
-    // not sure why we have showPie & showDoughnut
     const [doughnutHeight, setDoughnutHeight] = React.useState(0);
 
     const [showBar, setShowBar] = React.useState(!showPie);
-    const [showDoughnut, setShowDoughnut] = React.useState(showPie);
 
     const ref = useRef();
     window.onresize = () => {

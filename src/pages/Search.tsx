@@ -11,9 +11,9 @@ import {
 import './Search.css';
 import faker from 'faker';
 import { MessageContext } from '../context/context';
-import MobileDisplay from '../components/search/MobileDisplay';
+// import MobileDisplay from '../components/search/MobileDisplay';
 import { environment } from "../environments/environment";
-import { useParams, useHistory } from 'react-router';
+import { useParams } from 'react-router';
 import Header from "../components/header/Header";
 
 const Search: React.FC = () => {
@@ -259,6 +259,9 @@ const Search: React.FC = () => {
                                     </div>
                                 </div>)}
 
+                            {/* use this if you want to test the width */}
+                            {/*--{width}--*/}
+
                             {/* chart / search results, based on screen width
                                 note that heights of the chart are hardcoded below, while heights of the message list is on the Display.jsx.getMessageListHeight() */}
                             {!isLoading && foundResults && width > 1536 && (
@@ -273,24 +276,27 @@ const Search: React.FC = () => {
                             )}
                             {!isLoading && foundResults && width <= 1280 && width > 1024 && (
                                 <Display chartData={chartData} position='bottom'
-                                    height={Number(55)} total={total} totalCountHeight={25} showPie={false}
+                                    height={Number(60)} total={total} totalCountHeight={25} showPie={false}
                                     width={width}/>
                             )}
                             {!isLoading && foundResults && width <= 1024 && width > 768 && (
                                 <Display chartData={chartData} position='bottom'
-                                    height={Number(65)} total={total} totalCountHeight={28} showPie={false}
+                                    height={Number(80)} total={total} totalCountHeight={28} showPie={false}
                                     width={width} />
                             )}
                             {!isLoading && foundResults && width <= 768 && width > 640 && (
                                 <Display chartData={chartData} position='bottom'
-                                    height={Number(230)} total={total} totalCountHeight={35} showPie={false}
+                                    height={Number(130)} total={total} totalCountHeight={35} showPie={false}
                                     width={width} />
 
                             )}
                             {!isLoading && foundResults && width <= 640 && (
-                                <MobileDisplay chartData={chartData} position='right'
-                                    height={Number(310)} total={total} totalCountHeight={30} showPie={false}
-                                 />
+                                // <MobileDisplay chartData={chartData} position='right'
+                                //     height={Number(175)} total={total} totalCountHeight={30} showPie={false}
+                                //  />
+                                <Display chartData={chartData} position='bottom'
+                                         height={Number(175)} total={total} totalCountHeight={35} showPie={false}
+                                         width={width} />
                             )}
 
                             {/* error bar */}
