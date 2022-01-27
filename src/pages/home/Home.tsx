@@ -120,7 +120,7 @@ const Home = () => {
                 <br/>
 
 
-                {/* Possible Mints */}
+                {/* Possible Mints ... */}
                 <IonCard hidden={true}>
                     <IonLabel className="text-4xl text-blue-600">Possible Mints</IonLabel>
 
