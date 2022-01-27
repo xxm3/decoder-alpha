@@ -83,14 +83,14 @@ const App = () => {
 								{/*		</IonButton>*/}
 								{/*	)}*/}
 								{/*/>*/}
-								<ProtectedRoute
+								<Route
 									path="/"
 									// component={HomePage}
                                     component={Home}
 									exact
 								/>
 
-								<ProtectedRoute
+								<Route
 									path="/search/:id"
 									exact={true}
 									component={Search}

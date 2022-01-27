@@ -228,11 +228,8 @@ const Search: React.FC = () => {
 
     return (
         <React.Fragment>
-
             <IonPage id="home-page">
-
                 <IonContent ref={contentRef} scrollEvents={true} fullscreen>
-
                     {/* Header */}
                     <Header mintAddrToParent={mintAddrToParent} onClick={onClick} showflag={false} />
 
@@ -246,7 +243,7 @@ const Search: React.FC = () => {
                             {/* loading bar */}
                             {isLoading && (
                                 <div>
-                                    <h1>Searching for {searchText}</h1>
+                                    <h1 className="flex justify-center items-center">Searching for {searchText}</h1>
                                     <div className="pt-10 flex justify-center items-center">
                                         <Loader/>
                                     </div>
