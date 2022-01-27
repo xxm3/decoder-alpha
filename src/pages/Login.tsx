@@ -47,7 +47,7 @@ function Login() {
                 .catch((e) => {
                     console.log(e);
                     if (e.response?.status === 403)
-                        setError("You aren't authorised to view this site");
+                        setError("You need a proper role in Discord before accessing the site");
                     else setError('Something went wrong. Please try again');
                 })
                 .finally(() => {
