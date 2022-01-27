@@ -99,7 +99,9 @@ const Home = () => {
         // FFFFFF - White       - Tile Text Color
 
         <IonPage className="bg-background">
+
             <Header mintAddrToParent={mintAddrToParent} showflag={true} onClick={undefined}/>
+
             {/* New Collections */}
             <div className="rounded-lg m-4 bg-background">
                 <IonLabel className="text-2xl text-secondary">New Collections</IonLabel>

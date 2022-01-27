@@ -114,10 +114,12 @@ const HeaderContainer = ({ mintAddrToParent, showflag, onClick }) => {
                                                 <IonRow className="xs::flex items-center rounded-lg overflow-hidden px-2 py-1 justify-center">
                                                     <IonCol>
                                                         <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
-                                                            type="text" value={searchvalue} onIonChange={e => {
-                                                                // @ts-ignore
-                                                            setInput(e.target.value)
-                                                            }} animated placeholder="Type to search" />
+                                                            type="text" value={searchvalue} IonInput={handleKeyDown} onKeyPress={handleKeyDown}
+                                                            // IonChange={e => {
+                                                            //     // @ts-ignore
+                                                            //     setInput(e.target.value)
+                                                            //     }}
+                                                            animated placeholder="Type to search!" />
                                                     </IonCol>
                                                     <IonCol>
                                                         <IonButton color="sucess" className="text-white bg-orange-500" value={searchvalue} onClick={() => handleSearch()}

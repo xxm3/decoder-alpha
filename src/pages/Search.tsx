@@ -11,26 +11,25 @@ import {
 import './Search.css';
 import faker from 'faker';
 import { MessageContext } from '../context/context';
-import MobileDisplay from '../components/search/MobileDisplay';
-import { useParams, useHistory } from 'react-router';
+
+
+import { environment } from "../environments/environment";
+import { useParams } from 'react-router';
+
+
 import Header from "../components/header/Header";
 import { instance } from '../axios';
 
 const Search: React.FC = () => {
 
+    /**
+     * States & Variables
+     */
     // @ts-ignore
     const { messages, setMessages, setWord } = useContext(MessageContext);
     const [total, setTotal] = useState(0);
     const [width, setWidth] = useState(window.innerWidth);
-    
-    window.onresize = () => {
-        resizeWidth();
-    };
 
-    function resizeWidth() {
-        setWidth(window.innerWidth);
-    }
-    
     // @ts-ignore
     const { id } = useParams();
     const [searchText, setSearchText] = useState(id);
@@ -39,6 +38,34 @@ const Search: React.FC = () => {
     const [foundResults, setFoundResults] = useState(false);
     const [error, setError] = useState("");
 
+    const [walletAddress, setWalletAddress] = useState('');
+
+    /**
+     * Use Effects
+     */
+    // resize window
+    useEffect(() => {
+        window.addEventListener('resize', resizeWidth);
+        return () => window.removeEventListener('resize', resizeWidth);
+    }, []);
+
+    // for searching...
+    useEffect(() => {
+        doSearch();
+    }, [searchText]);
+
+    /**
+     * Functions
+     */
+    // window resize
+    window.onresize = () => {
+        resizeWidth();
+    };
+    function resizeWidth() {
+        setWidth(window.innerWidth);
+    }
+
+    // chart stuff
     const generateLabels = () => {
         let date = new Date();
         var dates = [];
@@ -69,6 +96,7 @@ const Search: React.FC = () => {
     }
     const labels = generateLabels();
 
+    // data for charts
     const [chartData, setChartData] = useState({
         labels: dispLabels(),
         datasets: [
@@ -96,6 +124,7 @@ const Search: React.FC = () => {
         doSearch();
     }
 
+    // load search data from backend
     const doSearch = async () => {
         try {
             setIsLoading(true);
@@ -121,8 +150,9 @@ const Search: React.FC = () => {
                 var labels = [];
                 labels = generateLabels();
                 var idx = labels.findIndex((val) => val === sample.ten_day_count[i].date);
-                datasetForChart[idx + 1] = sample.ten_day_count[i].count;
+                datasetForChart[idx] = sample.ten_day_count[i].count; // + 1
             }
+
             setChartData({
                 ...chartData,
                 labels: dispLabels(),
@@ -183,20 +213,6 @@ const Search: React.FC = () => {
         }
     }
 
-    useEffect(() => {
-        window.addEventListener('resize', resizeWidth);
-        return () => window.removeEventListener('resize', resizeWidth);
-    }, []);
-
-    useEffect(() => {
-        doSearch();
-    }, [searchText]);
-
-    const [walletAddress, setWalletAddress] = useState('');
-
-    /**
-     * Actions
-     */
     const mintAddrToParent = (walletAddress: any) => {
         setWalletAddress(walletAddress);
     }
@@ -206,24 +222,38 @@ const Search: React.FC = () => {
         contentRef.current && contentRef.current.scrollToTop();
     };
 
+    /**
+     * Renders
+     */
+
     return (
         <React.Fragment>
+
             <IonPage id="home-page">
+
                 <IonContent ref={contentRef} scrollEvents={true} fullscreen>
 
                     {/* Header */}
                     <Header mintAddrToParent={mintAddrToParent} onClick={onClick} showflag={false} />
 
                     {/* Main Content After Header */}
-                    <div className="min-h-screen font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2">
+                    <div className="font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2 sticky">
+                        {/*min-h-screen*/}
 
                         {/* The Gray Container */}
                         <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
                             {/* loading bar */}
-                            {isLoading && (<div className="pt-10 flex justify-center items-center">
-                                <Loader/>
-                            </div>)}
+                            {isLoading && (
+                                <div>
+                                    <h1>Searching for {searchText}</h1>
+                                    <div className="pt-10 flex justify-center items-center">
+                                        <Loader/>
+                                    </div>
+                                </div>)}
+
+                            {/* use this if you want to test the width */}
+                            {/*--{width}--*/}
 
                             {/* chart / search results, based on screen width
                                 note that heights of the chart are hardcoded below, while heights of the message list is on the Display.jsx.getMessageListHeight() */}
@@ -239,23 +269,27 @@ const Search: React.FC = () => {
                             )}
                             {!isLoading && foundResults && width <= 1280 && width > 1024 && (
                                 <Display chartData={chartData} position='bottom'
-                                    height={Number(55)} total={total} totalCountHeight={25} showPie={false}
+                                    height={Number(60)} total={total} totalCountHeight={25} showPie={false}
                                     width={width}/>
                             )}
                             {!isLoading && foundResults && width <= 1024 && width > 768 && (
                                 <Display chartData={chartData} position='bottom'
-                                    height={Number(65)} total={total} totalCountHeight={28} showPie={false}
+                                    height={Number(80)} total={total} totalCountHeight={28} showPie={false}
                                     width={width} />
                             )}
                             {!isLoading && foundResults && width <= 768 && width > 640 && (
                                 <Display chartData={chartData} position='bottom'
-                                    height={Number(230)} total={total} totalCountHeight={35} showPie={false}
+                                    height={Number(130)} total={total} totalCountHeight={35} showPie={false}
                                     width={width} />
+
                             )}
                             {!isLoading && foundResults && width <= 640 && (
-                                <MobileDisplay chartData={chartData} position='right'
-                                    height={Number(310)} total={total} totalCountHeight={30} showPie={false}
-                                 />
+                                // <MobileDisplay chartData={chartData} position='right'
+                                //     height={Number(175)} total={total} totalCountHeight={30} showPie={false}
+                                //  />
+                                <Display chartData={chartData} position='bottom'
+                                         height={Number(175)} total={total} totalCountHeight={35} showPie={false}
+                                         width={width} />
                             )}
 
                             {/* error bar */}
@@ -268,7 +302,8 @@ const Search: React.FC = () => {
                                 </div>
                             )}
 
-                            {!isLoading && foundResults && (
+                            {/* scroll bar */}
+                            {!isLoading && foundResults && total > 5 && (
                                 <IonButton onClick={() => scrollToTop()} className="float-right">Scroll to Top</IonButton>
                             )}
 

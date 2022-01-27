@@ -50,7 +50,8 @@ module.exports = {
         'secondary' : '#8C52FF',
         'background': '#3B5C6E',
         'card': '#1f2e3c',
-        'text': '#FFFFFF'
+        'text': '#FFFFFF',
+        'success-1': '#2dd36f'
       },
     }
   },

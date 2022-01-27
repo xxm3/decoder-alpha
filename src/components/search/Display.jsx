@@ -1,11 +1,9 @@
-import { IonCheckbox, IonCol, IonGrid, IonRow,IonLabel,IonToggle,IonItem } from "@ionic/react";
+import { IonCol, IonGrid, IonRow, IonToggle,IonItem } from "@ionic/react";
 import { MessageContext } from "../../context/context";
 import { useContext, useState } from 'react';
 import MessageListItem from "./MessageListItem";
-import React, { useEffect, useRef } from "react";
-import { Doughnut, Chart } from 'react-chartjs-2';
-import { IonButton } from '@ionic/react';
-import { useHistory, useNavigate } from 'react-router-dom';
+import React from "react";
+import { Chart } from 'react-chartjs-2';
 import Cookies from 'universal-cookie';
 import './Display.css';
 import {
@@ -37,7 +35,6 @@ ChartJS.register(
 );
 
 defaults.color = '#FFFFFF';
-
 const Display = ({ chartData, height, position, total, totalCountHeight, showPie, width }) => {
 
     const cookies = new Cookies();
@@ -59,10 +56,15 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
         <React.Fragment>
 
             <IonItem>
-                Toggle Chart
-                <IonToggle color="dark"
-                           checked={showChart}
-                           onClick={ () => handleChartToggleClick(!showChart) } />
+
+                <span>Searched on {word}</span>
+                <span style={{width: "100px"}}> </span>
+                <span>
+                    <span style={{marginBottom: "10px"}}>Toggle Chart</span>
+                    <IonToggle color="dark"
+                               checked={showChart}
+                               onClick={ () => handleChartToggleClick(!showChart) } />
+                </span>
             </IonItem>
             <IonGrid>
 
