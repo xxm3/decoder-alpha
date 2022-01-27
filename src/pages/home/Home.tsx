@@ -15,6 +15,7 @@ import {
     getParsedNftAccountsByOwner
 } from "@nfteyez/sol-rayz";
 import {Connection, programs} from '@metaplex/js';
+import {instance} from "../../axios";
 
 const Home = () => {
 
@@ -32,10 +33,6 @@ const Home = () => {
     /**
      * Use Effects
      */
-    useEffect(() => {
-        fetchHomePageData();
-    }, []);
-
     useEffect(() => {
         fetchHomePageData();
     }, []);
@@ -85,7 +82,7 @@ const Home = () => {
     // get data for home page
     const fetchHomePageData = () => {
         setIsLoading(true);
-        axios
+        instance
             .get(environment.backendApi + '/homeData')
             .then((res) => {
                 setHomePageData(res.data.data.possibleMintLinks[0]);

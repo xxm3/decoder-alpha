@@ -204,14 +204,14 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
 
                             {/*TODO: implement wallet*/}
                             {/*wallet stuff*/}
-                            {!isWalletConnected && width >= 750 && (
-                                <>
-                                    <span></span>
-                                    <IonButton color="success" className="float-right" onClick={() => connectWallet()}>
-                                        Connect Wallet
-                                    </IonButton>
-                                </>
-                            )}
+                            {/*{!isWalletConnected && width >= 750 && (*/}
+                            {/*    <>*/}
+                            {/*        <span></span>*/}
+                            {/*        <IonButton color="success" className="float-right" onClick={() => connectWallet()}>*/}
+                            {/*            Connect Wallet*/}
+                            {/*        </IonButton>*/}
+                            {/*    </>*/}
+                            {/*)}*/}
 
                             {isWalletConnected &&
                                 <span></span>

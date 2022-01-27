@@ -1,11 +1,11 @@
-import { IonButton, IonContent, IonPage } from '@ionic/react';
-import { useEffect, useMemo, useState } from 'react';
-import { Redirect } from 'react-router';
-import { instance } from '../axios';
+import {IonButton, IonContent, IonPage} from '@ionic/react';
+import {useEffect, useMemo, useState} from 'react';
+import {Redirect} from 'react-router';
+import {instance} from '../axios';
 import Loader from '../components/Loader';
-import { useUser } from '../context/UserContext';
-import { environment } from '../environments/environment';
-import { auth } from '../firebase';
+import {useUser} from '../context/UserContext';
+import {environment} from '../environments/environment';
+import {auth} from '../firebase';
 
 // The "Login" page to which all unauthenticated users are redirected to
 function Login() {
@@ -41,11 +41,11 @@ function Login() {
                     }
                 )
                 .then(({ data }) => {
-                    console.log(data);
+                    // console.log(data);
                     return auth.signInWithCustomToken(data.body);
                 })
                 .catch((e) => {
-                    console.log(e);
+                    // console.log(e);
                     if (e.response?.status === 403)
                         setError("You need a proper role in Discord before accessing the site");
                     else setError('Something went wrong. Please try again');
@@ -66,11 +66,11 @@ function Login() {
                 <div className="w-screen min-h-screen flex flex-col  justify-center items-center">
                     {!loading ? (
                         <>
-                            {/*TODO: clean up... add more friendly text (be in discord (link)... have whitelist */}
 
-                            <p className="text-red-500 my-4 text-2xl">
-                                {error}
-                            </p>
+                            {/*TODO: need to make this page more spicy*/}
+
+                            <h3 className="text-white-500 my-4">Welcome to SOL Decoder!</h3>
+                            <br/>
 
                             <IonButton
                                 onClick={() => {
@@ -80,15 +80,28 @@ function Login() {
                                         `${window.location.origin}/login`
                                     );
                                     params.set('state', next);
-                                    const url = `https://discord.com/api/oauth2/authorize?client_id=${
+                                    window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${
                                         environment.clientId
                                     }&response_type=code&scope=identify&${params.toString()}`;
-                                    window.location.href = url;
                                 }}
                             >
                                 Login with Discord
                             </IonButton>
+
+                            <p className="text-red-500 my-4 text-2xl">
+                                {error}
+                            </p>
+
+                            <ul className="text-white-500 my-4">
+                                <li>Please join <a href="https://discord.gg/tEa8ZTWv" style={{"textDecoration": "underline"}}>our Discord</a> to get access to the site</li>
+                                <br/>
+                                <li>In the future the site will be locked behing ownership of the NFT. Until the NFT releases, you can get access by being whitelisted</li>
+                                <br/>
+                                <li>View whitelisting requirements in the #whitelist-faq channel</li>
+                            </ul>
+
                         </>
+
                     ) : (
                         <div className="h-48 w-48">
                             <Loader />

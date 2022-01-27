@@ -2,6 +2,7 @@ import React from "react";
 
 const Loader: React.FC = () => {
     return (
+        // TODO: messed up on firefox
         <div className="flex-col ">
             <svg viewBox="0 0 860.1 876.5">
                 <path
