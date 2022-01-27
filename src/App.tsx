@@ -34,6 +34,8 @@ import "@ionic/react/css/display.css";
 
 
 import "./theme/variables.css";
+import HomePage from "./pages/home/HomePage";
+import Home from "./pages/home/Home";
 
 
 
@@ -49,13 +51,12 @@ const App = () => {
 	useEffect(() => {
 		return auth.onAuthStateChanged((user) => {
 			if (user) {
-                setUser({
-                    id: user.uid,
-                });
                 user.getIdToken().then(
-                    (token) =>
-                        (instance.defaults.headers.common.Authorization = `Bearer ${token}`)
-                );
+                    (token) => {
+                        (instance.defaults.headers.common.Authorization = `Bearer ${token}`);
+
+                        setUser({id: user.uid });
+                    });
             } else {
                 setUser(null);
                 instance.defaults.headers.common = {};
@@ -70,22 +71,24 @@ const App = () => {
 					<IonReactRouter>
 						<IonRouterOutlet>
 							<Switch>
+
+								{/*<ProtectedRoute*/}
+								{/*	path="/"*/}
+								{/*	exact={true}*/}
+								{/*	render={() => (*/}
+								{/*		<IonButton*/}
+								{/*			onClick={() => auth.signOut()}*/}
+								{/*		>*/}
+								{/*			Sign out*/}
+								{/*		</IonButton>*/}
+								{/*	)}*/}
+								{/*/>*/}
 								<ProtectedRoute
 									path="/"
-									exact={true}
-									render={() => (
-										<IonButton
-											onClick={() => auth.signOut()}
-										>
-											Sign out
-										</IonButton>
-									)}
-								/>
-								{/* <ProtectedRoute
-									path="/"
-									component={HomePage}
+									// component={HomePage}
+                                    component={Home}
 									exact
-								/> */}
+								/>
 
 								<ProtectedRoute
 									path="/search/:id"
