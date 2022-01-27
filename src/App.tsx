@@ -1,14 +1,19 @@
 
 import { IonApp, IonButton, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from 'react-router-dom';
 import ReactGA from 'react-ga';
 
-// /* Pages */
-// import Home from './pages/home/Home';
-// import Mint from "./pages/mint/Mint";
-// import Game from "./pages/game/Game";
-
+import Search from "./pages/Search";
+import Login from "./pages/Login";
+import { useEffect, useState } from "react";
+import { auth } from "./firebase";
+import { IUser } from "./types/User";
+import { Route, Switch } from "react-router";
+import "./App.css";
+import Loader from "./components/Loader";
+import ProtectedRoute from "./components/ProtectedRoute";
+import UserContext from "./context/UserContext";
+import { instance } from "./axios";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -29,22 +34,13 @@ import "@ionic/react/css/display.css";
 
 
 import "./theme/variables.css";
+import HomePage from "./pages/home/HomePage";
+import Home from "./pages/home/Home";
 
-import Search from "./pages/Search";
-// import HomePage from "./pages/home/HomePage";
-import Login from "./pages/Login";
-import { useEffect, useState } from "react";
-import { auth } from "./firebase";
-import { IUser } from "./types/User";
-import { Route, Switch } from "react-router";
-import "./App.css";
-import Loader from "./components/Loader";
-import ProtectedRoute from "./components/ProtectedRoute";
-import UserContext from "./context/UserContext";
-import { instance } from "./axios";
+
 
 const App = () => {
-	/* 
+	/*
 		state which stores the user. It has 3 states:
 		1. undefined : User data is still loading
 		2. null : User is not authenticated
@@ -55,13 +51,12 @@ const App = () => {
 	useEffect(() => {
 		return auth.onAuthStateChanged((user) => {
 			if (user) {
-                setUser({
-                    id: user.uid,
-                });
                 user.getIdToken().then(
-                    (token) =>
-                        (instance.defaults.headers.common.Authorization = `Bearer ${token}`)
-                );
+                    (token) => {
+                        (instance.defaults.headers.common.Authorization = `Bearer ${token}`);
+
+                        setUser({id: user.uid });
+                    });
             } else {
                 setUser(null);
                 instance.defaults.headers.common = {};
@@ -76,22 +71,24 @@ const App = () => {
 					<IonReactRouter>
 						<IonRouterOutlet>
 							<Switch>
+
+								{/*<ProtectedRoute*/}
+								{/*	path="/"*/}
+								{/*	exact={true}*/}
+								{/*	render={() => (*/}
+								{/*		<IonButton*/}
+								{/*			onClick={() => auth.signOut()}*/}
+								{/*		>*/}
+								{/*			Sign out*/}
+								{/*		</IonButton>*/}
+								{/*	)}*/}
+								{/*/>*/}
 								<ProtectedRoute
 									path="/"
-									exact={true}
-									render={() => (
-										<IonButton
-											onClick={() => auth.signOut()}
-										>
-											Sign out
-										</IonButton>
-									)}
-								/>
-								{/* <ProtectedRoute
-									path="/"
-									component={HomePage}
+									// component={HomePage}
+                                    component={Home}
 									exact
-								/> */}
+								/>
 
 								<ProtectedRoute
 									path="/search/:id"
@@ -143,7 +140,7 @@ const App = () => {
 
 //                 {/* Old Home */}
 //                  <Route path="/" component={Home} exact />
-                
+
 //                 {/* New Home */}
 //                 {/*<Route path="/" component={HomePage} exact />*/}
 

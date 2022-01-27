@@ -66,9 +66,12 @@ function Login() {
                 <div className="w-screen min-h-screen flex flex-col  justify-center items-center">
                     {!loading ? (
                         <>
+                            {/*TODO: clean up... add more friendly text (be in discord (link)... have whitelist */}
+
                             <p className="text-red-500 my-4 text-2xl">
                                 {error}
                             </p>
+
                             <IonButton
                                 onClick={() => {
                                     const params = new URLSearchParams();
