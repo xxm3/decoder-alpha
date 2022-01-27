@@ -1,6 +1,9 @@
 
 ## frontend-app
 
+## Discord oauth
+- Add clientId variable to environment.js on the environment object
+- This clientId is the clientId of your discord application
 ### To develop
 1. cd into the folder
 2. Run `npm install` at the root of your directory

@@ -6,7 +6,7 @@ import './Home.css';
 import Header from '../../components/header/Header';
 import Card from './Card';
 import CollectionCard from './CollectionCard';
-import Loader from "../../components/search/Loader";
+import Loader from "../../components/Loader";
 import {environment} from "../../environments/environment";
 import moment from "moment";
 import { pin } from 'ionicons/icons';

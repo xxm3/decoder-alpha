@@ -12,6 +12,7 @@ import {
     getParsedNftAccountsByOwner
 } from "@nfteyez/sol-rayz";
 import {Connection, programs} from '@metaplex/js';
+import { instance } from '../../axios';
 
 const Home = () => {
     // State Variables
@@ -27,45 +28,45 @@ const Home = () => {
     const mintAddrToParent = (walletAddress: any) => {
         // console.log(`----got wallet address from child: '${walletAddress}'`);
         setWalletAddress(walletAddress);
-        getNfts(walletAddress);
+        // getNfts(walletAddress);
     }
 
     // gets the user's nft's from their wallet
     // from https://github.com/NftEyez/sol-rayz
-    const getNfts = async (passedWalletAddress: string) => {
-        const publicAddress = passedWalletAddress;
-        const rawNftArray = await getParsedNftAccountsByOwner({
-            publicAddress,
-        });
-        // console.log("raw user nfts: ", rawNftArray);
-        let modifiedUserNfts: any = [];
-        for (let i in rawNftArray) {
-            const uri = rawNftArray[i].data.uri;
-            if (uri.indexOf("arweave") !== -1) {
-                let moreData: any = {};
-                await axios.get(uri).then((res) => {
-                    // push unique collections only
-                    // @ts-ignore
-                    if (!modifiedUserNfts.map(item => item.name).includes(res.data.collection.name)) {
-                        modifiedUserNfts.push({
-                            img: res.data.image,
-                            name: res.data.collection.name
-                        });
-                    }
-                }).catch((err) => {
-                    console.error("error when getting arweave data: " + err);
-                });
-            }
-            // console.log("modified user nfts: ", modifiedUserNfts);
-            // @ts-ignore
-            setUserNfts(modifiedUserNfts);
-        }
-    }
+    // const getNfts = async (passedWalletAddress: string) => {
+    //     const publicAddress = passedWalletAddress;
+    //     const rawNftArray = await getParsedNftAccountsByOwner({
+    //         publicAddress,
+    //     });
+    //     // console.log("raw user nfts: ", rawNftArray);
+    //     let modifiedUserNfts: any = [];
+    //     for (let i in rawNftArray) {
+    //         const uri = rawNftArray[i].data.uri;
+    //         if (uri.indexOf("arweave") !== -1) {
+    //             let moreData: any = {};
+    //             await axios.get(uri).then((res) => {
+    //                 // push unique collections only
+    //                 // @ts-ignore
+    //                 if (!modifiedUserNfts.map(item => item.name).includes(res.data.collection.name)) {
+    //                     modifiedUserNfts.push({
+    //                         img: res.data.image,
+    //                         name: res.data.collection.name
+    //                     });
+    //                 }
+    //             }).catch((err) => {
+    //                 console.error("error when getting arweave data: " + err);
+    //             });
+    //         }
+    //         // console.log("modified user nfts: ", modifiedUserNfts);
+    //         // @ts-ignore
+    //         setUserNfts(modifiedUserNfts);
+    //     }
+    // }
 
     // get data for home page
     const fetchHomePageData = () => {
         setIsLoading(true);
-        axios
+        instance
             .get(environment.backendApi + '/homeData')
             .then((res) => {
                 setHomePageData(res.data.data.possibleMintLinks[0]);
@@ -96,6 +97,7 @@ const Home = () => {
         // 8C52FF - Purple      - Secondary
         // 3B5C6E - Bluish Gray - Background
         // FFFFFF - White       - Tile Text Color
+
         <IonPage className="bg-background">
 
             <Header mintAddrToParent={mintAddrToParent} showflag={true} onClick={undefined}/>
@@ -118,6 +120,7 @@ const Home = () => {
                 </IonRow>
             </div>
         </IonPage>
+
     );
 }
 
