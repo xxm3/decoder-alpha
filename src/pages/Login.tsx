@@ -1,11 +1,12 @@
-import { IonButton, IonContent, IonPage } from '@ionic/react';
-import { useEffect, useMemo, useState } from 'react';
-import { Redirect } from 'react-router';
-import { instance } from '../axios';
+import {IonButton, IonCard, IonContent, IonLabel, IonPage} from '@ionic/react';
+import {useEffect, useMemo, useState} from 'react';
+import {Redirect} from 'react-router';
+import {instance} from '../axios';
 import Loader from '../components/Loader';
-import { useUser } from '../context/UserContext';
-import { environment } from '../environments/environment';
-import { auth } from '../firebase';
+import {useUser} from '../context/UserContext';
+import {environment} from '../environments/environment';
+import {auth} from '../firebase';
+import "./Login.css"
 
 // The "Login" page to which all unauthenticated users are redirected to
 function Login() {
@@ -41,11 +42,11 @@ function Login() {
                     }
                 )
                 .then(({ data }) => {
-                    console.log(data);
+                    // console.log(data);
                     return auth.signInWithCustomToken(data.body);
                 })
                 .catch((e) => {
-                    console.log(e);
+                    // console.log(e);
                     if (e.response?.status === 403)
                         setError("You need a proper role in Discord before accessing the site");
                     else setError('Something went wrong. Please try again');
@@ -66,11 +67,6 @@ function Login() {
                 <div className="w-screen min-h-screen flex flex-col  justify-center items-center">
                     {!loading ? (
                         <>
-                            {/*TODO: clean up... add more friendly text (be in discord (link)... have whitelist */}
-
-                            <p className="text-red-500 my-4 text-2xl">
-                                {error}
-                            </p>
 
                             <IonButton
                                 onClick={() => {
@@ -80,15 +76,47 @@ function Login() {
                                         `${window.location.origin}/login`
                                     );
                                     params.set('state', next);
-                                    const url = `https://discord.com/api/oauth2/authorize?client_id=${
+                                    window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${
                                         environment.clientId
                                     }&response_type=code&scope=identify&${params.toString()}`;
-                                    window.location.href = url;
                                 }}
                             >
                                 Login with Discord
                             </IonButton>
+
+                            <p className="text-red-500 my-4 text-xl">
+                                {error}
+                            </p>
+
+
+                            <IonCard className="p-4">
+                                <div id="welcome">
+                                    <p className="font-bold">Welcome to SOL Decoder</p>
+
+                                    <ul className="">
+                                        <li>Please join <a href="https://discord.gg/tEa8ZTWv" style={{"textDecoration": "underline"}}>our Discord</a> to get access to the site</li>
+                                        <li>In the future the site will be locked behind ownership of the NFT. Until the NFT releases, you can get access by being whitelisted</li>
+                                        <li>View whitelisting requirements in the #whitelist-faq channel</li>
+                                    </ul>
+                                </div>
+                                <br/>
+
+                                <div id="security">
+                                    <p className="font-bold">A note on Discord integration</p>
+                                    <ul>
+                                        <li>We require you to login with Discord, so that we can verify you have the proper role(s)</li>
+                                        <li>Note the permissions, seen when you click the Login button:</li>
+                                        <li style={{paddingLeft: "8px"}}>(1) Access your username, avatar, and banner</li>
+                                        <li style={{paddingLeft: "8px"}}>(2) This application cannot read your messages or send messages as you.</li>
+                                        <li>The site can never read any of your Discord messages, and asks for the most limited amount of permissions.</li>
+                                    </ul>
+                                </div>
+
+                            </IonCard>
+
+
                         </>
+
                     ) : (
                         <div className="h-48 w-48">
                             <Loader />

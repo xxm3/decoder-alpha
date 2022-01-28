@@ -9,3 +9,4 @@ export const environment = {
         : 'https://us-central1-nft-discord-relay.cloudfunctions.net/api',
     clientId: '927008889092857898',
 };
+

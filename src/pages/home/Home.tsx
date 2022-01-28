@@ -15,6 +15,7 @@ import {
     getParsedNftAccountsByOwner
 } from "@nfteyez/sol-rayz";
 import {Connection, programs} from '@metaplex/js';
+import {instance} from "../../axios";
 
 const Home = () => {
 
@@ -32,10 +33,6 @@ const Home = () => {
     /**
      * Use Effects
      */
-    useEffect(() => {
-        fetchHomePageData();
-    }, []);
-
     useEffect(() => {
         fetchHomePageData();
     }, []);
@@ -85,7 +82,7 @@ const Home = () => {
     // get data for home page
     const fetchHomePageData = () => {
         setIsLoading(true);
-        axios
+        instance
             .get(environment.backendApi + '/homeData')
             .then((res) => {
                 setHomePageData(res.data.data.possibleMintLinks[0]);
@@ -116,11 +113,11 @@ const Home = () => {
             <Header mintAddrToParent={mintAddrToParent} showflag={true} onClick={undefined}/>
 
             <IonContent className="bg-gradient-to-b ">
-                <h1 style={{'paddingLeft': '30px'}}>More content coming soon! Use the search above in meantime</h1>
+                <h1 style={{'paddingLeft': '30px'}}>More content coming soon! Use the search above in the meantime</h1>
                 <br/>
 
 
-                {/* Possible Mints */}
+                {/* Possible Mints ... */}
                 <IonCard hidden={true}>
                     <IonLabel className="text-4xl text-blue-600">Possible Mints</IonLabel>
 

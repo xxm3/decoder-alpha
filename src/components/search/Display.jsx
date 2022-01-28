@@ -39,7 +39,7 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
 
     const cookies = new Cookies();
     const { messages, word } = useContext(MessageContext);
-    const [showChart, setShowChart] = useState(String(cookies.get('showChart')) === 'true' ? true : false);
+    const [showChart, setShowChart] = useState(String(cookies.get('showChart')) === 'false' ? false : true);
 
     // show the chart or not
     function handleChartToggleClick(val) {
