@@ -162,7 +162,7 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
                     <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 ">
 
                         {/* search bar */}
-                        <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2 "
+                        <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2"
                                         type="text"
                                         value={searchValue}
                                         onKeyPress={handleKeyDown}
@@ -173,53 +173,38 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
 
                         {/* search button for big screens, to do the actual search*/}
                         {width >= 750 && (
-                            <div className="xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44 "
+                            // xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44
+                            <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"
                                     onClick={() => handleSearch(searchValue)}>
                                 <IonIcon slot="icon-only" icon={search} className=" " />
                             </div>
                         )}
 
-
                         {/* mobile search stuff */}
                         {width < 750 && (
                         <>
                             {/* show search button, for mobile screens */}
-                            <div className="xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44"
+                            <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"
+                                 // xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44
                                     onClick={mobileSearchClicked} hidden={showMobileSearch}>
                                 <IonIcon slot="icon-only" icon={search} className=" " />
                             </div>
                             {/* do the actual search, for mobile screens */}
-                            <div className="xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44"
+                            <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"
+                                 // xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44
                                     onClick={() => handleSearch(searchValue)} hidden={!showMobileSearch}>
                                 <IonIcon slot="icon-only" icon={search} className=" " />
                             </div>
 
                             {/*hide search*/}
-                            <div className="xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44"
+                            <div className=""
+                                 // xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44
                                 onClick={mobileSearchClicked}>
-                                <IonIcon slot="icon-only" icon={closeOutline} className=" " hidden={!showMobileSearch} />
+                                <IonIcon slot="icon-only" icon={closeOutline} className=" xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1" hidden={!showMobileSearch} />
                             </div>
                         </>
                         )}
 
-                        {/*<>*/}
-                        {/*    /!* show search button, for mobile screens *!/*/}
-                        {/*    <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"*/}
-                        {/*         onClick={mobileSearchClicked} hidden={showMobileSearch}>*/}
-                        {/*        <IonIcon slot="icon-only" icon={search} className=" " />*/}
-                        {/*    </div>*/}
-                        {/*    /!* do the actual search, for mobile screens *!/*/}
-                        {/*    <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"*/}
-                        {/*         onClick={() => handleSearch(searchValue)} hidden={!showMobileSearch}>*/}
-                        {/*        <IonIcon slot="icon-only" icon={search} className=" " />*/}
-                        {/*    </div>*/}
-
-                        {/*    /!*hide search*!/*/}
-                        {/*    <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"*/}
-                        {/*        onClick={mobileSearchClicked}>*/}
-                        {/*        <IonIcon slot="icon-only" icon={closeOutline} className=" " hidden={!showMobileSearch} />*/}
-                        {/*    </div>*/}
-                        {/*</>*/}
 
 
                         {/*wallet stuff*/}

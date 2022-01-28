@@ -1,4 +1,4 @@
-import {IonButton, IonContent, IonPage} from '@ionic/react';
+import {IonButton, IonCard, IonContent, IonLabel, IonPage} from '@ionic/react';
 import {useEffect, useMemo, useState} from 'react';
 import {Redirect} from 'react-router';
 import {instance} from '../axios';
@@ -6,6 +6,7 @@ import Loader from '../components/Loader';
 import {useUser} from '../context/UserContext';
 import {environment} from '../environments/environment';
 import {auth} from '../firebase';
+import "./Login.css"
 
 // The "Login" page to which all unauthenticated users are redirected to
 function Login() {
@@ -67,11 +68,6 @@ function Login() {
                     {!loading ? (
                         <>
 
-                            {/*TODO: need to make this page more spicy ... !!! Show screenshot auth.. explain can't read discord msg's */}
-
-                            <h3 className="text-white-500 my-4">Welcome to SOL Decoder</h3>
-                            <br/>
-
                             <IonButton
                                 onClick={() => {
                                     const params = new URLSearchParams();
@@ -88,17 +84,36 @@ function Login() {
                                 Login with Discord
                             </IonButton>
 
-                            <p className="text-red-500 my-4 text-2xl">
+                            <p className="text-red-500 my-4 text-xl">
                                 {error}
                             </p>
 
-                            <ul className="text-white-500 my-4">
-                                <li>Please join <a href="https://discord.gg/tEa8ZTWv" style={{"textDecoration": "underline"}}>our Discord</a> to get access to the site</li>
+
+                            <IonCard className="p-4">
+                                <div id="welcome">
+                                    <p className="font-bold">Welcome to SOL Decoder</p>
+
+                                    <ul className="">
+                                        <li>Please join <a href="https://discord.gg/tEa8ZTWv" style={{"textDecoration": "underline"}}>our Discord</a> to get access to the site</li>
+                                        <li>In the future the site will be locked behind ownership of the NFT. Until the NFT releases, you can get access by being whitelisted</li>
+                                        <li>View whitelisting requirements in the #whitelist-faq channel</li>
+                                    </ul>
+                                </div>
                                 <br/>
-                                <li>In the future the site will be locked behing ownership of the NFT. Until the NFT releases, you can get access by being whitelisted</li>
-                                <br/>
-                                <li>View whitelisting requirements in the #whitelist-faq channel</li>
-                            </ul>
+
+                                <div id="security">
+                                    <p className="font-bold">A note on Discord integration</p>
+                                    <ul>
+                                        <li>We require you to login with Discord, so that we can verify you have the proper role(s)</li>
+                                        <li>Note the permissions, seen when you click the Login button:</li>
+                                        <li style={{paddingLeft: "8px"}}>(1) Access your username, avatar, and banner</li>
+                                        <li style={{paddingLeft: "8px"}}>(2) This application cannot read your messages or send messages as you.</li>
+                                        <li>The site can never read any of your Discord messages, and asks for the most limited amount of permissions.</li>
+                                    </ul>
+                                </div>
+
+                            </IonCard>
+
 
                         </>
 

@@ -30,7 +30,8 @@ const Loader: React.FC = () => {
                 />
             </svg>
 
-            <div className="mt-3 text-gray-200 font-mono text-sm sm:text-xs">Loading...</div>
+            <div className="mt-3 text-gray-200 font-mono font-bold">Loading...</div>
+            {/*text-sm sm:text-xs*/}
 
         </div>
     );
