@@ -113,7 +113,7 @@ const Home = () => {
             <Header mintAddrToParent={mintAddrToParent} showflag={true} onClick={undefined}/>
 
             <IonContent className="bg-gradient-to-b ">
-                <h1 style={{'paddingLeft': '30px'}}>More content coming soon! Use the search above in meantime</h1>
+                <h1 style={{'paddingLeft': '30px'}}>More content coming soon! Use the search above in the meantime</h1>
                 <br/>
 
 

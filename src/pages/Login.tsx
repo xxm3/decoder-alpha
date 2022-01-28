@@ -67,9 +67,9 @@ function Login() {
                     {!loading ? (
                         <>
 
-                            {/*TODO: need to make this page more spicy ... alos Show screenshot auth.. explain can't read discord msg's */}
+                            {/*TODO: need to make this page more spicy ... !!! Show screenshot auth.. explain can't read discord msg's */}
 
-                            <h3 className="text-white-500 my-4">Welcome to SOL Decoder!</h3>
+                            <h3 className="text-white-500 my-4">Welcome to SOL Decoder</h3>
                             <br/>
 
                             <IonButton

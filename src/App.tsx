@@ -36,7 +36,6 @@ import "./theme/variables.css";
 import HomePage from "./pages/home/HomePage";
 import Home from "./pages/home/Home";
 
-// // TODO: not working? https://analytics.google.com/analytics/web/#/p301084891/reports/reportinghub -- also in index.html
 // // https://javascript.plainenglish.io/how-to-setup-and-add-google-analytics-to-your-react-app-fd361f47ac7b
 const TRACKING_ID = "G-Z3GDFZ53DN";
 ReactGA.initialize(TRACKING_ID);
