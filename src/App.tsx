@@ -74,17 +74,6 @@ const App = () => {
 						<IonRouterOutlet>
 							<Switch>
 
-								{/*<ProtectedRoute*/}
-								{/*	path="/"*/}
-								{/*	exact={true}*/}
-								{/*	render={() => (*/}
-								{/*		<IonButton*/}
-								{/*			onClick={() => auth.signOut()}*/}
-								{/*		>*/}
-								{/*			Sign out*/}
-								{/*		</IonButton>*/}
-								{/*	)}*/}
-								{/*/>*/}
 								<ProtectedRoute
 									path="/"
 									// component={HomePage}
