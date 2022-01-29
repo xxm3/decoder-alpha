@@ -224,6 +224,8 @@ const Search: React.FC = () => {
 
     /**
      * Renders
+     *
+     * TODO: search hints!! ie. one word is better...!!! no partial match etc...
      */
 
     return (
@@ -234,11 +236,11 @@ const Search: React.FC = () => {
                     <Header mintAddrToParent={mintAddrToParent} onClick={onClick} showflag={false} />
 
                     {/* Main Content After Header */}
-                    <div className="font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2 sticky">
+                    <div className="font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-2 pt-2 sticky">
                         {/*min-h-screen*/}
 
                         {/* The Gray Container */}
-                        <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+                        <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-2 pb-5 pr-2 pl-2 h-fit xl:pb-2 2xl:pb-1 lg:pb-3`}>
 
                             {/* loading bar */}
                             {isLoading && (

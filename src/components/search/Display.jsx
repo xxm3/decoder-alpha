@@ -60,13 +60,13 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
                 <span className="font-bold">Searched on {word} ({total} results)</span>
                 <span style={{width: "100px"}}> </span>
                 <span>
-                    <span style={{marginBottom: "10px"}} className="">Toggle Chart</span>
-                    <IonToggle color="dark"
+                    <span style={{marginBottom: "1px"}} className="">Toggle Chart</span>
+                    <IonToggle color="dark" style={{marginTop: "1px"}}
                                checked={showChart}
                                onClick={ () => handleChartToggleClick(!showChart) } />
                 </span>
             </IonItem>
-            <IonGrid>
+            <IonGrid className="noPaddingLeftRight">
 
                 {/* bar & line chart */}
                 {showChart && (
@@ -105,9 +105,9 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
 
                 {/* list of messages */}
                 {(<IonRow>
-                    <IonCol size="12">
+                    <IonCol size="12" className="noPaddingLeftRight">
                         <div className="overflow-y-scroll bg-inherit rounded-l flex flex-col divide-y divide-gray-400">
-                            <div className="space-y-3 pb-10 p-2">
+                            <div className="space-y-2">  {/*  pb-8 p-1 */}
                                 {messages.map((m, idx) => {
                                     return (<MessageListItem idx={idx + 1} key={m.id} message={m} word={word} />)
                                 })}

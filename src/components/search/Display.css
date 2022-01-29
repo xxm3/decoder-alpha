@@ -21,3 +21,7 @@
     background: #1F1932;
 }
 
+.noPaddingLeftRight{
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
