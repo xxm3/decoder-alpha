@@ -40,6 +40,8 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
     const cookies = new Cookies();
     const { messages, word } = useContext(MessageContext);
     const [showChart, setShowChart] = useState(String(cookies.get('showChart')) === 'false' ? false : true);
+    // currently hiding the chart if multiple words searched on
+    const [completelyHideChart, setCompletelyHideChart] = useState(word.indexOf(" ") !== -1);
 
     // show the chart or not
     function handleChartToggleClick(val) {
@@ -56,10 +58,9 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
         <React.Fragment>
 
             <IonItem>
-
-                <span className="font-bold">Searched on {word} ({total} results)</span>
+                <span className="font-bold">Searched on "{word}" ({total} results)</span>
                 <span style={{width: "100px"}}> </span>
-                <span>
+                <span hidden="completelyHideChart === true">
                     <span style={{marginBottom: "1px"}} className="">Toggle Chart</span>
                     <IonToggle color="dark" style={{marginTop: "1px"}}
                                checked={showChart}
@@ -69,7 +70,7 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
             <IonGrid className="noPaddingLeftRight">
 
                 {/* bar & line chart */}
-                {showChart && (
+                {showChart && !completelyHideChart && (
                     <IonRow>
                         <IonCol size="12">
                             <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
