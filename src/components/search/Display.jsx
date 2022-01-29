@@ -57,10 +57,10 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
 
             <IonItem>
 
-                <span>Searched on {word}</span>
+                <span className="font-bold">Searched on {word} ({total} results)</span>
                 <span style={{width: "100px"}}> </span>
                 <span>
-                    <span style={{marginBottom: "10px"}}>Toggle Chart</span>
+                    <span style={{marginBottom: "10px"}} className="">Toggle Chart</span>
                     <IonToggle color="dark"
                                checked={showChart}
                                onClick={ () => handleChartToggleClick(!showChart) } />

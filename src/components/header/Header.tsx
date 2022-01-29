@@ -209,17 +209,14 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
 
                         {/*wallet stuff*/}
 
-                        {/*TODO: new button for 'your nft page' */}
-
-                        {/*TODO: implement wallet*/}
-                        {isWalletConnected && width >= 750 && (
-                            <>
-                                <span></span>
-                                <IonButton color="success" className="absolute inset-y-0 right-0 mr-4" onClick={() => connectWallet()}>
-                                    Connect Wallet
-                                </IonButton>
-                            </>
-                        )}
+                        {/*{isWalletConnected && width >= 750 && (*/}
+                        {/*    <>*/}
+                        {/*        <span></span>*/}
+                        {/*        <IonButton color="success" className="absolute inset-y-0 right-0 mr-4" onClick={() => connectWallet()}>*/}
+                        {/*            Connect Wallet*/}
+                        {/*        </IonButton>*/}
+                        {/*    </>*/}
+                        {/*)}*/}
 
 
                         {/* hamburger, to connect wallet on mobile */}
