@@ -37,12 +37,22 @@ ChartJS.register(
 defaults.color = '#FFFFFF';
 const Display = ({ chartData, height, position, total, totalCountHeight, showPie, width }) => {
 
+    /**
+     * States & Variables
+     */
     const cookies = new Cookies();
     const { messages, word } = useContext(MessageContext);
     const [showChart, setShowChart] = useState(String(cookies.get('showChart')) === 'false' ? false : true);
     // currently hiding the chart if multiple words searched on
     const [completelyHideChart, setCompletelyHideChart] = useState(word.indexOf(" ") !== -1);
 
+    /**
+     * Use Effects
+     */
+
+    /**
+     * Functions
+     */
     // show the chart or not
     function handleChartToggleClick(val) {
         if(val === true || val === 'true') {
@@ -54,6 +64,9 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
         }
     }
 
+    /**
+     * Renders
+     */
     return (
         <React.Fragment>
 
