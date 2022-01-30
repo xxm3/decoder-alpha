@@ -224,8 +224,6 @@ const Search: React.FC = () => {
 
     /**
      * Renders
-     *
-     * TODO: search hints!! ie. one word is better...!!! no partial match etc... -- mult words no chart for now
      */
 
     return (
