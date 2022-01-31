@@ -62,6 +62,10 @@ const Display = ({ chartDataDailyCount, width, height, total, chartDataPerSource
         }
     }
 
+    function refreshSearch(){
+        window.location.reload();
+    }
+
     /**
      * Renders
      */
@@ -77,6 +81,7 @@ const Display = ({ chartDataDailyCount, width, height, total, chartDataPerSource
                                checked={showChart}
                                onClick={ () => handleChartToggleClick(!showChart) } />
                 </span>
+                {/* <span style={{width: "20px"}}> </span> <a click={refreshSearch()} style={{"textDecoration": "underline"}}>Refresh</a>*/}
             </IonItem>
             <IonGrid className="noPaddingLeftRight">
 
