@@ -65,8 +65,8 @@ const Search: React.FC = () => {
         setWidth(window.innerWidth);
     }
 
-    // chart stuff
-    const generateLabels = () => {
+    // label stuff for charts
+    const generateLabelsDailyCount = () => {
         let date = new Date();
         var dates = [];
         var labels = [];
@@ -80,7 +80,7 @@ const Search: React.FC = () => {
         }
         return labels.reverse();
     }
-    const dispLabels = () => {
+    const dispLabelsDailyCount = () => {
         let date = new Date();
         var dates = [];
         var labels = [];
@@ -94,11 +94,12 @@ const Search: React.FC = () => {
         }
         return labels.reverse();
     }
-    const labels = generateLabels();
+    const labels = generateLabelsDailyCount();
 
     // data for charts
-    const [chartData, setChartData] = useState({
-        labels: dispLabels(),
+    // daily count of message per day
+    const [chartDataDailyCount, setChartDataDailyCount] = useState({
+        labels: dispLabelsDailyCount(),
         datasets: [
             {
                 type: 'line' as const,
@@ -119,6 +120,22 @@ const Search: React.FC = () => {
         ],
     });
 
+    // total mentions per source
+    const [chartDataPerSource, setChartDataPerSource] = useState({
+        labels: dispLabelsDailyCount(), // TODO
+        datasets: [
+            {
+                type: 'bar' as const,
+                label: 'Bar Graph',
+                backgroundColor: 'rgb(75, 192, 192)',
+                data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
+                borderColor: 'white',
+                borderWidth: 2,
+            }
+        ],
+    });
+
+    // pass in the search logic to header
     const onClick = async (e: any) => {
         e.preventDefault();
         doSearch();
@@ -140,22 +157,25 @@ const Search: React.FC = () => {
 				}
 			);
 
-            let sample = fetchedData;
-            setTotal(sample.totalCount);
+            setTotal(fetchedData.totalCount);
 
             // repeated on constants.js & Search.tsx
             const numDaysBackGraphs = 10;
+
+            // put backend data into JSON for chart
+            // daily count of message per day
             var datasetForChart = Array.from({ length: numDaysBackGraphs }, () => 0);
-            for (let i = 0; i < sample.ten_day_count.length; i++) {
+            for (let i = 0; i < fetchedData.ten_day_count.length; i++) {
                 var labels = [];
-                labels = generateLabels();
-                var idx = labels.findIndex((val) => val === sample.ten_day_count[i].date);
-                datasetForChart[idx] = sample.ten_day_count[i].count; // + 1
+                labels = generateLabelsDailyCount();
+                var idx = labels.findIndex((val) => val === fetchedData.ten_day_count[i].date);
+                datasetForChart[idx] = fetchedData.ten_day_count[i].count; // + 1
             }
 
-            setChartData({
-                ...chartData,
-                labels: dispLabels(),
+            // daily count of message per day
+            setChartDataDailyCount({
+                ...chartDataDailyCount,
+                labels: dispLabelsDailyCount(),
                 datasets: [
                     {
                         type: 'line' as const,
@@ -175,19 +195,19 @@ const Search: React.FC = () => {
                     }
                 ],
             });
-            sample.messages.forEach((msg: any, idx: any) => {
-                messages[idx] = {
-                    message: msg.message,
-                    id: idx,
-                    time: msg.time,
-                };
-            });
 
-            // setShowHelp(false);
-            setFoundResults(true);
+            // not sure what below is for...
+            // fetchedData.messages.forEach((msg: any, idx: any) => {
+            //     messages[idx] = {
+            //         message: msg.message,
+            //         id: idx,
+            //         time: msg.time,
+            //     };
+            // });
 
+            // sets the messages for user to view
             let tempMsg: Message[] = [];
-            sample.messages.forEach((msg: any, idx: any) => {
+            fetchedData.messages.forEach((msg: any, idx: any) => {
                 let newMsg: Message = {
                     message: msg.message,
                     id: idx,
@@ -195,10 +215,13 @@ const Search: React.FC = () => {
                 }
                 tempMsg.push(newMsg);
             });
-            setWord(sample.word);
-            setMessages(tempMsg);
 
+            // set various variables
+            setWord(fetchedData.word);
+            setMessages(tempMsg);
+            setFoundResults(true);
             setIsLoading(false);
+
         } catch (e: any) {
             console.error("try/catch in Search.tsx: ", e);
 
@@ -213,10 +236,12 @@ const Search: React.FC = () => {
         }
     }
 
+    // get the wallet address from header
     const mintAddrToParent = (walletAddress: any) => {
         setWalletAddress(walletAddress);
     }
 
+    // for scrolling to top
     const contentRef = useRef<HTMLIonContentElement | null>(null);
     const scrollToTop = () => {
         contentRef.current && contentRef.current.scrollToTop();
@@ -234,16 +259,16 @@ const Search: React.FC = () => {
                     <Header mintAddrToParent={mintAddrToParent} onClick={onClick} showflag={false} />
 
                     {/* Main Content After Header */}
-                    <div className="font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2 sticky">
+                    <div className="font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-2 pt-2 sticky">
                         {/*min-h-screen*/}
 
                         {/* The Gray Container */}
-                        <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+                        <div className={` ${width <= 640 ? "w-full" : "container"} bg-satin-3 rounded-lg pt-2 pb-5 pr-2 pl-2 h-fit xl:pb-2 2xl:pb-1 lg:pb-3`}>
 
                             {/* loading bar */}
                             {isLoading && (
                                 <div>
-                                    <h1 className="flex justify-center items-center font-bold text-xl">Searching for {searchText}</h1>
+                                    <h1 className="flex justify-center items-center font-bold text-xl">Searching for "{searchText}"</h1>
                                     <br/>
                                     <div className="pt-10 flex justify-center items-center">
                                         <Loader/>
@@ -256,38 +281,38 @@ const Search: React.FC = () => {
                             {/* chart / search results, based on screen width
                                 note that heights of the chart are hardcoded below, while heights of the message list is on the Display.jsx.getMessageListHeight() */}
                             {!isLoading && foundResults && width > 1536 && (
-                                <Display chartData={chartData} position='bottom'
-                                    height={Number(35)} total={total} totalCountHeight={18} showPie={false}
-                                     width={width}/>
+                                <Display chartDataDailyCount={chartDataDailyCount}
+                                    height={Number(85)} total={total}
+                                    />
                             )}
                             {!isLoading && foundResults && width <= 1536 && width > 1280 && (
-                                <Display chartData={chartData}  position='bottom'
-                                    height={Number(45)} total={total} totalCountHeight={22} showPie={false}
-                                    width={width}/>
+                                <Display chartDataDailyCount={chartDataDailyCount}
+                                    height={Number(85)} total={total}
+                                    />
                             )}
                             {!isLoading && foundResults && width <= 1280 && width > 1024 && (
-                                <Display chartData={chartData} position='bottom'
-                                    height={Number(60)} total={total} totalCountHeight={25} showPie={false}
-                                    width={width}/>
+                                <Display chartDataDailyCount={chartDataDailyCount}
+                                    height={Number(85)} total={total}
+                                    />
                             )}
                             {!isLoading && foundResults && width <= 1024 && width > 768 && (
-                                <Display chartData={chartData} position='bottom'
-                                    height={Number(80)} total={total} totalCountHeight={28} showPie={false}
-                                    width={width} />
+                                <Display chartDataDailyCount={chartDataDailyCount}
+                                    height={Number(85)} total={total}
+                                     />
                             )}
                             {!isLoading && foundResults && width <= 768 && width > 640 && (
-                                <Display chartData={chartData} position='bottom'
-                                    height={Number(130)} total={total} totalCountHeight={35} showPie={false}
-                                    width={width} />
+                                <Display chartDataDailyCount={chartDataDailyCount}
+                                    height={Number(130)} total={total}
+                                     />
 
                             )}
                             {!isLoading && foundResults && width <= 640 && (
-                                // <MobileDisplay chartData={chartData} position='right'
-                                //     height={Number(175)} total={total} totalCountHeight={30} showPie={false}
+                                // <MobileDisplay chartDataDailyCount={chartDataDailyCount} position='right'
+                                //     height={Number(175)} total={total} totalCountHeight={30}
                                 //  />
-                                <Display chartData={chartData} position='bottom'
-                                         height={Number(175)} total={total} totalCountHeight={35} showPie={false}
-                                         width={width} />
+                                <Display chartDataDailyCount={chartDataDailyCount}
+                                         height={Number(175)} total={total}
+                                          />
                             )}
 
                             {/* error bar */}

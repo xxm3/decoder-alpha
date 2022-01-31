@@ -20,8 +20,6 @@ import {
     defaults,
 } from 'chart.js';
 
-// NOTE: any changes made here must be made in both Display.jsx & MobileDisplay.jsx!
-
 ChartJS.register(...registerables);
 ChartJS.register(
     ArcElement,
@@ -35,12 +33,24 @@ ChartJS.register(
 );
 
 defaults.color = '#FFFFFF';
-const Display = ({ chartData, height, position, total, totalCountHeight, showPie, width }) => {
+const Display = ({ chartDataDailyCount, height, total }) => { // , totalCountHeight, width position, showPie // position='bottom' totalCountHeight={18}  width={width}
 
+    /**
+     * States & Variables
+     */
     const cookies = new Cookies();
     const { messages, word } = useContext(MessageContext);
     const [showChart, setShowChart] = useState(String(cookies.get('showChart')) === 'false' ? false : true);
+    // currently hiding the chart if multiple words searched on
+    const [completelyHideChart, setCompletelyHideChart] = useState(word.indexOf(" ") !== -1);
 
+    /**
+     * Use Effects
+     */
+
+    /**
+     * Functions
+     */
     // show the chart or not
     function handleChartToggleClick(val) {
         if(val === true || val === 'true') {
@@ -52,28 +62,30 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
         }
     }
 
+    /**
+     * Renders
+     */
     return (
         <React.Fragment>
 
             <IonItem>
-
-                <span>Searched on {word}</span>
+                <span className="font-bold">Searched on "{word}" ({total} results last 10 days)</span>
                 <span style={{width: "100px"}}> </span>
-                <span>
-                    <span style={{marginBottom: "10px"}}>Toggle Chart</span>
-                    <IonToggle color="dark"
+                <span hidden="completelyHideChart === true">
+                    <span style={{marginBottom: "1px"}} className="">Toggle Chart</span>
+                    <IonToggle color="dark" style={{marginTop: "1px"}}
                                checked={showChart}
                                onClick={ () => handleChartToggleClick(!showChart) } />
                 </span>
             </IonItem>
-            <IonGrid>
+            <IonGrid className="noPaddingLeftRight">
 
                 {/* bar & line chart */}
-                {showChart && (
+                {showChart && !completelyHideChart && (
                     <IonRow>
-                        <IonCol size="12">
+                        <IonCol size="6">
                             <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
-                                <Chart type='bar' data={chartData} height={height} options={{
+                                <Chart type='bar' data={chartDataDailyCount} height={height} options={{
                                     plugins: {
                                         legend: {
                                             labels: { color: 'white', }
@@ -100,14 +112,45 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
                                 }} />
                             </div>
                         </IonCol>
+
+                        <IonCol size="6">
+                            <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
+                                <Chart type='bar' data={chartDataDailyCount} height={height} options={{
+                                    plugins: {
+                                        legend: {
+                                            labels: { color: 'white', }
+                                        },
+                                        title: { color: 'red',},
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    beginAtZero: true,
+                                                    display: false,
+                                                    color: 'white'
+                                                },
+                                            }],
+                                            xAxes: [{
+                                                ticks: {
+                                                    display: false,
+                                                    color: 'white'
+                                                },
+                                            }]
+                                        },
+                                    },
+                                    responsive: true,
+                                    maintainAspectRatio: true,
+                                }} />
+                            </div>
+                        </IonCol>
+                        a
                     </IonRow>
                 )}
 
                 {/* list of messages */}
                 {(<IonRow>
-                    <IonCol size="12">
+                    <IonCol size="12" className="noPaddingLeftRight">
                         <div className="overflow-y-scroll bg-inherit rounded-l flex flex-col divide-y divide-gray-400">
-                            <div className="space-y-3 pb-10 p-2">
+                            <div className="space-y-2">  {/*  pb-8 p-1 */}
                                 {messages.map((m, idx) => {
                                     return (<MessageListItem idx={idx + 1} key={m.id} message={m} word={word} />)
                                 })}
