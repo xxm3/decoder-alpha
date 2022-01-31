@@ -196,7 +196,7 @@ const Search: React.FC = () => {
                 ],
             });
 
-            // not sure what below is for...
+            // not sure what below is for...?
             // fetchedData.messages.forEach((msg: any, idx: any) => {
             //     messages[idx] = {
             //         message: msg.message,
