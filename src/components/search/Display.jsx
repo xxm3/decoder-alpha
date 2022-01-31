@@ -20,8 +20,6 @@ import {
     defaults,
 } from 'chart.js';
 
-// NOTE: any changes made here must be made in both Display.jsx & MobileDisplay.jsx!
-
 ChartJS.register(...registerables);
 ChartJS.register(
     ArcElement,
@@ -35,7 +33,7 @@ ChartJS.register(
 );
 
 defaults.color = '#FFFFFF';
-const Display = ({ chartData, height, position, total, totalCountHeight, showPie, width }) => {
+const Display = ({ chartDataDailyCount, height, total }) => { // , totalCountHeight, width position, showPie // position='bottom' totalCountHeight={18}  width={width}
 
     /**
      * States & Variables
@@ -71,7 +69,7 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
         <React.Fragment>
 
             <IonItem>
-                <span className="font-bold">Searched on "{word}" ({total} results)</span>
+                <span className="font-bold">Searched on "{word}" ({total} results last 10 days)</span>
                 <span style={{width: "100px"}}> </span>
                 <span hidden="completelyHideChart === true">
                     <span style={{marginBottom: "1px"}} className="">Toggle Chart</span>
@@ -85,9 +83,9 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
                 {/* bar & line chart */}
                 {showChart && !completelyHideChart && (
                     <IonRow>
-                        <IonCol size="12">
+                        <IonCol size="6">
                             <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
-                                <Chart type='bar' data={chartData} height={height} options={{
+                                <Chart type='bar' data={chartDataDailyCount} height={height} options={{
                                     plugins: {
                                         legend: {
                                             labels: { color: 'white', }
@@ -114,6 +112,37 @@ const Display = ({ chartData, height, position, total, totalCountHeight, showPie
                                 }} />
                             </div>
                         </IonCol>
+
+                        <IonCol size="6">
+                            <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
+                                <Chart type='bar' data={chartDataDailyCount} height={height} options={{
+                                    plugins: {
+                                        legend: {
+                                            labels: { color: 'white', }
+                                        },
+                                        title: { color: 'red',},
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    beginAtZero: true,
+                                                    display: false,
+                                                    color: 'white'
+                                                },
+                                            }],
+                                            xAxes: [{
+                                                ticks: {
+                                                    display: false,
+                                                    color: 'white'
+                                                },
+                                            }]
+                                        },
+                                    },
+                                    responsive: true,
+                                    maintainAspectRatio: true,
+                                }} />
+                            </div>
+                        </IonCol>
+                        a
                     </IonRow>
                 )}
 
