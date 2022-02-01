@@ -12,7 +12,7 @@ fontFamily['serif'] = [
 
 
 module.exports = {
-  purge: [
+  content: [
     "./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"
   ],
   darkMode: 'class', // or 'media' or 'class'
