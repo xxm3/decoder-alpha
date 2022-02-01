@@ -42,7 +42,7 @@ const Home = () => {
      */
     // called from the child, after their wallet is connected
     const mintAddrToParent = (walletAddress: any) => {
-        // console.log(`----got wallet address from child: '${walletAddress}'`);
+        console.log(`----got wallet address from child: '${walletAddress}'`);
         setWalletAddress(walletAddress);
         // getNfts(walletAddress);
     }

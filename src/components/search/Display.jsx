@@ -96,7 +96,7 @@ const Display = ({ chartDataDailyCount, width, height, total, chartDataPerSource
                                         legend: {
                                             display: false
                                         },
-                                        title: { display: true, text: '# of messages per day'},
+                                        title: { display: true, text: '# of messages per day (from several Discords)'},
                                         scales: {
                                             yAxes: [{
                                                 ticks: {
@@ -127,7 +127,7 @@ const Display = ({ chartDataDailyCount, width, height, total, chartDataPerSource
                                         legend: {
                                             display: false
                                         },
-                                        title: { display: true, text: '# of messages per Discord, last 100 messages'},
+                                        title: { display: true, text: '# of messages per Discord (last 100 messages)'},
                                         scales: {
                                             yAxes: [{
                                                 ticks: {

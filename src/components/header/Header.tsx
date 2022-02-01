@@ -1,29 +1,16 @@
 import './Header.css';
 import {
     IonButton,
-    IonButtons,
     IonHeader,
     IonRouterLink,
     IonIcon,
     IonToolbar,
-    IonTitle,
-    IonInput,
     IonItem,
     IonSearchbar
 } from "@ionic/react";
-import React, {useEffect, useState, forwardRef, useRef, useImperativeHandle} from "react";
+import React, {useEffect, useState} from "react";
 import {useHistory} from 'react-router';
-import {attachProps} from '@ionic/react/dist/types/components/utils';
-import {
-    personCircle,
-    search,
-    helpCircle,
-    star,
-    create,
-    ellipsisHorizontal,
-    ellipsisVertical,
-    menuOutline, closeOutline
-} from 'ionicons/icons';
+import { search, closeOutline } from 'ionicons/icons';
 
 // @ts-ignore
 const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
@@ -48,18 +35,24 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
         return () => window.removeEventListener('resize', resizeWidth);
     }, []);
 
-    // connecting SOL wallet
+    // connecting SOL wallet - called on load
     useEffect(() => {
+        // console.log("in load ue");
         const onLoad = async () => {
+            // console.log("in onload");
             await checkIfWalletIsConnected();
         };
-        window.addEventListener('load', onLoad);
-        return () => window.removeEventListener('load', onLoad);
+        onLoad();
+        // window.addEventListener('load', onLoad);
+        // return () => window.removeEventListener('load', onLoad);
     }, []);
     useEffect(() => {
         if (walletAddress) {
             // Call Solana program here.
-            // Set state
+            console.log("ue - wallet set");
+
+            setWalletAddress(walletAddress);
+            setIsWalletConnected(true);
         }
     }, [walletAddress]);
 
@@ -75,52 +68,58 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
         setWidth(window.innerWidth);
     }
 
-    // for connecting to SOL wallet
+    // for connecting to SOL wallet - called on load
     const checkIfWalletIsConnected = async () => {
         try {
             // @ts-ignore
             const {solana} = window;
             if (solana) {
                 if (solana.isPhantom) {
-                    console.log('Phantom wallet found!');
                     const response = await solana.connect({onlyIfTrusted: true});
-                    console.log(
-                        'Connected with Public Key:',
-                        response.publicKey.toString()
-                    );
-
-                    // send the wallet address to the parent
-                    mintAddrToParent(walletAddress);
+                    console.log('CIWIC - Connected with Public Key:', response.publicKey.toString());
 
                     /*
                      * Set the user's publicKey in state to be used later!
                      */
                     setWalletAddress(response.publicKey.toString());
                     setIsWalletConnected(true);
+
+                    // send the wallet address to the parent
+                    mintAddrToParent(walletAddress);
                 }
             } else {
-                alert('Get a Phantom Wallet 👻');
+                alert('Get a Phantom Wallet 👻'); // TODO: cleanup
             }
         } catch (error) {
             console.error(error);
         }
     };
 
-    // connect to your SOL wallet
+    // checkIfWalletIsConnected();
+    // if (walletAddress) {
+    //     // Call Solana program here.
+    //     // Set state
+    //     console.log("ue - wallet set");
+    //
+    //     setWalletAddress(walletAddress);
+    //     setIsWalletConnected(true);
+    // }
+
+    // connect to your SOL wallet - called when clicking "connect Wallet"
     const connectWallet = async () => {
         // @ts-ignore
         const {solana} = window;
         if (solana) {
             const response = await solana.connect();
-            console.log('Connected with Public Key:', response.publicKey.toString());
+
+            console.log('CW - Connected with Public Key:', response.publicKey.toString());
             setWalletAddress(response.publicKey.toString());
+            setIsWalletConnected(true);
         }
     };
 
     // does the search functionality
     function handleSearch(val: any) {
-        // if (typeof (searchValue) !== "undefined" && searchValue !== '') {
-        //     history.push(`/search/${searchValue}`);
         if (typeof (val) !== "undefined" && val !== '') {
             history.push(`/search/${val}`);
             window.location.reload();
@@ -208,15 +207,21 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
 
 
                         {/*wallet stuff*/}
+                        {!isWalletConnected && width >= 750 && (
+                            <>
+                                {/*<span style={{width: '75px'}}> </span>*/}
+                                <IonButton color="success" className="absolute inset-y-0 right-0 mr-8 mt-4" onClick={() => connectWallet()}>
+                                    Connect Wallet
+                                </IonButton>
+                            </>
+                        )}
+                        {isWalletConnected && width >= 750 && (
+                            <>
+                                {/*TODO: cleanup, and need disconnect etc... */}
+                                <span className="absolute inset-y-0 right-0 mr-8 mt-4" >{walletAddress}</span>
+                            </>
+                        )}
 
-                        {/*{isWalletConnected && width >= 750 && (*/}
-                        {/*    <>*/}
-                        {/*        <span></span>*/}
-                        {/*        <IonButton color="success" className="absolute inset-y-0 right-0 mr-4" onClick={() => connectWallet()}>*/}
-                        {/*            Connect Wallet*/}
-                        {/*        </IonButton>*/}
-                        {/*    </>*/}
-                        {/*)}*/}
 
 
                         {/* hamburger, to connect wallet on mobile */}
