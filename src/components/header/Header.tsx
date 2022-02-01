@@ -1,4 +1,5 @@
 import './Header.css';
+import React, {useEffect, useState, FC, useMemo } from "react";
 import {
     IonButton,
     IonHeader,
@@ -8,9 +9,28 @@ import {
     IonItem,
     IonSearchbar
 } from "@ionic/react";
-import React, {useEffect, useState} from "react";
 import {useHistory} from 'react-router';
 import { search, closeOutline } from 'ionicons/icons';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import {
+    LedgerWalletAdapter,
+    PhantomWalletAdapter,
+    SlopeWalletAdapter,
+    SolflareWalletAdapter,
+    SolletExtensionWalletAdapter,
+    SolletWalletAdapter,
+    TorusWalletAdapter,
+} from '@solana/wallet-adapter-wallets';
+import {
+    WalletModalProvider,
+    WalletDisconnectButton,
+    WalletMultiButton
+} from '@solana/wallet-adapter-react-ui';
+import { clusterApiUrl } from '@solana/web3.js';
+
+// Default styles that can be overridden by your app
+require('@solana/wallet-adapter-react-ui/styles.css');
 
 // @ts-ignore
 const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
@@ -141,6 +161,28 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
         setShowMobileSearch(!showMobileSearch);
     }
 
+    // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
+    const network = WalletAdapterNetwork.Devnet;
+
+    // You can also provide a custom RPC endpoint.
+    const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+
+    // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking and lazy loading --
+    // Only the wallets you configure here will be compiled into your application, and only the dependencies
+    // of wallets that your users connect to will be loaded.
+    const wallets = useMemo(
+        () => [
+            new PhantomWalletAdapter(),
+            new SlopeWalletAdapter(),
+            new SolflareWalletAdapter(),
+            new TorusWalletAdapter(),
+            new LedgerWalletAdapter(),
+            new SolletWalletAdapter({ network }),
+            new SolletExtensionWalletAdapter({ network }),
+        ],
+        [network]
+    );
+
     /**
      * Renders
      */
@@ -207,20 +249,31 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
 
 
                         {/*wallet stuff*/}
-                        {!isWalletConnected && width >= 750 && (
-                            <>
-                                {/*<span style={{width: '75px'}}> </span>*/}
-                                <IonButton color="success" className="absolute inset-y-0 right-0 mr-8 mt-4" onClick={() => connectWallet()}>
-                                    Connect Wallet
-                                </IonButton>
-                            </>
-                        )}
-                        {isWalletConnected && width >= 750 && (
-                            <>
-                                {/*TODO: cleanup, and need disconnect etc... */}
-                                <span className="absolute inset-y-0 right-0 mr-8 mt-4" >{walletAddress}</span>
-                            </>
-                        )}
+
+                        <ConnectionProvider endpoint={endpoint}>
+                            <WalletProvider wallets={wallets} autoConnect>
+                                <WalletModalProvider>
+                                    <WalletMultiButton />
+                                    <WalletDisconnectButton />
+                                    { /* Your app's components go here, nested within the context providers. */ }
+                                </WalletModalProvider>
+                            </WalletProvider>
+                        </ConnectionProvider>
+
+                        {/*{!isWalletConnected && width >= 750 && (*/}
+                        {/*    <>*/}
+                        {/*        /!*<span style={{width: '75px'}}> </span>*!/*/}
+                        {/*        <IonButton color="success" className="absolute inset-y-0 right-0 mr-8 mt-4" onClick={() => connectWallet()}>*/}
+                        {/*            Connect Wallet*/}
+                        {/*        </IonButton>*/}
+                        {/*    </>*/}
+                        {/*)}*/}
+                        {/*{isWalletConnected && width >= 750 && (*/}
+                        {/*    <>*/}
+                        {/*        /!*TODO: cleanup, and need disconnect etc... *!/*/}
+                        {/*        <span className="absolute inset-y-0 right-0 mr-8 mt-4" >{walletAddress}</span>*/}
+                        {/*    </>*/}
+                        {/*)}*/}
 
 
 
