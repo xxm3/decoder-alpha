@@ -33,7 +33,7 @@ ChartJS.register(
 );
 
 defaults.color = '#FFFFFF';
-const Display = ({ chartDataDailyCount, height, total }) => { // , totalCountHeight, width position, showPie // position='bottom' totalCountHeight={18}  width={width}
+const Display = ({ chartDataDailyCount, width, height, total, chartDataPerSource }) => { // , totalCountHeight, width position, showPie // position='bottom' totalCountHeight={18}  width={width}
 
     /**
      * States & Variables
@@ -42,7 +42,7 @@ const Display = ({ chartDataDailyCount, height, total }) => { // , totalCountHei
     const { messages, word } = useContext(MessageContext);
     const [showChart, setShowChart] = useState(String(cookies.get('showChart')) === 'false' ? false : true);
     // currently hiding the chart if multiple words searched on
-    const [completelyHideChart, setCompletelyHideChart] = useState(word.indexOf(" ") !== -1);
+    const [completelyHideChart, setCompletelyHideChart] = useState(word.indexOf(" ") !== -1 ? true : false);
 
     /**
      * Use Effects
@@ -62,6 +62,10 @@ const Display = ({ chartDataDailyCount, height, total }) => { // , totalCountHei
         }
     }
 
+    function refreshSearch(){
+        window.location.reload();
+    }
+
     /**
      * Renders
      */
@@ -71,26 +75,28 @@ const Display = ({ chartDataDailyCount, height, total }) => { // , totalCountHei
             <IonItem>
                 <span className="font-bold">Searched on "{word}" ({total} results last 10 days)</span>
                 <span style={{width: "100px"}}> </span>
-                <span hidden="completelyHideChart === true">
+                <span hidden={completelyHideChart === true}>
                     <span style={{marginBottom: "1px"}} className="">Toggle Chart</span>
                     <IonToggle color="dark" style={{marginTop: "1px"}}
                                checked={showChart}
                                onClick={ () => handleChartToggleClick(!showChart) } />
                 </span>
+                {/* <span style={{width: "20px"}}> </span> <a click={refreshSearch()} style={{"textDecoration": "underline"}}>Refresh</a>*/}
             </IonItem>
             <IonGrid className="noPaddingLeftRight">
 
                 {/* bar & line chart */}
                 {showChart && !completelyHideChart && (
                     <IonRow>
-                        <IonCol size="6">
+                        <IonCol size={ width < 640 ? "12" : "6" }>
+
                             <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
                                 <Chart type='bar' data={chartDataDailyCount} height={height} options={{
                                     plugins: {
                                         legend: {
-                                            labels: { color: 'white', }
+                                            display: false
                                         },
-                                        title: { color: 'red',},
+                                        title: { display: true, text: '# of messages per day (from several Discords)'},
                                         scales: {
                                             yAxes: [{
                                                 ticks: {
@@ -113,14 +119,15 @@ const Display = ({ chartDataDailyCount, height, total }) => { // , totalCountHei
                             </div>
                         </IonCol>
 
-                        <IonCol size="6">
+                        <IonCol size={ width < 640 ? "12" : "6" }>
+
                             <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
-                                <Chart type='bar' data={chartDataDailyCount} height={height} options={{
+                                <Chart type='bar' data={chartDataPerSource} height={height} options={{
                                     plugins: {
                                         legend: {
-                                            labels: { color: 'white', }
+                                            display: false
                                         },
-                                        title: { color: 'red',},
+                                        title: { display: true, text: '# of messages per Discord (last 100 messages)'},
                                         scales: {
                                             yAxes: [{
                                                 ticks: {
@@ -142,7 +149,7 @@ const Display = ({ chartDataDailyCount, height, total }) => { // , totalCountHei
                                 }} />
                             </div>
                         </IonCol>
-                        a
+
                     </IonRow>
                 )}
 

@@ -66,10 +66,15 @@ const Search: React.FC = () => {
     }
 
     // label stuff for charts
-    const generateLabelsDailyCount = () => {
+    const removeYrDate = (passedDate: any) => {
+        let d = passedDate.toDateString().split(' ').slice(1).join(' ');
+        return d.replace("2022", "");
+    }
+    const generateLabelsDailyCount = (fetchedData: any) => {
         let date = new Date();
-        var dates = [];
-        var labels = [];
+
+        let dates = [];
+        let labels = [];
         labels.push(date.toISOString().split('T')[0]);
         dates.push(date);
         for (let i = 0; i < 9; i++) {
@@ -78,62 +83,46 @@ const Search: React.FC = () => {
             dates.push(nextDay);
             labels.push(nextDay.toISOString().split('T')[0]);
         }
-        return labels.reverse();
+
+        // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
+        if(fetchedData.ten_day_count.length === 9){
+            console.log('minimizing labels');
+            labels.splice(9, 1);
+        }
+
+        labels = labels.reverse();
+        return labels;
     }
-    const dispLabelsDailyCount = () => {
+    const dispLabelsDailyCount = (fetchedData: any) => {
         let date = new Date();
-        var dates = [];
-        var labels = [];
-        labels.push(date.toDateString().split(' ').slice(1).join(' '));
+
+        let dates = [];
+        let labels = [];
+        labels.push(removeYrDate(date));
         dates.push(date);
         for (let i = 0; i < 9; i++) {
             let nextDay: Date = new Date(dates[i]);
             nextDay.setDate(dates[i].getDate() - 1);
             dates.push(nextDay);
-            labels.push(nextDay.toDateString().split(' ').slice(1).join(' '));
+            labels.push(removeYrDate(nextDay));
         }
-        return labels.reverse();
+
+        // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
+        if(fetchedData.ten_day_count.length === 9){
+            console.log('minimizing labels');
+            labels.splice(9, 1);
+        }
+
+        labels = labels.reverse();
+        return labels;
     }
-    const labels = generateLabelsDailyCount();
 
     // data for charts
     // daily count of message per day
-    const [chartDataDailyCount, setChartDataDailyCount] = useState({
-        labels: dispLabelsDailyCount(),
-        datasets: [
-            {
-                type: 'line' as const,
-                label: 'Line Chart',
-                borderColor: 'rgb(255, 99, 132)',
-                borderWidth: 2,
-                fill: false,
-                data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-            },
-            {
-                type: 'bar' as const,
-                label: 'Bar Graph',
-                backgroundColor: 'rgb(75, 192, 192)',
-                data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-                borderColor: 'white',
-                borderWidth: 2,
-            }
-        ],
-    });
+    const [chartDataDailyCount, setChartDataDailyCount] = useState({});
 
     // total mentions per source
-    const [chartDataPerSource, setChartDataPerSource] = useState({
-        labels: dispLabelsDailyCount(), // TODO
-        datasets: [
-            {
-                type: 'bar' as const,
-                label: 'Bar Graph',
-                backgroundColor: 'rgb(75, 192, 192)',
-                data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-                borderColor: 'white',
-                borderWidth: 2,
-            }
-        ],
-    });
+    const [chartDataPerSource, setChartDataPerSource] = useState({});
 
     // pass in the search logic to header
     const onClick = async (e: any) => {
@@ -164,18 +153,21 @@ const Search: React.FC = () => {
 
             // put backend data into JSON for chart
             // daily count of message per day
-            var datasetForChart = Array.from({ length: numDaysBackGraphs }, () => 0);
+            let datasetForChartDailyCount = Array.from({ length: numDaysBackGraphs }, () => 0);
             for (let i = 0; i < fetchedData.ten_day_count.length; i++) {
-                var labels = [];
-                labels = generateLabelsDailyCount();
-                var idx = labels.findIndex((val) => val === fetchedData.ten_day_count[i].date);
-                datasetForChart[idx] = fetchedData.ten_day_count[i].count; // + 1
-            }
+                let labels = [];
+                labels = generateLabelsDailyCount(fetchedData);
+                let idx = labels.findIndex((val) => val === fetchedData.ten_day_count[i].date);
+                datasetForChartDailyCount[idx] = fetchedData.ten_day_count[i].count; // + 1
 
-            // daily count of message per day
+                // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
+                if(fetchedData.ten_day_count.length === 9) {
+                    console.log('minimizing data');
+                    datasetForChartDailyCount.splice(9, 1);
+                }
+            }
             setChartDataDailyCount({
-                ...chartDataDailyCount,
-                labels: dispLabelsDailyCount(),
+                labels: dispLabelsDailyCount(fetchedData),
                 datasets: [
                     {
                         type: 'line' as const,
@@ -183,27 +175,40 @@ const Search: React.FC = () => {
                         borderColor: 'rgb(255, 99, 132)',
                         borderWidth: 2,
                         fill: false,
-                        data: datasetForChart,
+                        data: datasetForChartDailyCount,
                     },
                     {
                         type: 'bar' as const,
                         label: 'Bar Graph',
                         backgroundColor: 'rgb(75, 192, 192)',
-                        data: datasetForChart,
+                        data: datasetForChartDailyCount,
                         borderColor: 'white',
                         borderWidth: 2,
                     }
                 ],
             });
 
-            // not sure what below is for...
-            // fetchedData.messages.forEach((msg: any, idx: any) => {
-            //     messages[idx] = {
-            //         message: msg.message,
-            //         id: idx,
-            //         time: msg.time,
-            //     };
-            // });
+            // total mentions per source
+            const sourceToAry = fetchedData.source;
+            let labelsPerSource = [];
+            let dataPerSource: any = [];
+            for(let i in sourceToAry){
+                labelsPerSource.push(sourceToAry[i][0]);
+                dataPerSource.push(sourceToAry[i][1]);
+            }
+            setChartDataPerSource({
+                labels: labelsPerSource,
+                datasets: [
+                    {
+                        type: 'bar' as const,
+                        label: 'Bar Graph',
+                        backgroundColor: 'rgb(75, 192, 192)',
+                        data: dataPerSource,
+                        borderColor: 'white',
+                        borderWidth: 2,
+                    }
+                ],
+            });
 
             // sets the messages for user to view
             let tempMsg: Message[] = [];
@@ -282,37 +287,34 @@ const Search: React.FC = () => {
                                 note that heights of the chart are hardcoded below, while heights of the message list is on the Display.jsx.getMessageListHeight() */}
                             {!isLoading && foundResults && width > 1536 && (
                                 <Display chartDataDailyCount={chartDataDailyCount}
-                                    height={Number(85)} total={total}
-                                    />
+                                    height={Number(75)} total={total} width={width}
+                                         chartDataPerSource={chartDataPerSource} />
                             )}
                             {!isLoading && foundResults && width <= 1536 && width > 1280 && (
                                 <Display chartDataDailyCount={chartDataDailyCount}
-                                    height={Number(85)} total={total}
-                                    />
+                                    height={Number(90)} total={total}  width={width}
+                                         chartDataPerSource={chartDataPerSource} />
                             )}
                             {!isLoading && foundResults && width <= 1280 && width > 1024 && (
                                 <Display chartDataDailyCount={chartDataDailyCount}
-                                    height={Number(85)} total={total}
-                                    />
+                                    height={Number(110)} total={total} width={width}
+                                         chartDataPerSource={chartDataPerSource} />
                             )}
                             {!isLoading && foundResults && width <= 1024 && width > 768 && (
                                 <Display chartDataDailyCount={chartDataDailyCount}
-                                    height={Number(85)} total={total}
-                                     />
+                                    height={Number(155)} total={total} width={width}
+                                         chartDataPerSource={chartDataPerSource} />
                             )}
                             {!isLoading && foundResults && width <= 768 && width > 640 && (
                                 <Display chartDataDailyCount={chartDataDailyCount}
-                                    height={Number(130)} total={total}
-                                     />
+                                    height={Number(200)} total={total} width={width}
+                                         chartDataPerSource={chartDataPerSource} />
 
                             )}
                             {!isLoading && foundResults && width <= 640 && (
-                                // <MobileDisplay chartDataDailyCount={chartDataDailyCount} position='right'
-                                //     height={Number(175)} total={total} totalCountHeight={30}
-                                //  />
                                 <Display chartDataDailyCount={chartDataDailyCount}
-                                         height={Number(175)} total={total}
-                                          />
+                                         height={Number(140)} total={total} width={width}
+                                         chartDataPerSource={chartDataPerSource} />
                             )}
 
                             {/* error bar */}
@@ -321,7 +323,6 @@ const Search: React.FC = () => {
                                     <p className="text-lg text-red-700 font-medium"><b>{error}</b></p>
                                     <span
                                         className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">!</span>
-                                    {/*<div className="absolute top-0 right-0 flex space-x-2 p-4"></div>*/}
                                 </div>
                             )}
 
