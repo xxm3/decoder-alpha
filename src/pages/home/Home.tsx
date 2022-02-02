@@ -22,7 +22,6 @@ const Home = () => {
     /**
      * States & Variables
      */
-    const [walletAddress, setWalletAddress] = useState('');
     const [userNfts, setUserNfts] = useState([]); // from user wallet
     const [homePageData, setHomePageData] = useState([]); // ie. possible mints...
     const [newCollections, setNewCollection] = useState([]); // from ME
@@ -37,15 +36,7 @@ const Home = () => {
         fetchHomePageData();
     }, []);
 
-    /**
-     * Functions
-     */
-    // called from the child, after their wallet is connected
-    const mintAddrToParent = (walletAddress: any) => {
-        console.log(`----got wallet address from child: '${walletAddress}'`);
-        setWalletAddress(walletAddress);
-        // getNfts(walletAddress);
-    }
+
 
     // gets the user's nft's from their wallet
     // from https://github.com/NftEyez/sol-rayz
@@ -110,7 +101,7 @@ const Home = () => {
 
         <IonPage className="bg-sky">
 
-            <Header mintAddrToParent={mintAddrToParent} showflag={true} onClick={undefined}/>
+            <Header />
 
             <IonContent className="bg-gradient-to-b ">
                 <h1 style={{'paddingLeft': '30px'}}>More content coming soon! Use the search above in the meantime</h1>

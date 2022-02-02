@@ -261,8 +261,7 @@ const Search: React.FC = () => {
             <IonPage id="home-page">
                 <IonContent ref={contentRef} scrollEvents={true} fullscreen>
                     {/* Header */}
-                    <Header mintAddrToParent={mintAddrToParent} onClick={onClick} showflag={false} />
-
+                    <Header />
                     {/* Main Content After Header */}
                     <div className="font-sans bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-2 pt-2 sticky">
                         {/*min-h-screen*/}

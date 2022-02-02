@@ -16,20 +16,11 @@ import { instance } from '../../axios';
 
 const Home = () => {
     // State Variables
-    const [walletAddress, setWalletAddress] = useState('');
     const [userNfts, setUserNfts] = useState([]); // from user wallet
     const [homePageData, setHomePageData] = useState([]); // ie. possible mints...
     const [newCollections, setNewCollection] = useState([]); // from ME
     const [popularCollections, setPopularCollection] = useState([]); // from ME
     const [isLoading, setIsLoading] = useState(false);
-
-    // Actions
-    // called from the child, after their wallet is connected
-    const mintAddrToParent = (walletAddress: any) => {
-        // console.log(`----got wallet address from child: '${walletAddress}'`);
-        setWalletAddress(walletAddress);
-        // getNfts(walletAddress);
-    }
 
     // gets the user's nft's from their wallet
     // from https://github.com/NftEyez/sol-rayz
@@ -96,7 +87,7 @@ const Home = () => {
 
         <IonPage className="bg-background">
 
-            <Header mintAddrToParent={mintAddrToParent} showflag={true} onClick={undefined}/>
+            <Header/>
 
             {/* New Collections */}
             <div className="rounded-lg m-4 bg-background">
