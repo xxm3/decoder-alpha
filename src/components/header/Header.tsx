@@ -172,7 +172,7 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
             {/*    </IonContent>*/}
             {/*</IonMenu>*/}
 
-            {/*TODO*/}
+            {/*TODO - https://reactjsexample.com/minimal-side-navigation-component-for-react/ - https://codesandbox.io/s/react-minimal-side-navigation-example-y299d?file=/src/components/NavSidebar.jsx */}
             {/*<Navigation*/}
             {/*    // you can use your own router's api to get pathname*/}
             {/*    activeItemId="/management/members"*/}
