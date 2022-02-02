@@ -7,13 +7,12 @@ import {
     IonIcon,
     IonToolbar,
     IonItem,
-    IonSearchbar
+    IonSearchbar, useIonAlert, IonMenu, IonTitle, IonContent, IonList
 } from "@ionic/react";
 import {useHistory} from 'react-router';
-import { search, closeOutline } from 'ionicons/icons';
-
-// Default styles that can be overridden by your app
-require('@solana/wallet-adapter-react-ui/styles.css');
+import { search, closeOutline, menuOutline } from 'ionicons/icons';
+// @ts-ignore
+import { menuController } from 'https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/index.esm.js';
 
 // @ts-ignore
 const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
@@ -23,11 +22,15 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
      */
     let history = useHistory();
     const [walletAddress, setWalletAddress] = useState(null);
+    const [smallerWallet, setSmallerWallet] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [isWalletConnected, setIsWalletConnected] = useState(false);
     const [showMobileSearch, setShowMobileSearch] = useState(false);
     const [width, setWidth] = useState(window.innerWidth);
+
+    const smallHeaderWitdh = 930; // what size browser needs to be, before header goes small mode
+    const [present] =   useIonAlert(); // ion alert
 
     /**
      * Use Effects
@@ -56,6 +59,11 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
 
             setWalletAddress(walletAddress);
             setIsWalletConnected(true);
+
+            // @ts-ignore
+            const lastFour = walletAddress.substring(walletAddress.length - 4);
+            // @ts-ignore
+            setSmallerWallet(walletAddress.substr(0,4) + '...' + lastFour);
         }
     }, [walletAddress]);
 
@@ -89,24 +97,16 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
 
                     // send the wallet address to the parent
                     mintAddrToParent(walletAddress);
+                }else{
+                    await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
                 }
             } else {
-                alert('Get a Phantom Wallet 👻'); // TODO: cleanup
+                await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
             }
         } catch (error) {
             console.error(error);
         }
     };
-
-    // checkIfWalletIsConnected();
-    // if (walletAddress) {
-    //     // Call Solana program here.
-    //     // Set state
-    //     console.log("ue - wallet set");
-    //
-    //     setWalletAddress(walletAddress);
-    //     setIsWalletConnected(true);
-    // }
 
     // connect to your SOL wallet - called when clicking "connect Wallet"
     const connectWallet = async () => {
@@ -144,6 +144,14 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
         setShowMobileSearch(!showMobileSearch);
     }
 
+    const openMenu = () => {
+        console.log("...");
+
+        // @ts-ignore
+        window.menuController = menuController;
+        menuController.open();
+    }
+
     /**
      * Renders
      */
@@ -151,11 +159,32 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
     // @ts-ignore
     return (
         <React.Fragment>
+
+
+            <IonMenu side="start" menuId="first">
+                <IonHeader>
+                    <IonToolbar color="primary">
+                        <IonTitle>Start Menu</IonTitle>
+                    </IonToolbar>
+                </IonHeader>
+                <IonContent>
+                    <IonList>
+                        <IonItem>Menu Item</IonItem>
+                        <IonItem>Menu Item</IonItem>
+                        <IonItem>Menu Item</IonItem>
+                        <IonItem>Menu Item</IonItem>
+                        <IonItem>Menu Item</IonItem>
+                    </IonList>
+                </IonContent>
+            </IonMenu>
+
+
+
             <IonHeader className="m-4 ">
                 <IonToolbar className="bg-card rounded-lg">
                     <IonItem>
                     <IonRouterLink className="text-2xl" routerLink="/"
-                        hidden={width < 750 && showMobileSearch}>
+                        hidden={width < smallHeaderWitdh && showMobileSearch}>
                         SOL Decoder
                     </IonRouterLink>
 
@@ -171,73 +200,70 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
                                         onIonChange={e => setSearchValue(e.detail.value!)}
                                         animated placeholder="Type to search" disabled={isLoading}
                                         style={{width: '450px'}}
-                                        hidden={width < 750 && !showMobileSearch} />
+                                        hidden={width < smallHeaderWitdh && !showMobileSearch} />
 
                         {/* search button for big screens, to do the actual search*/}
-                        {width >= 750 && (
+                        {width >= smallHeaderWitdh && (
                             // xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44
-                            <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"
+                            <div className="text-2xl xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1 pb-1 pt-1 cursor-pointer"
                                     onClick={() => handleSearch(searchValue)}>
                                 <IonIcon slot="icon-only" icon={search} className=" " />
                             </div>
                         )}
 
                         {/* mobile search stuff */}
-                        {width < 750 && (
-                        <>
+                        {width < smallHeaderWitdh && (
+                        <div className="">
+                            {/* do the actual search, for mobile screens */}
+                            <div className="text-2xl xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1 pb-1 pt-1 cursor-pointer"
+                                // xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44
+                                 onClick={() => handleSearch(searchValue)} hidden={!showMobileSearch}>
+                                <IonIcon slot="icon-only" icon={search} className=" " />
+                            </div>
+
                             {/* show search button, for mobile screens */}
-                            <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"
+                            <div className="text-2xl xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1 pb-1 pt-1 cursor-pointer
+                                absolute inset-y-0 right-0 mr-20 mt-4 "
                                  // xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44
                                     onClick={mobileSearchClicked} hidden={showMobileSearch}>
                                 <IonIcon slot="icon-only" icon={search} className=" " />
                             </div>
-                            {/* do the actual search, for mobile screens */}
-                            <div className="xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1"
-                                 // xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44
-                                    onClick={() => handleSearch(searchValue)} hidden={!showMobileSearch}>
-                                <IonIcon slot="icon-only" icon={search} className=" " />
-                            </div>
 
                             {/*hide search*/}
-                            <div className=""
+                            <div className="absolute inset-y-0 right-0 mr-8 mt-4 "
                                  // xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44
                                 onClick={mobileSearchClicked}>
-                                <IonIcon slot="icon-only" icon={closeOutline} className=" xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1" hidden={!showMobileSearch} />
+                                <IonIcon slot="icon-only" icon={closeOutline}
+                                         className="text-2xl xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1 ml-2 pb-1 pt-1 cursor-pointer" hidden={!showMobileSearch} />
                             </div>
-                        </>
+                        </div>
                         )}
 
 
 
                         {/*wallet stuff*/}
-
-                        {/*{!isWalletConnected && width >= 750 && (*/}
-                        {/*    <>*/}
-                        {/*        /!*<span style={{width: '75px'}}> </span>*!/*/}
-                        {/*        <IonButton color="success" className="absolute inset-y-0 right-0 mr-8 mt-4" onClick={() => connectWallet()}>*/}
-                        {/*            Connect Wallet*/}
-                        {/*        </IonButton>*/}
-                        {/*    </>*/}
-                        {/*)}*/}
-                        {/*{isWalletConnected && width >= 750 && (*/}
-                        {/*    <>*/}
-                        {/*        /!*TODO: cleanup, and need disconnect etc... *!/*/}
-                        {/*        <span className="absolute inset-y-0 right-0 mr-8 mt-4" >{walletAddress}</span>*/}
-                        {/*    </>*/}
-                        {/*)}*/}
-
-
+                        {!isWalletConnected && width >= smallHeaderWitdh && (
+                            <>
+                                {/*<span style={{width: '75px'}}> </span>*/}
+                                <IonButton color="success" className="absolute inset-y-0 right-0 mr-8 mt-4 cursor-pointer" onClick={() => connectWallet()}>
+                                    Connect Wallet
+                                </IonButton>
+                            </>
+                        )}
+                        {isWalletConnected && width >= smallHeaderWitdh && (
+                            <>
+                                <span className="absolute inset-y-0 right-0 mr-8 mt-4" >{smallerWallet}</span>
+                            </>
+                        )}
 
                         {/* hamburger, to connect wallet on mobile */}
-
-                        {/*
-                            TO.DO: don't implement - will be implemented in https://gitlab.com/nft-relay-group/frontend-app/-/issues/16
-                        */}
-                        {/*{width < 750 && (*/}
-                        {/*    <div className="xs:flex items-center px-2 rounded-lg space-x-4 mx-auto bg-success-1">*/}
-                        {/*        <IonIcon slot="icon-only" icon={menuOutline} className="rounded-b-3xl"/>*/}
-                        {/*    </div>*/}
-                        {/*})*/}
+                        {width < smallHeaderWitdh && (
+                            <div className="text-2xl xs:flex items-center px-2 rounded-lg space-x-4 mx-auto bg-success-1 ml-2 pb-1 pt-1 cursor-pointer
+                                        absolute inset-y-0 right-0 mr-8 mt-4 "
+                                 hidden={showMobileSearch}>
+                                <IonIcon slot="icon-only" icon={menuOutline} className="rounded-b-3xl" onClick={openMenu} />
+                            </div>
+                        )}
 
                     </div>
                     </IonItem>

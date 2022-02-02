@@ -84,7 +84,7 @@ const Search: React.FC = () => {
         let d = passedDate.toDateString().split(' ').slice(1).join(' ');
         return d.replace("2022", "");
     }
-    const dispLabelsDailyCount = () => {
+    const dispLabelsDailyCount = (fetchedData: any) => {
         let date = new Date();
         var dates = [];
         var labels = [];
@@ -96,7 +96,14 @@ const Search: React.FC = () => {
             dates.push(nextDay);
             labels.push(removeYrDate(nextDay));
         }
-        return labels.reverse();
+
+        // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
+        if(fetchedData.ten_day_count.length == 9){
+            labels.splice(9, 1);
+        }
+
+        labels = labels.reverse();
+        return labels;
     }
 
     // data for charts
@@ -141,9 +148,14 @@ const Search: React.FC = () => {
                 labels = generateLabelsDailyCount();
                 let idx = labels.findIndex((val) => val === fetchedData.ten_day_count[i].date);
                 datasetForChartDailyCount[idx] = fetchedData.ten_day_count[i].count; // + 1
+
+                // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
+                if(fetchedData.ten_day_count.length == 9) {
+                    datasetForChartDailyCount.splice(9, 1);
+                }
             }
             setChartDataDailyCount({
-                labels: dispLabelsDailyCount(),
+                labels: dispLabelsDailyCount(fetchedData),
                 datasets: [
                     {
                         type: 'line' as const,

@@ -84,11 +84,7 @@ const Home = () => {
 
     // UseEffects
     useEffect(() => {
-        fetchHomePageData();
-    }, []);
-
-    useEffect(() => {
-        fetchHomePageData();
+        // fetchHomePageData();
     }, []);
 
     // HTML etc...

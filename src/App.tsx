@@ -73,9 +73,18 @@ const App = () => {
 						<IonRouterOutlet>
 							<Switch>
 
-								<ProtectedRoute path="/" component={Home} exact />
-								<ProtectedRoute path="/search/:id" exact={true} component={Search} />
+								<ProtectedRoute
+									path="/"
+									// component={HomePage}
+                                    component={Home}
+									exact
+								/>
 
+								<ProtectedRoute
+									path="/search/:id"
+									exact={true}
+									component={Search}
+								/>
 								<Route exact path="/Login" component={Login} />
 							</Switch>
 
