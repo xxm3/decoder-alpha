@@ -1,7 +1,6 @@
-import { IonApp, IonButton, IonRouterOutlet } from "@ionic/react";
-import { IonReactRouter } from "@ionic/react-router";
-import ReactGA from 'react-ga';
 
+import { IonApp, IonRouterOutlet } from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import { useEffect, useState } from "react";
@@ -33,12 +32,27 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 
 /* Pages */
-import HomePage from "./pages/home/HomePage";
 import Home from "./pages/home/Home";
 
 // // https://javascript.plainenglish.io/how-to-setup-and-add-google-analytics-to-your-react-app-fd361f47ac7b
-const TRACKING_ID = "G-Z3GDFZ53DN";
-ReactGA.initialize(TRACKING_ID);
+// const TRACKING_ID = "G-Z3GDFZ53DN";
+// ReactGA.initialize(TRACKING_ID);
+
+
+import {
+	QueryClient,
+	QueryClientProvider,
+  } from 'react-query'
+import { ReactQueryDevtools } from "react-query/devtools"
+
+
+const queryClient = new QueryClient({
+	defaultOptions : { 
+		queries : { 
+            refetchOnWindowFocus: process.env.NODE_ENV === 'production',
+		}
+	}
+})
 
 const App = () => {
 
@@ -49,56 +63,70 @@ const App = () => {
 		3. { id : "USERS_ID"} : user is authenticated
 	*/
 	const [user, setUser] = useState<IUser | null | undefined>(undefined);
+	// const [walletAddress, setWalletAdress] = useState(null);
 	useEffect(() => {
-		return auth.onAuthStateChanged((user) => {
+		return auth.onIdTokenChanged(user => {
 			if (user) {
                 user.getIdToken().then(
                     (token) => {
                         (instance.defaults.headers.common.Authorization = `Bearer ${token}`);
 
-                        setUser({id: user.uid });
+                        setUser({ id: user.uid });
                     });
             } else {
                 setUser(null);
                 instance.defaults.headers.common = {};
             }
-		});
+		})
 	}, []);
 
 	return (
 		<IonApp>
-			<UserContext.Provider value={user}>
-				{user !== undefined ? (
-					<IonReactRouter>
-						<IonRouterOutlet>
-							<Switch>
-
-								<ProtectedRoute
-									path="/"
-									// component={HomePage}
-                                    component={Home}
-									exact
-								/>
-
-								<ProtectedRoute
-									path="/search/:id"
-									exact={true}
-									component={Search}
-								/>
-								<Route exact path="/Login" component={Login} />
-							</Switch>
-
-							{/* <Route path="/message/:id">
-				                <ViewMessage />
-				              </Route> */}
-						</IonRouterOutlet>
-					</IonReactRouter>
-				) : (
-					<div className="mx-auto my-auto h-48 w-48">
-						<Loader />
-					</div>
-				)}
-			</UserContext.Provider>
+			<QueryClientProvider client={queryClient}>
+				<UserContext.Provider value={user}>
+					{user !== undefined ? (
+						<>
+							<IonReactRouter>
+								<IonRouterOutlet>
+									<Switch>
+										
+		
+										{/* <ProtectedRoute
+											path="/"
+											exact={true}
+											render={() => (
+												<IonButton
+													onClick={() => auth.signOut()}
+												>
+													Sign out
+												</IonButton>
+											)}
+										/> */}
+										<ProtectedRoute
+											path="/"
+											// component={HomePage}
+		                                    component={Home}
+											exact
+										/>
+		
+										<ProtectedRoute
+											path="/search/:id"
+											exact={true}
+											component={Search}
+										/>
+										<Route exact path="/Login" component={Login} />
+									</Switch>
+								</IonRouterOutlet>
+							</IonReactRouter>
+						</>
+					) : (
+						<div className="mx-auto my-auto h-48 w-48">
+							<Loader />
+						</div>
+					)}
+					<ReactQueryDevtools initialIsOpen />
+				</UserContext.Provider>
+			</QueryClientProvider>
 		</IonApp>
 	);
 };

@@ -1,0 +1,151 @@
+import { IonModal } from '@ionic/react';
+import React, { useRef } from 'react';
+import { Message } from '../../types/messages';
+import MessageListItem from './MessageListItem';
+import { QueryFunctionContext, useInfiniteQuery } from 'react-query';
+import { instance } from '../../axios';
+import { AxiosResponse } from 'axios';
+
+interface MessageThreadProps {
+    message: Message;
+    onClose: Function;
+}
+
+type MessageThreadQueryKey = readonly ['messageThread', string];
+type PageParam =
+    | { priorLimit: number; postLimit: number; messageId: string }
+    | undefined;
+
+interface MessageThreadData {
+    priorMsg: Message[];
+    subsequentMsg: Message[];
+}
+
+const MessageThread: React.FC<MessageThreadProps> = ({
+    message,
+    message: { id },
+    onClose,
+}) => {
+    const defaultPageParam: PageParam = {
+        messageId: message.id,
+        priorLimit: 5,
+        postLimit: 10,
+    };
+
+    async function fetchContext({
+        pageParam = defaultPageParam,
+    }: QueryFunctionContext<MessageThreadQueryKey, PageParam>) {
+        try {
+            const { data } = await instance.post<MessageThreadData>(
+                '/getPriorAndSubMessages',
+                pageParam
+            );
+            data.priorMsg = data.priorMsg.map(message => ({ 
+                ...message,
+                // @ts-expect-error
+                time : message.createdAt
+            }))
+            data.subsequentMsg = data.subsequentMsg.map(message => ({ 
+                ...message,
+                // @ts-expect-error
+                time : message.createdAt
+            }))
+            if (pageParam === defaultPageParam)
+                return [...data.priorMsg, message, ...data.subsequentMsg];
+            return [...data.priorMsg, ...data.subsequentMsg];
+        } catch (e) {
+            console.error('try/catch in MessageThread.tsx: ', e);
+            const error = e as Error & { response?: AxiosResponse };
+            if (error && error.response) {
+                throw new Error(String(error.response.data.body));
+            } else {
+                throw new Error('Unable to connect. Please try again later');
+            }
+        }
+    }
+
+
+    const {
+        data = { pages: [] },
+        hasNextPage,
+        fetchNextPage,
+        fetchPreviousPage,
+    } = useInfiniteQuery(['messageThread', message.id], fetchContext, {
+        getNextPageParam: (lastPage): PageParam => {
+            const lastMessageId = lastPage?.slice(-1)[0]?.id;
+            return lastMessageId
+                ? {
+                      messageId: lastMessageId,
+                      postLimit: 10,
+                      priorLimit: 0,
+                  }
+                : undefined;
+        },
+        getPreviousPageParam: (firstPage) => {
+            const firstMessageId = firstPage[0]?.id;
+            return firstMessageId
+                ? {
+                      messageId: firstMessageId,
+                      postLimit: 0,
+                      priorLimit: 10,
+                  }
+                : undefined;
+        },
+        initialData: {
+            // @ts-expect-error
+            pageParams: defaultPageParam,
+            pages: [
+                [
+                    ...[...Array(10).keys()].map(() => undefined),
+                    message,
+                    ...[...Array(10).keys()].map(() => undefined),
+                ],
+            ],
+        },
+    });
+
+    const mainMessageRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    return (
+        <IonModal
+            isOpen
+            onDidDismiss={onClose as any}
+            onDidPresent={() => {
+                if (mainMessageRef.current) {
+                    mainMessageRef.current.scrollIntoView({
+                        block: 'center',
+                        inline: 'center',
+                    });
+                }
+            }}
+        >
+            <div
+                ref={containerRef}
+                className="p-5 overflow-y-scroll space-y-5 h-full w-full !bg-bg-tertiary"
+            >
+              
+                    {data.pages
+                        .map((page) =>
+                            page.map((message, i) =>
+                                message ? (
+                                    <MessageListItem
+                                        message={message}
+                                        key={message.id}
+                                        ref={
+                                            message.id === id
+                                                ? mainMessageRef
+                                                : null
+                                        }
+                                    />
+                                ) : (
+                                    <MessageListItem index={i} key={i} />
+                                )
+                            )
+                        )
+                        .flat(1)}
+            </div>
+        </IonModal>
+    );
+};
+
+export default MessageThread;

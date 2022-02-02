@@ -1,59 +1,22 @@
-ion-item {
-    --padding-start: 0;
-    --inner-padding-end: 0;
+.ripple {
+	position:absolute;
+	animation: ripple 800ms linear infinite;
+	@apply bg-bg-tertiary;
+	left : 0%;
+	top : 0;
+	clip-path: polygon(0 0, 100% 0, 72% 100%, 0% 100%);
+	height : 100%;
+	width : 0px;
+	/* border: 2px solid blue;  */
 }
 
-ion-label {
-    margin-top: 12px;
-    margin-bottom: 12px;
+@keyframes ripple {
+	to {
+		width : 100%;
+		opacity : 0;
+	}
 }
 
-ion-item h2 {
-    font-weight: 600;
-    margin: 0;
-}
-
-ion-item p {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    width: 95%;
-}
-
-ion-item .date {
-    float: right;
-    align-items: center;
-    display: flex;
-}
-
-ion-item ion-icon {
-    color: #c9c9ca;
-}
-
-ion-item ion-note {
-    font-size: 15px;
-    margin-right: 8px;
-    font-weight: normal;
-}
-
-ion-item ion-note.md {
-    margin-right: 14px;
-}
-
-.dot {
-    display: block;
-    height: 12px;
-    width: 12px;
-    border-radius: 50%;
-    align-self: start;
-    margin: 16px 10px 16px 16px;
-}
-
-.dot-unread {
-    background: var(--ion-color-primary);
-}
-
-ion-footer ion-title {
-    font-size: 11px;
-    font-weight: normal;
+.messageLoading p {
+	@apply bg-bg-primary text-xs text-bg-primary;
 }
