@@ -11,8 +11,9 @@ import {
 } from "@ionic/react";
 import {useHistory} from 'react-router';
 import { search, closeOutline, menuOutline } from 'ionicons/icons';
-// @ts-ignore
-import { menuController } from 'https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/index.esm.js';
+import {Navigation} from 'react-minimal-side-navigation';
+import 'react-minimal-side-navigation/lib/ReactMinimalSideNavigation.css';
+import { Icon } from 'ionicons/dist/types/components/icon/icon';
 
 // @ts-ignore
 const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
@@ -144,13 +145,6 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
         setShowMobileSearch(!showMobileSearch);
     }
 
-    const openMenu = () => {
-        console.log("...");
-
-        // @ts-ignore
-        window.menuController = menuController;
-        menuController.open();
-    }
 
     /**
      * Renders
@@ -161,23 +155,40 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
         <React.Fragment>
 
 
-            <IonMenu side="start" menuId="first">
-                <IonHeader>
-                    <IonToolbar color="primary">
-                        <IonTitle>Start Menu</IonTitle>
-                    </IonToolbar>
-                </IonHeader>
-                <IonContent>
-                    <IonList>
-                        <IonItem>Menu Item</IonItem>
-                        <IonItem>Menu Item</IonItem>
-                        <IonItem>Menu Item</IonItem>
-                        <IonItem>Menu Item</IonItem>
-                        <IonItem>Menu Item</IonItem>
-                    </IonList>
-                </IonContent>
-            </IonMenu>
+            {/*<IonMenu side="start" menuId="first">*/}
+            {/*    <IonHeader>*/}
+            {/*        <IonToolbar color="primary">*/}
+            {/*            <IonTitle>Start Menu</IonTitle>*/}
+            {/*        </IonToolbar>*/}
+            {/*    </IonHeader>*/}
+            {/*    <IonContent>*/}
+            {/*        <IonList>*/}
+            {/*            <IonItem>Menu Item</IonItem>*/}
+            {/*            <IonItem>Menu Item</IonItem>*/}
+            {/*            <IonItem>Menu Item</IonItem>*/}
+            {/*            <IonItem>Menu Item</IonItem>*/}
+            {/*            <IonItem>Menu Item</IonItem>*/}
+            {/*        </IonList>*/}
+            {/*    </IonContent>*/}
+            {/*</IonMenu>*/}
 
+            {/*TODO*/}
+            {/*<Navigation*/}
+            {/*    // you can use your own router's api to get pathname*/}
+            {/*    activeItemId="/management/members"*/}
+            {/*    onSelect={({itemId}) => {*/}
+            {/*        // maybe push to the route*/}
+            {/*    }}*/}
+            {/*    items={[*/}
+            {/*        {*/}
+            {/*            title: 'Dashboard',*/}
+            {/*            itemId: '/dashboard',*/}
+            {/*            // you can use your own custom Icon component as well*/}
+            {/*            // icon is optional*/}
+            {/*            // elemBefore: () => <Icon name="inbox" />,*/}
+            {/*        },*/}
+            {/*    ]}*/}
+            {/*/>*/}
 
 
             <IonHeader className="m-4 ">
@@ -261,7 +272,8 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
                             <div className="text-2xl xs:flex items-center px-2 rounded-lg space-x-4 mx-auto bg-success-1 ml-2 pb-1 pt-1 cursor-pointer
                                         absolute inset-y-0 right-0 mr-8 mt-4 "
                                  hidden={showMobileSearch}>
-                                <IonIcon slot="icon-only" icon={menuOutline} className="rounded-b-3xl" onClick={openMenu} />
+                                <IonIcon slot="icon-only" icon={menuOutline} className="rounded-b-3xl"  />
+                                {/*onClick={openMenu}*/}
                             </div>
                         )}
 

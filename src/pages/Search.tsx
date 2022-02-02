@@ -66,10 +66,15 @@ const Search: React.FC = () => {
     }
 
     // label stuff for charts
-    const generateLabelsDailyCount = () => {
+    const removeYrDate = (passedDate: any) => {
+        let d = passedDate.toDateString().split(' ').slice(1).join(' ');
+        return d.replace("2022", "");
+    }
+    const generateLabelsDailyCount = (fetchedData: any) => {
         let date = new Date();
-        var dates = [];
-        var labels = [];
+
+        let dates = [];
+        let labels = [];
         labels.push(date.toISOString().split('T')[0]);
         dates.push(date);
         for (let i = 0; i < 9; i++) {
@@ -78,16 +83,21 @@ const Search: React.FC = () => {
             dates.push(nextDay);
             labels.push(nextDay.toISOString().split('T')[0]);
         }
-        return labels.reverse();
-    }
-    const removeYrDate = (passedDate: any) => {
-        let d = passedDate.toDateString().split(' ').slice(1).join(' ');
-        return d.replace("2022", "");
+
+        // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
+        if(fetchedData.ten_day_count.length === 9){
+            console.log('minimizing labels');
+            labels.splice(9, 1);
+        }
+
+        labels = labels.reverse();
+        return labels;
     }
     const dispLabelsDailyCount = (fetchedData: any) => {
         let date = new Date();
-        var dates = [];
-        var labels = [];
+
+        let dates = [];
+        let labels = [];
         labels.push(removeYrDate(date));
         dates.push(date);
         for (let i = 0; i < 9; i++) {
@@ -98,7 +108,8 @@ const Search: React.FC = () => {
         }
 
         // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
-        if(fetchedData.ten_day_count.length == 9){
+        if(fetchedData.ten_day_count.length === 9){
+            console.log('minimizing labels');
             labels.splice(9, 1);
         }
 
@@ -142,15 +153,16 @@ const Search: React.FC = () => {
 
             // put backend data into JSON for chart
             // daily count of message per day
-            var datasetForChartDailyCount = Array.from({ length: numDaysBackGraphs }, () => 0);
+            let datasetForChartDailyCount = Array.from({ length: numDaysBackGraphs }, () => 0);
             for (let i = 0; i < fetchedData.ten_day_count.length; i++) {
                 let labels = [];
-                labels = generateLabelsDailyCount();
+                labels = generateLabelsDailyCount(fetchedData);
                 let idx = labels.findIndex((val) => val === fetchedData.ten_day_count[i].date);
                 datasetForChartDailyCount[idx] = fetchedData.ten_day_count[i].count; // + 1
 
                 // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
-                if(fetchedData.ten_day_count.length == 9) {
+                if(fetchedData.ten_day_count.length === 9) {
+                    console.log('minimizing data');
                     datasetForChartDailyCount.splice(9, 1);
                 }
             }
