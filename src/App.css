@@ -1,3 +1,7 @@
 .firebase-emulator-warning {
 	display: none;
 }
+
+body {
+	font-family: Helvetica, Arial, sans-serif;
+}
