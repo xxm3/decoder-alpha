@@ -5,12 +5,10 @@ import {
     IonIcon,
     IonToolbar,
     IonSearchbar,
-    IonGrid,
-    IonRow,
     useIonAlert,
     IonItem
 } from "@ionic/react";
-import React, {useEffect, useState } from "react";
+import React, {useEffect, useMemo, useState } from "react";
 import {useHistory, useParams} from 'react-router';
 import {
     search,
@@ -26,10 +24,9 @@ const HeaderContainer = () => {
      */
     const { id } = useParams<{ id ?: string;}>()
     let history = useHistory();
-    const [walletAddress, setWalletAddress] = useState(null);
-    const [smallerWallet, setSmallerWallet] = useState(null);
+    const [walletAddress, setWalletAddress] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [searchValue, setSearchValue] = useState('');
+    const [searchValue, setSearchValue] = useState(id ?? '');
     const [isWalletConnected, setIsWalletConnected] = useState(false);
     const [showMobileSearch, setShowMobileSearch] = useState(false);
     const [width, setWidth] = useState(window.innerWidth);
@@ -37,6 +34,7 @@ const HeaderContainer = () => {
     const smallHeaderWitdh = 930; // what size browser needs to be, before header goes small mode
     const [present] =   useIonAlert(); // ion alert
 
+    const smallerWallet = useMemo(() => walletAddress?.substring(walletAddress.length - 4), [walletAddress])
 
 
     // connecting SOL wallet - called on load
@@ -48,19 +46,21 @@ const HeaderContainer = () => {
                 const {solana} = window;
                 if (solana) {
                     if (solana.isPhantom) {
-                        console.log('Phantom wallet found!');
                         const response = await solana.connect({onlyIfTrusted: true});
-                        console.log(
-                            'Connected with Public Key:',
-                            response.publicKey.toString()
-                        );
+                        console.log('CIWIC - Connected with Public Key:', response.publicKey.toString());
+    
                         /*
                          * Set the user's publicKey in state to be used later!
                          */
                         setWalletAddress(response.publicKey.toString());
+                        setIsWalletConnected(true);
+    
+
+                    }else{
+                        await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
                     }
                 } else {
-                    alert('Get a Phantom Wallet 👻');
+                    await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
                 }
             } catch (error) {
                 console.error(error);
