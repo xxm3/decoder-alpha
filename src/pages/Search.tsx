@@ -14,83 +14,25 @@ import { useQuery } from 'react-query';
 import { Message } from '../types/messages';
 import { AxiosResponse } from 'axios';
 import Header from '../components/header/Header';
-
-interface SearchResponse {
-    messages: (Message | undefined)[];
-    totalCount: number;
-    word: string;
-    ten_day_count: {
-        count: number;
-        date: `${number}-${number}-${number}`;
-    }[];
-    source : [string,number][]
-}
-
-const generateLabelsDailyCount = (fetchedData: SearchResponse) => {
-    let date = new Date();
-
-    let dates = [];
-    let labels = [];
-    labels.push(date.toISOString().split('T')[0]);
-    dates.push(date);
-    for (let i = 0; i < 9; i++) {
-        let nextDay: Date = new Date(dates[i]);
-        nextDay.setDate(dates[i].getDate() - 1);
-        dates.push(nextDay);
-        labels.push(nextDay.toISOString().split('T')[0]);
-    }
-
-    // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
-    if(fetchedData.ten_day_count.length === 9){
-        console.log('minimizing labels');
-        labels.splice(9, 1);
-    }
-
-    labels = labels.reverse();
-    return labels;
-}
-const removeYrDate = (passedDate: Date) => {
-    let d = passedDate.toDateString().split(' ').slice(1).join(' ');
-    return d.replace("2022", "");
-}
-const dispLabelsDailyCount = (fetchedData: SearchResponse) => {
-    let date = new Date();
-
-    let dates = [];
-    let labels = [];
-    labels.push(removeYrDate(date));
-    dates.push(date);
-    for (let i = 0; i < 9; i++) {
-        let nextDay: Date = new Date(dates[i]);
-        nextDay.setDate(dates[i].getDate() - 1);
-        dates.push(nextDay);
-        labels.push(removeYrDate(nextDay));
-    }
-
-    // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
-    if(fetchedData.ten_day_count.length === 9){
-        console.log('minimizing labels');
-        labels.splice(9, 1);
-    }
-
-    labels = labels.reverse();
-    return labels;
-}
-
+import {
+    SearchResponse,
+    generateLabelsDailyCount,
+    removeYrDate,
+    dispLabelsDailyCount,
+    getDailyCountData
+} from '../components/feMiscFunctions';
 
 const Search: React.FC = () => {
 
     /**
      * States & Variables
      */
-    
     const [width, setWidth] = useState(window.innerWidth);
 
-    
     const { id : searchText} = useParams<{
         id : string;
     }>();
-    
+
     const { data, isLoading, error, isError } = useQuery(
         ['messages', searchText],
         async () => {
@@ -128,29 +70,15 @@ const Search: React.FC = () => {
                 source : []
             },
             select : (data) => {
-                const numDaysBackGraphs = 10;
 
-                // put backend data into JSON for chart
-                // daily count of message per day
-                let datasetForChartDailyCount = Array.from({ length: numDaysBackGraphs }, () => 0);
-                for (let i = 0; i < data.ten_day_count.length; i++) {
-                    let labels = [];
-                    labels = generateLabelsDailyCount(data);
-                    let idx = labels.findIndex((val) => val === data.ten_day_count[i].date);
-                    datasetForChartDailyCount[idx] = data.ten_day_count[i].count; // + 1
-    
-                    // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
-                    if(data.ten_day_count.length === 9) {
-                        console.log('minimizing data');
-                        datasetForChartDailyCount.splice(9, 1);
-                    }
-                }
+                const datasetForChartDailyCount = getDailyCountData(data);
+
                 const chartDataDailyCount = {
                     labels: dispLabelsDailyCount(data),
                     datasets: [
                         {
                             type: 'line' as const,
-                            label: 'Line Chart',
+                            // label: 'Line Chart',
                             borderColor: 'rgb(255, 99, 132)',
                             borderWidth: 2,
                             fill: false,
@@ -158,7 +86,7 @@ const Search: React.FC = () => {
                         },
                         {
                             type: 'bar' as const,
-                            label: 'Bar Graph',
+                            // label: 'Bar Graph',
                             backgroundColor: 'rgb(75, 192, 192)',
                             data: datasetForChartDailyCount,
                             borderColor: 'white',
@@ -178,7 +106,7 @@ const Search: React.FC = () => {
                     datasets: [
                         {
                             type: 'bar' as const,
-                            label: 'Bar Graph',
+                            // label: 'Bar Graph',
                             backgroundColor: 'rgb(75, 192, 192)',
                             data: dataPerSource,
                             borderColor: 'white',
@@ -186,7 +114,7 @@ const Search: React.FC = () => {
                         }
                     ],
                 });
-                return { 
+                return {
                     ...data,
                     chartDataDailyCount,
                     chartDataPerSource
@@ -204,8 +132,6 @@ const Search: React.FC = () => {
         return 140;
     }, [width])
 
-
-
     /**
      * Use Effects
      */
@@ -217,14 +143,6 @@ const Search: React.FC = () => {
         window.addEventListener('resize', resizeWidth);
         return () => window.removeEventListener('resize', resizeWidth);
     }, []);
-
-
-    // chart stuff
-
-
-
-    
-
 
     // for scrolling to top
     const contentRef = useRef<HTMLIonContentElement | null>(null);

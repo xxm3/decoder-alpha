@@ -38,7 +38,7 @@ ChartJS.register(
 );
 
 defaults.color = '#FFFFFF';
-const Display : React.FC<{ 
+const Display : React.FC<{
     chartDataDailyCount ?: ChartData<"bar" | "line", number[]>;
     chartDataPerSource ?: ChartData<"bar", number[]>;
     chartHeight : number;
@@ -52,7 +52,7 @@ const Display : React.FC<{
     const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
     // show the chart or not
     const { id : word} = useParams<{ id : string;}>()
-   
+
     useEffect(() => {
         cookies.set("showChart", String(showChart));
     }, [showChart, cookies])
@@ -85,22 +85,22 @@ const Display : React.FC<{
                                         display: false
                                     },
                                     title: { display: true, text: '# of messages per day (from several Discords)'},
-                                    // @ts-expect-error
-                                    scales: {
-                                        yAxes: [{
-                                            ticks: {
-                                                beginAtZero: true,
-                                                display: false,
-                                                color: 'white'
-                                            },
-                                        }],
-                                        xAxes: [{
-                                            ticks: {
-                                                display: false,
-                                                color: 'white'
-                                            },
-                                        }]
-                                    },
+                                    // @ ts-expect-error
+                                    // scales: {
+                                    //     yAxes: [{
+                                    //         ticks: {
+                                    //             beginAtZero: true,
+                                    //             display: false,
+                                    //             color: 'white'
+                                    //         },
+                                    //     }],
+                                    //     xAxes: [{
+                                    //         ticks: {
+                                    //             display: false,
+                                    //             color: 'white'
+                                    //         },
+                                    //     }]
+                                    // },
                                 },
                                 responsive: true,
                                 maintainAspectRatio: true,
@@ -117,22 +117,22 @@ const Display : React.FC<{
                                         display: false
                                     },
                                     title: { display: true, text: '# of messages per Discord (last 100 messages)'},
-                                    // @ts-expect-error
-                                    scales: {
-                                        yAxes: [{
-                                            ticks: {
-                                                beginAtZero: true,
-                                                display: false,
-                                                color: 'white'
-                                            },
-                                        }],
-                                        xAxes: [{
-                                            ticks: {
-                                                display: false,
-                                                color: 'white'
-                                            },
-                                        }]
-                                    },
+                                    // @ ts-expect-error
+                                    // scales: {
+                                    //     yAxes: [{
+                                    //         ticks: {
+                                    //             beginAtZero: true,
+                                    //             display: false,
+                                    //             color: 'white'
+                                    //         },
+                                    //     }],
+                                    //     xAxes: [{
+                                    //         ticks: {
+                                    //             display: false,
+                                    //             color: 'white'
+                                    //         },
+                                    //     }]
+                                    // },
                                 },
                                 responsive: true,
                                 maintainAspectRatio: true,
@@ -152,7 +152,7 @@ const Display : React.FC<{
                                     return m ? <MessageListItem key={m.id} onClick={() => {
                                         if(m.source === "Twitter"){
                                             const url = `https://twitter.com/${m.author}`;
-                                            window.open( 
+                                            window.open(
                                                 url, "_blank");
                                         }
                                         else setSelectedMessage(m)
@@ -162,7 +162,7 @@ const Display : React.FC<{
                         </div>
                     </IonCol>
                 </IonRow>
-               {selectedMessage && <MessageThread onClose={() => setSelectedMessage(null)} message={selectedMessage}/>} 
+               {selectedMessage && <MessageThread onClose={() => setSelectedMessage(null)} message={selectedMessage}/>}
 
             </IonGrid>
 

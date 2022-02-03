@@ -37,7 +37,7 @@ const HeaderContainer = () => {
     const smallHeaderWitdh = 930; // what size browser needs to be, before header goes small mode
     const [present] =   useIonAlert(); // ion alert
 
-   
+
 
     // connecting SOL wallet - called on load
     useEffect(() => {
@@ -70,8 +70,8 @@ const HeaderContainer = () => {
             setWidth(window.innerWidth);
         }
         window.addEventListener("resize", resizeWidth);
-    
-    
+
+
         window.addEventListener('load', onLoad);
         return () => {
             window.removeEventListener('load', onLoad)
@@ -98,7 +98,7 @@ const HeaderContainer = () => {
         //     history.push(`/search/${searchValue}`);
             history.push("/replace")
             history.replace(`/search/${val}`);
-            
+
     }
 
     // when typing into the search bar
@@ -140,25 +140,6 @@ const HeaderContainer = () => {
             {/*        </IonList>*/}
             {/*    </IonContent>*/}
             {/*</IonMenu>*/}
-
-            {/*TODO - https://reactjsexample.com/minimal-side-navigation-component-for-react/ - https://codesandbox.io/s/react-minimal-side-navigation-example-y299d?file=/src/components/NavSidebar.jsx */}
-            {/*<Navigation*/}
-            {/*    // you can use your own router's api to get pathname*/}
-            {/*    activeItemId="/management/members"*/}
-            {/*    onSelect={({itemId}) => {*/}
-            {/*        // maybe push to the route*/}
-            {/*    }}*/}
-            {/*    items={[*/}
-            {/*        {*/}
-            {/*            title: 'Dashboard',*/}
-            {/*            itemId: '/dashboard',*/}
-            {/*            // you can use your own custom Icon component as well*/}
-            {/*            // icon is optional*/}
-            {/*            // elemBefore: () => <Icon name="inbox" />,*/}
-            {/*        },*/}
-            {/*    ]}*/}
-            {/*/>*/}
-
 
             <IonHeader className="m-4 ">
                 <IonToolbar className="bg-card rounded-lg">

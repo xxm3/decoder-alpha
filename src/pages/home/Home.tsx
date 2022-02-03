@@ -25,9 +25,10 @@ import {
 } from "@nfteyez/sol-rayz";
 import {Connection, programs} from '@metaplex/js';
 import {instance} from "../../axios";
-import {Message} from "../../data/messages";
+// import {Message} from "../../data/messages";
 import {Chart} from "react-chartjs-2";
-import faker from 'faker';
+import {SearchResponse, generateLabelsDailyCount, removeYrDate, dispLabelsDailyCount, getDailyCountData} from '../../components/feMiscFunctions';
+import {data} from "autoprefixer";
 
 const Home = () => {
 
@@ -44,9 +45,9 @@ const Home = () => {
     /**
      * Use Effects
      */
-    useEffect(() => {
-        fetchHomePageData();
-    }, []);
+    // useEffect(() => {
+    //     fetchHomePageData();
+    // }, []);
 
 
 
@@ -110,7 +111,7 @@ const Home = () => {
      */
 
     // search vars
-    const [searchValueStacked, setSearchValueStacked] = useState('fellowship'); // TODO
+    const [searchValueStacked, setSearchValueStacked] = useState('fellowship dronies'); // TODO
     const [errorSearchStacked, setErrorSearchStacked] = useState('');
     const [graphStackedLoaded, setGraphStackedLoaded] = useState(false);
     const [stackedLineData, setStackedLineData] = useState({
@@ -137,7 +138,7 @@ const Home = () => {
     const doSearch = async () => {
         try {
             setIsLoading(true);
-            const { data: fetchedData } = await instance.post(
+            const { data: rawFetchedData } = await instance.post(
                 "/getWordCount/",
                 {
                     array: searchValueStacked.split(' '),
@@ -149,43 +150,45 @@ const Home = () => {
                 }
             );
 
-            // repeated on constants.js & Search.tsx & Home.tsx etc...
-            const numDaysBackGraphs = 10;
+            // TODO: tell user 8 max
+            const colorAry = ['rgb(255, 0, 0)',
+                'rgb(153, 255, 51)',
+                'rgb(0, 128, 255)',
+                'rgb(127, 0, 255)',
+                'rgb(255, 255, 255)',
+                'rgb(255, 204, 204)',
+                'rgb(102, 51, 0)',
+                'rgb(255, 102, 102)'];
 
-            // TODO
-            console.log(fetchedData);
-            setStackedLineData(fetchedData);
+            // TODO: height needs to grow as page shrinks
 
-            /*
-            // put backend data into JSON for chart
-            // daily count of message per day
-            let datasetForChartDailyCount = Array.from({ length: numDaysBackGraphs }, () => 0);
-            for (let i = 0; i < fetchedData.ten_day_count.length; i++) {
-                let labels = [];
-                labels = generateLabelsDailyCount(fetchedData);
-                let idx = labels.findIndex((val) => val === fetchedData.ten_day_count[i].date);
-                datasetForChartDailyCount[idx] = fetchedData.ten_day_count[i].count; // + 1
+            // console.log(rawFetchedData);
 
-                // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
-                if(fetchedData.ten_day_count.length === 9) {
-                    console.log('minimizing data');
-                    datasetForChartDailyCount.splice(9, 1);
-                }
+            let datasetsAry = [];
+            // const obj2Ary = Object.entries(rawFetchedData);
+            for(let i in rawFetchedData){
+                datasetsAry.push({
+                    type: 'line' as const,
+                    label:  rawFetchedData[i].name,
+                    // @ts-ignore
+                    borderColor: colorAry[i],
+                    borderWidth: 2,
+                    fill: false,
+                    // @ts-ignore
+                    data: getDailyCountData(rawFetchedData[i]),
+                });
             }
-            setChartDataDailyCount({
-                labels: dispLabelsDailyCount(fetchedData),
-                datasets: [
-                    {
-                        type: 'line' as const,
-                        label: 'Line Chart',
-                        borderColor: 'rgb(255, 99, 132)',
-                        borderWidth: 2,
-                        fill: false,
-                        data: datasetForChartDailyCount,
-                    }
-                ],
+
+            const labels = dispLabelsDailyCount((rawFetchedData[0]));
+            console.log(labels);
+            console.log(getDailyCountData(rawFetchedData[0])); // TODO x2
+
+            setStackedLineData({
+                // @ts-ignore
+                labels: labels,
+                // @ts-ignore
+                datasets: datasetsAry,
             });
-            */
 
             // set various variables
             setGraphStackedLoaded(true);
@@ -205,7 +208,6 @@ const Home = () => {
     }
 
     // @ts-ignore
-    // @ts-ignore
     return (
 
         <IonPage className="bg-sky">
@@ -214,11 +216,11 @@ const Home = () => {
 
             <IonContent className="bg-gradient-to-b ">
 
-                <IonCard hidden={true}>
+                <IonCard >
                     <div className="pl-2 pt-1">
                         <IonLabel className="text-xl text-blue-600">Compare different words on a graph</IonLabel>
 
-                        {/*TODO hard click...*/}
+                        {/*TODO hard to search in there....*/}
                         {/*TODO: need loading after click*/}
 
                         {/* search bar */}
@@ -229,43 +231,52 @@ const Home = () => {
                                       onIonChange={e => setSearchValueStacked(e.detail.value!)}
                                       animated placeholder="Type to search" disabled={isLoading}
                                       style={{width: '450px'}}
-                                      // hidden={width < smallHeaderWitdh && !showMobileSearch}
+                                      // hidden={width < smallHeaderWidth && !showMobileSearch}
                         />
 
-                        {/*TODO too big...*/}
+                        {/*TODO!!!: show a graph (nn/relic) from previous day ... with % return on top of it to show correlation*/}
 
+                        {/*TODO: too darn big */}
                         {/* search button, to do the actual search*/}
-                        <div className="text-2xl xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1 pb-1 pt-1 cursor-pointer"
-                             onClick={() => handleSearchStacked(searchValueStacked)}>
-                            <IonIcon slot="icon-only" icon={search} className=" " />
-                        </div>
+                        {/*<div className="text-2xl xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1 pb-1 pt-1 cursor-pointer"*/}
+                        {/*     onClick={() => handleSearchStacked(searchValueStacked)}>*/}
+                        {/*    <IonIcon slot="icon-only" icon={search} className=" " />*/}
+                        {/*</div>*/}
 
                         <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg" hidden={!graphStackedLoaded}>
-                            <Chart type='bar' data={stackedLineData} height="200" options={{
-                                plugins: {
-                                    legend: {
-                                        display: false
-                                    },
-                                    title: { display: true, text: '# of messages per day (from several Discords)'},
-                                    // scales: {
-                                    //     yAxes: [{
-                                    //         ticks: {
-                                    //             beginAtZero: true,
-                                    //             display: false,
-                                    //             color: 'white'
-                                    //         },
-                                    //     }],
-                                    //     xAxes: [{
-                                    //         ticks: {
-                                    //             display: false,
-                                    //             color: 'white'
-                                    //         },
-                                    //     }]
-                                    // },
-                                },
-                                responsive: true,
-                                maintainAspectRatio: true,
-                            }} />
+                            <Chart type='line' data={stackedLineData} height="80"
+                                options={{
+                                    responsive: true,
+                                    maintainAspectRatio: true,
+                                    plugins: {
+                                        legend: {
+                                            display: true
+                                        },
+                                        title: { display: true, text: '# of messages per day (from several Discords)'},
+                                        // @ ts-expect-error
+                                        // scales: {
+                                        //     xAxes: [{
+                                        //         title: {
+                                        //             display: false,
+                                        //             text: 'Date'
+                                        //         },
+                                        //         ticks: {
+                                        //             color: 'white'
+                                        //         },
+                                        //     }],
+                                        //     yAxes: [{
+                                        //         title: {
+                                        //             display: true,
+                                        //             text: '# messages'
+                                        //         },
+                                        //         ticks: {
+                                        //             beginAtZero: true,
+                                        //             color: 'white'
+                                        //         },
+                                        //     }]
+                                        // }
+                                    }
+                                }} />
                         </div>
 
                     </div>
@@ -293,10 +304,6 @@ const Home = () => {
                 </IonCard>
 
             </IonContent>
-
-
-
-
 
 
 
