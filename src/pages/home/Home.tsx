@@ -9,7 +9,7 @@ import {
     IonSearchbar
 } from '@ionic/react';
 import { IonItem, IonLabel, IonCard, IonCardContent, IonIcon, IonRow, IonCol } from '@ionic/react';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import axios from 'axios';
 import './Home.css';
 import Header from '../../components/header/Header';
@@ -42,15 +42,40 @@ const Home = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
+    const [width, setWidth] = useState(window.innerWidth);
+
     /**
      * Use Effects
      */
+    // for setting height of chart, depending on what width browser is
+    const chartHeight = useMemo(() => {
+        if(width > 1536) return 75;
+        if(width > 1280) return 90;
+        if(width > 1024) return 110;
+        if(width > 768) return 155;
+        if(width > 640) return 200;
+        return 140;
+    }, [width])
+
+    // resize window
+    useEffect(() => {
+        function resizeWidth() {
+            setWidth(window.innerWidth);
+        }
+        window.addEventListener('resize', resizeWidth);
+        return () => window.removeEventListener('resize', resizeWidth);
+    }, []);
+
     // useEffect(() => {
     //     fetchHomePageData();
     // }, []);
 
 
+    // TODO: why party only 100 last 10 days... should be 364 -- everything like this... (asked parth)
 
+    /**
+     * Functions
+     */
     // gets the user's nft's from their wallet
     // from https://github.com/NftEyez/sol-rayz
     // const getNfts = async (passedWalletAddress: string) => {
@@ -112,7 +137,7 @@ const Home = () => {
     // TODO: look at heights...
 
     // search vars
-    const [searchValueStacked, setSearchValueStacked] = useState('fellowship dronies Sovana glyph'); // TODO
+    const [searchValueStacked, setSearchValueStacked] = useState('party br1 LaunchLabs rats'); // TODO!!!
     const [errorSearchStacked, setErrorSearchStacked] = useState('');
     const [graphStackedLoaded, setGraphStackedLoaded] = useState(false);
     const [stackedLineData, setStackedLineData] = useState({
@@ -181,8 +206,11 @@ const Home = () => {
             }
 
             const labels = dispLabelsDailyCount((rawFetchedData[0]));
-            console.log(labels);
-            console.log(getDailyCountData(rawFetchedData[0])); // TODO x2
+
+            // console.log("labels");
+            // console.log(labels);
+            // console.log("first data");
+            // console.log(getDailyCountData(rawFetchedData[0]));
 
             setStackedLineData({
                 // @ts-ignore
@@ -245,13 +273,14 @@ const Home = () => {
                         {/*</div>*/}
 
                         <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg" hidden={!graphStackedLoaded}>
-                            <Chart type='line' data={stackedLineData} height="80"
+                            <Chart type='line' data={stackedLineData} height={chartHeight}
                                 options={{
                                     responsive: true,
                                     maintainAspectRatio: true,
                                     plugins: {
                                         legend: {
-                                            display: true
+                                            display: true,
+                                            reverse: true
                                         },
                                         title: { display: true, text: '# of messages per day (from several Discords)'},
                                         // @ ts-expect-error

@@ -123,6 +123,10 @@ const Search: React.FC = () => {
         }
     );
 
+    /**
+     * Use Effects
+     */
+    // for setting height of chart, depending on what width browser is
     const chartHeight = useMemo(() => {
         if(width > 1536) return 75;
         if(width > 1280) return 90;
@@ -132,9 +136,6 @@ const Search: React.FC = () => {
         return 140;
     }, [width])
 
-    /**
-     * Use Effects
-     */
     // resize window
     useEffect(() => {
         function resizeWidth() {
@@ -146,6 +147,10 @@ const Search: React.FC = () => {
 
     // for scrolling to top
     const contentRef = useRef<HTMLIonContentElement | null>(null);
+
+    /**
+     * Functions
+     */
     const scrollToTop = () => {
         contentRef.current && contentRef.current.scrollToTop();
     };

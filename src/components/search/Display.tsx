@@ -63,7 +63,7 @@ const Display : React.FC<{
 
            {definedMessages.length > 0 && <IonItem>
 
-                <span>Searched on "{word}" ({messages.length} results last 10 days)</span>
+                <span className="font-bold">Searched on "{word}" ({messages.length} results last 10 days)</span>
                 <span style={{width: "100px"}}> </span>
                 <span>
                     <span style={{marginBottom: "10px"}}>Toggle Chart</span>

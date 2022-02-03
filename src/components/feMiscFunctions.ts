@@ -1,5 +1,9 @@
 import {Message} from "../types/messages";
 
+// repeated on constants.js & feMiscFunctions.js
+// const numDaysBackGraphs = 10;
+const numDaysBackGraphs = 5;
+
 export interface SearchResponse {
     messages: (Message | undefined)[];
     totalCount: number;
@@ -26,7 +30,7 @@ export function generateLabelsDailyCount(fetchedData: SearchResponse){
     let labels = [];
     labels.push(date.toISOString().split('T')[0]);
     dates.push(date);
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < numDaysBackGraphs - 1; i++) {
         let nextDay: Date = new Date(dates[i]);
         nextDay.setDate(dates[i].getDate() - 1);
         dates.push(nextDay);
@@ -43,7 +47,7 @@ export function generateLabelsDailyCount(fetchedData: SearchResponse){
     labels = labels.reverse();
 
     // TODO-aman: temporary fix for graph after 7pm -- removing everything from this day when its after 7pm, as graphs messed up otherwise
-    labels.splice(9, 1);
+    // labels.splice(9, 1);
 
     return labels;
 }
@@ -54,7 +58,7 @@ export function dispLabelsDailyCount(fetchedData: SearchResponse){
     let labels = [];
     labels.push(removeYrDate(date));
     dates.push(date);
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < numDaysBackGraphs - 1; i++) {
         let nextDay: Date = new Date(dates[i]);
         nextDay.setDate(dates[i].getDate() - 1);
         dates.push(nextDay);
@@ -63,10 +67,10 @@ export function dispLabelsDailyCount(fetchedData: SearchResponse){
 
     // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
     // BAND AID FIX
-    if(fetchedData.ten_day_count.length === 9){
-        // console.log('minimizing labels');
-        labels.splice(9, 1);
-    }
+    // if(fetchedData.ten_day_count.length === 9){
+    //     // console.log('minimizing labels');
+    //     labels.splice(9, 1);
+    // }
 
     labels = labels.reverse();
     return labels;
@@ -74,9 +78,7 @@ export function dispLabelsDailyCount(fetchedData: SearchResponse){
 
 
 // put backend data into JSON for chart
-// repeated on constants.js & Search.tsx & Home.tsx etc...
 export function getDailyCountData(fetchedData: SearchResponse){
-    const numDaysBackGraphs = 10;
 
     // daily count of message per day
     let datasetForChartDailyCount = Array.from({ length: numDaysBackGraphs }, () => 0);
