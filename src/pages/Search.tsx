@@ -161,20 +161,21 @@ const Search: React.FC = () => {
 
     return (
         <React.Fragment>
-            <IonPage id="home-page">
+
+            <IonPage>
+
                 <IonContent ref={contentRef} scrollEvents={true} fullscreen>
-                    {/* Header */}
+
                     <Header />
+
                     {/* Main Content After Header */}
                     <div className="bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2 sticky">
                         {/*min-h-screen*/}
 
-                        {/* The Gray Container */}
-                        <div
-                            className={` ${
-                                width <= 640 ? 'w-full' : 'container'
-                            } bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}
-                        >
+                        {/* The bit darker Gray Container */}
+                        <div className={` ${width <= 640 ? 'w-full' : 'container'}
+                            bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+
                             {/* loading bar */}
                             {isLoading ? (
                                 <div>
@@ -184,6 +185,8 @@ const Search: React.FC = () => {
                                         <Loader />
                                     </div>
                                 </div>
+
+                            // error page
                             ) : isError ? (
                                 <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                                     <p className="text-lg text-red-700 font-medium">
@@ -192,8 +195,9 @@ const Search: React.FC = () => {
                                     <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                                         !
                                     </span>
-                                    {/*<div className="absolute top-0 right-0 flex space-x-2 p-4"></div>*/}
                                 </div>
+
+                            // actual content
                             ) : (
                                 <>
                                     <Display {...{
@@ -201,7 +205,8 @@ const Search: React.FC = () => {
                                         chartDataPerSource : data?.chartDataPerSource,
                                         chartHeight,
                                         width,
-                                        messages : data?.messages ?? []
+                                        messages : data?.messages ?? [],
+                                        totalCount: data?.totalCount
                                     }}/>
                                     {(data?.totalCount ?? 0) > 5 && (
                                         <IonButton

@@ -3,6 +3,7 @@ import { Message } from '../../types/messages';
 import moment from 'moment';
 import { useParams } from 'react-router';
 import './MessageListItem.css';
+import ReactTooltip from 'react-tooltip';
 
 type MessageListItemProps =
     | {
@@ -97,7 +98,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                     >
                         <p>{loading ? 'LOADING LOADING' : `(${source} ${source !== "Twitter" ? "- Discord" : ""}) ${author}`}</p>
                         {!loading && (
-                            <div className="text-xs text-gray-400">
+                            <div className="text-xs text-gray-400" data-tip={time}>
                                 {getDateAgo(time)}
                             </div>
                         )}
@@ -119,6 +120,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         })}
                     </p>
                 </div>
+
                 {loading && (
                     <span
                         className="ripple"
@@ -127,6 +129,8 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         }}
                     />
                 )}
+
+                <ReactTooltip />
             </div>
         );
     }

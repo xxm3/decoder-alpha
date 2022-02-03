@@ -2,7 +2,11 @@ import {Message} from "../types/messages";
 
 // repeated on constants.js & feMiscFunctions.js
 // const numDaysBackGraphs = 10;
-const numDaysBackGraphs = 5;
+export function constants(){
+    return {
+        numDaysBackGraphs: 5
+    }
+}
 
 export interface SearchResponse {
     messages: (Message | undefined)[];
@@ -30,7 +34,7 @@ export function generateLabelsDailyCount(fetchedData: SearchResponse){
     let labels = [];
     labels.push(date.toISOString().split('T')[0]);
     dates.push(date);
-    for (let i = 0; i < numDaysBackGraphs - 1; i++) {
+    for (let i = 0; i < constants().numDaysBackGraphs - 1; i++) {
         let nextDay: Date = new Date(dates[i]);
         nextDay.setDate(dates[i].getDate() - 1);
         dates.push(nextDay);
@@ -58,7 +62,7 @@ export function dispLabelsDailyCount(fetchedData: SearchResponse){
     let labels = [];
     labels.push(removeYrDate(date));
     dates.push(date);
-    for (let i = 0; i < numDaysBackGraphs - 1; i++) {
+    for (let i = 0; i < constants().numDaysBackGraphs - 1; i++) {
         let nextDay: Date = new Date(dates[i]);
         nextDay.setDate(dates[i].getDate() - 1);
         dates.push(nextDay);
@@ -81,7 +85,7 @@ export function dispLabelsDailyCount(fetchedData: SearchResponse){
 export function getDailyCountData(fetchedData: SearchResponse){
 
     // daily count of message per day
-    let datasetForChartDailyCount = Array.from({ length: numDaysBackGraphs }, () => 0);
+    let datasetForChartDailyCount = Array.from({ length: constants().numDaysBackGraphs }, () => 0);
     for (let i = 0; i < fetchedData.ten_day_count.length; i++) {
         let labels = [];
         labels = generateLabelsDailyCount(fetchedData);

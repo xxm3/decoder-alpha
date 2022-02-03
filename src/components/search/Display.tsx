@@ -1,9 +1,10 @@
-import { IonCol, IonGrid, IonRow, IonToggle,IonItem } from "@ionic/react";
-import { useEffect, useMemo, useState } from 'react';
+import {IonCol, IonGrid, IonRow, IonToggle, IonItem} from "@ionic/react";
+import {useEffect, useMemo, useState} from 'react';
 import MessageListItem from "./MessageListItem";
 import React from "react";
-import { Chart } from 'react-chartjs-2';
+import {Chart} from 'react-chartjs-2';
 import Cookies from 'universal-cookie';
+import {constants} from "../feMiscFunctions";
 import './Display.css';
 import {
     Chart as ChartJS,
@@ -19,9 +20,10 @@ import {
     defaults,
     ChartData,
 } from 'chart.js';
-import { Message } from "../../types/messages";
+import {Message} from "../../types/messages";
 import MessageThread from "./MessageThread";
-import { useParams } from "react-router";
+import {useParams} from "react-router";
+import ReactTooltip from "react-tooltip";
 
 // NOTE: any changes made here must be made in both Chart.jsx & MobileChart.jsx!
 
@@ -38,110 +40,100 @@ ChartJS.register(
 );
 
 defaults.color = '#FFFFFF';
-const Display : React.FC<{
-    chartDataDailyCount ?: ChartData<"bar" | "line", number[]>;
-    chartDataPerSource ?: ChartData<"bar", number[]>;
-    chartHeight : number;
-    messages : (Message | undefined)[];
-    width : number;
+const Display: React.FC<{
+    chartDataDailyCount?: ChartData<"bar" | "line", number[]>;
+    chartDataPerSource?: ChartData<"bar", number[]>;
+    chartHeight: number;
+    width: number;
+    messages: (Message | undefined)[];
+    totalCount: (number | undefined);
+}> = ({
+          chartDataDailyCount,
+          chartDataPerSource,
+          chartHeight,
+          width,
+          messages,
+          totalCount
+      }) => {
 
-}> = ({ chartDataDailyCount, chartHeight : height, messages,chartDataPerSource, width  }) => {
-
+    /**
+     * States & Variables
+     */
     const cookies = useMemo(() => new Cookies(), [])
     const [showChart, setShowChart] = useState(String(cookies.get('showChart')) === 'true' ? true : false);
     const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
-    // show the chart or not
-    const { id : word} = useParams<{ id : string;}>()
+    const {id: word} = useParams<{ id: string; }>()
 
+    const definedMessages = messages.filter(Boolean)
+
+    /**
+     * Use Effects
+     */
     useEffect(() => {
         cookies.set("showChart", String(showChart));
     }, [showChart, cookies])
 
-    const definedMessages = messages.filter(Boolean)
+    /**
+     * Functions
+     */
+
+    /**
+     * Renders
+     */
     return (
         <>
-
-           {definedMessages.length > 0 && <IonItem>
-
-                <span className="font-bold">Searched on "{word}" ({messages.length} results last 10 days)</span>
+            {definedMessages.length > 0 &&
+            <IonItem>
+                <span className="font-bold">Searched on "{word}" ({totalCount} results last {constants().numDaysBackGraphs} days)</span>
                 <span style={{width: "100px"}}> </span>
                 <span>
                     <span style={{marginBottom: "10px"}}>Toggle Chart</span>
                     <IonToggle color="dark"
                                checked={showChart}
-                               onClick={ () => setShowChart(!showChart) } />
+                               onClick={() => setShowChart(!showChart)}/>
                 </span>
             </IonItem>}
+
             <IonGrid className="noPaddingLeftRight">
 
+                {/*--{width}--{chartHeight}--*/}
+
                 {/* bar & line chart */}
-                {showChart && chartDataDailyCount && chartDataPerSource && definedMessages.length > 0 &&(
+                {showChart && chartDataDailyCount && chartDataPerSource && definedMessages.length > 0 && (
                     <IonRow>
-                    <IonCol size={ width < 640 ? "12" : "6" }>
+                        <IonCol size={width < 640 ? "12" : "6"}>
 
-                        <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
-                            <Chart type='bar' data={chartDataDailyCount} height={height} options={{
-                                plugins: {
-                                    legend: {
-                                        display: false
+                            <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
+                                <Chart type='bar' data={chartDataDailyCount} height={chartHeight} options={{
+                                    plugins: {
+                                        legend: {
+                                            display: false
+                                        },
+                                        title: {display: true, text: '# of messages per day (from several Discords)'},
                                     },
-                                    title: { display: true, text: '# of messages per day (from several Discords)'},
-                                    // @ ts-expect-error
-                                    // scales: {
-                                    //     yAxes: [{
-                                    //         ticks: {
-                                    //             beginAtZero: true,
-                                    //             display: false,
-                                    //             color: 'white'
-                                    //         },
-                                    //     }],
-                                    //     xAxes: [{
-                                    //         ticks: {
-                                    //             display: false,
-                                    //             color: 'white'
-                                    //         },
-                                    //     }]
-                                    // },
-                                },
-                                responsive: true,
-                                maintainAspectRatio: true,
-                            }} />
-                        </div>
-                    </IonCol>
+                                    responsive: true,
+                                    maintainAspectRatio: true,
+                                }}/>
+                            </div>
+                        </IonCol>
 
-                    <IonCol size={ width < 640 ? "12" : "6" }>
+                        <IonCol size={width < 640 ? "12" : "6"}>
 
-                        <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
-                            <Chart type='bar' data={chartDataPerSource} height={height} options={{
-                                plugins: {
-                                    legend: {
-                                        display: false
+                            <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
+                                <Chart type='bar' data={chartDataPerSource} height={chartHeight} options={{
+                                    plugins: {
+                                        legend: {
+                                            display: false
+                                        },
+                                        title: {display: true, text: '# of messages per Discord (last 100 messages)'},
                                     },
-                                    title: { display: true, text: '# of messages per Discord (last 100 messages)'},
-                                    // @ ts-expect-error
-                                    // scales: {
-                                    //     yAxes: [{
-                                    //         ticks: {
-                                    //             beginAtZero: true,
-                                    //             display: false,
-                                    //             color: 'white'
-                                    //         },
-                                    //     }],
-                                    //     xAxes: [{
-                                    //         ticks: {
-                                    //             display: false,
-                                    //             color: 'white'
-                                    //         },
-                                    //     }]
-                                    // },
-                                },
-                                responsive: true,
-                                maintainAspectRatio: true,
-                            }} />
-                        </div>
-                    </IonCol>
+                                    responsive: true,
+                                    maintainAspectRatio: true,
+                                }}/>
+                            </div>
+                        </IonCol>
 
-                </IonRow>
+                    </IonRow>
                 )}
 
                 {/* list of messages */}
@@ -151,22 +143,20 @@ const Display : React.FC<{
                             <div className="pb-10 p-2">
                                 {messages.map((m, i) => {
                                     return m ? <MessageListItem key={m.id} onClick={() => {
-                                        if(m.source === "Twitter"){
+                                        if (m.source === "Twitter") {
                                             const url = `https://twitter.com/${m.author}`;
                                             window.open(
                                                 url, "_blank");
-                                        }
-                                        else setSelectedMessage(m)
-                                    }} message={m} /> : <MessageListItem index={i} key={i} />
+                                        } else setSelectedMessage(m)
+                                    }} message={m}/> : <MessageListItem index={i} key={i}/>
                                 })}
                             </div>
                         </div>
                     </IonCol>
                 </IonRow>
-               {selectedMessage && <MessageThread onClose={() => setSelectedMessage(null)} message={selectedMessage}/>}
+                {selectedMessage && <MessageThread onClose={() => setSelectedMessage(null)} message={selectedMessage}/>}
 
             </IonGrid>
-
         </>
     );
 }

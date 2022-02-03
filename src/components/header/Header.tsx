@@ -34,7 +34,9 @@ const HeaderContainer = () => {
     const smallHeaderWitdh = 930; // what size browser needs to be, before header goes small mode
     const [present] =   useIonAlert(); // ion alert
 
-    const smallerWallet = useMemo(() => walletAddress?.substring(walletAddress.length - 4), [walletAddress])
+    const smallerWallet = useMemo(() =>
+        walletAddress ? walletAddress.substring(0, 4) + '...' + walletAddress.substring(walletAddress.length - 4)
+            : '', [walletAddress])
 
 
     // connecting SOL wallet - called on load
@@ -48,13 +50,13 @@ const HeaderContainer = () => {
                     if (solana.isPhantom) {
                         const response = await solana.connect({onlyIfTrusted: true});
                         console.log('CIWIC - Connected with Public Key:', response.publicKey.toString());
-    
+
                         /*
                          * Set the user's publicKey in state to be used later!
                          */
                         setWalletAddress(response.publicKey.toString());
                         setIsWalletConnected(true);
-    
+
 
                     }else{
                         await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
