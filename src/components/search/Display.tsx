@@ -57,12 +57,13 @@ const Display : React.FC<{
         cookies.set("showChart", String(showChart));
     }, [showChart, cookies])
 
+    const definedMessages = messages.filter(Boolean)
     return (
         <>
 
-            <IonItem>
+           {definedMessages.length > 0 && <IonItem>
 
-                <span>Searched on {word}</span>
+                <span>Searched on "{word}" ({messages.length} results last 10 days)</span>
                 <span style={{width: "100px"}}> </span>
                 <span>
                     <span style={{marginBottom: "10px"}}>Toggle Chart</span>
@@ -70,11 +71,11 @@ const Display : React.FC<{
                                checked={showChart}
                                onClick={ () => setShowChart(!showChart) } />
                 </span>
-            </IonItem>
-            <IonGrid>
+            </IonItem>}
+            <IonGrid className="noPaddingLeftRight">
 
                 {/* bar & line chart */}
-                {showChart && chartDataDailyCount && chartDataPerSource && (
+                {showChart && chartDataDailyCount && chartDataPerSource && definedMessages.length > 0 &&(
                     <IonRow>
                     <IonCol size={ width < 640 ? "12" : "6" }>
 
