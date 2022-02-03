@@ -35,12 +35,16 @@ export function generateLabelsDailyCount(fetchedData: SearchResponse){
 
     // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
     // BAND AID FIX
-    if(fetchedData.ten_day_count.length === 9){
-        // console.log('minimizing labels');
-        labels.splice(9, 1);
-    }
+    // if(fetchedData.ten_day_count.length === 9){
+    //     // console.log('minimizing labels');
+    //     labels.splice(9, 1);
+    // }
 
     labels = labels.reverse();
+
+    // TODO-aman: temporary fix for graph after 7pm -- removing everything from this day when its after 7pm, as graphs messed up otherwise
+    labels.splice(9, 1);
+
     return labels;
 }
 export function dispLabelsDailyCount(fetchedData: SearchResponse){
@@ -71,7 +75,7 @@ export function dispLabelsDailyCount(fetchedData: SearchResponse){
 
 // put backend data into JSON for chart
 // repeated on constants.js & Search.tsx & Home.tsx etc...
-export function getDailyCountData(fetchedData: any){
+export function getDailyCountData(fetchedData: SearchResponse){
     const numDaysBackGraphs = 10;
 
     // daily count of message per day

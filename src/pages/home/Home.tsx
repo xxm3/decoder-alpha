@@ -109,9 +109,10 @@ const Home = () => {
     /**
      * Renders
      */
+    // TODO: look at heights...
 
     // search vars
-    const [searchValueStacked, setSearchValueStacked] = useState('fellowship dronies'); // TODO
+    const [searchValueStacked, setSearchValueStacked] = useState('fellowship dronies Sovana glyph'); // TODO
     const [errorSearchStacked, setErrorSearchStacked] = useState('');
     const [graphStackedLoaded, setGraphStackedLoaded] = useState(false);
     const [stackedLineData, setStackedLineData] = useState({
