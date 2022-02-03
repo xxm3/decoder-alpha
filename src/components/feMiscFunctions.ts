@@ -50,7 +50,6 @@ export function generateLabelsDailyCount(fetchedData: SearchResponse){
 
     labels = labels.reverse();
 
-    // TODO-aman: temporary fix for graph after 7pm -- removing everything from this day when its after 7pm, as graphs messed up otherwise
     // labels.splice(9, 1);
 
     return labels;

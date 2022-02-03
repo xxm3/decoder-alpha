@@ -28,6 +28,7 @@ const Search: React.FC = () => {
      * States & Variables
      */
     const [width, setWidth] = useState(window.innerWidth);
+    const [searchErrorStr, setSearchErrorStr] = useState('');
 
     const { id : searchText} = useParams<{
         id : string;
@@ -52,12 +53,15 @@ const Search: React.FC = () => {
             } catch (e) {
                 console.error('try/catch in Search.tsx: ', e);
                 const error = e as Error & { response?: AxiosResponse };
-                if (error && error.response) {
-                    throw new Error(String(error.response.data.body));
+
+                // @ts-ignore
+                if (error && error.body) {
+                    // throw new Error(String(error.response.data.body));
+                    // @ts-ignore
+                    setSearchErrorStr(error.body);
                 } else {
-                    throw new Error(
-                        'Unable to connect. Please try again later'
-                    );
+                    // throw new Error('Unable to connect. Please try again later');
+                    setSearchErrorStr('Unable to connect. Please try again later');
                 }
             }
         },
@@ -69,7 +73,7 @@ const Search: React.FC = () => {
                 ten_day_count : [],
                 source : []
             },
-            select : (data) => {
+            select : (data: any) => {
 
                 const datasetForChartDailyCount = getDailyCountData(data);
 
@@ -187,10 +191,11 @@ const Search: React.FC = () => {
                                 </div>
 
                             // error page
-                            ) : isError ? (
+                            // ) : isError ? (
+                            ) : searchErrorStr ? (
                                 <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                                     <p className="text-lg text-red-700 font-medium">
-                                        <b>{(error as string) || 'Unable to connect'}</b>
+                                        <b>{(searchErrorStr as string) || 'Unable to connect'}</b>
                                     </p>
                                     <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                                         !

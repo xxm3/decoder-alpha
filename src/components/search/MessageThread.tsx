@@ -148,7 +148,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                         .flat(1)}
             </div>
 
-            {/*TODO: need this to work all the time... hit or miss, or only works first time (when click into modal) */}
             <ReactTooltip />
 
         </IonModal>

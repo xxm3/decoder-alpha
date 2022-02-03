@@ -132,7 +132,7 @@ const Home = () => {
      * Renders
      */
 
-    // TODO: look at heights... on both graphs -- works if refresh, but isnt dynamic
+    // TODO: still some bug where searched enviro.. said 3... had to click a few times (asked parth)
 
     const defaultGraph = {
         labels: ["1"],
@@ -156,7 +156,7 @@ const Home = () => {
     // when typing into the search bar
     const handleKeyDownStacked = (e: any) => {
         if (e.key === 'Enter') {
-            setSearchValueStacked(e.target.value!);
+            setSearchValueStacked(e.target.value); // !
             handleSearchStacked(e.target.value);
         }
     }
@@ -164,6 +164,8 @@ const Home = () => {
     // load search data from backend
     const doSearch = async () => {
         try {
+
+            // console.log(searchValueStacked);
 
             if(searchValueStacked.length < 3){ return setErrorSearchStacked('Please search on more than 3 characters'); }
             if(searchValueStacked.split(' ').length > 8){ return setErrorSearchStacked('Please search on 8 words max'); }
