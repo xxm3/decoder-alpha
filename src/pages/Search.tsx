@@ -61,7 +61,9 @@ const Search: React.FC = () => {
                     setSearchErrorStr(error.body);
                 } else {
                     // throw new Error('Unable to connect. Please try again later');
-                    setSearchErrorStr('Unable to connect. Please try again later');
+                    // setSearchErrorStr('Unable to connect. Please try again later');
+                    // TODO: I don't know how to get back from the backend the "No data available" that gets returned, and spit out to the frontend to show
+                    setSearchErrorStr('No results found');
                 }
             }
         },
