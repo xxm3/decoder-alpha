@@ -1,31 +1,32 @@
-import './Header.css';
-import React, {useEffect, useState, FC, useMemo } from "react";
 import {
     IonButton,
     IonHeader,
     IonRouterLink,
     IonIcon,
     IonToolbar,
-    IonItem,
-    IonSearchbar, useIonAlert, IonMenu, IonTitle, IonContent, IonList
+    IonSearchbar,
+    useIonAlert,
+    IonItem
 } from "@ionic/react";
-import {useHistory} from 'react-router';
-import { search, closeOutline, menuOutline } from 'ionicons/icons';
-import {Navigation} from 'react-minimal-side-navigation';
-import 'react-minimal-side-navigation/lib/ReactMinimalSideNavigation.css';
-import { Icon } from 'ionicons/dist/types/components/icon/icon';
+import React, {useEffect, useMemo, useState } from "react";
+import {useHistory, useParams} from 'react-router';
+import {
+    search,
+    closeOutline,
+    menuOutline
+} from 'ionicons/icons';
 
-// @ts-ignore
-const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
+
+const HeaderContainer = () => {
 
     /**
      * States & Variables
      */
+    const { id } = useParams<{ id ?: string;}>()
     let history = useHistory();
-    const [walletAddress, setWalletAddress] = useState(null);
-    const [smallerWallet, setSmallerWallet] = useState(null);
+    const [walletAddress, setWalletAddress] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [searchValue, setSearchValue] = useState('');
+    const [searchValue, setSearchValue] = useState(id ?? '');
     const [isWalletConnected, setIsWalletConnected] = useState(false);
     const [showMobileSearch, setShowMobileSearch] = useState(false);
     const [width, setWidth] = useState(window.innerWidth);
@@ -33,81 +34,50 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
     const smallHeaderWitdh = 930; // what size browser needs to be, before header goes small mode
     const [present] =   useIonAlert(); // ion alert
 
-    /**
-     * Use Effects
-     */
-    // resizing window
-    useEffect(() => {
-        window.addEventListener('resize', resizeWidth);
-        return () => window.removeEventListener('resize', resizeWidth);
-    }, []);
+    const smallerWallet = useMemo(() => walletAddress?.substring(walletAddress.length - 4), [walletAddress])
+
 
     // connecting SOL wallet - called on load
     useEffect(() => {
         // console.log("in load ue");
         const onLoad = async () => {
-            // console.log("in onload");
-            await checkIfWalletIsConnected();
-        };
-        onLoad();
-        // window.addEventListener('load', onLoad);
-        // return () => window.removeEventListener('load', onLoad);
-    }, []);
-    useEffect(() => {
-        if (walletAddress) {
-            // Call Solana program here.
-            console.log("ue - wallet set");
+            try {
+                // @ts-ignore
+                const {solana} = window;
+                if (solana) {
+                    if (solana.isPhantom) {
+                        const response = await solana.connect({onlyIfTrusted: true});
+                        console.log('CIWIC - Connected with Public Key:', response.publicKey.toString());
+    
+                        /*
+                         * Set the user's publicKey in state to be used later!
+                         */
+                        setWalletAddress(response.publicKey.toString());
+                        setIsWalletConnected(true);
+    
 
-            setWalletAddress(walletAddress);
-            setIsWalletConnected(true);
-
-            // @ts-ignore
-            const lastFour = walletAddress.substring(walletAddress.length - 4);
-            // @ts-ignore
-            setSmallerWallet(walletAddress.substr(0,4) + '...' + lastFour);
-        }
-    }, [walletAddress]);
-
-    /**
-     * Functions
-     */
-    // resizing the window
-    window.onresize = () => {
-        resizeWidth();
-    };
-
-    function resizeWidth() {
-        setWidth(window.innerWidth);
-    }
-
-    // for connecting to SOL wallet - called on load
-    const checkIfWalletIsConnected = async () => {
-        try {
-            // @ts-ignore
-            const {solana} = window;
-            if (solana) {
-                if (solana.isPhantom) {
-                    const response = await solana.connect({onlyIfTrusted: true});
-                    console.log('CIWIC - Connected with Public Key:', response.publicKey.toString());
-
-                    /*
-                     * Set the user's publicKey in state to be used later!
-                     */
-                    setWalletAddress(response.publicKey.toString());
-                    setIsWalletConnected(true);
-
-                    // send the wallet address to the parent
-                    mintAddrToParent(walletAddress);
-                }else{
+                    }else{
+                        await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
+                    }
+                } else {
                     await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
                 }
-            } else {
-                await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
+            } catch (error) {
+                console.error(error);
             }
-        } catch (error) {
-            console.error(error);
+        };
+        function resizeWidth() {
+            setWidth(window.innerWidth);
         }
-    };
+        window.addEventListener("resize", resizeWidth);
+
+
+        window.addEventListener('load', onLoad);
+        return () => {
+            window.removeEventListener('load', onLoad)
+            window.removeEventListener("resize", resizeWidth)
+        };
+    }, []);
 
     // connect to your SOL wallet - called when clicking "connect Wallet"
     const connectWallet = async () => {
@@ -123,13 +93,12 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
     };
 
     // does the search functionality
-    function handleSearch(val: any) {
-        if (typeof (val) !== "undefined" && val !== '') {
-            history.push(`/search/${val}`);
-            window.location.reload();
-        } else {
-            history.push('/');
-        }
+    function handleSearch(val: string) {
+        // if (typeof (searchValue) !== "undefined" && searchValue !== '') {
+        //     history.push(`/search/${searchValue}`);
+            history.push("/replace")
+            history.replace(`/search/${val}`);
+
     }
 
     // when typing into the search bar
@@ -150,9 +119,9 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
      * Renders
      */
 
-    // @ts-ignore
+
     return (
-        <React.Fragment>
+        <>
 
 
             {/*<IonMenu side="start" menuId="first">*/}
@@ -171,25 +140,6 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
             {/*        </IonList>*/}
             {/*    </IonContent>*/}
             {/*</IonMenu>*/}
-
-            {/*TODO*/}
-            {/*<Navigation*/}
-            {/*    // you can use your own router's api to get pathname*/}
-            {/*    activeItemId="/management/members"*/}
-            {/*    onSelect={({itemId}) => {*/}
-            {/*        // maybe push to the route*/}
-            {/*    }}*/}
-            {/*    items={[*/}
-            {/*        {*/}
-            {/*            title: 'Dashboard',*/}
-            {/*            itemId: '/dashboard',*/}
-            {/*            // you can use your own custom Icon component as well*/}
-            {/*            // icon is optional*/}
-            {/*            // elemBefore: () => <Icon name="inbox" />,*/}
-            {/*        },*/}
-            {/*    ]}*/}
-            {/*/>*/}
-
 
             <IonHeader className="m-4 ">
                 <IonToolbar className="bg-card rounded-lg">
@@ -281,7 +231,7 @@ const HeaderContainer = ({mintAddrToParent, showflag, onClick}) => {
                     </IonItem>
                 </IonToolbar>
             </IonHeader>
-        </React.Fragment>
+        </>
     );
 };
 
