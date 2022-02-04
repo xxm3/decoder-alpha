@@ -38,42 +38,22 @@ const HeaderContainer = () => {
         walletAddress ? walletAddress.substring(0, 4) + '...' + walletAddress.substring(walletAddress.length - 4)
             : '', [walletAddress])
 
-
-    // connecting SOL wallet - called on load
+    // onload useEffect
     useEffect(() => {
-        // console.log("in load ue");
         const onLoad = async () => {
+            // connecting SOL wallet
             try {
-                // @ts-ignore
-                const {solana} = window;
-                if (solana) {
-                    if (solana.isPhantom) {
-                        const response = await solana.connect({onlyIfTrusted: true});
-                        console.log('CIWIC - Connected with Public Key:', response.publicKey.toString());
-
-                        /*
-                         * Set the user's publicKey in state to be used later!
-                         */
-                        setWalletAddress(response.publicKey.toString());
-                        setIsWalletConnected(true);
-
-
-                    }else{
-                        await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
-                    }
-                } else {
-                    await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
-                }
+                await connectWallet();
             } catch (error) {
                 console.error(error);
             }
         };
+
+        // resize window stuff
         function resizeWidth() {
             setWidth(window.innerWidth);
         }
         window.addEventListener("resize", resizeWidth);
-
-
         window.addEventListener('load', onLoad);
         return () => {
             window.removeEventListener('load', onLoad)
@@ -81,26 +61,31 @@ const HeaderContainer = () => {
         };
     }, []);
 
-    // connect to your SOL wallet - called when clicking "connect Wallet"
+    // connect to your SOL wallet - called when clicking "connect Wallet". And called onLoad
     const connectWallet = async () => {
         // @ts-ignore
         const {solana} = window;
         if (solana) {
-            const response = await solana.connect();
+            if (solana.isPhantom) {
+                const response = await solana.connect({onlyIfTrusted: true});
+                console.log('onload - Connected with Public Key:', response.publicKey.toString());
 
-            console.log('CW - Connected with Public Key:', response.publicKey.toString());
-            setWalletAddress(response.publicKey.toString());
-            setIsWalletConnected(true);
+                // Set the user's publicKey in state to be used later!
+                setWalletAddress(response.publicKey.toString());
+                setIsWalletConnected(true);
+
+            }else{
+                await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
+            }
+        } else {
+            await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
         }
     };
 
     // does the search functionality
     function handleSearch(val: string) {
-        // if (typeof (searchValue) !== "undefined" && searchValue !== '') {
-        //     history.push(`/search/${searchValue}`);
-            history.push("/replace")
-            history.replace(`/search/${val}`);
-
+        history.push("/replace")
+        history.replace(`/search/${val}`);
     }
 
     // when typing into the search bar
@@ -116,32 +101,12 @@ const HeaderContainer = () => {
         setShowMobileSearch(!showMobileSearch);
     }
 
-
     /**
      * Renders
      */
 
-
     return (
         <>
-
-
-            {/*<IonMenu side="start" menuId="first">*/}
-            {/*    <IonHeader>*/}
-            {/*        <IonToolbar color="primary">*/}
-            {/*            <IonTitle>Start Menu</IonTitle>*/}
-            {/*        </IonToolbar>*/}
-            {/*    </IonHeader>*/}
-            {/*    <IonContent>*/}
-            {/*        <IonList>*/}
-            {/*            <IonItem>Menu Item</IonItem>*/}
-            {/*            <IonItem>Menu Item</IonItem>*/}
-            {/*            <IonItem>Menu Item</IonItem>*/}
-            {/*            <IonItem>Menu Item</IonItem>*/}
-            {/*            <IonItem>Menu Item</IonItem>*/}
-            {/*        </IonList>*/}
-            {/*    </IonContent>*/}
-            {/*</IonMenu>*/}
 
             <IonHeader className="m-4 ">
                 <IonToolbar className="bg-card rounded-lg">
