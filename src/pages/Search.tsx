@@ -62,7 +62,7 @@ const Search: React.FC = () => {
                 } else {
                     // throw new Error('Unable to connect. Please try again later');
                     // setSearchErrorStr('Unable to connect. Please try again later');
-                    // TODO: I don't know how to get back from the backend the "No data available" that gets returned, and spit out to the frontend to show
+                    // TODO-parth: I don't know how to get back from the backend the "No data available" that gets returned, and spit out to the frontend to show (asked parth)
                     setSearchErrorStr('No results found');
                 }
             }
@@ -177,6 +177,8 @@ const Search: React.FC = () => {
                     {/* Main Content After Header */}
                     <div className="bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2 sticky">
                         {/*min-h-screen*/}
+
+                        {/*TODO: put to the site what people searched on*/}
 
                         {/* The bit darker Gray Container */}
                         <div className={` ${width <= 640 ? 'w-full' : 'container'}

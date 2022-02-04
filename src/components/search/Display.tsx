@@ -60,7 +60,7 @@ const Display: React.FC<{
      * States & Variables
      */
     const cookies = useMemo(() => new Cookies(), [])
-    const [showChart, setShowChart] = useState(String(cookies.get('showChart')) === 'true' ? true : false);
+    const [showChart, setShowChart] = useState(String(cookies.get('showChart')) === 'false' ? false : true);
     const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
     const {id: word} = useParams<{ id: string; }>()
 

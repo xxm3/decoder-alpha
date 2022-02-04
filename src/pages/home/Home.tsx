@@ -132,7 +132,7 @@ const Home = () => {
      * Renders
      */
 
-    // TODO: still some bug where searched enviro.. said 3... had to click a few times (asked parth)
+    // TODO-parth: still some bug where searched enviro.. said 3... had to click a few times (asked parth)
 
     const defaultGraph = {
         labels: ["1"],
