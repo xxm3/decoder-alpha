@@ -73,7 +73,6 @@ const HeaderContainer = () => {
                 // Set the user's publicKey in state to be used later!
                 setWalletAddress(response.publicKey.toString());
                 setIsWalletConnected(true);
-
             }else{
                 await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
             }
