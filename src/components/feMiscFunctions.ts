@@ -11,7 +11,9 @@ export interface SearchResponse {
     source : [string,number][]
 }
 
-
+export function getUTCTime(): Date {
+    return new Date(new Date().toUTCString());
+}
 // don't care for years
 export function removeYrDate(passedDate: Date){
     let d = passedDate.toDateString().split(' ').slice(1).join(' ');
@@ -20,7 +22,7 @@ export function removeYrDate(passedDate: Date){
 
 // generates label code for our charts (mostly / only with the months0
 export function generateLabelsDailyCount(fetchedData: SearchResponse){
-    let date = new Date();
+    let date = getUTCTime();
 
     let dates = [];
     let labels = [];
@@ -35,16 +37,16 @@ export function generateLabelsDailyCount(fetchedData: SearchResponse){
 
     // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
     // BAND AID FIX
-    if(fetchedData.ten_day_count.length === 9){
-        // console.log('minimizing labels');
-        labels.splice(9, 1);
-    }
+    // if(fetchedData.ten_day_count.length === 9){
+    //     // console.log('minimizing labels');
+    //     labels.splice(9, 1);
+    // }
 
     labels = labels.reverse();
     return labels;
 }
 export function dispLabelsDailyCount(fetchedData: SearchResponse){
-    let date = new Date();
+    let date = getUTCTime();
 
     let dates = [];
     let labels = [];
@@ -59,10 +61,10 @@ export function dispLabelsDailyCount(fetchedData: SearchResponse){
 
     // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
     // BAND AID FIX
-    if(fetchedData.ten_day_count.length === 9){
-        // console.log('minimizing labels');
-        labels.splice(9, 1);
-    }
+    // if(fetchedData.ten_day_count.length === 9){
+    //     // console.log('minimizing labels');
+    //     labels.splice(9, 1);
+    // }
 
     labels = labels.reverse();
     return labels;
