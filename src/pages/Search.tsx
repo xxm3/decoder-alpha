@@ -178,8 +178,6 @@ const Search: React.FC = () => {
                     <div className="bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2 sticky">
                         {/*min-h-screen*/}
 
-                        {/*TODO: put to the site what people searched on*/}
-
                         {/* The bit darker Gray Container */}
                         <div className={` ${width <= 640 ? 'w-full' : 'container'}
                             bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>

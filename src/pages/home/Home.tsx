@@ -264,30 +264,26 @@ const Home = () => {
                         <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
                             {/*${width <= 640 ? 'w-full' : 'container'}*/}
 
-                            {/*<IonCard >*/}
+                            <div className={`pb-3 ${width <= 640 ? 'w-full' : 'w-96 '}`}>Compare multiple words on a graph</div>
 
-                            <IonItem className="font-bold">
-                                <span className="w-96">Compare multiple words on a graph</span>
+                            <div className="xs:flex items-center rounded-lg overflow-hidden">
 
-                                {/* search bar */}
-                                <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2"
+                                {/* search bar  xs-flex text-base text-gray-400 flex-grow outline-none px-2 */}
+                                <IonSearchbar className={`w-96`} // ${width <= 640 ? 'w-full' : 'w-full'}
                                               type="text"
                                               value={searchValueStacked}
                                               onKeyPress={handleKeyDownStacked}
                                               onIonChange={e => setSearchValueStacked(e.detail.value!)}
                                               animated placeholder="Type to search"
                                               disabled={graphStackedLoading}
-
-                                    // TODO: test mobile
-                                    // hidden={width < smallHeaderWidth && !showMobileSearch}
                                 />
 
                                 {/* search button, to do the actual search*/}
-                                <div className="text-2xl xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1 pb-1 pt-1 cursor-pointer"
+                                <div className="w-10 text-2xl xs:flex px-2 rounded-lg space-x-4 bg-success-1 pb-1 pt-1 cursor-pointer"
                                      onClick={() => handleSearchStacked(searchValueStacked)}>
                                     <IonIcon slot="icon-only" icon={search} className=" " />
                                 </div>
-                            </IonItem>
+                            </div>
 
 
                             {/*--{width}--{chartHeight}--*/}
