@@ -168,7 +168,7 @@ const Search: React.FC = () => {
 
                         {/* The bit darker Gray Container */}
                         <div className={` ${width <= 640 ? 'w-full' : 'container'}
-                            bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+                            bg-satin-3 rounded-lg pt-3 pb-6 md:px-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
                             {/* loading bar */}
                             {isError ? (

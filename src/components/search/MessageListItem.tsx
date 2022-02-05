@@ -90,7 +90,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         }
                     />
                 )}
-                <div>
+                <div className="flex-grow">
                     <div
                         className={`flex font-semibold items-center space-x-2 text-base ${
                             loading ? 'mb-5' : 'mb-1'
@@ -105,17 +105,12 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                     </div>
 
                     {/* show the message and highlight matches */}
-                    <p className={loading ? 'inline box-decoration-clone' : ''}>
+                    <p className={loading ? 'inline box-decoration-clone' : 'max-w-full word-wrap'}>
                         {msgArr.map((w, i) => {
-                            return (
-                                <span key={w + i}>
-                                    {/* {w}{i < msgArr.length - 1 ? <b className="text-cb">{word}</b> : null} */}
-                                    {w.toLowerCase() === word.toLowerCase() ? (
-                                        <b className="text-cb">{w}</b>
-                                    ) : (
-                                        w
-                                    )}
-                                </span>
+                            return w.toLowerCase() === word.toLowerCase() ? (
+                                <b className="text-cb">{w}</b>
+                            ) : (
+                                w
                             );
                         })}
                     </p>
