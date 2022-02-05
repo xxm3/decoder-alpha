@@ -40,19 +40,12 @@ import Home from "./pages/home/Home";
 
 
 import {
-	QueryClient,
 	QueryClientProvider,
   } from 'react-query'
 import { ReactQueryDevtools } from "react-query/devtools"
+import { queryClient } from "./queryClient";
 
 
-const queryClient = new QueryClient({
-	defaultOptions : { 
-		queries : { 
-            refetchOnWindowFocus: process.env.NODE_ENV === 'production',
-		}
-	}
-})
 
 const App = () => {
 

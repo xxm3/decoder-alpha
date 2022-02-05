@@ -8,13 +8,14 @@ import {
     useIonAlert,
     IonItem
 } from "@ionic/react";
-import React, {useEffect, useLayoutEffect, useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {useHistory, useParams} from 'react-router';
 import {
     search,
     closeOutline,
     menuOutline
 } from 'ionicons/icons';
+import { queryClient } from "../../queryClient";
 
 
 const HeaderContainer = () => {
@@ -85,8 +86,9 @@ const HeaderContainer = () => {
 
     // does the search functionality
     function handleSearch(val: string) {
-        history.push("/replace")
-        history.replace(`/search/${val}`);
+        const queryKey = ["messages", id]
+        queryClient.resetQueries(queryKey)
+        history.push(`/search/${val}`);
     }
 
     // when typing into the search bar
