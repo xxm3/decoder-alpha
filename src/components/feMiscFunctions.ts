@@ -19,7 +19,9 @@ export interface SearchResponse {
     source : [string,number][]
 }
 
-
+export function getUTCTime(): Date {
+    return new Date(new Date().toUTCString());
+}
 // don't care for years
 export function removeYrDate(passedDate: Date){
     let d = passedDate.toDateString().split(' ').slice(1).join(' ');
@@ -28,7 +30,7 @@ export function removeYrDate(passedDate: Date){
 
 // generates label code for our charts (mostly / only with the months0
 export function generateLabelsDailyCount(fetchedData: SearchResponse){
-    let date = new Date();
+    let date = getUTCTime();
 
     let dates = [];
     let labels = [];
@@ -55,7 +57,7 @@ export function generateLabelsDailyCount(fetchedData: SearchResponse){
     return labels;
 }
 export function dispLabelsDailyCount(fetchedData: SearchResponse){
-    let date = new Date();
+    let date = getUTCTime();
 
     let dates = [];
     let labels = [];
