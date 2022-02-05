@@ -8,7 +8,7 @@ import {
     useIonAlert,
     IonItem
 } from "@ionic/react";
-import React, {useEffect, useMemo, useState } from "react";
+import React, {useEffect, useLayoutEffect, useMemo, useState} from "react";
 import {useHistory, useParams} from 'react-router';
 import {
     search,
@@ -40,7 +40,20 @@ const HeaderContainer = () => {
 
     // onload useEffect
     useEffect(() => {
+        // resize window stuff
+        function resizeWidth() {
+            setWidth(window.innerWidth);
+        }
+        window.addEventListener("resize", resizeWidth);
+        // window.addEventListener('load', onLoad);
+        return () => {
+            // window.removeEventListener('load', onLoad)
+            window.removeEventListener("resize", resizeWidth)
+        };
+    }, []);
+    useLayoutEffect(() => {
         const onLoad = async () => {
+            console.log("in onload"); // TODO: BUGGED - fix then put in change log
             // connecting SOL wallet
             try {
                 await connectWallet();
@@ -49,20 +62,15 @@ const HeaderContainer = () => {
             }
         };
 
-        // resize window stuff
-        function resizeWidth() {
-            setWidth(window.innerWidth);
-        }
-        window.addEventListener("resize", resizeWidth);
-        window.addEventListener('load', onLoad);
-        return () => {
-            window.removeEventListener('load', onLoad)
-            window.removeEventListener("resize", resizeWidth)
-        };
+        const handler = () => onLoad();
+        window.addEventListener('load', handler);
+        return () => window.removeEventListener('load', handler);
     }, []);
 
     // connect to your SOL wallet - called when clicking "connect Wallet". And called onLoad
     const connectWallet = async () => {
+        console.log("connecting");
+
         // @ts-ignore
         const {solana} = window;
         if (solana) {
