@@ -23,7 +23,6 @@ import {
 import {Message} from "../../types/messages";
 import MessageThread from "./MessageThread";
 import {useParams} from "react-router";
-import ReactTooltip from "react-tooltip";
 
 // NOTE: any changes made here must be made in both Chart.jsx & MobileChart.jsx!
 
@@ -46,7 +45,7 @@ const Display: React.FC<{
     chartHeight: number;
     width: number;
     messages: (Message | undefined)[];
-    totalCount: (number | undefined);
+    totalCount?: number;
 }> = ({
           chartDataDailyCount,
           chartDataPerSource,
