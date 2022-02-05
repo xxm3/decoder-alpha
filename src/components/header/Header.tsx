@@ -40,20 +40,8 @@ const HeaderContainer = () => {
 
     // onload useEffect
     useEffect(() => {
-        // resize window stuff
-        function resizeWidth() {
-            setWidth(window.innerWidth);
-        }
-        window.addEventListener("resize", resizeWidth);
-        // window.addEventListener('load', onLoad);
-        return () => {
-            // window.removeEventListener('load', onLoad)
-            window.removeEventListener("resize", resizeWidth)
-        };
-    }, []);
-    useLayoutEffect(() => {
         const onLoad = async () => {
-            console.log("in onload"); // TODO: BUGGED - fix then put in change log
+            console.log("in onload"); // TODO-parth: bugged - doesn't get spit out to console when you refresh page. thus user not logged in on load
             // connecting SOL wallet
             try {
                 await connectWallet();
@@ -62,9 +50,17 @@ const HeaderContainer = () => {
             }
         };
 
-        const handler = () => onLoad();
-        window.addEventListener('load', handler);
-        return () => window.removeEventListener('load', handler);
+        // resize window stuff
+        function resizeWidth() {
+            setWidth(window.innerWidth);
+        }
+
+        window.addEventListener("resize", resizeWidth);
+        window.addEventListener('load', onLoad);
+        return () => {
+            window.removeEventListener('load', onLoad)
+            window.removeEventListener("resize", resizeWidth)
+        };
     }, []);
 
     // connect to your SOL wallet - called when clicking "connect Wallet". And called onLoad

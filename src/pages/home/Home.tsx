@@ -210,11 +210,10 @@ const Home = () => {
 
             const labels = dispLabelsDailyCount((rawFetchedData[0]));
 
-            // TODO
-            console.log("labels");
-            console.log(labels);
-            console.log("first data");
-            console.log(getDailyCountData(rawFetchedData[0]));
+            // console.log("labels");
+            // console.log(labels);
+            // console.log("first data");
+            // console.log(getDailyCountData(rawFetchedData[0]));
 
             setStackedLineData({
                 // @ts-ignore
@@ -265,7 +264,7 @@ const Home = () => {
                         <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
                             {/*${width <= 640 ? 'w-full' : 'container'}*/}
 
-                            <div className={`pb-3 ${width <= 640 ? 'w-full' : 'w-96 '}`}>Compare multiple words on a graph</div>
+                            <div className={`font-bold pb-1 ${width <= 640 ? 'w-full' : 'w-96 '}`}>Compare multiple words on a graph</div>
 
                             <div className="xs:flex items-center rounded-lg overflow-hidden">
 
