@@ -57,7 +57,7 @@ const HeaderContainer = () => {
         }
 
         window.addEventListener("resize", resizeWidth);
-        window.addEventListener('load', onLoad);
+        onLoad()
         return () => {
             window.removeEventListener('load', onLoad)
             window.removeEventListener("resize", resizeWidth)
@@ -67,7 +67,7 @@ const HeaderContainer = () => {
     // connect to your SOL wallet - called when clicking "connect Wallet". And called onLoad
     const connectWallet = async (obj: any) => {
         // @ts-ignore
-        const {solana} = window;
+        const { solana } = window;
         if (solana) {
             if (solana.isPhantom) {
                 const response = await solana.connect(obj);
