@@ -29,6 +29,7 @@ import {instance} from "../../axios";
 import {Chart} from "react-chartjs-2";
 import {dispLabelsDailyCount, getDailyCountData} from '../../components/feMiscFunctions';
 import {data} from "autoprefixer";
+import { ChartData } from 'chart.js';
 
 const Home = () => {
 
@@ -134,7 +135,7 @@ const Home = () => {
 
     // TODO-parth: still some bug where searched enviro.. said 3... had to click a few times (asked parth)
 
-    const defaultGraph = {
+    const defaultGraph : ChartData<any, string> = {
         labels: ["1"],
         datasets: [ { data: ["3"] } ],
     };
@@ -146,41 +147,35 @@ const Home = () => {
     const [graphStackedLoading, setGraphStackedLoading] = useState(false);
     const [stackedLineData, setStackedLineData] = useState(defaultGraph);
 
-    // does the search functionality
-    function handleSearchStacked(val: any) {
-        if (typeof (val) !== "undefined" && val !== '') {
-            doSearch();
-        }
-    }
-
-    // when typing into the search bar
-    const handleKeyDownStacked = (e: any) => {
-        if (e.key === 'Enter') {
-            setSearchValueStacked(e.target.value); // !
-            handleSearchStacked(e.target.value);
-        }
-    }
-
+    
     // load search data from backend
-    const doSearch = async () => {
+    const doSearch = async (query : string) => {
         try {
 
-            // console.log(searchValueStacked);
-
-            if(searchValueStacked.length < 3){ return setErrorSearchStacked('Please search on 3 or more characters'); }
-            if(searchValueStacked.split(' ').length > 8){ return setErrorSearchStacked('Please search on 8 words max'); }
-
+            console.log(query);
+            setErrorSearchStacked("")
+            setSearchValueStacked(query)
+            if(query.length < 3){ return setErrorSearchStacked('Please search on 3 or more characters'); }
+            if(query.split(' ').length > 8){ return setErrorSearchStacked('Please search on 8 words max'); }
             setGraphStackedLoading(true);
             setStackedLineData(defaultGraph);
 
-            const { data: rawFetchedData } = await instance.post(
-                "/getWordCount/",
+            const { data: rawFetchedData } = await instance.post<
                 {
-                    array: searchValueStacked.split(' '),
+                    name: string;
+                    ten_day_count: {
+                        count: number;
+                        date: string;
+                    }[];
+                }[]
+            >(
+                '/getWordCount/',
+                {
+                    array: query.split(' '),
                 },
                 {
                     headers: {
-                        "Content-Type": "application/json",
+                        'Content-Type': 'application/json',
                     },
                 }
             );
@@ -199,16 +194,16 @@ const Home = () => {
                 datasetsAry.push({
                     type: 'line' as const,
                     label:  rawFetchedData[i].name,
-                    // @ts-ignore
+
                     borderColor: colorAry[i],
                     borderWidth: 2,
                     fill: false,
-                    // @ts-ignore
+
                     data: getDailyCountData(rawFetchedData[i]),
                 });
             }
 
-            const labels = dispLabelsDailyCount((rawFetchedData[0]));
+            const labels = dispLabelsDailyCount();
 
             // console.log("labels");
             // console.log(labels);
@@ -216,9 +211,7 @@ const Home = () => {
             // console.log(getDailyCountData(rawFetchedData[0]));
 
             setStackedLineData({
-                // @ts-ignore
                 labels: labels,
-                // @ts-ignore
                 datasets: datasetsAry,
             });
 
@@ -272,7 +265,11 @@ const Home = () => {
                                 <IonSearchbar className={`w-96`} // ${width <= 640 ? 'w-full' : 'w-full'}
                                               type="text"
                                               value={searchValueStacked}
-                                              onKeyPress={handleKeyDownStacked}
+                                              
+                                            onKeyPress={e => { 
+                                                const val = (e.target as HTMLInputElement).value 
+                                                if(val && e.key === "Enter") doSearch(val)
+                                            }}
                                               onIonChange={e => setSearchValueStacked(e.detail.value!)}
                                               animated placeholder="Type to search"
                                               disabled={graphStackedLoading}
@@ -280,7 +277,7 @@ const Home = () => {
 
                                 {/* search button, to do the actual search*/}
                                 <div className="w-10 text-2xl xs:flex px-2 rounded-lg space-x-4 bg-success-1 pb-1 pt-1 cursor-pointer"
-                                     onClick={() => handleSearchStacked(searchValueStacked)}>
+                                     onClick={() => doSearch(searchValueStacked)}>
                                     <IonIcon slot="icon-only" icon={search} className=" " />
                                 </div>
                             </div>
@@ -307,7 +304,7 @@ const Home = () => {
 
                             // graph itself
                             ) : (
-                                <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg" hidden={graphStackedLoading || stackedLineData.labels.length == 1}>
+                                <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg" hidden={graphStackedLoading || stackedLineData.labels?.length === 1}>
                                     <Chart type='line' data={stackedLineData} height={chartHeight}
                                            options={{
                                                responsive: true,

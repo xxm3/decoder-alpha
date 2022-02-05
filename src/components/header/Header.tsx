@@ -8,13 +8,14 @@ import {
     useIonAlert,
     IonItem
 } from "@ionic/react";
-import React, {useEffect, useLayoutEffect, useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {useHistory, useParams} from 'react-router';
 import {
     search,
     closeOutline,
     menuOutline
 } from 'ionicons/icons';
+import { queryClient } from "../../queryClient";
 
 
 const HeaderContainer = () => {
@@ -56,7 +57,7 @@ const HeaderContainer = () => {
         }
 
         window.addEventListener("resize", resizeWidth);
-        window.addEventListener('load', onLoad);
+        onLoad()
         return () => {
             window.removeEventListener('load', onLoad)
             window.removeEventListener("resize", resizeWidth)
@@ -66,7 +67,7 @@ const HeaderContainer = () => {
     // connect to your SOL wallet - called when clicking "connect Wallet". And called onLoad
     const connectWallet = async (obj: any) => {
         // @ts-ignore
-        const {solana} = window;
+        const { solana } = window;
         if (solana) {
             if (solana.isPhantom) {
                 const response = await solana.connect(obj);
@@ -85,8 +86,9 @@ const HeaderContainer = () => {
 
     // does the search functionality
     function handleSearch(val: string) {
-        history.push("/replace")
-        history.replace(`/search/${val}`);
+        const queryKey = ["messages", id]
+        queryClient.resetQueries(queryKey)
+        history.push(`/search/${val}`);
     }
 
     // when typing into the search bar

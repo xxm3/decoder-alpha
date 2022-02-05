@@ -1,4 +1,3 @@
-import Loader from '../components/Loader';
 import React, { useMemo, useRef } from 'react';
 import Display from '../components/search/Display';
 import { useState, useEffect } from 'react';
@@ -11,13 +10,10 @@ import './Search.css';
 import { useParams } from 'react-router';
 import { instance } from '../axios';
 import { useQuery } from 'react-query';
-import { Message } from '../types/messages';
 import { AxiosResponse } from 'axios';
 import Header from '../components/header/Header';
 import {
     SearchResponse,
-    generateLabelsDailyCount,
-    removeYrDate,
     dispLabelsDailyCount,
     getDailyCountData
 } from '../components/feMiscFunctions';
@@ -28,13 +24,12 @@ const Search: React.FC = () => {
      * States & Variables
      */
     const [width, setWidth] = useState(window.innerWidth);
-    const [searchErrorStr, setSearchErrorStr] = useState('');
 
     const { id : searchText} = useParams<{
         id : string;
     }>();
 
-    const { data, isLoading, error, isError } = useQuery(
+    const { data, error, isError } = useQuery(
         ['messages', searchText],
         async () => {
             try {
@@ -54,16 +49,12 @@ const Search: React.FC = () => {
                 console.error('try/catch in Search.tsx: ', e);
                 const error = e as Error & { response?: AxiosResponse };
 
-                // @ts-ignore
-                if (error && error.body) {
-                    // throw new Error(String(error.response.data.body));
-                    // @ts-ignore
-                    setSearchErrorStr(error.body);
+
+                if (error && error.response) {
+                    throw new Error(String(error.response.data.body));
                 } else {
-                    // throw new Error('Unable to connect. Please try again later');
-                    // setSearchErrorStr('Unable to connect. Please try again later');
+                    throw new Error('Unable to connect. Please try again later');
                     // TODO-parth: I don't know how to get back from the backend the "No data available" that gets returned, and spit out to the frontend to show (asked parth)
-                    setSearchErrorStr('No results found');
                 }
             }
         },
@@ -75,12 +66,12 @@ const Search: React.FC = () => {
                 ten_day_count : [],
                 source : []
             },
-            select : (data: any) => {
+            select : (data) => {
 
                 const datasetForChartDailyCount = getDailyCountData(data);
 
                 const chartDataDailyCount = {
-                    labels: dispLabelsDailyCount(data),
+                    labels: dispLabelsDailyCount(),
                     datasets: [
                         {
                             type: 'line' as const,
@@ -180,21 +171,10 @@ const Search: React.FC = () => {
                             bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
                             {/* loading bar */}
-                            {isLoading ? (
-                                <div>
-                                    <h1 className="flex justify-center items-center font-bold text-xl">Searching for "{searchText}"</h1>
-                                    <br/>
-                                    <div className="pt-10 flex justify-center items-center">
-                                        <Loader />
-                                    </div>
-                                </div>
-
-                            // error page
-                            // ) : isError ? (
-                            ) : searchErrorStr ? (
+                            {isError ? (
                                 <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                                     <p className="text-lg text-red-700 font-medium">
-                                        <b>{(searchErrorStr as string) || 'Unable to connect'}</b>
+                                        <b>{(error as Error).message || 'Unable to connect'}</b>
                                     </p>
                                     <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                                         !
