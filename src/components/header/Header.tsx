@@ -44,7 +44,7 @@ const HeaderContainer = () => {
             console.log("in onload"); // TODO-parth: bugged - doesn't get spit out to console when you refresh page. thus user not logged in on load
             // connecting SOL wallet
             try {
-                await connectWallet();
+                await connectWallet({onlyIfTrusted: true});
             } catch (error) {
                 console.error(error);
             }
@@ -64,14 +64,12 @@ const HeaderContainer = () => {
     }, []);
 
     // connect to your SOL wallet - called when clicking "connect Wallet". And called onLoad
-    const connectWallet = async () => {
-        console.log("connecting");
-
+    const connectWallet = async (obj: any) => {
         // @ts-ignore
         const {solana} = window;
         if (solana) {
             if (solana.isPhantom) {
-                const response = await solana.connect({onlyIfTrusted: true});
+                const response = await solana.connect(obj);
                 console.log('onload - Connected with Public Key:', response.publicKey.toString());
 
                 // Set the user's publicKey in state to be used later!
@@ -176,7 +174,7 @@ const HeaderContainer = () => {
                         {!isWalletConnected && width >= smallHeaderWitdh && (
                             <>
                                 {/*<span style={{width: '75px'}}> </span>*/}
-                                <IonButton color="success" className="absolute inset-y-0 right-0 mr-8 mt-4 cursor-pointer" onClick={() => connectWallet()}>
+                                <IonButton color="success" className="absolute inset-y-0 right-0 mr-8 mt-4 cursor-pointer" onClick={() => connectWallet(null)}>
                                     Connect Wallet
                                 </IonButton>
                             </>
