@@ -167,7 +167,7 @@ const Home = () => {
 
             // console.log(searchValueStacked);
 
-            if(searchValueStacked.length < 3){ return setErrorSearchStacked('Please search on more than 3 characters'); }
+            if(searchValueStacked.length < 3){ return setErrorSearchStacked('Please search on 3 or more characters'); }
             if(searchValueStacked.split(' ').length > 8){ return setErrorSearchStacked('Please search on 8 words max'); }
 
             setGraphStackedLoading(true);
@@ -210,10 +210,11 @@ const Home = () => {
 
             const labels = dispLabelsDailyCount((rawFetchedData[0]));
 
-            // console.log("labels");
-            // console.log(labels);
-            // console.log("first data");
-            // console.log(getDailyCountData(rawFetchedData[0]));
+            // TODO
+            console.log("labels");
+            console.log(labels);
+            console.log("first data");
+            console.log(getDailyCountData(rawFetchedData[0]));
 
             setStackedLineData({
                 // @ts-ignore

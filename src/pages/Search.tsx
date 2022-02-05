@@ -84,7 +84,6 @@ const Search: React.FC = () => {
                     datasets: [
                         {
                             type: 'line' as const,
-                            // label: 'Line Chart',
                             borderColor: 'rgb(255, 99, 132)',
                             borderWidth: 2,
                             fill: false,
@@ -92,7 +91,6 @@ const Search: React.FC = () => {
                         },
                         {
                             type: 'bar' as const,
-                            // label: 'Bar Graph',
                             backgroundColor: 'rgb(75, 192, 192)',
                             data: datasetForChartDailyCount,
                             borderColor: 'white',
@@ -112,7 +110,6 @@ const Search: React.FC = () => {
                     datasets: [
                         {
                             type: 'bar' as const,
-                            // label: 'Bar Graph',
                             backgroundColor: 'rgb(75, 192, 192)',
                             data: dataPerSource,
                             borderColor: 'white',
