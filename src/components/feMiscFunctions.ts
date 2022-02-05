@@ -14,7 +14,7 @@ export interface SearchResponse {
     word: string;
     ten_day_count: {
         count: number;
-        date: `${number}-${number}-${number}`;
+        date: string;
     }[];
     source : [string,number][]
 }
@@ -29,7 +29,7 @@ export function removeYrDate(passedDate: Date){
 }
 
 // generates label code for our charts (mostly / only with the months0
-export function generateLabelsDailyCount(fetchedData: SearchResponse){
+export function generateLabelsDailyCount(){
     let date = getUTCTime();
 
     let dates = [];
@@ -56,7 +56,7 @@ export function generateLabelsDailyCount(fetchedData: SearchResponse){
 
     return labels;
 }
-export function dispLabelsDailyCount(fetchedData: SearchResponse){
+export function dispLabelsDailyCount(){
     let date = getUTCTime();
 
     let dates = [];
@@ -83,13 +83,13 @@ export function dispLabelsDailyCount(fetchedData: SearchResponse){
 
 
 // put backend data into JSON for chart
-export function getDailyCountData(fetchedData: SearchResponse){
+export function getDailyCountData(fetchedData: Pick<SearchResponse, "ten_day_count"> & { [key: string] : any}){
 
     // daily count of message per day
     let datasetForChartDailyCount = Array.from({ length: constants().numDaysBackGraphs }, () => 0);
     for (let i = 0; i < fetchedData.ten_day_count.length; i++) {
         let labels = [];
-        labels = generateLabelsDailyCount(fetchedData);
+        labels = generateLabelsDailyCount();
         let idx = labels.findIndex((val) => val === fetchedData.ten_day_count[i].date);
         datasetForChartDailyCount[idx] = fetchedData.ten_day_count[i].count; // + 1
     }

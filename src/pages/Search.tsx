@@ -71,7 +71,7 @@ const Search: React.FC = () => {
                 const datasetForChartDailyCount = getDailyCountData(data);
 
                 const chartDataDailyCount = {
-                    labels: dispLabelsDailyCount(data),
+                    labels: dispLabelsDailyCount(),
                     datasets: [
                         {
                             type: 'line' as const,
