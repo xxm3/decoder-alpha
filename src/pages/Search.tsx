@@ -49,12 +49,10 @@ const Search: React.FC = () => {
                 console.error('try/catch in Search.tsx: ', e);
                 const error = e as Error & { response?: AxiosResponse };
 
-
                 if (error && error.response) {
                     throw new Error(String(error.response.data.body));
                 } else {
                     throw new Error('Unable to connect. Please try again later');
-                    // TODO-parth: I don't know how to get back from the backend the "No data available" that gets returned, and spit out to the frontend to show (asked parth)
                 }
             }
         },

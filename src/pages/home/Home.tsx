@@ -132,9 +132,6 @@ const Home = () => {
     /**
      * Renders
      */
-
-    // TODO-parth: still some bug where searched enviro.. said 3... had to click a few times (asked parth)
-
     const defaultGraph : ChartData<any, string> = {
         labels: ["1"],
         datasets: [ { data: ["3"] } ],
@@ -148,15 +145,15 @@ const Home = () => {
     const [stackedLineData, setStackedLineData] = useState(defaultGraph);
 
 
-    // load search data from backend
+    // load search data from backend, for stacked line graph
     const doSearch = async (query : string) => {
         try {
+            setErrorSearchStacked("");
+            setSearchValueStacked(query);
 
-            console.log(query);
-            setErrorSearchStacked("")
-            setSearchValueStacked(query)
             if(query.length < 3){ return setErrorSearchStacked('Please search on 3 or more characters'); }
             if(query.split(' ').length > 8){ return setErrorSearchStacked('Please search on 8 words max'); }
+
             setGraphStackedLoading(true);
             setStackedLineData(defaultGraph);
 
@@ -217,6 +214,7 @@ const Home = () => {
 
             // set various variables
             setGraphStackedLoading(false);
+            // setSearchValueStacked(''); // reset it
 
         } catch (e: any) {
             console.error("try/catch in Home.tsx.doSearch: ", e);
@@ -252,8 +250,6 @@ const Home = () => {
                             <p>Below search will compare multiple single words against each other ("portals enviro suites").
                                 Each word will be graphed and you can compare the popularity of each word against each other.</p>
                         </div>
-
-                        {/*TODO: clear search bar(s) after search*/}
 
                         {/* The bit darker Gray Container */}
                         <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>

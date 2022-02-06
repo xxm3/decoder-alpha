@@ -42,7 +42,6 @@ const HeaderContainer = () => {
     // onload useEffect
     useEffect(() => {
         const onLoad = async () => {
-            console.log("in onload"); // TODO-parth: bugged - doesn't get spit out to console when you refresh page. thus user not logged in on load
             // connecting SOL wallet
             try {
                 await connectWallet({onlyIfTrusted: true});
@@ -57,7 +56,7 @@ const HeaderContainer = () => {
         }
 
         window.addEventListener("resize", resizeWidth);
-        onLoad()
+        onLoad();
         return () => {
             window.removeEventListener('load', onLoad)
             window.removeEventListener("resize", resizeWidth)
@@ -86,9 +85,11 @@ const HeaderContainer = () => {
 
     // does the search functionality
     function handleSearch(val: string) {
-        const queryKey = ["messages", id]
-        queryClient.resetQueries(queryKey)
+        const queryKey = ["messages", id];
+        queryClient.resetQueries(queryKey);
         history.push(`/search/${val}`);
+
+        // setSearchValue(''); // reset it
     }
 
     // when typing into the search bar
