@@ -147,7 +147,7 @@ const Home = () => {
     const [graphStackedLoading, setGraphStackedLoading] = useState(false);
     const [stackedLineData, setStackedLineData] = useState(defaultGraph);
 
-    
+
     // load search data from backend
     const doSearch = async (query : string) => {
         try {
@@ -253,6 +253,8 @@ const Home = () => {
                                 Each word will be graphed and you can compare the popularity of each word against each other.</p>
                         </div>
 
+                        {/*TODO: clear search bar(s) after search*/}
+
                         {/* The bit darker Gray Container */}
                         <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
                             {/*${width <= 640 ? 'w-full' : 'container'}*/}
@@ -265,9 +267,9 @@ const Home = () => {
                                 <IonSearchbar className={`w-96`} // ${width <= 640 ? 'w-full' : 'w-full'}
                                               type="text"
                                               value={searchValueStacked}
-                                              
-                                            onKeyPress={e => { 
-                                                const val = (e.target as HTMLInputElement).value 
+
+                                            onKeyPress={e => {
+                                                const val = (e.target as HTMLInputElement).value
                                                 if(val && e.key === "Enter") doSearch(val)
                                             }}
                                               onIonChange={e => setSearchValueStacked(e.detail.value!)}
