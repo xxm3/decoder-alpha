@@ -1,4 +1,4 @@
-import {IonCol, IonGrid, IonRow, IonToggle, IonItem} from "@ionic/react";
+import { IonToggle } from "@ionic/react";
 import {useEffect, useMemo, useState} from 'react';
 import MessageListItem from "./MessageListItem";
 import React from "react";
@@ -25,6 +25,7 @@ import MessageThread from "./MessageThread";
 import {useParams} from "react-router";
 
 // NOTE: any changes made here must be made in both Chart.jsx & MobileChart.jsx!
+ 
 
 ChartJS.register(...registerables);
 ChartJS.register(
@@ -43,14 +44,12 @@ const Display: React.FC<{
     chartDataDailyCount?: ChartData<"bar" | "line", number[]>;
     chartDataPerSource?: ChartData<"bar", number[]>;
     chartHeight: number;
-    width: number;
     messages: (Message | undefined)[];
     totalCount?: number;
 }> = ({
           chartDataDailyCount,
           chartDataPerSource,
           chartHeight,
-          width,
           messages,
           totalCount
       }) => {
@@ -81,81 +80,105 @@ const Display: React.FC<{
      */
     return (
         <>
-            {definedMessages.length > 0 &&
-            <IonItem>
-                <span className="font-bold">Searched on "{word}" ({totalCount} results last {constants().numDaysBackGraphs} days)</span>
-                <span style={{width: "100px"}}> </span>
-                <span>
-                    <span style={{marginBottom: "10px"}}>Toggle Chart</span>
-                    <IonToggle color="dark"
-                               checked={showChart}
-                               onClick={() => setShowChart(!showChart)}/>
-                </span>
-            </IonItem>}
-
-            <IonGrid className="noPaddingLeftRight">
-
+            <div className="p-3 overflow-y-scroll rounded-lg">
                 {/*--{width}--{chartHeight}--*/}
+                <div className="gap-4 mb-4 grid grid-cols-12">
 
-                {/* bar & line chart */}
-                {showChart && chartDataDailyCount && chartDataPerSource && definedMessages.length > 0 && (
-                    <IonRow>
-                        <IonCol size={width < 640 ? "12" : "6"}>
+                    {definedMessages.length > 0 && (
+                        <>
+                            <p className="font-bold col-span-6 sm:text-center">
+                                Searched on "{word}" ({totalCount} results last{' '}
+                                {constants().numDaysBackGraphs} days)
+                            </p>
 
-                            <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
-                                <Chart type='bar' data={chartDataDailyCount} height={chartHeight} options={{
-                                    plugins: {
-                                        legend: {
-                                            display: false
-                                        },
-                                        title: {display: true, text: '# of messages per day (from several Discords)'},
-                                    },
-                                    responsive: true,
-                                    maintainAspectRatio: true,
-                                }}/>
+                            <div className="flex items-center justify-center col-span-6">
+                                <p>Toggle Chart</p>
+                                <IonToggle
+                                    color="dark"
+                                    checked={showChart}
+                                    onClick={() => setShowChart(!showChart)}
+                                />
                             </div>
-                        </IonCol>
+                        </>
+                    )}
+                    {/* bar & line chart */}
+                    {showChart &&
+                        chartDataDailyCount &&
+                        chartDataPerSource &&
+                        definedMessages.length > 0 && (
+                            <>
+                                <div className="chart">
+                                    <Chart
+                                        type="bar"
+                                        data={chartDataDailyCount}
+                                        height={chartHeight}
+                                        options={{
+                                            plugins: {
+                                                legend: {
+                                                    display: false,
+                                                },
+                                                title: {
+                                                    display: true,
+                                                    text: '# of messages per day (from several Discords)',
+                                                },
+                                            },
+                                            responsive: true,
+                                            maintainAspectRatio: true,
+                                        }}
+                                        key={chartHeight}
+                                    />
+                                </div>
 
-                        <IonCol size={width < 640 ? "12" : "6"}>
-
-                            <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg">
-                                <Chart type='bar' data={chartDataPerSource} height={chartHeight} options={{
-                                    plugins: {
-                                        legend: {
-                                            display: false
-                                        },
-                                        title: {display: true, text: '# of messages per Discord (last 100 messages)'},
-                                    },
-                                    responsive: true,
-                                    maintainAspectRatio: true,
-                                }}/>
-                            </div>
-                        </IonCol>
-
-                    </IonRow>
-                )}
+                                <div className="chart">
+                                    <Chart
+                                        type="bar"
+                                        data={chartDataPerSource}
+                                        height={chartHeight}
+                                        options={{
+                                            plugins: {
+                                                legend: {
+                                                    display: false,
+                                                },
+                                                title: {
+                                                    display: true,
+                                                    text: '# of messages per Discord (last 100 messages)',
+                                                },
+                                            },
+                                            responsive: true,
+                                            maintainAspectRatio: true,
+                                        }}
+                                        key={chartHeight}
+                                    />
+                                </div>
+                            </>
+                        )}
+                </div>
 
                 {/* list of messages */}
-                <IonRow>
-                    <IonCol size="12">
-                        <div className="overflow-y-scroll bg-inherit rounded-l flex flex-col divide-y divide-gray-400">
-                            <div className="pb-10 p-2">
-                                {messages.map((m, i) => {
-                                    return m ? <MessageListItem key={m.id} onClick={() => {
-                                        if (m.source === "Twitter") {
-                                            const url = `https://twitter.com/${m.author}`;
-                                            window.open(
-                                                url, "_blank");
-                                        } else setSelectedMessage(m)
-                                    }} message={m}/> : <MessageListItem index={i} key={i}/>
-                                })}
-                            </div>
-                        </div>
-                    </IonCol>
-                </IonRow>
-                {selectedMessage && <MessageThread onClose={() => setSelectedMessage(null)} message={selectedMessage}/>}
-
-            </IonGrid>
+                {messages.map((m, i) => (
+                    
+                        m ? (
+                            <MessageListItem
+                                onClick={() => {
+                                    if (m.source === 'Twitter') {
+                                        const url = `https://twitter.com/${m.author}`;
+                                        window.open(url, '_blank');
+                                    } else setSelectedMessage(m);
+                                }}
+                                message={m}
+                                key={m.id}
+                            />
+                        ) : (
+                            <MessageListItem index={i} key={i} />
+                        )
+                ))}
+                {selectedMessage && (
+                    <MessageThread
+                        onClose={() => setSelectedMessage(null)}
+                        message={selectedMessage}
+                    />
+                )}
+            </div>
         </>
     );
 }

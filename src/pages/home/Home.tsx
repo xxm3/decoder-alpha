@@ -30,6 +30,7 @@ import {Chart} from "react-chartjs-2";
 import {dispLabelsDailyCount, getDailyCountData} from '../../components/feMiscFunctions';
 import {data} from "autoprefixer";
 import { ChartData } from 'chart.js';
+import SearchBar from '../../components/SearchBar';
 
 const Home = () => {
 
@@ -257,28 +258,32 @@ const Home = () => {
 
                             <div className={`font-bold pb-1 ${width <= 640 ? 'w-full' : 'w-96 '}`}>Compare multiple words on a graph</div>
 
-                            <div className="xs:flex items-center rounded-lg overflow-hidden">
+                            <div className={`max-w-2xl my-2`}>
+                                <SearchBar initialValue='' onSubmit={doSearch}/></div>
 
-                                {/* search bar  xs-flex text-base text-gray-400 flex-grow outline-none px-2 */}
-                                <IonSearchbar className={`w-96`} // ${width <= 640 ? 'w-full' : 'w-full'}
-                                              type="text"
-                                              value={searchValueStacked}
+                            // <div className="xs:flex items-center rounded-lg overflow-hidden">
 
-                                            onKeyPress={e => {
-                                                const val = (e.target as HTMLInputElement).value
-                                                if(val && e.key === "Enter") doSearch(val)
-                                            }}
-                                              onIonChange={e => setSearchValueStacked(e.detail.value!)}
-                                              animated placeholder="Type to search"
-                                              disabled={graphStackedLoading}
-                                />
+                            //     {/* search bar  xs-flex text-base text-gray-400 flex-grow outline-none px-2 */}
+                            //     <IonSearchbar className={`w-96`} // ${width <= 640 ? 'w-full' : 'w-full'}
+                            //                   type="text"
+                            //                   value={searchValueStacked}
 
-                                {/* search button, to do the actual search*/}
-                                <div className="w-10 text-2xl xs:flex px-2 rounded-lg space-x-4 bg-success-1 pb-1 pt-1 cursor-pointer"
-                                     onClick={() => doSearch(searchValueStacked)}>
-                                    <IonIcon slot="icon-only" icon={search} className=" " />
-                                </div>
-                            </div>
+                            //                 onKeyPress={e => {
+                            //                     const val = (e.target as HTMLInputElement).value
+                            //                     if(val && e.key === "Enter") doSearch(val)
+                            //                 }}
+                            //                   onIonChange={e => setSearchValueStacked(e.detail.value!)}
+                            //                   animated placeholder="Type to search"
+                            //                   disabled={graphStackedLoading}
+                            //     />
+
+                            //     {/* search button, to do the actual search*/}
+                            //     <div className="w-10 text-2xl xs:flex px-2 rounded-lg space-x-4 bg-success-1 pb-1 pt-1 cursor-pointer"
+                            //          onClick={() => doSearch(searchValueStacked)}>
+                            //         <IonIcon slot="icon-only" icon={search} className=" " />
+                            //     </div>
+                            // </div>
+
 
 
                             {/*--{width}--{chartHeight}--*/}

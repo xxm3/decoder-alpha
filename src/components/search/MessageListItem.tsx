@@ -53,18 +53,16 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
             return msg;
         }, [message, word]);
 
-        const imageClassName =
-            'rounded-full h-12 w-12 flex-shrink-0 bg-bg-primary';
         const loading = useMemo(() => !message, [message]);
         return (
             <div
-                className={`relative max-w-2xl items-start ${
+                className={`relative w-full items-start ${
                     loading
-                        ? 'bg-inherit text-bg-primary messageLoading'
-                        : 'bg-bg-primary text-white my-4'
+                        ? 'messageLoading py-2'
+                        : 'text-gray-200 my-2'
                 } ${
-                    onClick ? 'hover:bg-opacity-60 cursor-pointer' : ''
-                } p-5 space-x-4 rounded-xl text-lg flex`}
+                    onClick ? 'hover:bg-opacity-100 cursor-pointer' : ''
+                } py-1 space-x-4 rounded-xl text-lg flex`}
                 onClick={() =>
                     onClick &&
                     onClick({ id, source, author, time, message } as Message)
@@ -72,10 +70,10 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                 ref={ref}
             >
                 {loading ? (
-                    <div className={imageClassName} />
+                    <div className="image" />
                 ) : (
                     <img
-                        className={imageClassName}
+                        className="image"
                         alt={source === 'Twitter' ? 'Twitter' : 'Discord'}
                         src={
                             loading
@@ -90,7 +88,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         }
                     />
                 )}
-                <div>
+                <div className="flex-grow">
                     <div
                         className={`flex font-semibold items-center space-x-2 text-base ${
                             loading ? 'mb-5' : 'mb-1'
@@ -98,24 +96,19 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                     >
                         <p>{loading ? 'LOADING LOADING' : `(${source} ${source !== "Twitter" ? "- Discord" : ""}) ${author}`}</p>
                         {!loading && (
-                            <div className="text-xs text-gray-400" data-tip={time}>
+                            <div className="text-xs text-gray-400" data-tip={new Date(time as string).toLocaleString()}>
                                 {getDateAgo(time)}
                             </div>
                         )}
                     </div>
 
                     {/* show the message and highlight matches */}
-                    <p className={loading ? 'inline box-decoration-clone' : ''}>
+                    <p className={loading ? 'inline box-decoration-clone' : 'max-w-full word-wrap'}>
                         {msgArr.map((w, i) => {
-                            return (
-                                <span key={w + i}>
-                                    {/* {w}{i < msgArr.length - 1 ? <b className="text-cb">{word}</b> : null} */}
-                                    {w.toLowerCase() === word.toLowerCase() ? (
-                                        <b className="text-cb">{w}</b>
-                                    ) : (
-                                        w
-                                    )}
-                                </span>
+                            return w.toLowerCase() === word.toLowerCase() ? (
+                                <b className="text-cb" key={w+i}>{w}</b>
+                            ) : (
+                                w
                             );
                         })}
                     </p>
