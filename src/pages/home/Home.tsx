@@ -9,7 +9,7 @@ import {
     IonSearchbar
 } from '@ionic/react';
 import { IonItem, IonLabel, IonCard, IonCardContent, IonIcon, IonRow, IonCol } from '@ionic/react';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import axios from 'axios';
 import './Home.css';
 import Header from '../../components/header/Header';
@@ -27,8 +27,10 @@ import {Connection, programs} from '@metaplex/js';
 import {instance} from "../../axios";
 // import {Message} from "../../data/messages";
 import {Chart} from "react-chartjs-2";
-import {SearchResponse, generateLabelsDailyCount, removeYrDate, dispLabelsDailyCount, getDailyCountData} from '../../components/feMiscFunctions';
+import {dispLabelsDailyCount, getDailyCountData} from '../../components/feMiscFunctions';
 import {data} from "autoprefixer";
+import { ChartData } from 'chart.js';
+import SearchBar from '../../components/SearchBar';
 
 const Home = () => {
 
@@ -42,15 +44,37 @@ const Home = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
+    const [width, setWidth] = useState(window.innerWidth);
+
     /**
      * Use Effects
      */
+    // for setting height of chart, depending on what width browser is
+    const chartHeight = useMemo(() => {
+        if(width > 1536) return 75;
+        if(width > 1280) return 90;
+        if(width > 1024) return 110;
+        if(width > 768) return 155;
+        if(width > 640) return 200;
+        return 230;
+    }, [width])
+
+    // resize window
+    useEffect(() => {
+        function resizeWidth() {
+            setWidth(window.innerWidth);
+        }
+        window.addEventListener('resize', resizeWidth);
+        return () => window.removeEventListener('resize', resizeWidth);
+    }, []);
+
     // useEffect(() => {
     //     fetchHomePageData();
     // }, []);
 
-
-
+    /**
+     * Functions
+     */
     // gets the user's nft's from their wallet
     // from https://github.com/NftEyez/sol-rayz
     // const getNfts = async (passedWalletAddress: string) => {
@@ -109,48 +133,51 @@ const Home = () => {
     /**
      * Renders
      */
+    const defaultGraph : ChartData<any, string> = {
+        labels: ["1"],
+        datasets: [ { data: ["3"] } ],
+    };
 
     // search vars
-    const [searchValueStacked, setSearchValueStacked] = useState('fellowship dronies'); // TODO
+    const [searchValueStacked, setSearchValueStacked] = useState('');
     const [errorSearchStacked, setErrorSearchStacked] = useState('');
-    const [graphStackedLoaded, setGraphStackedLoaded] = useState(false);
-    const [stackedLineData, setStackedLineData] = useState({
-        labels: ["1,2"],
-        datasets: [ { data: ["3", "4"] } ],
-    });
 
-    // does the search functionality
-    function handleSearchStacked(val: any) {
-        if (typeof (val) !== "undefined" && val !== '') {
-            doSearch();
-        }
-    }
+    const [graphStackedLoading, setGraphStackedLoading] = useState(false);
+    const [stackedLineData, setStackedLineData] = useState(defaultGraph);
 
-    // when typing into the search bar
-    const handleKeyDownStacked = (e: any) => {
-        if (e.key === 'Enter') {
-            setSearchValueStacked(e.target.value!);
-            handleSearchStacked(e.target.value);
-        }
-    }
 
-    // load search data from backend
-    const doSearch = async () => {
+    // load search data from backend, for stacked line graph
+    const doSearch = async (query : string) => {
         try {
-            setIsLoading(true);
-            const { data: rawFetchedData } = await instance.post(
-                "/getWordCount/",
+            setErrorSearchStacked("");
+            setSearchValueStacked(query);
+
+            if(query.length < 3){ return setErrorSearchStacked('Please search on 3 or more characters'); }
+            if(query.split(' ').length > 8){ return setErrorSearchStacked('Please search on 8 words max'); }
+
+            setGraphStackedLoading(true);
+            setStackedLineData(defaultGraph);
+
+            const { data: rawFetchedData } = await instance.post<
                 {
-                    array: searchValueStacked.split(' '),
+                    name: string;
+                    ten_day_count: {
+                        count: number;
+                        date: string;
+                    }[];
+                }[]
+            >(
+                '/getWordCount/',
+                {
+                    array: query.split(' '),
                 },
                 {
                     headers: {
-                        "Content-Type": "application/json",
+                        'Content-Type': 'application/json',
                     },
                 }
             );
 
-            // TODO: tell user 8 max
             const colorAry = ['rgb(255, 0, 0)',
                 'rgb(153, 255, 51)',
                 'rgb(0, 128, 255)',
@@ -160,41 +187,38 @@ const Home = () => {
                 'rgb(102, 51, 0)',
                 'rgb(255, 102, 102)'];
 
-            // TODO: height needs to grow as page shrinks
-
-            // console.log(rawFetchedData);
-
             let datasetsAry = [];
-            // const obj2Ary = Object.entries(rawFetchedData);
             for(let i in rawFetchedData){
                 datasetsAry.push({
                     type: 'line' as const,
                     label:  rawFetchedData[i].name,
-                    // @ts-ignore
+
                     borderColor: colorAry[i],
                     borderWidth: 2,
                     fill: false,
-                    // @ts-ignore
+
                     data: getDailyCountData(rawFetchedData[i]),
                 });
             }
 
-            const labels = dispLabelsDailyCount((rawFetchedData[0]));
-            console.log(labels);
-            console.log(getDailyCountData(rawFetchedData[0])); // TODO x2
+            const labels = dispLabelsDailyCount();
+
+            // console.log("labels");
+            // console.log(labels);
+            // console.log("first data");
+            // console.log(getDailyCountData(rawFetchedData[0]));
 
             setStackedLineData({
-                // @ts-ignore
                 labels: labels,
-                // @ts-ignore
                 datasets: datasetsAry,
             });
 
             // set various variables
-            setGraphStackedLoaded(true);
+            setGraphStackedLoading(false);
+            // setSearchValueStacked(''); // reset it
 
         } catch (e: any) {
-            console.error("try/catch in Search.tsx: ", e);
+            console.error("try/catch in Home.tsx.doSearch: ", e);
 
             if (e && e.response) {
                 setErrorSearchStacked(String(e.response.data.body));
@@ -202,91 +226,137 @@ const Home = () => {
                 setErrorSearchStacked('Unable to connect. Please try again later');
             }
 
-            // setIsLoading(false);
-            // setFoundResults(false);
+            setGraphStackedLoading(false);
         }
     }
 
     // @ts-ignore
     return (
+        <React.Fragment>
 
-        <IonPage className="bg-sky">
+            <IonPage> {/* className="bg-sky" */ }
 
-            <Header />
+                <IonContent  fullscreen> {/* ref={contentRef} scrollEvents={true} */}
 
-            <IonContent className="bg-gradient-to-b ">
+                    <Header />
 
-                <IonCard >
-                    <div className="pl-2 pt-1">
-                        <IonLabel className="text-xl text-blue-600">Compare different words on a graph</IonLabel>
+                    {/* Main Content After Header - The light gray Container */}
+                    <div className="bg-gradient-to-b from-bg-primary to-bg-secondary justify-center items-center p-4 pt-2 sticky">
+                        {/*flex*/}
 
-                        {/*TODO hard to search in there....*/}
-                        {/*TODO: need loading after click*/}
+                        <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-4`}>
+                            <p className="mb-3">The search above does an exact match on a single word ("catalina"), or does an exact match on multiple words ("catalina whale").
+                                Results include graphs, and messages you can scroll through.</p>
 
-                        {/* search bar */}
-                        <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2"
-                                      type="text"
-                                      value={searchValueStacked}
-                                      onKeyPress={handleKeyDownStacked}
-                                      onIonChange={e => setSearchValueStacked(e.detail.value!)}
-                                      animated placeholder="Type to search" disabled={isLoading}
-                                      style={{width: '450px'}}
-                                      // hidden={width < smallHeaderWidth && !showMobileSearch}
-                        />
-
-                        {/*TODO!!!: show a graph (nn/relic) from previous day ... with % return on top of it to show correlation*/}
-
-                        {/*TODO: too darn big */}
-                        {/* search button, to do the actual search*/}
-                        {/*<div className="text-2xl xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1 pb-1 pt-1 cursor-pointer"*/}
-                        {/*     onClick={() => handleSearchStacked(searchValueStacked)}>*/}
-                        {/*    <IonIcon slot="icon-only" icon={search} className=" " />*/}
-                        {/*</div>*/}
-
-                        <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg" hidden={!graphStackedLoaded}>
-                            <Chart type='line' data={stackedLineData} height="80"
-                                options={{
-                                    responsive: true,
-                                    maintainAspectRatio: true,
-                                    plugins: {
-                                        legend: {
-                                            display: true
-                                        },
-                                        title: { display: true, text: '# of messages per day (from several Discords)'},
-                                        // @ ts-expect-error
-                                        // scales: {
-                                        //     xAxes: [{
-                                        //         title: {
-                                        //             display: false,
-                                        //             text: 'Date'
-                                        //         },
-                                        //         ticks: {
-                                        //             color: 'white'
-                                        //         },
-                                        //     }],
-                                        //     yAxes: [{
-                                        //         title: {
-                                        //             display: true,
-                                        //             text: '# messages'
-                                        //         },
-                                        //         ticks: {
-                                        //             beginAtZero: true,
-                                        //             color: 'white'
-                                        //         },
-                                        //     }]
-                                        // }
-                                    }
-                                }} />
+                            <p>Below search will compare multiple single words against each other ("portals enviro suites").
+                                Each word will be graphed and you can compare the popularity of each word against each other.</p>
                         </div>
 
+                        {/* The bit darker Gray Container */}
+                        <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+                            {/*${width <= 640 ? 'w-full' : 'container'}*/}
+
+                            <div className={`font-bold pb-1 ${width <= 640 ? 'w-full' : 'w-96 '}`}>Compare multiple words on a graph</div>
+
+                            <div className={`max-w-2xl my-2`}>
+                                <SearchBar initialValue='' onSubmit={doSearch}/></div>
+
+                            // <div className="xs:flex items-center rounded-lg overflow-hidden">
+
+                            //     {/* search bar  xs-flex text-base text-gray-400 flex-grow outline-none px-2 */}
+                            //     <IonSearchbar className={`w-96`} // ${width <= 640 ? 'w-full' : 'w-full'}
+                            //                   type="text"
+                            //                   value={searchValueStacked}
+
+                            //                 onKeyPress={e => {
+                            //                     const val = (e.target as HTMLInputElement).value
+                            //                     if(val && e.key === "Enter") doSearch(val)
+                            //                 }}
+                            //                   onIonChange={e => setSearchValueStacked(e.detail.value!)}
+                            //                   animated placeholder="Type to search"
+                            //                   disabled={graphStackedLoading}
+                            //     />
+
+                            //     {/* search button, to do the actual search*/}
+                            //     <div className="w-10 text-2xl xs:flex px-2 rounded-lg space-x-4 bg-success-1 pb-1 pt-1 cursor-pointer"
+                            //          onClick={() => doSearch(searchValueStacked)}>
+                            //         <IonIcon slot="icon-only" icon={search} className=" " />
+                            //     </div>
+                            // </div>
+
+
+
+                            {/*--{width}--{chartHeight}--*/}
+
+                            {/*loading*/}
+                            {graphStackedLoading ? (
+                                <div className="pt-10 flex justify-center items-center">
+                                    <Loader />
+                                </div>
+
+                            // error
+                            ) : errorSearchStacked ? (
+                                <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
+                                    <p className="text-lg text-red-700 font-medium">
+                                        <b>{(errorSearchStacked as string) || 'Unable to connect'}</b>
+                                    </p>
+                                    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                                        !
+                                    </span>
+                                </div>
+
+                            // graph itself
+                            ) : (
+                                <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg" hidden={graphStackedLoading || stackedLineData.labels?.length === 1}>
+                                    <Chart type='line' data={stackedLineData} height={chartHeight}
+                                           options={{
+                                               responsive: true,
+                                               maintainAspectRatio: true,
+                                               plugins: {
+                                                   legend: {
+                                                       display: true,
+                                                       reverse: true
+                                                   },
+                                                   title: { display: true, text: '# of messages per day (from several Discords)'},
+                                               }
+                                           }} />
+                                </div>
+                            )}
+
+                        </div>
                     </div>
-                </IonCard>
+
+
+                    {/* Possible Mints ... */}
+                    <IonCard hidden={true}>
+                        <IonLabel className="text-4xl text-blue-600">Possible Mints</IonLabel>
+
+                        {/* loading bar */}
+                        {isLoading && (
+                            <div className="pt-10 flex justify-center items-center">
+                                <Loader/>
+                            </div>
+                        )}
+                        <div hidden={isLoading}>
+                            {homePageData.map((product: any, index: any) => (
+                                <>
+                                    <Card key={index} url={product.url} readableTimestamp={getDateAgo(product.timestamp)} source={product.source}/>
+                                </>
+                            ))}
+                        </div>
+                    </IonCard>
+
+                </IonContent>
 
 
 
-                {/* Possible Mints ... */}
-                <IonCard hidden={true}>
-                    <IonLabel className="text-4xl text-blue-600">Possible Mints</IonLabel>
+                {/* SHITTY FORMATTED CODE: */}
+
+                <div hidden={true}>
+                <IonContent>
+                    <IonRow>
+                        <IonLabel className="text-4xl text-blue-600">New Collection</IonLabel>
+                    </IonRow>
 
                     {/* loading bar */}
                     {isLoading && (
@@ -295,106 +365,78 @@ const Home = () => {
                         </div>
                     )}
                     <div hidden={isLoading}>
-                        {homePageData.map((product: any, index: any) => (
-                            <>
-                                <Card key={index} url={product.url} readableTimestamp={getDateAgo(product.timestamp)} source={product.source}/>
-                            </>
-                        ))}
+
+                        {/* New Collections */}
+                        <IonRow className="bg-lime-700">
+                            {newCollections.map((collection: any, index: any) => (
+                                <IonCol>
+                                    <CollectionCard key={index}
+                                                    name={collection.name}
+                                                    description={collection.description}
+                                                    image={collection.image}
+                                                    website={collection.website}
+                                                    twitter={collection.twitter}
+                                                    discord={collection.discord}
+                                                    categories={collection.categories}
+                                                    splitName={collection.splitName}
+                                                    link={collection.link}
+                                                    timestamp={collection.timestamp}
+                                                    readableTimestamp={collection.readableTimestamp}
+                                    />
+                                </IonCol>
+                            ))}
+                        </IonRow>
+
+                        {/* Popular Collections */}
+                        <IonRow>
+                            <IonLabel className="text-4xl text-blue-600">Popular Collection</IonLabel>
+                        </IonRow>
+
+                        <IonRow>
+                            {popularCollections.map((collection: any, index: any) => (
+                                <IonCol>
+                                    <CollectionCard key={index}
+                                                    name={collection.name}
+                                                    description={collection.description}
+                                                    image={collection.image}
+                                                    website={collection.website}
+                                                    twitter={collection.twitter}
+                                                    discord={collection.discord}
+                                                    categories={collection.categories}
+                                                    splitName={collection.splitName}
+                                                    link={collection.link}
+                                                    timestamp={collection.timestamp}
+                                                    readableTimestamp={collection.readableTimestamp}
+                                    />
+                                </IonCol>
+                            ))}
+                        </IonRow>
+
                     </div>
-                </IonCard>
-
-            </IonContent>
+                </IonContent>
 
 
 
-
-
-            {/* SHITTY FORMATTED CODE: */}
-
-            <div hidden={true}>
-            <IonContent>
-                <IonRow>
-                    <IonLabel className="text-4xl text-blue-600">New Collection</IonLabel>
-                </IonRow>
-
-                {/* loading bar */}
-                {isLoading && (
-                    <div className="pt-10 flex justify-center items-center">
-                        <Loader/>
-                    </div>
-                )}
-                <div hidden={isLoading}>
-
-                    {/* New Collections */}
-                    <IonRow className="bg-lime-700">
-                        {newCollections.map((collection: any, index: any) => (
-                            <IonCol>
-                                <CollectionCard key={index}
-                                                name={collection.name}
-                                                description={collection.description}
-                                                image={collection.image}
-                                                website={collection.website}
-                                                twitter={collection.twitter}
-                                                discord={collection.discord}
-                                                categories={collection.categories}
-                                                splitName={collection.splitName}
-                                                link={collection.link}
-                                                timestamp={collection.timestamp}
-                                                readableTimestamp={collection.readableTimestamp}
-                                />
-                            </IonCol>
-                        ))}
-                    </IonRow>
-
-                    {/* Popular Collections */}
-                    <IonRow>
-                        <IonLabel className="text-4xl text-blue-600">Popular Collection</IonLabel>
-                    </IonRow>
-
-                    <IonRow>
-                        {popularCollections.map((collection: any, index: any) => (
-                            <IonCol>
-                                <CollectionCard key={index}
-                                                name={collection.name}
-                                                description={collection.description}
-                                                image={collection.image}
-                                                website={collection.website}
-                                                twitter={collection.twitter}
-                                                discord={collection.discord}
-                                                categories={collection.categories}
-                                                splitName={collection.splitName}
-                                                link={collection.link}
-                                                timestamp={collection.timestamp}
-                                                readableTimestamp={collection.readableTimestamp}
-                                />
-                            </IonCol>
-                        ))}
-                    </IonRow>
+                {/* user's NFTs */}
+                {/*<h3>User NFTs:</h3>*/}
+                {/*<IonCard>*/}
+                {/*    <IonContent>*/}
+                {/*        <IonRow className="bg-lime-700" hidden={userNfts.length === 0}>*/}
+                {/*            {userNfts.map((collection: any, index: any) => (*/}
+                {/*                <IonCol>*/}
+                {/*                    {collection.name}*/}
+                {/*                    <br/>*/}
+                {/*                    <img style={{height: "100px"}} src={collection.img} alt="" />*/}
+                {/*                </IonCol>*/}
+                {/*            ))}*/}
+                {/*        </IonRow>*/}
+                {/*    </IonContent>*/}
+                {/*</IonCard>*/}
 
                 </div>
-            </IonContent>
 
-
-
-            {/* user's NFTs */}
-            {/*<h3>User NFTs:</h3>*/}
-            {/*<IonCard>*/}
-            {/*    <IonContent>*/}
-            {/*        <IonRow className="bg-lime-700" hidden={userNfts.length === 0}>*/}
-            {/*            {userNfts.map((collection: any, index: any) => (*/}
-            {/*                <IonCol>*/}
-            {/*                    {collection.name}*/}
-            {/*                    <br/>*/}
-            {/*                    <img style={{height: "100px"}} src={collection.img} alt="" />*/}
-            {/*                </IonCol>*/}
-            {/*            ))}*/}
-            {/*        </IonRow>*/}
-            {/*    </IonContent>*/}
-            {/*</IonCard>*/}
-
-            </div>
-
-        </IonPage>
+            </IonPage>
+        </React.Fragment>
     );
 }
 
