@@ -80,13 +80,13 @@ const Search: React.FC = () => {
                             fill: false,
                             data: datasetForChartDailyCount,
                         },
-                        {
-                            type: 'bar' as const,
-                            backgroundColor: 'rgb(75, 192, 192)',
-                            data: datasetForChartDailyCount,
-                            borderColor: 'white',
-                            borderWidth: 2,
-                        }
+                        // {
+                        //     type: 'bar' as const,
+                        //     backgroundColor: 'rgb(75, 192, 192)',
+                        //     data: datasetForChartDailyCount,
+                        //     borderColor: 'white',
+                        //     borderWidth: 2,
+                         // }
                     ],
                 }
                 const sourceToAry = data.source;
