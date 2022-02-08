@@ -25,7 +25,7 @@ import MessageThread from "./MessageThread";
 import {useParams} from "react-router";
 
 // NOTE: any changes made here must be made in both Chart.jsx & MobileChart.jsx!
- 
+
 
 ChartJS.register(...registerables);
 ChartJS.register(
@@ -122,6 +122,14 @@ const Display: React.FC<{
                                                     text: '# of messages per day (from several Discords)',
                                                 },
                                             },
+                                            // TODO: figure out
+                                            // scales: {
+                                            //     yAxes: [{
+                                            //         ticks: {
+                                            //             beginAtZero: true
+                                            //         }
+                                            //     }]
+                                            // },
                                             responsive: true,
                                             maintainAspectRatio: true,
                                         }}
@@ -156,7 +164,7 @@ const Display: React.FC<{
 
                 {/* list of messages */}
                 {messages.map((m, i) => (
-                    
+
                         m ? (
                             <MessageListItem
                                 onClick={() => {

@@ -38,4 +38,30 @@ function SearchBar({ initialValue, onSubmit }: SearchBarProps) {
     );
 }
 
+
 export default SearchBar;
+
+
+
+{/*// <div className="xs:flex items-center rounded-lg overflow-hidden">*/}
+{/*//     /!* search bar  xs-flex text-base text-gray-400 flex-grow outline-none px-2 *!/*/}
+{/*//     <IonSearchbar className={`w-96`} // ${width <= 640 ? 'w-full' : 'w-full'}*/}
+{/*//                   type="text"*/}
+{/*//                   value={searchValueStacked}*/}
+
+{/*//                 onKeyPress={e => {*/}
+{/*//                     const val = (e.target as HTMLInputElement).value*/}
+{/*//                     if(val && e.key === "Enter") doSearch(val)*/}
+{/*//                 }}*/}
+{/*//                   onIonChange={e => setSearchValueStacked(e.detail.value!)}*/}
+{/*//                   animated placeholder="Type to search"*/}
+{/*//                   disabled={graphStackedLoading}*/}
+{/*//     />*/}
+
+{/*//     /!* search button, to do the actual search*!/*/}
+{/*//     <div className="w-10 text-2xl xs:flex px-2 rounded-lg space-x-4 bg-success-1 pb-1 pt-1 cursor-pointer"*/}
+{/*//          onClick={() => doSearch(searchValueStacked)}>*/}
+{/*//         <IonIcon slot="icon-only" icon={search} className=" " />*/}
+{/*//     </div>*/}
+{/*// </div>*/}
+
