@@ -188,7 +188,6 @@ const Search: React.FC = () => {
                                         chartDataDailyCount : data?.chartDataDailyCount,
                                         chartDataPerSource : data?.chartDataPerSource,
                                         chartHeight,
-                                        width,
                                         messages : data?.messages ?? [],
                                         totalCount: data?.totalCount
                                     }}/>
