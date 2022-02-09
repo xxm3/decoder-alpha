@@ -57,12 +57,15 @@ const Display: React.FC<{
     /**
      * States & Variables
      */
-    const cookies = useMemo(() => new Cookies(), [])
+    const cookies = useMemo(() => new Cookies(), []);
     const [showChart, setShowChart] = useState(String(cookies.get('showChart')) === 'false' ? false : true);
-    const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
-    const {id: word} = useParams<{ id: string; }>()
+    const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+    const {id: word} = useParams<{ id: string; }>();
 
-    const definedMessages = messages.filter(Boolean)
+    // don't show the charts if there is a space in the word
+    const [completelyHideChart, setCompletelyHideChart] = useState(word.indexOf(" ") !== -1 ? true : false);
+
+    const definedMessages = messages.filter(Boolean);
 
     /**
      * Use Effects
@@ -81,7 +84,6 @@ const Display: React.FC<{
     return (
         <>
             <div className="p-3 overflow-y-scroll rounded-lg">
-                {/*--{width}--{chartHeight}--*/}
                 <div className="gap-4 mb-4 grid grid-cols-12">
 
                     {definedMessages.length > 0 && (
@@ -91,7 +93,7 @@ const Display: React.FC<{
                                 {constants().numDaysBackGraphs} days)
                             </p>
 
-                            <div className="flex items-center justify-center col-span-6">
+                            <div className="flex items-center justify-center col-span-6" hidden={completelyHideChart}>
                                 <p>Toggle Chart</p>
                                 <IonToggle
                                     color="dark"
@@ -101,11 +103,15 @@ const Display: React.FC<{
                             </div>
                         </>
                     )}
+
+                    {/*--{completelyHideChart}--*/}
+
                     {/* bar & line chart */}
                     {showChart &&
                         chartDataDailyCount &&
                         chartDataPerSource &&
-                        definedMessages.length > 0 && (
+                        definedMessages.length > 0 &&
+                        !completelyHideChart && (
                             <>
                                 <div className="chart">
                                     <Chart
