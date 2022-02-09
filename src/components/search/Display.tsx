@@ -122,7 +122,7 @@ const Display: React.FC<{
                                                     text: '# of messages per day (from several Discords)',
                                                 },
                                             },
-                                            // TODO: figure out
+                                            // TODO: figure out scale 0, portals
                                             // scales: {
                                             //     yAxes: [{
                                             //         ticks: {

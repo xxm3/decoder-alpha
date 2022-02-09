@@ -8,6 +8,7 @@ interface SearchBarProps {
 }
 
 function SearchBar({ initialValue, onSubmit }: SearchBarProps) {
+
     const handleKeyDown : KeyboardEventHandler<HTMLIonSearchbarElement> = (e) => {
 		const { target, key } = e as KeyboardEvent<HTMLIonSearchbarElement> & { target : HTMLInputElement}
         if (target && key === 'Enter') {

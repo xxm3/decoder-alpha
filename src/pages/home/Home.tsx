@@ -201,7 +201,9 @@ const Home = () => {
                 });
             }
 
-            const labels = dispLabelsDailyCount();
+            // console.log(rawFetchedData[0].ten_day_count);
+            // rawFetchedData[0].ten_day_count -> [{count: 5, date: '2022-xx-xx'}, {}
+            const labels = dispLabelsDailyCount(rawFetchedData[0].ten_day_count, true);
 
             // console.log("labels");
             // console.log(labels);
@@ -215,7 +217,6 @@ const Home = () => {
 
             // set various variables
             setGraphStackedLoading(false);
-            // setSearchValueStacked(''); // reset it
 
         } catch (e: any) {
             console.error("try/catch in Home.tsx.doSearch: ", e);

@@ -81,6 +81,8 @@ const HeaderContainer = () => {
 
     // does the search functionality
     function handleSearch(val: string) {
+        if(val.length === 0) return;
+
         const queryKey = ["messages", id];
         queryClient.resetQueries(queryKey);
         history.push(`/search/${val}`);
@@ -88,7 +90,7 @@ const HeaderContainer = () => {
         // setSearchValue(''); // reset it
     }
 
-   
+
     /**
      * Renders
      */
@@ -100,7 +102,7 @@ const HeaderContainer = () => {
                 <IonToolbar className="bg-card px-4 rounded-lg related">
                     <div className="justify-between space-x-8 flex items-center relative">
                         <IonRouterLink className="text-2xl" routerLink="/"
-                            hidden={showMobileSearch}    
+                            hidden={showMobileSearch}
                         >
                             SOL Decoder
                         </IonRouterLink>
