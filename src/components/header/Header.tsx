@@ -82,10 +82,9 @@ const HeaderContainer = () => {
     // does the search functionality
     function handleSearch(val: string) {
         if(val.length === 0) return;
-
         const queryKey = ["messages", id];
         queryClient.resetQueries(queryKey);
-        history.push(`/search/${val}`);
+        history.push(`/search/${encodeURIComponent(val)}`);
 
         // setSearchValue(''); // reset it
     }
@@ -110,7 +109,7 @@ const HeaderContainer = () => {
 					    <div className={`flex-grow flex items-center ${showMobileSearch ? "space-x-8" : "md:max-w-xl justify-end md:justify-start"}`}>
                             {showMobileSearch && <IonIcon slot="icon-only" icon={arrowBack} className="text-3xl cursor-pointer hover:opacity-80" onClick={() => setShowMobileSearch(false)}/>}
                             <div className={`flex-grow ${showMobileSearch ? "max-w-xl" : "hidden md:block"}`}>
-                                <SearchBar onSubmit={handleSearch} initialValue={id} placeholder='Search to see graphs, Discord messages, and tweets' />
+                                <SearchBar onSubmit={handleSearch} initialValue={decodeURIComponent(id ?? "")} placeholder='Search to see graphs, Discord messages, and tweets' />
                             </div>
                             {!showMobileSearch && <IonIcon slot="icon-only" icon={search} className="md:hidden cursor-pointer text-2xl hover:opacity-80" onClick={() => setShowMobileSearch(true)} />}
                         </div>
