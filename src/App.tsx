@@ -1,8 +1,6 @@
 
 import { IonApp, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import Search from "./pages/Search";
-import Login from "./pages/Login";
 import { useEffect, useState } from "react";
 import { auth } from "./firebase";
 import { IUser } from "./types/User";
@@ -33,6 +31,10 @@ import "./theme/variables.css";
 
 /* Pages */
 import Home from "./pages/home/Home";
+import Search from "./pages/Search";
+import Login from "./pages/Login";
+import Schedule from "./pages/schedule/Schedule";
+
 
 // // https://javascript.plainenglish.io/how-to-setup-and-add-google-analytics-to-your-react-app-fd361f47ac7b
 // const TRACKING_ID = "G-Z3GDFZ53DN";
@@ -44,7 +46,6 @@ import {
 	QueryClientProvider,
   } from 'react-query'
 import { ReactQueryDevtools } from "react-query/devtools"
-
 
 const queryClient = new QueryClient({
 	defaultOptions : { 
@@ -114,6 +115,7 @@ const App = () => {
 											exact={true}
 											component={Search}
 										/>
+										<Route exact path="/Schedule" component={Schedule} />
 										<Route exact path="/Login" component={Login} />
 									</Switch>
 								</IonRouterOutlet>
