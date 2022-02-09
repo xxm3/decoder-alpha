@@ -84,7 +84,6 @@ const HeaderContainer = () => {
         if(val.length === 0) return;
         const queryKey = ["messages", id];
         queryClient.resetQueries(queryKey);
-        console.log(val, encodeURIComponent(val));
         history.push(`/search/${encodeURIComponent(val)}`);
 
         // setSearchValue(''); // reset it
