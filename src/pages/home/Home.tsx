@@ -257,10 +257,10 @@ const Home = () => {
                         <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
                             {/*${width <= 640 ? 'w-full' : 'container'}*/}
 
-                            <div className={`font-bold pb-1 ${width <= 640 ? 'w-full' : 'w-96 '}`}>Compare multiple words on a graph</div>
+                            <div className={`font-bold pb-1 ${width <= 640 ? 'w-full' : 'w-96 '}`}>Compare multiple words on a line graph</div>
 
                             <div className={`max-w-2xl my-2`}>
-                                <SearchBar initialValue='' onSubmit={doSearch}/>
+                                <SearchBar initialValue='' onSubmit={doSearch} placeholder='Type to search' />
                             </div>
 
                             {/*--{width}--{chartHeight}--*/}
@@ -295,6 +295,9 @@ const Home = () => {
                                                        reverse: true
                                                    },
                                                    title: { display: true, text: '# of messages per day (from several Discords)'},
+                                               },
+                                               y: {
+                                                   suggestedMin: 0,
                                                }
                                            }} />
                                 </div>

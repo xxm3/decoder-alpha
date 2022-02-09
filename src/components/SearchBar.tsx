@@ -5,9 +5,10 @@ import { search } from 'ionicons/icons';
 interface SearchBarProps {
     initialValue?: string;
     onSubmit(query: string): unknown;
+    placeholder?: string
 }
 
-function SearchBar({ initialValue, onSubmit }: SearchBarProps) {
+function SearchBar({ initialValue, onSubmit, placeholder }: SearchBarProps) {
 
     const handleKeyDown : KeyboardEventHandler<HTMLIonSearchbarElement> = (e) => {
 		const { target, key } = e as KeyboardEvent<HTMLIonSearchbarElement> & { target : HTMLInputElement}
@@ -27,7 +28,7 @@ function SearchBar({ initialValue, onSubmit }: SearchBarProps) {
                     onKeyPress={handleKeyDown}
                     onIonChange={(e) => setSearchValue(e.detail.value!)}
                     animated
-                    placeholder="Type to search"
+                    placeholder={placeholder}
                 />
                 <div
                     className="text-2xl flex items-center bg-opacity-10 bg-gray-300 hover:bg-opacity-20 justify-center h-10 w-16 space-x-4 cursor-pointer"
