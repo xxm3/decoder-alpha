@@ -104,7 +104,8 @@ const Search: React.FC = () => {
                     chartDataDailyCount,
                     chartDataPerSource
                 }
-            }
+            },
+            retry : false
         }
     );
 
