@@ -89,7 +89,7 @@ const Display: React.FC<{
                     {definedMessages.length > 0 && (
                         <>
                             <p className="font-bold col-span-6 sm:text-center">
-                                Searched on "{word}" ({totalCount} results last{' '}
+                                Searched on "{decodeURIComponent(word)}" ({totalCount} results last{' '}
                                 {constants().numDaysBackGraphs} days)
                             </p>
 
