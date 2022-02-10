@@ -1,4 +1,3 @@
-import Loader from '../components/Loader';
 import React, { useMemo, useRef } from 'react';
 import Display from '../components/search/Display';
 import { useState, useEffect } from 'react';
@@ -11,13 +10,10 @@ import './Search.css';
 import { useParams } from 'react-router';
 import { instance } from '../axios';
 import { useQuery } from 'react-query';
-import { Message } from '../types/messages';
 import { AxiosResponse } from 'axios';
 import Header from '../components/header/Header';
 import {
     SearchResponse,
-    generateLabelsDailyCount,
-    removeYrDate,
     dispLabelsDailyCount,
     getDailyCountData
 } from '../components/feMiscFunctions';
@@ -33,7 +29,7 @@ const Search: React.FC = () => {
         id : string;
     }>();
 
-    const { data, isLoading, error, isError } = useQuery(
+    const { data, error, isError } = useQuery(
         ['messages', searchText],
         async () => {
             try {
@@ -52,12 +48,11 @@ const Search: React.FC = () => {
             } catch (e) {
                 console.error('try/catch in Search.tsx: ', e);
                 const error = e as Error & { response?: AxiosResponse };
+
                 if (error && error.response) {
                     throw new Error(String(error.response.data.body));
                 } else {
-                    throw new Error(
-                        'Unable to connect. Please try again later'
-                    );
+                    throw new Error('Unable to connect. Please try again later');
                 }
             }
         },
@@ -74,24 +69,22 @@ const Search: React.FC = () => {
                 const datasetForChartDailyCount = getDailyCountData(data);
 
                 const chartDataDailyCount = {
-                    labels: dispLabelsDailyCount(data),
+                    labels: dispLabelsDailyCount(),
                     datasets: [
                         {
                             type: 'line' as const,
-                            // label: 'Line Chart',
                             borderColor: 'rgb(255, 99, 132)',
                             borderWidth: 2,
                             fill: false,
                             data: datasetForChartDailyCount,
                         },
-                        {
-                            type: 'bar' as const,
-                            // label: 'Bar Graph',
-                            backgroundColor: 'rgb(75, 192, 192)',
-                            data: datasetForChartDailyCount,
-                            borderColor: 'white',
-                            borderWidth: 2,
-                        }
+                        // {
+                        //     type: 'bar' as const,
+                        //     backgroundColor: 'rgb(75, 192, 192)',
+                        //     data: datasetForChartDailyCount,
+                        //     borderColor: 'white',
+                        //     borderWidth: 2,
+                         // }
                     ],
                 }
                 const sourceToAry = data.source;
@@ -106,7 +99,6 @@ const Search: React.FC = () => {
                     datasets: [
                         {
                             type: 'bar' as const,
-                            // label: 'Bar Graph',
                             backgroundColor: 'rgb(75, 192, 192)',
                             data: dataPerSource,
                             borderColor: 'white',
@@ -123,6 +115,10 @@ const Search: React.FC = () => {
         }
     );
 
+    /**
+     * Use Effects
+     */
+    // for setting height of chart, depending on what width browser is
     const chartHeight = useMemo(() => {
         if(width > 1536) return 75;
         if(width > 1280) return 90;
@@ -132,9 +128,6 @@ const Search: React.FC = () => {
         return 140;
     }, [width])
 
-    /**
-     * Use Effects
-     */
     // resize window
     useEffect(() => {
         function resizeWidth() {
@@ -146,6 +139,10 @@ const Search: React.FC = () => {
 
     // for scrolling to top
     const contentRef = useRef<HTMLIonContentElement | null>(null);
+
+    /**
+     * Functions
+     */
     const scrollToTop = () => {
         contentRef.current && contentRef.current.scrollToTop();
     };
@@ -156,47 +153,41 @@ const Search: React.FC = () => {
 
     return (
         <React.Fragment>
-            <IonPage id="home-page">
+
+            <IonPage>
+
                 <IonContent ref={contentRef} scrollEvents={true} fullscreen>
-                    {/* Header */}
+
                     <Header />
+
                     {/* Main Content After Header */}
                     <div className="bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2 sticky">
                         {/*min-h-screen*/}
 
-                        {/* The Gray Container */}
-                        <div
-                            className={` ${
-                                width <= 640 ? 'w-full' : 'container'
-                            } bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}
-                        >
+                        {/* The bit darker Gray Container */}
+                        <div className={` ${width <= 640 ? 'w-full' : 'container'}
+                            bg-satin-3 rounded-lg pt-3 pb-6 md:px-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+
                             {/* loading bar */}
-                            {isLoading ? (
-                                <div>
-                                    <h1 className="flex justify-center items-center font-bold text-xl">Searching for "{searchText}"</h1>
-                                    <br/>
-                                    <div className="pt-10 flex justify-center items-center">
-                                        <Loader />
-                                    </div>
-                                </div>
-                            ) : isError ? (
+                            {isError ? (
                                 <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                                     <p className="text-lg text-red-700 font-medium">
-                                        <b>{(error as string) || 'Unable to connect'}</b>
+                                        <b>{(error as Error).message || 'Unable to connect'}</b>
                                     </p>
                                     <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                                         !
                                     </span>
-                                    {/*<div className="absolute top-0 right-0 flex space-x-2 p-4"></div>*/}
                                 </div>
+
+                            // actual content
                             ) : (
                                 <>
                                     <Display {...{
                                         chartDataDailyCount : data?.chartDataDailyCount,
                                         chartDataPerSource : data?.chartDataPerSource,
                                         chartHeight,
-                                        width,
-                                        messages : data?.messages ?? []
+                                        messages : data?.messages ?? [],
+                                        totalCount: data?.totalCount
                                     }}/>
                                     {(data?.totalCount ?? 0) > 5 && (
                                         <IonButton

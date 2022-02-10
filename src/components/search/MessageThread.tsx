@@ -5,6 +5,7 @@ import MessageListItem from './MessageListItem';
 import { QueryFunctionContext, useInfiniteQuery } from 'react-query';
 import { instance } from '../../axios';
 import { AxiosResponse } from 'axios';
+import ReactTooltip from "react-tooltip";
 
 interface MessageThreadProps {
     message: Message;
@@ -40,19 +41,21 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                 '/getPriorAndSubMessages',
                 pageParam
             );
-            data.priorMsg = data.priorMsg.map(message => ({ 
-                ...message,
-                // @ts-expect-error
-                time : message.createdAt
-            }))
-            data.subsequentMsg = data.subsequentMsg.map(message => ({ 
+            // data.priorMsg = data.priorMsg.map(message => ({
+            //     ...message,
+            //     // @ts-expect-error
+            //     time : message.createdAt
+            // }))
+            data.subsequentMsg = data.subsequentMsg.map(message => ({
                 ...message,
                 // @ts-expect-error
                 time : message.createdAt
             }))
             if (pageParam === defaultPageParam)
-                return [...data.priorMsg, message, ...data.subsequentMsg];
-            return [...data.priorMsg, ...data.subsequentMsg];
+                // return [...data.priorMsg, message, ...data.subsequentMsg];
+                return [message, ...data.subsequentMsg];
+            // return [...data.priorMsg, ...data.subsequentMsg];
+            return [...data.subsequentMsg];
         } catch (e) {
             console.error('try/catch in MessageThread.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
@@ -123,7 +126,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                 ref={containerRef}
                 className="p-5 overflow-y-scroll space-y-5 h-full w-full !bg-bg-tertiary"
             >
-              
+
                     {data.pages
                         .map((page) =>
                             page.map((message, i) =>
@@ -144,6 +147,9 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                         )
                         .flat(1)}
             </div>
+
+            <ReactTooltip />
+
         </IonModal>
     );
 };
