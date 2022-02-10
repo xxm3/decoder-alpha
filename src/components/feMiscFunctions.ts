@@ -1,9 +1,9 @@
 import {Message} from "../types/messages";
+import moment from "moment";
 
-// repeated on constants.js & feMiscFunctions.js
-// const numDaysBackGraphs = 10;
 export function constants(){
     return {
+        // repeated on constants.js & feMiscFunctions.js
         numDaysBackGraphs: 5
     }
 }
@@ -19,87 +19,36 @@ export interface SearchResponse {
     source : [string,number][]
 }
 
-export function getUTCTime(): Date {
-    return new Date(new Date().toUTCString());
-}
-// don't care for years
-export function removeYrDate(passedDate: Date){
-    let d = passedDate.toDateString().split(' ').slice(1).join(' ');
-    return d.replace("2022", "");
-}
+// pass in data from backend (which is properly formatted), and return back labels for the charts
+export function dispLabelsDailyCount(indivRawFetchedData: any, convertMmmDd: boolean){
+    let labels: any = [];
 
-// generates label code for our charts (mostly / only with the months0
-export function generateLabelsDailyCount(){
-    let date = getUTCTime();
+    for(let obj in indivRawFetchedData){
+        let date = indivRawFetchedData[obj].date;
 
-    let dates = [];
-    let labels = [];
-    labels.push(date.toISOString().split('T')[0]);
-    dates.push(date);
-    for (let i = 0; i < constants().numDaysBackGraphs - 1; i++) {
-        let nextDay: Date = new Date(dates[i]);
-        nextDay.setDate(dates[i].getDate() - 1);
-        dates.push(nextDay);
-        labels.push(nextDay.toISOString().split('T')[0]);
+        // only certain functions that call this, need it in this format
+        if(convertMmmDd){
+            date = moment(date).format("MMM D");
+        }
+
+        labels.push(date);
     }
 
-    // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
-    // BAND AID FIX
-    // if(fetchedData.ten_day_count.length === 9){
-    //     // console.log('minimizing labels');
-    //     labels.splice(9, 1);
-    // }
-
-    labels = labels.reverse();
-
-    // labels.splice(9, 1);
-
-    return labels;
+    return labels.reverse();
 }
-export function dispLabelsDailyCount(){
-    let date = getUTCTime();
-
-    let dates = [];
-    let labels = [];
-    labels.push(removeYrDate(date));
-    dates.push(date);
-    for (let i = 0; i < constants().numDaysBackGraphs - 1; i++) {
-        let nextDay: Date = new Date(dates[i]);
-        nextDay.setDate(dates[i].getDate() - 1);
-        dates.push(nextDay);
-        labels.push(removeYrDate(nextDay));
-    }
-
-    // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
-    // BAND AID FIX
-    // if(fetchedData.ten_day_count.length === 9){
-    //     // console.log('minimizing labels');
-    //     labels.splice(9, 1);
-    // }
-
-    labels = labels.reverse();
-    return labels;
-}
-
 
 // put backend data into JSON for chart
 export function getDailyCountData(fetchedData: Pick<SearchResponse, "ten_day_count"> & { [key: string] : any}){
-
     // daily count of message per day
     let datasetForChartDailyCount = Array.from({ length: constants().numDaysBackGraphs }, () => 0);
     for (let i = 0; i < fetchedData.ten_day_count.length; i++) {
-        let labels = [];
-        labels = generateLabelsDailyCount();
-        let idx = labels.findIndex((val) => val === fetchedData.ten_day_count[i].date);
+
+        // rawFetchedData.ten_day_count -> [{count: 5, date: '2022-xx-xx'}, {}
+        let labels = dispLabelsDailyCount(fetchedData.ten_day_count, false);
+
+        let idx = labels.findIndex((val: any) => val === fetchedData.ten_day_count[i].date);
         datasetForChartDailyCount[idx] = fetchedData.ten_day_count[i].count; // + 1
     }
-
-    // at night-time it is the next day in UTC, so all data today shows as 0. This comment repeated in 3 places, where we fix this
-    // BAND AID FIX
-    // if(fetchedData.ten_day_count.length === 9) {
-    //     // console.log('minimizing data');
-    //     datasetForChartDailyCount.splice(9, 1);
-    // }
 
     return datasetForChartDailyCount;
 }
