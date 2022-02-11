@@ -118,6 +118,7 @@ const Schedule = () => {
         },
       ];
 
+  // Renders
   return (
     <IonPage>
         <IonContent  fullscreen>
