@@ -146,6 +146,8 @@ const Home = () => {
             setErrorSearchStacked("");
             setSearchValueStacked(query);
 
+            if(query.length === 0) { setStackedLineData(defaultGraph); return; }
+
             if(query.length < 3){ return setErrorSearchStacked('Please search on 3 or more characters'); }
             if(query.split(' ').length > 8){ return setErrorSearchStacked('Please search on 8 words max'); }
 
@@ -277,7 +279,6 @@ const Home = () => {
                             // graph itself
                             ) : (
 
-                                // TODO: need to be able to reset the graph...
                                 <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg" hidden={graphStackedLoading || stackedLineData.labels?.length === 1}>
                                     <Chart type='line' data={stackedLineData} height={chartHeight}
                                            options={{
