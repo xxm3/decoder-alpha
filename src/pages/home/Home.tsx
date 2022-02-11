@@ -1,16 +1,5 @@
-import {
-    IonButton,
-    IonContent,
-    IonHeader,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-    IonRouterLink,
-    IonSearchbar
-} from '@ionic/react';
-import { IonItem, IonLabel, IonCard, IonCardContent, IonIcon, IonRow, IonCol } from '@ionic/react';
+import { IonLabel, IonCard, IonRow, IonCol, IonContent, IonPage } from '@ionic/react';
 import React, {useEffect, useMemo, useState} from 'react';
-import axios from 'axios';
 import './Home.css';
 import Header from '../../components/header/Header';
 import Card from './Card';
@@ -18,19 +7,17 @@ import CollectionCard from './CollectionCard';
 import Loader from "../../components/Loader";
 import {environment} from "../../environments/environment";
 import moment from "moment";
-import {pin, search} from 'ionicons/icons';
 import {
     resolveToWalletAddress,
     getParsedNftAccountsByOwner
 } from "@nfteyez/sol-rayz";
 import {Connection, programs} from '@metaplex/js';
 import {instance} from "../../axios";
-// import {Message} from "../../data/messages";
 import {Chart} from "react-chartjs-2";
 import {dispLabelsDailyCount, getDailyCountData} from '../../components/feMiscFunctions';
-import {data} from "autoprefixer";
 import { ChartData } from 'chart.js';
 import SearchBar from '../../components/SearchBar';
+import NftPriceTable from "../../components/NftPriceTable";
 
 const Home = () => {
 
@@ -132,6 +119,11 @@ const Home = () => {
 
     /**
      * Renders
+     */
+
+
+    /**
+     * (Putting stacked graph stuff below...)
      */
     const defaultGraph : ChartData<any, string> = {
         labels: ["1"],
@@ -243,7 +235,6 @@ const Home = () => {
 
                     {/* Main Content After Header - The light gray Container */}
                     <div className="bg-gradient-to-b from-bg-primary to-bg-secondary justify-center items-center p-4 pt-2 sticky">
-                        {/*flex*/}
 
                         <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-4`}>
                             <p className="mb-3">The search above does an exact match on a single word ("catalina"), or does an exact match on multiple words ("catalina whale").
@@ -253,9 +244,8 @@ const Home = () => {
                                 Each word will be graphed and you can compare the popularity of each word against each other.</p>
                         </div>
 
-                        {/* The bit darker Gray Container */}
+                        {/* Stacked line Search stuff - The bit darker Gray Container */}
                         <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
-                            {/*${width <= 640 ? 'w-full' : 'container'}*/}
 
                             <div className={`font-bold pb-1 ${width <= 640 ? 'w-full' : 'w-96 '}`}>Compare multiple words on a line graph</div>
 
@@ -302,9 +292,19 @@ const Home = () => {
                                            }} />
                                 </div>
                             )}
-
                         </div>
+                        <br/>
+
+                        {/* Mint Alerts Automated - Statistics */}
+                        <NftPriceTable foo='' onSubmit={doSearch} />
+
                     </div>
+
+
+
+                    {/*// TODO: aar could have spreadsheet of all mint-automated -- OR FRONTEND UI*/}
+
+
 
 
                     {/* Possible Mints ... */}
@@ -330,8 +330,10 @@ const Home = () => {
 
 
 
-                {/* SHITTY FORMATTED CODE: */}
 
+
+
+                {/* SHITTY FORMATTED CODE: */}
                 <div hidden={true}>
                 <IonContent>
                     <IonRow>
@@ -418,6 +420,6 @@ const Home = () => {
             </IonPage>
         </React.Fragment>
     );
-}
+};
 
 export default Home;

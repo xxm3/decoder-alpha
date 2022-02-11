@@ -63,7 +63,9 @@ const Display: React.FC<{
     const {id: word} = useParams<{ id: string; }>();
 
     // don't show the charts if there is a space in the word
-    const [completelyHideChart, setCompletelyHideChart] = useState(word.indexOf(" ") !== -1 ? true : false);
+    // TODO: parth help
+    // const completelyHideChart = useMemo(() => word.indexOf(" ") !== -1 ? true : false, []);
+    const completelyHideChart = false;
 
     const definedMessages = messages.filter(Boolean);
 
