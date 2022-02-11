@@ -89,6 +89,9 @@ const HeaderContainer = () => {
         // setSearchValue(''); // reset it
     }
 
+    function todaysMintsLink(){
+        history.push(`/schedule`);
+    }
 
     /**
      * Renders
@@ -113,18 +116,27 @@ const HeaderContainer = () => {
                             </div>
                             {!showMobileSearch && <IonIcon slot="icon-only" icon={search} className="md:hidden cursor-pointer text-2xl hover:opacity-80" onClick={() => setShowMobileSearch(true)} />}
                         </div>
-                        {!showMobileSearch && (!isWalletConnected  ? (
-                                <>
-                                    <IonButton color="success" className="text-sm" onClick={() => connectWallet(null)}>
-                                        Connect Wallet
-                                    </IonButton>
-                                </>
-                            )
-                           : (
-                                <>
-                                    <span className="" >{smallerWallet}</span>
-                                </>
-                            ))}
+
+                        <div className="float-right">
+                            {/*TODO-parth: how can make onclick work?it brings me to schedule page then back */}
+                            {/*<a href="" onClick={() => todaysMintsLink()}>Today's Mints</a>*/}
+                            <a href="/schedule" className="pr-7 underline">Today's Mints</a>
+
+                            {!showMobileSearch && (!isWalletConnected  ? (
+                                    <>
+                                        <IonButton color="success" className="text-sm" onClick={() => connectWallet(null)}>
+                                            Connect Wallet
+                                        </IonButton>
+                                    </>
+                                )
+                                : (
+                                    <>
+                                        <span className="" >{smallerWallet}</span>
+                                    </>
+                                ))}
+                        </div>
+
+
                         {/* <span style={{width: '75px'}}> </span>
 
                         <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 ">
