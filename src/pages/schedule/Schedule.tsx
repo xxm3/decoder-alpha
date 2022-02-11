@@ -4,9 +4,10 @@ import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
 import {Table} from 'antd'
 import { ColumnsType } from 'antd/es/table';
-import { IonContent, IonModal} from '@ionic/react';
+import {IonContent, IonModal, IonPage} from '@ionic/react';
 
 import './Schedule.css'
+import Header from "../../components/header/Header";
 
 const Schedule = () => {
     /**
@@ -67,7 +68,7 @@ const Schedule = () => {
           key: 'project',
           render: record => (
             <span
-              className='cursor-pointer' 
+              className='cursor-pointer'
               onClick={() => handleProjectClick(record)}
             >
               {record.project}
@@ -89,7 +90,7 @@ const Schedule = () => {
                 <a href={record.twitterLink}>Twitter</a>
               </>
           ),
-          width: 150 
+          width: 150
         },
         {
           title: 'Count',
@@ -118,39 +119,50 @@ const Schedule = () => {
       ];
 
   return (
-    <div>
-        {
-            isLoading
-            ?   <div className="pt-10 flex justify-center items-center">
-                    <Loader />
-                </div>
-            : <div className="max-w-fit mx-auto mb-10">
-                <h1 className='text-center'>{date}</h1>
-                <br />
-                <Table 
-                    className='w-full mx-auto'
-                    rowKey='project'
-                    dataSource={dataSource} 
-                    columns={columns} 
-                    bordered
-                    scroll={{y: 500}}
-                    pagination={false}
-                />
-                <IonModal isOpen={isOpen}>
-                  <IonContent>
-                    {
-                      splitCollectionName.length
-                      && splitCollectionName?.map(name => (
-                          <div key={name} className='text-center'>
-                            <span style={{color: 'white'}}>{name}</span> <br />
-                          </div>
-                      ))
-                    }
-                  </IonContent>
-                </IonModal>
-              </div>   
-        }
-    </div>
+    <IonPage>
+        <IonContent  fullscreen>
+
+            <Header />
+
+            <div className="bg-gradient-to-b from-bg-primary to-bg-secondary justify-center items-center p-4 pt-2 sticky">
+
+                <div className={`font-bold pb-1`}>Today's Mints - {date}</div>
+
+                {
+                    isLoading
+                    ?   <div className="pt-10 flex justify-center items-center">
+                            <Loader />
+                        </div>
+                    : <div className="max-w-fit mx-auto mb-10">
+                        <br />
+                        <Table
+                            className='w-full mx-auto'
+                            rowKey='project'
+                            dataSource={dataSource}
+                            columns={columns}
+                            bordered
+                            scroll={{y: 500}}
+                            pagination={false}
+                        />
+                        <IonModal isOpen={isOpen}>
+                          <IonContent>
+                            {
+                              splitCollectionName.length
+                              && splitCollectionName?.map(name => (
+                                  <div key={name} className='text-center'>
+                                    <span style={{color: 'white'}}>{name}</span> <br />
+                                  </div>
+                              ))
+                            }
+                          </IonContent>
+                        </IonModal>
+                      </div>
+                }
+
+            </div>
+        </IonContent>
+
+    </IonPage>
   )
 }
 

@@ -72,6 +72,9 @@ const HeaderContainer = () => {
         // setSearchValue(''); // reset it
     }
 
+    function todaysMintsLink(){
+        history.push(`/schedule`);
+    }
 
     /**
      * Renders
@@ -131,7 +134,13 @@ const HeaderContainer = () => {
                                 />
                             )}
                         </div>
-                        <div className="hidden md:block">
+
+                        <div className="hidden md:block float-right">
+
+                            {/*TODO-parth: how can make onclick work?it brings me to schedule page then back */}
+                            {/*<a href="" onClick={() => todaysMintsLink()}>Today's Mints</a>*/}
+                            <a href="/schedule" className="pr-7 underline">Today's Mints</a>
+
                             {!showMobileSearch &&
                                 (!walletAddress ? (
                                       <WalletButton />
@@ -143,6 +152,7 @@ const HeaderContainer = () => {
                                     </>
                                 ))}
                         </div>
+
                         {/* <span style={{width: '75px'}}> </span>
 
                         <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 ">
