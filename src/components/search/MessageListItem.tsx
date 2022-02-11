@@ -31,7 +31,8 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
         const msgArr = useMemo(() => {
             if (!message)
                 return [
-                    'LOADING LOADING LOADING LOADING LOADING LOADING  LOADING LOADING LOADING LOADING LOADING LOADING',
+                    // 'LOADING LOADING LOADING LOADING LOADING LOADING  LOADING LOADING LOADING LOADING LOADING LOADING',
+                    'LOADING'
                 ];
             const indexesArr = [
                 ...message
@@ -54,6 +55,20 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
         }, [message, word]);
 
         const loading = useMemo(() => !message, [message]);
+
+
+        // convert links to images and links
+        function httpHtml(content: string) {
+            const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g;
+
+            // TODO no work class
+            if(content.indexOf('.png') !== -1){
+                return content.replace(reg, "<img src='$1$2' style={'max-height': '20px !important;' } />");
+            }else{
+                return content.replace(reg, "<a href='$1$2' class='underline' target='_blank'>$1$2</a>");
+            }
+        }
+
         return (
             <div
                 className={`relative w-full items-start ${
@@ -94,7 +109,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                             loading ? 'mb-5' : 'mb-1'
                         }`}
                     >
-                        <p>{loading ? 'LOADING LOADING' : `(${source} ${source !== "Twitter" ? "- Discord" : ""}) ${author}`}</p>
+                        <p>{loading ? 'LOADING' : `(${source} ${source !== "Twitter" ? "- Discord" : ""}) ${author}`}</p>
                         {!loading && (
                             <div className="text-xs text-gray-400" data-tip={new Date(time as string).toLocaleString()}>
                                 {getDateAgo(time)}
@@ -108,7 +123,10 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                             return w.toLowerCase() === word.toLowerCase() ? (
                                 <b className="text-cb" key={w+i}>{w}</b>
                             ) : (
-                                w
+                                // w + "????"
+                                <span dangerouslySetInnerHTML={{
+                                    __html: httpHtml(w)
+                                }} />
                             );
                         })}
                     </p>

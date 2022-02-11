@@ -38,7 +38,7 @@ const Schedule = () => {
     const fetchMintsData = () => {
       setIsLoading(true)
       instance
-          .get(environment.backendApi + '/getTodaysMints?doScrape=true')
+          .get(environment.backendApi + '/getTodaysMints')
           .then((res) => {
             console.log(res.data.data.mints)
             setMints(res.data.data.mints)
