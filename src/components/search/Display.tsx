@@ -4,7 +4,7 @@ import MessageListItem from "./MessageListItem";
 import React from "react";
 import {Chart} from 'react-chartjs-2';
 import Cookies from 'universal-cookie';
-import {constants} from "../feMiscFunctions";
+import {constants} from "../../util/constants";
 import './Display.css';
 import {
     Chart as ChartJS,
@@ -20,7 +20,7 @@ import {
     defaults,
     ChartData,
 } from 'chart.js';
-import {Message} from "../../types/messages";
+import {Message} from "../../types/Message";
 import MessageThread from "./MessageThread";
 import {useParams} from "react-router";
 

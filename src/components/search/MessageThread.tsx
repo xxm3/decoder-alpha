@@ -1,6 +1,6 @@
 import { IonModal } from '@ionic/react';
 import React, { useRef } from 'react';
-import { Message } from '../../types/messages';
+import { Message } from '../../types/Message';
 import MessageListItem from './MessageListItem';
 import { QueryFunctionContext, useInfiniteQuery } from 'react-query';
 import { instance } from '../../axios';

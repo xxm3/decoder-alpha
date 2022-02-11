@@ -1,18 +1,21 @@
 import {
-    IonButton,
     IonHeader,
     IonRouterLink,
     IonIcon,
     IonToolbar,
-    useIonAlert,
+    IonMenuButton,
 } from "@ionic/react";
 import {useEffect, useMemo, useState} from "react";
 import {useHistory, useParams} from 'react-router';
 import {
-    arrowBack, search
+    arrowBack, search,
 } from 'ionicons/icons';
 import { queryClient } from "../../queryClient";
 import SearchBar from "../SearchBar";
+import useConnectWallet from "../../hooks/useConnectWallet";
+import { useSelector } from 'react-redux'
+import { RootState } from "../../redux/store";
+import WalletButton from "../WalletButton";
 
 
 const HeaderContainer = () => {
@@ -22,12 +25,12 @@ const HeaderContainer = () => {
      */
     const { id } = useParams<{ id ?: string;}>()
     let history = useHistory();
-    const [walletAddress, setWalletAddress] = useState<string | null>(null);
-    const [isWalletConnected, setIsWalletConnected] = useState(false);
     const [showMobileSearch, setShowMobileSearch] = useState(false);
 
     const smallHeaderWitdh = 768; // what size browser needs to be, before header goes small mode
-    const [present] =   useIonAlert(); // ion alert
+
+    const connectWallet = useConnectWallet()
+    const walletAddress = useSelector((state : RootState) => state.wallet.walletAddress)
 
     const smallerWallet = useMemo(() =>
         walletAddress ? walletAddress.substring(0, 4) + '...' + walletAddress.substring(walletAddress.length - 4)
@@ -54,30 +57,10 @@ const HeaderContainer = () => {
         window.addEventListener("resize", resizeWidth);
         onLoad();
         return () => {
-            window.removeEventListener('load', onLoad)
             window.removeEventListener("resize", resizeWidth)
         };
-    }, []);
+    }, [connectWallet]);
 
-    // connect to your SOL wallet - called when clicking "connect Wallet". And called onLoad
-    const connectWallet = async (obj: any) => {
-        // @ts-ignore
-        const { solana } = window;
-        if (solana) {
-            if (solana.isPhantom) {
-                const response = await solana.connect(obj);
-                console.log('onload - Connected with Public Key:', response.publicKey.toString());
-
-                // Set the user's publicKey in state to be used later!
-                setWalletAddress(response.publicKey.toString());
-                setIsWalletConnected(true);
-            }else{
-                await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
-            }
-        } else {
-            await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
-        }
-    };
 
     // does the search functionality
     function handleSearch(val: string) {
@@ -97,35 +80,70 @@ const HeaderContainer = () => {
 
     return (
         <>
-
             <IonHeader className="p-4">
                 <IonToolbar className="bg-card px-4 rounded-lg related">
                     <div className="justify-between space-x-8 flex items-center relative">
-                        <IonRouterLink className="text-2xl" routerLink="/"
-                            hidden={showMobileSearch}
-                        >
-                            SOL Decoder
-                        </IonRouterLink>
-
-					    <div className={`flex-grow flex items-center ${showMobileSearch ? "space-x-8" : "md:max-w-xl justify-end md:justify-start"}`}>
-                            {showMobileSearch && <IonIcon slot="icon-only" icon={arrowBack} className="text-3xl cursor-pointer hover:opacity-80" onClick={() => setShowMobileSearch(false)}/>}
-                            <div className={`flex-grow ${showMobileSearch ? "max-w-xl" : "hidden md:block"}`}>
-                                <SearchBar onSubmit={handleSearch} initialValue={decodeURIComponent(id ?? "")} placeholder='Search to see graphs, Discord messages, and tweets' />
+                        {!showMobileSearch && (
+                            <div className="flex items-center space-x-5">
+                                <IonMenuButton color="white" menu="sidebar" className="md:hidden" />
+                                <IonRouterLink
+                                    className="text-2xl"
+                                    routerLink="/"
+                                >
+                                    SOL Decoder
+                                </IonRouterLink>
                             </div>
-                            {!showMobileSearch && <IonIcon slot="icon-only" icon={search} className="md:hidden cursor-pointer text-2xl hover:opacity-80" onClick={() => setShowMobileSearch(true)} />}
+                        )}
+
+                        <div
+                            className={`flex-grow flex items-center ${
+                                showMobileSearch
+                                    ? 'space-x-8'
+                                    : 'md:max-w-xl justify-end md:justify-start'
+                            }`}
+                        >
+                            {showMobileSearch && (
+                                <IonIcon
+                                    slot="icon-only"
+                                    icon={arrowBack}
+                                    className="text-3xl cursor-pointer hover:opacity-80"
+                                    onClick={() => setShowMobileSearch(false)}
+                                />
+                            )}
+                            <div
+                                className={`flex-grow ${
+                                    showMobileSearch
+                                        ? 'max-w-xl'
+                                        : 'hidden md:block'
+                                }`}
+                            >
+                                <SearchBar
+                                    onSubmit={handleSearch}
+                                    initialValue={decodeURIComponent(id ?? '')}
+                                    placeholder="Search to see graphs, Discord messages, and tweets"
+                                />
+                            </div>
+                            {!showMobileSearch && (
+                                <IonIcon
+                                    slot="icon-only"
+                                    icon={search}
+                                    className="md:hidden cursor-pointer text-2xl hover:opacity-80"
+                                    onClick={() => setShowMobileSearch(true)}
+                                />
+                            )}
                         </div>
-                        {!showMobileSearch && (!isWalletConnected  ? (
-                                <>
-                                    <IonButton color="success" className="text-sm" onClick={() => connectWallet(null)}>
-                                        Connect Wallet
-                                    </IonButton>
-                                </>
-                            )
-                           : (
-                                <>
-                                    <span className="" >{smallerWallet}</span>
-                                </>
-                            ))}
+                        <div className="hidden md:block">
+                            {!showMobileSearch &&
+                                (!walletAddress ? (
+                                      <WalletButton />
+                                ) : (
+                                    <>
+                                        <span className="">
+                                            {smallerWallet}
+                                        </span>
+                                    </>
+                                ))}
+                        </div>
                         {/* <span style={{width: '75px'}}> </span>
 
                         <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 ">

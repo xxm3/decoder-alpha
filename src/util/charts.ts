@@ -1,26 +1,10 @@
-import {Message} from "../types/messages";
 import moment from "moment";
+import { SearchResponse } from "../types/SearchResponse";
+import { constants } from "./constants";
 
-export function constants(){
-    return {
-        // repeated on constants.js & feMiscFunctions.js
-        numDaysBackGraphs: 5
-    }
-}
-
-export interface SearchResponse {
-    messages: (Message | undefined)[];
-    totalCount: number;
-    word: string;
-    ten_day_count: {
-        count: number;
-        date: string;
-    }[];
-    source : [string,number][]
-}
 
 // pass in data from backend (which is properly formatted), and return back labels for the charts
-export function dispLabelsDailyCount(indivRawFetchedData: any, convertMmmDd: boolean){
+export function dispLabelsDailyCount(indivRawFetchedData: SearchResponse["ten_day_count"], convertMmmDd: boolean){
     let labels: any = [];
 
     for(let obj in indivRawFetchedData){
@@ -52,5 +36,3 @@ export function getDailyCountData(fetchedData: Pick<SearchResponse, "ten_day_cou
 
     return datasetForChartDailyCount;
 }
-
-

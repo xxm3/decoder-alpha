@@ -1,9 +1,9 @@
 
-import { IonApp, IonRouterOutlet } from "@ionic/react";
+import { IonApp, IonCol, IonContent, IonGrid, IonMenu, IonRouterOutlet, IonRow } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { auth } from "./firebase";
 import { IUser } from "./types/User";
 import { Route, Switch } from "react-router";
@@ -12,6 +12,7 @@ import Loader from "./components/Loader";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UserContext from "./context/UserContext";
 import { instance } from "./axios";
+import { useSelector } from 'react-redux'
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -44,6 +45,8 @@ import {
   } from 'react-query'
 import { ReactQueryDevtools } from "react-query/devtools"
 import { queryClient } from "./queryClient";
+import WalletButton from "./components/WalletButton";
+import { RootState } from "./redux/store";
 
 
 
@@ -73,18 +76,33 @@ const App = () => {
 		})
 	}, []);
 
+    const walletAddress = useSelector((state : RootState) => state.wallet.walletAddress)
+
+    const smallerWallet = useMemo(() =>
+        walletAddress ? walletAddress.substring(0, 4) + '...' + walletAddress.substring(walletAddress.length - 4)
+            : '', [walletAddress])
+
 	return (
-		<IonApp>
-			<QueryClientProvider client={queryClient}>
-				<UserContext.Provider value={user}>
-					{user !== undefined ? (
-						<>
-							<IonReactRouter>
-								<IonRouterOutlet>
-									<Switch>
-										
-		
-										{/* <ProtectedRoute
+        <IonApp>
+            <QueryClientProvider client={queryClient}>
+                <UserContext.Provider value={user}>
+                    {user !== undefined ? (
+                        <>
+                            <IonMenu menuId="sidebar" contentId="router">
+                                <IonContent>
+                                    <IonGrid className="ion-padding">
+                                        <IonRow>
+                                                <IonCol size="12">
+                                                   {!walletAddress ? <WalletButton /> : <div className="bg-green-600 p-3 text-center">Connected as {smallerWallet}</div>}
+                                                </IonCol>
+                                        </IonRow>
+                                    </IonGrid>
+                                </IonContent>
+                            </IonMenu>
+                            <IonReactRouter>
+                                <IonRouterOutlet id="router">
+                                    <Switch>
+                                        {/* <ProtectedRoute
 											path="/"
 											exact={true}
 											render={() => (
@@ -95,33 +113,37 @@ const App = () => {
 												</IonButton>
 											)}
 										/> */}
-										<ProtectedRoute
-											path="/"
-											// component={HomePage}
-		                                    component={Home}
-											exact
-										/>
-		
-										<ProtectedRoute
-											path="/search/:id"
-											exact={true}
-											component={Search}
-										/>
-										<Route exact path="/Login" component={Login} />
-									</Switch>
-								</IonRouterOutlet>
-							</IonReactRouter>
-						</>
-					) : (
-						<div className="mx-auto my-auto h-48 w-48">
-							<Loader />
-						</div>
-					)}
-					<ReactQueryDevtools initialIsOpen />
-				</UserContext.Provider>
-			</QueryClientProvider>
-		</IonApp>
-	);
+                                        <ProtectedRoute
+                                            path="/"
+                                            // component={HomePage}
+                                            component={Home}
+                                            exact
+                                        />
+
+                                        <ProtectedRoute
+                                            path="/search/:id"
+                                            exact={true}
+                                            component={Search}
+                                        />
+                                        <Route
+                                            exact
+                                            path="/Login"
+                                            component={Login}
+                                        />
+                                    </Switch>
+                                </IonRouterOutlet>
+                            </IonReactRouter>
+                        </>
+                    ) : (
+                        <div className="mx-auto my-auto h-48 w-48">
+                            <Loader />
+                        </div>
+                    )}
+                    <ReactQueryDevtools initialIsOpen />
+                </UserContext.Provider>
+            </QueryClientProvider>
+        </IonApp>
+    );
 };
 
 // const App = () => (

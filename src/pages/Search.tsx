@@ -12,11 +12,9 @@ import { instance } from '../axios';
 import { useQuery } from 'react-query';
 import { AxiosResponse } from 'axios';
 import Header from '../components/header/Header';
-import {
-    SearchResponse,
-    dispLabelsDailyCount,
-    getDailyCountData
-} from '../components/feMiscFunctions';
+import { SearchResponse } from '../types/SearchResponse';
+import { dispLabelsDailyCount, getDailyCountData } from '../util/charts';
+
 
 const Search: React.FC = () => {
 
