@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Message } from '../../types/messages';
+import { Message } from '../../types/Message';
 import moment from 'moment';
 import { useParams } from 'react-router';
 import './MessageListItem.css';

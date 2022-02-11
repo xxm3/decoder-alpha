@@ -12,11 +12,9 @@ import { instance } from '../axios';
 import { useQuery } from 'react-query';
 import { AxiosResponse } from 'axios';
 import Header from '../components/header/Header';
-import {
-    SearchResponse,
-    dispLabelsDailyCount,
-    getDailyCountData
-} from '../components/feMiscFunctions';
+import { SearchResponse } from '../types/SearchResponse';
+import { dispLabelsDailyCount, getDailyCountData } from '../util/charts';
+
 
 const Search: React.FC = () => {
 
@@ -69,7 +67,7 @@ const Search: React.FC = () => {
                 const datasetForChartDailyCount = getDailyCountData(data);
 
                 const chartDataDailyCount = {
-                    labels: dispLabelsDailyCount(),
+                    labels: dispLabelsDailyCount(data.ten_day_count, true),
                     datasets: [
                         {
                             type: 'line' as const,
@@ -77,14 +75,7 @@ const Search: React.FC = () => {
                             borderWidth: 2,
                             fill: false,
                             data: datasetForChartDailyCount,
-                        },
-                        // {
-                        //     type: 'bar' as const,
-                        //     backgroundColor: 'rgb(75, 192, 192)',
-                        //     data: datasetForChartDailyCount,
-                        //     borderColor: 'white',
-                        //     borderWidth: 2,
-                         // }
+                        }
                     ],
                 }
                 const sourceToAry = data.source;
@@ -111,7 +102,8 @@ const Search: React.FC = () => {
                     chartDataDailyCount,
                     chartDataPerSource
                 }
-            }
+            },
+            retry : false
         }
     );
 
@@ -126,7 +118,7 @@ const Search: React.FC = () => {
         if(width > 768) return 155;
         if(width > 640) return 200;
         return 140;
-    }, [width])
+    }, [width]);
 
     // resize window
     useEffect(() => {
