@@ -14,7 +14,9 @@ import {
 import {Connection, programs} from '@metaplex/js';
 import {instance} from "../../axios";
 import {Chart} from "react-chartjs-2";
-import {dispLabelsDailyCount, getDailyCountData} from '../../components/feMiscFunctions';
+// import {dispLabelsDailyCount, getDailyCountData} from '../../components/feMiscFunctions';
+import {dispLabelsDailyCount, getDailyCountData} from '../../util/charts';
+import {data} from "autoprefixer";
 import { ChartData } from 'chart.js';
 import SearchBar from '../../components/SearchBar';
 import NftPriceTable from "../../components/NftPriceTable";
