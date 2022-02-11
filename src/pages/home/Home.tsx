@@ -240,21 +240,15 @@ const Home = () => {
                     {/* Main Content After Header - The light gray Container */}
                     <div className="bg-gradient-to-b from-bg-primary to-bg-secondary justify-center items-center p-4 pt-2 sticky">
 
-                        <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-4`}>
-                            <p className="mb-3">The search above does an exact match on a single word ("catalina"), or does an exact match on multiple words ("catalina whale").
-                                Results include graphs, and messages you can scroll through.</p>
-
-                            <p>Below search will compare multiple single words against each other ("portals enviro suites").
-                                Each word will be graphed and you can compare the popularity of each word against each other.</p>
-                        </div>
-
                         {/* Stacked line Search stuff - The bit darker Gray Container */}
-                        <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+                        <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-2`}>
 
                             <div className={`font-bold pb-1 ${width <= 640 ? 'w-full' : 'w-96 '}`}>Compare multiple words on a line graph</div>
 
                             <div className={`max-w-2xl my-2`}>
-                                <SearchBar initialValue='' onSubmit={doSearch} placeholder='Type to search' />
+                                <SearchBar initialValue='' onSubmit={doSearch} placeholder='Type to search'
+                                       helpMsg='Compares multiple single words against each other (ex. "portals enviro suites").
+                                Each word will be graphed and you can compare the popularity of each word against each other' />
                             </div>
 
                             {/*--{width}--{chartHeight}--*/}
@@ -298,11 +292,9 @@ const Home = () => {
                                 </div>
                             )}
                         </div>
-                        <br/>
 
                         {/* Mint Alerts Automated - Statistics */}
-                        {/*TODO*/}
-                        {/*<NftPriceTable foo='' onSubmit={doSearch} />*/}
+                        <NftPriceTable foo='' onSubmit={doSearch} />
 
                     </div>
 

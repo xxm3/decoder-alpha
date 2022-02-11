@@ -29,8 +29,8 @@ const HeaderContainer = () => {
 
     const smallHeaderWidth = 768; // what size browser needs to be, before header goes small mode
 
-    const connectWallet = useConnectWallet()
-    const walletAddress = useSelector((state : RootState) => state.wallet.walletAddress)
+    const connectWallet = useConnectWallet();
+    const walletAddress = useSelector((state : RootState) => state.wallet.walletAddress);
 
     const smallerWallet = useMemo(() =>
         walletAddress ? walletAddress.substring(0, 4) + '...' + walletAddress.substring(walletAddress.length - 4)
@@ -140,6 +140,8 @@ const HeaderContainer = () => {
                                     onSubmit={handleSearch}
                                     initialValue={decodeURIComponent(id ?? '')}
                                     placeholder={headerPlaceholder}
+                                    helpMsg='Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale").
+                                            Results include graphs, and messages you can scroll through'
                                 />
                             </div>
                             {!showMobileSearch && (

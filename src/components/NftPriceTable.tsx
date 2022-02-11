@@ -1,12 +1,7 @@
 import {
-    IonIcon,
-    IonSearchbar,
-    IonInput,
     IonButton,
     IonList,
-    IonRadioGroup,
-    IonListHeader,
-    IonLabel, IonItemDivider, IonItem, IonRadio
+    IonLabel, IonItem, IonCheckbox
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState} from 'react';
 import { search } from 'ionicons/icons';
@@ -120,77 +115,52 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
             </div>
             <br/>
 
-            <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+            <div hidden={true}
+                className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
                 <div className={`font-bold pb-3 w-full text-lg`}>Mint Alerts Automated - Custom Alerts</div>
 
                 <div>
-
                     <label className={`font-bold pb-1 w-full`} htmlFor="">Get an alert when the below meta gets alerted in #mint-alerts-automated</label>
 
                     <IonList>
-                        <IonRadioGroup value='...' > {/*onIonChange={e => setSelected(e.detail.value)}*/}
+                        <IonItem>
+                            <IonLabel>Staking/Token/Low Supply</IonLabel>
+                            <IonCheckbox slot="start" value="biff" />
+                        </IonItem>
 
-                            {/*<IonListHeader>*/}
-                            {/*    <IonLabel>Name</IonLabel>*/}
-                            {/*</IonListHeader>*/}
+                        <IonItem>
+                            <IonLabel>Metaverse</IonLabel>
+                            <IonCheckbox slot="start" value="griff" />
+                        </IonItem>
 
-                            {/*TODO: chekcbox*/}
-                            <IonItem>
-                                <IonLabel>Staking/Token/Low Supply</IonLabel>
-                                <IonRadio slot="start" value="biff" />
-                            </IonItem>
+                        <IonItem>
+                            <IonLabel>Casino</IonLabel>
+                            <IonCheckbox slot="start" value="buford" />
+                        </IonItem>
 
-                            <IonItem>
-                                <IonLabel>Metaverse</IonLabel>
-                                <IonRadio slot="start" value="griff" />
-                            </IonItem>
+                        <IonItem>
+                            <IonLabel>P2E</IonLabel>
+                            <IonCheckbox slot="start" value="buford" />
+                        </IonItem>
 
-                            <IonItem>
-                                <IonLabel>Casino</IonLabel>
-                                <IonRadio slot="start" value="buford" />
-                            </IonItem>
+                        <IonItem>
+                            <IonLabel>Bot / Sniper</IonLabel>
+                            <IonCheckbox slot="start" value="buford" />
+                        </IonItem>
 
-                            <IonItem>
-                                <IonLabel>P2E</IonLabel>
-                                <IonRadio slot="start" value="buford" />
-                            </IonItem>
-
-                            <IonItem>
-                                <IonLabel>Bot / Sniper</IonLabel>
-                                <IonRadio slot="start" value="buford" />
-                            </IonItem>
-
-                            <IonItem>
-                                <IonLabel>Asian / Hong Kong devs</IonLabel>
-                                <IonRadio slot="start" value="buford" />
-                            </IonItem>
-                        </IonRadioGroup>
-                        {/*<IonItemDivider>Your Selection</IonItemDivider>*/}
-                        {/*<IonItem>{selected ?? '(none selected'}</IonItem>*/}
+                        <IonItem>
+                            <IonLabel>Asian / Hong Kong devs</IonLabel>
+                            <IonCheckbox slot="start" value="buford" />
+                        </IonItem>
                     </IonList>
 
                     <IonButton color="success" className="text-sm" >
                         Submit
                     </IonButton>
                     <br/><br/>
-
-                    <label className={`font-bold pb-1 w-full`} htmlFor="">Get an alert when the below URL or CMv2 ID goes live</label>
-                    <IonInput value='' placeholder='Type a URL of a mint, or a CMv2 ID' style={{"border": "1px solid", "width": "400px"}}></IonInput>
-                    <IonButton color="success" className="text-sm" >
-                        Submit
-                    </IonButton>
                     <br/><br/>
-
-                    <label className={`font-bold pb-1 w-full`} htmlFor="">Get an alert when the below URL or CMv2 ID mints a certain amount</label>
-                    <IonInput value='' placeholder='Type a URL of a mint, or a CMv2 ID' style={{"border": "1px solid", "width": "400px"}}></IonInput>
-                    <IonInput value='' placeholder='Type the # that should be minted before alerting' style={{"border": "1px solid", "width": "400px"}}></IonInput>
-                    <IonButton color="success" className="text-sm" >
-                        Submit
-                    </IonButton>
-
-                    <br/><br/><br/><br/>
-
                 </div>
+
             </div>
 
         </>
