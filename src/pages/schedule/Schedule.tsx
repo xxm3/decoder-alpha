@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
+import { instance } from '../../axios';
+import { environment } from '../../environments/environment';
+import Loader from '../../components/Loader';
 import {Table} from 'antd'
 import { ColumnsType } from 'antd/es/table';
-import Loader from '../../components/Loader';
+import { IonContent, IonModal} from '@ionic/react';
+
+import './Schedule.css'
 
 const Schedule = () => {
-
+    /**
+     * States & Variables
+     */
     const [mints, setMints] = useState([])
     const [date, setDate] = useState('')
+    const [splitCollectionName, setSplitCollectionName] = useState([])
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [isOpen, setIsOpen] = useState(false)
     interface Mint {
         image: string,
         project: string,
@@ -18,61 +27,90 @@ const Schedule = () => {
         tillTheMint: string,
         count: string,
         price: string,
-        extras: string
+        extras: string,
+        "10DaySearchResults": any
     }
 
     const dataSource = mints
 
+    // Get today's mints
+    const fetchMintsData = () => {
+      setIsLoading(true)
+      instance
+          .get(environment.backendApi + '/getTodaysMints?doScrape=true')
+          .then((res) => {
+            console.log(res.data.data.mints)
+            setMints(res.data.data.mints)
+            setDate(res.data.data.date)
+            setIsLoading(false)
+          })
+          .catch((err) => {
+            setIsLoading(false)
+            console.error("error when getting mints: " + err)
+          })
+    }
+
     useEffect(() => {
-        const fetchMintsData = async () => {
-            const data = await axios.get('http://localhost:8080/getTodaysMints')
-            setMints(data.data.data.mints)
-            setDate(data.data.data.date)
-        }
         fetchMintsData()
     }, [])
 
+    const handleProjectClick = (project: any) => {
+      setIsOpen(!isOpen)
+      setIsLoading(true)
+      setSplitCollectionName(project["10DaySearchResults"])
+      setIsLoading(false)
+    }
+
     const columns: ColumnsType<Mint> = [
         {
-          title: 'PROJECT',
-          dataIndex: 'project',
+          title: 'Project',
           key: 'project',
+          render: record => (
+            <span
+              className='cursor-pointer' 
+              onClick={() => handleProjectClick(record)}
+            >
+              {record.project}
+            </span>
+          )
         },
         {
-          title: 'LINKS',
+          title: 'Time',
+          dataIndex: 'time',
+          key: 'time',
+          width: 150
+        },
+        {
+          title: 'Links',
           key: 'links',
           render: record => (
               <>
                 <a href={record.discordLink}>Discord</a> <br />
                 <a href={record.twitterLink}>Twitter</a>
               </>
-          )
+          ),
+          width: 150 
         },
         {
-          title: 'TIME',
-          dataIndex: 'time',
-          key: 'time',
+          title: 'Count',
+          dataIndex: 'count',
+          key: 'count',
           width: 150
         },
         {
-          title: 'TILL THE MINT',
+          title: 'Price',
+          dataIndex: 'price',
+          key: 'price',
+          width: 150
+        },
+        {
+          title: 'Till the Mint',
           dataIndex: 'tillTheMint',
           key: 'tillTheMint',
           width: 100
         },
         {
-          title: 'COUNT',
-          dataIndex: 'count',
-          key: 'count',
-        },
-        {
-          title: 'PRICE',
-          dataIndex: 'price',
-          key: 'price',
-          width: 100
-        },
-        {
-          title: 'EXTRAS',
+          title: 'Description',
           dataIndex: 'extras',
           key: 'extras',
           width: 300
@@ -82,23 +120,34 @@ const Schedule = () => {
   return (
     <div>
         {
-            !dataSource.length
+            isLoading
             ?   <div className="pt-10 flex justify-center items-center">
                     <Loader />
                 </div>
-            : <div className="max-w-fit mx-auto">
+            : <div className="max-w-fit mx-auto mb-10">
                 <h1 className='text-center'>{date}</h1>
                 <br />
                 <Table 
-                    className=''
-                    key={'project'}
+                    className='w-full mx-auto'
+                    rowKey='project'
                     dataSource={dataSource} 
                     columns={columns} 
                     bordered
-                    scroll={{y: 1000}}
+                    scroll={{y: 500}}
                     pagination={false}
-                    style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
                 />
+                <IonModal isOpen={isOpen}>
+                  <IonContent>
+                    {
+                      splitCollectionName.length
+                      && splitCollectionName?.map(name => (
+                          <div key={name} className='text-center'>
+                            <span style={{color: 'white'}}>{name}</span> <br />
+                          </div>
+                      ))
+                    }
+                  </IonContent>
+                </IonModal>
               </div>   
         }
     </div>

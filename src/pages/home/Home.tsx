@@ -276,6 +276,8 @@ const Home = () => {
 
                             // graph itself
                             ) : (
+
+                                // TODO: need to be able to reset the graph...
                                 <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg" hidden={graphStackedLoading || stackedLineData.labels?.length === 1}>
                                     <Chart type='line' data={stackedLineData} height={chartHeight}
                                            options={{
@@ -298,15 +300,10 @@ const Home = () => {
                         <br/>
 
                         {/* Mint Alerts Automated - Statistics */}
-                        <NftPriceTable foo='' onSubmit={doSearch} />
+                        {/*TODO*/}
+                        {/*<NftPriceTable foo='' onSubmit={doSearch} />*/}
 
                     </div>
-
-
-
-                    {/*// TODO: aar could have spreadsheet of all mint-automated -- OR FRONTEND UI*/}
-
-
 
 
                     {/* Possible Mints ... */}

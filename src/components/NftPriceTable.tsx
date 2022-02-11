@@ -46,6 +46,8 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
      * - store in RDS
      * - figure out how to track price in first place ... maybe can pull from some site...
      * - stop tracking after 7 days or something (otherwise spamming ME etc...)
+     *
+     * - orrr perhaps that can be automated in the discord as well. like each alert automatically gets emojis added to the bottom that you vote on, one represents staking
      */
 
     /**
