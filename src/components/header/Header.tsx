@@ -27,7 +27,7 @@ const HeaderContainer = () => {
     let history = useHistory();
     const [showMobileSearch, setShowMobileSearch] = useState(false);
 
-    const smallHeaderWitdh = 768; // what size browser needs to be, before header goes small mode
+    const smallHeaderWidth = 768; // what size browser needs to be, before header goes small mode
 
     const connectWallet = useConnectWallet()
     const walletAddress = useSelector((state : RootState) => state.wallet.walletAddress)
@@ -49,7 +49,7 @@ const HeaderContainer = () => {
 
         // resize window stuff
         function resizeWidth() {
-            if(window.innerHeight > smallHeaderWitdh){
+            if(window.innerHeight > smallHeaderWidth){
                 setShowMobileSearch(false)
             }
         }
@@ -68,8 +68,6 @@ const HeaderContainer = () => {
         const queryKey = ["messages", id];
         queryClient.resetQueries(queryKey);
         history.push(`/search/${encodeURIComponent(val)}`);
-
-        // setSearchValue(''); // reset it
     }
 
     function todaysMintsLink(){
@@ -82,6 +80,7 @@ const HeaderContainer = () => {
 
     return (
         <>
+
             <IonHeader className="p-4">
                 <IonToolbar className="bg-card px-4 rounded-lg related">
                     <div className="justify-between space-x-8 flex items-center relative">
@@ -119,10 +118,11 @@ const HeaderContainer = () => {
                                         : 'hidden md:block'
                                 }`}
                             >
+                                {/*TODO: need smaller placeholder ('type to search') when screen small */}
                                 <SearchBar
                                     onSubmit={handleSearch}
                                     initialValue={decodeURIComponent(id ?? '')}
-                                    placeholder="Search to see graphs, Discord messages, and tweets"
+                                    placeholder="Search for graphs, Discord messages, and tweets"
                                 />
                             </div>
                             {!showMobileSearch && (
@@ -135,92 +135,24 @@ const HeaderContainer = () => {
                             )}
                         </div>
 
-                        <div className="hidden md:block float-right">
+                        <div className="hidden md:block float-right" hidden={showMobileSearch}>
+                            {/* below repeated on Header.tsx and App.tsx */}
 
-                            {/*TODO-parth: how can make onclick work?it brings me to schedule page then back */}
+                            {/*TODO-parth: how can make onclick work? it brings me to schedule page then back */}
                             {/*<a href="" onClick={() => todaysMintsLink()}>Today's Mints</a>*/}
                             <a href="/schedule" className="pr-7 underline">Today's Mints</a>
 
-                            {!showMobileSearch &&
-                                (!walletAddress ? (
-                                      <WalletButton />
-                                ) : (
-                                    <>
-                                        <span className="">
-                                            {smallerWallet}
-                                        </span>
-                                    </>
-                                ))}
+                            {!walletAddress ? (
+                                  <WalletButton />
+                            ) : (
+                                <>
+                                    <span className="">
+                                        {smallerWallet}
+                                    </span>
+                                </>
+                            )}
                         </div>
 
-                        {/* <span style={{width: '75px'}}> </span>
-
-                        <div className="xs:flex items-center rounded-lg overflow-hidden px-2 py-1 ">
-
-                            <IonSearchbar className="xs-flex text-base text-gray-400 flex-grow outline-none px-2"
-                                            type="text"
-                                            value={searchValue}
-                                            onKeyPress={handleKeyDown}
-                                            onIonChange={e => setSearchValue(e.detail.value!)}
-                                            animated placeholder="Type to search" disabled={isLoading}
-                                            style={{width: '450px'}}
-                                            hidden={width < smallHeaderWitdh && !showMobileSearch} />
-
-                            {width >= smallHeaderWitdh && (
-                                // xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44
-                                <div className="text-2xl xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1 pb-1 pt-1 cursor-pointer"
-                                        onClick={() => handleSearch(searchValue)}>
-                                    <IonIcon slot="icon-only" icon={search} className=" " />
-                                </div>
-                            )}
-
-
-                            {width < smallHeaderWitdh && (
-                            <div className="">
-                                <div className="text-2xl xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1 pb-1 pt-1 cursor-pointer"
-                                    // xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44
-                                    onClick={() => handleSearch(searchValue)} hidden={!showMobileSearch}>
-                                    <IonIcon slot="icon-only" icon={search} className=" " />
-                                </div>
-
-                                <div className="text-2xl xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1 pb-1 pt-1 cursor-pointer
-                                    absolute inset-y-0 right-0 mr-20 mt-4 "
-                                    // xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44
-                                        onClick={mobileSearchClicked} hidden={showMobileSearch}>
-                                    <IonIcon slot="icon-only" icon={search} className=" " />
-                                </div>
-
-                                <div className="absolute inset-y-0 right-0 mr-8 mt-4 "
-                                    // xs:flex p-1 rounded-lg space-x-4 mx-auto bg-success-1 absolute inset-y-0 right-0 my-4 mr-44
-                                    onClick={mobileSearchClicked}>
-                                    <IonIcon slot="icon-only" icon={closeOutline}
-                                            className="text-2xl xs:flex px-2 rounded-lg space-x-4 mx-auto bg-success-1 ml-2 pb-1 pt-1 cursor-pointer" hidden={!showMobileSearch} />
-                                </div>
-                            </div>
-                            )}
-
-                            {!isWalletConnected && width >= smallHeaderWitdh && (
-                                <>
-                                    <IonButton color="success" className="absolute inset-y-0 right-0 mr-8 mt-4 cursor-pointer" onClick={() => connectWallet(null)}>
-                                        Connect Wallet
-                                    </IonButton>
-                                </>
-                            )}
-                            {isWalletConnected && width >= smallHeaderWitdh && (
-                                <>
-                                    <span className="absolute inset-y-0 right-0 mr-8 mt-4" >{smallerWallet}</span>
-                                </>
-                            )}
-
-                            {width < smallHeaderWitdh && (
-                                <div className="text-2xl xs:flex items-center px-2 rounded-lg space-x-4 mx-auto bg-success-1 ml-2 pb-1 pt-1 cursor-pointer
-                                            absolute inset-y-0 right-0 mr-8 mt-4 "
-                                    hidden={showMobileSearch}>
-                                    <IonIcon slot="icon-only" icon={menuOutline} className="rounded-b-3xl"  />
-                                </div>
-                            )}
-
-                        </div> */}
                     </div>
                 </IonToolbar>
             </IonHeader>

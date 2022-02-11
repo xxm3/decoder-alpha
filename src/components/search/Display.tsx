@@ -63,7 +63,7 @@ const Display: React.FC<{
     const {id: word} = useParams<{ id: string; }>();
 
     // don't show the charts if there is a space in the word
-    // TODO: parth help
+    // TODO: parth help: how to make this work with useMemo?
     // const completelyHideChart = useMemo(() => word.indexOf(" ") !== -1 ? true : false, []);
     const completelyHideChart = false;
 

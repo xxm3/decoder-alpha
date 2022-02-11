@@ -96,9 +96,18 @@ const App = () => {
                                 <IonContent>
                                     <IonGrid className="ion-padding">
                                         <IonRow>
-                                                <IonCol size="12">
-                                                   {!walletAddress ? <WalletButton /> : <div className="bg-green-600 p-3 text-center">Connected as {smallerWallet}</div>}
-                                                </IonCol>
+                                            <IonCol size="12">
+                                                {/* below repeated on Header.tsx and App.tsx */}
+
+                                               {!walletAddress ? <WalletButton /> : <div className="bg-green-600 p-3 text-center">Connected as {smallerWallet}</div>}
+                                                <br/>
+
+                                                {/*TODO-parth: how can make onclick work? it brings me to schedule page then back */}
+                                                {/*<a href="" onClick={() => todaysMintsLink()}>Today's Mints</a>*/}
+                                                <a href="/schedule" className="pr-7 underline">Today's Mints</a>
+
+
+                                            </IonCol>
                                         </IonRow>
                                     </IonGrid>
                                 </IonContent>
@@ -117,7 +126,6 @@ const App = () => {
 												</IonButton>
 											)}
 										/> */}
-
 
 										<ProtectedRoute
 											path="/"
