@@ -34,7 +34,9 @@ const HeaderContainer = () => {
 
     const smallerWallet = useMemo(() =>
         walletAddress ? walletAddress.substring(0, 4) + '...' + walletAddress.substring(walletAddress.length - 4)
-            : '', [walletAddress])
+            : '', [walletAddress]);
+
+    const [headerPlaceholder, setHeaderPlaceholder] = useState('');
 
     // onload useEffect
     useEffect(() => {
@@ -49,13 +51,25 @@ const HeaderContainer = () => {
 
         // resize window stuff
         function resizeWidth() {
-            if(window.innerHeight > smallHeaderWidth){
-                setShowMobileSearch(false)
+            if(window.innerWidth > smallHeaderWidth){
+                setShowMobileSearch(false);
+            }
+            smallPlaceholder();
+        }
+        // set the placeholder of the header search bar
+        function smallPlaceholder(){
+            if(window.innerWidth > 1050){
+                setHeaderPlaceholder("Search on Discord messages/tweets & view graphs");
+            }else{
+                setHeaderPlaceholder("Type to search");
             }
         }
 
         window.addEventListener("resize", resizeWidth);
+
         onLoad();
+        resizeWidth();
+
         return () => {
             window.removeEventListener("resize", resizeWidth)
         };
@@ -84,9 +98,13 @@ const HeaderContainer = () => {
             <IonHeader className="p-4">
                 <IonToolbar className="bg-card px-4 rounded-lg related">
                     <div className="justify-between space-x-8 flex items-center relative">
+
                         {!showMobileSearch && (
                             <div className="flex items-center space-x-5">
+                                {/*hamburger sidebar*/}
                                 <IonMenuButton color="white" menu="sidebar" className="md:hidden" />
+
+                                {/*site logo & home*/}
                                 <IonRouterLink
                                     className="text-2xl"
                                     routerLink="/"
@@ -118,11 +136,10 @@ const HeaderContainer = () => {
                                         : 'hidden md:block'
                                 }`}
                             >
-                                {/*TODO: need smaller placeholder ('type to search') when screen small */}
                                 <SearchBar
                                     onSubmit={handleSearch}
                                     initialValue={decodeURIComponent(id ?? '')}
-                                    placeholder="Search for graphs, Discord messages, and tweets"
+                                    placeholder={headerPlaceholder}
                                 />
                             </div>
                             {!showMobileSearch && (
