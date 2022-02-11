@@ -61,9 +61,16 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
         function httpHtml(content: string) {
             const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g;
 
-            // TODO no work class
+            /**
+             * TODO-parth:
+             * - git pull origin mikes-dev
+             * - http://localhost:3000/search/lux
+             * - scroll down until you see huge image
+             * - see how the img has a class of imgMaxHeight ... which is defined on messagelistitem.css
+             * - but image dosn't size down properly, its freakin' huge
+             */
             if(content.indexOf('.png') !== -1){
-                return content.replace(reg, "<img src='$1$2' style={'max-height': '20px !important;' } />");
+                return content.replace(reg, "<img src='$1$2' className='imgMaxHeight' />");
             }else{
                 return content.replace(reg, "<a href='$1$2' class='underline' target='_blank'>$1$2</a>");
             }
