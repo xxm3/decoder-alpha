@@ -1,3 +1,11 @@
 .ant-table-body .ant-table-row-level-0 {
     border-bottom: 1px solid gray;
 }
+
+.ant-table-body {
+    margin-top: 3em;
+}
+
+.ant-tooltip-inner {
+    display: none;
+}
