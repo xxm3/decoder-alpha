@@ -73,17 +73,19 @@ const Schedule = () => {
             >
               {record.project}
             </span>
-          )
+          ),
+          sorter: (a, b) => a.project.length - b.project.length,
         },
         {
           title: 'Time',
           dataIndex: 'time',
           key: 'time',
-          width: 150
+          sorter: (a:any, b:any) => a.time.split(" ")[0].split(":").join("") - b.time.split(" ")[0].split(":").join(""),
+          width: 150,
         },
         {
-          title: 'Links',
-          key: 'links',
+          title: 'Connections',
+          key: 'connections',
           render: record => (
               <>
                 <a href={record.discordLink}>Discord</a> <br />
@@ -96,28 +98,31 @@ const Schedule = () => {
           title: 'Count',
           dataIndex: 'count',
           key: 'count',
-          width: 150
+          sorter: (a:any, b:any) => a.count - b.count,
+          width: 150,
         },
         {
-          title: 'Price',
+          title: 'Value',
           dataIndex: 'price',
-          key: 'price',
-          width: 150
+          key: 'value',
+          sorter: (a: any, b: any) => a.price.split(" ")[0] - b.price.split(" ")[0],
+          width: 150,
         },
         {
           title: 'Till the Mint',
           dataIndex: 'tillTheMint',
           key: 'tillTheMint',
-          width: 100
+          width: 100,
         },
         {
           title: 'Description',
           dataIndex: 'extras',
-          key: 'extras',
-          width: 300
+          key: 'description',
+          width: 300,
         },
       ];
 
+  // Renders
   return (
     <IonPage>
         <IonContent  fullscreen>
