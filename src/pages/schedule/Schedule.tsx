@@ -11,7 +11,7 @@ import Header from "../../components/header/Header";
 
 const Schedule = () => {
     /**
-     * States & Variables
+     * States & Variables.
      */
     const [mints, setMints] = useState([])
     const [date, setDate] = useState('')
