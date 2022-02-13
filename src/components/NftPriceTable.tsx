@@ -1,7 +1,7 @@
 import {
     IonButton,
     IonList,
-    IonLabel, IonItem, IonCheckbox
+    IonLabel, IonItem, IonCheckbox, IonInput
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState} from 'react';
 import { search } from 'ionicons/icons';
@@ -34,6 +34,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
             { title: 'Comments', dataIndex: 'comments', key: 'comments', width: 400 },
             { title: 'Magic Eden URL', dataIndex: 'meUrl', key: 'meUrl', width: 200 },
             { title: 'Mint URL', dataIndex: 'mintUrl', key: 'mintUrl', width: 200 },
+            // stillBeingTracked
         ];
 
     /**
@@ -41,6 +42,9 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
      * - store in RDS
      * - figure out how to track price in first place ... maybe can pull from some site...
      * - stop tracking after 7 days or something (otherwise spamming ME etc...)
+     *
+     * - Table show number discord alerted...And alert off that number only ie alert 3 with any meta ...
+     *   when done, maybe comment in https://gitlab.com/nft-relay-group/frontend-app/-/issues/2
      *
      * - orrr perhaps that can be automated in the discord as well. like each alert automatically gets emojis added to the bottom that you vote on, one represents staking
      */
@@ -158,7 +162,8 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                         Submit
                     </IonButton>
                     <br/><br/>
-                    <br/><br/>
+
+
                 </div>
 
             </div>

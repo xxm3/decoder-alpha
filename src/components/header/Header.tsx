@@ -58,8 +58,8 @@ const HeaderContainer = () => {
         }
         // set the placeholder of the header search bar
         function smallPlaceholder(){
-            if(window.innerWidth > 1050){
-                setHeaderPlaceholder("Search on Discord messages/tweets & view graphs");
+            if(window.innerWidth > 1000){
+                setHeaderPlaceholder("Search Discord/tweets & view graphs");
             }else{
                 setHeaderPlaceholder("Type to search");
             }
@@ -142,6 +142,7 @@ const HeaderContainer = () => {
                                     placeholder={headerPlaceholder}
                                     helpMsg='Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale").
                                             Results include graphs, and messages you can scroll through'
+                                    disableReset='true'
                                 />
                             </div>
                             {!showMobileSearch && (
