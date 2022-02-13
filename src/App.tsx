@@ -63,8 +63,16 @@ const App = () => {
 		3. { id : "USERS_ID"} : user is authenticated
 	*/
 	const [user, setUser] = useState<IUser | null | undefined>(undefined);
+
 	// const [walletAddress, setWalletAdress] = useState(null);
+
 	useEffect(() => {
+
+        // first redirect if on old URL
+        if (window.location.hostname.indexOf('localhost') === -1 && window.location.hostname.indexOf('soldecoder.app') === -1) {
+            window.location.replace("https://soldecoder.app");
+        }
+
 		return auth.onIdTokenChanged(user => {
 			if (user) {
                 user.getIdToken().then(

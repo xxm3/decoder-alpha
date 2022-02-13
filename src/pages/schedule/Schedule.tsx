@@ -64,7 +64,7 @@ const Schedule = () => {
 
     const columns: ColumnsType<Mint> = [
         {
-          title: 'Project',
+          title: 'Name',
           key: 'project',
           render: record => (
             <span

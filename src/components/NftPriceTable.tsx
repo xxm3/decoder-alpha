@@ -25,17 +25,35 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
     const [tableData, setTableData] = useState([])
 
     const columns: ColumnsType<any> = [
-            { title: 'Name', dataIndex: 'name', key: 'name', width: 200 },
-            { title: 'Mint Date', dataIndex: 'mintDate', key: 'mintDate', width: 200 },
-            { title: 'Mint Price', dataIndex: 'mintPrice', key: 'mintPrice', width: 100 },
-            { title: 'Highest Price', dataIndex: 'currentPrice', key: 'currentPrice', width: 100 },
-            { title: '% change', dataIndex: 'pctChange', key: 'pctChange', width: 100 },
-            { title: 'Meta', dataIndex: 'meta', key: 'meta', width: 200 },
-            { title: 'Comments', dataIndex: 'comments', key: 'comments', width: 400 },
-            { title: 'Magic Eden URL', dataIndex: 'meUrl', key: 'meUrl', width: 200 },
-            { title: 'Mint URL', dataIndex: 'mintUrl', key: 'mintUrl', width: 200 },
-            // stillBeingTracked
-        ];
+        {
+            title: 'Name',
+            key: 'name',
+            render: record => (
+                <span
+                    // className='cursor-pointer underline'
+                    // onClick={() => handleProjectClick(record)}
+                >
+              {record.name}
+            </span>
+            ),
+            sorter: (a, b) => a.name.length - b.name.length,
+            width: 200
+        },
+        { title: 'Mint Date', dataIndex: 'mintDate', key: 'mintDate', width: 200,
+            sorter: (a, b) => a.mintDate.length - b.mintDate.length },
+        { title: 'Mint Price', dataIndex: 'mintPrice', key: 'mintPrice', width: 150,
+            sorter: (a, b) => a.mintPrice.length - b.mintPrice.length },
+        { title: 'Highest Price', dataIndex: 'currentPrice', key: 'currentPrice', width: 170,
+            sorter: (a, b) => a.currentPrice.length - b.currentPrice.length },
+        { title: '% change', dataIndex: 'pctChange', key: 'pctChange', width: 130,
+            sorter: (a, b) => a.pctChange.length - b.pctChange.length },
+        { title: 'Meta', dataIndex: 'meta', key: 'meta', width: 200,
+            sorter: (a, b) => a.meta.length - b.meta.length },
+        { title: 'Comments', dataIndex: 'comments', key: 'comments'}, // , width: 400
+        { title: 'Magic Eden URL', dataIndex: 'meUrl', key: 'meUrl', width: 200 },
+        { title: 'Mint URL', dataIndex: 'mintUrl', key: 'mintUrl', width: 200 },
+        // stillBeingTracked
+    ];
 
     /**
      * TODO:
