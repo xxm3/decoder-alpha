@@ -2,7 +2,6 @@
 	animation: ripple 800ms linear infinite;
 	@apply bg-bg-tertiary w-0 h-full left-0 top-0 absolute !mx-0;
 	clip-path: polygon(0 0, 100% 0, 72% 100%, 0% 100%);
-	/* border: 2px solid blue;  */
 }
 
 @keyframes ripple {

@@ -31,7 +31,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
         const msgArr = useMemo(() => {
             if (!message)
                 return [
-                    'LOADING LOADING LOADING LOADING LOADING LOADING  LOADING LOADING LOADING LOADING LOADING LOADING',
+                    'LOADING'
                 ];
             const indexesArr = [
                 ...message
@@ -54,6 +54,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
         }, [message, word]);
 
         const loading = useMemo(() => !message, [message]);
+
         return (
             <div
                 className={`relative w-full items-start ${
@@ -94,7 +95,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                             loading ? 'mb-5' : 'mb-1'
                         }`}
                     >
-                        <p>{loading ? 'LOADING LOADING' : `(${source} ${source !== "Twitter" ? "- Discord" : ""}) ${author}`}</p>
+                        <p>{loading ? 'LOADING' : `(${source} ${source !== "Twitter" ? "- Discord" : ""}) ${author}`}</p>
                         {!loading && (
                             <div className="text-xs text-gray-400" data-tip={new Date(time as string).toLocaleString()}>
                                 {getDateAgo(time)}
@@ -104,13 +105,13 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
 
                     {/* show the message and highlight matches */}
                     <p className={loading ? 'inline box-decoration-clone' : 'max-w-full word-wrap'}>
-                        {msgArr.map((w, i) => {
+                        {!loading ? msgArr.map((w, i) => {
                             return w.toLowerCase() === word.toLowerCase() ? (
                                 <b className="text-cb" key={w+i}>{w}</b>
                             ) : (
-                                w
+                              w
                             );
-                        })}
+                        }) : "LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING"}
                     </p>
                 </div>
 
@@ -123,6 +124,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                     />
                 )}
 
+                {/*tooltip hovering over date*/}
                 <ReactTooltip />
             </div>
         );

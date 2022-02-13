@@ -24,16 +24,8 @@ module.exports = {
     },
     extend:{
       colors: {
-        'cg': '#00FFA3',
         'cb': '#03E1FF',
-        'cp': '#DC1FFF',
-        'cbl': '#101921',
         'cbg': 'rgb(16, 25, 33,0.2)',
-        'cbgld': 'rgb(16, 25, 33,0.4)',
-        'cbgmd': 'rgb(16, 25, 33,0.6)',
-        'cbgd': 'rgb(16, 25, 33,0.8)',
-        'tp': '#DC1FFF',
-        'tg': '#00FFA3',
         'bg-primary': '#36393f',
         'bg-secondary': '#2f3136',
         'bg-tertiary': '#202225',

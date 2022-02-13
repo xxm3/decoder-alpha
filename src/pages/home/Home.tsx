@@ -57,9 +57,9 @@ const Home = () => {
         return () => window.removeEventListener('resize', resizeWidth);
     }, []);
 
-    // useEffect(() => {
-    //     fetchHomePageData();
-    // }, []);
+    useEffect(() => {
+        fetchHomePageData();
+    }, []);
 
     /**
      * Functions
@@ -102,7 +102,7 @@ const Home = () => {
         instance
             .get(environment.backendApi + '/homeData')
             .then((res) => {
-                setHomePageData(res.data.data.possibleMintLinks[0]);
+                setHomePageData(res.data.data.possibleMintLinks);
                 setNewCollection(res.data.data.new_collections);
                 setPopularCollection(res.data.data.popular_collections);
                 // console.log("res1----------------", homePageData);
@@ -145,6 +145,12 @@ const Home = () => {
         try {
             setErrorSearchStacked("");
             setSearchValueStacked(query);
+
+            if(query.length === 0) {
+
+                setStackedLineData(defaultGraph);
+                return;
+            }
 
             if(query.length < 3){ return setErrorSearchStacked('Please search on 3 or more characters'); }
             if(query.split(' ').length > 8){ return setErrorSearchStacked('Please search on 8 words max'); }
@@ -238,21 +244,16 @@ const Home = () => {
                     {/* Main Content After Header - The light gray Container */}
                     <div className="bg-gradient-to-b from-bg-primary to-bg-secondary justify-center items-center p-4 pt-2 sticky">
 
-                        <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-4`}>
-                            <p className="mb-3">The search above does an exact match on a single word ("catalina"), or does an exact match on multiple words ("catalina whale").
-                                Results include graphs, and messages you can scroll through.</p>
-
-                            <p>Below search will compare multiple single words against each other ("portals enviro suites").
-                                Each word will be graphed and you can compare the popularity of each word against each other.</p>
-                        </div>
-
                         {/* Stacked line Search stuff - The bit darker Gray Container */}
-                        <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+                        <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-2`}>
 
                             <div className={`font-bold pb-1 ${width <= 640 ? 'w-full' : 'w-96 '}`}>Compare multiple words on a line graph</div>
 
                             <div className={`max-w-2xl my-2`}>
-                                <SearchBar initialValue='' onSubmit={doSearch} placeholder='Type to search' />
+                                <SearchBar initialValue='' onSubmit={doSearch} placeholder='Type to search'
+                                       helpMsg='Compares multiple single words against each other (ex. "portals enviro suites").
+                                Each word will be graphed and you can compare the popularity of each word against each other'
+                                       disableReset='false' />
                             </div>
 
                             {/*--{width}--{chartHeight}--*/}
@@ -277,7 +278,6 @@ const Home = () => {
                             // graph itself
                             ) : (
 
-                                // TODO: need to be able to reset the graph...
                                 <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg" hidden={graphStackedLoading || stackedLineData.labels?.length === 1}>
                                     <Chart type='line' data={stackedLineData} height={chartHeight}
                                            options={{
@@ -297,10 +297,9 @@ const Home = () => {
                                 </div>
                             )}
                         </div>
-                        <br/>
 
-                        {/* Mint Alerts Automated - Statistics */}
                         {/*TODO*/}
+                        {/* Mint Alerts Automated - Statistics */}
                         {/*<NftPriceTable foo='' onSubmit={doSearch} />*/}
 
                     </div>
@@ -324,17 +323,8 @@ const Home = () => {
                             ))}
                         </div>
                     </IonCard>
-
-                </IonContent>
-
-
-
-
-
-
-                {/* SHITTY FORMATTED CODE: */}
-                <div hidden={true}>
-                <IonContent>
+                    <div>
+                <div hidden>
                     <IonRow>
                         <IonLabel className="text-4xl text-blue-600">New Collection</IonLabel>
                     </IonRow>
@@ -345,7 +335,7 @@ const Home = () => {
                             <Loader/>
                         </div>
                     )}
-                    <div hidden={isLoading}>
+                    <div hidden={!isLoading}>
 
                         {/* New Collections */}
                         <IonRow className="bg-lime-700">
@@ -394,7 +384,7 @@ const Home = () => {
                         </IonRow>
 
                     </div>
-                </IonContent>
+                </div>
 
 
 
@@ -415,6 +405,15 @@ const Home = () => {
                 {/*</IonCard>*/}
 
                 </div>
+                </IonContent>
+
+
+
+
+
+
+                {/* SHITTY FORMATTED CODE: */}
+
 
             </IonPage>
         </React.Fragment>

@@ -62,10 +62,7 @@ const Display: React.FC<{
     const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
     const {id: word} = useParams<{ id: string; }>();
 
-    // don't show the charts if there is a space in the word
-    // TODO: parth help: how to make this work with useMemo?
-    // const completelyHideChart = useMemo(() => word.indexOf(" ") !== -1 ? true : false, []);
-    const completelyHideChart = false;
+    const completelyHideChart = useMemo(() => word.indexOf(" ") !== -1 ? true : false, [word]);
 
     const definedMessages = messages.filter(Boolean);
 
@@ -88,9 +85,10 @@ const Display: React.FC<{
             <div className="p-3 overflow-y-scroll rounded-lg">
                 <div className="gap-4 mb-4 grid grid-cols-12">
 
+                    {/*search header*/}
                     {definedMessages.length > 0 && (
                         <>
-                            <p className="font-bold col-span-6 sm:text-center">
+                            <p className={`font-bold ${completelyHideChart ? "col-span-12" : "col-span-6"} sm:text-center`}>
                                 Searched on "{decodeURIComponent(word)}" ({totalCount} results last{' '}
                                 {constants().numDaysBackGraphs} days)
                             </p>
@@ -105,8 +103,6 @@ const Display: React.FC<{
                             </div>
                         </>
                     )}
-
-                    {/*--{completelyHideChart}--*/}
 
                     {/* bar & line chart */}
                     {showChart &&
@@ -167,24 +163,25 @@ const Display: React.FC<{
                         )}
                 </div>
 
-                {/* list of messages */}
+                {/* list of messages, ie. search results */}
                 {messages.map((m, i) => (
-
-                        m ? (
-                            <MessageListItem
-                                onClick={() => {
-                                    if (m.source === 'Twitter') {
-                                        const url = `https://twitter.com/${m.author}`;
-                                        window.open(url, '_blank');
-                                    } else setSelectedMessage(m);
-                                }}
-                                message={m}
-                                key={m.id}
-                            />
-                        ) : (
-                            <MessageListItem index={i} key={i} />
-                        )
+                    m ? (
+                        <MessageListItem
+                            onClick={() => {
+                                if (m.source === 'Twitter') {
+                                    const url = `https://twitter.com/${m.author}`;
+                                    window.open(url, '_blank');
+                                } else setSelectedMessage(m);
+                            }}
+                            message={m}
+                            key={m.id}
+                        />
+                    ) : (
+                        <MessageListItem index={i} key={i} />
+                    )
                 ))}
+
+                {/*if you click on a message*/}
                 {selectedMessage && (
                     <MessageThread
                         onClose={() => setSelectedMessage(null)}
