@@ -7,9 +7,10 @@ interface SearchBarProps {
     onSubmit(query: string): unknown;
     placeholder?: string;
     helpMsg?: any;
+    disableReset?: any;
 }
 
-function SearchBar({initialValue, onSubmit, placeholder, helpMsg}: SearchBarProps) {
+function SearchBar({initialValue, onSubmit, placeholder, helpMsg, disableReset}: SearchBarProps) {
 
     const handleKeyDown: KeyboardEventHandler<HTMLIonSearchbarElement> = (e) => {
         const {target, key} = e as KeyboardEvent<HTMLIonSearchbarElement> & { target: HTMLInputElement }
@@ -23,6 +24,10 @@ function SearchBar({initialValue, onSubmit, placeholder, helpMsg}: SearchBarProp
 
     const getHelp = async (msg: string) => {
         await present(msg, [{text: 'Ok'}]);
+    }
+    const resetSearch = () => {
+        onSubmit('');
+        setSearchValue('');
     }
 
     return (
@@ -51,6 +56,7 @@ function SearchBar({initialValue, onSubmit, placeholder, helpMsg}: SearchBarProp
 
 
             {/* <div className="pl-5 underline cursor-pointer" onClick={() => onSubmit('')} hidden={searchValue.length === 0}>Reset</div> */}
+            <div className="pl-5 underline cursor-pointer" onClick={() => resetSearch()} hidden={searchValue.length === 0 || disableReset === 'true'}>Reset</div>
         </div>
     );
 }
