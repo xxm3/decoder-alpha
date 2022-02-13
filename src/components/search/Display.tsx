@@ -85,6 +85,7 @@ const Display: React.FC<{
             <div className="p-3 overflow-y-scroll rounded-lg">
                 <div className="gap-4 mb-4 grid grid-cols-12">
 
+                    {/*search header*/}
                     {definedMessages.length > 0 && (
                         <>
                             <p className={`font-bold ${completelyHideChart ? "col-span-12" : "col-span-6"} sm:text-center`}>
@@ -102,8 +103,6 @@ const Display: React.FC<{
                             </div>
                         </>
                     )}
-
-                    {/*--{completelyHideChart}--*/}
 
                     {/* bar & line chart */}
                     {showChart &&
@@ -164,24 +163,25 @@ const Display: React.FC<{
                         )}
                 </div>
 
-                {/* list of messages */}
+                {/* list of messages, ie. search results */}
                 {messages.map((m, i) => (
-
-                        m ? (
-                            <MessageListItem
-                                onClick={() => {
-                                    if (m.source === 'Twitter') {
-                                        const url = `https://twitter.com/${m.author}`;
-                                        window.open(url, '_blank');
-                                    } else setSelectedMessage(m);
-                                }}
-                                message={m}
-                                key={m.id}
-                            />
-                        ) : (
-                            <MessageListItem index={i} key={i} />
-                        )
+                    m ? (
+                        <MessageListItem
+                            onClick={() => {
+                                if (m.source === 'Twitter') {
+                                    const url = `https://twitter.com/${m.author}`;
+                                    window.open(url, '_blank');
+                                } else setSelectedMessage(m);
+                            }}
+                            message={m}
+                            key={m.id}
+                        />
+                    ) : (
+                        <MessageListItem index={i} key={i} />
+                    )
                 ))}
+
+                {/*if you click on a message*/}
                 {selectedMessage && (
                     <MessageThread
                         onClose={() => setSelectedMessage(null)}

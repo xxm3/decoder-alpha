@@ -62,7 +62,12 @@ const Search: React.FC = () => {
                 ten_day_count : [],
                 source : []
             },
-            select : (data) => {
+            select : (data: any) => {
+
+                // in case couldn't search on this
+                if (data.error && data.body) {
+                    throw new Error(String(data.body));
+                }
 
                 const datasetForChartDailyCount = getDailyCountData(data);
 

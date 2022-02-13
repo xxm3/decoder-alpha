@@ -145,6 +145,8 @@ const HeaderContainer = () => {
                         </div>
 
                         <div className="hidden md:flex items-center" hidden={showMobileSearch}>
+                            {/* below repeated on Header.tsx and App.tsx */}
+
                             <IonRouterLink href="/schedule" className="pr-7 underline text-inherit">Today's Mints</IonRouterLink>
 
                             <WalletButton />

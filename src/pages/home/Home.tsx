@@ -298,8 +298,9 @@ const Home = () => {
                             )}
                         </div>
 
+                        {/*TODO*/}
                         {/* Mint Alerts Automated - Statistics */}
-                        <NftPriceTable foo='' onSubmit={doSearch} />
+                        {/*<NftPriceTable foo='' onSubmit={doSearch} />*/}
 
                     </div>
 
@@ -412,7 +413,7 @@ const Home = () => {
 
 
                 {/* SHITTY FORMATTED CODE: */}
-               
+
 
             </IonPage>
         </React.Fragment>

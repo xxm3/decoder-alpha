@@ -87,7 +87,7 @@ const App = () => {
 	}, []);
 
 
-    
+
 
 	return (
         <IonApp>
@@ -103,7 +103,7 @@ const App = () => {
                                                 {/* below repeated on Header.tsx and App.tsx */}
 
                                                 <WalletButton />
-                                                <br/>
+                                                <br/><br/>
 
                                                 <IonRouterLink href="/schedule" className="pr-7 underline text-inherit">Today's Mints</IonRouterLink>
 
