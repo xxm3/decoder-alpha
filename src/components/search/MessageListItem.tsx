@@ -56,26 +56,6 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
 
         const loading = useMemo(() => !message, [message]);
 
-
-        // convert links to images and links
-        function httpHtml(content: string) {
-            const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g;
-
-            /**
-             * TODO-parth:
-             * - git pull origin mikes-dev
-             * - http://localhost:3000/search/lux
-             * - scroll down until you see huge image
-             * - see how the img has a class of imgMaxHeight ... which is defined on messagelistitem.css
-             * - but image dosn't size down properly, its freakin' huge
-             */
-            if(content.indexOf('.png') !== -1){
-                return content.replace(reg, "<img src='$1$2' className='imgMaxHeight' />");
-            }else{
-                return content.replace(reg, "<a href='$1$2' class='underline' target='_blank'>$1$2</a>");
-            }
-        }
-
         return (
             <div
                 className={`relative w-full items-start ${
@@ -126,16 +106,14 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
 
                     {/* show the message and highlight matches */}
                     <p className={loading ? 'inline box-decoration-clone' : 'max-w-full word-wrap'}>
-                        {msgArr.map((w, i) => {
+                        {!loading ? msgArr.map((w, i) => {
                             return w.toLowerCase() === word.toLowerCase() ? (
                                 <b className="text-cb" key={w+i}>{w}</b>
                             ) : (
                                 // w + "????"
-                                <span dangerouslySetInnerHTML={{
-                                    __html: httpHtml(w)
-                                }} />
+                              w
                             );
-                        })}
+                        }) : "LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING"}
                     </p>
                 </div>
 

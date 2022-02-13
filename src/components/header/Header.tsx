@@ -5,7 +5,7 @@ import {
     IonToolbar,
     IonMenuButton,
 } from "@ionic/react";
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import {useHistory, useParams} from 'react-router';
 import {
     arrowBack, search,
@@ -13,8 +13,6 @@ import {
 import { queryClient } from "../../queryClient";
 import SearchBar from "../SearchBar";
 import useConnectWallet from "../../hooks/useConnectWallet";
-import { useSelector } from 'react-redux'
-import { RootState } from "../../redux/store";
 import WalletButton from "../WalletButton";
 
 
@@ -27,14 +25,9 @@ const HeaderContainer = () => {
     let history = useHistory();
     const [showMobileSearch, setShowMobileSearch] = useState(false);
 
-    const smallHeaderWidth = 768; // what size browser needs to be, before header goes small mode
+    const smallHeaderWidth = 1024; // what size browser needs to be, before header goes small mode
 
     const connectWallet = useConnectWallet();
-    const walletAddress = useSelector((state : RootState) => state.wallet.walletAddress);
-
-    const smallerWallet = useMemo(() =>
-        walletAddress ? walletAddress.substring(0, 4) + '...' + walletAddress.substring(walletAddress.length - 4)
-            : '', [walletAddress]);
 
     const [headerPlaceholder, setHeaderPlaceholder] = useState('');
 
@@ -84,10 +77,6 @@ const HeaderContainer = () => {
         history.push(`/search/${encodeURIComponent(val)}`);
     }
 
-    function todaysMintsLink(){
-        history.push(`/schedule`);
-    }
-
     /**
      * Renders
      */
@@ -96,8 +85,8 @@ const HeaderContainer = () => {
         <>
 
             <IonHeader className="p-4">
-                <IonToolbar className="bg-card px-4 rounded-lg related">
-                    <div className="justify-between space-x-8 flex items-center relative">
+                <IonToolbar className="bg-card px-4 rounded-lg related verflow-y-auto relative">
+                    <div className="justify-between space-x-8 flex items-center">
 
                         {!showMobileSearch && (
                             <div className="flex items-center space-x-5">
@@ -118,7 +107,7 @@ const HeaderContainer = () => {
                             className={`flex-grow flex items-center ${
                                 showMobileSearch
                                     ? 'space-x-8'
-                                    : 'md:max-w-xl justify-end md:justify-start'
+                                    : 'lg:max-w-xl justify-end lg:justify-start'
                             }`}
                         >
                             {showMobileSearch && (
@@ -132,8 +121,8 @@ const HeaderContainer = () => {
                             <div
                                 className={`flex-grow ${
                                     showMobileSearch
-                                        ? 'max-w-xl'
-                                        : 'hidden md:block'
+                                        ? 'max-w-3xl px-3'
+                                        : 'hidden lg:block'
                                 }`}
                             >
                                 <SearchBar
@@ -148,28 +137,16 @@ const HeaderContainer = () => {
                                 <IonIcon
                                     slot="icon-only"
                                     icon={search}
-                                    className="md:hidden cursor-pointer text-2xl hover:opacity-80"
+                                    className="lg:hidden cursor-pointer text-2xl hover:opacity-80"
                                     onClick={() => setShowMobileSearch(true)}
                                 />
                             )}
                         </div>
 
-                        <div className="hidden md:block float-right" hidden={showMobileSearch}>
-                            {/* below repeated on Header.tsx and App.tsx */}
+                        <div className="hidden md:flex items-center" hidden={showMobileSearch}>
+                            <IonRouterLink href="/schedule" className="pr-7 underline text-inherit">Today's Mints</IonRouterLink>
 
-                            {/*TODO-parth: how can make onclick work? it brings me to schedule page then back */}
-                            {/*<a href="" onClick={() => todaysMintsLink()}>Today's Mints</a>*/}
-                            <a href="/schedule" className="pr-7 underline">Today's Mints</a>
-
-                            {!walletAddress ? (
-                                  <WalletButton />
-                            ) : (
-                                <>
-                                    <span className="">
-                                        {smallerWallet}
-                                    </span>
-                                </>
-                            )}
+                            <WalletButton />
                         </div>
 
                     </div>

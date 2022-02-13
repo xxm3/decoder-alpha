@@ -57,9 +57,9 @@ const Home = () => {
         return () => window.removeEventListener('resize', resizeWidth);
     }, []);
 
-    // useEffect(() => {
-    //     fetchHomePageData();
-    // }, []);
+    useEffect(() => {
+        fetchHomePageData();
+    }, []);
 
     /**
      * Functions
@@ -102,7 +102,7 @@ const Home = () => {
         instance
             .get(environment.backendApi + '/homeData')
             .then((res) => {
-                setHomePageData(res.data.data.possibleMintLinks[0]);
+                setHomePageData(res.data.data.possibleMintLinks);
                 setNewCollection(res.data.data.new_collections);
                 setPopularCollection(res.data.data.popular_collections);
                 // console.log("res1----------------", homePageData);
@@ -317,17 +317,8 @@ const Home = () => {
                             ))}
                         </div>
                     </IonCard>
-
-                </IonContent>
-
-
-
-
-
-
-                {/* SHITTY FORMATTED CODE: */}
-                <div hidden={true}>
-                <IonContent>
+                    <div>
+                <div hidden>
                     <IonRow>
                         <IonLabel className="text-4xl text-blue-600">New Collection</IonLabel>
                     </IonRow>
@@ -338,7 +329,7 @@ const Home = () => {
                             <Loader/>
                         </div>
                     )}
-                    <div hidden={isLoading}>
+                    <div hidden={!isLoading}>
 
                         {/* New Collections */}
                         <IonRow className="bg-lime-700">
@@ -387,7 +378,7 @@ const Home = () => {
                         </IonRow>
 
                     </div>
-                </IonContent>
+                </div>
 
 
 
@@ -408,6 +399,15 @@ const Home = () => {
                 {/*</IonCard>*/}
 
                 </div>
+                </IonContent>
+
+
+
+
+
+
+                {/* SHITTY FORMATTED CODE: */}
+               
 
             </IonPage>
         </React.Fragment>

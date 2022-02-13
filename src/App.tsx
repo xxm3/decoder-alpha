@@ -1,10 +1,10 @@
 
-import { IonApp, IonCol, IonContent, IonGrid, IonMenu, IonRouterOutlet, IonRow } from "@ionic/react";
+import { IonApp, IonCol, IonContent, IonGrid, IonMenu, IonRouterLink, IonRouterOutlet, IonRow } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 // import { useEffect, useState } from "react";
 // import Search from "./pages/Search";
 // import Login from "./pages/Login";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { auth } from "./firebase";
 import { IUser } from "./types/User";
 import { Route, Switch } from "react-router";
@@ -13,7 +13,6 @@ import Loader from "./components/Loader";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UserContext from "./context/UserContext";
 import { instance } from "./axios";
-import { useSelector } from 'react-redux'
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -51,7 +50,6 @@ import {
 import { ReactQueryDevtools } from "react-query/devtools"
 import { queryClient } from "./queryClient";
 import WalletButton from "./components/WalletButton";
-import { RootState } from "./redux/store";
 
 
 const App = () => {
@@ -80,11 +78,8 @@ const App = () => {
 		})
 	}, []);
 
-    const walletAddress = useSelector((state : RootState) => state.wallet.walletAddress)
 
-    const smallerWallet = useMemo(() =>
-        walletAddress ? walletAddress.substring(0, 4) + '...' + walletAddress.substring(walletAddress.length - 4)
-            : '', [walletAddress])
+    
 
 	return (
         <IonApp>
@@ -92,19 +87,17 @@ const App = () => {
                 <UserContext.Provider value={user}>
                     {user !== undefined ? (
                         <>
-                            <IonMenu menuId="sidebar" contentId="router">
+                            <IonMenu menuId="sidebar" contentId="router" className="md:hidden">
                                 <IonContent>
                                     <IonGrid className="ion-padding">
                                         <IonRow>
                                             <IonCol size="12">
                                                 {/* below repeated on Header.tsx and App.tsx */}
 
-                                               {!walletAddress ? <WalletButton /> : <div className="bg-green-600 p-3 text-center">Connected as {smallerWallet}</div>}
+                                                <WalletButton />
                                                 <br/>
 
-                                                {/*TODO-parth: how can make onclick work? it brings me to schedule page then back */}
-                                                {/*<a href="" onClick={() => todaysMintsLink()}>Today's Mints</a>*/}
-                                                <a href="/schedule" className="pr-7 underline">Today's Mints</a>
+                                                <IonRouterLink href="/schedule" className="pr-7 underline text-inherit">Today's Mints</IonRouterLink>
 
 
                                             </IonCol>

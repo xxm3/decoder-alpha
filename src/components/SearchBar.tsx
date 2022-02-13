@@ -50,7 +50,7 @@ function SearchBar({initialValue, onSubmit, placeholder, helpMsg}: SearchBarProp
             </div>
 
 
-            <div className="pl-5 underline cursor-pointer" onClick={() => onSubmit('')} hidden={searchValue.length === 0}>Reset</div>
+            {/* <div className="pl-5 underline cursor-pointer" onClick={() => onSubmit('')} hidden={searchValue.length === 0}>Reset</div> */}
         </div>
     );
 }

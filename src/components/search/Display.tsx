@@ -62,10 +62,7 @@ const Display: React.FC<{
     const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
     const {id: word} = useParams<{ id: string; }>();
 
-    // don't show the charts if there is a space in the word
-    // TODO: parth help: how to make this work with useMemo?
-    // const completelyHideChart = useMemo(() => word.indexOf(" ") !== -1 ? true : false, []);
-    const completelyHideChart = false;
+    const completelyHideChart = useMemo(() => word.indexOf(" ") !== -1 ? true : false, [word]);
 
     const definedMessages = messages.filter(Boolean);
 
@@ -90,7 +87,7 @@ const Display: React.FC<{
 
                     {definedMessages.length > 0 && (
                         <>
-                            <p className="font-bold col-span-6 sm:text-center">
+                            <p className={`font-bold ${completelyHideChart ? "col-span-12" : "col-span-6"} sm:text-center`}>
                                 Searched on "{decodeURIComponent(word)}" ({totalCount} results last{' '}
                                 {constants().numDaysBackGraphs} days)
                             </p>

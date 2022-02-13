@@ -1,18 +1,80 @@
-import { IonButton } from '@ionic/react';
+import { IonButton, IonIcon } from '@ionic/react';
 import useConnectWallet from '../hooks/useConnectWallet';
+import { useDispatch,  useSelector } from 'react-redux'
+import { RootState } from "../redux/store";
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+    Tooltip,
+  } from 'react-tippy';
+import { chevronDown, chevronUp, wallet } from 'ionicons/icons';
+import { setWallet } from '../redux/slices/walletSlice';
+import useOnScreen from '../hooks/useOnScreen';
+
 
 function WalletButton() {
     const connectWallet = useConnectWallet();
-
-    return (
-        <IonButton
-            color="success"
-            className="text-sm"
-            onClick={() => connectWallet(null)}
-        >
-            Connect Wallet
-        </IonButton>
+    const walletAddress = useSelector(
+        (state: RootState) => state.wallet.walletAddress
     );
+    const smallerWallet = useMemo(
+        () =>
+            walletAddress
+                ? walletAddress.substring(0, 4) +
+                  '...' +
+                  walletAddress.substring(walletAddress.length - 4)
+                : '',
+        [walletAddress]
+    );
+
+    const walletButtonRef = useRef<HTMLIonButtonElement>(null);
+    const [showDropdown, setShowDropdown] = useState(false)
+
+    const isOnScreen = useOnScreen(walletButtonRef);
+    useEffect(() => {
+        if(!isOnScreen){
+            setShowDropdown(false)
+        }
+    }, [isOnScreen])
+    const dispatch = useDispatch()
+     return (
+         <>
+         <Tooltip
+         open={showDropdown}
+         onRequestClose={() => setShowDropdown(false)}
+         html={
+             <div className="bg-bg-tertiary py-3 flex flex-col space-y-4">
+                 <IonButton  onClick={() => {
+                     //@ts-expect-error
+                     window.solana.disconnect()
+                     dispatch(setWallet(null))
+                 }} color="inherit" className="border-transparent shadow-none bg-inherit rounded hover:bg-blue-500">
+                    <div className="flex space-x-2 py-1.5">
+                         <IonIcon icon={wallet} />
+                         <p>Disconnect Wallet</p>
+                    </div>
+                 </IonButton>
+                 
+                
+             </div>
+         }
+         trigger="click" position={"bottom"} disabled={!walletAddress}>
+
+             <IonButton
+                 color="primary"
+                 ref={walletButtonRef}
+                 className="text-sm space-x-1"
+                onClick={() => {
+                     if (!walletAddress) connectWallet(null);
+                     else setShowDropdown(show => !show)
+                 }}
+             >
+                 <p>{walletAddress ? smallerWallet : "Connect Wallet"}</p>
+               <IonIcon hidden={!walletAddress} icon={showDropdown ? chevronUp :chevronDown}/>
+             </IonButton>
+         </Tooltip>
+            
+         </>
+     );
 }
 
 export default WalletButton;
