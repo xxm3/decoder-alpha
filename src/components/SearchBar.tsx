@@ -55,6 +55,7 @@ function SearchBar({initialValue, onSubmit, placeholder, helpMsg, disableReset}:
             </div>
 
 
+            {/* <div className="pl-5 underline cursor-pointer" onClick={() => onSubmit('')} hidden={searchValue.length === 0}>Reset</div> */}
             <div className="pl-5 underline cursor-pointer" onClick={() => resetSearch()} hidden={searchValue.length === 0 || disableReset === 'true'}>Reset</div>
         </div>
     );
