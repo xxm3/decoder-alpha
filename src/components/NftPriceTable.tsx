@@ -52,11 +52,16 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         { title: 'Comments', dataIndex: 'comments', key: 'comments'}, // , width: 400
         { title: 'Magic Eden URL', dataIndex: 'meUrl', key: 'meUrl', width: 200 },
         { title: 'Mint URL', dataIndex: 'mintUrl', key: 'mintUrl', width: 200 },
+        // numDiscordsAlerted
         // stillBeingTracked
     ];
 
     /**
      * TODO:
+     *
+     * ---- Contract with Dan… can’t share img… can’t dox
+     *
+     *
      * - store in RDS
      * - figure out how to track price in first place ... maybe can pull from some site...
      * - stop tracking after 7 days or something (otherwise spamming ME etc...)
