@@ -27,6 +27,10 @@ const Search: React.FC = () => {
         id : string;
     }>();
 
+    // TODO: supply needs > 100 before discord alert
+
+    // TODO: why empty when search https://marketplace.treasure.lol/legion-genesis
+
     const { data, error, isError } = useQuery(
         ['messages', searchText],
         async () => {
