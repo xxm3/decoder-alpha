@@ -151,7 +151,7 @@ const Schedule = () => {
                             scroll={{y: 500}}
                             pagination={false}
                         />
-                        <IonModal isOpen={isOpen}>
+                        {/* <IonModal isOpen={isOpen}>
                           <IonContent>
                             {
                               splitCollectionName.length
@@ -162,7 +162,7 @@ const Schedule = () => {
                               ))
                             }
                           </IonContent>
-                        </IonModal>
+                        </IonModal> */}
                       </div>
                 }
 
