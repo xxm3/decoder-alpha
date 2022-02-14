@@ -29,7 +29,7 @@ const Schedule = () => {
         count: string,
         price: string,
         extras: string,
-        "10DaySearchResults": any
+        tenDaySearchResults: any
     }
 
     const dataSource = mints
@@ -37,10 +37,10 @@ const Schedule = () => {
     // Get today's mints
     const fetchMintsData = () => {
       setIsLoading(true)
+      
       instance
           .get(environment.backendApi + '/getTodaysMints')
           .then((res) => {
-            console.log(res.data.data.mints)
             setMints(res.data.data.mints)
             setDate(res.data.data.date)
             setIsLoading(false)
@@ -58,7 +58,9 @@ const Schedule = () => {
     const handleProjectClick = (project: any) => {
       setIsOpen(!isOpen)
       setIsLoading(true)
-      setSplitCollectionName(project["10DaySearchResults"])
+      // Temporarily set this condition below since old collection has 10DaySearchResults field
+      // which is conflicting with new renamed field tenDaySearchResults
+      setSplitCollectionName(!project.tenDaySearchResults ? project['10DaySearchResults'] : project.tenDaySearchResults )
       setIsLoading(false)
     }
 
