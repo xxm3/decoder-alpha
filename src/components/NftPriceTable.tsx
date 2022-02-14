@@ -56,13 +56,16 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         // stillBeingTracked
     ];
 
+
     /**
      * TODO:
      *
      * ---- Contract with Dan… can’t share img… can’t dox
      *
+     * back into yaww wl
      *
-     * - store in RDS
+     *
+     * - store in RDS- make the models!
      * - figure out how to track price in first place ... maybe can pull from some site...
      * - stop tracking after 7 days or something (otherwise spamming ME etc...)
      *
