@@ -44,7 +44,10 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
             render: record => (
                 <span>{record.createdAt.substring(0, 10)}</span>
             ),
-            sorter: (a, b) => a.mintDate - b.mintDate }, // TODO: sort
+            sorter: (a:any, b:any) =>
+                    a.createdAt.substring(0, 10).split("-").join("") - b.createdAt.substring(0, 10).split("-").join("")
+
+            },
         { title: 'Mint Price', dataIndex: 'mintPrice', key: 'mintPrice', width: 150,
             sorter: (a, b) => a.mintPrice - b.mintPrice },
         { title: 'Highest Price', dataIndex: 'highestPrice', key: 'highestPrice', width: 170,
@@ -114,8 +117,12 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         <>
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
-                {/*${width <= 640 ? 'w-full' : 'w-96 '}*/}
-                <div className={`font-bold pb-1 w-full`}>Mint Alerts Automated - Statistics</div>
+                {/* TODO: remove below once done, plus remove pl-10  */}
+                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full ">
+                    WIP
+                </span>
+
+                <div className={`font-bold pb-1 w-full pl-10`}>Mint Alerts Automated - Statistics</div>
                 <p>These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel</p>
 
                 <div>
@@ -145,10 +152,11 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
             </div>
             <br/>
 
-            {/* TODO: write that its for 3 nft holders only... */}
+
             <div hidden={true}
                 className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
                 <div className={`font-bold pb-3 w-full text-lg`}>Mint Alerts Automated - Custom Alerts</div>
+                <div>Note: for 3 NFT holders only</div>
 
                 <div>
                     <label className={`font-bold pb-1 w-full`} htmlFor="">Get an alert when the below meta gets alerted in #mint-alerts-automated</label>
