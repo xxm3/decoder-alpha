@@ -1,11 +1,12 @@
+/* Override styles of antd table */
+.ant-table-body {
+    margin-top: 3em;
+}
 .ant-table-body .ant-table-row-level-0 {
     border-bottom: 1px solid gray;
 }
 
-.ant-table-body {
-    margin-top: 3em;
-}
-
+/* Override styles of antd column-sorter tooltip */
 .ant-tooltip-inner {
     display: none;
 }
