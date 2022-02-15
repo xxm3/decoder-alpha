@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import moment from 'moment';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
+import Header from "../../components/header/Header";
 import Loader from '../../components/Loader';
 import {Table} from 'antd'
 import { ColumnsType } from 'antd/es/table';
 import {IonContent, IonModal, IonPage} from '@ionic/react';
 
 import './Schedule.css'
-import Header from "../../components/header/Header";
 
 const Schedule = () => {
     /**
@@ -55,6 +56,43 @@ const Schedule = () => {
         fetchMintsData()
     }, [])
 
+
+    // This will call the mintExpiresAt function every minute to update tillTheMint's time 
+    useEffect(() => {
+        const interval = setInterval(() => {
+          mintExpiresAt(mints)
+        }, 60000)
+
+        return () => clearInterval(interval);
+    }, [mints])
+
+
+    /**
+     * this function is used to update the time of tillTheMint every minute
+     * @param {[]} mints array
+     * @return {} update the mints array objects values => tillTheMint to new values
+     */
+    const mintExpiresAt = (arr: any) => {
+      for(let i = 0; i < arr.length; i++) {
+        if(arr[i].mintExpiresAt || arr[i].mintExpiresAt?.length !== 0) {
+          const timeNow = moment()
+          const timeExpiresAt = moment(arr[i].mintExpiresAt)
+          
+          const diff = (timeExpiresAt.diff(timeNow))
+     
+          let minutes = Math.floor((diff / (1000 * 60)) % 60)
+          let hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
+
+          let splitArr = arr[i].tillTheMint.split(" ") // ['6', 'hours', '23', 'minutes']
+
+          splitArr[0] = hours
+          splitArr[2] = minutes
+
+          arr[i].tillTheMint = splitArr.join(" ")
+        }
+      }
+    }
+
     const handleProjectClick = (project: any) => {
       setIsOpen(!isOpen)
       setIsLoading(true)
@@ -77,6 +115,7 @@ const Schedule = () => {
             </span>
           ),
           sorter: (a, b) => a.project.length - b.project.length,
+          responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
           title: 'Time',
@@ -84,6 +123,7 @@ const Schedule = () => {
           key: 'time',
           sorter: (a:any, b:any) => a.time.split(" ")[0].split(":").join("") - b.time.split(" ")[0].split(":").join(""),
           width: 150,
+          responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
           title: 'Connections',
@@ -94,7 +134,8 @@ const Schedule = () => {
                 <a href={record.twitterLink}>Twitter</a>
               </>
           ),
-          width: 150
+          width: 150,
+          responsive: ['md'], // Will not be displayed below 768px
         },
         {
           title: 'Count',
@@ -102,6 +143,7 @@ const Schedule = () => {
           key: 'count',
           sorter: (a:any, b:any) => a.count - b.count,
           width: 150,
+          responsive: ['md'], // Will not be displayed below 768px
         },
         {
           title: 'Value',
@@ -109,18 +151,21 @@ const Schedule = () => {
           key: 'value',
           sorter: (a: any, b: any) => a.price.split(" ")[0] - b.price.split(" ")[0],
           width: 150,
+          responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
           title: 'Till the Mint',
           dataIndex: 'tillTheMint',
           key: 'tillTheMint',
           width: 100,
+          responsive: ['md'], // Will not be displayed below 768px
         },
         {
           title: 'Description',
           dataIndex: 'extras',
           key: 'description',
           width: 300,
+          responsive: ['md'], // Will not be displayed below 768px
         },
       ];
 
