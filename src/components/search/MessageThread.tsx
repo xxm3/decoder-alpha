@@ -30,7 +30,8 @@ const MessageThread: React.FC<MessageThreadProps> = ({
     const defaultPageParam: PageParam = {
         messageId: message.id,
         priorLimit: 5,
-        postLimit: 10,
+        postLimit: 100,
+        // #s REPEATED on MessageThread.tsx & priorAndSubsequent.js
     };
 
     async function fetchContext({

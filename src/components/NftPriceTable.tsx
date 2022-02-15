@@ -4,11 +4,9 @@ import {
     IonLabel, IonItem, IonCheckbox, IonInput
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState} from 'react';
-import { search } from 'ionicons/icons';
-import {Table} from 'antd'
+import {Table} from 'antd' // https://ant.design/components/table/
 import { ColumnsType } from 'antd/es/table';
 import Loader from "./Loader";
-import axios from "axios";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 
@@ -37,7 +35,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
               {record.name}
             </span>
             ),
-            sorter: (a, b) => a.name.length - b.name.length,
+            sorter: (a, b) => a.name.localeCompare(b.name),
             width: 200
         },
         { title: 'Mint Date', key: 'createdAt', width: 200,
@@ -46,16 +44,21 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
             ),
             sorter: (a:any, b:any) =>
                     a.createdAt.substring(0, 10).split("-").join("") - b.createdAt.substring(0, 10).split("-").join("")
-
             },
         { title: 'Mint Price', dataIndex: 'mintPrice', key: 'mintPrice', width: 150,
             sorter: (a, b) => a.mintPrice - b.mintPrice },
         { title: 'Highest Price', dataIndex: 'highestPrice', key: 'highestPrice', width: 170,
             sorter: (a, b) => a.highestPrice - b.highestPrice },
-        { title: '% change', dataIndex: 'pctChange', key: 'pctChange', width: 130,
-            sorter: (a, b) => a.pctChange - b.pctChange },
+        { title: '% change', key: 'pctChange', width: 130,
+            sorter: (a, b) => a.pctChange - b.pctChange,
+            render: record => (
+                <></>
+                // TODO
+                // <span hidden={!record.pctChange}>{record.pctChange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}%</span>
+            ),
+        },
         { title: 'Meta', dataIndex: 'meta', key: 'meta', width: 200,
-            sorter: (a, b) => a.meta.length - b.meta.length }, // TODO sort
+            sorter: (a, b) => a.meta ? a.meta.localeCompare(b.meta) : 0 },
         { title: 'Comments',key: 'comments',
             render: record => (
                 // <span>{(record.comments.length > 90) ? record.comments.substr(0, 90 - 1) + '...' : record.comments}</span>
@@ -77,13 +80,6 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         // stillBeingTracked
     ];
 
-
-    /**
-     * TODO:
-     * Contract with Dan… can’t share images… can’t dox
-     *
-     * back into yaww wl
-     */
 
     /**
      * Use Effects
