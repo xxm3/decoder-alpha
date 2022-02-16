@@ -6,6 +6,11 @@
     border-bottom: 1px solid gray;
 }
 
+.ant-table-thead .ant-table-cell {
+    /* border-bottom: 1px solid gray; */
+    text-decoration: underline;
+}
+
 /* Override styles of antd column-sorter tooltip */
 .ant-tooltip-inner {
     display: none;
