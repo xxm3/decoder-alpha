@@ -146,7 +146,11 @@ const Home = () => {
             setErrorSearchStacked("");
             setSearchValueStacked(query);
 
-            if(query.length === 0) { setStackedLineData(defaultGraph); return; }
+            if(query.length === 0) {
+
+                setStackedLineData(defaultGraph);
+                return;
+            }
 
             if(query.length < 3){ return setErrorSearchStacked('Please search on 3 or more characters'); }
             if(query.split(' ').length > 8){ return setErrorSearchStacked('Please search on 8 words max'); }
@@ -240,7 +244,8 @@ const Home = () => {
                             <div className={`max-w-2xl my-2`}>
                                 <SearchBar initialValue='' onSubmit={doSearch} placeholder='Type to search'
                                        helpMsg='Compares multiple single words against each other (ex. "portals enviro suites").
-                                Each word will be graphed and you can compare the popularity of each word against each other' />
+                                Each word will be graphed and you can compare the popularity of each word against each other'
+                                       disableReset='false' />
                             </div>
 
                             {/*--{width}--{chartHeight}--*/}
@@ -285,8 +290,9 @@ const Home = () => {
                             )}
                         </div>
 
+                        {/*TODO*/}
                         {/* Mint Alerts Automated - Statistics */}
-                        <NftPriceTable foo='' onSubmit={doSearch} />
+                        {/*<NftPriceTable foo='' onSubmit={doSearch} />*/}
 
 
 

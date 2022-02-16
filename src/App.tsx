@@ -62,8 +62,16 @@ const App = () => {
 		3. { id : "USERS_ID"} : user is authenticated
 	*/
 	const [user, setUser] = useState<IUser | null | undefined>(undefined);
+
 	// const [walletAddress, setWalletAdress] = useState(null);
+
 	useEffect(() => {
+
+        // first redirect if on old URL
+        if (window.location.hostname.indexOf('localhost') === -1 && window.location.hostname.indexOf('soldecoder.app') === -1) {
+            window.location.replace("https://soldecoder.app");
+        }
+
 		return auth.onIdTokenChanged(user => {
 			if (user) {
                 user.getIdToken().then(
@@ -80,7 +88,7 @@ const App = () => {
 	}, []);
 
 
-    
+
 
 	return (
         <IonApp>
@@ -96,7 +104,7 @@ const App = () => {
                                                 {/* below repeated on Header.tsx and App.tsx */}
 
                                                 <WalletButton />
-                                                <br/>
+                                                <br/><br/>
 
                                                 <IonRouterLink href="/schedule" className="pr-7 underline text-inherit">Today's Mints</IonRouterLink>
 

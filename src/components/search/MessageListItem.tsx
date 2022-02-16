@@ -31,7 +31,6 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
         const msgArr = useMemo(() => {
             if (!message)
                 return [
-                    // 'LOADING LOADING LOADING LOADING LOADING LOADING  LOADING LOADING LOADING LOADING LOADING LOADING',
                     'LOADING'
                 ];
             const indexesArr = [
@@ -110,7 +109,6 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                             return w.toLowerCase() === word.toLowerCase() ? (
                                 <b className="text-cb" key={w+i}>{w}</b>
                             ) : (
-                                // w + "????"
                               w
                             );
                         }) : "LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING"}
@@ -126,6 +124,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                     />
                 )}
 
+                {/*tooltip hovering over date*/}
                 <ReactTooltip />
             </div>
         );
