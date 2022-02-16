@@ -229,16 +229,8 @@ const Home = () => {
 
     // @ts-ignore
     return (
-        <React.Fragment>
-
-            <IonPage> {/* className="bg-sky" */ }
-
-                <IonContent  fullscreen> {/* ref={contentRef} scrollEvents={true} */}
-
-                    <Header />
-
+        <div>
                     {/* Main Content After Header - The light gray Container */}
-                    <div className="bg-gradient-to-b from-bg-primary to-bg-secondary justify-center items-center p-4 pt-2 sticky">
 
                         {/* Stacked line Search stuff - The bit darker Gray Container */}
                         <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-2`}>
@@ -296,7 +288,6 @@ const Home = () => {
                         {/* Mint Alerts Automated - Statistics */}
                         <NftPriceTable foo='' onSubmit={doSearch} />
 
-                    </div>
 
 
                     {/* Possible Mints ... */}
@@ -399,18 +390,7 @@ const Home = () => {
                 {/*</IonCard>*/}
 
                 </div>
-                </IonContent>
-
-
-
-
-
-
-                {/* SHITTY FORMATTED CODE: */}
-               
-
-            </IonPage>
-        </React.Fragment>
+        </div>
     );
 };
 

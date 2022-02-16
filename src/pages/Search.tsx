@@ -2,8 +2,6 @@ import React, { useMemo, useRef } from 'react';
 import Display from '../components/search/Display';
 import { useState, useEffect } from 'react';
 import {
-    IonContent,
-    IonPage,
     IonButton,
 } from '@ionic/react';
 import './Search.css';
@@ -11,7 +9,6 @@ import { useParams } from 'react-router';
 import { instance } from '../axios';
 import { useQuery } from 'react-query';
 import { AxiosResponse } from 'axios';
-import Header from '../components/header/Header';
 import { SearchResponse } from '../types/SearchResponse';
 import { dispLabelsDailyCount, getDailyCountData } from '../util/charts';
 
@@ -145,15 +142,6 @@ const Search: React.FC = () => {
 
     return (
         <React.Fragment>
-
-            <IonPage>
-
-                <IonContent ref={contentRef} scrollEvents={true} fullscreen>
-
-                    <Header />
-
-                    {/* Main Content After Header */}
-                    <div className="bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2 sticky">
                         {/*min-h-screen*/}
 
                         {/* The bit darker Gray Container */}
@@ -192,9 +180,6 @@ const Search: React.FC = () => {
                                 </>
                             )}
                         </div>
-                    </div>
-                </IonContent>
-            </IonPage>
         </React.Fragment>
     );
 };

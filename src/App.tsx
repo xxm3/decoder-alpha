@@ -7,7 +7,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import { useEffect, useState } from "react";
 import { auth } from "./firebase";
 import { IUser } from "./types/User";
-import { Route, Switch } from "react-router";
+import { Switch } from "react-router";
 import "./App.css";
 import Loader from "./components/Loader";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -50,6 +50,7 @@ import {
 import { ReactQueryDevtools } from "react-query/devtools"
 import { queryClient } from "./queryClient";
 import WalletButton from "./components/WalletButton";
+import AppRoute from "./components/Route";
 
 
 const App = () => {
@@ -132,8 +133,8 @@ const App = () => {
 											exact={true}
 											component={Search}
 										/>
-										<Route exact path="/Schedule" component={Schedule} />
-										<Route exact path="/Login" component={Login} />
+										<AppRoute exact path="/Schedule" component={Schedule} />
+										<AppRoute exact path="/Login" component={Login} />
 									</Switch>
 								</IonRouterOutlet>
 							</IonReactRouter>

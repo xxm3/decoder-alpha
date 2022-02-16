@@ -4,10 +4,9 @@ import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
 import {Table} from 'antd'
 import { ColumnsType } from 'antd/es/table';
-import {IonContent, IonModal, IonPage} from '@ionic/react';
+import {IonContent, IonModal } from '@ionic/react';
 
 import './Schedule.css'
-import Header from "../../components/header/Header";
 
 const Schedule = () => {
     /**
@@ -119,13 +118,7 @@ const Schedule = () => {
       ];
 
   return (
-    <IonPage>
-        <IonContent  fullscreen>
-
-            <Header />
-
-            <div className="bg-gradient-to-b from-bg-primary to-bg-secondary justify-center items-center p-4 pt-2 sticky">
-
+    <div className="w-full">
                 <div className={`font-bold pb-1`}>Today's Mints - {date}</div>
 
                 {
@@ -158,11 +151,7 @@ const Schedule = () => {
                         </IonModal>
                       </div>
                 }
-
-            </div>
-        </IonContent>
-
-    </IonPage>
+    </div>
   )
 }
 
