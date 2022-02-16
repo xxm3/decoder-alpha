@@ -298,7 +298,6 @@ const Home = () => {
                             )}
                         </div>
 
-                        {/*TODO*/}
                         {/* Mint Alerts Automated - Statistics */}
                         <NftPriceTable foo='' onSubmit={doSearch} />
 
