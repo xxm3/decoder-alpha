@@ -187,10 +187,12 @@ const Schedule = () => {
   // Renders
   return (
     <div className="w-full">
-                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full ">
-                    WIP
-                </span>
-                <div className={`font-bold pb-1`}>Today's Mints - {date}</div>
+               <div className="flex space-x-2 items-center">
+                  <span className="bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full ">
+                      WIP
+                  </span>
+                  <div className={`font-bold pb-1`}>Today's Mints - {date}</div>
+               </div>
 
                 {
                     isLoading
