@@ -18,7 +18,6 @@ If you haven't done that, then you can skip that by going to environmenet.js, an
 4. Stats on https://console.firebase.google.com/u/1/project/nft-discord-relay/hosting/sites
 
 
-<<<<<<< HEAD
 # Style Guide
 
 1. When making a new page, use either
