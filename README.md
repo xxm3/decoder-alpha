@@ -24,7 +24,6 @@ If you haven't done that, then you can skip that by going to environmenet.js, an
    - The AppRoute component for unprotected pages (i.e pages that can be accessed by an unauthenticated user)
    - The ProtectedRoute component for protected pages (i.e pages that can't be accessed by an unauthenticated user)
    - And keep in mind that there's no need to use the `IonPage` component  at the root of your page (You will know why if you look through the code of the AppRoute component at `components/Route.tsx`)
-=======
 
 ### How to code certain things
 
