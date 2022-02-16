@@ -22,7 +22,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
      */
     const [tableData, setTableData] = useState([])
 
-    // TODO: how make look good mobile (asked him for other page...)
+    // TODO: how make look good mobile (asked him for other page...) - need horiz scrolling on both ... min width many cols
     const columns: ColumnsType<any> = [
         {
             title: 'Name',
@@ -36,47 +36,60 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
             </span>
             ),
             sorter: (a, b) => a.name.localeCompare(b.name),
-            width: 200
+            width: 200,
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         { title: 'Mint Date', key: 'createdAt', width: 200,
             render: record => (
                 <span>{record.createdAt.substring(0, 10)}</span>
             ),
-            sorter: (a:any, b:any) =>
-                    a.createdAt.substring(0, 10).split("-").join("") - b.createdAt.substring(0, 10).split("-").join("")
-            },
+            sorter: (a:any, b:any) =>  a.createdAt.substring(0, 10).split("-").join("") - b.createdAt.substring(0, 10).split("-").join(""),
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+        },
         { title: 'Mint Price', dataIndex: 'mintPrice', key: 'mintPrice', width: 150,
-            sorter: (a, b) => a.mintPrice - b.mintPrice },
+            sorter: (a, b) => a.mintPrice - b.mintPrice,
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+        },
         { title: 'Highest Price', dataIndex: 'highestPrice', key: 'highestPrice', width: 170,
-            sorter: (a, b) => a.highestPrice - b.highestPrice },
+            sorter: (a, b) => a.highestPrice - b.highestPrice,
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+         },
         { title: '% change', key: 'pctChange', width: 130,
             sorter: (a, b) => a.pctChange - b.pctChange,
             render: record => (
-                <></>
-                // TODO
-                // <span hidden={!record.pctChange}>{record.pctChange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}%</span>
+                <span hidden={!record.pctChange}>{record.pctChange ? record.pctChange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ''}%</span>
             ),
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
-        { title: 'Meta', dataIndex: 'meta', key: 'meta', width: 200,
-            sorter: (a, b) => a.meta ? a.meta.localeCompare(b.meta) : 0 },
+        { title: '# Discords Alerted on', dataIndex: 'numDiscordsAlerted', key: 'numDiscordsAlerted', width: 150,
+            sorter: (a, b) => a.numDiscordsAlerted - b.numDiscordsAlerted,
+            responsive: ['md'], // Will not be displayed below 768px
+        },
+        { title: 'Meta', dataIndex: 'meta', key: 'meta',
+            width: 200,
+            sorter: (a, b) => a.meta ? a.meta.localeCompare(b.meta) : 0,
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+        },
         { title: 'Comments',key: 'comments',
             render: record => (
                 // <span>{(record.comments.length > 90) ? record.comments.substr(0, 90 - 1) + '...' : record.comments}</span>
                 <span>{record.comments}</span>
             ),
-            width: 400
+            width: 400,
+            responsive: ['md'], // Will not be displayed below 768px
         },
         { title: 'ME URL', key: 'meUrl', width: 100,
             render: record => (
                 <a href={record.meUrl} target="_blank" hidden={!record.meUrl}>view</a>
-            )
+            ),
+            responsive: ['md'], // Will not be displayed below 768px
         },
         { title: 'Mint URL', key: 'mintUrl', width: 100,
             render: record => (
                 <a href={record.mintUrl} target="_blank" hidden={record.mintUrl.length < 5}>view</a>
-            )
+            ),
+            responsive: ['md'], // Will not be displayed below 768px
         },
-        // numDiscordsAlerted
         // stillBeingTracked
     ];
 
@@ -113,7 +126,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         <>
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
-                {/* TODO: remove below once done, plus remove pl-10  */}
+                {/* TODO-later: remove below once done, plus remove pl-10  */}
                 <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full ">
                     WIP
                 </span>
@@ -131,7 +144,6 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 
                             <br />
 
-                            {/*TODO: need default sort date*/}
                             <Table
                                 className=''
                                 key={'name'}
