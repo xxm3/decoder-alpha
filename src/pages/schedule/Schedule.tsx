@@ -244,4 +244,5 @@ const Schedule = () => {
   )
 }
 
-export default Schedule
+// @ts-ignore
+export default Schedule;
