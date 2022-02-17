@@ -216,6 +216,8 @@ const Schedule = () => {
         // },
       ];
 
+    // TODO: put this in a "card"... once style guide merged in
+
   // Renders
   return (
     <IonPage>

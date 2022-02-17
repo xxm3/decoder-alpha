@@ -125,6 +125,8 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
      * Renders
      */
 
+    // TODO: pretty sure +discord is broke. didn't work for https://honshu-wolves-mint.vercel.app/...
+
     return (
         <>
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
@@ -140,17 +142,16 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                             </div>
                         : <div className=" "> {/* max-w-fit mx-auto */}
 
-                            <br />
-
                             <Table
-                                className=''
+                                className='pt-2'
                                 key={'name'}
                                 dataSource={tableData}
                                 columns={columns}
                                 bordered
-                                scroll={{x: 'max-content'}}
+                                // scroll={{x: 'max-content'}}
+                                scroll={{y: 400}}
                                 // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
-                                // scroll={{x: 'max-content', y: 500}}
+                                // scroll={{x: 'max-content', y: 400}}
                                 pagination={false}
                                 style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
                             />

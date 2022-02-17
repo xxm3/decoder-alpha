@@ -20,6 +20,7 @@ import {data} from "autoprefixer";
 import { ChartData } from 'chart.js';
 import SearchBar from '../../components/SearchBar';
 import NftPriceTable from "../../components/NftPriceTable";
+import FoxToken from "../../components/FoxToken";
 
 const Home = () => {
 
@@ -301,6 +302,10 @@ const Home = () => {
                         {/* Mint Alerts Automated - Statistics */}
                         <NftPriceTable foo='' onSubmit={doSearch} />
 
+                        {/* Fox Token - Analysis */}
+                        <FoxToken foo='' onSubmit={doSearch} />
+
+
                     </div>
 
 
@@ -323,6 +328,7 @@ const Home = () => {
                         </div>
                     </IonCard>
                     <div>
+
                 <div hidden>
                     <IonRow>
                         <IonLabel className="text-4xl text-blue-600">New Collection</IonLabel>
