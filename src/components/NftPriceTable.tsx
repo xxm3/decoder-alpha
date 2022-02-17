@@ -4,11 +4,9 @@ import {
     IonLabel, IonItem, IonCheckbox, IonInput
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState} from 'react';
-import { search } from 'ionicons/icons';
-import {Table} from 'antd'
+import {Table} from 'antd' // https://ant.design/components/table/
 import { ColumnsType } from 'antd/es/table';
 import Loader from "./Loader";
-import axios from "axios";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 
@@ -24,6 +22,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
      */
     const [tableData, setTableData] = useState([])
 
+    // TODO-later/hetul: how make look good mobile --- need horiz scrolling on both of our tables ... need min width on all of the cols
     const columns: ColumnsType<any> = [
         {
             title: 'Name',
@@ -36,41 +35,65 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
               {record.name}
             </span>
             ),
-            sorter: (a, b) => a.name.length - b.name.length,
-            width: 200
+            sorter: (a, b) => a.name.localeCompare(b.name),
+            width: 200,
+            fixed: 'left',
+            // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
-        { title: 'Mint Date', dataIndex: 'mintDate', key: 'mintDate', width: 200,
-            sorter: (a, b) => a.mintDate.length - b.mintDate.length },
+        { title: 'Mint Date', key: 'createdAt', width: 200,
+            render: record => (
+                <span>{record.createdAt.substring(0, 10)}</span>
+            ),
+            sorter: (a:any, b:any) =>  a.createdAt.substring(0, 10).split("-").join("") - b.createdAt.substring(0, 10).split("-").join(""),
+            // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+        },
         { title: 'Mint Price', dataIndex: 'mintPrice', key: 'mintPrice', width: 150,
-            sorter: (a, b) => a.mintPrice.length - b.mintPrice.length },
-        { title: 'Highest Price', dataIndex: 'currentPrice', key: 'currentPrice', width: 170,
-            sorter: (a, b) => a.currentPrice.length - b.currentPrice.length },
-        { title: '% change', dataIndex: 'pctChange', key: 'pctChange', width: 130,
-            sorter: (a, b) => a.pctChange.length - b.pctChange.length },
-        { title: 'Meta', dataIndex: 'meta', key: 'meta', width: 200,
-            sorter: (a, b) => a.meta.length - b.meta.length },
-        { title: 'Comments', dataIndex: 'comments', key: 'comments'}, // , width: 400
-        { title: 'Magic Eden URL', dataIndex: 'meUrl', key: 'meUrl', width: 200 },
-        { title: 'Mint URL', dataIndex: 'mintUrl', key: 'mintUrl', width: 200 },
-        // numDiscordsAlerted
+            sorter: (a, b) => a.mintPrice - b.mintPrice,
+            // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+        },
+        { title: 'Highest Price', dataIndex: 'highestPrice', key: 'highestPrice', width: 170,
+            sorter: (a, b) => a.highestPrice - b.highestPrice,
+            // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+         },
+        { title: '% change', key: 'pctChange', width: 130,
+            sorter: (a, b) => a.pctChange - b.pctChange,
+            render: record => (
+                <span hidden={!record.pctChange}>{record.pctChange ? record.pctChange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ''}%</span>
+            ),
+            // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+        },
+        { title: '# Discords Alerted on', dataIndex: 'numDiscordsAlerted', key: 'numDiscordsAlerted', width: 150,
+            sorter: (a, b) => a.numDiscordsAlerted - b.numDiscordsAlerted,
+            // responsive: ['md'], // Will not be displayed below 768px
+        },
+        { title: 'Meta', dataIndex: 'meta', key: 'meta',
+            width: 200,
+            sorter: (a, b) => a.meta ? a.meta.localeCompare(b.meta) : 0,
+            // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+        },
+        { title: 'Comments',key: 'comments',
+            render: record => (
+                // <span>{(record.comments.length > 90) ? record.comments.substr(0, 90 - 1) + '...' : record.comments}</span>
+                <span>{record.comments}</span>
+            ),
+            width: 400,
+            // responsive: ['md'], // Will not be displayed below 768px
+        },
+        { title: 'ME URL', key: 'meUrl', width: 100,
+            render: record => (
+                <a href={record.meUrl} target="_blank" hidden={!record.meUrl}>view</a>
+            ),
+            // responsive: ['md'], // Will not be displayed below 768px
+        },
+        { title: 'Mint URL', key: 'mintUrl', width: 100,
+            render: record => (
+                <a href={record.mintUrl} target="_blank" hidden={record.mintUrl.length < 5}>view</a>
+            ),
+            // responsive: ['md'], // Will not be displayed below 768px
+        },
         // stillBeingTracked
     ];
 
-    /**
-     * TODO:
-     *
-     * ---- Contract with Dan… can’t share img… can’t dox
-     *
-     *
-     * - store in RDS
-     * - figure out how to track price in first place ... maybe can pull from some site...
-     * - stop tracking after 7 days or something (otherwise spamming ME etc...)
-     *
-     * - Table show number discord alerted...And alert off that number only ie alert 3 with any meta ...
-     *   when done, maybe comment in https://gitlab.com/nft-relay-group/frontend-app/-/issues/2
-     *
-     * - orrr perhaps that can be automated in the discord as well. like each alert automatically gets emojis added to the bottom that you vote on, one represents staking
-     */
 
     /**
      * Use Effects
@@ -78,21 +101,12 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
     useEffect(() => {
         const fetchTableData = async () => {
 
-            setTableData([
-                // @ts-ignore
-                {'name': 'Royal Lion Party Club', mintDate: '2022-02-09', mintPrice: 0.99,
-                    // @ts-ignore
-                    currentPrice: 6.2, pctChange: '550%', meUrl: '[view]', mintUrl: '[view]', meta: 'Staking/Token/Low Supply', comments: 'low comments...' },
-                // @ts-ignore
-                {'name': 'Moonland Metaverse', mintDate: '2022-02-09', mintPrice: 1.5,
-                    // @ts-ignore
-                    currentPrice: 3, pctChange: '100%', meUrl: '[view]', mintUrl: '[view]', meta: 'Metaverse', comments: 'taking a while to mint' }
-            ]);
+            setTableData([]);
 
             instance
                 .get(environment.backendApi + '/mintAlertsAutomatedStats')
                 .then((res) => {
-                    // setTableData(data.data.mints); // TODO
+                    setTableData(res.data);
                 })
                 .catch((err) => {
                     console.error("error when getting mint alerts automated: " + err);
@@ -113,7 +127,6 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         <>
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
-                {/*${width <= 640 ? 'w-full' : 'w-96 '}*/}
                 <div className={`font-bold pb-1 w-full`}>Mint Alerts Automated - Statistics</div>
                 <p>These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel</p>
 
@@ -126,13 +139,16 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                         : <div className=" "> {/* max-w-fit mx-auto */}
 
                             <br />
+
                             <Table
                                 className=''
                                 key={'name'}
                                 dataSource={tableData}
                                 columns={columns}
                                 bordered
-                                scroll={{y: 1000}}
+                                scroll={{x: 'max-content'}}
+                                // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
+                                // scroll={{x: 'max-content', y: 500}} 
                                 pagination={false}
                                 style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
                             />
@@ -142,9 +158,11 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
             </div>
             <br/>
 
+
             <div hidden={true}
                 className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
                 <div className={`font-bold pb-3 w-full text-lg`}>Mint Alerts Automated - Custom Alerts</div>
+                <div>Note: for 3 NFT holders only</div>
 
                 <div>
                     <label className={`font-bold pb-1 w-full`} htmlFor="">Get an alert when the below meta gets alerted in #mint-alerts-automated</label>
