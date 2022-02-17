@@ -22,7 +22,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
      */
     const [tableData, setTableData] = useState([])
 
-    // TODO: how make look good mobile (asked him for other page...) - need horiz scrolling on both ... min width many cols
+    // TODO-later/hetul: how make look good mobile --- need horiz scrolling on both of our tables ... need min width on all of the cols
     const columns: ColumnsType<any> = [
         {
             title: 'Name',
@@ -126,12 +126,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         <>
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
-                {/* TODO-later: remove below once done, plus remove pl-10  */}
-                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full ">
-                    WIP
-                </span>
-
-                <div className={`font-bold pb-1 w-full pl-10`}>Mint Alerts Automated - Statistics</div>
+                <div className={`font-bold pb-1 w-full`}>Mint Alerts Automated - Statistics</div>
                 <p>These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel</p>
 
                 <div>
