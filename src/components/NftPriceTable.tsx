@@ -145,7 +145,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                                 dataSource={tableData}
                                 columns={columns}
                                 bordered
-                                scroll={{y: 1000}}
+                                scroll={{y: 500}}
                                 pagination={false}
                                 style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
                             />

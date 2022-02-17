@@ -58,13 +58,13 @@ const Schedule = () => {
 
 
     // This will call the mintExpiresAt function every minute to update tillTheMint's time
-    useEffect(() => {
-        const interval = setInterval(() => {
-          mintExpiresAt(mints)
-        }, 60000)
-
-        return () => clearInterval(interval);
-    }, [mints])
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //       mintExpiresAt(mints)
+    //     }, 60000)
+    //
+    //     return () => clearInterval(interval);
+    // }, [mints]);
 
 
     /**
@@ -72,34 +72,35 @@ const Schedule = () => {
      * @param {[]} mints array
      * @return {} update the mints array objects values => tillTheMint to new values
      */
-    const mintExpiresAt = (arr: any) => {
-      for(let i = 0; i < arr.length; i++) {
-        if(arr[i].mintExpiresAt || arr[i].mintExpiresAt?.length !== 0) {
-          const timeNow = moment()
-          const timeExpiresAt = moment(arr[i].mintExpiresAt)
-
-          const diff = (timeExpiresAt.diff(timeNow))
-
-          let minutes = Math.floor((diff / (1000 * 60)) % 60)
-          let hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
-
-          let splitArr = arr[i].tillTheMint.split(" ") // ['6', 'hours', '23', 'minutes']
-
-          splitArr[0] = hours
-          splitArr[2] = minutes
-
-          arr[i].tillTheMint = splitArr.join(" ")
-        }
-      }
-    }
+    // const mintExpiresAt = (arr: any) => {
+    //   for(let i = 0; i < arr.length; i++) {
+    //     if(arr[i].mintExpiresAt || arr[i].mintExpiresAt?.length !== 0) {
+    //       const timeNow = moment()
+    //       const timeExpiresAt = moment(arr[i].mintExpiresAt)
+    //
+    //       const diff = (timeExpiresAt.diff(timeNow))
+    //
+    //       let minutes = Math.floor((diff / (1000 * 60)) % 60)
+    //       let hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
+    //
+    //       let splitArr = arr[i].tillTheMint.split(" ") // ['6', 'hours', '23', 'minutes']
+    //
+    //       splitArr[0] = hours
+    //       splitArr[2] = minutes
+    //
+    //       arr[i].tillTheMint = splitArr.join(" ")
+    //     }
+    //   }
+    // }
 
     const handleProjectClick = (project: any) => {
-      setIsOpen(!isOpen)
-      setIsLoading(true)
+      setIsOpen(!isOpen);
+      setIsLoading(true);
+
       // Temporarily set this condition below since old collection has 10DaySearchResults field
       // which is conflicting with new renamed field tenDaySearchResults
-      setSplitCollectionName(!project.tenDaySearchResults ? project['10DaySearchResults'] : project.tenDaySearchResults )
-      setIsLoading(false)
+      setSplitCollectionName(!project.tenDaySearchResults ? project['10DaySearchResults'] : project.tenDaySearchResults );
+      setIsLoading(false);
     }
 
     const columns: ColumnsType<Mint> = [
@@ -115,6 +116,7 @@ const Schedule = () => {
             </span>
           ),
           sorter: (a, b) => a.project.length - b.project.length,
+          width: 220,
           responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
@@ -157,7 +159,7 @@ const Schedule = () => {
                     <a href={record.twitterLink}>Twitter</a>
                 </>
             ),
-            width: 150,
+            width: 100,
             responsive: ['md'], // Will not be displayed below 768px
         },
         {
@@ -172,16 +174,16 @@ const Schedule = () => {
             ),
 
             sorter: (a: any, b: any) => a.numbersOfTwitterFollowers - b.numbersOfTwitterFollowers,
-            width: 75,
+            width: 100,
             responsive: ['md'], // Will not be displayed below 768px
         },
-        {
-          title: 'Description',
-          dataIndex: 'extras',
-          key: 'description',
-          width: 300,
-          responsive: ['md'], // Will not be displayed below 768px
-        },
+        // {
+        //   title: 'Description',
+        //   dataIndex: 'extras',
+        //   key: 'description',
+        //   width: 300,
+        //   responsive: ['md'], // Will not be displayed below 768px
+        // },
       ];
 
   // Renders
@@ -205,7 +207,9 @@ const Schedule = () => {
                     ?   <div className="pt-10 flex justify-center items-center">
                             <Loader />
                         </div>
-                    : <div className="max-w-fit mx-auto mb-10">
+                    :
+
+                    <div className="max-w-fit mx-auto mb-10">
                         <br />
                         <Table
                             className='w-full mx-auto'
@@ -216,6 +220,7 @@ const Schedule = () => {
                             scroll={{y: 500}}
                             pagination={false}
                         />
+
                         {/* <IonModal isOpen={isOpen}>
                           <IonContent>
                             {
@@ -228,7 +233,8 @@ const Schedule = () => {
                             }
                           </IonContent>
                         </IonModal> */}
-                      </div>
+
+                    </div>
                 }
 
             </div>
