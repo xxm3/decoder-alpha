@@ -128,10 +128,15 @@ const Schedule = () => {
           responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
-            title: 'ETA',
-            dataIndex: 'tillTheMint',
+            title: 'Time',
             key: 'tillTheMint',
-            width: 100,
+            width: 200,
+            render: record => (
+                // (record.time)
+                <span>
+                    {moment().fromNow()}
+                </span>
+            ),
             responsive: ['md'], // Will not be displayed below 768px
         },
         {
