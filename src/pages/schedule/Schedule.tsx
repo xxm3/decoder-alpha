@@ -115,9 +115,11 @@ const Schedule = () => {
               {record.project}
             </span>
           ),
-          sorter: (a, b) => a.project.length - b.project.length,
+          sorter: (a, b) => a.project.localeCompare(b.project),
           width: 220,
-          responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+          fixed: 'left',
+          align: 'left'
+        //   responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
           title: 'Time',
@@ -125,7 +127,8 @@ const Schedule = () => {
           key: 'time',
           sorter: (a:any, b:any) => a.time.split(" ")[0].split(":").join("") - b.time.split(" ")[0].split(":").join(""),
           width: 150,
-          responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+          align: 'left'
+        //   responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
             title: 'Time',
@@ -134,10 +137,11 @@ const Schedule = () => {
             render: record => (
                 // (record.time)
                 <span>
-                    {moment().fromNow()}
+                    {record.time !== "No time specified yet." && moment.utc(record.time, 'hh:mm:ss').fromNow()}
                 </span>
             ),
-            responsive: ['md'], // Will not be displayed below 768px
+            align: 'left'
+            // responsive: ['md'], // Will not be displayed below 768px
         },
         {
             title: 'Price',
@@ -145,7 +149,8 @@ const Schedule = () => {
             key: 'value',
             sorter: (a: any, b: any) => a.price.split(" ")[0] - b.price.split(" ")[0],
             width: 150,
-            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+            align: 'left'
+            // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
           title: 'Supply',
@@ -153,7 +158,8 @@ const Schedule = () => {
           key: 'count',
           sorter: (a:any, b:any) => a.count - b.count,
           width: 150,
-          responsive: ['md'], // Will not be displayed below 768px
+          align: 'left'
+        //   responsive: ['md'], // Will not be displayed below 768px
         },
         {
             title: 'Links',
@@ -165,7 +171,8 @@ const Schedule = () => {
                 </>
             ),
             width: 100,
-            responsive: ['md'], // Will not be displayed below 768px
+            align: 'left'
+            // responsive: ['md'], // Will not be displayed below 768px
         },
         {
             title: '# Twitter',
@@ -180,7 +187,25 @@ const Schedule = () => {
 
             sorter: (a: any, b: any) => a.numbersOfTwitterFollowers - b.numbersOfTwitterFollowers,
             width: 100,
-            responsive: ['md'], // Will not be displayed below 768px
+            align: 'left'
+            // responsive: ['md'], // Will not be displayed below 768px
+        },
+        {
+            title: '# Tweet Interaction',
+            key: 'numbersOfTwitterFollowers',
+
+            render: record => (
+                <>
+                <span>
+                    likes: {record.tweetInteraction?.likes} <br />
+                    comments: {record.tweetInteraction?.comments} <br />
+                    retweets: {record.tweetInteraction?.retweets}
+                </span>
+                </>
+            ),
+            width: 120,
+            align: 'left'
+            // responsive: ['md'], // Will not be displayed below 768px
         },
         // {
         //   title: 'Description',
@@ -222,7 +247,9 @@ const Schedule = () => {
                             dataSource={dataSource}
                             columns={columns}
                             bordered
-                            scroll={{y: 500}}
+                            scroll={{x: 'max-content'}}
+                            // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
+                            // scroll={{x: 'max-content', y: 500}} 
                             pagination={false}
                         />
 
