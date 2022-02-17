@@ -15,3 +15,8 @@
 .ant-tooltip-inner {
     display: none;
 }
+
+/* Give background-color same as the background to ant-table-cell so it doesn't look transparent while scrolling horizontally  */
+.ant-table-cell {
+    background-color: #36393f;
+}
