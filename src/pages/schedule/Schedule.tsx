@@ -38,7 +38,7 @@ const Schedule = () => {
     // Get today's mints
     const fetchMintsData = () => {
       setIsLoading(true)
-      
+
       instance
           .get(environment.backendApi + '/getTodaysMints')
           .then((res) => {
@@ -57,7 +57,7 @@ const Schedule = () => {
     }, [])
 
 
-    // This will call the mintExpiresAt function every minute to update tillTheMint's time 
+    // This will call the mintExpiresAt function every minute to update tillTheMint's time
     useEffect(() => {
         const interval = setInterval(() => {
           mintExpiresAt(mints)
@@ -77,9 +77,9 @@ const Schedule = () => {
         if(arr[i].mintExpiresAt || arr[i].mintExpiresAt?.length !== 0) {
           const timeNow = moment()
           const timeExpiresAt = moment(arr[i].mintExpiresAt)
-          
+
           const diff = (timeExpiresAt.diff(timeNow))
-     
+
           let minutes = Math.floor((diff / (1000 * 60)) % 60)
           let hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
 
@@ -126,19 +126,22 @@ const Schedule = () => {
           responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
-          title: 'Connections',
-          key: 'connections',
-          render: record => (
-              <>
-                <a href={record.discordLink}>Discord</a> <br />
-                <a href={record.twitterLink}>Twitter</a>
-              </>
-          ),
-          width: 150,
-          responsive: ['md'], // Will not be displayed below 768px
+            title: 'ETA',
+            dataIndex: 'tillTheMint',
+            key: 'tillTheMint',
+            width: 100,
+            responsive: ['md'], // Will not be displayed below 768px
         },
         {
-          title: 'Count',
+            title: 'Price',
+            dataIndex: 'price',
+            key: 'value',
+            sorter: (a: any, b: any) => a.price.split(" ")[0] - b.price.split(" ")[0],
+            width: 150,
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+        },
+        {
+          title: 'Supply',
           dataIndex: 'count',
           key: 'count',
           sorter: (a:any, b:any) => a.count - b.count,
@@ -146,19 +149,31 @@ const Schedule = () => {
           responsive: ['md'], // Will not be displayed below 768px
         },
         {
-          title: 'Value',
-          dataIndex: 'price',
-          key: 'value',
-          sorter: (a: any, b: any) => a.price.split(" ")[0] - b.price.split(" ")[0],
-          width: 150,
-          responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+            title: 'Links',
+            key: 'connections',
+            render: record => (
+                <>
+                    <a href={record.discordLink}>Discord</a> <br />
+                    <a href={record.twitterLink}>Twitter</a>
+                </>
+            ),
+            width: 150,
+            responsive: ['md'], // Will not be displayed below 768px
         },
         {
-          title: 'Till the Mint',
-          dataIndex: 'tillTheMint',
-          key: 'tillTheMint',
-          width: 100,
-          responsive: ['md'], // Will not be displayed below 768px
+            title: '# Twitter',
+            // dataIndex: 'numbersOfTwitterFollowers',
+            key: 'numbersOfTwitterFollowers',
+
+            render: record => (
+                <>
+                    {record.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </>
+            ),
+
+            sorter: (a: any, b: any) => a.numbersOfTwitterFollowers - b.numbersOfTwitterFollowers,
+            width: 75,
+            responsive: ['md'], // Will not be displayed below 768px
         },
         {
           title: 'Description',
@@ -178,7 +193,12 @@ const Schedule = () => {
 
             <div className="bg-gradient-to-b from-bg-primary to-bg-secondary justify-center items-center p-4 pt-2 sticky">
 
-                <div className={`font-bold pb-1`}>Today's Mints - {date}</div>
+                {/*TODO-later: remove below once done, plus remove pl-10 */}
+                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full ">
+                    WIP
+                </span>
+
+                <div className={`font-bold pb-1 pl-10`}>Today's Mints - {date}</div>
 
                 {
                     isLoading
