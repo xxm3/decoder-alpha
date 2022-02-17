@@ -54,6 +54,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
             sorter: (a, b) => a.highestPrice - b.highestPrice,
             responsive: ['xs', 'sm'], // Will be displayed on every size of screen
          },
+        // TODO: classes... green / red for %
         { title: '% change', key: 'pctChange', width: 130,
             sorter: (a, b) => a.pctChange - b.pctChange,
             render: record => (
