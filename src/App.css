@@ -5,3 +5,10 @@
 body {
 	font-family: Helvetica, Arial, sans-serif;
 }
+
+.greenPctChange{
+    color: #2dd36f;
+}
+.redPctChange{
+    color: red;
+}

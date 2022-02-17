@@ -22,7 +22,6 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
      */
     const [tableData, setTableData] = useState([])
 
-    // TODO-later/hetul: how make look good mobile --- need horiz scrolling on both of our tables ... need min width on all of the cols
     const columns: ColumnsType<any> = [
         {
             title: 'Name',
@@ -36,34 +35,36 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
             </span>
             ),
             sorter: (a, b) => a.name.localeCompare(b.name),
-            width: 200,
-            fixed: 'left',
+            width: 180,
+            // fixed: 'left',
             // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
-        { title: 'Mint Date', key: 'createdAt', width: 200,
+        { title: 'Mint Date', key: 'createdAt',
             render: record => (
                 <span>{record.createdAt.substring(0, 10)}</span>
             ),
             sorter: (a:any, b:any) =>  a.createdAt.substring(0, 10).split("-").join("") - b.createdAt.substring(0, 10).split("-").join(""),
+            width: 130,
             // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
-        { title: 'Mint Price', dataIndex: 'mintPrice', key: 'mintPrice', width: 150,
+        { title: 'Mint Price', dataIndex: 'mintPrice', key: 'mintPrice',
+            width: 130,
             sorter: (a, b) => a.mintPrice - b.mintPrice,
             // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
-        { title: 'Highest Price', dataIndex: 'highestPrice', key: 'highestPrice', width: 170,
+        { title: 'Highest Price', dataIndex: 'highestPrice', key: 'highestPrice',
+            width: 150,
             sorter: (a, b) => a.highestPrice - b.highestPrice,
             // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
          },
-        // TODO: classes... green / red for %
         { title: '% change', key: 'pctChange', width: 130,
             sorter: (a, b) => a.pctChange - b.pctChange,
             render: record => (
-                <span hidden={!record.pctChange}>{record.pctChange ? record.pctChange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ''}%</span>
+                <span className={record.pctChange > 0 ? 'greenPctChange' : 'redPctChange'} hidden={!record.pctChange}>{record.pctChange ? record.pctChange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : ''}%</span>
             ),
             // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
-        { title: '# Discords Alerted on', dataIndex: 'numDiscordsAlerted', key: 'numDiscordsAlerted', width: 150,
+        { title: '# Discords Alerted on', dataIndex: 'numDiscordsAlerted', key: 'numDiscordsAlerted', width: 200,
             sorter: (a, b) => a.numDiscordsAlerted - b.numDiscordsAlerted,
             // responsive: ['md'], // Will not be displayed below 768px
         },
@@ -149,7 +150,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                                 bordered
                                 scroll={{x: 'max-content'}}
                                 // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
-                                // scroll={{x: 'max-content', y: 500}} 
+                                // scroll={{x: 'max-content', y: 500}}
                                 pagination={false}
                                 style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
                             />
