@@ -234,16 +234,8 @@ const Home = () => {
 
     // @ts-ignore
     return (
-        <React.Fragment>
-
-            <IonPage> {/* className="bg-sky" */ }
-
-                <IonContent  fullscreen> {/* ref={contentRef} scrollEvents={true} */}
-
-                    <Header />
-
+        <div>
                     {/* Main Content After Header - The light gray Container */}
-                    <div className="bg-gradient-to-b from-bg-primary to-bg-secondary justify-center items-center p-4 pt-2 sticky">
 
                         {/* Stacked line Search stuff - The bit darker Gray Container */}
                         <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-2`}>
@@ -413,23 +405,8 @@ const Home = () => {
                 {/*    </IonContent>*/}
                 {/*</IonCard>*/}
 
-
-                    {/*if need to tell the user of errors*/}
-                    {/*<div className="m-12 relative mt-6 bg-red-100 p-6 rounded-xl">*/}
-                    {/*    <p className="text-lg text-red-700 font-medium">*/}
-                    {/*        <b>The database ran into an error on Feb 14th at 1200 EST (shouldn't happen again). Old data was lost, so searches will be a bit empty for the next day</b>*/}
-                    {/*    </p>*/}
-                    {/*    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">*/}
-                    {/*        !*/}
-                    {/*    </span>*/}
-                    {/*</div>*/}
-
                 </div>
-                </IonContent>
-
-
-            </IonPage>
-        </React.Fragment>
+        </div>
     );
 };
 
