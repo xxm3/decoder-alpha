@@ -41,8 +41,8 @@ ChartJS.register(
 
 defaults.color = '#FFFFFF';
 const Display: React.FC<{
-    chartDataDailyCount?: ChartData<"bar" | "line", number[]>;
-    chartDataPerSource?: ChartData<"bar", number[]>;
+    chartDataDailyCount?: any;
+    chartDataPerSource?: any;
     chartHeight: number;
     messages: (Message | undefined)[];
     totalCount?: number;
@@ -164,7 +164,7 @@ const Display: React.FC<{
                 </div>
 
                 {/* list of messages, ie. search results */}
-                {messages.map((m, i) => (
+                {messages?.map((m, i) => (
                     m ? (
                         <MessageListItem
                             onClick={() => {
