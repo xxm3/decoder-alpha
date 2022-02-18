@@ -6,7 +6,7 @@ import Header from "../../components/header/Header";
 import Loader from '../../components/Loader';
 import {Table} from 'antd'
 import { ColumnsType } from 'antd/es/table';
-import {IonContent, IonModal, IonPage} from '@ionic/react';
+import {IonContent, IonModal } from '@ionic/react';
 
 import './Schedule.css'
 
@@ -162,6 +162,7 @@ const Schedule = () => {
         //   responsive: ['md'], // Will not be displayed below 768px
         },
         {
+
             title: '# Twitter',
             // dataIndex: 'numbersOfTwitterFollowers',
             key: 'numbersOfTwitterFollowers',
@@ -199,8 +200,8 @@ const Schedule = () => {
             key: 'connections',
             render: record => (
                 <>
-                    <a href={record.discordLink}>Discord</a> <br />
-                    <a href={record.twitterLink}>Twitter</a>
+                    <a href={record.discordLink} target='_blank'>Discord</a> <br />
+                    <a href={record.twitterLink} target='_blank'>Twitter</a>
                 </>
             ),
             width: 100,
@@ -220,19 +221,21 @@ const Schedule = () => {
 
   // Renders
   return (
-    <IonPage>
-        <IonContent  fullscreen>
 
-            <Header />
+    <div className="w-full">
+               <div className="flex space-x-2 items-center">
+                  {/*TODO-later: remove below once done, plus remove pl-10 */}
+                  <span className="bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full ">
+                      WIP
+                  </span>
+                  <div className={`font-bold pb-1 pl-10`}>Today's Mints - {date}</div>
+               </div>
 
-            <div className="bg-gradient-to-b from-bg-primary to-bg-secondary justify-center items-center p-4 pt-2 sticky">
 
-                {/*TODO-later: remove below once done, plus remove pl-10 */}
-                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full ">
-                    WIP
-                </span>
+            // <div className="bg-gradient-to-b from-bg-primary to-bg-primary justify-center items-center p-4 pt-2 sticky">
 
-                <div className={`font-bold pb-1 pl-10`}>Today's Mints - {date}</div>
+  
+
 
                 <p className="pt-3">Projects must have more than 1,000 twitter followers before showing up on the list</p>
 
@@ -272,11 +275,7 @@ const Schedule = () => {
 
                     </div>
                 }
-
-            </div>
-        </IonContent>
-
-    </IonPage>
+    </div>
   )
 }
 

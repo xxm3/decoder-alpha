@@ -18,6 +18,12 @@ If you haven't done that, then you can skip that by going to environmenet.js, an
 4. Stats on https://console.firebase.google.com/u/1/project/nft-discord-relay/hosting/sites
 
 
+# Style Guide
+
+1. When making a new page, use either
+   - The AppRoute component for unprotected pages (i.e pages that can be accessed by an unauthenticated user)
+   - The ProtectedRoute component for protected pages (i.e pages that can't be accessed by an unauthenticated user)
+   - And keep in mind that there's no need to use the `IonPage` component  at the root of your page (You will know why if you look through the code of the AppRoute component at `components/Route.tsx`)
 
 ### How to code certain things
 
@@ -25,8 +31,7 @@ To link to other pages:
 `<IonRouterLink href="/schedule" className="pr-7 underline text-inherit">Today's Mints</IonRouterLink>`
 
 To make calls to the backend:
-`instance.post<SearchResponse>`
-- use React query for data fetching
+- use React query for data fetching. Look at how the Search page implements React Query to understand how it works
 - React query reduces a lot of work that goes into managing loading, error states , caching, not sending the same requests at the same time, etc
 
 To do dropdowns:
@@ -43,18 +48,11 @@ To do alert popups:
 ### Style guide
 
 #### How to style a new page, when you create it
-- Copy things from Home.tsx & Schedule.tsx
-- ie. having:
-```
-<IonPage>
-    <IonContent  fullscreen>
-        <Header />
-        <div className="bg-gradient-to-b from-bg-primary to-bg-secondary justify-center items-center p-4 pt-2 sticky">
-```
+
 
 When you want an even darker section under there (ie. a "card"):
 ```
-<div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-2`}>
+<div className={`bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-2`}>
 ```
 
 To have a title of a section:

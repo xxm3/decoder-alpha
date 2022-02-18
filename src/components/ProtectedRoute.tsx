@@ -1,12 +1,13 @@
 import React from "react";
-import { Redirect, Route, RouteProps } from "react-router";
+import { Redirect, Route } from "react-router";
 import { useUser } from "../context/UserContext";
+import AppRoute from "./Route";
 
 // a route to be used to protect pages against unauthenticated users
-const ProtectedRoute = (props: RouteProps) => {
+const ProtectedRoute = (props: Parameters<typeof AppRoute>[0]) => {
 	const user = useUser();
 	return user || (window.location.href.indexOf('localhost') !== -1) ? (
-		<Route {...props} />
+		<AppRoute {...props} />
 	) : (
 		<Route
 			{...props}
