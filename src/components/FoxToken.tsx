@@ -1,7 +1,7 @@
 import {
     IonButton,
     IonList,
-    IonLabel, IonItem, IonCheckbox, IonInput
+    IonLabel, IonItem, IonCheckbox, IonInput, IonRow, IonCol
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState} from 'react';
 import {Table} from 'antd' // https://ant.design/components/table/
@@ -30,12 +30,17 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             // render: record => (
             //     <span>{record.createdAt.substring(0, 10)}</span>
             // ),
-            // sorter: (a:any, b:any) =>  a.createdAt.substring(0, 10).split("-").join("") - b.createdAt.substring(0, 10).split("-").join(""),
+            sorter: (a, b) => a.token.localeCompare(b.token),
             // width: 130,
             // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
-        { title: 'Floor Price', key: 'floorPrice', dataIndex: 'floorPrice', width: 150 },
-        { title: 'Name', key: 'name', dataIndex: 'name', }
+        { title: 'Floor Price', key: 'floorPrice', dataIndex: 'floorPrice', width: 150,
+            sorter: (a, b) => a.floorPrice - b.floorPrice,},
+        { title: 'Name', key: 'name', dataIndex: 'name',
+            sorter: (a, b) => a.name.localeCompare(b.name),},
+        { title: 'Total Token Listings', key: 'totalTokenListings', dataIndex: 'totalTokenListings', width: 250,
+            sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,}
+
     ];
 
 
@@ -82,19 +87,29 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             </div>
                         : <div className=" ">
 
-                            <Table
-                                className='pt-2'
-                                key={'name'}
-                                dataSource={tableData}
-                                columns={columns}
-                                bordered
-                                // scroll={{x: 'max-content'}}
-                                scroll={{y: 400}}
-                                // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
-                                // scroll={{x: 'max-content', y: 400}}
-                                pagination={false}
-                                style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
-                            />
+                            <IonRow>
+                                <IonCol className='' size="8">
+                                    <Table
+                                        className='pt-2'
+                                        key={'name'}
+                                        dataSource={tableData}
+                                        columns={columns}
+                                        bordered
+                                        // scroll={{x: 'max-content'}}
+                                        scroll={{y: 400}}
+                                        // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
+                                        // scroll={{x: 'max-content', y: 400}}
+                                        pagination={false}
+                                        style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
+                                    />
+                                </IonCol>
+                                <IonCol>
+                                    {/*TODO*/}
+                                </IonCol>
+                            </IonRow>
+
+                            <br/><br/>
+
                         </div>
                 }
                 </div>
