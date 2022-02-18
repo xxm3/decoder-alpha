@@ -1,4 +1,4 @@
-import {IonButton, IonCard, IonContent, IonLabel, IonPage} from '@ionic/react';
+import {IonButton, IonCard } from '@ionic/react';
 import {useEffect, useMemo, useState} from 'react';
 import {Redirect} from 'react-router';
 import {instance} from '../axios';
@@ -62,8 +62,7 @@ function Login() {
     return user ? (
         <Redirect to={next} />
     ) : (
-        <IonPage>
-            <IonContent>
+        <>
                 <div className="w-screen min-h-screen flex flex-col  justify-center items-center">
                     {!loading ? (
                         <>
@@ -123,8 +122,7 @@ function Login() {
                         </div>
                     )}
                 </div>
-            </IonContent>
-        </IonPage>
+        </>
     );
 }
 
