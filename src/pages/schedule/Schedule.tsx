@@ -166,8 +166,8 @@ const Schedule = () => {
             key: 'connections',
             render: record => (
                 <>
-                    <a href={record.discordLink}>Discord</a> <br />
-                    <a href={record.twitterLink}>Twitter</a>
+                    <a href={record.discordLink} target='_blank'>Discord</a> <br />
+                    <a href={record.twitterLink} target='_blank'>Twitter</a>
                 </>
             ),
             width: 100,
@@ -223,7 +223,7 @@ const Schedule = () => {
 
             <Header />
 
-            <div className="bg-gradient-to-b from-bg-primary to-bg-secondary justify-center items-center p-4 pt-2 sticky">
+            <div className="bg-gradient-to-b from-bg-primary to-bg-primary justify-center items-center p-4 pt-2 sticky">
 
                 {/*TODO-later: remove below once done, plus remove pl-10 */}
                 <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full ">
