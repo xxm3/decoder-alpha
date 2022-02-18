@@ -150,7 +150,7 @@ const Display: React.FC<{
                                                 },
                                                 title: {
                                                     display: true,
-                                                    text: '# of messages per Discord (last 100 messages)',
+                                                    text: '# of messages per Discord',
                                                 },
                                             },
                                             responsive: true,
