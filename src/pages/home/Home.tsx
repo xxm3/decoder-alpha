@@ -295,7 +295,11 @@ const Home = () => {
                         <NftPriceTable foo='' onSubmit={doSearch} />
 
                         {/* Fox Token - Analysis */}
-                        <FoxToken foo='' onSubmit={doSearch} />
+                        {/*TODO*/}
+                        <div hidden={true}>
+                            <FoxToken foo=''  onSubmit={doSearch} />
+                        </div>
+
 
 
                     </div>
