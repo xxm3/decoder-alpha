@@ -2,11 +2,26 @@
 .ant-table-body {
     margin-top: 3em;
 }
-.ant-table-body .ant-table-row-level-0 {
+.ant-table-tbody .ant-table-row-level-0 {
     border-bottom: 1px solid gray;
+}
+
+.ant-table-thead .ant-table-cell {
+    /* border-bottom: 1px solid gray; */
+    text-decoration: underline;
 }
 
 /* Override styles of antd column-sorter tooltip */
 .ant-tooltip-inner {
     display: none;
+}
+
+/* Give background-color same as the background to ant-table-cell so it doesn't look transparent while scrolling horizontally  */
+.ant-table-cell {
+    background-color: #36393f;
+}
+
+/* Give underline to discord and twitter links under Links column */
+.ant-table-cell a {
+    text-decoration: underline;
 }

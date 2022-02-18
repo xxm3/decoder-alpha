@@ -12,26 +12,28 @@ import { AxiosResponse } from 'axios';
 import { SearchResponse } from '../types/SearchResponse';
 import { dispLabelsDailyCount, getDailyCountData } from '../util/charts';
 
-
 const Search: React.FC = () => {
 
     /**
      * States & Variables
      */
     const [width, setWidth] = useState(window.innerWidth);
+    const [pageCount, setPageCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
 
     const { id : searchText} = useParams<{
         id : string;
-    }>();
+    }>();    
 
     const { data, error, isError } = useQuery(
-        ['messages', searchText],
+        ['messages', searchText,currentPage],
         async () => {
             try {
                 const { data } = await instance.post<SearchResponse>(
                     '/search/',
                     {
                         word: searchText,
+                        pageNumber: currentPage
                     },
                     {
                         headers: {
@@ -108,7 +110,7 @@ const Search: React.FC = () => {
             retry : false
         }
     );
-
+    
     /**
      * Use Effects
      */
@@ -131,6 +133,13 @@ const Search: React.FC = () => {
         return () => window.removeEventListener('resize', resizeWidth);
     }, []);
 
+    useEffect(() => {
+        if(data.totalCount) {
+            const totalPages = Math.floor(data.totalCount/100);
+            setPageCount(totalPages)
+        }
+    }, [data?.totalCount])
+
     // for scrolling to top
     const contentRef = useRef<HTMLIonContentElement | null>(null);
 
@@ -140,6 +149,11 @@ const Search: React.FC = () => {
     const scrollToTop = () => {
         contentRef.current && contentRef.current.scrollToTop();
     };
+
+    const handlePage = (type: string) => {
+        if(type === 'next' && (currentPage < pageCount)) setCurrentPage(currentPage+1)
+        else setCurrentPage(currentPage - 1)
+    }
 
     /**
      * Renders
@@ -175,12 +189,16 @@ const Search: React.FC = () => {
                                         totalCount: data?.totalCount
                                     }}/>
                                     {(data?.totalCount ?? 0) > 5 && (
+                                        <>
+                                        {(currentPage != 0) && <IonButton onClick={()=> handlePage('previous')}>Previous</IonButton>}
+                                        {(currentPage < pageCount)  && <IonButton onClick={()=> handlePage('next')}  className="ml-4">Next</IonButton>}
                                         <IonButton
                                             onClick={() => scrollToTop()}
                                             className="float-right"
                                         >
                                             Scroll to Top
                                         </IonButton>
+                                        </>
                                     )}
                                 </>
                             )}
