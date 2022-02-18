@@ -116,9 +116,9 @@ const Schedule = () => {
             </span>
           ),
           sorter: (a, b) => a.project.localeCompare(b.project),
-          width: 220,
-          fixed: 'left',
-          align: 'left'
+          width: 180,
+          // fixed: 'left',
+          // align: 'left'
         //   responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
@@ -126,18 +126,18 @@ const Schedule = () => {
           dataIndex: 'time',
           key: 'time',
           sorter: (a:any, b:any) => a.time.split(" ")[0].split(":").join("") - b.time.split(" ")[0].split(":").join(""),
-          width: 150,
+          width: 100,
           align: 'left'
         //   responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
             title: 'Time',
             key: 'tillTheMint',
-            width: 200,
+            width: 130,
             render: record => (
                 // (record.time)
                 <span>
-                    {record.time !== "No time specified yet." && moment.utc(record.time, 'hh:mm:ss').fromNow()}
+                    {record.time !== "" && moment.utc(record.time, 'hh:mm:ss').fromNow()}
                 </span>
             ),
             align: 'left'
@@ -157,9 +157,42 @@ const Schedule = () => {
           dataIndex: 'count',
           key: 'count',
           sorter: (a:any, b:any) => a.count - b.count,
-          width: 150,
+          width: 100,
           align: 'left'
         //   responsive: ['md'], // Will not be displayed below 768px
+        },
+        {
+            title: '# Twitter',
+            // dataIndex: 'numbersOfTwitterFollowers',
+            key: 'numbersOfTwitterFollowers',
+            render: record => (
+                <>
+                    {record.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </>
+            ),
+            sorter: (a: any, b: any) => a.numbersOfTwitterFollowers - b.numbersOfTwitterFollowers,
+            width: 110,
+            align: 'left'
+            // responsive: ['md'], // Will not be displayed below 768px
+        },
+        {
+            title: '# Tweet Interactions',
+            key: 'numbersOfTwitterFollowers',
+
+            render: record => (
+                <>
+                <span>
+                    {record.tweetInteraction.total}
+                    {/*likes: {record.tweetInteraction?.likes} <br />*/}
+                    {/*comments: {record.tweetInteraction?.comments} <br />*/}
+                    {/*retweets: {record.tweetInteraction?.retweets}*/}
+
+                </span>
+                </>
+            ),
+            width: 120,
+            align: 'left'
+            // responsive: ['md'], // Will not be displayed below 768px
         },
         {
             title: 'Links',
@@ -174,39 +207,6 @@ const Schedule = () => {
             align: 'left'
             // responsive: ['md'], // Will not be displayed below 768px
         },
-        {
-            title: '# Twitter',
-            // dataIndex: 'numbersOfTwitterFollowers',
-            key: 'numbersOfTwitterFollowers',
-
-            render: record => (
-                <>
-                    {record.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                </>
-            ),
-
-            sorter: (a: any, b: any) => a.numbersOfTwitterFollowers - b.numbersOfTwitterFollowers,
-            width: 100,
-            align: 'left'
-            // responsive: ['md'], // Will not be displayed below 768px
-        },
-        {
-            title: '# Tweet Interaction',
-            key: 'numbersOfTwitterFollowers',
-
-            render: record => (
-                <>
-                <span>
-                    likes: {record.tweetInteraction?.likes} <br />
-                    comments: {record.tweetInteraction?.comments} <br />
-                    retweets: {record.tweetInteraction?.retweets}
-                </span>
-                </>
-            ),
-            width: 120,
-            align: 'left'
-            // responsive: ['md'], // Will not be displayed below 768px
-        },
         // {
         //   title: 'Description',
         //   dataIndex: 'extras',
@@ -215,6 +215,8 @@ const Schedule = () => {
         //   responsive: ['md'], // Will not be displayed below 768px
         // },
       ];
+
+    // TODO: put this in a "card"... once style guide merged in
 
   // Renders
   return (
@@ -231,6 +233,8 @@ const Schedule = () => {
                 </span>
 
                 <div className={`font-bold pb-1 pl-10`}>Today's Mints - {date}</div>
+
+                <p className="pt-3">Projects must have more than 1,000 twitter followers before showing up on the list</p>
 
                 {
                     isLoading
@@ -249,7 +253,7 @@ const Schedule = () => {
                             bordered
                             scroll={{x: 'max-content'}}
                             // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
-                            // scroll={{x: 'max-content', y: 500}} 
+                            // scroll={{x: 'max-content', y: 500}}
                             pagination={false}
                         />
 
