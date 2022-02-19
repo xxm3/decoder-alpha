@@ -395,6 +395,16 @@ const Home = () => {
                 {/*    </IonContent>*/}
                 {/*</IonCard>*/}
 
+                
+                {/*if need to tell the user of errors*/}
+                {/*<div className="m-12 relative mt-6 bg-red-100 p-6 rounded-xl">*/}
+                {/*    <p className="text-lg text-red-700 font-medium">*/}
+                {/*        <b>The database ran into an error on Feb 14th at 1200 EST (shouldn't happen again). Old data was lost, so searches will be a bit empty for the next day</b>*/}
+                {/*    </p>*/}
+                {/*    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">*/}
+                {/*        !*/}
+                {/*    </span>*/}
+                {/*</div>*/}
                 </div>
         </div>
     );
