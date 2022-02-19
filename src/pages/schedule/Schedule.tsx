@@ -6,7 +6,7 @@ import Header from "../../components/header/Header";
 import Loader from '../../components/Loader';
 import {Table} from 'antd'
 import { ColumnsType } from 'antd/es/table';
-import {IonContent, IonModal, IonPage} from '@ionic/react';
+import {IonContent, IonModal } from '@ionic/react';
 
 import './Schedule.css'
 
@@ -20,6 +20,7 @@ const Schedule = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false)
+
     interface Mint {
         image: string,
         project: string,
@@ -37,19 +38,19 @@ const Schedule = () => {
 
     // Get today's mints
     const fetchMintsData = () => {
-      setIsLoading(true)
+        setIsLoading(true)
 
-      instance
-          .get(environment.backendApi + '/getTodaysMints')
-          .then((res) => {
-            setMints(res.data.data.mints)
-            setDate(res.data.data.date)
-            setIsLoading(false)
-          })
-          .catch((err) => {
-            setIsLoading(false)
-            console.error("error when getting mints: " + err)
-          })
+        instance
+            .get(environment.backendApi + '/getTodaysMints')
+            .then((res) => {
+                setMints(res.data.data.mints)
+                setDate(res.data.data.date)
+                setIsLoading(false)
+            })
+            .catch((err) => {
+                setIsLoading(false)
+                console.error("error when getting mints: " + err)
+            })
     }
 
     useEffect(() => {
@@ -72,63 +73,63 @@ const Schedule = () => {
      * @param {[]} mints array
      * @return {} update the mints array objects values => tillTheMint to new values
      */
-    // const mintExpiresAt = (arr: any) => {
-    //   for(let i = 0; i < arr.length; i++) {
-    //     if(arr[i].mintExpiresAt || arr[i].mintExpiresAt?.length !== 0) {
-    //       const timeNow = moment()
-    //       const timeExpiresAt = moment(arr[i].mintExpiresAt)
-    //
-    //       const diff = (timeExpiresAt.diff(timeNow))
-    //
-    //       let minutes = Math.floor((diff / (1000 * 60)) % 60)
-    //       let hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
-    //
-    //       let splitArr = arr[i].tillTheMint.split(" ") // ['6', 'hours', '23', 'minutes']
-    //
-    //       splitArr[0] = hours
-    //       splitArr[2] = minutes
-    //
-    //       arr[i].tillTheMint = splitArr.join(" ")
-    //     }
-    //   }
-    // }
+        // const mintExpiresAt = (arr: any) => {
+        //   for(let i = 0; i < arr.length; i++) {
+        //     if(arr[i].mintExpiresAt || arr[i].mintExpiresAt?.length !== 0) {
+        //       const timeNow = moment()
+        //       const timeExpiresAt = moment(arr[i].mintExpiresAt)
+        //
+        //       const diff = (timeExpiresAt.diff(timeNow))
+        //
+        //       let minutes = Math.floor((diff / (1000 * 60)) % 60)
+        //       let hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
+        //
+        //       let splitArr = arr[i].tillTheMint.split(" ") // ['6', 'hours', '23', 'minutes']
+        //
+        //       splitArr[0] = hours
+        //       splitArr[2] = minutes
+        //
+        //       arr[i].tillTheMint = splitArr.join(" ")
+        //     }
+        //   }
+        // }
 
     const handleProjectClick = (project: any) => {
-      setIsOpen(!isOpen);
-      setIsLoading(true);
+            setIsOpen(!isOpen);
+            setIsLoading(true);
 
-      // Temporarily set this condition below since old collection has 10DaySearchResults field
-      // which is conflicting with new renamed field tenDaySearchResults
-      setSplitCollectionName(!project.tenDaySearchResults ? project['10DaySearchResults'] : project.tenDaySearchResults );
-      setIsLoading(false);
-    }
+            // Temporarily set this condition below since old collection has 10DaySearchResults field
+            // which is conflicting with new renamed field tenDaySearchResults
+            setSplitCollectionName(!project.tenDaySearchResults ? project['10DaySearchResults'] : project.tenDaySearchResults);
+            setIsLoading(false);
+        }
 
     const columns: ColumnsType<Mint> = [
         {
-          title: 'Name',
-          key: 'project',
-          render: record => (
-            <span
-              className='cursor-pointer'
-              onClick={() => handleProjectClick(record)}
-            >
+            title: 'Name',
+            key: 'project',
+            render: record => (
+                <span
+                    className='cursor-pointer'
+                    onClick={() => handleProjectClick(record)}
+                >
               {record.project}
             </span>
-          ),
-          sorter: (a, b) => a.project.localeCompare(b.project),
-          width: 180,
-          // fixed: 'left',
-          // align: 'left'
-        //   responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+            ),
+            sorter: (a, b) => a.project.localeCompare(b.project),
+            width: 180,
+            // fixed: 'left',
+            // align: 'left'
+            //   responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
-          title: 'Time',
-          dataIndex: 'time',
-          key: 'time',
-          sorter: (a:any, b:any) => a.time.split(" ")[0].split(":").join("") - b.time.split(" ")[0].split(":").join(""),
-          width: 100,
-          align: 'left'
-        //   responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+            title: 'Time',
+            dataIndex: 'time',
+            key: 'time',
+            sorter: (a: any, b: any) => a.time.split(" ")[0].split(":").join("") - b.time.split(" ")[0].split(":").join(""),
+            width: 100,
+            align: 'left'
+            //   responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
             title: 'Time',
@@ -153,15 +154,16 @@ const Schedule = () => {
             // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
-          title: 'Supply',
-          dataIndex: 'count',
-          key: 'count',
-          sorter: (a:any, b:any) => a.count - b.count,
-          width: 100,
-          align: 'left'
-        //   responsive: ['md'], // Will not be displayed below 768px
+            title: 'Supply',
+            dataIndex: 'count',
+            key: 'count',
+            sorter: (a: any, b: any) => a.count - b.count,
+            width: 100,
+            align: 'left'
+            //   responsive: ['md'], // Will not be displayed below 768px
         },
         {
+
             title: '# Twitter',
             // dataIndex: 'numbersOfTwitterFollowers',
             key: 'numbersOfTwitterFollowers',
@@ -199,8 +201,8 @@ const Schedule = () => {
             key: 'connections',
             render: record => (
                 <>
-                    <a href={record.discordLink}>Discord</a> <br />
-                    <a href={record.twitterLink}>Twitter</a>
+                    <a href={record.discordLink} target='_blank'>Discord</a> <br/>
+                    <a href={record.twitterLink} target='_blank'>Twitter</a>
                 </>
             ),
             width: 100,
@@ -214,39 +216,32 @@ const Schedule = () => {
         //   width: 300,
         //   responsive: ['md'], // Will not be displayed below 768px
         // },
-      ];
+    ];
 
-    // TODO: put this in a "card"... once style guide merged in
+    // Renders
+    return (
 
-  // Renders
-  return (
-    <IonPage>
-        <IonContent  fullscreen>
+        <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
-            <Header />
+            <div className="flex space-x-2 items-center">
+                <div className={`font-bold pb-1 `}>Today's Mints - {date}</div>
+            </div>
 
-            <div className="bg-gradient-to-b from-bg-primary to-bg-secondary justify-center items-center p-4 pt-2 sticky">
 
-                {/*TODO-later: remove below once done, plus remove pl-10 */}
-                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full ">
-                    WIP
-                </span>
+            {/* <div className="bg-gradient-to-b from-bg-primary to-bg-primary justify-center items-center p-4 pt-2 sticky">*/}
 
-                <div className={`font-bold pb-1 pl-10`}>Today's Mints - {date}</div>
-
-                <p className="pt-3">Projects must have more than 1,000 twitter followers before showing up on the list</p>
-
-                {
-                    isLoading
-                    ?   <div className="pt-10 flex justify-center items-center">
-                            <Loader />
-                        </div>
+            <p className="pt-3">Projects must have more than 1,000 twitter followers before showing up on the list</p>
+            {
+                isLoading
+                    ? <div className="pt-10 flex justify-center items-center">
+                        <Loader/>
+                    </div>
                     :
 
-                    <div className="max-w-fit mx-auto mb-10">
-                        <br />
+                    <div className="max-w-fit mx-auto mb-10 ">
+                        <br/>
                         <Table
-                            className='w-full mx-auto'
+                            className='w-full mx-auto '
                             rowKey='project'
                             dataSource={dataSource}
                             columns={columns}
@@ -271,13 +266,9 @@ const Schedule = () => {
                         </IonModal> */}
 
                     </div>
-                }
-
-            </div>
-        </IonContent>
-
-    </IonPage>
-  )
+            }
+        </div>
+    )
 }
 
 // @ts-ignore

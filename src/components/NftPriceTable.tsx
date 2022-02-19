@@ -64,10 +64,10 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
             ),
             // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
-        { title: '# Discords Alerted on', dataIndex: 'numDiscordsAlerted', key: 'numDiscordsAlerted', width: 200,
-            sorter: (a, b) => a.numDiscordsAlerted - b.numDiscordsAlerted,
-            // responsive: ['md'], // Will not be displayed below 768px
-        },
+        // { title: '# Discords Alerted on', dataIndex: 'numDiscordsAlerted', key: 'numDiscordsAlerted', width: 200,
+        //     sorter: (a, b) => a.numDiscordsAlerted - b.numDiscordsAlerted,
+        //     // responsive: ['md'], // Will not be displayed below 768px
+        // },
         { title: 'Meta', dataIndex: 'meta', key: 'meta',
             width: 200,
             sorter: (a, b) => a.meta ? a.meta.localeCompare(b.meta) : 0,
@@ -124,8 +124,6 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
     /**
      * Renders
      */
-
-    // TODO: pretty sure +discord is broke. didn't work for https://honshu-wolves-mint.vercel.app/...
 
     return (
         <>
