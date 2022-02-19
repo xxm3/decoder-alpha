@@ -67,7 +67,7 @@ const Display: React.FC<{
     const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
     const {id: word} = useParams<{ id: string; }>();
 
-    const completelyHideChart = useMemo(() => word.indexOf(" ") !== -1 ? true : false, [word]);
+    const completelyHideChart = false; // useMemo(() => word.indexOf(" ") !== -1 ? true : false, [word]);
 
     const definedMessages = messages.filter(Boolean);
 
