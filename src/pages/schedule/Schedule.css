@@ -1,6 +1,7 @@
 /* Override styles of antd table */
 .ant-table-body {
-    margin-top: 3em;
+    /*margin-top: 3em;*/
+
 }
 .ant-table-tbody .ant-table-row-level-0 {
     border-bottom: 1px solid gray;
