@@ -23,6 +23,7 @@ import {
 import {Message} from "../../types/Message";
 import MessageThread from "./MessageThread";
 import {useParams} from "react-router";
+import Loader from "../Loader";
 
 // NOTE: any changes made here must be made in both Chart.jsx & MobileChart.jsx!
 
@@ -46,12 +47,16 @@ const Display: React.FC<{
     chartHeight: number;
     messages: (Message | undefined)[];
     totalCount?: number;
+    isLoadingChart?: any;
+    isLoadingMessages?: any;
 }> = ({
           chartDataDailyCount,
           chartDataPerSource,
           chartHeight,
           messages,
-          totalCount
+          totalCount,
+          isLoadingChart,
+          isLoadingMessages
       }) => {
 
     /**
@@ -105,7 +110,7 @@ const Display: React.FC<{
                     )}
 
                     {/* bar & line chart */}
-                    {showChart &&
+                    {isLoadingChart ? <div className="pt-10 flex justify-center items-center"><Loader /></div> : showChart && (Object.keys(chartDataDailyCount).length) &&
                         chartDataDailyCount &&
                         chartDataPerSource &&
                         definedMessages.length > 0 &&
@@ -164,7 +169,7 @@ const Display: React.FC<{
                 </div>
 
                 {/* list of messages, ie. search results */}
-                {messages?.map((m, i) => (
+                {isLoadingMessages ? <div className="pt-10 flex justify-center items-center"><Loader /></div> : messages?.map((m, i) => (
                     m ? (
                         <MessageListItem
                             onClick={() => {

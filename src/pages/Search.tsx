@@ -22,7 +22,10 @@ const Search: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [chartDailyCount, setChartDailyCount] = useState({});
     const [chartSource, setChartSource] = useState({});
-    const [isError, setIsError] = useState(false)
+    const [isError, setIsError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
+    let error: any;
 
     const { id : searchText} = useParams<{
         id : string;
@@ -112,12 +115,20 @@ const Search: React.FC = () => {
 
     useEffect(() => {
         if(results.length) {
-            // setIsError(false);
-            if(results[0].data && results[0].data.totalCount) {
-                const totalPages = Math.floor(results[0].data.totalCount/100);
-                setPageCount(totalPages)
+            if(results[0].data) {
+                if(results[0].data.totalCount) {
+                    const totalPages = Math.floor(results[0].data.totalCount/100);
+                    setPageCount(totalPages)
+                    setIsError(false);
+                }
+                else {
+                    setIsError(true)
+                    setErrorMessage("No data found")
+                }
             }
             if(results[1].data) {
+                setIsError(false);
+
                 const datasetForChartDailyCount = getDailyCountData(results[1].data);
 
                 const chartDataDailyCount = {
@@ -154,16 +165,13 @@ const Search: React.FC = () => {
                 setChartDailyCount(chartDataDailyCount);
                 setChartSource(chartDataPerSource)
             }
+            
         }
-        console.log("result : --- ",results);
-        if(results[0].isError  || results[1].isError ) setIsError(true)
-        else setIsError(false)
-    }, [results[0]?.data, results[1]?.data])
-
-    useEffect(() => {
-        console.log("chart daily ", chartDailyCount, chartSource);
         
-    },[chartDailyCount, chartSource])
+    }, [results[0]?.data?.totalCount])
+
+    // useEffect(() => {        
+    // },[chartDailyCount, chartSource])
 
     // for scrolling to top
     const contentRef = useRef<HTMLIonContentElement | null>(null);
@@ -193,10 +201,10 @@ const Search: React.FC = () => {
                             bg-satin-3 rounded-lg pt-3 pb-6 md:px-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
                             {/* loading bar */}
-                            {isError ? (
+                            {/* {isError ? (
                                 <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                                     <p className="text-lg text-red-700 font-medium">
-                                        <b>{'Unable to connect'}</b>
+                                        <b>{errorMessage ||'Unable to connect'}</b>
                                     </p>
                                     <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                                         !
@@ -204,16 +212,30 @@ const Search: React.FC = () => {
                                 </div>
 
                             // actual content
-                            ) : (
+                            ) : ( */}
                                 <>
-                                {results.length && (Object.keys(chartDailyCount).length) ? 
-                                  <> 
+                                {results.length ? 
+                                    results[0].data?.messages == undefined ? (
+                                        <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
+                                            <p className="text-lg text-red-700 font-medium">
+                                                <b>{"No such word found" ||'Unable to connect'}</b>
+                                            </p>
+                                            <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                                                !
+                                            </span>
+                                        </div>
+        
+                                    // actual content
+                                    ) : 
+                                  (<> 
                                     <Display {...{
                                         chartDataDailyCount : chartDailyCount ? chartDailyCount: {},
                                         chartDataPerSource : chartSource ? chartSource : {},
                                         chartHeight,
                                         messages : results[0].data?.messages ?? [],
-                                        totalCount: results[0].data?.totalCount
+                                        totalCount: results[0].data?.totalCount,
+                                        isLoadingChart: results[1].isLoading,
+                                        isLoadingMessages: results[0].isLoading
                                     }}/>
                                     {(results[0].data?.totalCount ?? 0) > 5 && (
                                         <>
@@ -227,9 +249,10 @@ const Search: React.FC = () => {
                                         </IonButton>
                                         </>
                                     )}
-                                    </> : <></>}                                     
+                                    </> )
+                                    : <></>}                                     
                                 </>
-                            )}
+                             {/* )} */}
                         </div>
         </React.Fragment>
     );
