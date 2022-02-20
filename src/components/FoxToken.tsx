@@ -73,7 +73,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
      */
     // user wants to only see verified collections
     const setCheckedVerifiedOnly = (e: any) => {
-        console.log(e);
+        console.log(e); // TODO
     }
 
     /**
@@ -95,10 +95,12 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             </div>
                         : <div className=" ">
 
-                            <IonItem style={{"width": "250px"}}>
-                                <IonLabel>Show Verified Only</IonLabel>
-                                <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />
-                            </IonItem>
+                            {/*TODO:*/}
+                            {/*<IonItem style={{"width": "250px"}}>*/}
+                            {/*    <IonLabel>Show Verified Only</IonLabel>*/}
+                            {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
+                            {/*</IonItem>*/}
+
                             <IonRow>
                                 <IonCol className='' size="8">
                                     <Table
