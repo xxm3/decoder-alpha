@@ -25,9 +25,6 @@ import MessageThread from "./MessageThread";
 import {useParams} from "react-router";
 import Loader from "../Loader";
 
-// NOTE: any changes made here must be made in both Chart.jsx & MobileChart.jsx!
-
-
 ChartJS.register(...registerables);
 ChartJS.register(
     ArcElement,
@@ -88,6 +85,7 @@ const Display: React.FC<{
     return (
         <>
             <div className="p-3 overflow-y-scroll rounded-lg">
+
                 <div className="gap-4 mb-4 grid grid-cols-12">
 
                     {/*search header*/}
@@ -110,11 +108,17 @@ const Display: React.FC<{
                     )}
 
                     {/* bar & line chart */}
-                    {isLoadingChart ? <div className="pt-10 flex justify-center items-center"><Loader /></div> : showChart && (Object.keys(chartDataDailyCount).length) &&
+                    {/* starting with loading */}
+                    {/*TODO-rakesh: this loading is always blank...*/}
+                    {isLoadingChart ?
+                            <div className="pt-10 flex justify-center items-center"><Loader /></div> :
+                        showChart &&
+                        (Object.keys(chartDataDailyCount).length) &&
                         chartDataDailyCount &&
                         chartDataPerSource &&
                         definedMessages.length > 0 &&
-                        !completelyHideChart && (
+                        !completelyHideChart &&
+                        (
                             <>
                                 <div className="chart">
                                     <Chart
@@ -169,6 +173,7 @@ const Display: React.FC<{
                 </div>
 
                 {/* list of messages, ie. search results */}
+                {/*TODO-rakesh: this loading is always blank...*/}
                 {isLoadingMessages ? <div className="pt-10 flex justify-center items-center"><Loader /></div> : messages?.map((m, i) => (
                     m ? (
                         <MessageListItem

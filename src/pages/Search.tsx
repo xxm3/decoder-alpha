@@ -29,11 +29,11 @@ const Search: React.FC = () => {
 
     const { id : searchText} = useParams<{
         id : string;
-    }>();    
+    }>();
 
     const results = useQueries([
-        { 
-            queryKey: ['messages', searchText,currentPage], 
+        {
+            queryKey: ['messages', searchText,currentPage],
             queryFn: async () => {
                 try {
                     const { data } = await instance.post<SearchResponse>(
@@ -52,7 +52,7 @@ const Search: React.FC = () => {
                 } catch (e) {
                     console.error('try/catch in Search.tsx: ', e);
                     const error = e as Error & { response?: AxiosResponse };
-    
+
                     if (error && error.response) {
                         throw new Error(String(error.response.data.body));
                     } else {
@@ -61,8 +61,8 @@ const Search: React.FC = () => {
                 }
             }
         },
-        { 
-            queryKey: ['messages', searchText], 
+        {
+            queryKey: ['messages', searchText],
             queryFn: async () => {
                 try {
                     const { data } = await instance.post<SearchResponse>(
@@ -80,7 +80,7 @@ const Search: React.FC = () => {
                 } catch (e) {
                     console.error('try/catch in Search.tsx: ', e);
                     const error = e as Error & { response?: AxiosResponse };
-    
+
                     if (error && error.response) {
                         throw new Error(String(error.response.data.body));
                     } else {
@@ -115,18 +115,26 @@ const Search: React.FC = () => {
 
     useEffect(() => {
         if(results.length) {
-            if(results[0].data) {
-                if(results[0].data.totalCount) {
-                    const totalPages = Math.floor(results[0].data.totalCount/100);
+
+            if (results[0].data) {
+                if (results[0].data.totalCount) {
+                    const totalPages = Math.floor(results[0].data.totalCount / 100);
                     setPageCount(totalPages)
                     setIsError(false);
-                }
-                else {
+                } else {
                     setIsError(true)
                     setErrorMessage("No data found")
                 }
             }
+        }
+    }, [results[0]?.data?.totalCount])
+
+
+    useEffect(() => {
+        if(results.length) {
+
             if(results[1].data) {
+
                 setIsError(false);
 
                 const datasetForChartDailyCount = getDailyCountData(results[1].data);
@@ -165,12 +173,12 @@ const Search: React.FC = () => {
                 setChartDailyCount(chartDataDailyCount);
                 setChartSource(chartDataPerSource)
             }
-            
-        }
-        
-    }, [results[0]?.data?.totalCount])
 
-    // useEffect(() => {        
+        }
+
+    }, [results[1]?.data])
+
+    // useEffect(() => {
     // },[chartDailyCount, chartSource])
 
     // for scrolling to top
@@ -200,11 +208,11 @@ const Search: React.FC = () => {
                         <div className={` ${width <= 640 ? 'w-full' : 'container'}
                             bg-satin-3 rounded-lg pt-3 pb-6 md:px-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
-                            {/* loading bar */}
-                            {/* {isError ? (
+                            {/* ERROR bar */}
+                            {isError ? (
                                 <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                                     <p className="text-lg text-red-700 font-medium">
-                                        <b>{errorMessage ||'Unable to connect'}</b>
+                                        <b>{errorMessage || 'Unable to connect, please try again later'}</b>
                                     </p>
                                     <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                                         !
@@ -212,22 +220,25 @@ const Search: React.FC = () => {
                                 </div>
 
                             // actual content
-                            ) : ( */}
+                            ) : (
                                 <>
-                                {results.length ? 
+                                {results.length ?
                                     results[0].data?.messages == undefined ? (
-                                        <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
-                                            <p className="text-lg text-red-700 font-medium">
-                                                <b>{"No such word found" ||'Unable to connect'}</b>
-                                            </p>
-                                            <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                                                !
-                                            </span>
-                                        </div>
-        
+                                        // TODO-rakesh: why do we have this whole section below (that ive since commented out) - when we have most of this above?
+                                            //  maybe we need it, maybe we don't, but it was ALWAYS showing "no results found" instead of some loading bar... so i commented it out
+                                        <></>
+                                        // <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
+                                        //     <p className="text-lg text-red-700 font-medium">
+                                        //         <b>{"No results found" ||'Unable to connect, please try again later'}</b>
+                                        //     </p>
+                                        //     <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                                        //         !
+                                        //     </span>
+                                        // </div>
+
                                     // actual content
-                                    ) : 
-                                  (<> 
+                                    ) :
+                                  (<>
                                     <Display {...{
                                         chartDataDailyCount : chartDailyCount ? chartDailyCount: {},
                                         chartDataPerSource : chartSource ? chartSource : {},
@@ -240,19 +251,23 @@ const Search: React.FC = () => {
                                     {(results[0].data?.totalCount ?? 0) > 5 && (
                                         <>
                                         {(currentPage != 0) && <IonButton onClick={()=> handlePage('previous')}>Previous</IonButton>}
-                                        {(currentPage < pageCount)  && <IonButton onClick={()=> handlePage('next')}  className="ml-4">Next</IonButton>}
+
+                                        {/*TODO-rakesh: this next isn't working when its multiple words :( search for "Starry Insiders"*/}
+                                        {(currentPage < pageCount) && <IonButton onClick={()=> handlePage('next')}  className="ml-4">Next</IonButton>}
+                                            {/* && results[0].data?.totalCount > 100*/}
                                         <IonButton
                                             onClick={() => scrollToTop()}
                                             className="float-right"
                                         >
+                                            {/*TODO-rakesh: this doens't work anymore*/}
                                             Scroll to Top
                                         </IonButton>
                                         </>
                                     )}
                                     </> )
-                                    : <></>}                                     
+                                    : <></>}
                                 </>
-                             {/* )} */}
+                              )}
                         </div>
         </React.Fragment>
     );

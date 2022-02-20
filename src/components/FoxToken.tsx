@@ -23,9 +23,6 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
      */
     const [tableData, setTableData] = useState([])
 
-    // TODO: filter dropdowns like fox token...
-    // TODO: try and see if I can link these to our 'mints alerted table' or 'todays mints' table
-
     const columns: ColumnsType<any> = [
         { title: 'Token', key: 'token', dataIndex: 'token',
             // render: record => (
@@ -40,7 +37,13 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         { title: 'Name', key: 'name', dataIndex: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),},
         { title: 'Total Token Listings', key: 'totalTokenListings', dataIndex: 'totalTokenListings', width: 250,
-            sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,}
+            sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,},
+
+        { title: 'View Supply in Explorer', key: '', width: 250,
+            render: record => (
+                <a target="_blank" href={'https://explorer.solana.com/address/' + record.token} >View</a>
+            ),
+        }
 
     ];
 
@@ -72,20 +75,6 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     /**
      * Renders
      */
-
-
-    // TODO
-    const url = 'https://api-mainnet.magiceden.io/rpc/getListedNFTsByQuery?q={%22$match%22:{%22collectionSymbol%22:%22cubistnft%22},%22$sort%22:{%22takerAmount%22:1,%22createdAt%22:-1},%22$skip%22:0,%22$limit%22:100}';
-    const headers = {
-        'origin': 'https://magiceden.io',
-        // 'referer': 'https://magiceden.io/',
-    }
-    axios.get(url, { headers: headers }).then((data) => {
-        console.log("data!");
-        console.log(data);
-    }).catch((err) => {
-        console.error(err);
-    });
 
 
     return (
@@ -120,7 +109,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                     />
                                 </IonCol>
                                 <IonCol>
-                                    {/*TODO: future charts i guess? */}
+
                                 </IonCol>
                             </IonRow>
 

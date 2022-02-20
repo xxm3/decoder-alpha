@@ -124,26 +124,32 @@ const Schedule = () => {
         },
         {
             title: 'Time',
-            dataIndex: 'time',
+            // dataIndex: 'time',
             key: 'time',
             sorter: (a: any, b: any) => a.time.split(" ")[0].split(":").join("") - b.time.split(" ")[0].split(":").join(""),
-            width: 100,
-            align: 'left'
-            //   responsive: ['xs', 'sm'], // Will be displayed on every size of screen
-        },
-        {
-            title: 'Time',
-            key: 'tillTheMint',
-            width: 130,
+            width: 200,
+            align: 'left',
             render: record => (
-                // (record.time)
                 <span>
-                    {record.time !== "" && moment.utc(record.time, 'hh:mm:ss').fromNow()}
+                    {record.time}
+                    {record.time !== "" && " (" + moment.utc(record.time, 'hh:mm:ss').fromNow() + ")"}
                 </span>
             ),
-            align: 'left'
-            // responsive: ['md'], // Will not be displayed below 768px
+            //   responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
+        // {
+        //     title: 'Time',
+        //     key: 'tillTheMint',
+        //     width: 130,
+        //     render: record => (
+        //         // (record.time)
+        //         <span>
+        //             {record.time !== "" && moment.utc(record.time, 'hh:mm:ss').fromNow()}
+        //         </span>
+        //     ),
+        //     align: 'left'
+        //     // responsive: ['md'], // Will not be displayed below 768px
+        // },
         {
             title: 'Price',
             dataIndex: 'price',
