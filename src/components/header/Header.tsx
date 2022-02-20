@@ -130,7 +130,7 @@ const HeaderContainer = () => {
                                     initialValue={decodeURIComponent(id ?? '')}
                                     placeholder={headerPlaceholder}
                                     helpMsg='Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale").
-                                            Results include graphs, and messages you can scroll through'
+                                            Results include graphs, and messages you can scroll through. Click on a message to view more'
                                     disableReset='true'
                                 />
                             </div>
