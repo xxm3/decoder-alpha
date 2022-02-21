@@ -11,6 +11,8 @@ import { useQueries } from 'react-query';
 import { AxiosResponse } from 'axios';
 import { SearchResponse } from '../types/SearchResponse';
 import { dispLabelsDailyCount, getDailyCountData } from '../util/charts';
+import DisplayGraph from '../components/search/DisplayGraph';
+import Loader from '../components/Loader';
 
 const Search: React.FC = () => {
 
@@ -115,65 +117,84 @@ const Search: React.FC = () => {
 
     useEffect(() => {
         if(results.length) {
+            
+            if(results[0].status == 'success') {
+                if (results[0].data) {
+                    if(results[0].data?.error) {
+                        setIsError(true)
+                        setErrorMessage(results[0].data.body);
+                        setChartDailyCount({});
+                        setChartSource({});
+                    }
+                    if (results[0].data.totalCount) {
+                        const totalPages = Math.floor(results[0].data.totalCount / 100);
+                        setPageCount(totalPages)
+                        setIsError(false);
+                        setErrorMessage("");
 
-            if (results[0].data) {
-                if (results[0].data.totalCount) {
-                    const totalPages = Math.floor(results[0].data.totalCount / 100);
-                    setPageCount(totalPages)
-                    setIsError(false);
-                } else {
-                    setIsError(true)
-                    setErrorMessage("No data found")
+                    } else {
+                        setIsError(true)
+                        setErrorMessage("No data found");
+                        setChartDailyCount({});
+                        setChartSource({});
+                    }
                 }
             }
         }
-    }, [results[0]?.data?.totalCount])
+    }, [results[0]?.data])
 
 
     useEffect(() => {
         if(results.length) {
+            console.log("result ", results);
+            
+            if(results[1].status == 'success') {
+                if(results[1].data) {
 
-            if(results[1].data) {
+                    if(results[0].data?.error) {
+                        setIsError(true)
+                    }
+                    else {
+                        setIsError(false);
 
-                setIsError(false);
-
-                const datasetForChartDailyCount = getDailyCountData(results[1].data);
-
-                const chartDataDailyCount = {
-                    labels: dispLabelsDailyCount(results[1].data.ten_day_count, true),
-                    datasets: [
-                        {
-                            type: 'line' as const,
-                            borderColor: 'rgb(255, 99, 132)',
-                            borderWidth: 2,
-                            fill: false,
-                            data: datasetForChartDailyCount,
+                        const datasetForChartDailyCount = getDailyCountData(results[1].data);
+    
+                        const chartDataDailyCount = {
+                            labels: dispLabelsDailyCount(results[1].data.ten_day_count, true),
+                            datasets: [
+                                {
+                                    type: 'line' as const,
+                                    borderColor: 'rgb(255, 99, 132)',
+                                    borderWidth: 2,
+                                    fill: false,
+                                    data: datasetForChartDailyCount,
+                                }
+                            ],
                         }
-                    ],
-                }
-                const sourceToAry = results[1].data.source;
-                let labelsPerSource = [];
-                let dataPerSource: any = [];
-                for(let i in sourceToAry){
-                    labelsPerSource.push(sourceToAry[i][0]);
-                    dataPerSource.push(sourceToAry[i][1]);
-                }
-               const chartDataPerSource = ({
-                    labels: labelsPerSource,
-                    datasets: [
-                        {
-                            type: 'bar' as const,
-                            backgroundColor: 'rgb(75, 192, 192)',
-                            data: dataPerSource,
-                            borderColor: 'white',
-                            borderWidth: 2,
+                        const sourceToAry = results[1].data.source;
+                        let labelsPerSource = [];
+                        let dataPerSource: any = [];
+                        for(let i in sourceToAry){
+                            labelsPerSource.push(sourceToAry[i][0]);
+                            dataPerSource.push(sourceToAry[i][1]);
                         }
-                    ],
-                });
-                setChartDailyCount(chartDataDailyCount);
-                setChartSource(chartDataPerSource)
+                    const chartDataPerSource = ({
+                            labels: labelsPerSource,
+                            datasets: [
+                                {
+                                    type: 'bar' as const,
+                                    backgroundColor: 'rgb(75, 192, 192)',
+                                    data: dataPerSource,
+                                    borderColor: 'white',
+                                    borderWidth: 2,
+                                }
+                            ],
+                        });
+                        setChartDailyCount(chartDataDailyCount);
+                        setChartSource(chartDataPerSource);
+                    }
+                }
             }
-
         }
 
     }, [results[1]?.data])
@@ -188,7 +209,16 @@ const Search: React.FC = () => {
      * Functions
      */
     const scrollToTop = () => {
-        contentRef.current && contentRef.current.scrollToTop();
+        
+        if(contentRef.current !== null) {
+            console.log("inside if");
+            contentRef.current.scrollToTop();
+        }
+        else {
+            console.log("used window property");     
+            window.scrollTo(0, 0)      
+        }
+        // contentRef.current !== null ? contentRef.current.scrollToTop() : window.scrollTo({top:0, behavior:"smooth"});
     };
 
     const handlePage = (type: string) => {
@@ -222,32 +252,20 @@ const Search: React.FC = () => {
                             // actual content
                             ) : (
                                 <>
-                                {results.length ?
-                                    results[0].data?.messages == undefined ? (
-                                        // TODO-rakesh: why do we have this whole section below (that ive since commented out) - when we have most of this above?
-                                            //  maybe we need it, maybe we don't, but it was ALWAYS showing "no results found" instead of some loading bar... so i commented it out
-                                        <></>
-                                        // <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
-                                        //     <p className="text-lg text-red-700 font-medium">
-                                        //         <b>{"No results found" ||'Unable to connect, please try again later'}</b>
-                                        //     </p>
-                                        //     <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                                        //         !
-                                        //     </span>
-                                        // </div>
-
-                                    // actual content
-                                    ) :
-                                  (<>
-                                    <Display {...{
+                                {results[0]?.status == 'loading' && results[1]?.status == 'loading' ?
+                                    <div className="pt-10 flex justify-center items-center"><Loader /></div> :
+                                  <>
+                                  {isError === false && <Display {...{
                                         chartDataDailyCount : chartDailyCount ? chartDailyCount: {},
                                         chartDataPerSource : chartSource ? chartSource : {},
                                         chartHeight,
-                                        messages : results[0].data?.messages ?? [],
-                                        totalCount: results[0].data?.totalCount,
                                         isLoadingChart: results[1].isLoading,
+                                        totalCount: results[0].data?.totalCount,
+                                        dataObject: results[0],
+                                        messages : results[0].data?.messages ?? [],
                                         isLoadingMessages: results[0].isLoading
-                                    }}/>
+                                    }}/>}
+                                    
                                     {(results[0].data?.totalCount ?? 0) > 5 && (
                                         <>
                                         {(currentPage != 0) && <IonButton onClick={()=> handlePage('previous')}>Previous</IonButton>}
@@ -256,7 +274,7 @@ const Search: React.FC = () => {
                                         {(currentPage < pageCount) && <IonButton onClick={()=> handlePage('next')}  className="ml-4">Next</IonButton>}
                                             {/* && results[0].data?.totalCount > 100*/}
                                         <IonButton
-                                            onClick={() => scrollToTop()}
+                                            onClick={scrollToTop}
                                             className="float-right"
                                         >
                                             {/*TODO-rakesh: this doens't work anymore*/}
@@ -264,8 +282,8 @@ const Search: React.FC = () => {
                                         </IonButton>
                                         </>
                                     )}
-                                    </> )
-                                    : <></>}
+                                    </> }
+                                    {/* : <></>} */}
                                 </>
                               )}
                         </div>
