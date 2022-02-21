@@ -50,7 +50,7 @@ const Schedule = () => {
               dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")"
           }
             setMints([...dataSource])
-        }, 6000)
+        }, 60000)
     
         return () => clearInterval(interval);
     }, [mints]);
