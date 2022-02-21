@@ -23,9 +23,7 @@ import {
 import {Message} from "../../types/Message";
 import MessageThread from "./MessageThread";
 import {useParams} from "react-router";
-
-// NOTE: any changes made here must be made in both Chart.jsx & MobileChart.jsx!
-
+import Loader from "../Loader";
 
 ChartJS.register(...registerables);
 ChartJS.register(
@@ -41,17 +39,21 @@ ChartJS.register(
 
 defaults.color = '#FFFFFF';
 const Display: React.FC<{
-    chartDataDailyCount?: ChartData<"bar" | "line", number[]>;
-    chartDataPerSource?: ChartData<"bar", number[]>;
+    chartDataDailyCount?: any;
+    chartDataPerSource?: any;
     chartHeight: number;
     messages: (Message | undefined)[];
     totalCount?: number;
+    isLoadingChart?: any;
+    isLoadingMessages?: any;
 }> = ({
           chartDataDailyCount,
           chartDataPerSource,
           chartHeight,
           messages,
-          totalCount
+          totalCount,
+          isLoadingChart,
+          isLoadingMessages
       }) => {
 
     /**
@@ -62,7 +64,7 @@ const Display: React.FC<{
     const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
     const {id: word} = useParams<{ id: string; }>();
 
-    const completelyHideChart = useMemo(() => word.indexOf(" ") !== -1 ? true : false, [word]);
+    const completelyHideChart = false; // useMemo(() => word.indexOf(" ") !== -1 ? true : false, [word]);
 
     const definedMessages = messages.filter(Boolean);
 
@@ -83,6 +85,7 @@ const Display: React.FC<{
     return (
         <>
             <div className="p-3 overflow-y-scroll rounded-lg">
+
                 <div className="gap-4 mb-4 grid grid-cols-12">
 
                     {/*search header*/}
@@ -105,11 +108,17 @@ const Display: React.FC<{
                     )}
 
                     {/* bar & line chart */}
-                    {showChart &&
+                    {/* starting with loading */}
+                    {/*TODO-rakesh: this loading is always blank...*/}
+                    {isLoadingChart ?
+                            <div className="pt-10 flex justify-center items-center"><Loader /></div> :
+                        showChart &&
+                        (Object.keys(chartDataDailyCount).length) &&
                         chartDataDailyCount &&
                         chartDataPerSource &&
                         definedMessages.length > 0 &&
-                        !completelyHideChart && (
+                        !completelyHideChart &&
+                        (
                             <>
                                 <div className="chart">
                                     <Chart
@@ -150,7 +159,7 @@ const Display: React.FC<{
                                                 },
                                                 title: {
                                                     display: true,
-                                                    text: '# of messages per Discord (last 100 messages)',
+                                                    text: '# of messages per Discord',
                                                 },
                                             },
                                             responsive: true,
@@ -164,7 +173,8 @@ const Display: React.FC<{
                 </div>
 
                 {/* list of messages, ie. search results */}
-                {messages.map((m, i) => (
+                {/*TODO-rakesh: this loading is always blank...*/}
+                {isLoadingMessages ? <div className="pt-10 flex justify-center items-center"><Loader /></div> : messages?.map((m, i) => (
                     m ? (
                         <MessageListItem
                             onClick={() => {
