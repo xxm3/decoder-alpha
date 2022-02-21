@@ -113,6 +113,7 @@ const Search: React.FC = () => {
         return () => window.removeEventListener('resize', resizeWidth);
     }, []);
 
+    // for results[0] - which is /searchMessages ... which returns only the mesages
     useEffect(() => {
         if(results.length) {
 
@@ -129,7 +130,7 @@ const Search: React.FC = () => {
         }
     }, [results[0]?.data?.totalCount])
 
-
+    // for results[1] - which is /search ... which returns source / ten_day_count
     useEffect(() => {
         if(results.length) {
 

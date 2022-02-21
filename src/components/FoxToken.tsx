@@ -1,7 +1,7 @@
 import {
     IonButton,
     IonList,
-    IonLabel, IonItem, IonCheckbox, IonInput, IonRow, IonCol
+    IonLabel, IonItem, IonCheckbox, IonInput, IonRow, IonCol, IonItemDivider
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState} from 'react';
 import {Table} from 'antd' // https://ant.design/components/table/
@@ -73,7 +73,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
      */
     // user wants to only see verified collections
     const setCheckedVerifiedOnly = (e: any) => {
-        console.log(e); // TODO
+
     }
 
     /**
@@ -95,7 +95,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             </div>
                         : <div className=" ">
 
-                            {/*TODO:*/}
+                            {/*TODO: show verified:*/}
                             {/*<IonItem style={{"width": "250px"}}>*/}
                             {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                             {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
@@ -122,11 +122,49 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                 </IonCol>
                             </IonRow>
 
-                            <br/><br/>
+                            <br/>
 
                         </div>
                 }
                 </div>
+
+
+
+                <div hidden={true}
+                     className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+                    <div className={`font-bold pb-3 w-full text-lg`}>Fox Token - Price Alerts</div>
+
+                    <div>
+                        <label className={`font-bold pb-1 w-full`} htmlFor="">Get an alert when any of your WL tokens lists over a certain price</label>
+
+                        <IonList>
+                            <b>Wallet Address</b>
+                            <IonItem>
+                                <IonInput placeholder="Enter Wallet Address to Monitor" ></IonInput>
+                                {/* value={text} onIonChange={e => setText(e.detail.value!)} */}
+                            </IonItem>
+                        </IonList>
+
+                        <IonList>
+                            <b>Floor price of any of your WL tokens before alert</b>
+                            <IonItem>
+                                <IonInput placeholder="Enter price" ></IonInput>
+                                {/* value={text} onIonChange={e => setText(e.detail.value!)} */}
+                            </IonItem>
+                        </IonList>
+
+                        <IonButton color="success" className="text-sm" >
+                            Submit
+                        </IonButton>
+                        <br/><br/>
+
+
+                    </div>
+
+                </div>
+
+                <br/>
+
             </div>
 
         </>

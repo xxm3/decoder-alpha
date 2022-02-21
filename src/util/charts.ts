@@ -23,6 +23,7 @@ export function dispLabelsDailyCount(indivRawFetchedData: SearchResponse["ten_da
 
 // put backend data into JSON for chart
 export function getDailyCountData(fetchedData: Pick<SearchResponse, "ten_day_count"> & { [key: string] : any}){
+
     // daily count of message per day
     let datasetForChartDailyCount = Array.from({ length: constants().numDaysBackGraphs }, () => 0);
     for (let i = 0; i < fetchedData.ten_day_count.length; i++) {
