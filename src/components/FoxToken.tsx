@@ -107,14 +107,22 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 let datasetsAry = [];
                 datasetsAry.push({
                     type: 'line' as const,
-                    // label: 'portals',
-
+                    label: 'Floor Price',
                     borderColor: 'white',
                     borderWidth: 2,
                     fill: false,
-
                     data: res.data.map( (el: { floorPrice: any; }) => parseFloat(el.floorPrice)),
                 });
+
+                // TODO: put into 2 cols of charts...
+                // datasetsAry.push({
+                //     type: 'line' as const,
+                //     label: '# Listings',
+                //     borderColor: 'blue',
+                //     borderWidth: 2,
+                //     fill: false,
+                //     data: res.data.map( (el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings)),
+                // });
 
                 // console.log(labels);
                 // console.log(datasetsAry);
@@ -135,14 +143,18 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
      * Renders
      */
 
-    // @ts-ignore
-    // @ts-ignore
     return (
         <>
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
                 <div className={`font-bold pb-1 w-full`}><a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">Fox Token Market - Analysis</a></div>
                 {/*<p></p>*/}
+
+                {/* TODO: need a "add name" button */}
+
+                {/* TODO celestial order celestial order - tokKuR2MoVW3kahSpcAzkwTRjYxSnDskyTScvgP5PDc --- solana vision Emg31JgF1Ergtoswe9YQ23WVZNATN5374x56fGXQ6Gou
+
+                 */}
 
                 <div>
                 {

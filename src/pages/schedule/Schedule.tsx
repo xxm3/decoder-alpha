@@ -31,12 +31,13 @@ const Schedule = () => {
     const [date, setDate] = useState('')
     const [mints, setMints] = useState<Mint[]>([])
     const [splitCollectionName, setSplitCollectionName] = useState([])
-    
+
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false)
-    
+
     let dataSource = mints
 
+    // TODO-DevDes: also you have a bug - your new moment stuff doesn't trigger until 60 seconds after the page loads
     /**
      * This will call the every minute to update the mints array and assign mintExpiresAt field
      * which is calculated with moment.fromNow()
@@ -51,7 +52,7 @@ const Schedule = () => {
           }
             setMints([...dataSource])
         }, 60000)
-    
+
         return () => clearInterval(interval);
     }, [mints]);
 
@@ -85,7 +86,7 @@ const Schedule = () => {
     //
     //     return () => clearInterval(interval);
     // }, [mints]);
-   
+
 
     /**
      * this function is used to update the time of tillTheMint every minute
@@ -211,8 +212,8 @@ const Schedule = () => {
         },
         {
             title: '# Tweet Interactions',
-            key: 'numbersOfTwitterFollowers',
-
+            key: 'tweetInteraction',
+            sorter: (a: any, b: any) => a.tweetInteraction.total - b.tweetInteraction.total,
             render: record => (
                 <>
                 <span>
