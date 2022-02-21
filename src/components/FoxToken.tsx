@@ -10,6 +10,10 @@ import Loader from "./Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import axios from "axios";
+import {ChartData} from "chart.js";
+import {Chart} from "react-chartjs-2";
+import {getDailyCountData} from "../util/charts";
+import moment from "moment";
 
 interface FoxToken {
     foo?: string;
@@ -21,7 +25,15 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     /**
      * States & Variables
      */
-    const [tableData, setTableData] = useState([])
+    const [tableData, setTableData] = useState([]);
+
+    const [tokenClickedOn, setTokenClickedOn] = useState();
+
+    const defaultGraph : ChartData<any, string> = {
+        labels: ["1"],
+        datasets: [ { data: ["3"] } ],
+    };
+    const [foxLineData, setFoxLineData] = useState(defaultGraph);
 
     const columns: ColumnsType<any> = [
         { title: 'Token', key: 'token', dataIndex: 'token',
@@ -43,10 +55,14 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             render: record => (
                 <a target="_blank" href={'https://explorer.solana.com/address/' + record.token} >View</a>
             ),
+        },
+        { title: 'View Chart', key: '', width: 250,
+            render: record => (
+                <a onClick={() => viewChart(record.token, record.name)} className="cursor-pointer">View</a>
+            ),
         }
 
     ];
-
 
     /**
      * Use Effects
@@ -76,10 +92,51 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
     }
 
+    // viewing the chart for a token
+    const viewChart = (token: string, name: string) => {
+
+        // @ts-ignore
+        setTokenClickedOn(name ? `${name} (${token})` : token);
+
+        instance
+            .get(environment.backendApi + '/receiver/foxTokenHistory?token=' + token)
+            .then((res) => {
+
+                const labels = res.data.map( (el: { createdAt: any; }) => moment(el.createdAt).fromNow());
+
+                let datasetsAry = [];
+                datasetsAry.push({
+                    type: 'line' as const,
+                    // label: 'portals',
+
+                    borderColor: 'white',
+                    borderWidth: 2,
+                    fill: false,
+
+                    data: res.data.map( (el: { floorPrice: any; }) => parseFloat(el.floorPrice)),
+                });
+
+                // console.log(labels);
+                // console.log(datasetsAry);
+
+                setFoxLineData({
+                    labels: labels,
+                    datasets: datasetsAry
+                });
+
+            })
+            .catch((err) => {
+                console.error("error when getting fox token history data: " + err);
+            });
+
+    }
+
     /**
      * Renders
      */
 
+    // @ts-ignore
+    // @ts-ignore
     return (
         <>
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
@@ -101,6 +158,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                             {/*</IonItem>*/}
 
+                            {/*TODO: tell screen width and put in 2 cols i guess ... */}
                             <IonRow>
                                 <IonCol className='' size="8">
                                     <Table
@@ -118,6 +176,33 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                     />
                                 </IonCol>
                                 <IonCol>
+
+                                    <Chart type='line'
+                                           // @ts-ignore
+                                           hidden={foxLineData.labels.length == 1}
+                                           data={foxLineData} height='300'
+                                           options={{
+                                               responsive: true,
+                                               maintainAspectRatio: true,
+                                               plugins: {
+                                                   legend: {
+                                                       display: false
+                                                   },
+                                                   title: { display: true, text: tokenClickedOn},
+                                               },
+                                               scales: {
+                                                   x: {
+                                                       ticks: {
+                                                           autoSkip: true,
+                                                           maxTicksLimit: 8
+                                                       }
+                                                   },
+                                                   y: {
+                                                       suggestedMin: 0,
+                                                   },
+                                               }
+
+                                           }} />
 
                                 </IonCol>
                             </IonRow>
