@@ -24,6 +24,7 @@ import {Message} from "../../types/Message";
 import MessageThread from "./MessageThread";
 import {useParams} from "react-router";
 import Loader from "../Loader";
+import DisplayGraph from "./DisplayGraph";
 
 ChartJS.register(...registerables);
 ChartJS.register(
@@ -55,7 +56,7 @@ const Display: React.FC<{
           isLoadingChart,
           isLoadingMessages
       }) => {
-
+        
     /**
      * States & Variables
      */
@@ -84,6 +85,7 @@ const Display: React.FC<{
      */
     return (
         <>
+            
             <div className="p-3 overflow-y-scroll rounded-lg">
 
                 <div className="gap-4 mb-4 grid grid-cols-12">
@@ -106,71 +108,14 @@ const Display: React.FC<{
                             </div>
                         </>
                     )}
-
-                    {/* bar & line chart */}
-                    {/* starting with loading */}
-                    {/*TODO-rakesh: this loading is always blank...*/}
-                    {isLoadingChart ?
-                            <div className="pt-10 flex justify-center items-center"><Loader /></div> :
-                        showChart &&
-                        (Object.keys(chartDataDailyCount).length) &&
-                        chartDataDailyCount &&
-                        chartDataPerSource &&
-                        definedMessages.length > 0 &&
-                        !completelyHideChart &&
-                        (
-                            <>
-                                <div className="chart">
-                                    <Chart
-                                        type="bar"
-                                        data={chartDataDailyCount}
-                                        height={chartHeight}
-                                        options={{
-                                            plugins: {
-                                                legend: {
-                                                    display: false,
-                                                },
-                                                title: {
-                                                    display: true,
-                                                    text: '# of messages per day (from several Discords)',
-                                                },
-                                            },
-                                            scales: {
-                                                y: {
-                                                    suggestedMin: 0,
-                                                }
-                                            },
-                                            responsive: true,
-                                            maintainAspectRatio: true,
-                                        }}
-                                        key={chartHeight}
-                                    />
-                                </div>
-
-                                <div className="chart">
-                                    <Chart
-                                        type="bar"
-                                        data={chartDataPerSource}
-                                        height={chartHeight}
-                                        options={{
-                                            plugins: {
-                                                legend: {
-                                                    display: false,
-                                                },
-                                                title: {
-                                                    display: true,
-                                                    text: '# of messages per Discord',
-                                                },
-                                            },
-                                            responsive: true,
-                                            maintainAspectRatio: true,
-                                        }}
-                                        key={chartHeight}
-                                    />
-                                </div>
-                            </>
-                        )}
                 </div>
+                {/* bar & line chart */}
+                <DisplayGraph {...{
+                    chartDataDailyCount : chartDataDailyCount ? chartDataDailyCount: {},
+                    chartDataPerSource : chartDataPerSource ? chartDataPerSource : {},
+                    chartHeight,
+                    isLoadingChart: isLoadingChart,
+                }} />
 
                 {/* list of messages, ie. search results */}
                 {/*TODO-rakesh: this loading is always blank...*/}
