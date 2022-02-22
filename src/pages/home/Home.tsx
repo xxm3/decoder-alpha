@@ -234,7 +234,7 @@ const Home = () => {
 
     // @ts-ignore
     return (
-        <div>
+        <div className="w-full">
             {/* Main Content After Header - The light gray Container */}
 
             {/* Stacked line Search stuff - The bit darker Gray Container */}
