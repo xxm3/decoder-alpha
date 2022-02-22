@@ -24,6 +24,7 @@ import {Message} from "../../types/Message";
 import MessageThread from "./MessageThread";
 import {useParams} from "react-router";
 import Loader from "../Loader";
+import DisplayGraph from "./DisplayGraph";
 
 ChartJS.register(...registerables);
 ChartJS.register(
@@ -39,23 +40,23 @@ ChartJS.register(
 
 defaults.color = '#FFFFFF';
 const Display: React.FC<{
-    chartDataDailyCount?: any;
-    chartDataPerSource?: any;
-    chartHeight: number;
+    // chartDataDailyCount?: any;
+    // chartDataPerSource?: any;
+    // chartHeight: number;
     messages: (Message | undefined)[];
     totalCount?: number;
-    isLoadingChart?: any;
+    // isLoadingChart?: any;
     isLoadingMessages?: any;
 }> = ({
-          chartDataDailyCount,
-          chartDataPerSource,
-          chartHeight,
+        //   chartDataDailyCount,
+        //   chartDataPerSource,
+        //   chartHeight,
           messages,
           totalCount,
-          isLoadingChart,
+        //   isLoadingChart,
           isLoadingMessages
       }) => {
-
+        
     /**
      * States & Variables
      */
@@ -84,93 +85,15 @@ const Display: React.FC<{
      */
     return (
         <>
-            <div className="p-3 overflow-y-scroll rounded-lg">
-
-                <div className="gap-4 mb-4 grid grid-cols-12">
-
-                    {/*search header*/}
-                    {definedMessages.length > 0 && (
-                        <>
-                            <p className={`font-bold ${completelyHideChart ? "col-span-12" : "col-span-6"} sm:text-center`}>
-                                Searched on "{decodeURIComponent(word)}" ({totalCount} results last{' '}
-                                {constants().numDaysBackGraphs} days)
-                            </p>
-
-                            <div className="flex items-center justify-center col-span-6" hidden={completelyHideChart}>
-                                <p>Toggle Chart</p>
-                                <IonToggle
-                                    color="dark"
-                                    checked={showChart}
-                                    onClick={() => setShowChart(!showChart)}
-                                />
-                            </div>
-                        </>
-                    )}
-
-                    {/* bar & line chart */}
-                    {/* starting with loading */}
-                    {/*TODO-rakesh: this loading is always blank...*/}
-                    {isLoadingChart ?
-                            <div className="pt-10 flex justify-center items-center"><Loader /></div> :
-                        showChart &&
-                        (Object.keys(chartDataDailyCount).length) &&
-                        chartDataDailyCount &&
-                        chartDataPerSource &&
-                        definedMessages.length > 0 &&
-                        !completelyHideChart &&
-                        (
-                            <>
-                                <div className="chart">
-                                    <Chart
-                                        type="bar"
-                                        data={chartDataDailyCount}
-                                        height={chartHeight}
-                                        options={{
-                                            plugins: {
-                                                legend: {
-                                                    display: false,
-                                                },
-                                                title: {
-                                                    display: true,
-                                                    text: '# of messages per day (from several Discords)',
-                                                },
-                                            },
-                                            scales: {
-                                                y: {
-                                                    suggestedMin: 0,
-                                                }
-                                            },
-                                            responsive: true,
-                                            maintainAspectRatio: true,
-                                        }}
-                                        key={chartHeight}
-                                    />
-                                </div>
-
-                                <div className="chart">
-                                    <Chart
-                                        type="bar"
-                                        data={chartDataPerSource}
-                                        height={chartHeight}
-                                        options={{
-                                            plugins: {
-                                                legend: {
-                                                    display: false,
-                                                },
-                                                title: {
-                                                    display: true,
-                                                    text: '# of messages per Discord',
-                                                },
-                                            },
-                                            responsive: true,
-                                            maintainAspectRatio: true,
-                                        }}
-                                        key={chartHeight}
-                                    />
-                                </div>
-                            </>
-                        )}
-                </div>
+            
+            <div className="p-3 overflow-y-scroll rounded-lg">                
+                {/* bar & line chart */}
+                {/* <DisplayGraph {...{
+                    chartDataDailyCount : chartDataDailyCount ? chartDataDailyCount: {},
+                    chartDataPerSource : chartDataPerSource ? chartDataPerSource : {},
+                    chartHeight,
+                    isLoadingChart: isLoadingChart,
+                }} /> */}
 
                 {/* list of messages, ie. search results */}
                 {/*TODO-rakesh: this loading is always blank...*/}
