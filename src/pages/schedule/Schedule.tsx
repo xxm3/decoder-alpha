@@ -28,14 +28,15 @@ const Schedule = () => {
     /**
      * States & Variables.
      */
-    const [date, setDate] = useState('')
-    const [mints, setMints] = useState<Mint[]>([])
-    const [splitCollectionName, setSplitCollectionName] = useState([])
+    const [date, setDate] = useState('');
+    const [mints, setMints] = useState<Mint[]>([]);
+    const [splitCollectionName, setSplitCollectionName] = useState([]);
+
     
     const [isLoading, setIsLoading] = useState(false);
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
     
-    let dataSource = mints
+    let dataSource = mints;
 
     /**
      * This will call the every minute to update the mints array and assign mintExpiresAt field
@@ -43,38 +44,46 @@ const Schedule = () => {
      * So as we are scrapping the data every hour and since we would have an hour old data
      * this will keep updating the time of when the mint will expire
      */
-    useEffect(() => {
+     const addMintExpiresAt = () => {
+        for(let i = 0; i < dataSource.length; i++) {
+            if(dataSource[i].time !== "")
+            dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";
+        }
+          setMints([...dataSource]);
+     }
+
+     useEffect(() => {
+        dataSource.length && addMintExpiresAt();
+
         const interval = setInterval(() => {
-          for(let i = 0; i < dataSource.length; i++) {
-              if(dataSource[i].time !== "")
-              dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")"
-          }
-            setMints([...dataSource])
-        }, 60000)
+            console.log('interval started');
+            addMintExpiresAt();
+        }, 60000);
     
         return () => clearInterval(interval);
-    }, [mints]);
-
+    }, [dataSource.length]);
+    
+    
     // Get today's mints
     const fetchMintsData = () => {
-        setIsLoading(true)
+        setIsLoading(true);
 
         instance
             .get(environment.backendApi + '/getTodaysMints')
             .then((res) => {
-                setMints(res.data.data.mints)
-                setDate(res.data.data.date)
-                setIsLoading(false)
+                setMints(res.data.data.mints);
+                setDate(res.data.data.date);
+                setIsLoading(false);
             })
             .catch((err) => {
-                setIsLoading(false)
-                console.error("error when getting mints: " + err)
+                setIsLoading(false);
+                console.error("error when getting mints: " + err);
             })
     }
 
     useEffect(() => {
-        fetchMintsData()
-    }, [])
+        fetchMintsData();
+    }, []);
 
 
     // This will call the mintExpiresAt function every minute to update tillTheMint's time
