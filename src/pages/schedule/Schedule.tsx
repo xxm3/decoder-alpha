@@ -28,15 +28,14 @@ const Schedule = () => {
     /**
      * States & Variables.
      */
-    const [date, setDate] = useState('');
-    const [mints, setMints] = useState<Mint[]>([]);
-    const [splitCollectionName, setSplitCollectionName] = useState([]);
+    const [date, setDate] = useState('')
+    const [mints, setMints] = useState<Mint[]>([])
+    const [splitCollectionName, setSplitCollectionName] = useState([])
 
-    
     const [isLoading, setIsLoading] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
-    
-    let dataSource = mints;
+    const [isOpen, setIsOpen] = useState(false)
+
+    let dataSource = mints
 
     /**
      * This will call the every minute to update the mints array and assign mintExpiresAt field
@@ -56,14 +55,17 @@ const Schedule = () => {
         dataSource.length && addMintExpiresAt();
 
         const interval = setInterval(() => {
-            console.log('interval started');
-            addMintExpiresAt();
-        }, 60000);
-    
+          for(let i = 0; i < dataSource.length; i++) {
+              if(dataSource[i].time !== "")
+              dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")"
+          }
+            setMints([...dataSource])
+        }, 60000)
+
         return () => clearInterval(interval);
     }, [dataSource.length]);
-    
-    
+
+
     // Get today's mints
     const fetchMintsData = () => {
         setIsLoading(true);
@@ -94,7 +96,7 @@ const Schedule = () => {
     //
     //     return () => clearInterval(interval);
     // }, [mints]);
-   
+
 
     /**
      * this function is used to update the time of tillTheMint every minute
@@ -220,8 +222,8 @@ const Schedule = () => {
         },
         {
             title: '# Tweet Interactions',
-            key: 'numbersOfTwitterFollowers',
-
+            key: 'tweetInteraction',
+            sorter: (a: any, b: any) => a.tweetInteraction.total - b.tweetInteraction.total,
             render: record => (
                 <>
                 <span>
@@ -271,7 +273,9 @@ const Schedule = () => {
 
             {/* <div className="bg-gradient-to-b from-bg-primary to-bg-primary justify-center items-center p-4 pt-2 sticky">*/}
 
-            <p className="pt-3">Projects must have more than 1,000 twitter followers before showing up on the list</p>
+            <p className="pt-3">Projects must have more than 1,000 twitter followers before showing up on the list.
+                <br/>
+                "# Tweet Interactions" takes the last five tweets, gets an average of the Comments / Likes / Retweets, and adds them up (the higher the better)</p>
             {
                 isLoading
                     ? <div className="pt-10 flex justify-center items-center">

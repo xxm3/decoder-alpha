@@ -140,7 +140,6 @@ const Home = () => {
     const [graphStackedLoading, setGraphStackedLoading] = useState(false);
     const [stackedLineData, setStackedLineData] = useState(defaultGraph);
 
-
     // load search data from backend, for stacked line graph
     const doSearch = async (query : string) => {
         try {
@@ -202,14 +201,10 @@ const Home = () => {
                 });
             }
 
-            // console.log(rawFetchedData[0].ten_day_count);
-            // rawFetchedData[0].ten_day_count -> [{count: 5, date: '2022-xx-xx'}, {}
             const labels = dispLabelsDailyCount(rawFetchedData[0].ten_day_count, true);
 
-            // console.log("labels");
             // console.log(labels);
-            // console.log("first data");
-            // console.log(getDailyCountData(rawFetchedData[0]));
+            // console.log(datasetsAry);
 
             setStackedLineData({
                 labels: labels,
@@ -245,7 +240,7 @@ const Home = () => {
                 <div className={`max-w-2xl my-2`}>
                     <SearchBar initialValue='' onSubmit={doSearch} placeholder='Type to search'
                            helpMsg='Compares multiple single words against each other (ex. "portals enviro suites").
-                    Each word will be graphed and you can compare the popularity of each word against each other'
+                    Each word will be graphed and you can compare the popularity of each word (useful to search on multiple mints in the morning and see which his more popular)'
                            disableReset='false' />
                 </div>
 
@@ -381,7 +376,7 @@ const Home = () => {
                         ))}
                     </IonRow>
 
-                
+
                 {/*if need to tell the user of errors*/}
                 {/*<div className="m-12 relative mt-6 bg-red-100 p-6 rounded-xl">*/}
                 {/*    <p className="text-lg text-red-700 font-medium">*/}

@@ -1,7 +1,7 @@
 import {
     IonButton,
     IonList,
-    IonLabel, IonItem, IonCheckbox, IonInput, IonRow, IonCol
+    IonLabel, IonItem, IonCheckbox, IonInput, IonRow, IonCol, IonItemDivider
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState} from 'react';
 import {Table} from 'antd' // https://ant.design/components/table/
@@ -10,6 +10,10 @@ import Loader from "./Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import axios from "axios";
+import {ChartData} from "chart.js";
+import {Chart} from "react-chartjs-2";
+import {getDailyCountData} from "../util/charts";
+import moment from "moment";
 
 interface FoxToken {
     foo?: string;
@@ -21,7 +25,15 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     /**
      * States & Variables
      */
-    const [tableData, setTableData] = useState([])
+    const [tableData, setTableData] = useState([]);
+
+    const [tokenClickedOn, setTokenClickedOn] = useState();
+
+    const defaultGraph : ChartData<any, string> = {
+        labels: ["1"],
+        datasets: [ { data: ["3"] } ],
+    };
+    const [foxLineData, setFoxLineData] = useState(defaultGraph);
 
     const columns: ColumnsType<any> = [
         { title: 'Token', key: 'token', dataIndex: 'token',
@@ -43,10 +55,14 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             render: record => (
                 <a target="_blank" href={'https://explorer.solana.com/address/' + record.token} >View</a>
             ),
+        },
+        { title: 'View Chart', key: '', width: 250,
+            render: record => (
+                <a onClick={() => viewChart(record.token, record.name)} className="cursor-pointer">View</a>
+            ),
         }
 
     ];
-
 
     /**
      * Use Effects
@@ -71,11 +87,61 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     /**
      * Functions
      */
+    // user wants to only see verified collections
+    const setCheckedVerifiedOnly = (e: any) => {
+
+    }
+
+    // viewing the chart for a token
+    const viewChart = (token: string, name: string) => {
+
+        // @ts-ignore
+        setTokenClickedOn(name ? `${name} (${token})` : token);
+
+        instance
+            .get(environment.backendApi + '/receiver/foxTokenHistory?token=' + token)
+            .then((res) => {
+
+                const labels = res.data.map( (el: { createdAt: any; }) => moment(el.createdAt).fromNow());
+
+                let datasetsAry = [];
+                datasetsAry.push({
+                    type: 'line' as const,
+                    label: 'Floor Price',
+                    borderColor: 'white',
+                    borderWidth: 2,
+                    fill: false,
+                    data: res.data.map( (el: { floorPrice: any; }) => parseFloat(el.floorPrice)),
+                });
+
+                // TODO: put into 2 cols of charts...
+                // datasetsAry.push({
+                //     type: 'line' as const,
+                //     label: '# Listings',
+                //     borderColor: 'blue',
+                //     borderWidth: 2,
+                //     fill: false,
+                //     data: res.data.map( (el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings)),
+                // });
+
+                // console.log(labels);
+                // console.log(datasetsAry);
+
+                setFoxLineData({
+                    labels: labels,
+                    datasets: datasetsAry
+                });
+
+            })
+            .catch((err) => {
+                console.error("error when getting fox token history data: " + err);
+            });
+
+    }
 
     /**
      * Renders
      */
-
 
     return (
         <>
@@ -83,6 +149,12 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
                 <div className={`font-bold pb-1 w-full`}><a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">Fox Token Market - Analysis</a></div>
                 {/*<p></p>*/}
+
+                {/* TODO: need a "add name" button */}
+
+                {/* TODO celestial order celestial order - tokKuR2MoVW3kahSpcAzkwTRjYxSnDskyTScvgP5PDc --- solana vision Emg31JgF1Ergtoswe9YQ23WVZNATN5374x56fGXQ6Gou
+
+                 */}
 
                 <div>
                 {
@@ -92,6 +164,13 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             </div>
                         : <div className=" ">
 
+                            {/*TODO: show verified:*/}
+                            {/*<IonItem style={{"width": "250px"}}>*/}
+                            {/*    <IonLabel>Show Verified Only</IonLabel>*/}
+                            {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
+                            {/*</IonItem>*/}
+
+                            {/*TODO: tell screen width and put in 2 cols i guess ... */}
                             <IonRow>
                                 <IonCol className='' size="8">
                                     <Table
@@ -110,14 +189,79 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                 </IonCol>
                                 <IonCol>
 
+                                    <Chart type='line'
+                                           // @ts-ignore
+                                           hidden={foxLineData.labels.length == 1}
+                                           data={foxLineData} height='300'
+                                           options={{
+                                               responsive: true,
+                                               maintainAspectRatio: true,
+                                               plugins: {
+                                                   legend: {
+                                                       display: false
+                                                   },
+                                                   title: { display: true, text: tokenClickedOn},
+                                               },
+                                               scales: {
+                                                   x: {
+                                                       ticks: {
+                                                           autoSkip: true,
+                                                           maxTicksLimit: 8
+                                                       }
+                                                   },
+                                                   y: {
+                                                       suggestedMin: 0,
+                                                   },
+                                               }
+
+                                           }} />
+
                                 </IonCol>
                             </IonRow>
 
-                            <br/><br/>
+                            <br/>
 
                         </div>
                 }
                 </div>
+
+
+
+                <div hidden={true}
+                     className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+                    <div className={`font-bold pb-3 w-full text-lg`}>Fox Token - Price Alerts</div>
+
+                    <div>
+                        <label className={`font-bold pb-1 w-full`} htmlFor="">Get an alert when any of your WL tokens lists over a certain price</label>
+
+                        <IonList>
+                            <b>Wallet Address</b>
+                            <IonItem>
+                                <IonInput placeholder="Enter Wallet Address to Monitor" ></IonInput>
+                                {/* value={text} onIonChange={e => setText(e.detail.value!)} */}
+                            </IonItem>
+                        </IonList>
+
+                        <IonList>
+                            <b>Floor price of any of your WL tokens before alert</b>
+                            <IonItem>
+                                <IonInput placeholder="Enter price" ></IonInput>
+                                {/* value={text} onIonChange={e => setText(e.detail.value!)} */}
+                            </IonItem>
+                        </IonList>
+
+                        <IonButton color="success" className="text-sm" >
+                            Submit
+                        </IonButton>
+                        <br/><br/>
+
+
+                    </div>
+
+                </div>
+
+                <br/>
+
             </div>
 
         </>
