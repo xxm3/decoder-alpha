@@ -37,14 +37,23 @@ const Schedule = () => {
 
     let dataSource = mints
 
-    // TODO-DevDes: also you have a bug - your new moment stuff doesn't trigger until 60 seconds after the page loads
     /**
      * This will call the every minute to update the mints array and assign mintExpiresAt field
      * which is calculated with moment.fromNow()
      * So as we are scrapping the data every hour and since we would have an hour old data
      * this will keep updating the time of when the mint will expire
      */
-    useEffect(() => {
+     const addMintExpiresAt = () => {
+        for(let i = 0; i < dataSource.length; i++) {
+            if(dataSource[i].time !== "")
+            dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";
+        }
+          setMints([...dataSource]);
+     }
+
+     useEffect(() => {
+        dataSource.length && addMintExpiresAt();
+
         const interval = setInterval(() => {
           for(let i = 0; i < dataSource.length; i++) {
               if(dataSource[i].time !== "")
@@ -54,28 +63,29 @@ const Schedule = () => {
         }, 60000)
 
         return () => clearInterval(interval);
-    }, [mints]);
+    }, [dataSource.length]);
+
 
     // Get today's mints
     const fetchMintsData = () => {
-        setIsLoading(true)
+        setIsLoading(true);
 
         instance
             .get(environment.backendApi + '/getTodaysMints')
             .then((res) => {
-                setMints(res.data.data.mints)
-                setDate(res.data.data.date)
-                setIsLoading(false)
+                setMints(res.data.data.mints);
+                setDate(res.data.data.date);
+                setIsLoading(false);
             })
             .catch((err) => {
-                setIsLoading(false)
-                console.error("error when getting mints: " + err)
+                setIsLoading(false);
+                console.error("error when getting mints: " + err);
             })
     }
 
     useEffect(() => {
-        fetchMintsData()
-    }, [])
+        fetchMintsData();
+    }, []);
 
 
     // This will call the mintExpiresAt function every minute to update tillTheMint's time
