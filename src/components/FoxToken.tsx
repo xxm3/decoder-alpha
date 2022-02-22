@@ -25,6 +25,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     /**
      * States & Variables
      */
+    const [width, setWidth] = useState(window.innerWidth);
+
     const [tableData, setTableData] = useState([]);
 
     const [tokenClickedOn, setTokenClickedOn] = useState();
@@ -36,10 +38,14 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     const [foxLineData, setFoxLineData] = useState(defaultGraph);
 
     const columns: ColumnsType<any> = [
-        { title: 'Token', key: 'token', dataIndex: 'token',
-            // render: record => (
-            //     <span>{record.createdAt.substring(0, 10)}</span>
-            // ),
+        { title: 'Token', key: 'token', // dataIndex: 'token',
+            render: record => (
+                <>
+                    <span hidden={width < 768}>{record.token}</span>
+                    <span hidden={width > 768}>{record.token.substr(0, 4) + '...' + record.token.substr(record.token.length -4)}</span>
+                </>
+
+            ),
             sorter: (a, b) => a.token.localeCompare(b.token),
             // width: 130,
             // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
@@ -49,12 +55,14 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         { title: 'Name', key: 'name', dataIndex: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),},
         { title: 'Total Token Listings', key: 'totalTokenListings', dataIndex: 'totalTokenListings', width: 250,
-            sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,},
-
+            sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,
+            responsive: ['md'], // Will not be displayed below 768px
+        },
         { title: 'View Supply in Explorer', key: '', width: 250,
             render: record => (
                 <a target="_blank" href={'https://explorer.solana.com/address/' + record.token} >View</a>
             ),
+            responsive: ['md'], // Will not be displayed below 768px
         },
         { title: 'View Chart', key: '', width: 250,
             render: record => (
@@ -82,6 +90,15 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 });
         }
         fetchTableData();
+    }, []);
+
+    // resize window
+    useEffect(() => {
+        function resizeWidth() {
+            setWidth(window.innerWidth);
+        }
+        window.addEventListener('resize', resizeWidth);
+        return () => window.removeEventListener('resize', resizeWidth);
     }, []);
 
     /**
@@ -152,10 +169,6 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
                 {/* TODO: need a "add name" button */}
 
-                {/* TODO celestial order celestial order - tokKuR2MoVW3kahSpcAzkwTRjYxSnDskyTScvgP5PDc --- solana vision Emg31JgF1Ergtoswe9YQ23WVZNATN5374x56fGXQ6Gou
-
-                 */}
-
                 <div>
                 {
                     !tableData.length
@@ -171,8 +184,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             {/*</IonItem>*/}
 
                             {/*TODO: tell screen width and put in 2 cols i guess ... */}
-                            <IonRow>
-                                <IonCol className='' size="8">
+                            <div className="gap-4 mb-4 grid grid-cols-12" >
+                                <div className='' >
                                     <Table
                                         className='pt-2'
                                         key={'name'}
@@ -186,8 +199,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                         pagination={false}
                                         style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
                                     />
-                                </IonCol>
-                                <IonCol>
+                                </div>
+                                <div className='' >
 
                                     <Chart type='line'
                                            // @ts-ignore
@@ -216,8 +229,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
                                            }} />
 
-                                </IonCol>
-                            </IonRow>
+                                </div>
+                            </div>
 
                             <br/>
 
