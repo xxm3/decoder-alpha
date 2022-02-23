@@ -14,6 +14,7 @@ import { dispLabelsDailyCount, getDailyCountData } from '../util/charts';
 import DisplayGraph from '../components/search/DisplayGraph';
 import Loader from '../components/Loader';
 import Header from '../components/header/Header';
+import SearchSkelleton from './SearchSkelleton';
 
 const Search: React.FC = () => {
 
@@ -182,11 +183,24 @@ const Search: React.FC = () => {
         },
         retry : false
     })
-    const messageQuery = useQuery([searchText,currentPage], fetchSearchMessages, { keepPreviousData : true })
-
-    if(messageQuery.status === 'success' && messageQuery?.data?.totalCount > 100) {
-        messageQuery.data.hasMore = true;
-    }
+    const messageQuery = useQuery([searchText,currentPage], fetchSearchMessages, { 
+        keepPreviousData : true,
+        select : (data: any) => {
+            // in case couldn't search on this
+    
+            if (data?.error && data.body) {
+                throw new Error(String(data.body));
+            }
+            if(data?.totalCount > 100) {
+                data.hasMore = true;
+            }
+            return {
+                ...data,
+            }
+        },
+        retry : false
+    })
+    
     /**
      * Renders
      */
@@ -200,14 +214,14 @@ const Search: React.FC = () => {
                         {/*min-h-screen*/}
 
                         {/* The bit darker Gray Container */}
-                            <div ref={contentRef} className={` ${width <= 640 ? 'w-full' : 'container'}
+                            <div ref={contentRef} className={`!overflow-y-auto ${width <= 640 ? 'w-full' : 'container'}
                                 bg-satin-3 rounded-lg pt-3 pb-6 md:px-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`} >
 
                                 {/* ERROR bar */}
-                                {(graphQuery.isError || messageQuery.isError) || messageQuery?.data?.error ? (
+                                {graphQuery.isError || messageQuery.isError || messageQuery?.data?.error || graphQuery?.data?.error ? (
                                     <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                                         <p className="text-lg text-red-700 font-medium">
-                                            <b>{messageQuery?.data?.body || 'Unable to connect, please try again later'}</b>
+                                            <b>{(messageQuery?.error as Error).message || (graphQuery?.error as Error).message || 'Unable to connect, please try again later'}</b>
                                         </p>
                                         <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                                             !
@@ -220,14 +234,17 @@ const Search: React.FC = () => {
                                         {graphQuery?.isFetching ? <div className="pt-10 flex justify-center items-center"><Loader /></div> :
                                         graphQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                         <b>{"Error while loading message"}</b>
-                                        </p> : <DisplayGraph {...{
+                                        </p> : 
+                                        <DisplayGraph {...{
                                             chartDataDailyCount : graphQuery?.data.chartDataDailyCount,
                                             chartDataPerSource : graphQuery?.data.chartDataPerSource,
                                             chartHeight,
                                             isLoadingChart:graphQuery?.isLoading,
                                             totalCount: messageQuery?.data?.totalCount
                                         }} />}
-                                        {messageQuery?.isFetching ? <div className="pt-10 flex justify-center items-center"><Loader /></div> :
+                                        {/* Displaying the custom skeleton loader while fetching */}
+                                        {messageQuery?.isFetching ? 
+                                            new Array(10).fill(0).map(elm => <SearchSkelleton />) :
                                         messageQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                             <b>{"Error while loading message"}</b>
                                         </p> :
@@ -237,15 +254,15 @@ const Search: React.FC = () => {
                                         }}/>}
                                         {(messageQuery?.data?.totalCount ?? 0) > 5 && (
                                             <>
-                                            {(currentPage != 0) && <IonButton onClick={()=> handlePage('previous')}>Previous</IonButton>}
-                                            {(!messageQuery?.isPreviousData && messageQuery?.data?.hasMore)  && <IonButton onClick={()=> handlePage('next')}  className="ml-4">Next</IonButton>}
+                                            {(currentPage != 0 && !messageQuery?.isFetching) && <IonButton onClick={()=> handlePage('previous')}>Previous</IonButton>}
+                                            {(!messageQuery?.isPreviousData && messageQuery?.data?.hasMore && !messageQuery?.isFetching)  && <IonButton onClick={()=> handlePage('next')}  className="ml-4">Next</IonButton>}
+                                            {!messageQuery?.isFetching && 
                                             <IonButton
                                                 onClick={() => scrollToTop()}
                                                 className="float-right"
-                                                // ref={contentRef}
                                             >
                                                 Scroll to Top
-                                            </IonButton>
+                                            </IonButton>}
                                             </>
                                         )}
                                     </>
