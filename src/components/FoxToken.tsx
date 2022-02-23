@@ -36,6 +36,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         datasets: [ { data: ["3"] } ],
     };
     const [foxLineData, setFoxLineData] = useState(defaultGraph);
+    const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
 
     const columns: ColumnsType<any> = [
         { title: 'Token', key: 'token', // dataIndex: 'token',
@@ -121,33 +122,43 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
                 const labels = res.data.map( (el: { createdAt: any; }) => moment(el.createdAt).fromNow());
 
-                let datasetsAry = [];
-                datasetsAry.push({
+                const lineData = res.data.map( (el: { floorPrice: any; }) => parseFloat(el.floorPrice));
+                // console.log(lineData);
+                let datasetsAry = [{
                     type: 'line' as const,
                     label: 'Floor Price',
                     borderColor: 'white',
                     borderWidth: 2,
                     fill: false,
-                    data: res.data.map( (el: { floorPrice: any; }) => parseFloat(el.floorPrice)),
-                });
+                    data: lineData,
+                }];
 
-                // TODO: put into 2 cols of charts...
-                // datasetsAry.push({
-                //     type: 'line' as const,
-                //     label: '# Listings',
-                //     borderColor: 'blue',
-                //     borderWidth: 2,
-                //     fill: false,
-                //     data: res.data.map( (el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings)),
-                // });
+                const listingsData = res.data.map( (el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings));
+                // console.log(listingsData);
+                let datasetsAryListings = [{
+                    type: 'line' as const,
+                    label: 'Total Token Listings',
+                    borderColor: 'blue',
+                    borderWidth: 2,
+                    fill: false,
+                    data: listingsData,
+                }];
 
                 // console.log(labels);
                 // console.log(datasetsAry);
+                // console.log(datasetsAryListings);
 
                 setFoxLineData({
                     labels: labels,
                     datasets: datasetsAry
                 });
+                setFoxLineListingsData({
+                    labels: labels,
+                    datasets: datasetsAryListings
+                });
+
+                // TODO: wait for rak for scroll bottom:...
+                // window.scrollTo(0,document.body.scrollHeight);
 
             })
             .catch((err) => {
@@ -183,29 +194,59 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                             {/*</IonItem>*/}
 
-                            {/*TODO: tell screen width and put in 2 cols i guess ... */}
-                            <div className="gap-4 mb-4 grid grid-cols-12" >
-                                <div className='' >
-                                    <Table
-                                        className='pt-2'
-                                        key={'name'}
-                                        dataSource={tableData}
-                                        columns={columns}
-                                        bordered
-                                        // scroll={{x: 'max-content'}}
-                                        scroll={{y: 400}}
-                                        // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
-                                        // scroll={{x: 'max-content', y: 400}}
-                                        pagination={false}
-                                        style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
-                                    />
-                                </div>
-                                <div className='' >
+                            <div  >
+                                <Table
+                                    className='pt-2'
+                                    key={'name'}
+                                    dataSource={tableData}
+                                    columns={columns}
+                                    bordered
+                                    // scroll={{x: 'max-content'}}
+
+                                    scroll={{y: 400}}
+                                    // scroll={{y: 22}} // if want show it off
+
+                                    // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
+                                    // scroll={{x: 'max-content', y: 400}}
+                                    pagination={false}
+                                    style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
+                                />
+                            </div>
+
+                            <div className="gap-4 mb-4 grid grid-cols-12 mt-3" >
+                                <div className='chart' >
 
                                     <Chart type='line'
-                                           // @ts-ignore
-                                           hidden={foxLineData.labels.length == 1}
-                                           data={foxLineData} height='300'
+                                       // @ts-ignore
+                                       hidden={foxLineData.labels.length == 1}
+                                       data={foxLineData} height='150'
+                                       options={{
+                                           responsive: true,
+                                           maintainAspectRatio: true,
+                                           plugins: {
+                                               legend: {
+                                                   display: false
+                                               },
+                                               title: { display: true, text: tokenClickedOn + " - Price" },
+                                           },
+                                           scales: {
+                                               x: {
+                                                   ticks: {
+                                                       autoSkip: true,
+                                                       maxTicksLimit: 8
+                                                   }
+                                               },
+                                               y: {
+                                                   suggestedMin: 0,
+                                               },
+                                           }
+                                       }} />
+                                </div>
+                                <div className="chart">
+                                    <Chart type='line'
+                                        // @ts-ignore
+                                           hidden={foxLineListingsData.labels.length == 1}
+                                           data={foxLineListingsData} height='150'
                                            options={{
                                                responsive: true,
                                                maintainAspectRatio: true,
@@ -213,7 +254,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                                    legend: {
                                                        display: false
                                                    },
-                                                   title: { display: true, text: tokenClickedOn},
+                                                   title: { display: true, text: 'Total Token Listings'},
                                                },
                                                scales: {
                                                    x: {
@@ -226,9 +267,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                                        suggestedMin: 0,
                                                    },
                                                }
-
                                            }} />
-
                                 </div>
                             </div>
 
