@@ -56,7 +56,7 @@ const Display: React.FC<{
         //   isLoadingChart,
           isLoadingMessages
       }) => {
-        
+
     /**
      * States & Variables
      */
@@ -85,8 +85,8 @@ const Display: React.FC<{
      */
     return (
         <>
-            
-            <div className="p-3 overflow-y-scroll rounded-lg">                
+
+            <div className="p-3 overflow-y-scroll rounded-lg">
                 {/* bar & line chart */}
                 {/* <DisplayGraph {...{
                     chartDataDailyCount : chartDataDailyCount ? chartDataDailyCount: {},
@@ -96,7 +96,6 @@ const Display: React.FC<{
                 }} /> */}
 
                 {/* list of messages, ie. search results */}
-                {/*TODO-rakesh: this loading is always blank...*/}
                 {isLoadingMessages ? <div className="pt-10 flex justify-center items-center"><Loader /></div> : messages?.map((m, i) => (
                     m ? (
                         <MessageListItem
