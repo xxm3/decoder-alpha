@@ -44,6 +44,15 @@ To do alert popups:
 
 ...
 
+#### Links to read
+- For Error handling using reactQuery -  https://react-query.tanstack.com/guides/query-functions#handling-and-throwing-errors
+- For pagination using react Query -  https://react-query.tanstack.com/guides/paginated-queries
+- For reactQuery selector - https://react-query.tanstack.com/guides/migrating-to-react-query-3#query-data-selectors 
+
+...
+
+...
+
 
 ### Style guide
 
