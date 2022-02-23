@@ -33,7 +33,7 @@ const Schedule = () => {
     const [splitCollectionName, setSplitCollectionName] = useState([])
 
     const [isLoading, setIsLoading] = useState(false);
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
 
     let dataSource = mints
 
@@ -290,6 +290,7 @@ const Schedule = () => {
                             dataSource={dataSource}
                             columns={columns}
                             bordered
+                            // scroll={{y: 500}}
                             scroll={{x: 'max-content'}}
                             // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
                             // scroll={{x: 'max-content', y: 500}}
@@ -297,7 +298,7 @@ const Schedule = () => {
                             style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
                         />
 
-                        {/* <IonModal isOpen={isOpen}>
+                        {/* <IonModal isOpen={isOpen}  onDidDismiss={onClose as any} >
                           <IonContent>
                             {
                               splitCollectionName.length

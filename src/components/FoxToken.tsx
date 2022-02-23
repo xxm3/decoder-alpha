@@ -1,7 +1,17 @@
 import {
     IonButton,
     IonList,
-    IonLabel, IonItem, IonCheckbox, IonInput, IonRow, IonCol, IonItemDivider
+    IonLabel,
+    IonItem,
+    IonCheckbox,
+    IonInput,
+    IonRow,
+    IonCol,
+    IonItemDivider,
+    IonModal,
+    IonContent,
+    IonHeader,
+    IonToolbar, IonTitle, useIonToast
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState} from 'react';
 import {Table} from 'antd' // https://ant.design/components/table/
@@ -157,7 +167,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                     datasets: datasetsAryListings
                 });
 
-                // TODO: wait for rak for scroll bottom:...
+                // TODO-rakesh: wait for rak for scroll bottom:...
                 // window.scrollTo(0,document.body.scrollHeight);
 
             })
@@ -165,6 +175,54 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 console.error("error when getting fox token history data: " + err);
             });
 
+    }
+
+    // for submitting custom token names
+    const [addNameModalOpen, setAddNameModalOpen] = useState(false);
+    const [formToken, setFormToken] = useState('');
+    const [formName, setFormName] = useState('');
+    const [formLoading, setFormLoading] = useState(false);
+    const [formErrMsg, setFormErrMsg] = useState('');
+    const [present, dismiss] = useIonToast();
+    const clickedAddName = (val: boolean) => {
+        setAddNameModalOpen(val);
+    }
+    const submittedForm = () => {
+
+        const body = {
+            formToken: formToken,
+            formName: formName,
+        }
+
+        setFormLoading(true);
+        setFormErrMsg('');
+
+        axios.post(environment.backendApi + '/receiver/foxTokenNameAdd', body).then(resp => {
+
+            if(resp.data.error){
+                setFormLoading(false);
+                setFormErrMsg(resp.data.message);
+            }else{
+                setFormLoading(false);
+                setFormToken('');
+                setFormName('');
+
+                clickedAddName(false);
+
+                // show toast
+                present({
+                    message: 'Successfully added the name',
+                    color: 'success',
+                    duration: 5000
+                })
+            }
+
+        }).catch(err => {
+            console.error(err);
+
+            setFormLoading(false);
+            setFormErrMsg(err);
+        });
     }
 
     /**
@@ -175,10 +233,82 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         <>
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
-                <div className={`font-bold pb-1 w-full`}><a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">Fox Token Market - Analysis</a></div>
-                {/*<p></p>*/}
+                <div className={`font-bold pb-1 w-full`}>
+                    <a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">Fox Token Market - Analysis</a>
 
-                {/* TODO: need a "add name" button */}
+                    <IonButton color="success" className="text-sm small-btn ml-5 mb-3"
+                               onClick={() => clickedAddName(true)}>
+                        Add a name to a token
+                    </IonButton>
+
+                    <div className="float-right">
+                        👪 are community added names
+                    </div>
+                </div>
+
+                <IonModal
+                    isOpen={addNameModalOpen}
+                    onDidDismiss={() => setAddNameModalOpen(false)}
+                >
+
+                    <IonHeader>
+                        <IonToolbar>
+                            <IonTitle>
+                                Add a Token Name
+                                <a className="float-right text-base underline cursor-pointer"
+                                   onClick={() => clickedAddName(false)}>close</a>
+                            </IonTitle>
+                        </IonToolbar>
+                    </IonHeader>
+
+                    <IonContent className="">
+
+                        <div className="ml-12 mr-12 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl" >
+                            <div className="text-lg  font-medium">
+                                <p>If a token on Fox Token Market doesn't have an official name yet, and you know for certain what NFT the token is for,
+                                    then you can use the below form to add that data</p>
+                                <p className="mt-3">Your discord name will be recorded when submitting the form.
+                                Those abusing the service will receive such punishments as having your account banned from entering data,
+                                with severe violations being permanently muted in the Discord.</p>
+                            </div>
+                        </div>
+
+                        {/*bg-gradient-to-b from-bg-primary to-bg-secondary"*/}
+                        <div className="ml-12 mr-12">
+
+                            <IonItem>
+                                <IonLabel className="font-bold">Token</IonLabel>
+                                <IonInput onIonChange={(e) => setFormToken(e.detail.value!)}
+                                          placeholder="ex. Hxq2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU"></IonInput>
+                            </IonItem>
+
+                            <IonItem>
+                                <IonLabel className="font-bold">Name</IonLabel>
+                                <IonInput onIonChange={(e) => setFormName(e.detail.value!)}
+                                          placeholder="ex. Zillas vs Kong WL"></IonInput>
+                            </IonItem>
+
+                            <IonButton color="success" className="mt-5" hidden={formLoading}
+                                       onClick={() => submittedForm()}>
+                                Submit
+                            </IonButton>
+
+                            <div hidden={!formLoading}>Loading...</div>
+
+                            <div className="m-12 relative mt-6 bg-red-100 p-6 rounded-xl" hidden={!formErrMsg}>
+                                <p className="text-lg text-red-700 font-medium">
+                                    <b>{formErrMsg}</b>
+                                </p>
+                                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                                    !
+                                </span>
+                            </div>
+
+                        </div>
+
+
+                    </IonContent>
+                </IonModal>
 
                 <div>
                 {
@@ -188,7 +318,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             </div>
                         : <div className=" ">
 
-                            {/*TODO: show verified:*/}
+                            {/*TODO-later: show only names :*/}
                             {/*<IonItem style={{"width": "250px"}}>*/}
                             {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                             {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}

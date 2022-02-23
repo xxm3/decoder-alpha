@@ -114,14 +114,14 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         <IonModal
             isOpen
             onDidDismiss={onClose as any}
-            onDidPresent={() => {
-                if (mainMessageRef.current) {
-                    mainMessageRef.current.scrollIntoView({
-                        block: 'center',
-                        inline: 'center',
-                    });
-                }
-            }}
+            // onDidPresent={() => {
+            //     if (mainMessageRef.current) {
+            //         mainMessageRef.current.scrollIntoView({
+            //             block: 'center',
+            //             inline: 'center',
+            //         });
+            //     }
+            // }}
         >
             <div
                 ref={containerRef}
