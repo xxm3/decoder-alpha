@@ -96,7 +96,7 @@ const Display: React.FC<{
                 }} /> */}
 
                 {/* list of messages, ie. search results */}
-                {isLoadingMessages ? <div className="pt-10 flex justify-center items-center"><Loader /></div> : messages?.map((m, i) => (
+                {messages.map((m, i) => (
                     m ? (
                         <MessageListItem
                             onClick={() => {
