@@ -34,6 +34,8 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
             if (!message) return { formattedMessage : "", mediaUrls: [] };
             const mediaUrls: string[] = [];
 
+			
+
             let formattedMessage = message.replaceAll(
                 urlRegExp,
                 (url) => {
@@ -41,10 +43,19 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
 						mediaUrls.push(url);
 						return '';
                     } else return ` <${url.trim()}>`;
-                }
-            ).replaceAll(new RegExp(word, 'gi'), `**${word}**`);
+                },
+            ).replaceAll(new RegExp(word, 'gi'), `**${word}**`)
 
-           
+           if (source !== 'Twitter') {
+               formattedMessage = formattedMessage
+                   .replaceAll(/<(@|!|@!)(\d{18})>/g, '`@User`')
+                   .replaceAll(/<#(\d{18})>/g, '`#channel`')
+                   .replaceAll(/<@&(\d{18})>/g, '`@Role`')
+				   .replaceAll(/@(here|everyone)/g, str => `\`${str}\``)
+           } else {
+			   formattedMessage = formattedMessage
+				   .replaceAll(/@([a-zA-Z0-9]*)/g, str => `\`${str}\``)
+           }
             return {
                 formattedMessage,
                 mediaUrls: mediaUrls,
@@ -119,15 +130,42 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         }
                     >
                         {!loading
-                            ? <ReactMarkdown components={{
-								strong({ children, ...props  }){
-									const strongWord = children[0]?.toString()
-									return <b {...props} className={strongWord?.toString().toLowerCase() === word.toLowerCase() ? "text-cb" : ""}>{children}</b>
-								},
-								a({ href, ...props }){
-									return <a href={href} onClick={e => e.stopPropagation()} {...props} className="text-blue-300" target="_blank" />
-								}
-							}}>
+                            ? <ReactMarkdown 
+								components={{
+									strong({ children, ...props  }){
+										const strongWord = children[0]?.toString()
+										return <b {...props} className={strongWord?.toString().toLowerCase() === word.toLowerCase() ? "text-cb" : ""}>{children}</b>
+									},
+									a({ href, ...props }){
+										return <a href={href} onClick={e => e.stopPropagation()} {...props} className="text-blue-300" target="_blank" />
+									},
+									code({node, inline, className, children, ...props}) {
+										const codeWord = children[0]?.toString()
+										let isMention = false;
+										if(codeWord?.startsWith("@") || codeWord?.startsWith("#")){
+											isMention = true
+										}
+										return isMention && inline ? (
+                                            <span
+                                                {...props}
+                                                className="text-white bg-[#5865f2] px-1"
+                                            >
+                                                {children}
+                                            </span>
+                                        ) : source !== 'Twitter' ? (
+                                            <code
+                                                className={className}
+                                                {...props}
+                                            >
+                                                {children}
+                                            </code>
+                                        ) : (
+                                            <span {...props} />
+                                        );
+									}
+								}}
+								
+							>
 								{formattedMessage}
 							</ReactMarkdown>
                             : 'LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING'}
