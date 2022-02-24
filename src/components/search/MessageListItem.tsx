@@ -5,6 +5,7 @@ import { useParams } from 'react-router';
 import './MessageListItem.css';
 import ReactTooltip from 'react-tooltip';
 import { getUrlExtension, mediaTypes, urlRegExp } from '../../util/getURLs';
+import ReactMarkdown from "react-markdown";
 
 type MessageListItemProps =
     | {
@@ -29,40 +30,23 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
     ) => {
         const { id: word } = useParams<{ id: string }>();
 
-        const { msgArr, mediaUrls } = useMemo(() => {
-            if (!message) return { msgArr: [], mediaUrls: [] };
+        const { formattedMessage, mediaUrls } = useMemo(() => {
+            if (!message) return { formattedMessage : "", mediaUrls: [] };
             const mediaUrls: string[] = [];
 
-            const messageWithoutMediaUrls = message.replaceAll(
+            let formattedMessage = message.replaceAll(
                 urlRegExp,
                 (url) => {
-                    if (mediaTypes.has(getUrlExtension(url))) {
-                        if (!mediaUrls.includes(url)) {
-                            mediaUrls.push(url);
-                            return '';
-                        }
-                        return url;
-                    } else return url;
+                    if (mediaTypes.has(getUrlExtension(url)) && !mediaUrls.includes(url)) {
+						mediaUrls.push(url);
+						return '';
+                    } else return ` <${url.trim()}>`;
                 }
-            );
+            ).replaceAll(new RegExp(word, 'gi'), `**${word}**`);
 
-            const indexesArr = [
-                ...messageWithoutMediaUrls.matchAll(new RegExp(word, 'gi')),
-            ]
-                .map((match) => [
-                    match.index as number,
-                    (match.index as number) + word.length,
-                ])
-                .flat(1);
-            let lastIndex = 0;
-            const msg: string[] = [];
-            for (let index of indexesArr) {
-                msg.push(messageWithoutMediaUrls.slice(lastIndex, index));
-                lastIndex = index;
-            }
-            msg.push(messageWithoutMediaUrls.slice(lastIndex));
+           
             return {
-                msgArr: msg,
+                formattedMessage,
                 mediaUrls: mediaUrls,
             };
         }, [message, word]);
@@ -135,16 +119,17 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         }
                     >
                         {!loading
-                            ? msgArr.map((w, i) => {
-                                  return w.toLowerCase() ===
-                                      word.toLowerCase() ? (
-                                      <b className="text-cb" key={w + i}>
-                                          {w}
-                                      </b>
-                                  ) : (
-                                      w
-                                  );
-                              })
+                            ? <ReactMarkdown components={{
+								strong({ children, ...props  }){
+									const strongWord = children[0]?.toString()
+									return <b {...props} className={strongWord?.toString().toLowerCase() === word.toLowerCase() ? "text-cb" : ""}>{children}</b>
+								},
+								a({ href, ...props }){
+									return <a href={href} onClick={e => e.stopPropagation()} {...props} className="text-blue-300" target="_blank" />
+								}
+							}}>
+								{formattedMessage}
+							</ReactMarkdown>
                             : 'LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING'}
                     </p>
                     <div className="media">
