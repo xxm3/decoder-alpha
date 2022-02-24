@@ -244,8 +244,8 @@ const Schedule = () => {
             key: 'connections',
             render: record => (
                 <>
-                    <a href={record.discordLink} target='_blank'>Discord</a> <br/>
-                    <a href={record.twitterLink} target='_blank'>Twitter</a>
+                    <a href={record.discordLink} className="link_underline" target='_blank'>Discord</a> <br/>
+                    <a href={record.twitterLink} className="link_underline" target='_blank'>Twitter</a>
                 </>
             ),
             width: 100,
@@ -267,7 +267,7 @@ const Schedule = () => {
         <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 max-w-fit mx-auto mb-10`}>
 
             <div className="flex space-x-2 items-center">
-                <div className={`font-bold pb-1 `}>Today's Mints - {date}</div>
+                <div className={`font-bold pb-1 `}>Mint Schedule - {date}</div>
             </div>
 
 

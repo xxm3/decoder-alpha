@@ -9,6 +9,7 @@ import { ColumnsType } from 'antd/es/table';
 import Loader from "./Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
+import ReactTooltip from "react-tooltip";
 
 interface NftPriceTableProps {
     foo?: string;
@@ -20,7 +21,8 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
     /**
      * States & Variables
      */
-    const [tableData, setTableData] = useState([])
+    const [tableData, setTableData] = useState([]);
+    const [hideComments, f] = useState(true)
 
     const columns: ColumnsType<any> = [
         {
@@ -41,7 +43,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         },
         { title: 'Mint Date', key: 'createdAt',
             render: record => (
-                <span>{record.createdAt.substring(0, 10)}</span>
+                <span>{record.createdAt.substring(0, 10).replace("2022-", "")}</span>
             ),
             sorter: (a:any, b:any) =>  a.createdAt.substring(0, 10).split("-").join("") - b.createdAt.substring(0, 10).split("-").join(""),
             width: 130,
@@ -52,7 +54,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
             sorter: (a, b) => a.mintPrice - b.mintPrice,
             responsive: ['md'], // Will not be displayed below 768px
         },
-        { title: 'Highest Price', dataIndex: 'highestPrice', key: 'highestPrice',
+        { title: 'High Price', dataIndex: 'highestPrice', key: 'highestPrice',
             width: 150,
             sorter: (a, b) => a.highestPrice - b.highestPrice,
             responsive: ['xs', 'sm'], // Will be displayed on every size of screen
@@ -76,20 +78,20 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         { title: 'Comments',key: 'comments',
             render: record => (
                 // <span>{(record.comments.length > 90) ? record.comments.substr(0, 90 - 1) + '...' : record.comments}</span>
-                <span>{record.comments}</span>
+                <span hidden={hideComments}>{record.comments}</span>
             ),
             width: 400,
             responsive: ['md'], // Will not be displayed below 768px
         },
         { title: 'ME URL', key: 'meUrl', width: 100,
             render: record => (
-                <a href={record.meUrl} target="_blank" hidden={!record.meUrl}>view</a>
+                <a href={record.meUrl} target="_blank" hidden={!record.meUrl}>🌐</a>
             ),
             responsive: ['md'], // Will not be displayed below 768px
         },
         { title: 'Mint URL', key: 'mintUrl', width: 100,
             render: record => (
-                <a href={record.mintUrl} target="_blank" hidden={record.mintUrl.length < 5}>view</a>
+                <a href={record.mintUrl} target="_blank" hidden={record.mintUrl.length < 5}>🌐</a>
             ),
             responsive: ['md'], // Will not be displayed below 768px
         },
@@ -129,7 +131,12 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         <>
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
-                <div className={`font-bold pb-1 w-full`}>Mint Alerts Automated - Statistics</div>
+                <div className={`font-bold pb-1 w-full`}>
+                    Mint Alerts Automated - Statistics
+                    <div className="float-right" hidden={!tableData.length}>
+                        <a className="underline">💬 Show Comments</a>
+                    </div>
+                </div>
                 <p>These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel</p>
 
                 <div>
@@ -209,6 +216,8 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                 </div>
 
             </div>
+
+            <ReactTooltip />
 
         </>
     );

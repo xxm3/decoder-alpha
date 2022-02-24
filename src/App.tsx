@@ -73,6 +73,7 @@ const App = () => {
         }
 
 		return auth.onIdTokenChanged(user => {
+            console.log(user);
 			if (user) {
                 user.getIdToken().then(
                     (token) => {

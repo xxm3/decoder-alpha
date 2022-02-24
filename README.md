@@ -33,8 +33,12 @@ To link to other pages:
 To make calls to the backend:
 - use React query for data fetching. Look at how the Search page implements React Query to understand how it works
 - React query reduces a lot of work that goes into managing loading, error states , caching, not sending the same requests at the same time, etc
+
 To do dropdowns:
 - See WalletButton.tsx and how it uses `<Tooltip>`
+
+To do tooltips:
+- MessageListItem.tsx with its <ReactTooltip /> and data-tip
 
 To do alert popups:
 - See useConnectWallet.ts and how it uses `useIonAlert()`

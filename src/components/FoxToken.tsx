@@ -71,13 +71,13 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         },
         { title: 'View Supply in Explorer', key: '', width: 250,
             render: record => (
-                <a target="_blank" href={'https://explorer.solana.com/address/' + record.token} >View</a>
+                <a target="_blank" className="no-underline" href={'https://explorer.solana.com/address/' + record.token} >🌐</a>
             ),
             responsive: ['md'], // Will not be displayed below 768px
         },
         { title: 'View Chart', key: '', width: 250,
             render: record => (
-                <a onClick={() => viewChart(record.token, record.name)} className="cursor-pointer">View</a>
+                <span onClick={() => viewChart(record.token, record.name)} className="cursor-pointer">📈</span>
             ),
         }
 
@@ -94,7 +94,19 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             instance
                 .get(environment.backendApi + '/receiver/foxTokenAnalysis')
                 .then((res) => {
-                    setTableData(res.data.data);
+
+                    const data = res.data.data;
+                    // const newData = [];
+                    //
+                    // // TODO!!
+                    // for(let i in data){
+                    //     if(data[i].customName){
+                    //         newData.push(data[i]);
+                    //     }
+                    // }
+
+                    // @ts-ignore
+                    setTableData(data);
                 })
                 .catch((err) => {
                     console.error("error when getting fox token data: " + err);
@@ -197,7 +209,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         setFormLoading(true);
         setFormErrMsg('');
 
-        axios.post(environment.backendApi + '/receiver/foxTokenNameAdd', body).then(resp => {
+        instance.post(environment.backendApi + '/receiver/foxTokenNameAdd', body).then(resp => {
 
             if(resp.data.error){
                 setFormLoading(false);
@@ -211,7 +223,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
                 // show toast
                 present({
-                    message: 'Successfully added the name',
+                    message: 'Successfully added the name. Refresh to see it',
                     color: 'success',
                     duration: 5000
                 })
@@ -236,13 +248,14 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 <div className={`font-bold pb-1 w-full`}>
                     <a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">Fox Token Market - Analysis</a>
 
-                    <IonButton color="success" className="text-sm small-btn ml-5 mb-3"
-                               onClick={() => clickedAddName(true)}>
-                        Add a name to a token
-                    </IonButton>
+                    {/*TODO: wait for discord*/}
+                    {/*<IonButton color="success" className="text-sm small-btn ml-5 mb-3"*/}
+                    {/*           onClick={() => clickedAddName(true)}>*/}
+                    {/*    Add a name to a token*/}
+                    {/*</IonButton>*/}
 
-                    <div className="float-right">
-                        👪 are community added names
+                    <div className="float-right" hidden={!tableData.length}>
+                        👪 are community added <a onClick={() => clickedAddName(true)}>names</a>
                     </div>
                 </div>
 
@@ -333,7 +346,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                     bordered
                                     // scroll={{x: 'max-content'}}
 
-                                    scroll={{y: 400}}
+                                    scroll={{y: 600}}
                                     // scroll={{y: 22}} // if want show it off
 
                                     // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
