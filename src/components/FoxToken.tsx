@@ -349,8 +349,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                     bordered
                                     // scroll={{x: 'max-content'}}
 
-                                    scroll={{y: 600}}
-                                    // scroll={{y: 22}} // if want show it off / shill
+                                    // scroll={{y: 400}}
+                                    scroll={{y: 22}} // if want show it off / shill
 
                                     // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
                                     // scroll={{x: 'max-content', y: 400}}
