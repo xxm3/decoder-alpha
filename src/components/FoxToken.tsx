@@ -1,7 +1,17 @@
 import {
     IonButton,
     IonList,
-    IonLabel, IonItem, IonCheckbox, IonInput, IonRow, IonCol, IonItemDivider
+    IonLabel,
+    IonItem,
+    IonCheckbox,
+    IonInput,
+    IonRow,
+    IonCol,
+    IonItemDivider,
+    IonModal,
+    IonContent,
+    IonHeader,
+    IonToolbar, IonTitle, useIonToast
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState} from 'react';
 import {Table} from 'antd' // https://ant.design/components/table/
@@ -36,6 +46,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         datasets: [ { data: ["3"] } ],
     };
     const [foxLineData, setFoxLineData] = useState(defaultGraph);
+    const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
 
     const columns: ColumnsType<any> = [
         { title: 'Token', key: 'token', // dataIndex: 'token',
@@ -58,15 +69,15 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,
             responsive: ['md'], // Will not be displayed below 768px
         },
-        { title: 'View Supply in Explorer', key: '', width: 250,
+        { title: 'View Supply in Explorer', key: '', width: 200,
             render: record => (
-                <a target="_blank" href={'https://explorer.solana.com/address/' + record.token} >View</a>
+                <a target="_blank" className="no-underline" href={'https://explorer.solana.com/address/' + record.token} >🌐</a>
             ),
             responsive: ['md'], // Will not be displayed below 768px
         },
-        { title: 'View Chart', key: '', width: 250,
+        { title: 'View Chart', key: '', width: 150,
             render: record => (
-                <a onClick={() => viewChart(record.token, record.name)} className="cursor-pointer">View</a>
+                <span onClick={() => viewChart(record.token, record.name)} className="cursor-pointer">📈</span>
             ),
         }
 
@@ -83,7 +94,19 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             instance
                 .get(environment.backendApi + '/receiver/foxTokenAnalysis')
                 .then((res) => {
-                    setTableData(res.data.data);
+
+                    const data = res.data.data;
+                    // const newData = [];
+                    //
+                    //
+                    // for(let i in data){
+                    //     if(data[i].customName){
+                    //         newData.push(data[i]);
+                    //     }
+                    // }
+
+                    // @ts-ignore
+                    setTableData(data);
                 })
                 .catch((err) => {
                     console.error("error when getting fox token data: " + err);
@@ -121,39 +144,97 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
                 const labels = res.data.map( (el: { createdAt: any; }) => moment(el.createdAt).fromNow());
 
-                let datasetsAry = [];
-                datasetsAry.push({
+                const lineData = res.data.map( (el: { floorPrice: any; }) => parseFloat(el.floorPrice));
+                // console.log(lineData);
+                let datasetsAry = [{
                     type: 'line' as const,
                     label: 'Floor Price',
                     borderColor: 'white',
                     borderWidth: 2,
                     fill: false,
-                    data: res.data.map( (el: { floorPrice: any; }) => parseFloat(el.floorPrice)),
-                });
+                    data: lineData,
+                }];
 
-                // TODO: put into 2 cols of charts...
-                // datasetsAry.push({
-                //     type: 'line' as const,
-                //     label: '# Listings',
-                //     borderColor: 'blue',
-                //     borderWidth: 2,
-                //     fill: false,
-                //     data: res.data.map( (el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings)),
-                // });
+                const listingsData = res.data.map( (el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings));
+                // console.log(listingsData);
+                let datasetsAryListings = [{
+                    type: 'line' as const,
+                    label: 'Total Token Listings',
+                    borderColor: 'blue',
+                    borderWidth: 2,
+                    fill: false,
+                    data: listingsData,
+                }];
 
                 // console.log(labels);
                 // console.log(datasetsAry);
+                // console.log(datasetsAryListings);
 
                 setFoxLineData({
                     labels: labels,
                     datasets: datasetsAry
                 });
+                setFoxLineListingsData({
+                    labels: labels,
+                    datasets: datasetsAryListings
+                });
+
+                // TODO-rakesh: wait for rak for scroll bottom:...
+                // window.scrollTo(0,document.body.scrollHeight);
 
             })
             .catch((err) => {
                 console.error("error when getting fox token history data: " + err);
             });
 
+    }
+
+    // for submitting custom token names
+    const [addNameModalOpen, setAddNameModalOpen] = useState(false);
+    const [formToken, setFormToken] = useState('');
+    const [formName, setFormName] = useState('');
+    const [formLoading, setFormLoading] = useState(false);
+    const [formErrMsg, setFormErrMsg] = useState('');
+    const [present, dismiss] = useIonToast();
+    const clickedAddName = (val: boolean) => {
+        setAddNameModalOpen(val);
+    }
+    const submittedForm = () => {
+
+        const body = {
+            formToken: formToken,
+            formName: formName,
+        }
+
+        setFormLoading(true);
+        setFormErrMsg('');
+
+        instance.post(environment.backendApi + '/receiver/foxTokenNameAdd', body).then(resp => {
+
+            if(resp.data.error){
+                setFormLoading(false);
+                setFormErrMsg(resp.data.message);
+            }else{
+                setFormLoading(false);
+                setFormToken('');
+                setFormName('');
+
+                clickedAddName(false);
+
+                // show toast
+                present({
+                    message: 'Successfully added the name. Refresh to see it',
+                    color: 'success',
+                    duration: 5000
+                })
+            }
+
+        }).catch(err => {
+            console.error(err);
+
+            setFormLoading(false);
+            setFormErrMsg(err);
+        });
     }
 
     /**
@@ -164,10 +245,86 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         <>
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
-                <div className={`font-bold pb-1 w-full`}><a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">Fox Token Market - Analysis</a></div>
-                {/*<p></p>*/}
+                <div className={`font-bold pb-1 w-full`}>
+                    <a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">Fox Token Market - Analysis</a>
+                    <div hidden={!tableData.length}>
+                        👪 are community added <a onClick={() => clickedAddName(true)}>names</a>
+                    </div>
 
-                {/* TODO: need a "add name" button */}
+                    {/*TODO: wait for parth/discord*/}
+                    {/*<IonButton color="success" className="text-sm small-btn ml-5 mb-3"*/}
+                    {/*           onClick={() => clickedAddName(true)}>*/}
+                    {/*    Add a name to a token*/}
+                    {/*</IonButton>*/}
+
+                    <div className="float-right">
+
+                    </div>
+                </div>
+
+                <IonModal
+                    isOpen={addNameModalOpen}
+                    onDidDismiss={() => setAddNameModalOpen(false)}
+                >
+
+                    <IonHeader>
+                        <IonToolbar>
+                            <IonTitle>
+                                Add a Token Name
+                                <a className="float-right text-base underline cursor-pointer"
+                                   onClick={() => clickedAddName(false)}>close</a>
+                            </IonTitle>
+                        </IonToolbar>
+                    </IonHeader>
+
+                    <IonContent className="">
+
+                        <div className="ml-12 mr-12 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl" >
+                            <div className="text-lg  font-medium">
+                                <p>If a token on Fox Token Market doesn't have an official name yet, and you know for certain what NFT the token is for,
+                                    then you can use the below form to add that data</p>
+                                <p className="mt-3">Your discord name will be recorded when submitting the form.
+                                Those abusing the service will receive such punishments as having your account banned from entering data,
+                                with severe violations being permanently muted in the Discord.</p>
+                            </div>
+                        </div>
+
+                        {/*bg-gradient-to-b from-bg-primary to-bg-secondary"*/}
+                        <div className="ml-12 mr-12">
+
+                            <IonItem>
+                                <IonLabel className="font-bold">Token</IonLabel>
+                                <IonInput onIonChange={(e) => setFormToken(e.detail.value!)}
+                                          placeholder="ex. Hxq2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU"></IonInput>
+                            </IonItem>
+
+                            <IonItem>
+                                <IonLabel className="font-bold">Name</IonLabel>
+                                <IonInput onIonChange={(e) => setFormName(e.detail.value!)}
+                                          placeholder="ex. Zillas vs Kong WL"></IonInput>
+                            </IonItem>
+
+                            <IonButton color="success" className="mt-5" hidden={formLoading}
+                                       onClick={() => submittedForm()}>
+                                Submit
+                            </IonButton>
+
+                            <div hidden={!formLoading}>Loading...</div>
+
+                            <div className="m-12 relative mt-6 bg-red-100 p-6 rounded-xl" hidden={!formErrMsg}>
+                                <p className="text-lg text-red-700 font-medium">
+                                    <b>{formErrMsg}</b>
+                                </p>
+                                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                                    !
+                                </span>
+                            </div>
+
+                        </div>
+
+
+                    </IonContent>
+                </IonModal>
 
                 <div>
                 {
@@ -177,35 +334,65 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             </div>
                         : <div className=" ">
 
-                            {/*TODO: show verified:*/}
+                            {/*TODO-later: show only names (have a TODO on top as well for the data :*/}
                             {/*<IonItem style={{"width": "250px"}}>*/}
                             {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                             {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                             {/*</IonItem>*/}
 
-                            {/*TODO: tell screen width and put in 2 cols i guess ... */}
-                            <div className="gap-4 mb-4 grid grid-cols-12" >
-                                <div className='' >
-                                    <Table
-                                        className='pt-2'
-                                        key={'name'}
-                                        dataSource={tableData}
-                                        columns={columns}
-                                        bordered
-                                        // scroll={{x: 'max-content'}}
-                                        scroll={{y: 400}}
-                                        // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
-                                        // scroll={{x: 'max-content', y: 400}}
-                                        pagination={false}
-                                        style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
-                                    />
-                                </div>
-                                <div className='' >
+                            <div  >
+                                <Table
+                                    className='pt-2'
+                                    key={'name'}
+                                    dataSource={tableData}
+                                    columns={columns}
+                                    bordered
+                                    // scroll={{x: 'max-content'}}
+
+                                    scroll={{y: 600}}
+                                    // scroll={{y: 22}} // if want show it off / shill
+
+                                    // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
+                                    // scroll={{x: 'max-content', y: 400}}
+                                    pagination={false}
+                                    style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
+                                />
+                            </div>
+
+                            <div className="gap-4 mb-4 grid grid-cols-12 mt-3" >
+                                <div className='chart' >
 
                                     <Chart type='line'
-                                           // @ts-ignore
-                                           hidden={foxLineData.labels.length == 1}
-                                           data={foxLineData} height='300'
+                                       // @ts-ignore
+                                       hidden={foxLineData.labels.length == 1}
+                                       data={foxLineData} height='150'
+                                       options={{
+                                           responsive: true,
+                                           maintainAspectRatio: true,
+                                           plugins: {
+                                               legend: {
+                                                   display: false
+                                               },
+                                               title: { display: true, text: tokenClickedOn + " - Price" },
+                                           },
+                                           scales: {
+                                               x: {
+                                                   ticks: {
+                                                       autoSkip: true,
+                                                       maxTicksLimit: 8
+                                                   }
+                                               },
+                                               y: {
+                                                   suggestedMin: 0,
+                                               },
+                                           }
+                                       }} />
+                                </div>
+                                <div className="chart">
+                                    <Chart type='line'
+                                        // @ts-ignore
+                                           hidden={foxLineListingsData.labels.length == 1}
+                                           data={foxLineListingsData} height='150'
                                            options={{
                                                responsive: true,
                                                maintainAspectRatio: true,
@@ -213,7 +400,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                                    legend: {
                                                        display: false
                                                    },
-                                                   title: { display: true, text: tokenClickedOn},
+                                                   title: { display: true, text: 'Total Token Listings'},
                                                },
                                                scales: {
                                                    x: {
@@ -226,9 +413,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                                        suggestedMin: 0,
                                                    },
                                                }
-
                                            }} />
-
                                 </div>
                             </div>
 

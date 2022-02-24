@@ -115,14 +115,15 @@ const Search: React.FC = () => {
             );
             return data;
         } catch (e) {
-            console.error('try/catch in Search.tsx: ', e);
-            const error = e as Error & { response?: AxiosResponse };
-
-            if (error && error.response) {
-                throw new Error(String(error.response.data.body));
-            } else {
-                throw new Error('Unable to connect. Please try again later');
-            }
+            // TODO-rakesh: bugs with http://localhost:3000/search/portalsasdfsdf
+            // console.error('try/catch in Search.tsx: ', e);
+            // const error = e as Error & { response?: AxiosResponse };
+            //
+            // if (error && error.response) {
+            //     throw new Error(String(error.response.data.body));
+            // } else {
+            //     throw new Error('Unable to connect. Please try again later');
+            // }
         }
     }
 
@@ -183,11 +184,11 @@ const Search: React.FC = () => {
         },
         retry : false
     })
-    const messageQuery = useQuery([searchText,currentPage], fetchSearchMessages, { 
+    const messageQuery = useQuery([searchText,currentPage], fetchSearchMessages, {
         keepPreviousData : true,
         select : (data: any) => {
             // in case couldn't search on this
-    
+
             if (data?.error && data.body) {
                 throw new Error(String(data.body));
             }
@@ -200,7 +201,7 @@ const Search: React.FC = () => {
         },
         retry : false
     })
-    
+
     /**
      * Renders
      */
@@ -221,7 +222,11 @@ const Search: React.FC = () => {
                                 {graphQuery.isError || messageQuery.isError || messageQuery?.data?.error || graphQuery?.data?.error ? (
                                     <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                                         <p className="text-lg text-red-700 font-medium">
-                                            <b>{(messageQuery?.error as Error).message || (graphQuery?.error as Error).message || 'Unable to connect, please try again later'}</b>
+
+                                            {/*TODO-rakesh: bugs with http://localhost:3000/search/portalsasdfsdf*/}
+                                            No results found
+                                            {/*<b>{(messageQuery?.error as Error).message ||*/}
+                                            {/*    (graphQuery?.error as Error).message || 'Unable to connect, please try again later'}</b>*/}
                                         </p>
                                         <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                                             !
@@ -234,7 +239,7 @@ const Search: React.FC = () => {
                                         {graphQuery?.isFetching ? <div className="pt-10 flex justify-center items-center"><Loader /></div> :
                                         graphQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                         <b>{"Error while loading message"}</b>
-                                        </p> : 
+                                        </p> :
                                         <DisplayGraph {...{
                                             chartDataDailyCount : graphQuery?.data.chartDataDailyCount,
                                             chartDataPerSource : graphQuery?.data.chartDataPerSource,
@@ -243,7 +248,7 @@ const Search: React.FC = () => {
                                             totalCount: messageQuery?.data?.totalCount
                                         }} />}
                                         {/* Displaying the custom skeleton loader while fetching */}
-                                        {messageQuery?.isFetching ? 
+                                        {messageQuery?.isFetching ?
                                             new Array(10).fill(0).map(elm => <SearchSkelleton />) :
                                         messageQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                             <b>{"Error while loading message"}</b>
@@ -252,19 +257,24 @@ const Search: React.FC = () => {
                                             messages : messageQuery?.data?.messages ?? [],
                                             totalCount: messageQuery?.data?.totalCount
                                         }}/>}
+
                                         {(messageQuery?.data?.totalCount ?? 0) > 5 && (
                                             <>
-                                            {(currentPage != 0 && !messageQuery?.isFetching) && <IonButton onClick={()=> handlePage('previous')}>Previous</IonButton>}
-                                            {(!messageQuery?.isPreviousData && messageQuery?.data?.hasMore && !messageQuery?.isFetching)  && <IonButton onClick={()=> handlePage('next')}  className="ml-4">Next</IonButton>}
-                                            {!messageQuery?.isFetching && 
-                                            <IonButton
-                                                onClick={() => scrollToTop()}
-                                                className="float-right"
-                                            >
-                                                Scroll to Top
-                                            </IonButton>}
+                                                {(currentPage != 0 && !messageQuery?.isFetching) && <IonButton onClick={()=> handlePage('previous')}>Previous</IonButton>}
+                                                {(!messageQuery?.isPreviousData && messageQuery?.data?.hasMore && !messageQuery?.isFetching)  &&
+                                                    <IonButton onClick={()=> handlePage('next')}  className="ml-4">Next</IonButton>}
+
+                                                {/*TODO-rakesh: reenable later*/}
+                                                {/*{!messageQuery?.isFetching &&*/}
+                                                {/*<IonButton*/}
+                                                {/*    onClick={() => scrollToTop()}*/}
+                                                {/*    className="float-right"*/}
+                                                {/*>*/}
+                                                {/*    Scroll to Top*/}
+                                                {/*</IonButton>}*/}
                                             </>
                                         )}
+
                                     </>
                                 )}
                             </div>

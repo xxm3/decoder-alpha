@@ -37,17 +37,25 @@ To make calls to the backend:
 To do dropdowns:
 - See WalletButton.tsx and how it uses `<Tooltip>`
 
+To do tooltips:
+- MessageListItem.tsx with its <ReactTooltip /> and data-tip
+
 To do alert popups:
 - See useConnectWallet.ts and how it uses `useIonAlert()`
 
-...
+To use modals
+- See FoxToken.tsx and its IonModal
+
+To use toasts
+- See FoxToken.tsx and its toasts
+- https://ionicframework.com/docs/api/toast
 
 ...
 
 #### Links to read
 - For Error handling using reactQuery -  https://react-query.tanstack.com/guides/query-functions#handling-and-throwing-errors
 - For pagination using react Query -  https://react-query.tanstack.com/guides/paginated-queries
-- For reactQuery selector - https://react-query.tanstack.com/guides/migrating-to-react-query-3#query-data-selectors 
+- For reactQuery selector - https://react-query.tanstack.com/guides/migrating-to-react-query-3#query-data-selectors
 
 ...
 
@@ -57,7 +65,6 @@ To do alert popups:
 ### Style guide
 
 #### How to style a new page, when you create it
-
 
 When you want an even darker section under there (ie. a "card"):
 ```
