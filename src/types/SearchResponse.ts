@@ -1,8 +1,9 @@
 import { Message } from "./Message";
 
 export interface SearchResponse {
-    error?: any;
-    body?: any;
+    error?: boolean;
+    body?: string;
+    hasMore?: boolean;
     messages: (Message | undefined)[];
     totalCount: number;
     word: string;

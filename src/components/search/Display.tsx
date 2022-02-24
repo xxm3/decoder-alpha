@@ -40,23 +40,23 @@ ChartJS.register(
 
 defaults.color = '#FFFFFF';
 const Display: React.FC<{
-    chartDataDailyCount?: any;
-    chartDataPerSource?: any;
-    chartHeight: number;
+    // chartDataDailyCount?: any;
+    // chartDataPerSource?: any;
+    // chartHeight: number;
     messages: (Message | undefined)[];
     totalCount?: number;
-    isLoadingChart?: any;
+    // isLoadingChart?: any;
     isLoadingMessages?: any;
 }> = ({
-          chartDataDailyCount,
-          chartDataPerSource,
-          chartHeight,
+        //   chartDataDailyCount,
+        //   chartDataPerSource,
+        //   chartHeight,
           messages,
           totalCount,
-          isLoadingChart,
+        //   isLoadingChart,
           isLoadingMessages
       }) => {
-        
+
     /**
      * States & Variables
      */
@@ -85,41 +85,18 @@ const Display: React.FC<{
      */
     return (
         <>
-            
+
             <div className="p-3 overflow-y-scroll rounded-lg">
-
-                <div className="gap-4 mb-4 grid grid-cols-12">
-
-                    {/*search header*/}
-                    {definedMessages.length > 0 && (
-                        <>
-                            <p className={`font-bold ${completelyHideChart ? "col-span-12" : "col-span-6"} sm:text-center`}>
-                                Searched on "{decodeURIComponent(word)}" ({totalCount} results last{' '}
-                                {constants().numDaysBackGraphs} days)
-                            </p>
-
-                            <div className="flex items-center justify-center col-span-6" hidden={completelyHideChart}>
-                                <p>Toggle Chart</p>
-                                <IonToggle
-                                    color="dark"
-                                    checked={showChart}
-                                    onClick={() => setShowChart(!showChart)}
-                                />
-                            </div>
-                        </>
-                    )}
-                </div>
                 {/* bar & line chart */}
-                <DisplayGraph {...{
+                {/* <DisplayGraph {...{
                     chartDataDailyCount : chartDataDailyCount ? chartDataDailyCount: {},
                     chartDataPerSource : chartDataPerSource ? chartDataPerSource : {},
                     chartHeight,
                     isLoadingChart: isLoadingChart,
-                }} />
+                }} /> */}
 
                 {/* list of messages, ie. search results */}
-                {/*TODO-rakesh: this loading is always blank...*/}
-                {isLoadingMessages ? <div className="pt-10 flex justify-center items-center"><Loader /></div> : messages?.map((m, i) => (
+                {messages.map((m, i) => (
                     m ? (
                         <MessageListItem
                             onClick={() => {

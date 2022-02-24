@@ -50,7 +50,9 @@ const DisplayGraph:React.FC<{
     chartDataPerSource,
     chartHeight,
     isLoadingChart,
+    totalCount
 }) => {
+    
     const cookies = useMemo(() => new Cookies(), []);
     const [showChart, setShowChart] = useState(String(cookies.get('showChart')) === 'false' ? false : true);
     const {id: word} = useParams<{ id: string; }>();
@@ -64,11 +66,33 @@ const DisplayGraph:React.FC<{
         cookies.set("showChart", String(showChart));
     }, [showChart, cookies])
     
+    
     /**
      * Renders
      */
   return (
-    <div>            
+    <div>  
+        <div className="gap-4 mb-4 grid grid-cols-12">
+
+            {/*search header*/}
+            {totalCount && (
+                <>
+                    <p className={`font-bold ${completelyHideChart ? "col-span-12" : "col-span-6"} sm:text-center`}>
+                        Searched on "{decodeURIComponent(word)}" ({totalCount} results last{' '}
+                        {constants().numDaysBackGraphs} days)
+                    </p>
+
+                    <div className="flex items-center justify-center col-span-6" hidden={completelyHideChart}>
+                        <p>Toggle Chart</p>
+                        <IonToggle
+                            color="dark"
+                            checked={showChart}
+                            onClick={() => setShowChart(!showChart)}
+                        />
+                    </div>
+                </>
+            )}
+            </div>          
         {/* bar & line chart */}
         {/* starting with loading */}
         {isLoadingChart ?

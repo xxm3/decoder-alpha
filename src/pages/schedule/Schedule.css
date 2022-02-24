@@ -19,10 +19,14 @@
 
 /* Give background-color same as the background to ant-table-cell so it doesn't look transparent while scrolling horizontally  */
 .ant-table-cell {
-    background-color: #36393f;
+    /*background-color: #36393f;*/
+}
+
+.ant-table-body tr:nth-child(even) {
+    background-color: #181a1b;
 }
 
 /* Give underline to discord and twitter links under Links column */
-.ant-table-cell a {
+.ant-table-cell a.link_underline {
     text-decoration: underline;
 }

@@ -11,16 +11,6 @@ import {IonContent, IonModal } from '@ionic/react';
 import './Schedule.css'
 
 const Schedule = () => {
-    /**
-     * States & Variables.
-     */
-    const [mints, setMints] = useState([])
-    const [date, setDate] = useState('')
-    const [splitCollectionName, setSplitCollectionName] = useState([])
-
-    const [isLoading, setIsLoading] = useState(false);
-    const [isOpen, setIsOpen] = useState(false)
-
     interface Mint {
         image: string,
         project: string,
@@ -31,31 +21,71 @@ const Schedule = () => {
         count: string,
         price: string,
         extras: string,
-        tenDaySearchResults: any
+        tenDaySearchResults: any,
+        mintExpiresAt: any,
     }
 
-    const dataSource = mints
+    /**
+     * States & Variables.
+     */
+    const [date, setDate] = useState('')
+    const [mints, setMints] = useState<Mint[]>([])
+    const [splitCollectionName, setSplitCollectionName] = useState([])
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+
+    let dataSource = mints
+
+    /**
+     * This will call the every minute to update the mints array and assign mintExpiresAt field
+     * which is calculated with moment.fromNow()
+     * So as we are scrapping the data every hour and since we would have an hour old data
+     * this will keep updating the time of when the mint will expire
+     */
+     const addMintExpiresAt = () => {
+        for(let i = 0; i < dataSource.length; i++) {
+            if(dataSource[i].time !== "")
+            dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";
+        }
+          setMints([...dataSource]);
+     }
+
+     useEffect(() => {
+        dataSource.length && addMintExpiresAt();
+
+        const interval = setInterval(() => {
+          for(let i = 0; i < dataSource.length; i++) {
+              if(dataSource[i].time !== "")
+              dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")"
+          }
+            setMints([...dataSource])
+        }, 60000)
+
+        return () => clearInterval(interval);
+    }, [dataSource.length]);
+
 
     // Get today's mints
     const fetchMintsData = () => {
-        setIsLoading(true)
+        setIsLoading(true);
 
         instance
             .get(environment.backendApi + '/getTodaysMints')
             .then((res) => {
-                setMints(res.data.data.mints)
-                setDate(res.data.data.date)
-                setIsLoading(false)
+                setMints(res.data.data.mints);
+                setDate(res.data.data.date);
+                setIsLoading(false);
             })
             .catch((err) => {
-                setIsLoading(false)
-                console.error("error when getting mints: " + err)
+                setIsLoading(false);
+                console.error("error when getting mints: " + err);
             })
     }
 
     useEffect(() => {
-        fetchMintsData()
-    }, [])
+        fetchMintsData();
+    }, []);
 
 
     // This will call the mintExpiresAt function every minute to update tillTheMint's time
@@ -132,7 +162,14 @@ const Schedule = () => {
             render: record => (
                 <span>
                     {record.time}
-                    {record.time !== "" && " (" + moment.utc(record.time, 'hh:mm:ss').fromNow() + ")"}
+                    {record.mintExpiresAt}
+                    {/* {record.time !== "" && " (" + moment.utc(record.time, 'hh:mm:ss').fromNow() + ")"} */}
+                    {
+                        // setInterval(() => {
+                        //     <p>ok</p>
+                        //     // updateTime(record.time)
+                        // }, 6000)
+                    }
                 </span>
             ),
             //   responsive: ['xs', 'sm'], // Will be displayed on every size of screen
@@ -185,8 +222,8 @@ const Schedule = () => {
         },
         {
             title: '# Tweet Interactions',
-            key: 'numbersOfTwitterFollowers',
-
+            key: 'tweetInteraction',
+            sorter: (a: any, b: any) => a.tweetInteraction.total - b.tweetInteraction.total,
             render: record => (
                 <>
                 <span>
@@ -207,8 +244,8 @@ const Schedule = () => {
             key: 'connections',
             render: record => (
                 <>
-                    <a href={record.discordLink} target='_blank'>Discord</a> <br/>
-                    <a href={record.twitterLink} target='_blank'>Twitter</a>
+                    <a href={record.discordLink} className="link_underline" target='_blank'>Discord</a> <br/>
+                    <a href={record.twitterLink} className="link_underline" target='_blank'>Twitter</a>
                 </>
             ),
             width: 100,
@@ -227,10 +264,10 @@ const Schedule = () => {
     // Renders
     return (
 
-        <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+        <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 max-w-fit mx-auto mb-10`}>
 
             <div className="flex space-x-2 items-center">
-                <div className={`font-bold pb-1 `}>Today's Mints - {date}</div>
+                <div className={`font-bold pb-1 `}>Mint Schedule - {date}</div>
             </div>
 
 
@@ -246,21 +283,22 @@ const Schedule = () => {
                     </div>
                     :
 
-                    <div className="max-w-fit mx-auto mb-10 ">
+                    <div className="p-4">
                         <br/>
                         <Table
-                            className='w-full mx-auto '
                             rowKey='project'
                             dataSource={dataSource}
                             columns={columns}
                             bordered
+                            // scroll={{y: 500}}
                             scroll={{x: 'max-content'}}
                             // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
                             // scroll={{x: 'max-content', y: 500}}
                             pagination={false}
+                            style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
                         />
 
-                        {/* <IonModal isOpen={isOpen}>
+                        {/* <IonModal isOpen={isOpen}  onDidDismiss={onClose as any} >
                           <IonContent>
                             {
                               splitCollectionName.length

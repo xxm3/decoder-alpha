@@ -84,7 +84,8 @@ const HeaderContainer = () => {
     return (
         <>
 
-            <IonHeader className="p-4">
+            {/*p-4*/}
+            <IonHeader className="">
                 <IonToolbar className="bg-card px-4 rounded-lg related verflow-y-auto relative">
                     <div className="justify-between space-x-8 flex items-center">
 
