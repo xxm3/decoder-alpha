@@ -11,7 +11,7 @@ import { Switch } from "react-router";
 import "./App.css";
 import Loader from "./components/Loader";
 import ProtectedRoute from "./components/ProtectedRoute";
-import , from "./context/,";
+import UserContext from "./context/UserContext";
 import { instance } from "./axios";
 
 /* Core CSS required for Ionic components to work properly */
@@ -94,7 +94,7 @@ const App = () => {
 	return (
         <IonApp>
             <QueryClientProvider client={queryClient}>
-                <,.Provider value={user}>
+                <UserContext.Provider value={user}>
                     {user !== undefined ? (
                         <>
                             <IonMenu menuId="sidebar" contentId="router" className="md:hidden">
@@ -154,7 +154,7 @@ const App = () => {
 						</div>
 					)}
 					<ReactQueryDevtools initialIsOpen />
-				</,.Provider>
+				</UserContext.Provider>
 			</QueryClientProvider>
 		</IonApp>
 	);

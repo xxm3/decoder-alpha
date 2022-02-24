@@ -14,7 +14,7 @@ import { queryClient } from "../../queryClient";
 import SearchBar from "../SearchBar";
 import useConnectWallet from "../../hooks/useConnectWallet";
 import WalletButton from "../WalletButton";
-import {useUser} from "../../context/,";
+import {useUser} from "../../context/UserContext";
 
 
 const HeaderContainer = () => {

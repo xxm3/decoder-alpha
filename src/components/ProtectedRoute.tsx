@@ -1,6 +1,6 @@
 import React from "react";
 import { Redirect, Route } from "react-router";
-import { useUser } from "../context/,";
+import { useUser } from "../context/UserContext";
 import AppRoute from "./Route";
 
 // a route to be used to protect pages against unauthenticated users
