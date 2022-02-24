@@ -19,7 +19,6 @@ import { ColumnsType } from 'antd/es/table';
 import Loader from "./Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
-import axios from "axios";
 import {ChartData} from "chart.js";
 import {Chart} from "react-chartjs-2";
 import {getDailyCountData} from "../util/charts";
@@ -42,8 +41,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     const [tokenClickedOn, setTokenClickedOn] = useState();
 
     const defaultGraph : ChartData<any, string> = {
-        labels: ["1"],
-        datasets: [ { data: ["3"] } ],
+        labels: [],
+        datasets: [],
     };
     const [foxLineData, setFoxLineData] = useState(defaultGraph);
     const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
@@ -71,13 +70,13 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         },
         { title: 'View Supply in Explorer', key: '', width: 200,
             render: record => (
-                <a target="_blank" className="no-underline" href={'https://explorer.solana.com/address/' + record.token} >🌐</a>
+                <a target="_blank" className="no-underline big-emoji" href={'https://explorer.solana.com/address/' + record.token} >🌐</a>
             ),
             responsive: ['md'], // Will not be displayed below 768px
         },
         { title: 'View Chart', key: '', width: 150,
             render: record => (
-                <span onClick={() => viewChart(record.token, record.name)} className="cursor-pointer">📈</span>
+                <span onClick={() => viewChart(record.token, record.name)} className="cursor-pointer big-emoji">📈</span>
             ),
         }
 
@@ -135,6 +134,9 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     // viewing the chart for a token
     const viewChart = (token: string, name: string) => {
 
+        setFoxLineData(defaultGraph);
+        setFoxLineListingsData(defaultGraph);
+
         // @ts-ignore
         setTokenClickedOn(name ? `${name} (${token})` : token);
 
@@ -178,6 +180,10 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                     labels: labels,
                     datasets: datasetsAryListings
                 });
+
+                // think want to keep this in ... some timing ... issue....
+                console.log(foxLineData);
+
 
                 // TODO-rakesh: wait for rak for scroll bottom:...
                 // window.scrollTo(0,document.body.scrollHeight);
@@ -359,12 +365,13 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                 />
                             </div>
 
-                            <div className="gap-4 mb-4 grid grid-cols-12 mt-3" >
+                            <div className="gap-4 mb-4 grid grid-cols-12 mt-3"
+                                 // @ts-ignore
+                                 hidden={foxLineData.labels.length === 0}>
                                 <div className='chart' >
 
                                     <Chart type='line'
                                        // @ts-ignore
-                                       hidden={foxLineData.labels.length == 1}
                                        data={foxLineData} height='150'
                                        options={{
                                            responsive: true,
@@ -390,30 +397,28 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                 </div>
                                 <div className="chart">
                                     <Chart type='line'
-                                        // @ts-ignore
-                                           hidden={foxLineListingsData.labels.length == 1}
-                                           data={foxLineListingsData} height='150'
-                                           options={{
-                                               responsive: true,
-                                               maintainAspectRatio: true,
-                                               plugins: {
-                                                   legend: {
-                                                       display: false
-                                                   },
-                                                   title: { display: true, text: 'Total Token Listings'},
+                                       data={foxLineListingsData} height='150'
+                                       options={{
+                                           responsive: true,
+                                           maintainAspectRatio: true,
+                                           plugins: {
+                                               legend: {
+                                                   display: false
                                                },
-                                               scales: {
-                                                   x: {
-                                                       ticks: {
-                                                           autoSkip: true,
-                                                           maxTicksLimit: 8
-                                                       }
-                                                   },
-                                                   y: {
-                                                       suggestedMin: 0,
-                                                   },
-                                               }
-                                           }} />
+                                               title: { display: true, text: 'Total Token Listings'},
+                                           },
+                                           scales: {
+                                               x: {
+                                                   ticks: {
+                                                       autoSkip: true,
+                                                       maxTicksLimit: 8
+                                                   }
+                                               },
+                                               y: {
+                                                   suggestedMin: 0,
+                                               },
+                                           }
+                                       }} />
                                 </div>
                             </div>
 

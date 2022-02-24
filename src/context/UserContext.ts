@@ -2,9 +2,9 @@ import { createContext, useContext } from "react";
 import { IUser } from "../types/User";
 
 // context for storing the user object
-const UserContext = createContext<IUser | null | undefined>(null);
+const , = createContext<IUser | null | undefined>(null);
 
-export default UserContext;
+export default ,;
 
 // a custom hook to access the user object from the context easily
 export const useUser = () => {
