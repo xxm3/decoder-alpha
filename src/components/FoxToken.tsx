@@ -69,13 +69,13 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,
             responsive: ['md'], // Will not be displayed below 768px
         },
-        { title: 'View Supply in Explorer', key: '', width: 250,
+        { title: 'View Supply in Explorer', key: '', width: 200,
             render: record => (
                 <a target="_blank" className="no-underline" href={'https://explorer.solana.com/address/' + record.token} >🌐</a>
             ),
             responsive: ['md'], // Will not be displayed below 768px
         },
-        { title: 'View Chart', key: '', width: 250,
+        { title: 'View Chart', key: '', width: 150,
             render: record => (
                 <span onClick={() => viewChart(record.token, record.name)} className="cursor-pointer">📈</span>
             ),
@@ -98,7 +98,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                     const data = res.data.data;
                     // const newData = [];
                     //
-                    // // TODO!!
+                    //
                     // for(let i in data){
                     //     if(data[i].customName){
                     //         newData.push(data[i]);
@@ -247,15 +247,18 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
                 <div className={`font-bold pb-1 w-full`}>
                     <a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">Fox Token Market - Analysis</a>
+                    <div hidden={!tableData.length}>
+                        👪 are community added <a onClick={() => clickedAddName(true)}>names</a>
+                    </div>
 
-                    {/*TODO: wait for discord*/}
+                    {/*TODO: wait for parth/discord*/}
                     {/*<IonButton color="success" className="text-sm small-btn ml-5 mb-3"*/}
                     {/*           onClick={() => clickedAddName(true)}>*/}
                     {/*    Add a name to a token*/}
                     {/*</IonButton>*/}
 
-                    <div className="float-right" hidden={!tableData.length}>
-                        👪 are community added <a onClick={() => clickedAddName(true)}>names</a>
+                    <div className="float-right">
+
                     </div>
                 </div>
 
@@ -331,7 +334,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             </div>
                         : <div className=" ">
 
-                            {/*TODO-later: show only names :*/}
+                            {/*TODO-later: show only names (have a TODO on top as well for the data :*/}
                             {/*<IonItem style={{"width": "250px"}}>*/}
                             {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                             {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
@@ -347,7 +350,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                     // scroll={{x: 'max-content'}}
 
                                     scroll={{y: 600}}
-                                    // scroll={{y: 22}} // if want show it off
+                                    // scroll={{y: 22}} // if want show it off / shill
 
                                     // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
                                     // scroll={{x: 'max-content', y: 400}}

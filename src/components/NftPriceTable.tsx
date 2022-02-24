@@ -22,7 +22,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
      * States & Variables
      */
     const [tableData, setTableData] = useState([]);
-    const [hideComments, f] = useState(true)
+    const [hideComments, setHideComments] = useState(true);
 
     const columns: ColumnsType<any> = [
         {
@@ -134,7 +134,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                 <div className={`font-bold pb-1 w-full`}>
                     Mint Alerts Automated - Statistics
                     <div className="float-right" hidden={!tableData.length}>
-                        <a className="underline">💬 Show Comments</a>
+                        <a className="underline cursor-pointer" onClick={() => setHideComments(!hideComments)}>💬 Show Comments</a>
                     </div>
                 </div>
                 <p>These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel</p>
