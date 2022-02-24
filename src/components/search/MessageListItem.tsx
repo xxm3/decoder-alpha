@@ -4,6 +4,7 @@ import moment from 'moment';
 import { useParams } from 'react-router';
 import './MessageListItem.css';
 import ReactTooltip from 'react-tooltip';
+import { getUrlExtension, mediaTypes, urlRegExp } from '../../util/getURLs';
 
 type MessageListItemProps =
     | {
@@ -28,15 +29,25 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
     ) => {
         const { id: word } = useParams<{ id: string }>();
 
-        const msgArr = useMemo(() => {
-            if (!message)
-                return [
-                    'LOADING'
-                ];
+        const { msgArr, mediaUrls } = useMemo(() => {
+            if (!message) return { msgArr: [], mediaUrls: [] };
+            const mediaUrls: string[] = [];
+
+            const messageWithoutMediaUrls = message.replaceAll(
+                urlRegExp,
+                (url) => {
+                    if (mediaTypes.has(getUrlExtension(url))) {
+                        if (!mediaUrls.includes(url)) {
+                            mediaUrls.push(url);
+                            return '';
+                        }
+                        return url;
+                    } else return url;
+                }
+            );
+
             const indexesArr = [
-                ...message
-                    .toLowerCase()
-                    .matchAll(new RegExp(word.toLowerCase(), 'gi')),
+                ...messageWithoutMediaUrls.matchAll(new RegExp(word, 'gi')),
             ]
                 .map((match) => [
                     match.index as number,
@@ -46,11 +57,14 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
             let lastIndex = 0;
             const msg: string[] = [];
             for (let index of indexesArr) {
-                msg.push(message.slice(lastIndex, index));
+                msg.push(messageWithoutMediaUrls.slice(lastIndex, index));
                 lastIndex = index;
             }
-            msg.push(message.slice(lastIndex));
-            return msg;
+            msg.push(messageWithoutMediaUrls.slice(lastIndex));
+            return {
+                msgArr: msg,
+                mediaUrls: mediaUrls,
+            };
         }, [message, word]);
 
         const loading = useMemo(() => !message, [message]);
@@ -58,9 +72,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
         return (
             <div
                 className={`relative w-full items-start ${
-                    loading
-                        ? 'messageLoading py-2'
-                        : 'text-gray-200 my-2'
+                    loading ? 'messageLoading py-2' : 'text-gray-200 my-2'
                 } ${
                     onClick ? 'hover:bg-opacity-100 cursor-pointer' : ''
                 } py-1 space-x-4 rounded-xl text-lg flex`}
@@ -95,24 +107,56 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                             loading ? 'mb-5' : 'mb-1'
                         }`}
                     >
-                        <p>{loading ? 'LOADING' : `(${source} ${source !== "Twitter" ? "- Discord" : ""}) ${author}`}</p>
+                        <p>
+                            {loading
+                                ? 'LOADING'
+                                : `(${source} ${
+                                      source !== 'Twitter' ? '- Discord' : ''
+                                  }) ${author}`}
+                        </p>
                         {!loading && (
-                            <div className="text-xs text-gray-400" data-tip={new Date(time as string).toLocaleString()}>
+                            <div
+                                className="text-xs text-gray-400"
+                                data-tip={new Date(
+                                    time as string
+                                ).toLocaleString()}
+                            >
                                 {getDateAgo(time)}
                             </div>
                         )}
                     </div>
 
                     {/* show the message and highlight matches */}
-                    <p className={loading ? 'inline box-decoration-clone' : 'max-w-full word-wrap'}>
-                        {!loading ? msgArr.map((w, i) => {
-                            return w.toLowerCase() === word.toLowerCase() ? (
-                                <b className="text-cb" key={w+i}>{w}</b>
-                            ) : (
-                              w
-                            );
-                        }) : "LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING"}
+                    <p
+                        className={
+                            loading
+                                ? 'inline box-decoration-clone'
+                                : 'max-w-full word-wrap'
+                        }
+                    >
+                        {!loading
+                            ? msgArr.map((w, i) => {
+                                  return w.toLowerCase() ===
+                                      word.toLowerCase() ? (
+                                      <b className="text-cb" key={w + i}>
+                                          {w}
+                                      </b>
+                                  ) : (
+                                      w
+                                  );
+                              })
+                            : 'LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING'}
                     </p>
+                    <div className="media">
+                        {mediaUrls.map((url) => {
+                            switch (mediaTypes.get(getUrlExtension(url))) {
+                                case 'img':
+                                    return <img src={url} />;
+                                case 'video':
+                                    return <video src={url} />;
+                            }
+                        })}
+                    </div>
                 </div>
 
                 {loading && (
