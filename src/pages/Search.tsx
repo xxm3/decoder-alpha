@@ -64,8 +64,9 @@ const Search: React.FC = () => {
      * Functions
      */
     const scrollToTop = () => {
-        // contentRef.current && contentRef.current.scrollToTop();
-        window.scrollTo(0,0)
+        contentRef.current && contentRef.current.scrollToTop();
+        
+        // window.scrollTo(0,0)
     }
 
     const handlePage = (type: string) => {
@@ -116,14 +117,14 @@ const Search: React.FC = () => {
             return data;
         } catch (e) {
             // TODO-rakesh: bugs with http://localhost:3000/search/portalsasdfsdf
-            // console.error('try/catch in Search.tsx: ', e);
-            // const error = e as Error & { response?: AxiosResponse };
-            //
-            // if (error && error.response) {
-            //     throw new Error(String(error.response.data.body));
-            // } else {
-            //     throw new Error('Unable to connect. Please try again later');
-            // }
+            console.error('try/catch in Search.tsx: ', e);
+            const error = e as Error & { response?: AxiosResponse };
+            
+            if (error && error.response) {
+                throw new Error(String(error.response.data.body));
+            } else {
+                throw new Error('Unable to connect. Please try again later');
+            }
         }
     }
 
@@ -209,7 +210,7 @@ const Search: React.FC = () => {
     return (
         <React.Fragment>
             {/* <IonPage> */}
-                {/* <IonContent ref={contentRef} scrollEvents={true} fullscreen> */}
+                <IonContent ref={contentRef} fullscreen>
                     {/* <Header /> */}
 
                         {/*min-h-screen*/}
@@ -224,9 +225,11 @@ const Search: React.FC = () => {
                                         <p className="text-lg text-red-700 font-medium">
 
                                             {/*TODO-rakesh: bugs with http://localhost:3000/search/portalsasdfsdf*/}
-                                            No results found
-                                            {/*<b>{(messageQuery?.error as Error).message ||*/}
-                                            {/*    (graphQuery?.error as Error).message || 'Unable to connect, please try again later'}</b>*/}
+                                            {/* No results found */}
+                                            {console.log("erro ", messageQuery?.error, graphQuery?.error)
+                                            }
+                                            <b>{(messageQuery?.error as Error)?.message ||
+                                               (graphQuery?.error as Error)?.message || 'Unable to connect, please try again later'}</b>
                                         </p>
                                         <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                                             !
@@ -265,20 +268,20 @@ const Search: React.FC = () => {
                                                     <IonButton onClick={()=> handlePage('next')}  className="ml-4">Next</IonButton>}
 
                                                 {/*TODO-rakesh: reenable later*/}
-                                                {/*{!messageQuery?.isFetching &&*/}
-                                                {/*<IonButton*/}
-                                                {/*    onClick={() => scrollToTop()}*/}
-                                                {/*    className="float-right"*/}
-                                                {/*>*/}
-                                                {/*    Scroll to Top*/}
-                                                {/*</IonButton>}*/}
+                                                {!messageQuery?.isFetching &&
+                                                <IonButton
+                                                  onClick={() => scrollToTop()}
+                                                   className="float-right"
+                                                >
+                                                    Scroll to Top
+                                                </IonButton>}
                                             </>
                                         )}
 
                                     </>
                                 )}
                             </div>
-                {/* </IonContent> */}
+                </IonContent>
             {/* </IonPage> */}
         </React.Fragment>
     );

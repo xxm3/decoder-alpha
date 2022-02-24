@@ -180,6 +180,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 });
 
                 // TODO-rakesh: wait for rak for scroll bottom:...
+                // ! Explain the task in detail as it is not clear 
                 // window.scrollTo(0,document.body.scrollHeight);
 
             })
