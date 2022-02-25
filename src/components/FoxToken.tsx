@@ -25,6 +25,8 @@ import {getDailyCountData} from "../util/charts";
 import moment from "moment";
 import * as solanaWeb3 from '@solana/web3.js';
 import {wallet} from "ionicons/icons";
+import {useSelector} from "react-redux";
+import {RootState} from "../redux/store";
 
 
 interface FoxToken {
@@ -42,6 +44,9 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     const [tokenClickedOn, setTokenClickedOn] = useState();
     const [mySolBalance, setMySolBalance] = useState("");
     const [mySplTokens, setMySplTokens] = useState([]);
+    const walletAddress = useSelector(
+        (state: RootState) => state.wallet.walletAddress
+    );
 
     const defaultGraph : ChartData<any, string> = {
         labels: [],
@@ -203,49 +208,55 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
     // https://github.com/solana-labs/solana-program-library/blob/master/token/js/examples/create_mint_and_transfer_tokens.ts
     // https://docs.solana.com/es/developing/clients/jsonrpc-api#gettokenaccountsbyowner
-    useEffect(() => {
+    const getUserSpls = async() => {
 
-        const getUserSpls = async() => {
+        // console.log(walletAddress);
+        if(!walletAddress) return;
 
-            // https://docs.solana.com/developing/clients/javascript-reference
-            // const regularWalletId = '9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41';
-            const regularWalletId = 'AnUWnrpQnk98rwdQpSW7tyJv5z9uz9BPFsYxFXBJAhHd';
-            let base58publicKey = new solanaWeb3.PublicKey(regularWalletId);
+        // https://docs.solana.com/developing/clients/javascript-reference
+        let base58publicKey = new solanaWeb3.PublicKey(walletAddress.toString());
 
-            const connection = new solanaWeb3.Connection(
-                solanaWeb3.clusterApiUrl('mainnet-beta'),'confirmed',
-            );
+        const connection = new solanaWeb3.Connection(
+            solanaWeb3.clusterApiUrl('mainnet-beta'),'confirmed',
+        );
 
-            // let account = await connection.getAccountInfo(base58publicKey);
-            // console.log(account?.data);
+        // let account = await connection.getAccountInfo(base58publicKey);
+        // console.log(account?.data);
 
-            // https://github.com/solana-labs/solana/blob/master/web3.js/examples/get_account_info.js
-            let balance = await connection.getBalance(base58publicKey); // SOL balance
-            balance = balance / 1000000000;
-            // @ts-ignore
-            setMySolBalance(balance);
+        // https://github.com/solana-labs/solana/blob/master/web3.js/examples/get_account_info.js
+        let balance = await connection.getBalance(base58publicKey); // SOL balance
+        balance = balance / 1000000000;
+        // @ts-ignore
+        setMySolBalance(balance);
 
-            // https://github.com/michaelhly/solana-py/issues/48
-            let tokenAccounts = await connection.getParsedTokenAccountsByOwner(
-                base58publicKey,
-                {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
-            );
+        // https://github.com/michaelhly/solana-py/issues/48
+        let tokenAccounts = await connection.getParsedTokenAccountsByOwner(
+            base58publicKey,
+            {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
+        );
 
-            let mySplTokens = [];
-            for(let i in tokenAccounts.value){
-                if(tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0){
-                    // console.log(tokenAccounts.value[i]);
-                    mySplTokens.push(tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint);
-                }
+        let mySplTokens = [];
+        for(let i in tokenAccounts.value){
+            if(tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0){
+                // console.log(tokenAccounts.value[i]);
+                mySplTokens.push(tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint);
             }
-            // @ts-ignore
-            setMySplTokens(mySplTokens);
-
-            // TODO-later: use getTokenSupply?? - Returns the total supply of an SPL Token type. (FF uses this lots)
         }
-        getUserSpls();
+        // @ts-ignore
+        setMySplTokens(mySplTokens);
 
+        // TODO-later: use getTokenSupply?? - Returns the total supply of an SPL Token type. (FF uses this lots)
+    }
+
+    // call on load
+    useEffect(() => {
+        getUserSpls();
     }, []);
+    // TODO: not working...
+    useEffect(() => {
+        getUserSpls();
+    // @ts-ignore
+    }, walletAddress);
 
     /**
      * for submitting custom token names
@@ -293,7 +304,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                     message: 'Successfully added the name. Refresh to see it',
                     color: 'success',
                     duration: 5000
-                })
+                });
             }
 
         }).catch(err => {
@@ -305,8 +316,25 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     }
 
     const viewMyTokens = () => {
+        if(!walletAddress){
+            present({
+                message: 'Please connect to your wallet',
+                color: 'danger',
+                duration: 5000
+            });
+            return;
+        }
+
         // make sure they have tokens
         if(mySplTokens.length === 0){
+
+            // show toast
+            present({
+                message: 'No tokens found on this wallet :(',
+                color: 'danger',
+                duration: 5000
+            });
+            return;
 
             /**
              * TODO
@@ -330,8 +358,17 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                     newTableData.push(tableData[i]);
                 }
             }
-            setTableData(newTableData);
 
+            if(newTableData.length === 0){
+                present({
+                    message: 'None of your tokens are also listed on FF Token Market :(',
+                    color: 'danger',
+                    duration: 5000
+                });
+                return;
+            }
+
+            setTableData(newTableData);
         }
     };
 

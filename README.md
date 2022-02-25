@@ -50,6 +50,10 @@ To use toasts
 - See FoxToken.tsx and its toasts
 - https://ionicframework.com/docs/api/toast
 
+Global states....
+- see state.walletAddress... (to get)
+- see dispatch(setWallet... (to set)
+
 ...
 
 #### Links to read
