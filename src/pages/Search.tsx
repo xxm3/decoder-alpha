@@ -233,7 +233,6 @@ const Search: React.FC = () => {
                                     <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                                         <p className="text-lg text-red-700 font-medium">
 
-                                            {/*TODO-rakesh: bugs with http://localhost:3000/search/portalsasdfsdf --> Fixed*/}
                                             {/* No results found */}
                                             <b>{(messageQuery?.error as Error)?.message ||
                                                (graphQuery?.error as Error)?.message || 'Unable to connect, please try again later'}</b>
