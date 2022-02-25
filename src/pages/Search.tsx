@@ -125,7 +125,6 @@ const Search: React.FC = () => {
             );
             return data;
         } catch (e) {
-            // TODO-rakesh: bugs with http://localhost:3000/search/portalsasdfsdf <-- Fiexed it
             console.error('try/catch in Search.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
             
