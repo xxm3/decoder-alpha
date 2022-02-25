@@ -63,7 +63,6 @@ const Search: React.FC = () => {
     },[currentPage])
 
     // for scrolling to top
-    // const contentRef = useRef<HTMLDivElement | null>(null);
     const contentRef = useRef<any>(null);
 
     /**
@@ -127,7 +126,7 @@ const Search: React.FC = () => {
         } catch (e) {
             console.error('try/catch in Search.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
-            
+
             if (error && error.response) {
                 throw new Error(String(error.response.data.body));
             } else {
@@ -273,7 +272,6 @@ const Search: React.FC = () => {
                                                 {(!messageQuery?.isPreviousData && messageQuery?.data?.hasMore && !messageQuery?.isFetching)  &&
                                                     <IonButton onClick={()=> handlePage('next')}  className="ml-4">Next</IonButton>}
 
-                                                {/*TODO-rakesh: reenable later*/}
                                                 {!messageQuery?.isFetching &&
                                                 <IonButton
                                                   onClick={() => scrollToTop()}

@@ -190,8 +190,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 console.log(foxLineData);
 
 
-                // TODO-rakesh: wait for rak for scroll bottom:...
-                // ! Explain the task in detail as it is not clear 
+                // TODO-rakesh: go to the home page ... go to fox token table ... click view chart ... make sure it SCROLLS TO BOTTOM of page (or scrolls to make the chart the top of the page)
                 // window.scrollTo(0,document.body.scrollHeight);
 
             })
@@ -459,8 +458,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                     bordered
                                     // scroll={{x: 'max-content'}}
 
-                                    // scroll={{y: 400}}
-                                    scroll={{y: 22}} // if want show it off / shill
+                                    scroll={{y: 400}}
+                                    // scroll={{y: 22}} // if want show it off / shill
 
                                     // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
                                     // scroll={{x: 'max-content', y: 400}}
