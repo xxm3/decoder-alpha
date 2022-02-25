@@ -11,7 +11,7 @@ import {
     IonModal,
     IonContent,
     IonHeader,
-    IonToolbar, IonTitle, useIonToast
+    IonToolbar, IonTitle, useIonToast, IonIcon
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState} from 'react';
 import {Table} from 'antd' // https://ant.design/components/table/
@@ -23,6 +23,9 @@ import {ChartData} from "chart.js";
 import {Chart} from "react-chartjs-2";
 import {getDailyCountData} from "../util/charts";
 import moment from "moment";
+import * as solanaWeb3 from '@solana/web3.js';
+import {wallet} from "ionicons/icons";
+
 
 interface FoxToken {
     foo?: string;
@@ -35,10 +38,10 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
      * States & Variables
      */
     const [width, setWidth] = useState(window.innerWidth);
-
     const [tableData, setTableData] = useState([]);
-
     const [tokenClickedOn, setTokenClickedOn] = useState();
+    const [mySolBalance, setMySolBalance] = useState("");
+    const [mySplTokens, setMySplTokens] = useState([]);
 
     const defaultGraph : ChartData<any, string> = {
         labels: [],
@@ -131,6 +134,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
     }
 
+
+
     // viewing the chart for a token
     const viewChart = (token: string, name: string) => {
 
@@ -195,7 +200,58 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
     }
 
-    // for submitting custom token names
+    // https://github.com/solana-labs/solana-program-library/blob/master/token/js/examples/create_mint_and_transfer_tokens.ts
+    // https://docs.solana.com/es/developing/clients/jsonrpc-api#gettokenaccountsbyowner
+    useEffect(() => {
+
+        const getUserSpls = async() => {
+
+            // https://docs.solana.com/developing/clients/javascript-reference
+            // const regularWalletId = '9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41';
+            const regularWalletId = 'AnUWnrpQnk98rwdQpSW7tyJv5z9uz9BPFsYxFXBJAhHd';
+            let base58publicKey = new solanaWeb3.PublicKey(regularWalletId);
+
+            const connection = new solanaWeb3.Connection(
+                solanaWeb3.clusterApiUrl('mainnet-beta'),'confirmed',
+            );
+
+            // let account = await connection.getAccountInfo(base58publicKey);
+            // console.log(account?.data);
+
+            // TODO: need to do the "add other wallet strings" ....
+
+
+            // https://github.com/solana-labs/solana/blob/master/web3.js/examples/get_account_info.js
+            let balance = await connection.getBalance(base58publicKey); // SOL balance
+            balance = balance / 1000000000;
+            // @ts-ignore
+            setMySolBalance(balance); // TODO-later: how to pass to header?
+
+            // https://github.com/michaelhly/solana-py/issues/48
+            let tokenAccounts = await connection.getParsedTokenAccountsByOwner(
+                base58publicKey,
+                {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
+            );
+
+            let mySplTokens = [];
+            for(let i in tokenAccounts.value){
+                if(tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0){
+                    console.log(tokenAccounts.value[i]); // TODO
+                    mySplTokens.push(tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint);
+                }
+            }
+            // @ts-ignore
+            setMySplTokens(mySplTokens);
+
+            // TODO: use getTokenSupply?? - Returns the total supply of an SPL Token type. (FF uses this lots)
+        }
+        getUserSpls();
+
+    }, []);
+
+    /**
+     * for submitting custom token names
+     */
     const [addNameModalOpen, setAddNameModalOpen] = useState(false);
     const [formToken, setFormToken] = useState('');
     const [formName, setFormName] = useState('');
@@ -217,9 +273,16 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
         instance.post(environment.backendApi + '/receiver/foxTokenNameAdd', body).then(resp => {
 
+            // console.log(resp);
+
             if(resp.data.error){
                 setFormLoading(false);
-                setFormErrMsg(resp.data.message);
+                if(resp.data.message){
+                    setFormErrMsg(resp.data.message);
+                }else{
+                    setFormErrMsg('An error occurred. Please contact us if this continues to happen');
+                }
+
             }else{
                 setFormLoading(false);
                 setFormToken('');
@@ -243,6 +306,36 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         });
     }
 
+    const viewMyTokens = () => {
+        // make sure they have tokens
+        if(mySplTokens.length === 0){
+            // TODO: ... have them set their wallet here... or tlel them connect wllet topright...
+        }else{
+            // new array of data we'll set later
+            let newTableData: any = [];
+
+            // loop through tabledata (all fox tokens)
+            for(let i in tableData){
+                // if match, then push
+                // @ts-ignore
+                if(mySplTokens.indexOf(tableData[i].token) !== -1){
+                    newTableData.push(tableData[i]);
+                }
+            }
+            setTableData(newTableData);
+
+            /**
+             * TODO
+             * - Should be able to allow people to enter in multiples of their wallets, so click one button and see all your tokens
+             * - Will show the # of tokens you have
+             * - Will show tokens that aren't in FF as well
+             * - Want to try and show the date it was sent to you, will have to figure that out
+             *
+             */
+
+        }
+    };
+
     /**
      * Renders
      */
@@ -255,9 +348,15 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                     <a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">
                         Fox Token Market - Analysis
                     </a>
-                    <IonButton color="success" className="text-sm small-btn ml-5"
+                    <IonButton color="success" className="float-right text-sm small-btn pl-5"
                                onClick={() => clickedAddName(true)}>
-                        Add a name to a token
+                        {/*TODO: icon...*/}
+                        ➕ Add custom name
+                    </IonButton>
+                    <IonButton color="secondary" className="float-right text-sm small-btn ml-5"
+                               onClick={() => viewMyTokens()}>
+                        <IonIcon icon={wallet} className="pr-1" />
+                        View My Tokens
                     </IonButton>
                     <div hidden={!tableData.length}>
                         👪 are community added names

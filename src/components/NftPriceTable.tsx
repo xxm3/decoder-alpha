@@ -77,7 +77,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         },
         { title: 'ME URL', key: 'meUrl', width: 100,
             render: record => (
-                <a href={record.meUrl} target="_blank" className="big-emoji" hidden={!record.meUrl}>🌐</a>
+                <a href={record.meUrl} target="_blank" className="big-emoji" hidden={!record.meUrl || record.meUrl.length < 5}>🌐</a>
             ),
             responsive: ['md'], // Will not be displayed below 768px
         },
@@ -133,9 +133,12 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 
                 <div className={`font-bold pb-1 w-full`}>
                     Mint Alerts Automated - Statistics
-                    <div className="float-right" hidden={!tableData.length}>
-                        <a className="underline cursor-pointer" onClick={() => setHideComments(!hideComments)}>💬 Show Comments</a>
-                    </div>
+                    <IonButton className="float-right text-sm small-btn ml-5" hidden={!tableData.length} color="secondary"
+                               onClick={() => setHideComments(!hideComments)}
+                    >
+                        {/*TODO: icon*/}
+                        💬 Show Comments
+                    </IonButton>
                 </div>
                 <p>These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel</p>
 

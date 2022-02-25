@@ -8,13 +8,13 @@ function useConnectWallet() {
 	const dispatch = useDispatch()
 	const [present] = useIonAlert();
 	const connectWallet = useCallback(async (options : { onlyIfTrusted : boolean} | null) => {
-		
+
 			// @ts-ignore
 			const { solana } = window;
 			if (solana && solana.isPhantom) {
 					const response = await solana.connect(options);
-					console.log('onload - Connected with Public Key:', response.publicKey.toString());
-	
+					// console.log('onload - Connected with Public Key:', response.publicKey.toString());
+
 					// Set the user's publicKey in state to be used later!
 					dispatch(setWallet(response.publicKey.toString()));
 			} else if(options === null){
