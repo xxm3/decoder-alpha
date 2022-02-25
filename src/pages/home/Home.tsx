@@ -142,6 +142,8 @@ const Home = () => {
 
     // load search data from backend, for stacked line graph
     const doSearch = async (query : string) => {
+        query = query.trim();
+
         try {
             setErrorSearchStacked("");
             setSearchValueStacked(query);

@@ -66,21 +66,22 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         { title: 'Floor Price', key: 'floorPrice', dataIndex: 'floorPrice', width: 150,
             sorter: (a, b) => a.floorPrice - b.floorPrice,},
         { title: 'Name', key: 'name', dataIndex: 'name',
-            sorter: (a, b) => a.name.localeCompare(b.name),},
+            sorter: (a, b) => a.name.localeCompare(b.name),
+            width: 250,},
         { title: 'Total Token Listings', key: 'totalTokenListings', dataIndex: 'totalTokenListings', width: 250,
             sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,
-            responsive: ['md'], // Will not be displayed below 768px
-        },
-        { title: 'View Supply in Explorer', key: '', width: 200,
-            render: record => (
-                <a target="_blank" className="no-underline big-emoji" href={'https://explorer.solana.com/address/' + record.token} >🌐</a>
-            ),
             responsive: ['md'], // Will not be displayed below 768px
         },
         { title: 'View Chart', key: '', width: 150,
             render: record => (
                 <span onClick={() => viewChart(record.token, record.name)} className="cursor-pointer big-emoji">📈</span>
             ),
+        },
+        { title: 'View in Explorer', key: '', width: 150,
+            render: record => (
+                <a target="_blank" className="no-underline big-emoji" href={'https://explorer.solana.com/address/' + record.token} >🌐</a>
+            ),
+            responsive: ['md'], // Will not be displayed below 768px
         }
 
     ];
@@ -225,7 +226,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             let balance = await connection.getBalance(base58publicKey); // SOL balance
             balance = balance / 1000000000;
             // @ts-ignore
-            setMySolBalance(balance); // TODO-later: how to pass to header?
+            setMySolBalance(balance);
 
             // https://github.com/michaelhly/solana-py/issues/48
             let tokenAccounts = await connection.getParsedTokenAccountsByOwner(
@@ -236,14 +237,12 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             let mySplTokens = [];
             for(let i in tokenAccounts.value){
                 if(tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0){
-                    console.log(tokenAccounts.value[i]); // TODO
+                    // console.log(tokenAccounts.value[i]);
                     mySplTokens.push(tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint);
                 }
             }
             // @ts-ignore
             setMySplTokens(mySplTokens);
-
-            // TODO: bugs in ideas-bugs
 
             // TODO: use getTokenSupply?? - Returns the total supply of an SPL Token type. (FF uses this lots)
         }
@@ -356,12 +355,13 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                         {/*TODO: icon...*/}
                         ➕ Add custom name
                     </IonButton>
-                    {/*TODO*/}
-                    {/*<IonButton color="secondary" className="float-right text-sm small-btn ml-5"*/}
-                    {/*           onClick={() => viewMyTokens()}>*/}
-                    {/*    <IonIcon icon={wallet} className="pr-1" />*/}
-                    {/*    View My Tokens*/}
-                    {/*</IonButton>*/}
+
+                    {/*TODO: !!! */}
+                    <IonButton color="secondary" className="float-right text-sm small-btn ml-5"
+                               onClick={() => viewMyTokens()}>
+                        <IonIcon icon={wallet} className="pr-1" />
+                        View My Tokens
+                    </IonButton>
                     <div hidden={!tableData.length}>
                         👪 are community added names
                     </div>

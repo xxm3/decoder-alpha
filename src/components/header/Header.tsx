@@ -77,6 +77,8 @@ const HeaderContainer = () => {
 
     // does the search functionality
     function handleSearch(val: string) {
+        val = val.trim();
+
         if(val.length === 0) return;
         const queryKey = ["messages", id];
         queryClient.resetQueries(queryKey);
