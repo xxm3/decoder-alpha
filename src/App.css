@@ -19,3 +19,10 @@ body {
     padding: 1px;
     font-size: 14px;
 }
+.big-emoji{
+    font-size: 135%;
+}
+
+.me-logo{
+    max-height: 18px;
+}

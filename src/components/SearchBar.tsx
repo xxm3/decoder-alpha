@@ -16,7 +16,8 @@ function SearchBar({initialValue, onSubmit, placeholder, helpMsg, disableReset}:
         const {target, key} = e as KeyboardEvent<HTMLIonSearchbarElement> & { target: HTMLInputElement }
         if (target && key === 'Enter') {
             setSearchValue(target.value!);
-            onSubmit(target.value);
+            let searchVal = target.value.trim();
+            onSubmit(searchVal);
         }
     };
     const [searchValue, setSearchValue] = useState(initialValue ?? '');

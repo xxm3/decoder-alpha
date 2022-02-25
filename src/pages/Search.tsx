@@ -44,6 +44,7 @@ const Search: React.FC = () => {
 
     // resize window
     useEffect(() => {
+
         function resizeWidth() {
             setWidth(window.innerWidth);
         }
@@ -56,19 +57,27 @@ const Search: React.FC = () => {
         setCurrentPage(0);
     },[searchText])
 
+    // Whenever the next or previous page clicked it should scroll to top
+    useEffect(() => {
+        window.scrollTo(0,0);
+    },[currentPage])
+
     // for scrolling to top
-    // const contentRef = useRef<HTMLDivElement | null>(null);
     const contentRef = useRef<any>(null);
 
     /**
      * Functions
      */
+    const useMountEffect = (fun:any) => useEffect(fun, []);
+
     const scrollToTop = () => {
-        // contentRef.current && contentRef.current.scrollToTop();
-        window.scrollTo(0,0)
+        contentRef.current.scrollIntoView();
     }
 
+    useMountEffect(scrollToTop);
+
     const handlePage = (type: string) => {
+        contentRef.current.scrollIntoView();
         if(type === 'next' && (!messageQuery?.isPreviousData && messageQuery?.data?.hasMore)) setCurrentPage(currentPage+1)
         else setCurrentPage(currentPage - 1)
     }
@@ -115,15 +124,14 @@ const Search: React.FC = () => {
             );
             return data;
         } catch (e) {
-            // TODO-rakesh: bugs with http://localhost:3000/search/portalsasdfsdf
-            // console.error('try/catch in Search.tsx: ', e);
-            // const error = e as Error & { response?: AxiosResponse };
-            //
-            // if (error && error.response) {
-            //     throw new Error(String(error.response.data.body));
-            // } else {
-            //     throw new Error('Unable to connect. Please try again later');
-            // }
+            console.error('try/catch in Search.tsx: ', e);
+            const error = e as Error & { response?: AxiosResponse };
+
+            if (error && error.response) {
+                throw new Error(String(error.response.data.body));
+            } else {
+                throw new Error('Unable to connect. Please try again later');
+            }
         }
     }
 
@@ -209,7 +217,8 @@ const Search: React.FC = () => {
     return (
         <React.Fragment>
             {/* <IonPage> */}
-                {/* <IonContent ref={contentRef} scrollEvents={true} fullscreen> */}
+                {/* Because of this IonContent component the scroll became infinite */}
+                {/* <IonContent ref={contentRef} fullscreen> */}
                     {/* <Header /> */}
 
                         {/*min-h-screen*/}
@@ -223,10 +232,9 @@ const Search: React.FC = () => {
                                     <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                                         <p className="text-lg text-red-700 font-medium">
 
-                                            {/*TODO-rakesh: bugs with http://localhost:3000/search/portalsasdfsdf*/}
-                                            No results found
-                                            {/*<b>{(messageQuery?.error as Error).message ||*/}
-                                            {/*    (graphQuery?.error as Error).message || 'Unable to connect, please try again later'}</b>*/}
+                                            {/* No results found */}
+                                            <b>{(messageQuery?.error as Error)?.message ||
+                                               (graphQuery?.error as Error)?.message || 'Unable to connect, please try again later'}</b>
                                         </p>
                                         <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                                             !
@@ -236,7 +244,7 @@ const Search: React.FC = () => {
                                 // actual content
                                 ) : (
                                     <>
-                                        {graphQuery?.isFetching ? <div className="pt-10 flex justify-center items-center"><Loader /></div> :
+                                        {graphQuery?.isFetching ? <div className=" m-16 flex justify-center items-center"><Loader /></div> :
                                         graphQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                         <b>{"Error while loading message"}</b>
                                         </p> :
@@ -264,14 +272,13 @@ const Search: React.FC = () => {
                                                 {(!messageQuery?.isPreviousData && messageQuery?.data?.hasMore && !messageQuery?.isFetching)  &&
                                                     <IonButton onClick={()=> handlePage('next')}  className="ml-4">Next</IonButton>}
 
-                                                {/*TODO-rakesh: reenable later*/}
-                                                {/*{!messageQuery?.isFetching &&*/}
-                                                {/*<IonButton*/}
-                                                {/*    onClick={() => scrollToTop()}*/}
-                                                {/*    className="float-right"*/}
-                                                {/*>*/}
-                                                {/*    Scroll to Top*/}
-                                                {/*</IonButton>}*/}
+                                                {!messageQuery?.isFetching &&
+                                                <IonButton
+                                                  onClick={() => scrollToTop()}
+                                                   className="float-right"
+                                                >
+                                                    Scroll to Top
+                                                </IonButton>}
                                             </>
                                         )}
 

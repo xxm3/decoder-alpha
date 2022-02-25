@@ -6,7 +6,9 @@ import AppRoute from "./Route";
 // a route to be used to protect pages against unauthenticated users
 const ProtectedRoute = (props: Parameters<typeof AppRoute>[0]) => {
 	const user = useUser();
-	return user || (window.location.href.indexOf('localhost') !== -1) ? (
+	return user
+        || (window.location.href.indexOf('localhost') !== -1)
+    ? (
 		<AppRoute {...props} />
 	) : (
 		<Route

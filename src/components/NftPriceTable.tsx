@@ -10,6 +10,7 @@ import Loader from "./Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import ReactTooltip from "react-tooltip";
+import meLogo from '../images/me.png';
 
 interface NftPriceTableProps {
     foo?: string;
@@ -75,24 +76,26 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
             sorter: (a, b) => a.meta ? a.meta.localeCompare(b.meta) : 0,
             responsive: ['md'], // Will not be displayed below 768px
         },
+        { title: 'ME URL', key: 'meUrl', width: 100,
+            render: record => (
+                <a href={record.meUrl} target="_blank" className="big-emoji" hidden={!record.meUrl || record.meUrl.length < 5}>
+                    <img src={meLogo} className="me-logo pl-9" />
+                </a>
+            ),
+            responsive: ['md'], // Will not be displayed below 768px
+        },
+        { title: 'Mint URL', key: 'mintUrl', width: 100,
+            render: record => (
+                <a href={record.mintUrl} target="_blank" className="big-emoji" hidden={record.mintUrl.length < 5}>🌐</a>
+            ),
+            responsive: ['md'], // Will not be displayed below 768px
+        },
         { title: 'Comments',key: 'comments',
             render: record => (
                 // <span>{(record.comments.length > 90) ? record.comments.substr(0, 90 - 1) + '...' : record.comments}</span>
                 <span hidden={hideComments}>{record.comments}</span>
             ),
             width: 400,
-            responsive: ['md'], // Will not be displayed below 768px
-        },
-        { title: 'ME URL', key: 'meUrl', width: 100,
-            render: record => (
-                <a href={record.meUrl} target="_blank" hidden={!record.meUrl}>🌐</a>
-            ),
-            responsive: ['md'], // Will not be displayed below 768px
-        },
-        { title: 'Mint URL', key: 'mintUrl', width: 100,
-            render: record => (
-                <a href={record.mintUrl} target="_blank" hidden={record.mintUrl.length < 5}>🌐</a>
-            ),
             responsive: ['md'], // Will not be displayed below 768px
         },
         // stillBeingTracked
@@ -133,9 +136,12 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 
                 <div className={`font-bold pb-1 w-full`}>
                     Mint Alerts Automated - Statistics
-                    <div className="float-right" hidden={!tableData.length}>
-                        <a className="underline cursor-pointer" onClick={() => setHideComments(!hideComments)}>💬 Show Comments</a>
-                    </div>
+                    <IonButton className="float-right text-sm small-btn ml-5" hidden={!tableData.length} color="secondary"
+                               onClick={() => setHideComments(!hideComments)}
+                    >
+                        {/*TODO: icon*/}
+                        💬 Show Comments
+                    </IonButton>
                 </div>
                 <p>These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel</p>
 

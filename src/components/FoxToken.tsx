@@ -11,7 +11,7 @@ import {
     IonModal,
     IonContent,
     IonHeader,
-    IonToolbar, IonTitle, useIonToast
+    IonToolbar, IonTitle, useIonToast, IonIcon
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState} from 'react';
 import {Table} from 'antd' // https://ant.design/components/table/
@@ -19,11 +19,15 @@ import { ColumnsType } from 'antd/es/table';
 import Loader from "./Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
-import axios from "axios";
 import {ChartData} from "chart.js";
 import {Chart} from "react-chartjs-2";
 import {getDailyCountData} from "../util/charts";
 import moment from "moment";
+import * as solanaWeb3 from '@solana/web3.js';
+import {wallet} from "ionicons/icons";
+import {useSelector} from "react-redux";
+import {RootState} from "../redux/store";
+
 
 interface FoxToken {
     foo?: string;
@@ -36,14 +40,17 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
      * States & Variables
      */
     const [width, setWidth] = useState(window.innerWidth);
-
     const [tableData, setTableData] = useState([]);
-
     const [tokenClickedOn, setTokenClickedOn] = useState();
+    const [mySolBalance, setMySolBalance] = useState("");
+    const [mySplTokens, setMySplTokens] = useState([]);
+    const walletAddress = useSelector(
+        (state: RootState) => state.wallet.walletAddress
+    );
 
     const defaultGraph : ChartData<any, string> = {
-        labels: ["1"],
-        datasets: [ { data: ["3"] } ],
+        labels: [],
+        datasets: [],
     };
     const [foxLineData, setFoxLineData] = useState(defaultGraph);
     const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
@@ -64,21 +71,22 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         { title: 'Floor Price', key: 'floorPrice', dataIndex: 'floorPrice', width: 150,
             sorter: (a, b) => a.floorPrice - b.floorPrice,},
         { title: 'Name', key: 'name', dataIndex: 'name',
-            sorter: (a, b) => a.name.localeCompare(b.name),},
+            sorter: (a, b) => a.name.localeCompare(b.name),
+            width: 250,},
         { title: 'Total Token Listings', key: 'totalTokenListings', dataIndex: 'totalTokenListings', width: 250,
             sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,
             responsive: ['md'], // Will not be displayed below 768px
         },
-        { title: 'View Supply in Explorer', key: '', width: 200,
-            render: record => (
-                <a target="_blank" className="no-underline" href={'https://explorer.solana.com/address/' + record.token} >🌐</a>
-            ),
-            responsive: ['md'], // Will not be displayed below 768px
-        },
         { title: 'View Chart', key: '', width: 150,
             render: record => (
-                <span onClick={() => viewChart(record.token, record.name)} className="cursor-pointer">📈</span>
+                <span onClick={() => viewChart(record.token, record.name)} className="cursor-pointer big-emoji">📈</span>
             ),
+        },
+        { title: 'View in Explorer', key: '', width: 150,
+            render: record => (
+                <a target="_blank" className="no-underline big-emoji" href={'https://explorer.solana.com/address/' + record.token} >🌐</a>
+            ),
+            responsive: ['md'], // Will not be displayed below 768px
         }
 
     ];
@@ -132,8 +140,13 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
     }
 
+
+
     // viewing the chart for a token
     const viewChart = (token: string, name: string) => {
+
+        setFoxLineData(defaultGraph);
+        setFoxLineListingsData(defaultGraph);
 
         // @ts-ignore
         setTokenClickedOn(name ? `${name} (${token})` : token);
@@ -179,7 +192,11 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                     datasets: datasetsAryListings
                 });
 
-                // TODO-rakesh: wait for rak for scroll bottom:...
+                // think want to keep this in ... some timing ... issue....
+                console.log(foxLineData);
+
+
+                // TODO-rakesh: go to the home page ... go to fox token table ... click view chart ... make sure it SCROLLS TO BOTTOM of page (or scrolls to make the chart the top of the page)
                 // window.scrollTo(0,document.body.scrollHeight);
 
             })
@@ -189,7 +206,61 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
     }
 
-    // for submitting custom token names
+    // https://github.com/solana-labs/solana-program-library/blob/master/token/js/examples/create_mint_and_transfer_tokens.ts
+    // https://docs.solana.com/es/developing/clients/jsonrpc-api#gettokenaccountsbyowner
+    const getUserSpls = async() => {
+
+        // console.log(walletAddress);
+        if(!walletAddress) return;
+
+        // https://docs.solana.com/developing/clients/javascript-reference
+        let base58publicKey = new solanaWeb3.PublicKey(walletAddress.toString());
+
+        const connection = new solanaWeb3.Connection(
+            solanaWeb3.clusterApiUrl('mainnet-beta'),'confirmed',
+        );
+
+        // let account = await connection.getAccountInfo(base58publicKey);
+        // console.log(account?.data);
+
+        // https://github.com/solana-labs/solana/blob/master/web3.js/examples/get_account_info.js
+        let balance = await connection.getBalance(base58publicKey); // SOL balance
+        balance = balance / 1000000000;
+        // @ts-ignore
+        setMySolBalance(balance);
+
+        // https://github.com/michaelhly/solana-py/issues/48
+        let tokenAccounts = await connection.getParsedTokenAccountsByOwner(
+            base58publicKey,
+            {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
+        );
+
+        let mySplTokens = [];
+        for(let i in tokenAccounts.value){
+            if(tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0){
+                // console.log(tokenAccounts.value[i]);
+                mySplTokens.push(tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint);
+            }
+        }
+        // @ts-ignore
+        setMySplTokens(mySplTokens);
+
+        // TODO-later: use getTokenSupply?? - Returns the total supply of an SPL Token type. (FF uses this lots)
+    }
+
+    // call on load
+    useEffect(() => {
+        getUserSpls();
+    }, []);
+    // TODO: not working...
+    useEffect(() => {
+        getUserSpls();
+    // @ts-ignore
+    }, walletAddress);
+
+    /**
+     * for submitting custom token names
+     */
     const [addNameModalOpen, setAddNameModalOpen] = useState(false);
     const [formToken, setFormToken] = useState('');
     const [formName, setFormName] = useState('');
@@ -211,9 +282,16 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
         instance.post(environment.backendApi + '/receiver/foxTokenNameAdd', body).then(resp => {
 
+            // console.log(resp);
+
             if(resp.data.error){
                 setFormLoading(false);
-                setFormErrMsg(resp.data.message);
+                if(resp.data.message){
+                    setFormErrMsg(resp.data.message);
+                }else{
+                    setFormErrMsg('An error occurred. Please contact us if this continues to happen');
+                }
+
             }else{
                 setFormLoading(false);
                 setFormToken('');
@@ -226,7 +304,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                     message: 'Successfully added the name. Refresh to see it',
                     color: 'success',
                     duration: 5000
-                })
+                });
             }
 
         }).catch(err => {
@@ -237,6 +315,63 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         });
     }
 
+    const viewMyTokens = () => {
+        if(!walletAddress){
+            present({
+                message: 'Please connect to your wallet',
+                color: 'danger',
+                duration: 5000
+            });
+            return;
+        }
+
+        // make sure they have tokens
+        if(mySplTokens.length === 0){
+
+            // show toast
+            present({
+                message: 'No tokens found on this wallet :(',
+                color: 'danger',
+                duration: 5000
+            });
+            return;
+
+            /**
+             * TODO
+             * - Should be able to allow people to enter in multiples of their wallets, so click one button and see all your tokens
+             *       ... have them set their wallet here... or tlel them connect wllet topright...
+             *       ... need to do the "add other wallet strings" ....
+             * - Will show the # of tokens you have
+             * - Will show tokens that aren't in FF as well
+             * - Want to try and show the date it was sent to you, will have to figure that out
+             *
+             */
+        }else{
+            // new array of data we'll set later
+            let newTableData: any = [];
+
+            // loop through tabledata (all fox tokens)
+            for(let i in tableData){
+                // if match, then push
+                // @ts-ignore
+                if(mySplTokens.indexOf(tableData[i].token) !== -1){
+                    newTableData.push(tableData[i]);
+                }
+            }
+
+            if(newTableData.length === 0){
+                present({
+                    message: 'None of your tokens are also listed on FF Token Market :(',
+                    color: 'danger',
+                    duration: 5000
+                });
+                return;
+            }
+
+            setTableData(newTableData);
+        }
+    };
+
     /**
      * Renders
      */
@@ -246,16 +381,23 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
                 <div className={`font-bold pb-1 w-full`}>
-                    <a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">Fox Token Market - Analysis</a>
-                    <div hidden={!tableData.length}>
-                        👪 are community added <a onClick={() => clickedAddName(true)}>names</a>
-                    </div>
+                    <a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">
+                        Fox Token Market - Analysis
+                    </a>
+                    <IonButton color="success" className="float-right text-sm small-btn pl-5"
+                               onClick={() => clickedAddName(true)}>
+                        {/*TODO-later: icon...*/}
+                        ➕ Add custom name
+                    </IonButton>
 
-                    {/*TODO: wait for parth/discord*/}
-                    {/*<IonButton color="success" className="text-sm small-btn ml-5 mb-3"*/}
-                    {/*           onClick={() => clickedAddName(true)}>*/}
-                    {/*    Add a name to a token*/}
-                    {/*</IonButton>*/}
+                    <IonButton color="secondary" className="float-right text-sm small-btn ml-5"
+                               onClick={() => viewMyTokens()}>
+                        <IonIcon icon={wallet} className="pr-1" />
+                        View My Tokens
+                    </IonButton>
+                    <div hidden={!tableData.length}>
+                        👪 are community added names
+                    </div>
 
                     <div className="float-right">
 
@@ -349,7 +491,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                     bordered
                                     // scroll={{x: 'max-content'}}
 
-                                    scroll={{y: 600}}
+                                    scroll={{y: 400}}
                                     // scroll={{y: 22}} // if want show it off / shill
 
                                     // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
@@ -359,12 +501,13 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                 />
                             </div>
 
-                            <div className="gap-4 mb-4 grid grid-cols-12 mt-3" >
+                            <div className="gap-4 mb-4 grid grid-cols-12 mt-3"
+                                 // @ts-ignore
+                                 hidden={foxLineData.labels.length === 0}>
                                 <div className='chart' >
 
                                     <Chart type='line'
                                        // @ts-ignore
-                                       hidden={foxLineData.labels.length == 1}
                                        data={foxLineData} height='150'
                                        options={{
                                            responsive: true,
@@ -390,30 +533,28 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                 </div>
                                 <div className="chart">
                                     <Chart type='line'
-                                        // @ts-ignore
-                                           hidden={foxLineListingsData.labels.length == 1}
-                                           data={foxLineListingsData} height='150'
-                                           options={{
-                                               responsive: true,
-                                               maintainAspectRatio: true,
-                                               plugins: {
-                                                   legend: {
-                                                       display: false
-                                                   },
-                                                   title: { display: true, text: 'Total Token Listings'},
+                                       data={foxLineListingsData} height='150'
+                                       options={{
+                                           responsive: true,
+                                           maintainAspectRatio: true,
+                                           plugins: {
+                                               legend: {
+                                                   display: false
                                                },
-                                               scales: {
-                                                   x: {
-                                                       ticks: {
-                                                           autoSkip: true,
-                                                           maxTicksLimit: 8
-                                                       }
-                                                   },
-                                                   y: {
-                                                       suggestedMin: 0,
-                                                   },
-                                               }
-                                           }} />
+                                               title: { display: true, text: 'Total Token Listings'},
+                                           },
+                                           scales: {
+                                               x: {
+                                                   ticks: {
+                                                       autoSkip: true,
+                                                       maxTicksLimit: 8
+                                                   }
+                                               },
+                                               y: {
+                                                   suggestedMin: 0,
+                                               },
+                                           }
+                                       }} />
                                 </div>
                             </div>
 
