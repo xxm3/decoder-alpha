@@ -14,6 +14,7 @@ import { queryClient } from "../../queryClient";
 import SearchBar from "../SearchBar";
 import useConnectWallet from "../../hooks/useConnectWallet";
 import WalletButton from "../WalletButton";
+import {useUser} from "../../context/UserContext";
 
 
 const HeaderContainer = () => {
@@ -30,6 +31,11 @@ const HeaderContainer = () => {
     const connectWallet = useConnectWallet();
 
     const [headerPlaceholder, setHeaderPlaceholder] = useState('');
+
+    let user: any = useUser();
+    if(window.location.href.indexOf('localhost') !== -1){
+        user = true;
+    }
 
     // onload useEffect
     useEffect(() => {
@@ -92,7 +98,9 @@ const HeaderContainer = () => {
                         {!showMobileSearch && (
                             <div className="flex items-center space-x-5">
                                 {/*hamburger sidebar*/}
+                                <div hidden={!user}>
                                 <IonMenuButton color="white" menu="sidebar" className="md:hidden" />
+                                </div>
 
                                 {/*site logo & home*/}
                                 <IonRouterLink
@@ -104,7 +112,7 @@ const HeaderContainer = () => {
                             </div>
                         )}
 
-                        <div
+                        <div  hidden={!user}
                             className={`flex-grow flex items-center ${
                                 showMobileSearch
                                     ? 'space-x-8'
@@ -131,7 +139,7 @@ const HeaderContainer = () => {
                                     initialValue={decodeURIComponent(id ?? '')}
                                     placeholder={headerPlaceholder}
                                     helpMsg='Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale").
-                                            Results include graphs, and messages you can scroll through. Click on a message to view more'
+                                        Results include graphs, and messages you can scroll through. Click on a message to view more'
                                     disableReset='true'
                                 />
                             </div>
@@ -145,7 +153,7 @@ const HeaderContainer = () => {
                             )}
                         </div>
 
-                        <div className="hidden md:flex items-center" hidden={showMobileSearch}>
+                        <div className="hidden md:flex items-center" hidden={showMobileSearch || !user}>
                             {/* below repeated on Header.tsx and App.tsx */}
 
                             <IonRouterLink href="/schedule" className="pr-7 underline text-inherit">Today's Mints</IonRouterLink>
