@@ -252,16 +252,16 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
                 <div className={`font-bold pb-1 w-full`}>
-                    <a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">Fox Token Market - Analysis</a>
+                    <a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">
+                        Fox Token Market - Analysis
+                    </a>
+                    <IonButton color="success" className="text-sm small-btn ml-5"
+                               onClick={() => clickedAddName(true)}>
+                        Add a name to a token
+                    </IonButton>
                     <div hidden={!tableData.length}>
-                        👪 are community added <a onClick={() => clickedAddName(true)}>names</a>
+                        👪 are community added names
                     </div>
-
-                    {/*TODO: wait for parth/discord*/}
-                    {/*<IonButton color="success" className="text-sm small-btn ml-5 mb-3"*/}
-                    {/*           onClick={() => clickedAddName(true)}>*/}
-                    {/*    Add a name to a token*/}
-                    {/*</IonButton>*/}
 
                     <div className="float-right">
 
