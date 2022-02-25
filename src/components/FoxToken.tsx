@@ -243,9 +243,12 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             // @ts-ignore
             setMySplTokens(mySplTokens);
 
+            // TODO: bugs in ideas-bugs
+
             // TODO: use getTokenSupply?? - Returns the total supply of an SPL Token type. (FF uses this lots)
         }
-        getUserSpls();
+        // TODO
+        // getUserSpls();
 
     }, []);
 
@@ -353,11 +356,12 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                         {/*TODO: icon...*/}
                         ➕ Add custom name
                     </IonButton>
-                    <IonButton color="secondary" className="float-right text-sm small-btn ml-5"
-                               onClick={() => viewMyTokens()}>
-                        <IonIcon icon={wallet} className="pr-1" />
-                        View My Tokens
-                    </IonButton>
+                    {/*TODO*/}
+                    {/*<IonButton color="secondary" className="float-right text-sm small-btn ml-5"*/}
+                    {/*           onClick={() => viewMyTokens()}>*/}
+                    {/*    <IonIcon icon={wallet} className="pr-1" />*/}
+                    {/*    View My Tokens*/}
+                    {/*</IonButton>*/}
                     <div hidden={!tableData.length}>
                         👪 are community added names
                     </div>
@@ -454,8 +458,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                     bordered
                                     // scroll={{x: 'max-content'}}
 
-                                    scroll={{y: 400}}
-                                    // scroll={{y: 22}} // if want show it off / shill
+                                    // scroll={{y: 400}}
+                                    scroll={{y: 22}} // if want show it off / shill
 
                                     // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
                                     // scroll={{x: 'max-content', y: 400}}

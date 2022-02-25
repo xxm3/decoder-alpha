@@ -193,7 +193,8 @@ http://ionicframework.com/docs/theming/ */
      * Material Design Dark Theme
      * -------------------------------------------
      */
-    .md body {
+/* .md*/
+body {
         --ion-background-color: #121212;
         --ion-background-color-rgb: 18, 18, 18;
 
