@@ -22,3 +22,7 @@ body {
 .big-emoji{
     font-size: 135%;
 }
+
+.me-logo{
+    max-height: 18px;
+}

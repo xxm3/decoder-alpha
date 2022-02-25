@@ -10,6 +10,7 @@ import Loader from "./Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import ReactTooltip from "react-tooltip";
+import meLogo from '../images/me.png';
 
 interface NftPriceTableProps {
     foo?: string;
@@ -77,7 +78,9 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         },
         { title: 'ME URL', key: 'meUrl', width: 100,
             render: record => (
-                <a href={record.meUrl} target="_blank" className="big-emoji" hidden={!record.meUrl || record.meUrl.length < 5}>🌐</a>
+                <a href={record.meUrl} target="_blank" className="big-emoji" hidden={!record.meUrl || record.meUrl.length < 5}>
+                    <img src={meLogo} className="me-logo pl-9" />
+                </a>
             ),
             responsive: ['md'], // Will not be displayed below 768px
         },

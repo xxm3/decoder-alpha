@@ -219,9 +219,6 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             // let account = await connection.getAccountInfo(base58publicKey);
             // console.log(account?.data);
 
-            // TODO: need to do the "add other wallet strings" ....
-
-
             // https://github.com/solana-labs/solana/blob/master/web3.js/examples/get_account_info.js
             let balance = await connection.getBalance(base58publicKey); // SOL balance
             balance = balance / 1000000000;
@@ -244,10 +241,9 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             // @ts-ignore
             setMySplTokens(mySplTokens);
 
-            // TODO: use getTokenSupply?? - Returns the total supply of an SPL Token type. (FF uses this lots)
+            // TODO-later: use getTokenSupply?? - Returns the total supply of an SPL Token type. (FF uses this lots)
         }
-        // TODO
-        // getUserSpls();
+        getUserSpls();
 
     }, []);
 
@@ -311,7 +307,17 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     const viewMyTokens = () => {
         // make sure they have tokens
         if(mySplTokens.length === 0){
-            // TODO: ... have them set their wallet here... or tlel them connect wllet topright...
+
+            /**
+             * TODO
+             * - Should be able to allow people to enter in multiples of their wallets, so click one button and see all your tokens
+             *       ... have them set their wallet here... or tlel them connect wllet topright...
+             *       ... need to do the "add other wallet strings" ....
+             * - Will show the # of tokens you have
+             * - Will show tokens that aren't in FF as well
+             * - Want to try and show the date it was sent to you, will have to figure that out
+             *
+             */
         }else{
             // new array of data we'll set later
             let newTableData: any = [];
@@ -325,15 +331,6 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 }
             }
             setTableData(newTableData);
-
-            /**
-             * TODO
-             * - Should be able to allow people to enter in multiples of their wallets, so click one button and see all your tokens
-             * - Will show the # of tokens you have
-             * - Will show tokens that aren't in FF as well
-             * - Want to try and show the date it was sent to you, will have to figure that out
-             *
-             */
 
         }
     };
@@ -352,11 +349,10 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                     </a>
                     <IonButton color="success" className="float-right text-sm small-btn pl-5"
                                onClick={() => clickedAddName(true)}>
-                        {/*TODO: icon...*/}
+                        {/*TODO-later: icon...*/}
                         ➕ Add custom name
                     </IonButton>
 
-                    {/*TODO: !!! */}
                     <IonButton color="secondary" className="float-right text-sm small-btn ml-5"
                                onClick={() => viewMyTokens()}>
                         <IonIcon icon={wallet} className="pr-1" />
