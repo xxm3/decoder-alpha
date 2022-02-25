@@ -103,7 +103,7 @@ const DisplayGraph:React.FC<{
         chartDataPerSource &&
         !completelyHideChart &&
         (
-            <div className="gap-4 mb-4 grid grid-cols-12" >
+            <div className="gap-4 grid grid-cols-12" >
                 <div className="chart">
                     <Chart
                         type="bar"
