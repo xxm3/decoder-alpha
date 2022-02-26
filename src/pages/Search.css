@@ -1,15 +1,19 @@
 .search__ripple {
 	animation: ripple 800ms linear infinite;
-	@apply bg-bg-tertiary w-0 h-full left-0 top-0 absolute !mx-0;
+	@apply w-0 h-full left-0 top-0 absolute !mx-0;
+	background-color: var(--ion-color-step-100);
 	clip-path: polygon(0 0, 100% 0, 72% 100%, 0% 100%);
 }
 
 .search__messageLoading p {
-	@apply bg-bg-primary text-xs text-bg-primary;
+	@apply text-xs;
+	background-color: var(--ion-color-step-200);
+	color: var(--ion-color-step-200);
 }
 
 .search__image {
-	@apply rounded-full h-12 w-12 flex-shrink-0 bg-bg-primary;
+	@apply rounded-full h-12 w-12 flex-shrink-0 ;
+	background-color: var(--ion-color-step-200);
 }
 
 .skelleton {

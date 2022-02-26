@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "DISABLE_ESLINT_PLUGIN=true GENERATE_SOURCEMAP=false react-scripts start",
-    "build": "react-scripts build",
+    "build": "craco build",
     "test": "react-scripts test",
     "test-mocha": "mocha --timeout 10000 --recursive",
     "eject": "react-scripts eject",
@@ -16,6 +16,7 @@
     "ionic:serve": "react-scripts start"
   },
   "dependencies": {
+    "@emotion/react": "^11.8.1",
     "@ionic/react": "^5.5.0",
     "@ionic/react-router": "^5.5.0",
     "@metaplex/js": "^4.11.7",

@@ -13,7 +13,7 @@ import { SearchResponse } from '../types/SearchResponse';
 import { dispLabelsDailyCount, getDailyCountData } from '../util/charts';
 import DisplayGraph from '../components/search/DisplayGraph';
 import Loader from '../components/Loader';
-import Header from '../components/header/Header';
+import MessageListItem from '../components/search/MessageListItem';
 import SearchSkelleton from './SearchSkelleton';
 
 const Search: React.FC = () => {
@@ -225,7 +225,7 @@ const Search: React.FC = () => {
 
                         {/* The bit darker Gray Container */}
                             <div ref={contentRef} className={`!overflow-y-auto ${width <= 640 ? 'w-full' : 'container'}
-                                bg-satin-3 rounded-lg pt-3 pb-6 md:px-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`} >
+                                 rounded-lg pt-3 pb-6 md:px-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`} >
 
                                 {/* ERROR bar */}
                                 {graphQuery.isError || messageQuery.isError || messageQuery?.data?.error || graphQuery?.data?.error ? (
@@ -257,7 +257,7 @@ const Search: React.FC = () => {
                                         }} />}
                                         {/* Displaying the custom skeleton loader while fetching */}
                                         {messageQuery?.isFetching ?
-                                            new Array(10).fill(0).map(elm => <SearchSkelleton />) :
+                                            new Array(10).fill(0).map((_,i) => <SearchSkelleton />) :
                                         messageQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                             <b>{"Error while loading message"}</b>
                                         </p> :

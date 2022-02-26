@@ -1,7 +1,6 @@
 import { IonLabel, IonCard, IonRow, IonCol, IonContent, IonPage } from '@ionic/react';
 import React, {useEffect, useMemo, useState} from 'react';
 import './Home.css';
-import Header from '../../components/header/Header';
 import Card from './Card';
 import CollectionCard from './CollectionCard';
 import Loader from "../../components/Loader";

@@ -91,10 +91,8 @@ const HeaderContainer = () => {
 
     return (
         <>
-
-            {/*p-4*/}
-            <IonHeader className="">
-                <IonToolbar className="bg-card px-4 rounded-lg related verflow-y-auto relative">
+            <IonHeader>
+                <IonToolbar className="my-3 rounded-lg related overflow-y-auto relative">
                     <div className="justify-between space-x-8 flex items-center">
 
                         {!showMobileSearch && (
@@ -106,8 +104,9 @@ const HeaderContainer = () => {
 
                                 {/*site logo & home*/}
                                 <IonRouterLink
-                                    className="text-2xl"
+                                    className="text-2xl logo"
                                     routerLink="/"
+									color="text"
                                 >
                                     SOL Decoder
                                 </IonRouterLink>
@@ -156,9 +155,6 @@ const HeaderContainer = () => {
                         </div>
 
                         <div className="hidden md:flex items-center" hidden={showMobileSearch || !user}>
-                            {/* below repeated on Header.tsx and App.tsx */}
-
-                            <IonRouterLink href="/schedule" className="pr-7 underline text-inherit">Today's Mints</IonRouterLink>
 
                             <WalletButton />
                         </div>

@@ -1,7 +1,6 @@
-.ripple {
-	animation: ripple 800ms linear infinite;
-	@apply bg-bg-tertiary w-0 h-full left-0 top-0 absolute !mx-0;
-	clip-path: polygon(0 0, 100% 0, 72% 100%, 0% 100%);
+
+.image {
+	@apply rounded-full h-12 w-12 flex-shrink-0;
 }
 
 @keyframes ripple {
@@ -9,14 +8,6 @@
 		width : 100%;
 		opacity : 0;
 	}
-}
-
-.messageLoading p {
-	@apply bg-bg-primary text-xs text-bg-primary;
-}
-
-.image {
-	@apply rounded-full h-12 w-12 flex-shrink-0 bg-bg-primary;
 }
 
 /* make the modal bigger */

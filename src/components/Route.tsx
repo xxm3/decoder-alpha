@@ -1,7 +1,8 @@
 import { IonContent, IonPage } from "@ionic/react"
 import React from "react";
 import { Route, RouteProps } from "react-router"
-import HeaderContainer from "./header/Header"
+import HeaderContainer from "./nav/Header"
+import Sidebar from "./nav/Sidebar";
 
 
 const AppRoute : React.FC<RouteProps> = (
@@ -13,22 +14,31 @@ const AppRoute : React.FC<RouteProps> = (
             component={undefined}
             children={undefined}
             render={(componentProps) => (
-                <IonPage>
-                    <IonContent fullscreen>
-                        <HeaderContainer />
-                        <div className="bg-gradient-to-b from-bg-primary to-bg-secondary flex justify-center items-center p-4 pt-2 sticky">
-                            {children
-                                ? typeof children === 'function'
-                                    ? children(componentProps)
-                                    : children
-                                : component
-                                ? React.createElement(component, componentProps)
-                                : render
-                                ? render(componentProps)
-                                : null}
-                        </div>
-                    </IonContent>
-                </IonPage>
+                <>
+                    
+                        <IonPage className="px-10">
+							<HeaderContainer />
+                            <IonContent fullscreen>
+                                <div className="flex">
+									<div className="hidden md:block"><Sidebar /></div>
+                                	<div className="flex justify-center items-center pt-2 sticky">
+	                                    {children
+	                                        ? typeof children === 'function'
+	                                            ? children(componentProps)
+	                                            : children
+	                                        : component
+	                                        ? React.createElement(
+	                                              component,
+	                                              componentProps
+	                                          )
+	                                        : render
+	                                        ? render(componentProps)
+	                                        : null}
+	                                </div>
+                                </div>
+                            </IonContent>
+                        </IonPage>
+                </>
             )}
         />
     );

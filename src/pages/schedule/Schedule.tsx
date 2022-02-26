@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import moment from 'moment';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
-import Header from "../../components/header/Header";
 import Loader from '../../components/Loader';
 import {Table} from 'antd'
 import { ColumnsType } from 'antd/es/table';

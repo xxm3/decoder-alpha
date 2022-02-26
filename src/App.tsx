@@ -1,5 +1,4 @@
-
-import { IonApp, IonCol, IonContent, IonGrid, IonMenu, IonRouterLink, IonRouterOutlet, IonRow } from "@ionic/react";
+import { IonApp, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 // import { useEffect, useState } from "react";
 // import Search from "./pages/Search";
@@ -37,7 +36,7 @@ import Home from "./pages/home/Home";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Schedule from "./pages/schedule/Schedule";
-
+import { IonCol, IonContent, IonGrid, IonMenu, IonRouterLink, IonRow } from "@ionic/react"
 
 // // https://javascript.plainenglish.io/how-to-setup-and-add-google-analytics-to-your-react-app-fd361f47ac7b
 // const TRACKING_ID = "G-Z3GDFZ53DN";
@@ -49,8 +48,10 @@ import {
   } from 'react-query'
 import { ReactQueryDevtools } from "react-query/devtools"
 import { queryClient } from "./queryClient";
-import WalletButton from "./components/WalletButton";
 import AppRoute from "./components/Route";
+import HeaderContainer from "./components/nav/Header";
+import WalletButton from "./components/WalletButton";
+import Sidebar from "./components/nav/Sidebar";
 
 
 const App = () => {
@@ -92,28 +93,16 @@ const App = () => {
 
 
 	return (
-        <IonApp>
+        <IonApp id="main">
             <QueryClientProvider client={queryClient}>
                 <UserContext.Provider value={user}>
                     {user !== undefined ? (
                         <>
-                            <IonMenu menuId="sidebar" contentId="router" className="md:hidden">
-                                <IonContent>
-                                    <IonGrid className="ion-padding">
-                                        <IonRow>
-                                            <IonCol size="12">
-                                                {/* below repeated on Header.tsx and App.tsx */}
-
-                                                <WalletButton />
-                                                <br/><br/>
-
-                                                <IonRouterLink href="/schedule" className="pr-7 underline text-inherit">Today's Mints</IonRouterLink>
-
-
-                                            </IonCol>
-                                        </IonRow>
-                                    </IonGrid>
-                                </IonContent>
+                            <IonMenu
+                                menuId="sidebar"
+                                contentId="router"
+                            >
+                               <Sidebar />
                             </IonMenu>
                             <IonReactRouter>
                                 <IonRouterOutlet id="router">
@@ -130,34 +119,42 @@ const App = () => {
 											)}
 										/> */}
 
-										<ProtectedRoute
-											path="/"
-											// component={HomePage}
-		                                    component={Home}
-											exact
-										/>
+                                        <ProtectedRoute
+                                            path="/"
+                                            // component={HomePage}
+                                            component={Home}
+                                            exact
+                                        />
 
-										<ProtectedRoute
-											path="/search/:id"
-											exact={true}
-											component={Search}
-										/>
-										<AppRoute exact path="/Schedule" component={Schedule} />
-										<AppRoute exact path="/Login" component={Login} />
-									</Switch>
-								</IonRouterOutlet>
-							</IonReactRouter>
-						</>
-					) : (
-						<div className="mx-auto my-auto h-48 w-48">
-							<Loader />
-						</div>
-					)}
-					<ReactQueryDevtools initialIsOpen />
-				</UserContext.Provider>
-			</QueryClientProvider>
-		</IonApp>
-	);
+                                        <ProtectedRoute
+                                            path="/search/:id"
+                                            exact={true}
+                                            component={Search}
+                                        />
+                                        <AppRoute
+                                            exact
+                                            path="/Schedule"
+                                            component={Schedule}
+                                        />
+                                        <AppRoute
+                                            exact
+                                            path="/Login"
+                                            component={Login}
+                                        />
+                                    </Switch>
+                                </IonRouterOutlet>
+                            </IonReactRouter>
+                        </>
+                    ) : (
+                        <div className="mx-auto my-auto h-48 w-48">
+                            <Loader />
+                        </div>
+                    )}
+                    <ReactQueryDevtools initialIsOpen />
+                </UserContext.Provider>
+            </QueryClientProvider>
+        </IonApp>
+    );
 
 };
 

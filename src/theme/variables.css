@@ -194,34 +194,51 @@ http://ionicframework.com/docs/theming/ */
      * -------------------------------------------
      */
 /* .md*/
-body {
-        --ion-background-color: #121212;
-        --ion-background-color-rgb: 18, 18, 18;
+:root {
+	--ion-color-primary: #0052FF;
+	--ion-color-primary-rgb: 0,82,255;
+	--ion-color-primary-contrast: #F9F8F6;
+	--ion-color-primary-contrast-rgb: 249, 248, 246;
+	--ion-color-primary-shade: #0048e0;
+	--ion-color-primary-tint: #1a63ff;
 
-        --ion-text-color: #ffffff;
-        --ion-text-color-rgb: 255, 255, 255;
+	--ion-placeholder-color: #767676;
+	
+}
+
+body.dark {
+	--ion-background-color : #01021A;
+	--ion-background-color-rgb : 1,2,26;
+
+	--ion-text-color: var(--ion-color-primary-contrast);
+	--ion-text-color-rgb: var(--ion-color-primary-contrast-rgb);
+
+	--ion-color-step-50: #0d0e25;
+	--ion-color-step-100: #1a1b30;
+	--ion-color-step-150: #26273b;
+	--ion-color-step-200: #333346;
+	--ion-color-step-250: #3f4051;
+	--ion-color-step-300: #4b4c5c;
+	--ion-color-step-350: #585867;
+	--ion-color-step-400: #646472;
+	--ion-color-step-450: #71717d;
+	--ion-color-step-500: #7d7d88;
+	--ion-color-step-550: #898993;
+	--ion-color-step-600: #96969e;
+	--ion-color-step-650: #a2a2a9;
+	--ion-color-step-700: #afaeb4;
+	--ion-color-step-750: #bbbbbf;
+	--ion-color-step-800: #c7c7ca;
+	--ion-color-step-850: #d4d3d5;
+	--ion-color-step-900: #e0dfe0;
+	--ion-color-step-950: #edeceb;
+
+	
+}
+
+/* body {
 
         --ion-border-color: #222222;
-
-        --ion-color-step-50: #1e1e1e;
-        --ion-color-step-100: #2a2a2a;
-        --ion-color-step-150: #363636;
-        --ion-color-step-200: #414141;
-        --ion-color-step-250: #4d4d4d;
-        --ion-color-step-300: #595959;
-        --ion-color-step-350: #656565;
-        --ion-color-step-400: #717171;
-        --ion-color-step-450: #7d7d7d;
-        --ion-color-step-500: #898989;
-        --ion-color-step-550: #949494;
-        --ion-color-step-600: #a0a0a0;
-        --ion-color-step-650: #acacac;
-        --ion-color-step-700: #b8b8b8;
-        --ion-color-step-750: #c4c4c4;
-        --ion-color-step-800: #d0d0d0;
-        --ion-color-step-850: #dbdbdb;
-        --ion-color-step-900: #e7e7e7;
-        --ion-color-step-950: #f3f3f3;
 
         --ion-item-background: #1e1e1e;
 
@@ -230,6 +247,6 @@ body {
         --ion-tab-bar-background: #1f1f1f;
 
         --ion-card-background: #1e1e1e;
-    }
+} */
 
 /*}*/

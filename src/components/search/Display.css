@@ -22,5 +22,5 @@
 }
 
 .chart {
-    @apply col-span-12 sm:col-span-6 p-4 text-white shadow-lg rounded-l bg-cbg
+    @apply col-span-12 sm:col-span-6 p-4 text-white shadow-lg rounded-l
 }

@@ -26,3 +26,23 @@ body {
 .me-logo{
     max-height: 18px;
 }
+
+@font-face {
+	font-family: 'Logo';
+	src: local('Logo'), url(./fonts/ubuntu_title/ubuntu-title-fr-1.1.ttf) format('truetype');
+	/* other formats include: 'woff2', 'truetype, 'opentype',
+							  'embedded-opentype', and 'svg' */
+}
+
+.logo {
+	font-family: "Logo";
+	@apply !text-3xl hover:opacity-80
+}
+
+ion-button {
+	--box-shadow: none
+}
+
+ion-split-pane {
+	--side-width: 10vw;
+}
