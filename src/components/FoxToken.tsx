@@ -55,6 +55,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     const [foxLineData, setFoxLineData] = useState(defaultGraph);
     const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
 
+
     const columns: ColumnsType<any> = [
         { title: 'Token', key: 'token', // dataIndex: 'token',
             render: record => (
@@ -314,6 +315,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             setFormErrMsg(err);
         });
     }
+    // TODO: WTF NO RSULTS https://mint.sleepydragons.io/ --- told ibad ... when fixed i will tell SSolkill
 
     const viewMyTokens = () => {
         if(!walletAddress){
@@ -484,7 +486,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
                             <div  >
                                 <Table
-                                    className='pt-2'
+                                    className='pt-2 w-full'
                                     key={'name'}
                                     dataSource={tableData}
                                     columns={columns}
