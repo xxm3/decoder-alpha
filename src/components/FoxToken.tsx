@@ -13,7 +13,7 @@ import {
     IonHeader,
     IonToolbar, IonTitle, useIonToast, IonIcon
 } from '@ionic/react';
-import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState} from 'react';
+import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState, useRef, useCallback} from 'react';
 import {Table} from 'antd' // https://ant.design/components/table/
 import { ColumnsType } from 'antd/es/table';
 import Loader from "./Loader";
@@ -54,6 +54,11 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     };
     const [foxLineData, setFoxLineData] = useState(defaultGraph);
     const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
+
+    console.log(foxLineData);
+
+
+    const chartRef = useRef<any>(null);
 
     const columns: ColumnsType<any> = [
         { title: 'Token', key: 'token', // dataIndex: 'token',
@@ -132,6 +137,17 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         return () => window.removeEventListener('resize', resizeWidth);
     }, []);
 
+    // To handle scroll to bottom
+    useEffect(() => {
+        // console.log("foxLineListingsData", foxLineListingsData, "foxLineData == ", foxLineData, "ref -=-= ", chartRef.current);
+        
+        if(foxLineData?.labels?.length) {
+            if(chartRef.current) {
+                chartRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+            }
+        }
+    },[foxLineData?.labels, foxLineListingsData?.labels])
+
     /**
      * Functions
      */
@@ -145,8 +161,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     // viewing the chart for a token
     const viewChart = (token: string, name: string) => {
 
-        setFoxLineData(defaultGraph);
-        setFoxLineListingsData(defaultGraph);
+        // setFoxLineData(defaultGraph);
+        // setFoxLineListingsData(defaultGraph);
 
         // @ts-ignore
         setTokenClickedOn(name ? `${name} (${token})` : token);
@@ -193,11 +209,12 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 });
 
                 // think want to keep this in ... some timing ... issue....
-                console.log(foxLineData);
+                // console.log(foxLineData);
 
 
                 // TODO-rakesh: go to the home page ... go to fox token table ... click view chart ... make sure it SCROLLS TO BOTTOM of page (or scrolls to make the chart the top of the page)
                 // window.scrollTo(0,document.body.scrollHeight);
+                
 
             })
             .catch((err) => {
@@ -205,6 +222,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             });
 
     }
+
+    // useMountEffect(scrollToBottom);
 
     // https://github.com/solana-labs/solana-program-library/blob/master/token/js/examples/create_mint_and_transfer_tokens.ts
     // https://docs.solana.com/es/developing/clients/jsonrpc-api#gettokenaccountsbyowner
@@ -501,11 +520,11 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                 />
                             </div>
 
-                            <div className="gap-4 mb-4 grid grid-cols-12 mt-3"
+                            <div className="gap-4 mb-4 grid grid-cols-12 mt-3" ref={chartRef}
                                  // @ts-ignore
                                  hidden={foxLineData.labels.length === 0}>
                                 <div className='chart' >
-
+                                    {console.log("data -=-= ", foxLineData)}
                                     <Chart type='line'
                                        // @ts-ignore
                                        data={foxLineData} height='150'
