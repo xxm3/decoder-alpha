@@ -15,6 +15,7 @@ import SearchBar from "../SearchBar";
 import useConnectWallet from "../../hooks/useConnectWallet";
 import WalletButton from "../WalletButton";
 import {useUser} from "../../context/UserContext";
+import Style from "../Style";
 
 
 const HeaderContainer = () => {
@@ -92,6 +93,13 @@ const HeaderContainer = () => {
     return (
         <>
             <IonHeader>
+			<Style>
+				{`
+					ion-header {
+						background-color: var(--ion-background-color);
+					}
+				`}
+			</Style>
                 <IonToolbar className="my-3 rounded-lg related overflow-y-auto relative">
                     <div className="justify-between space-x-8 flex items-center">
 
@@ -108,7 +116,10 @@ const HeaderContainer = () => {
                                     routerLink="/"
 									color="text"
                                 >
-                                    SOL Decoder
+									<div className="flex items-center space-x-3">
+										<img className="h-10" src="/assets/site-logos/logo-transparent.png" alt="logo" />
+	                                    <p>SOL Decoder</p>
+									</div>
                                 </IonRouterLink>
                             </div>
                         )}

@@ -52,6 +52,7 @@ import AppRoute from "./components/Route";
 import HeaderContainer from "./components/nav/Header";
 import WalletButton from "./components/WalletButton";
 import Sidebar from "./components/nav/Sidebar";
+import Style from "./components/Style";
 
 
 const App = () => {
@@ -93,7 +94,7 @@ const App = () => {
 
 
 	return (
-        <IonApp id="main">
+        <IonApp>
             <QueryClientProvider client={queryClient}>
                 <UserContext.Provider value={user}>
                     {user !== undefined ? (
