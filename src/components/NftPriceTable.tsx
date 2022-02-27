@@ -139,7 +139,6 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                     <IonButton className="float-right text-sm small-btn ml-5" hidden={!tableData.length} color="secondary"
                                onClick={() => setHideComments(!hideComments)}
                     >
-                        {/*TODO: icon*/}
                         💬 Show Comments
                     </IonButton>
                 </div>

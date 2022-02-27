@@ -246,14 +246,12 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         // @ts-ignore
         setMySplTokens(mySplTokens);
 
-        // TODO-later: use getTokenSupply?? - Returns the total supply of an SPL Token type. (FF uses this lots)
     }
 
     // call on load
     useEffect(() => {
         getUserSpls();
     }, []);
-    // TODO: not working...
     useEffect(() => {
         getUserSpls();
     // @ts-ignore
@@ -315,7 +313,6 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             setFormErrMsg(err);
         });
     }
-    // TODO: WTF NO RSULTS https://mint.sleepydragons.io/ --- told ibad ... when fixed i will tell SSolkill
 
     const viewMyTokens = () => {
         if(!walletAddress){
@@ -338,16 +335,6 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             });
             return;
 
-            /**
-             * TODO
-             * - Should be able to allow people to enter in multiples of their wallets, so click one button and see all your tokens
-             *       ... have them set their wallet here... or tlel them connect wllet topright...
-             *       ... need to do the "add other wallet strings" ....
-             * - Will show the # of tokens you have
-             * - Will show tokens that aren't in FF as well
-             * - Want to try and show the date it was sent to you, will have to figure that out
-             *
-             */
         }else{
             // new array of data we'll set later
             let newTableData: any = [];
@@ -388,7 +375,6 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                     </a>
                     <IonButton color="success" className="float-right text-sm small-btn pl-5"
                                onClick={() => clickedAddName(true)}>
-                        {/*TODO-later: icon...*/}
                         ➕ Add custom name
                     </IonButton>
 
@@ -478,7 +464,6 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             </div>
                         : <div className=" ">
 
-                            {/*TODO-later: show only names (have a TODO on top as well for the data :*/}
                             {/*<IonItem style={{"width": "250px"}}>*/}
                             {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                             {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
