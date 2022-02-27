@@ -24,6 +24,8 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
      */
     const [tableData, setTableData] = useState([]);
     const [hideComments, setHideComments] = useState(true);
+    const [width, setWidth] = useState(window.innerWidth);
+    const smallWidthpx = 768;
 
     const columns: ColumnsType<any> = [
         {
@@ -135,14 +137,21 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
                 <div className={`font-bold pb-1 w-full`}>
-                    Mint Alerts Automated - Statistics
-                    <IonButton className="float-right text-sm small-btn ml-5" hidden={!tableData.length} color="secondary"
-                               onClick={() => setHideComments(!hideComments)}
-                    >
-                        💬 Show Comments
-                    </IonButton>
+                    Mint Alerts Automated - Stats
+
+                    <span hidden={!tableData.length}>
+                        <IonButton
+                            hidden={width <= smallWidthpx}
+                            className="float-right text-sm small-btn ml-5" color="secondary"
+                            onClick={() => setHideComments(!hideComments)}
+                        >
+                            💬 Show Comments
+                        </IonButton>
+                        <a className="float-right" hidden={width > smallWidthpx}>💬</a>
+                    </span>
+
                 </div>
-                <p>These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel</p>
+                <p hidden={width < smallWidthpx}>These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel</p>
 
                 <div>
                 {
@@ -152,6 +161,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                             </div>
                         : <div className=" "> {/* max-w-fit mx-auto */}
 
+                        {/*TODO*/}
                             <Table
                                 className='pt-2'
                                 key={'name'}
@@ -159,11 +169,11 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                                 columns={columns}
                                 bordered
                                 // scroll={{x: 'max-content'}}
-                                scroll={{y: 400}}
+                                // scroll={{y: 400}}
                                 // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
-                                // scroll={{x: 'max-content', y: 400}}
+                                scroll={{x: 'max-content', y: 400}}
                                 pagination={false}
-                                style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
+                                // style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
                             />
                         </div>
                 }

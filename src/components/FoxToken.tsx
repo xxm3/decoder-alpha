@@ -40,6 +40,17 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
      * States & Variables
      */
     const [width, setWidth] = useState(window.innerWidth);
+
+    // for setting height of chart, depending on what width browser is
+    const tableHeight = useMemo(() => {
+        if(width > 1536) return 150;
+        if(width > 1280) return 180;
+        if(width > 1024) return 220;
+        if(width > 768) return 260;
+        if(width > 640) return 280;
+        return 330;
+    }, [width]);
+
     const [tableData, setTableData] = useState([]);
     const [tokenClickedOn, setTokenClickedOn] = useState();
     const [mySolBalance, setMySolBalance] = useState("");
@@ -47,6 +58,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     const walletAddress = useSelector(
         (state: RootState) => state.wallet.walletAddress
     );
+
+    const smallWidthpx = 768;
 
     const defaultGraph : ChartData<any, string> = {
         labels: [],
@@ -60,8 +73,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         { title: 'Token', key: 'token', // dataIndex: 'token',
             render: record => (
                 <>
-                    <span hidden={width < 768}>{record.token}</span>
-                    <span hidden={width > 768}>{record.token.substr(0, 4) + '...' + record.token.substr(record.token.length -4)}</span>
+                    <span hidden={width < smallWidthpx}>{record.token}</span>
+                    <span hidden={width > smallWidthpx}>{record.token.substr(0, 4) + '...' + record.token.substr(record.token.length -4)}</span>
                 </>
 
             ),
@@ -69,11 +82,12 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             // width: 130,
             // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
-        { title: 'Floor Price', key: 'floorPrice', dataIndex: 'floorPrice', width: 150,
+        { title: 'Price', key: 'floorPrice', dataIndex: 'floorPrice', width: 100,
             sorter: (a, b) => a.floorPrice - b.floorPrice,},
         { title: 'Name', key: 'name', dataIndex: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
-            width: 250,},
+            width: 150,
+        },
         { title: 'Total Token Listings', key: 'totalTokenListings', dataIndex: 'totalTokenListings', width: 250,
             sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,
             responsive: ['md'], // Will not be displayed below 768px
@@ -373,22 +387,27 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                     <a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">
                         Fox Token Market - Analysis
                     </a>
-                    <IonButton color="success" className="float-right text-sm small-btn pl-5"
-                               onClick={() => clickedAddName(true)}>
-                        ➕ Add custom name
-                    </IonButton>
 
-                    <IonButton color="secondary" className="float-right text-sm small-btn ml-5"
-                               onClick={() => viewMyTokens()}>
-                        <IonIcon icon={wallet} className="pr-1" />
-                        View My Tokens
-                    </IonButton>
-                    <div hidden={!tableData.length}>
+                    <span hidden={width <= smallWidthpx} className="float-right">
+                        <IonButton color="success" className="text-sm small-btn pl-5"
+                                   onClick={() => clickedAddName(true)}>
+                            ➕ Add custom name
+                        </IonButton>
+                        <IonButton color="secondary" className="text-sm small-btn ml-5"
+                                   onClick={() => viewMyTokens()}>
+                            <IonIcon icon={wallet} className="pr-1" />
+                            View My Tokens
+                        </IonButton>
+                    </span>
+                    <span hidden={width > smallWidthpx} className="float-right">
+                        <a onClick={() => clickedAddName(true)}>➕</a>
+                        <a onClick={() => viewMyTokens()} className="pl-3">
+                            <IonIcon icon={wallet} className="pr-1" />
+                        </a>
+                    </span>
+
+                    <div hidden={!tableData.length || width < smallWidthpx}>
                         👪 are community added names
-                    </div>
-
-                    <div className="float-right">
-
                     </div>
                 </div>
 
@@ -449,9 +468,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                     !
                                 </span>
                             </div>
-
                         </div>
-
 
                     </IonContent>
                 </IonModal>
@@ -469,7 +486,24 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                             {/*</IonItem>*/}
 
-                            <div  >
+                            <div hidden={width <= smallWidthpx}>
+                                {/* Desktop version */}
+                                <Table
+                                    className='pt-2 w-full'
+                                    key={'name'}
+                                    dataSource={tableData}
+                                    columns={columns}
+                                    bordered
+                                    scroll={{y: 400}}
+                                    // scroll={{y: 22}} // if want show it off / shill
+
+                                    pagination={false}
+                                    style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
+                                />
+                            </div>
+                            <div hidden={width > smallWidthpx}>
+
+                                {/*Mobile Version*/}
                                 <Table
                                     className='pt-2 w-full'
                                     key={'name'}
@@ -478,14 +512,13 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                     bordered
                                     // scroll={{x: 'max-content'}}
 
-                                    scroll={{y: 400}}
-                                    // scroll={{y: 22}} // if want show it off / shill
-
                                     // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
-                                    // scroll={{x: 'max-content', y: 400}}
+                                    scroll={{x: 'max-content', y: 400}}
+
                                     pagination={false}
                                     style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
                                 />
+
                             </div>
 
                             <div className="gap-4 mb-4 grid grid-cols-12 mt-3"
@@ -495,7 +528,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
                                     <Chart type='line'
                                        // @ts-ignore
-                                       data={foxLineData} height='150'
+                                       data={foxLineData} height={tableHeight}
                                        options={{
                                            responsive: true,
                                            maintainAspectRatio: true,
@@ -520,7 +553,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                 </div>
                                 <div className="chart">
                                     <Chart type='line'
-                                       data={foxLineListingsData} height='150'
+                                       data={foxLineListingsData} height={tableHeight}
                                        options={{
                                            responsive: true,
                                            maintainAspectRatio: true,
