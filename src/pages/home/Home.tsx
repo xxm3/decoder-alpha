@@ -47,7 +47,7 @@ const Home = () => {
         if(width > 768) return 155;
         if(width > 640) return 200;
         return 230;
-    }, [width])
+    }, [width]);
 
     // resize window
     useEffect(() => {
