@@ -209,13 +209,14 @@ const Schedule = () => {
 
             title: '# Discord',
             key: 'numbersOfDiscordMembers',
+            width: 110,
+            align: 'left',
             render: record => (
                 <span>
-                    {record.numbersOfDiscordMembers === undefined? "-" : record.numbersOfDiscordMembers || "-" }
+                    {parseInt(record.numbersOfDiscordMembers).toLocaleString()}
                 </span>
             ),
-            width: 110,
-            align: 'left'
+            sorter: (a: any, b: any) => a.numbersOfDiscordMembers - b.numbersOfDiscordMembers,
             // responsive: ['md'], // Will not be displayed below 768px
         },
         {
@@ -248,8 +249,8 @@ const Schedule = () => {
                 </span>
                 </>
             ),
-            width: 120,
-            align: 'left'
+            width: 200,
+            align: 'center'
             // responsive: ['md'], // Will not be displayed below 768px
         },
         {
@@ -286,7 +287,7 @@ const Schedule = () => {
 
             {/* <div className="bg-gradient-to-b from-bg-primary to-bg-primary justify-center items-center p-4 pt-2 sticky">*/}
 
-            <p className="pt-3">Projects must have more than 1,000 twitter followers before showing up on the list.
+            <p className="pt-3">Projects must have {'>'} 2,000 Discord members and {'>'} 1,000 Twitter followers before showing up on the list.
                 <br/>
                 "# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them up (the higher the better)</p>
             {
