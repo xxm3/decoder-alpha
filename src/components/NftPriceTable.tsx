@@ -161,7 +161,6 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                             </div>
                         : <div className=" "> {/* max-w-fit mx-auto */}
 
-                        {/*TODO*/}
                             <Table
                                 className='pt-2'
                                 key={'name'}
@@ -231,8 +230,6 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                 </div>
 
             </div>
-
-            <ReactTooltip />
 
         </>
     );
