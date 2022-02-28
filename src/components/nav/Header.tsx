@@ -86,7 +86,7 @@ const HeaderContainer = () => {
 
     return (
         <>
-            <IonHeader className="py-2 pr-10">
+            <IonHeader className={`py-2 ${showMobileSearch ? "px-10" : "pr-10"}`}>
                 <Style>
                     {`
 					ion-header {
