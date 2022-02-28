@@ -1,4 +1,4 @@
-import { IonCol, IonContent, IonGrid, IonPage, IonRow } from "@ionic/react"
+import { IonCol, IonContent, IonGrid, IonMenu, IonPage, IonRow, IonSplitPane } from "@ionic/react"
 import React from "react";
 import { Route, RouteProps } from "react-router"
 import HeaderContainer from "./nav/Header"
@@ -16,36 +16,40 @@ const AppRoute : React.FC<RouteProps> = (
             render={(componentProps) => (
                 <>
                     <IonPage>
-                        <IonContent fullscreen>
-                            <IonGrid>
+                        <>
+                            <IonGrid className="w-screen h-screen flex flex-col relative">
                                 <IonRow>
-                                    <IonCol size="12" className="ion-no-padding">
+                                    <IonCol size="12">
                                         <HeaderContainer />
                                     </IonCol>
                                 </IonRow>
-                                <IonRow>
-                                    <IonCol className="hidden md:block" sizeLg="3" sizeMd="1.25" sizeXl="2">
-                                        <Sidebar />
-                                    </IonCol>
-                                    <IonCol sizeLg="9" sizeMd="10.75" sizeXl="10">
-                                        <div className="flex justify-center items-center pt-2">
-                                            {children
-                                                ? typeof children === 'function'
-                                                    ? children(componentProps)
-                                                    : children
-                                                : component
-                                                ? React.createElement(
-                                                      component,
-                                                      componentProps
-                                                  )
-                                                : render
-                                                ? render(componentProps)
-                                                : null}
-                                        </div>
+                                <IonRow className="flex-grow">
+                                    <IonCol size="12" className="flex h-full">
+                                        <Sidebar collapsible />
+                                        <IonContent className="h-full">
+											<IonGrid>
+												<IonRow>
+													<IonCol size="12" className="flex justify-center">	
+														{children
+															? typeof children === 'function'
+																? children(componentProps)
+																: children
+															: component
+															? React.createElement(
+																component,
+																componentProps
+															)
+															: render
+															? render(componentProps)
+															: null}
+													</IonCol>
+												</IonRow>
+											</IonGrid>
+                                        </IonContent>
                                     </IonCol>
                                 </IonRow>
                             </IonGrid>
-                        </IonContent>
+                        </>
                     </IonPage>
                 </>
             )}

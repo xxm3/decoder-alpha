@@ -1,4 +1,4 @@
-import { IonApp, IonRouterOutlet } from "@ionic/react";
+import { IonApp, IonMenu, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 // import { useEffect, useState } from "react";
 // import Search from "./pages/Search";
@@ -36,7 +36,6 @@ import Home from "./pages/home/Home";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Schedule from "./pages/schedule/Schedule";
-import { IonCol, IonContent, IonGrid, IonMenu, IonRouterLink, IonRow } from "@ionic/react"
 
 // // https://javascript.plainenglish.io/how-to-setup-and-add-google-analytics-to-your-react-app-fd361f47ac7b
 // const TRACKING_ID = "G-Z3GDFZ53DN";
@@ -99,30 +98,15 @@ const App = () => {
                 <UserContext.Provider value={user}>
                     {user !== undefined ? (
                         <>
-                            <IonMenu
-                                menuId="sidebar"
-                                contentId="router"
-                            >
-                               <Sidebar />
-                            </IonMenu>
                             <IonReactRouter>
+                            <IonMenu menuId="sidebar" contentId="router">
+                                <Sidebar />
+                            </IonMenu>
                                 <IonRouterOutlet id="router">
                                     <Switch>
-                                        {/* <ProtectedRoute
-											path="/"
-											exact={true}
-											render={() => (
-												<IonButton
-													onClick={() => auth.signOut()}
-												>
-													Sign out
-												</IonButton>
-											)}
-										/> */}
 
                                         <ProtectedRoute
                                             path="/"
-                                            // component={HomePage}
                                             component={Home}
                                             exact
                                         />

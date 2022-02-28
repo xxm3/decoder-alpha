@@ -20,3 +20,7 @@
 .media > video {
     @apply max-w-sm;
 }
+
+.searched_word {
+	color: #00d0ff
+}

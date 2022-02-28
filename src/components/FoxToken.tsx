@@ -77,12 +77,12 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,
             responsive: ['md'], // Will not be displayed below 768px
         },
-        { title: 'View Chart', key: '', width: 150,
+        { title: 'View Chart', key: 'viewChart', width: 150,
             render: record => (
                 <span onClick={() => viewChart(record.token, record.name)} className="cursor-pointer big-emoji">📈</span>
             ),
         },
-        { title: 'View in Explorer', key: '', width: 150,
+        { title: 'View in Explorer', key: 'viewInExplorer', width: 150,
             render: record => (
                 <a target="_blank" className="no-underline big-emoji" href={'https://explorer.solana.com/address/' + record.token} >🌐</a>
             ),
@@ -255,8 +255,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     // TODO: not working...
     useEffect(() => {
         getUserSpls();
-    // @ts-ignore
-    }, walletAddress);
+    }, [walletAddress]);
 
     /**
      * for submitting custom token names
@@ -485,7 +484,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             <div  >
                                 <Table
                                     className='pt-2'
-                                    key={'name'}
+                                    rowKey={'token'}
                                     dataSource={tableData}
                                     columns={columns}
                                     bordered

@@ -1,6 +1,7 @@
 
-import { IonIcon, IonItem, IonRouterLink } from "@ionic/react";
-import { useLocation } from "react-router";
+import { IonIcon, IonItem } from "@ionic/react";
+import { Link } from "react-router-dom";
+import { Tooltip } from "react-tippy";
 import Style from "../Style";
 
 interface Props {
@@ -9,23 +10,31 @@ interface Props {
 	title : string;
 }
 
-function NavLink({ to , icon , title,} : Props) {
+function NavLink({ to , icon , title} : Props) {
   return (
-      <IonRouterLink href={to}>
+      <Link to={to}>
           <Style>
               {`
 				ion-item:hover {
-					--background: var(--ion-color-primary)
+					--background: var(--ion-color-primary);
 				}
-				ion-icon {
+				ion-item {
+					--padding-horizontal : 1rem;
+					--padding-start: var(--padding-horizontal);
+					--padding-end: var(--padding-horizontal);
+				}
+				span.tooltip-title {
+					background-color: var(--ion-color-step-150)
 				}
 			`}
           </Style>
-          <IonItem className="items-center space-x-3 my-6 rounded-none md:rounded lg:rounded-none">
-              <IonIcon color="inherit" icon={icon} />
-              <p className="block md:hidden lg:block">{title}</p>
-          </IonItem>
-      </IonRouterLink>
+          <Tooltip html={<span className="tooltip-title px-4 py-2 rounded text-[15px]">{title}</span>} trigger="mouseenter">
+              <IonItem className="items-center space-x-3 my-6 rounded ">
+                  <IonIcon color="inherit" icon={icon} title={undefined} />
+                  <p className="block md:hidden lg:block">{title}</p>
+              </IonItem>
+          </Tooltip>
+      </Link>
   );
 }
 

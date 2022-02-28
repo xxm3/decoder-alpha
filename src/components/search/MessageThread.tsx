@@ -125,7 +125,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         >
             <div
                 ref={containerRef}
-                className="p-5 overflow-y-scroll space-y-5 h-full w-full !bg-bg-tertiary"
+                className="p-5 messages overflow-y-scroll space-y-5 h-full w-full !bg-bg-tertiary"
             >
 
                     {data.pages

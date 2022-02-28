@@ -122,7 +122,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                     </div>
 
                     {/* show the message and highlight matches */}
-                    <p
+                    <div
                         className={
                             loading
                                 ? 'inline box-decoration-clone'
@@ -134,7 +134,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
 								components={{
 									strong({ children, ...props  }){
 										const strongWord = children[0]?.toString()
-										return <b {...props} className={strongWord?.toString().toLowerCase() === word.toLowerCase() ? "text-cb" : ""}>{children}</b>
+										return <b {...props} className={strongWord?.toString().toLowerCase() === word.toLowerCase() ? "searched_word" : ""}>{children}</b>
 									},
 									a({ href, ...props }){
 										return <a href={href} onClick={e => e.stopPropagation()} {...props} className="text-blue-300" target="_blank" />
@@ -169,14 +169,14 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
 								{formattedMessage}
 							</ReactMarkdown>
                             : 'LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING'}
-                    </p>
+                    </div>
                     <div className="media">
                         {mediaUrls.map((url) => {
                             switch (mediaTypes.get(getUrlExtension(url))) {
                                 case 'img':
-                                    return <img src={url} />;
+                                    return <img key={url} src={url} />;
                                 case 'video':
-                                    return <video src={url} />;
+                                    return <video key={url} src={url} />;
                             }
                         })}
                     </div>

@@ -193,11 +193,9 @@ const Home = () => {
                 datasetsAry.push({
                     type: 'line' as const,
                     label:  rawFetchedData[i].name,
-
                     borderColor: colorAry[i],
                     borderWidth: 2,
                     fill: false,
-
                     data: getDailyCountData(rawFetchedData[i]),
                 });
             }
@@ -228,21 +226,31 @@ const Home = () => {
         }
     }
 
-    // @ts-ignore
     return (
         <div className="w-full">
             {/* Main Content After Header - The light gray Container */}
 
             {/* Stacked line Search stuff - The bit darker Gray Container */}
-            <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-2`}>
-
-                <div className={`font-bold pb-1 ${width <= 640 ? 'w-full' : 'w-96 '}`}>Compare multiple words on a line graph</div>
+            <div
+                className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-2`}
+            >
+                <div
+                    className={`font-bold pb-1 ${
+                        width <= 640 ? 'w-full' : 'w-96 '
+                    }`}
+                >
+                    Compare multiple words on a line graph
+                </div>
 
                 <div className={`max-w-2xl my-2`}>
-                    <SearchBar initialValue='' onSubmit={doSearch} placeholder='Type to search'
-                           helpMsg='Compares multiple single words against each other (ex. "portals enviro suites").
+                    <SearchBar
+                        initialValue=""
+                        onSubmit={doSearch}
+                        placeholder="Type to search"
+                        helpMsg='Compares multiple single words against each other (ex. "portals enviro suites").
                     Each word will be graphed and you can compare the popularity of each word (useful to search on multiple mints in the morning and see which his more popular)'
-                           disableReset='false' />
+                        disableReset="false"
+                    />
                 </div>
 
                 {/*--{width}--{chartHeight}--*/}
@@ -252,144 +260,173 @@ const Home = () => {
                     <div className="pt-10 flex justify-center items-center">
                         <Loader />
                     </div>
-
-                // error
-                ) : errorSearchStacked ? (
+                ) : // error
+                errorSearchStacked ? (
                     <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                         <p className="text-lg text-red-700 font-medium">
-                            <b>{(errorSearchStacked as string) || 'Unable to connect'}</b>
+                            <b>
+                                {(errorSearchStacked as string) ||
+                                    'Unable to connect'}
+                            </b>
                         </p>
                         <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                             !
                         </span>
                     </div>
-
-                // graph itself
                 ) : (
-
-                    <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg" hidden={graphStackedLoading || stackedLineData.labels?.length === 1}>
-                        <Chart type='line' data={stackedLineData} height={chartHeight}
-                               options={{
-                                   responsive: true,
-                                   maintainAspectRatio: true,
-                                   plugins: {
-                                       legend: {
-                                           display: true,
-                                           reverse: true
-                                       },
-                                       title: { display: true, text: '# of messages per day (from several Discords)'},
-                                   },
-                                   y: {
-                                       suggestedMin: 0,
-                                   }
-                               }} />
+                    // graph itself
+                    <div
+                        className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg"
+                        hidden={
+                            graphStackedLoading ||
+                            stackedLineData.labels?.length === 1
+                        }
+                    >
+                        <Chart
+                            type="line"
+                            data={stackedLineData}
+                            height={chartHeight}
+                            options={{
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        reverse: true,
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: '# of messages per day (from several Discords)',
+                                    },
+                                },
+                                y: {
+                                    suggestedMin: 0,
+                                },
+                            }}
+                        />
                     </div>
                 )}
             </div>
 
             {/* Mint Alerts Automated - Statistics */}
-            <NftPriceTable foo='' onSubmit={doSearch} />
+            <NftPriceTable foo="" onSubmit={doSearch} />
 
             {/* Fox Token - Analysis */}
-            <div >
+            <div>
                 {/* hidden={true} */}
-                <FoxToken foo=''  onSubmit={doSearch} />
+                <FoxToken foo="" onSubmit={doSearch} />
             </div>
-
 
             {/* Possible Mints ... */}
-            <IonCard hidden={true}>
-                <IonLabel className="text-4xl text-blue-600">Possible Mints</IonLabel>
 
-                {/* loading bar */}
-                {isLoading && (
-                    <div className="pt-10 flex justify-center items-center">
-                        <Loader/>
-                    </div>
-                )}
-                <div hidden={isLoading}>
-                    {homePageData.map((product: any, index: any) => (
-                        <>
-                            <Card key={index} url={product.url} readableTimestamp={getDateAgo(product.timestamp)} source={product.source}/>
-                        </>
-                    ))}
-                </div>
-            </IonCard>
+            {false && (
+                <>
+                    <IonCard>
+                        <IonLabel className="text-4xl text-blue-600">
+                            Possible Mints
+                        </IonLabel>
 
+                        {isLoading && (
+                            <div className="pt-10 flex justify-center items-center">
+                                <Loader />
+                            </div>
+                        )}
+                        <div hidden={isLoading}>
+                            {homePageData.map((product: any, index: any) => (
+                                <>
+                                    <Card
+                                        key={index}
+                                        url={product.url}
+                                        readableTimestamp={getDateAgo(
+                                            product.timestamp
+                                        )}
+                                        source={product.source}
+                                    />
+                                </>
+                            ))}
+                        </div>
+                    </IonCard>
+                    <div>
+                        <IonRow>
+                            <IonLabel className="text-4xl text-blue-600">
+                                New Collection
+                            </IonLabel>
+                        </IonRow>
 
-
-            <div hidden>
-                <IonRow>
-                    <IonLabel className="text-4xl text-blue-600">New Collection</IonLabel>
-                </IonRow>
-
-                {/* loading bar */}
-                {isLoading && (
-                    <div className="pt-10 flex justify-center items-center">
-                        <Loader/>
-                    </div>
-                )}
-                <div hidden={!isLoading}>
-
-                    {/* New Collections */}
-                    <IonRow className="bg-lime-700">
-                        {newCollections.map((collection: any, index: any) => (
-                            <IonCol>
-                                <CollectionCard key={index}
+                        {/* loading bar */}
+                        {isLoading && (
+                            <div className="pt-10 flex justify-center items-center">
+                                <Loader />
+                            </div>
+                        )}
+                        <div hidden={!isLoading}>
+                            <IonRow className="bg-lime-700">
+                                {newCollections.map(
+                                    (collection: any, index: any) => (
+                                        <IonCol>
+                                            <CollectionCard
+                                                key={index}
                                                 name={collection.name}
-                                                description={collection.description}
+                                                description={
+                                                    collection.description
+                                                }
                                                 image={collection.image}
                                                 website={collection.website}
                                                 twitter={collection.twitter}
                                                 discord={collection.discord}
-                                                categories={collection.categories}
+                                                categories={
+                                                    collection.categories
+                                                }
                                                 splitName={collection.splitName}
                                                 link={collection.link}
                                                 timestamp={collection.timestamp}
-                                                readableTimestamp={collection.readableTimestamp}
-                                />
-                            </IonCol>
-                        ))}
-                    </IonRow>
+                                                readableTimestamp={
+                                                    collection.readableTimestamp
+                                                }
+                                            />
+                                        </IonCol>
+                                    )
+                                )}
+                            </IonRow>
 
-                    {/* Popular Collections */}
-                    <IonRow>
-                        <IonLabel className="text-4xl text-blue-600">Popular Collection</IonLabel>
-                    </IonRow>
+                            <IonRow>
+                                <IonLabel className="text-4xl text-blue-600">
+                                    Popular Collection
+                                </IonLabel>
+                            </IonRow>
 
-                    <IonRow>
-                        {popularCollections.map((collection: any, index: any) => (
-                            <IonCol>
-                                <CollectionCard key={index}
+                            <IonRow>
+                                {popularCollections.map(
+                                    (collection: any, index) => (
+                                        <IonCol>
+                                            <CollectionCard
+                                                key={index}
                                                 name={collection.name}
-                                                description={collection.description}
+                                                description={
+                                                    collection.description
+                                                }
                                                 image={collection.image}
                                                 website={collection.website}
                                                 twitter={collection.twitter}
                                                 discord={collection.discord}
-                                                categories={collection.categories}
+                                                categories={
+                                                    collection.categories
+                                                }
                                                 splitName={collection.splitName}
                                                 link={collection.link}
                                                 timestamp={collection.timestamp}
-                                                readableTimestamp={collection.readableTimestamp}
-                                />
-                            </IonCol>
-                        ))}
-                    </IonRow>
-
-
-                {/*if need to tell the user of errors*/}
-                {/*<div className="m-12 relative mt-6 bg-red-100 p-6 rounded-xl">*/}
-                {/*    <p className="text-lg text-red-700 font-medium">*/}
-                {/*        <b>The database ran into an error on Feb 14th at 1200 EST (shouldn't happen again). Old data was lost, so searches will be a bit empty for the next day</b>*/}
-                {/*    </p>*/}
-                {/*    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">*/}
-                {/*        !*/}
-                {/*    </span>*/}
-                {/*</div>*/}
-                </div>
-            </div>
-
+                                                readableTimestamp={
+                                                    collection.readableTimestamp
+                                                }
+                                            />
+                                        </IonCol>
+                                    )
+                                )}
+                            </IonRow>
+                        </div>
+                    </div>
+                </>
+            )}
 
             {/* user's NFTs */}
             {/*<h3>User NFTs:</h3>*/}
@@ -406,7 +443,6 @@ const Home = () => {
             {/*        </IonRow>*/}
             {/*    </IonContent>*/}
             {/*</IonCard>*/}
-
         </div>
     );
 };

@@ -26,6 +26,7 @@ import {useParams} from "react-router";
 import Loader from "../Loader";
 import DisplayGraph from "./DisplayGraph";
 
+
 ChartJS.register(...registerables);
 ChartJS.register(
     ArcElement,
@@ -85,8 +86,7 @@ const Display: React.FC<{
      */
     return (
         <>
-
-            <div className="p-3 overflow-y-scroll rounded-lg">
+            <div className="p-3 messages overflow-y-scroll rounded-lg">
                 {/* bar & line chart */}
                 {/* <DisplayGraph {...{
                     chartDataDailyCount : chartDataDailyCount ? chartDataDailyCount: {},

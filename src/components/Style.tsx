@@ -1,4 +1,3 @@
-
 interface Props {
 	children: string;
 	global ?: boolean;
@@ -12,4 +11,4 @@ function Style({ children, global = false } : Props) {
   )
 }
 
-export default Style
+export default Style;

@@ -46,3 +46,14 @@ ion-button {
 ion-split-pane {
 	--side-width: 10vw;
 }
+
+ion-item {
+	--padding-start: 0;
+	--inner-padding-start: 0;
+	--padding-end: 0;
+	--inner-padding-end: 0;
+	--padding-top: 0;
+	--inner-padding-top: 0;
+	--padding-start: 0;
+	--inner-padding-bottom: 0;
+}

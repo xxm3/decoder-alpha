@@ -155,7 +155,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 
                             <Table
                                 className='pt-2'
-                                key={'name'}
+                                rowKey={'name'}
                                 dataSource={tableData}
                                 columns={columns}
                                 bordered

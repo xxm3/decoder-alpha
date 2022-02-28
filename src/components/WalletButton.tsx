@@ -56,7 +56,7 @@ function WalletButton() {
                 open={showDropdown}
                 onRequestClose={() => setShowDropdown(false)}
                 html={
-                    <IonList lines="none" className="py-1 mt-12 dropdown-list rounded items-center space-y-2 overflow-x-hidden">
+                    <IonList lines="none" className="py-1 dropdown-list rounded items-center space-y-2 overflow-x-hidden">
                        <IonItem color="inherit">
                        	 <IonButton 
 							onClick={() => dcWallet()}

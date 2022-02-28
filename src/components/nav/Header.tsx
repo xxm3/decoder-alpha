@@ -5,7 +5,7 @@ import {
     IonToolbar,
     IonMenuButton,
 } from "@ionic/react";
-import {useEffect, useState} from "react";
+import { useEffect, useState} from "react";
 import {useHistory, useParams} from 'react-router';
 import {
     arrowBack, search,
@@ -14,7 +14,6 @@ import { queryClient } from "../../queryClient";
 import SearchBar from "../SearchBar";
 import useConnectWallet from "../../hooks/useConnectWallet";
 import WalletButton from "../WalletButton";
-import {useUser} from "../../context/UserContext";
 import Style from "../Style";
 
 
@@ -32,11 +31,6 @@ const HeaderContainer = () => {
     const connectWallet = useConnectWallet();
 
     const [headerPlaceholder, setHeaderPlaceholder] = useState('');
-
-    let user: any = useUser();
-    if(window.location.href.indexOf('localhost') !== -1){
-        user = true;
-    }
 
     // onload useEffect
     useEffect(() => {
@@ -92,39 +86,50 @@ const HeaderContainer = () => {
 
     return (
         <>
-            <IonHeader>
-			<Style>
-				{`
+            <IonHeader className="py-2 pr-10">
+                <Style>
+                    {`
 					ion-header {
-						background-color: var(--ion-background-color);
-					}
-				`}
-			</Style>
-                <IonToolbar className="my-3 rounded-lg related overflow-y-auto relative">
-                    <div className="justify-between space-x-8 flex items-center">
 
+					}
+					ion-header, ion-toolbar {
+						--background: var(--ion-background-color);
+						background-color: var(--background)
+					}
+					ion-menu-button {
+						font-size: 32px;
+				`}
+                </Style>
+                <IonToolbar>
+                    <div className="justify-between space-x-8 flex items-center">
                         {!showMobileSearch && (
-                            <div className="flex items-center space-x-5">
+                            <div className="flex items-center space-x-4">
                                 {/*hamburger sidebar*/}
-                                <div hidden={!user}>
-                                <IonMenuButton color="white" menu="sidebar" className="md:hidden" />
-                                </div>
+                                <IonMenuButton
+                                    color="white"
+                                    menu="sidebar"
+                                    className="md:hidden ion-no-padding"
+                                />
 
                                 {/*site logo & home*/}
                                 <IonRouterLink
                                     className="text-2xl logo"
                                     routerLink="/"
-									color="text"
+                                    color="text"
                                 >
-									<div className="flex items-center space-x-3">
-										<img className="h-10" src="/assets/site-logos/logo-transparent.png" alt="logo" />
-	                                    <p>SOL Decoder</p>
-									</div>
+                                    <div className="flex items-center space-x-3">
+                                        <img
+                                            className="h-10"
+                                            src="/assets/site-logos/logo-transparent.png"
+                                            alt="logo"
+                                        />
+                                        <p>SOL Decoder</p>
+                                    </div>
                                 </IonRouterLink>
                             </div>
                         )}
 
-                        <div  hidden={!user}
+                        <div
                             className={`flex-grow flex items-center ${
                                 showMobileSearch
                                     ? 'space-x-8'
@@ -152,7 +157,7 @@ const HeaderContainer = () => {
                                     placeholder={headerPlaceholder}
                                     helpMsg='Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale").
                                         Results include graphs, and messages you can scroll through. Click on a message to view more'
-                                    disableReset='true'
+                                    disableReset="true"
                                 />
                             </div>
                             {!showMobileSearch && (
@@ -165,11 +170,12 @@ const HeaderContainer = () => {
                             )}
                         </div>
 
-                        <div className="hidden md:flex items-center" hidden={showMobileSearch || !user}>
-
+                        <div
+                            className="hidden md:flex items-center"
+                            hidden={showMobileSearch}
+                        >
                             <WalletButton />
                         </div>
-
                     </div>
                 </IonToolbar>
             </IonHeader>

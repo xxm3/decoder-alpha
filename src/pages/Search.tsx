@@ -71,7 +71,10 @@ const Search: React.FC = () => {
     const useMountEffect = (fun:any) => useEffect(fun, []);
 
     const scrollToTop = () => {
-        contentRef.current.scrollIntoView();
+        window.scrollTo({
+			top : 0,
+			behavior : 'smooth'	
+		})
     }
 
     useMountEffect(scrollToTop);
@@ -216,14 +219,7 @@ const Search: React.FC = () => {
 
     return (
         <React.Fragment>
-            {/* <IonPage> */}
-                {/* Because of this IonContent component the scroll became infinite */}
-                {/* <IonContent ref={contentRef} fullscreen> */}
-                    {/* <Header /> */}
-
-                        {/*min-h-screen*/}
-
-                        {/* The bit darker Gray Container */}
+			
                             <div ref={contentRef} className={`!overflow-y-auto ${width <= 640 ? 'w-full' : 'container'}
                                  rounded-lg pt-3 pb-6 md:px-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`} >
 
@@ -248,23 +244,23 @@ const Search: React.FC = () => {
                                         graphQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                         <b>{"Error while loading message"}</b>
                                         </p> :
-                                        <DisplayGraph {...{
-                                            chartDataDailyCount : graphQuery?.data.chartDataDailyCount,
-                                            chartDataPerSource : graphQuery?.data.chartDataPerSource,
-                                            chartHeight,
-                                            isLoadingChart:graphQuery?.isLoading,
-                                            totalCount: messageQuery?.data?.totalCount
-                                        }} />}
-                                        {/* Displaying the custom skeleton loader while fetching */}
-                                        {messageQuery?.isFetching ?
-                                            new Array(10).fill(0).map((_,i) => <SearchSkelleton />) :
-                                        messageQuery?.isError ? <p className="text-lg text-red-700 font-medium">
-                                            <b>{"Error while loading message"}</b>
-                                        </p> :
-                                        <Display {...{
-                                            messages : messageQuery?.data?.messages ?? [],
-                                            totalCount: messageQuery?.data?.totalCount
-                                        }}/>}
+                                      	  <DisplayGraph {...{
+	                                            chartDataDailyCount : graphQuery?.data.chartDataDailyCount,
+	                                            chartDataPerSource : graphQuery?.data.chartDataPerSource,
+	                                            chartHeight,
+	                                            isLoadingChart:graphQuery?.isLoading,
+	                                            totalCount: messageQuery?.data?.totalCount
+	                                        }} />}
+	                                        {/* Displaying the custom skeleton loader while fetching */}
+	                                        {messageQuery?.isFetching ?
+	                                            new Array(10).fill(0).map((_,i) => <SearchSkelleton key={i}/>) :
+	                                        messageQuery?.isError ? <p className="text-lg text-red-700 font-medium">
+	                                            <b>{"Error while loading message"}</b>
+	                                        </p> :
+	                                        <Display {...{
+	                                            messages : messageQuery?.data?.messages ?? [],
+	                                            totalCount: messageQuery?.data?.totalCount
+	                                        }}/>}
 
                                         {(messageQuery?.data?.totalCount ?? 0) > 5 && (
                                             <>
@@ -285,8 +281,6 @@ const Search: React.FC = () => {
                                     </>
                                 )}
                             </div>
-                {/* </IonContent> */}
-            {/* </IonPage> */}
         </React.Fragment>
     );
 };
