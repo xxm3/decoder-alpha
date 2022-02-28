@@ -207,6 +207,19 @@ const Schedule = () => {
         },
         {
 
+            title: '# Discord',
+            key: 'numbersOfDiscordMembers',
+            render: record => (
+                <span>
+                    {record.numbersOfDiscordMembers === undefined? "-" : record.numbersOfDiscordMembers || "-" }
+                </span>
+            ),
+            width: 110,
+            align: 'left'
+            // responsive: ['md'], // Will not be displayed below 768px
+        },
+        {
+
             title: '# Twitter',
             // dataIndex: 'numbersOfTwitterFollowers',
             key: 'numbersOfTwitterFollowers',

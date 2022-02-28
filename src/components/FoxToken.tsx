@@ -31,7 +31,6 @@ import ReactTooltip from "react-tooltip";
 import Cookies from "universal-cookie";
 
 /**
- * TODO
  * IF WANT TO TEST THIS PAGE
  * - be logged out of wallet and test things
  * - be logged out of wallet, and add a custom wallet
@@ -113,17 +112,30 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     }
 
     const resetMultWallets = () => {
-        if(confirm("Are you sure you want to reset all of your stored wallets?")){
-            cookies.remove("multWalletsAry");
 
-            present({
-                message: 'Successfully removed all wallets.',
-                color: 'success',
-                duration: 5000
-            });
+        // @ts-ignore
+        present({
+            cssClass: '',
+            header: 'Delete Wallets?',
+            message: 'Are you sure you want to reset all of your stored wallets?',
+            buttons: [
+                'Cancel',
+                {text: 'Ok', handler: () => {
 
-            setMultWalletAryFromCookie(null);
-        }
+                        cookies.remove("multWalletsAry");
+
+                        present({
+                            message: 'Successfully removed all wallets.',
+                            color: 'success',
+                            duration: 5000
+                        });
+
+                        setMultWalletAryFromCookie(null);
+
+                }},
+            ],
+        });
+
     }
 
 
@@ -203,11 +215,10 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             ),
             responsive: ['md'], // Will not be displayed below 768px
         },
-        { title: 'Which My Wallet(s)', key: 'whichMyWallets', width: 180, dataIndex: 'whichMyWallets',
+        { title: 'Which Of My Wallet(s)', key: 'whichMyWallets', width: 180, dataIndex: 'whichMyWallets',
             responsive: ['md'], // Will not be displayed below 768px
             // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
         }
-
     ];
 
     /**
@@ -319,20 +330,23 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
                 // console.log(mySplTokens);
 
-                // loop through table data (all fox tokens)
+                // loop through table data (all fox tokens)... to eventually add which of these are your SPL tokens
                 for(let i in data){
-                    // if match, then ADD data
+                    // loop through user tokens
                     for(let y in mySplTokens){
+                        // if match
                         // @ts-ignore
                         if(mySplTokens[y].token === data[i].token){
+                            // then ADD data
                             // @ts-ignore
                             if(!data[i].whichMyWallets){ data[i].whichMyWallets = shortenedWallet(mySplTokens[y].myWallet); }
                             // @ts-ignore
                             else{ data[i].whichMyWallets += ", " +  shortenedWallet(mySplTokens[y].myWallet); }
+
+                            break;
                         }
                     }
                 }
-
 
                 setTableData(data);
                 setFullTableData(data);
@@ -346,42 +360,54 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     // give a wallet ... return all spl tokens in it
     const getSplFromWallet = async (wallet: string) => {
 
-        // console.log("going out to " + wallet);
+        try{
+            // console.log("going out to " + wallet);
 
-        // https://docs.solana.com/developing/clients/javascript-reference
-        let base58publicKey = new solanaWeb3.PublicKey(wallet.toString());
+            // https://docs.solana.com/developing/clients/javascript-reference
+            let base58publicKey = new solanaWeb3.PublicKey(wallet.toString());
 
-        const connection = new solanaWeb3.Connection(
-            solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed',
-        );
+            const connection = new solanaWeb3.Connection(
+                solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed',
+            );
 
-        // let account = await connection.getAccountInfo(base58publicKey);
-        // console.log(account?.data);
-        // https://github.com/solana-labs/solana/blob/master/web3.js/examples/get_account_info.js
-        let balance = await connection.getBalance(base58publicKey); // SOL balance
-        balance = balance / 1000000000;
-        // @ts-ignore
-        setMySolBalance(balance);
+            // let account = await connection.getAccountInfo(base58publicKey);
+            // console.log(account?.data);
+            // https://github.com/solana-labs/solana/blob/master/web3.js/examples/get_account_info.js
+            let balance = await connection.getBalance(base58publicKey); // SOL balance
+            balance = balance / 1000000000;
+            // @ts-ignore
+            setMySolBalance(balance);
 
-        // https://github.com/michaelhly/solana-py/issues/48
-        let tokenAccounts = await connection.getParsedTokenAccountsByOwner(
-            base58publicKey,
-            {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
-        );
+            // https://github.com/michaelhly/solana-py/issues/48
+            let tokenAccounts = await connection.getParsedTokenAccountsByOwner(
+                base58publicKey,
+                {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
+            );
 
-        let mySplTokensTemporaryAgainAgain: any = [];
+            let mySplTokensTemporaryAgainAgain: any = [];
 
-        for (let i in tokenAccounts.value) {
-            if (tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0) {
-                // console.log(tokenAccounts.value[i]);
-                mySplTokensTemporaryAgainAgain.push({
-                    token: tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint,
-                    myWallet: wallet
-                });
+            for (let i in tokenAccounts.value) {
+                if (tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0) {
+                    // console.log(tokenAccounts.value[i]);
+                    mySplTokensTemporaryAgainAgain.push({
+                        token: tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint,
+                        myWallet: wallet
+                    });
+                }
             }
+
+            return mySplTokensTemporaryAgainAgain;
+
+        }catch(err){
+            present({
+                message: 'Error when getting your Whitelist tokens from your wallet',
+                color: 'danger',
+                duration: 5000
+            });
+
+            return [];
         }
 
-        return mySplTokensTemporaryAgainAgain;
     }
 
     // https://github.com/solana-labs/solana-program-library/blob/master/token/js/examples/create_mint_and_transfer_tokens.ts
@@ -405,7 +431,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         if(multWalletAryFromCookie){
             for(let i in multWalletAryFromCookie.split(",")){
                 const tempWall = multWalletAryFromCookie.split(",")[i];
-                if(tempWall.length === 44){
+                // make sure it's length of a sol wallet ... and that its not the connected wallet
+                if(tempWall.length === 44 && tempWall !== walletAddress){
                     mySplTokensTemporary = mySplTokensTemporary.concat(await getSplFromWallet(tempWall));
                 }
 
@@ -419,18 +446,31 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     }
 
     // load table data, after we load in user tokens
+    // isn't called on local host, see below useEffect
     useEffect(() => {
         if (firstUpdate.current) {
             firstUpdate.current = false;
             return;
         }
 
-        fetchTableData();
+        // only fetch data when NOT on local host ... after spl tokens is updated
+        if(window.location.href.indexOf('localhost') === -1) {
+            fetchTableData();
+        }
+
     }, [mySplTokens]);
 
     // call on load, when cookie array set
     useEffect(() => {
-        getUserSpls();
+
+        // however DON'T do this in local host (will do this elsewhere ... since get RPC blocked)
+        if(window.location.href.indexOf('localhost') === -1){
+            getUserSpls();
+        }else{
+            fetchTableData();
+        }
+
+
     }, [multWalletAryFromCookie]);
     // also call when new wallet is connected to
     useEffect(() => {
@@ -504,12 +544,17 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     };
 
     // Viewing MY tokens - filter the table
-    const viewMyTokens = (wantViewTokens: boolean) => {
+    const viewMyTokens = async (wantViewTokens: boolean) => {
 
         // user wants to see MY tokens
-        if(wantViewTokens){
+        if (wantViewTokens) {
 
-            if(!multWalletAryFromCookie && !walletAddress){
+            // see other local host on here to see why
+            if (window.location.href.indexOf('localhost') !== -1) {
+                await getUserSpls();
+            }
+
+            if (!multWalletAryFromCookie && !walletAddress) {
                 present({
                     message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add it manually',
                     color: 'danger',
@@ -519,7 +564,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             }
 
             // make sure they have tokens
-            if(mySplTokens.length === 0){
+            if (mySplTokens.length === 0) {
 
                 // show toast
                 present({
@@ -529,7 +574,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 });
                 return;
 
-            }else{
+            } else {
 
                 setViewMyTokensClicked(true);
 
@@ -537,17 +582,28 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 let newTableData: any = [];
 
                 // loop through table data (all fox tokens)
-                for(let i in tableData){
+                for (let i in tableData) {
                     // if match, then push
-                    for(let y in mySplTokens){
+                    for (let y in mySplTokens) {
                         // @ts-ignore
-                        if(mySplTokens[y].token === tableData[i].token){
+                        if (mySplTokens[y].token === tableData[i].token) {
+
+                            if (window.location.href.indexOf('localhost') !== -1) {
+                                // then ADD data
+                                // @ts-ignore
+                                if(!tableData[i].whichMyWallets){ tableData[i].whichMyWallets = shortenedWallet(mySplTokens[y].myWallet); }
+                                // @ts-ignore
+                                else{ tableData[i].whichMyWallets += ", " +  shortenedWallet(mySplTokens[y].myWallet); }
+                            }
+
+
                             newTableData.push(tableData[i]);
+                            break;
                         }
                     }
                 }
 
-                if(newTableData.length === 0){
+                if (newTableData.length === 0) {
                     present({
                         message: 'None of your tokens are also listed on FF Token Market :(',
                         color: 'danger',
@@ -559,8 +615,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 setTableData(newTableData);
             }
 
-        // user wants to see ALL tokens
-        }else{
+            // user wants to see ALL tokens
+        } else {
             setViewMyTokensClicked(false);
 
             setTableData(fullTableData);
