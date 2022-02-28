@@ -95,7 +95,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             setMultWalletAryFromCookie(cookies.get('multWalletsAry')); // set array to show user on frontend
 
             present({
-                message: 'Successfully added the wallet. Refresh to see it', // TODO-parth: "refresh to see..."
+                message: 'Successfully added the wallet',
                 color: 'success',
                 duration: 5000
             });
@@ -205,7 +205,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         },
         { title: 'Which My Wallet(s)', key: 'whichMyWallets', width: 180, dataIndex: 'whichMyWallets',
             responsive: ['md'], // Will not be displayed below 768px
-            sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
+            // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
         }
 
     ];
@@ -317,8 +317,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 //     }
                 // }
 
-
-                console.log(mySplTokens); // TODO: this has NO data
+                // console.log(mySplTokens);
 
                 // loop through table data (all fox tokens)
                 for(let i in data){
@@ -347,8 +346,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     // give a wallet ... return all spl tokens in it
     const getSplFromWallet = async (wallet: string) => {
 
-        // TODO
-        console.log("going out to " + wallet);
+        // console.log("going out to " + wallet);
 
         // https://docs.solana.com/developing/clients/javascript-reference
         let base58publicKey = new solanaWeb3.PublicKey(wallet.toString());
@@ -398,7 +396,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         // }
 
         // first try with the wallet address we got logged in
-        if(!walletAddress){
+        if(walletAddress){
             // @ts-ignore
             mySplTokensTemporary = mySplTokensTemporary.concat(await getSplFromWallet(walletAddress));
         }
@@ -406,14 +404,18 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         // now go through the wallets in cookies
         if(multWalletAryFromCookie){
             for(let i in multWalletAryFromCookie.split(",")){
-                mySplTokensTemporary = mySplTokensTemporary.concat(await getSplFromWallet(multWalletAryFromCookie.split(",")[i]));
+                const tempWall = multWalletAryFromCookie.split(",")[i];
+                if(tempWall.length === 44){
+                    mySplTokensTemporary = mySplTokensTemporary.concat(await getSplFromWallet(tempWall));
+                }
+
             }
         }
 
         // @ts-ignore
         setMySplTokens(mySplTokensTemporary);
 
-        console.log(mySplTokensTemporary); // TODO: this shows data
+        // console.log(mySplTokensTemporary);
     }
 
     // load table data, after we load in user tokens
@@ -429,7 +431,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     // call on load, when cookie array set
     useEffect(() => {
         getUserSpls();
-    }, [multWalletAryFromCookie]); // TODO: test!!
+    }, [multWalletAryFromCookie]);
     // also call when new wallet is connected to
     useEffect(() => {
         getUserSpls();
@@ -507,8 +509,6 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         // user wants to see MY tokens
         if(wantViewTokens){
 
-            setViewMyTokensClicked(true);
-
             if(!multWalletAryFromCookie && !walletAddress){
                 present({
                     message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add it manually',
@@ -530,6 +530,9 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 return;
 
             }else{
+
+                setViewMyTokensClicked(true);
+
                 // new array of data we'll set later
                 let newTableData: any = [];
 
@@ -594,6 +597,14 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             <IonIcon icon={wallet} className="pr-1" />
                             View My Tokens
                         </IonButton>
+                        <IonButton color="secondary" className="text-sm small-btn ml-5"
+                                   onClick={() => viewMyTokens(false)}
+                                   hidden={!viewMyTokensClicked}
+                                   data-tip="View All Tokens"
+                        >
+                            <IonIcon icon={wallet} className="pr-1" />
+                            View All Tokens
+                        </IonButton>
 
                         <IonButton color="secondary" className="text-sm small-btn ml-5"
                                    onClick={() => clickedMultWall(true)}
@@ -603,14 +614,6 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             Add Mult Wallets
                         </IonButton>
 
-                        <IonButton color="secondary" className="text-sm small-btn ml-5"
-                                   onClick={() => viewMyTokens(false)}
-                                   hidden={!viewMyTokensClicked}
-                                   data-tip="View All Tokens"
-                        >
-                            <IonIcon icon={wallet} className="pr-1" />
-                            View All Tokens
-                        </IonButton>
                     </span>
 
                     {/*MOBILE*/}
