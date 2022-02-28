@@ -30,6 +30,14 @@ import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
 import Cookies from "universal-cookie";
 
+/**
+ * TODO
+ * IF WANT TO TEST THIS PAGE
+ * - be logged out of wallet and test things
+ * - be logged out of wallet, and add a custom wallet
+ * - log in wallet, test
+ * - log in wallet, add 1-2 custom wallets
+ */
 
 interface FoxToken {
     foo?: string;
@@ -76,7 +84,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 // update cookie
             }else{
                 const newVal = multWalletAryFromCookie + ',' + formWalletMult;
-                cookies.set("multWalletsAry", newVal);
+                cookies.set("multWalletsAry", newVal.toString());
                 setMultWalletAryFromCookie(newVal);
             }
 
@@ -87,7 +95,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             setMultWalletAryFromCookie(cookies.get('multWalletsAry')); // set array to show user on frontend
 
             present({
-                message: 'Successfully added the wallet. Refresh to see it',
+                message: 'Successfully added the wallet. Refresh to see it', // TODO-parth: "refresh to see..."
                 color: 'success',
                 duration: 5000
             });
@@ -159,19 +167,22 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             render: record => (
                 <>
                     <span hidden={width < smallWidthpx}>{record.token}</span>
-                    <span hidden={width > smallWidthpx}>{record.token.substr(0, 4) + '...' + record.token.substr(record.token.length -4)}</span>
+                    <span hidden={width > smallWidthpx}>{shortenedWallet(record.token)}</span>
                 </>
 
             ),
             sorter: (a, b) => a.token.localeCompare(b.token),
             // width: 130,
-            // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         { title: 'Price', key: 'floorPrice', dataIndex: 'floorPrice', width: 100,
-            sorter: (a, b) => a.floorPrice - b.floorPrice,},
+            sorter: (a, b) => a.floorPrice - b.floorPrice,
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+        },
         { title: 'Name', key: 'name', dataIndex: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
             width: 150,
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         { title: 'Total Token Listings', key: 'totalTokenListings', dataIndex: 'totalTokenListings', width: 250,
             sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,
@@ -181,49 +192,27 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             render: record => (
                 <span onClick={() => viewChart(record.token, record.name)} className="cursor-pointer big-emoji">📈</span>
             ),
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         { title: 'View in Explorer', key: '', width: 150,
             render: record => (
                 <a target="_blank" className="no-underline big-emoji" href={'https://explorer.solana.com/address/' + record.token} >🌐</a>
             ),
             responsive: ['md'], // Will not be displayed below 768px
+        },
+        { title: 'Which My Wallet(s)', key: 'whichMyWallets', width: 180, dataIndex: 'whichMyWallets',
+            responsive: ['md'], // Will not be displayed below 768px
+            sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
         }
-
-        // TODO: Owned In Wallet
 
     ];
 
     /**
      * Use Effects
      */
-    useEffect(() => {
-        const fetchTableData = async () => {
-
-            setTableData([]);
-
-            instance
-                .get(environment.backendApi + '/receiver/foxTokenAnalysis')
-                .then((res) => {
-
-                    const data = res.data.data;
-                    // const newData = [];
-                    //
-                    //
-                    // for(let i in data){
-                    //     if(data[i].customName){
-                    //         newData.push(data[i]);
-                    //     }
-                    // }
-
-                    setTableData(data);
-                    setFullTableData(data);
-                })
-                .catch((err) => {
-                    console.error("error when getting fox token data: " + err);
-                });
-        }
-        fetchTableData();
-    }, []);
+    // useEffect(() => {
+    //
+    // }, []);
 
     // resize window
     useEffect(() => {
@@ -293,7 +282,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 });
 
                 // think want to keep this in ... some timing ... issue....
-                console.log(foxLineData);
+                // console.log(foxLineData);
 
 
                 // TODO-rakesh: go to the home page ... go to fox token table ... click view chart ... make sure it SCROLLS TO BOTTOM of page (or scrolls to make the chart the top of the page)
@@ -306,66 +295,142 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
     }
 
+    // load table data!
+    const fetchTableData = async () => {
+
+        setTableData([]);
+
+        instance
+            .get(environment.backendApi + '/receiver/foxTokenAnalysis')
+            .then((res) => {
+
+                const data = res.data.data;
+                // const newData = [];
+                //
+                //
+                // for(let i in data){
+                //     if(data[i].customName){
+                //         newData.push(data[i]);
+                //     }
+                // }
+
+
+                console.log(mySplTokens); // TODO: this has NO data
+
+                // loop through table data (all fox tokens)
+                for(let i in data){
+                    // if match, then ADD data
+                    for(let y in mySplTokens){
+                        // @ts-ignore
+                        if(mySplTokens[y].token === data[i].token){
+                            // @ts-ignore
+                            if(!data[i].whichMyWallets){ data[i].whichMyWallets = shortenedWallet(mySplTokens[y].myWallet); }
+                            // @ts-ignore
+                            else{ data[i].whichMyWallets += ", " +  shortenedWallet(mySplTokens[y].myWallet); }
+                        }
+                    }
+                }
+
+
+                setTableData(data);
+                setFullTableData(data);
+            })
+            .catch((err) => {
+                console.error("error when getting fox token data: " + err);
+            });
+    }
+
+
+    // give a wallet ... return all spl tokens in it
+    const getSplFromWallet = async (wallet: string) => {
+
+        // TODO
+        console.log("going out to " + wallet);
+
+        // https://docs.solana.com/developing/clients/javascript-reference
+        let base58publicKey = new solanaWeb3.PublicKey(wallet.toString());
+
+        const connection = new solanaWeb3.Connection(
+            solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed',
+        );
+
+        // let account = await connection.getAccountInfo(base58publicKey);
+        // console.log(account?.data);
+        // https://github.com/solana-labs/solana/blob/master/web3.js/examples/get_account_info.js
+        let balance = await connection.getBalance(base58publicKey); // SOL balance
+        balance = balance / 1000000000;
+        // @ts-ignore
+        setMySolBalance(balance);
+
+        // https://github.com/michaelhly/solana-py/issues/48
+        let tokenAccounts = await connection.getParsedTokenAccountsByOwner(
+            base58publicKey,
+            {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
+        );
+
+        let mySplTokensTemporaryAgainAgain: any = [];
+
+        for (let i in tokenAccounts.value) {
+            if (tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0) {
+                // console.log(tokenAccounts.value[i]);
+                mySplTokensTemporaryAgainAgain.push({
+                    token: tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint,
+                    myWallet: wallet
+                });
+            }
+        }
+
+        return mySplTokensTemporaryAgainAgain;
+    }
+
     // https://github.com/solana-labs/solana-program-library/blob/master/token/js/examples/create_mint_and_transfer_tokens.ts
     // https://docs.solana.com/es/developing/clients/jsonrpc-api#gettokenaccountsbyowner
     const getUserSpls = async() => {
 
-        // if no wallet is logged in ... OR didn't set multiple wallets in a cookie, then do nothing
-        if(!walletAddress || !multWalletAryFromCookie) return;
+        let mySplTokensTemporary: any = [];
 
-        let mySplTokens: any = [];
-
-        const getSplFromWallet = async (wallet: string) => {
-
-            // https://docs.solana.com/developing/clients/javascript-reference
-            let base58publicKey = new solanaWeb3.PublicKey(wallet.toString());
-
-            const connection = new solanaWeb3.Connection(
-                solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed',
-            );
-
-            // let account = await connection.getAccountInfo(base58publicKey);
-            // console.log(account?.data);
-            // https://github.com/solana-labs/solana/blob/master/web3.js/examples/get_account_info.js
-            let balance = await connection.getBalance(base58publicKey); // SOL balance
-            balance = balance / 1000000000;
-            // @ts-ignore
-            setMySolBalance(balance);
-
-            // https://github.com/michaelhly/solana-py/issues/48
-            let tokenAccounts = await connection.getParsedTokenAccountsByOwner(
-                base58publicKey,
-                {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
-            );
-
-            for (let i in tokenAccounts.value) {
-                if (tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0) {
-                    // console.log(tokenAccounts.value[i]);
-                    mySplTokens.push(tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint);
-                }
-            }
-            // @ts-ignore
-            setMySplTokens(mySplTokens);
+        // if no wallet is logged in ... OR didn't set multiple wallets in a cookie, then return table and do nothing else
+        if(!walletAddress && !multWalletAryFromCookie){
+            await fetchTableData();
+            return;
         }
 
         // first try with the wallet address we got logged in
-        await getSplFromWallet(walletAddress);
-        // now go through the wallets in cookies
-        for(let i in multWalletAryFromCookie.split(",")){
-            await getSplFromWallet(multWalletAryFromCookie.split(",")[i]);
+        if(!walletAddress){
+            // @ts-ignore
+            mySplTokensTemporary = mySplTokensTemporary.concat(await getSplFromWallet(walletAddress));
         }
+
+        // now go through the wallets in cookies
+        if(multWalletAryFromCookie){
+            for(let i in multWalletAryFromCookie.split(",")){
+                mySplTokensTemporary = mySplTokensTemporary.concat(await getSplFromWallet(multWalletAryFromCookie.split(",")[i]));
+            }
+        }
+
+
+        // @ts-ignore
+        setMySplTokens(mySplTokensTemporary);
+
+        console.log(mySplTokensTemporary); // TODO: this shows data
+
+        // NOW load table data
+        // setTimeout(async () => {
+        await fetchTableData();
+        // }, 50)
+
 
     }
 
     // call on load, when cookie array set
     useEffect(() => {
         getUserSpls();
-    }, multWalletAryFromCookie); // TODO: this is bugged!
-    // calso call when new wallet is connected to
+    }, [multWalletAryFromCookie]); // TODO: test!!
+    // also call when new wallet is connected to
     useEffect(() => {
         getUserSpls();
     // @ts-ignore
-    }, walletAddress);
+    }, [walletAddress]);
 
     /**
      * for submitting custom token names
@@ -426,6 +491,12 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         });
     }
 
+    const shortenedWallet = (wallet: string) => {
+        return wallet.substring(0, 4) +
+            '...' +
+            wallet.substring(wallet.length - 4);
+    };
+
     // Viewing MY tokens - filter the table
     const viewMyTokens = (wantViewTokens: boolean) => {
 
@@ -448,7 +519,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
                 // show toast
                 present({
-                    message: 'No tokens found on this wallet :(',
+                    message: 'No tokens found on your wallet(s) :(',
                     color: 'danger',
                     duration: 5000
                 });
@@ -458,12 +529,14 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 // new array of data we'll set later
                 let newTableData: any = [];
 
-                // loop through tabledata (all fox tokens)
+                // loop through table data (all fox tokens)
                 for(let i in tableData){
                     // if match, then push
-                    // @ts-ignore
-                    if(mySplTokens.indexOf(tableData[i].token) !== -1){
-                        newTableData.push(tableData[i]);
+                    for(let y in mySplTokens){
+                        // @ts-ignore
+                        if(mySplTokens[y].token === tableData[i].token){
+                            newTableData.push(tableData[i]);
+                        }
                     }
                 }
 
@@ -591,9 +664,11 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             <div className="text-lg  font-medium">
                                 <span className="font-bold">Wallets Added:</span>
                                 <ul>
-                                    {multWalletAryFromCookie.split(',').map(function(wallet: any){
-                                        return <li>{wallet}</li>;
-                                    })}
+                                    {multWalletAryFromCookie ?
+                                        multWalletAryFromCookie.split(',').map(function(wallet: any){
+                                            return <li>{wallet}</li>;
+                                        })
+                                        : ''}
                                 </ul>
                             </div>
                         </div>
