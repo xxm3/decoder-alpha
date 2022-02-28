@@ -33,8 +33,10 @@ const Home = () => {
     const [popularCollections, setPopularCollection] = useState([]); // from ME
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingWord, setIsLoadingWord] = useState(false);
 
     const [width, setWidth] = useState(window.innerWidth);
+    const [searchedWords, setSearchedWords] = useState([]);
 
     /**
      * Use Effects
@@ -47,7 +49,7 @@ const Home = () => {
         if(width > 768) return 155;
         if(width > 640) return 200;
         return 230;
-    }, [width])
+    }, [width]);
 
     // resize window
     useEffect(() => {
@@ -60,6 +62,7 @@ const Home = () => {
 
     useEffect(() => {
         fetchHomePageData();
+        getSearchedWords();
     }, []);
 
     /**
@@ -118,6 +121,20 @@ const Home = () => {
 
     const getDateAgo = function (time: any){
         return moment(time).fromNow();
+    }
+
+    const getSearchedWords = () => {
+        setIsLoadingWord(true);
+        instance
+            .get(environment.backendApi + '/getSearchedWords')
+            .then((res) => {
+                if(res.data.data) setSearchedWords(res.data.data)
+                setIsLoadingWord(false);
+            })
+            .catch((error) => {
+                setIsLoadingWord(false);
+                console.error("Error while fetching searched records ", error);
+            });
     }
 
     /**
@@ -235,61 +252,81 @@ const Home = () => {
             {/* Main Content After Header - The light gray Container */}
 
             {/* Stacked line Search stuff - The bit darker Gray Container */}
-            <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-2`}>
+            <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-2 flex gap-1 ${width <= 640 ? 'flex-col-reverse' : 'flex-row'} justify-between`}>
+                <div className={`${width <=640 ? 'w-full' : 'w-4/5'}`}>
+                    <div className={`font-bold pb-1 ${width <= 640 ? 'w-full' : 'w-96 '}`}>Compare multiple words on a line graph</div>
 
-                <div className={`font-bold pb-1 ${width <= 640 ? 'w-full' : 'w-96 '}`}>Compare multiple words on a line graph</div>
+                    <div className={`max-w-2xl my-2`}>
+                        <SearchBar initialValue='' onSubmit={doSearch} placeholder='Type to search'
+                            helpMsg='Compares multiple single words against each other (ex. "portals enviro suites").
+                        Each word will be graphed and you can compare the popularity of each word (useful to search on multiple mints in the morning and see which his more popular)'
+                            disableReset='false' />
+                    </div>
 
-                <div className={`max-w-2xl my-2`}>
-                    <SearchBar initialValue='' onSubmit={doSearch} placeholder='Type to search'
-                           helpMsg='Compares multiple single words against each other (ex. "portals enviro suites").
-                    Each word will be graphed and you can compare the popularity of each word (useful to search on multiple mints in the morning and see which his more popular)'
-                           disableReset='false' />
+                    {/*--{width}--{chartHeight}--*/}
+
+                    {/*loading*/}
+                    {graphStackedLoading ? (
+                        <div className="pt-10 flex justify-center items-center">
+                            <Loader />
+                        </div>
+
+                     // error
+                    ) : errorSearchStacked ? (
+                        <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
+                            <p className="text-lg text-red-700 font-medium">
+                                <b>{(errorSearchStacked as string) || 'Unable to connect'}</b>
+                            </p>
+                            <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                                !
+                            </span>
+                        </div>
+
+                    // graph itself
+                    ) : (
+
+                        <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg" hidden={graphStackedLoading || stackedLineData.labels?.length === 1}>
+                            <Chart type='line' data={stackedLineData} height={chartHeight}
+                                options={{
+                                    responsive: true,
+                                    maintainAspectRatio: true,
+                                    plugins: {
+                                        legend: {
+                                            display: true,
+                                            reverse: true
+                                        },
+                                        title: { display: true, text: '# of messages per day (from several Discords)'},
+                                    },
+                                    y: {
+                                        suggestedMin: 0,
+                                    }
+                                }} />
+                        </div>
+                    )} 
+
+                    {/* Mint Alerts Automated - Statistics */}
+                    <NftPriceTable foo='' onSubmit={doSearch} /> 
                 </div>
 
-                {/*--{width}--{chartHeight}--*/}
-
-                {/*loading*/}
-                {graphStackedLoading ? (
-                    <div className="pt-10 flex justify-center items-center">
-                        <Loader />
+                {/* Searched word section */}
+                <div className='bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4'>
+                    {/* <div className={`font-bold pb-1 ${width <= 640 ? 'w-full' : 'w-56 '}`}>Recent searches by others</div> */}
+                    <div className={`font-bold pb-1`}>Recent searches by others</div>
+                    <div>
+                        {
+                            isLoadingWord ? 
+                            <div className="flex justify-center items-center">
+                                <Loader />
+                            </div> :
+                            searchedWords.map((word,i) => (
+                                <p key={i}>{word}</p>
+                            ))
+                        }
                     </div>
-
-                // error
-                ) : errorSearchStacked ? (
-                    <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
-                        <p className="text-lg text-red-700 font-medium">
-                            <b>{(errorSearchStacked as string) || 'Unable to connect'}</b>
-                        </p>
-                        <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                            !
-                        </span>
-                    </div>
-
-                // graph itself
-                ) : (
-
-                    <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg" hidden={graphStackedLoading || stackedLineData.labels?.length === 1}>
-                        <Chart type='line' data={stackedLineData} height={chartHeight}
-                               options={{
-                                   responsive: true,
-                                   maintainAspectRatio: true,
-                                   plugins: {
-                                       legend: {
-                                           display: true,
-                                           reverse: true
-                                       },
-                                       title: { display: true, text: '# of messages per day (from several Discords)'},
-                                   },
-                                   y: {
-                                       suggestedMin: 0,
-                                   }
-                               }} />
-                    </div>
-                )}
+                </div>
             </div>
 
-            {/* Mint Alerts Automated - Statistics */}
-            <NftPriceTable foo='' onSubmit={doSearch} />
+            
 
             {/* Fox Token - Analysis */}
             <div >

@@ -275,7 +275,7 @@ const Schedule = () => {
 
             <p className="pt-3">Projects must have more than 1,000 twitter followers before showing up on the list.
                 <br/>
-                "# Tweet Interactions" takes the last five tweets, gets an average of the Comments / Likes / Retweets, and adds them up (the higher the better)</p>
+                "# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them up (the higher the better)</p>
             {
                 isLoading
                     ? <div className="pt-10 flex justify-center items-center">

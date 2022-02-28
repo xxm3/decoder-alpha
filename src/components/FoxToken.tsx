@@ -13,7 +13,7 @@ import {
     IonHeader,
     IonToolbar, IonTitle, useIonToast, IonIcon
 } from '@ionic/react';
-import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState, useRef, useCallback} from 'react';
+import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useRef, useState} from 'react';
 import {Table} from 'antd' // https://ant.design/components/table/
 import { ColumnsType } from 'antd/es/table';
 import Loader from "./Loader";
@@ -27,7 +27,17 @@ import * as solanaWeb3 from '@solana/web3.js';
 import {wallet} from "ionicons/icons";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
+import ReactTooltip from "react-tooltip";
+import Cookies from "universal-cookie";
 
+/**
+ * TODO
+ * IF WANT TO TEST THIS PAGE
+ * - be logged out of wallet and test things
+ * - be logged out of wallet, and add a custom wallet
+ * - log in wallet, test
+ * - log in wallet, add 1-2 custom wallets
+ */
 
 interface FoxToken {
     foo?: string;
@@ -36,17 +46,116 @@ interface FoxToken {
 
 function FoxToken({ foo, onSubmit }: FoxToken) {
 
+
+    /**
+     * Adding multiple wallets
+     */
+    const [addMultWallModalOpen, setAddMultWallModalOpen] = useState(false); // model open or not
+    const [formWalletMult, setFormWalletMult] = useState(''); // single wallet in the form
+    const [formLoadingMultWallet, setFormLoadingMultWallet] = useState(false); // form loading
+
+    const cookies = useMemo(() => new Cookies(), []);
+    const [multWalletAryFromCookie, setMultWalletAryFromCookie] = useState(cookies.get('multWalletsAry')); // mult. wallets you have from cookies
+    // clicked link to add multiple wallets
+    const clickedMultWall = (val: boolean) => {
+        setAddMultWallModalOpen(val);
+    }
+
+    // in the modal for multiple wallets - submit button clicked
+    const addMultWalletsSubmit = () => {
+
+        if(!formWalletMult || formWalletMult.length !== 44){
+            present({
+                message: 'Error - please enter a single, valid SOL wallet address',
+                color: 'danger',
+                duration: 5000
+            });
+            return;
+        }
+
+        setFormLoadingMultWallet(true);
+
+        try{
+            // let existingMultWalletsAry = cookies.get('multWalletsAry');
+            // didn't set any yet
+            if(!multWalletAryFromCookie){
+                cookies.set("multWalletsAry", formWalletMult);
+                setMultWalletAryFromCookie(formWalletMult);
+                // update cookie
+            }else{
+                const newVal = multWalletAryFromCookie + ',' + formWalletMult;
+                cookies.set("multWalletsAry", newVal.toString());
+                setMultWalletAryFromCookie(newVal);
+            }
+
+            // setFormErrMsg('');
+
+            setFormLoadingMultWallet(false); // loading false
+            setFormWalletMult(''); // clear the form
+            setMultWalletAryFromCookie(cookies.get('multWalletsAry')); // set array to show user on frontend
+
+            present({
+                message: 'Successfully added the wallet',
+                color: 'success',
+                duration: 5000
+            });
+
+        }catch(err){
+            console.error(err);
+            setFormLoadingMultWallet(false); // loading false
+
+            present({
+                message: 'An error occurred when adding your Wallet',
+                color: 'danger',
+                duration: 5000
+            });
+        }
+    }
+
+    const resetMultWallets = () => {
+        if(window.confirm("Are you sure you want to reset all of your stored wallets?")){
+            cookies.remove("multWalletsAry");
+
+            present({
+                message: 'Successfully removed all wallets.',
+                color: 'success',
+                duration: 5000
+            });
+
+            setMultWalletAryFromCookie(null);
+        }
+    }
+
+
     /**
      * States & Variables
      */
     const [width, setWidth] = useState(window.innerWidth);
+
+    // for setting height of chart, depending on what width browser is
+    const tableHeight = useMemo(() => {
+        if(width > 1536) return 150;
+        if(width > 1280) return 180;
+        if(width > 1024) return 220;
+        if(width > 768) return 260;
+        if(width > 640) return 280;
+        return 330;
+    }, [width]);
+
     const [tableData, setTableData] = useState([]);
+    const [fullTableData, setFullTableData] = useState([]);
     const [tokenClickedOn, setTokenClickedOn] = useState();
     const [mySolBalance, setMySolBalance] = useState("");
+
     const [mySplTokens, setMySplTokens] = useState([]);
+    const firstUpdate = useRef(true);
+
+    const [viewMyTokensClicked, setViewMyTokensClicked] = useState(false);
     const walletAddress = useSelector(
         (state: RootState) => state.wallet.walletAddress
     );
+
+    const smallWidthpx = 768;
 
     const defaultGraph : ChartData<any, string> = {
         labels: [],
@@ -55,29 +164,29 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     const [foxLineData, setFoxLineData] = useState(defaultGraph);
     const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
 
-    console.log(foxLineData);
-
-
-    const chartRef = useRef<any>(null);
 
     const columns: ColumnsType<any> = [
         { title: 'Token', key: 'token', // dataIndex: 'token',
             render: record => (
                 <>
-                    <span hidden={width < 768}>{record.token}</span>
-                    <span hidden={width > 768}>{record.token.substr(0, 4) + '...' + record.token.substr(record.token.length -4)}</span>
+                    <span hidden={width < smallWidthpx}>{record.token}</span>
+                    <span hidden={width > smallWidthpx}>{shortenedWallet(record.token)}</span>
                 </>
 
             ),
             sorter: (a, b) => a.token.localeCompare(b.token),
             // width: 130,
-            // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
-        { title: 'Floor Price', key: 'floorPrice', dataIndex: 'floorPrice', width: 150,
-            sorter: (a, b) => a.floorPrice - b.floorPrice,},
+        { title: 'Price', key: 'floorPrice', dataIndex: 'floorPrice', width: 100,
+            sorter: (a, b) => a.floorPrice - b.floorPrice,
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+        },
         { title: 'Name', key: 'name', dataIndex: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
-            width: 250,},
+            width: 150,
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+        },
         { title: 'Total Token Listings', key: 'totalTokenListings', dataIndex: 'totalTokenListings', width: 250,
             sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,
             responsive: ['md'], // Will not be displayed below 768px
@@ -86,12 +195,17 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             render: record => (
                 <span onClick={() => viewChart(record.token, record.name)} className="cursor-pointer big-emoji">📈</span>
             ),
+            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         { title: 'View in Explorer', key: '', width: 150,
             render: record => (
                 <a target="_blank" className="no-underline big-emoji" href={'https://explorer.solana.com/address/' + record.token} >🌐</a>
             ),
             responsive: ['md'], // Will not be displayed below 768px
+        },
+        { title: 'Which My Wallet(s)', key: 'whichMyWallets', width: 180, dataIndex: 'whichMyWallets',
+            responsive: ['md'], // Will not be displayed below 768px
+            // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
         }
 
     ];
@@ -99,34 +213,9 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     /**
      * Use Effects
      */
-    useEffect(() => {
-        const fetchTableData = async () => {
-
-            setTableData([]);
-
-            instance
-                .get(environment.backendApi + '/receiver/foxTokenAnalysis')
-                .then((res) => {
-
-                    const data = res.data.data;
-                    // const newData = [];
-                    //
-                    //
-                    // for(let i in data){
-                    //     if(data[i].customName){
-                    //         newData.push(data[i]);
-                    //     }
-                    // }
-
-                    // @ts-ignore
-                    setTableData(data);
-                })
-                .catch((err) => {
-                    console.error("error when getting fox token data: " + err);
-                });
-        }
-        fetchTableData();
-    }, []);
+    // useEffect(() => {
+    //
+    // }, []);
 
     // resize window
     useEffect(() => {
@@ -137,17 +226,6 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         return () => window.removeEventListener('resize', resizeWidth);
     }, []);
 
-    // To handle scroll to bottom
-    useEffect(() => {
-        // console.log("foxLineListingsData", foxLineListingsData, "foxLineData == ", foxLineData, "ref -=-= ", chartRef.current);
-        
-        if(foxLineData?.labels?.length) {
-            if(chartRef.current) {
-                chartRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-            }
-        }
-    },[foxLineData?.labels, foxLineListingsData?.labels])
-
     /**
      * Functions
      */
@@ -155,8 +233,6 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     const setCheckedVerifiedOnly = (e: any) => {
 
     }
-
-
 
     // viewing the chart for a token
     const viewChart = (token: string, name: string) => {
@@ -223,25 +299,65 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
     }
 
-    // useMountEffect(scrollToBottom);
+    // load table data!
+    const fetchTableData = async () => {
 
-    // https://github.com/solana-labs/solana-program-library/blob/master/token/js/examples/create_mint_and_transfer_tokens.ts
-    // https://docs.solana.com/es/developing/clients/jsonrpc-api#gettokenaccountsbyowner
-    const getUserSpls = async() => {
+        setTableData([]);
 
-        // console.log(walletAddress);
-        if(!walletAddress) return;
+        instance
+            .get(environment.backendApi + '/receiver/foxTokenAnalysis')
+            .then((res) => {
+
+                const data = res.data.data;
+                // const newData = [];
+                //
+                //
+                // for(let i in data){
+                //     if(data[i].customName){
+                //         newData.push(data[i]);
+                //     }
+                // }
+
+                // console.log(mySplTokens);
+
+                // loop through table data (all fox tokens)
+                for(let i in data){
+                    // if match, then ADD data
+                    for(let y in mySplTokens){
+                        // @ts-ignore
+                        if(mySplTokens[y].token === data[i].token){
+                            // @ts-ignore
+                            if(!data[i].whichMyWallets){ data[i].whichMyWallets = shortenedWallet(mySplTokens[y].myWallet); }
+                            // @ts-ignore
+                            else{ data[i].whichMyWallets += ", " +  shortenedWallet(mySplTokens[y].myWallet); }
+                        }
+                    }
+                }
+
+
+                setTableData(data);
+                setFullTableData(data);
+            })
+            .catch((err) => {
+                console.error("error when getting fox token data: " + err);
+            });
+    }
+
+
+    // give a wallet ... return all spl tokens in it
+    const getSplFromWallet = async (wallet: string) => {
+
+        // console.log("going out to " + wallet);
 
         // https://docs.solana.com/developing/clients/javascript-reference
-        let base58publicKey = new solanaWeb3.PublicKey(walletAddress.toString());
+        let base58publicKey = new solanaWeb3.PublicKey(wallet.toString());
 
         const connection = new solanaWeb3.Connection(
-            solanaWeb3.clusterApiUrl('mainnet-beta'),'confirmed',
+            solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed',
         );
 
         // let account = await connection.getAccountInfo(base58publicKey);
         // console.log(account?.data);
-
         // https://github.com/solana-labs/solana/blob/master/web3.js/examples/get_account_info.js
         let balance = await connection.getBalance(base58publicKey); // SOL balance
         balance = balance / 1000000000;
@@ -254,28 +370,74 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
         );
 
-        let mySplTokens = [];
-        for(let i in tokenAccounts.value){
-            if(tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0){
+        let mySplTokensTemporaryAgainAgain: any = [];
+
+        for (let i in tokenAccounts.value) {
+            if (tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0) {
                 // console.log(tokenAccounts.value[i]);
-                mySplTokens.push(tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint);
+                mySplTokensTemporaryAgainAgain.push({
+                    token: tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint,
+                    myWallet: wallet
+                });
             }
         }
-        // @ts-ignore
-        setMySplTokens(mySplTokens);
 
-        // TODO-later: use getTokenSupply?? - Returns the total supply of an SPL Token type. (FF uses this lots)
+        return mySplTokensTemporaryAgainAgain;
     }
 
-    // call on load
+    // https://github.com/solana-labs/solana-program-library/blob/master/token/js/examples/create_mint_and_transfer_tokens.ts
+    // https://docs.solana.com/es/developing/clients/jsonrpc-api#gettokenaccountsbyowner
+    const getUserSpls = async() => {
+        let mySplTokensTemporary: any = [];
+
+        // if no wallet is logged in ... OR didn't set multiple wallets in a cookie, then return table and do nothing else
+        // if(!walletAddress && !multWalletAryFromCookie){
+        //     await fetchTableData();
+        //     return;
+        // }
+
+        // first try with the wallet address we got logged in
+        if(walletAddress){
+            // @ts-ignore
+            mySplTokensTemporary = mySplTokensTemporary.concat(await getSplFromWallet(walletAddress));
+        }
+
+        // now go through the wallets in cookies
+        if(multWalletAryFromCookie){
+            for(let i in multWalletAryFromCookie.split(",")){
+                const tempWall = multWalletAryFromCookie.split(",")[i];
+                if(tempWall.length === 44){
+                    mySplTokensTemporary = mySplTokensTemporary.concat(await getSplFromWallet(tempWall));
+                }
+
+            }
+        }
+
+        // @ts-ignore
+        setMySplTokens(mySplTokensTemporary);
+
+        // console.log(mySplTokensTemporary);
+    }
+
+    // load table data, after we load in user tokens
+    useEffect(() => {
+        if (firstUpdate.current) {
+            firstUpdate.current = false;
+            return;
+        }
+
+        fetchTableData();
+    }, [mySplTokens]);
+
+    // call on load, when cookie array set
     useEffect(() => {
         getUserSpls();
-    }, []);
-    // TODO: not working...
+    }, [multWalletAryFromCookie]);
+    // also call when new wallet is connected to
     useEffect(() => {
         getUserSpls();
     // @ts-ignore
-    }, walletAddress);
+    }, [walletAddress]);
 
     /**
      * for submitting custom token names
@@ -289,6 +451,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     const clickedAddName = (val: boolean) => {
         setAddNameModalOpen(val);
     }
+
+    // submit form to add new wallet
     const submittedForm = () => {
 
         const body = {
@@ -334,60 +498,73 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         });
     }
 
-    const viewMyTokens = () => {
-        if(!walletAddress){
-            present({
-                message: 'Please connect to your wallet',
-                color: 'danger',
-                duration: 5000
-            });
-            return;
-        }
+    const shortenedWallet = (wallet: string) => {
+        return wallet.substring(0, 4) +
+            '...' +
+            wallet.substring(wallet.length - 4);
+    };
 
-        // make sure they have tokens
-        if(mySplTokens.length === 0){
+    // Viewing MY tokens - filter the table
+    const viewMyTokens = (wantViewTokens: boolean) => {
 
-            // show toast
-            present({
-                message: 'No tokens found on this wallet :(',
-                color: 'danger',
-                duration: 5000
-            });
-            return;
+        // user wants to see MY tokens
+        if(wantViewTokens){
 
-            /**
-             * TODO
-             * - Should be able to allow people to enter in multiples of their wallets, so click one button and see all your tokens
-             *       ... have them set their wallet here... or tlel them connect wllet topright...
-             *       ... need to do the "add other wallet strings" ....
-             * - Will show the # of tokens you have
-             * - Will show tokens that aren't in FF as well
-             * - Want to try and show the date it was sent to you, will have to figure that out
-             *
-             */
-        }else{
-            // new array of data we'll set later
-            let newTableData: any = [];
-
-            // loop through tabledata (all fox tokens)
-            for(let i in tableData){
-                // if match, then push
-                // @ts-ignore
-                if(mySplTokens.indexOf(tableData[i].token) !== -1){
-                    newTableData.push(tableData[i]);
-                }
-            }
-
-            if(newTableData.length === 0){
+            if(!multWalletAryFromCookie && !walletAddress){
                 present({
-                    message: 'None of your tokens are also listed on FF Token Market :(',
+                    message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add it manually',
                     color: 'danger',
                     duration: 5000
                 });
                 return;
             }
 
-            setTableData(newTableData);
+            // make sure they have tokens
+            if(mySplTokens.length === 0){
+
+                // show toast
+                present({
+                    message: 'No tokens found on your wallet(s) :(',
+                    color: 'danger',
+                    duration: 5000
+                });
+                return;
+
+            }else{
+
+                setViewMyTokensClicked(true);
+
+                // new array of data we'll set later
+                let newTableData: any = [];
+
+                // loop through table data (all fox tokens)
+                for(let i in tableData){
+                    // if match, then push
+                    for(let y in mySplTokens){
+                        // @ts-ignore
+                        if(mySplTokens[y].token === tableData[i].token){
+                            newTableData.push(tableData[i]);
+                        }
+                    }
+                }
+
+                if(newTableData.length === 0){
+                    present({
+                        message: 'None of your tokens are also listed on FF Token Market :(',
+                        color: 'danger',
+                        duration: 5000
+                    });
+                    return;
+                }
+
+                setTableData(newTableData);
+            }
+
+        // user wants to see ALL tokens
+        }else{
+            setViewMyTokensClicked(false);
+
+            setTableData(fullTableData);
         }
     };
 
@@ -403,26 +580,143 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                     <a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">
                         Fox Token Market - Analysis
                     </a>
-                    <IonButton color="success" className="float-right text-sm small-btn pl-5"
-                               onClick={() => clickedAddName(true)}>
-                        {/*TODO-later: icon...*/}
-                        ➕ Add custom name
-                    </IonButton>
 
-                    <IonButton color="secondary" className="float-right text-sm small-btn ml-5"
-                               onClick={() => viewMyTokens()}>
-                        <IonIcon icon={wallet} className="pr-1" />
-                        View My Tokens
-                    </IonButton>
-                    <div hidden={!tableData.length}>
+                    {/*DESKTOP*/}
+                    <span hidden={width <= smallWidthpx} className="float-right">
+                        <IonButton color="success" className="text-sm small-btn pl-5"
+                                   onClick={() => clickedAddName(true)}
+                                   // data-tip="Add a custom name to one of the nameless Fox Tokens, if you know it"
+                        >
+                            ➕ Add custom name
+                        </IonButton>
+
+                        <IonButton color="secondary" className="text-sm small-btn ml-5"
+                                   onClick={() => viewMyTokens(true)}
+                                   hidden={viewMyTokensClicked}
+                                   // data-tip="Filter the table to view only your tokens"
+                        >
+                            <IonIcon icon={wallet} className="pr-1" />
+                            View My Tokens
+                        </IonButton>
+                        <IonButton color="secondary" className="text-sm small-btn ml-5"
+                                   onClick={() => viewMyTokens(false)}
+                                   hidden={!viewMyTokensClicked}
+                                   data-tip="View All Tokens"
+                        >
+                            <IonIcon icon={wallet} className="pr-1" />
+                            View All Tokens
+                        </IonButton>
+
+                        <IonButton color="secondary" className="text-sm small-btn ml-5"
+                                   onClick={() => clickedMultWall(true)}
+                                   // data-tip="Add multiple wallets "
+                        >
+                            <IonIcon icon={wallet} className="pr-1" />
+                            Add Mult Wallets
+                        </IonButton>
+
+                    </span>
+
+                    {/*MOBILE*/}
+                    <span hidden={width > smallWidthpx} className="float-right">
+                        <a onClick={() => clickedAddName(true)} data-tip="Add a custom name">➕</a>
+
+                        <a hidden={viewMyTokensClicked}
+                           data-tip="Filter the table to view only your tokens"
+                            onClick={() => viewMyTokens(true)} className="pl-3">
+                            <IonIcon icon={wallet} className="pr-1" />
+                        </a>
+
+                         <a hidden={!viewMyTokensClicked}
+                            onClick={() => viewMyTokens(false)} className="pl-3"
+                            data-tip="View All Tokens">
+                            <IonIcon icon={wallet} className="pr-1" />
+                        </a>
+                    </span>
+
+                    <div hidden={!tableData.length || width < smallWidthpx}>
                         👪 are community added names
-                    </div>
-
-                    <div className="float-right">
-
                     </div>
                 </div>
 
+                {/*
+                    adding multiple wallets
+                */}
+                <IonModal
+                    isOpen={addMultWallModalOpen}
+                    onDidDismiss={() => setAddMultWallModalOpen(false)}
+                >
+
+                    <IonHeader>
+                        <IonToolbar>
+                            <IonTitle>
+                                Add Multiple Wallets
+                                <a className="float-right text-base underline cursor-pointer"
+                                   onClick={() => clickedMultWall(false)}>close</a>
+                            </IonTitle>
+                        </IonToolbar>
+                    </IonHeader>
+
+                    <IonContent className="">
+
+                        <div className="ml-12 mr-12 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl" >
+                            <div className="text-lg  font-medium">
+                                <p>This is used in conjuction with the "View My Tokens" button,
+                                    where you can filter the Fox Token Market table to show only tokens in your wallet.
+                                    Use this to filter the table to your tokens that are on multiple wallets</p>
+                            </div>
+                        </div>
+
+                        <div hidden={!multWalletAryFromCookie}
+                            className="ml-12 mr-12 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl" >
+                            <div className="text-lg  font-medium">
+                                <span className="font-bold">Wallets Added:</span>
+                                <ul>
+                                    {multWalletAryFromCookie ?
+                                        multWalletAryFromCookie.split(',').map(function(wallet: any){
+                                            return <li>{wallet}</li>;
+                                        })
+                                        : ''}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div className="ml-12 mr-12">
+
+                            <IonItem>
+                                <IonLabel className="font-bold">Wallet</IonLabel>
+                                <IonInput onIonChange={(e) => setFormWalletMult(e.detail.value!)}
+                                          value={formWalletMult}
+                                          placeholder="ex. 91q2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU"></IonInput>
+                            </IonItem>
+
+                            <IonButton color="success" className="mt-5" hidden={formLoadingMultWallet}
+                                       onClick={() => addMultWalletsSubmit()}>
+                                Submit
+                            </IonButton>
+                            <IonButton
+                                hidden={!multWalletAryFromCookie}
+                                color="danger" className="mt-5"
+                                onClick={() => resetMultWallets()}>
+                                Reset Stored Wallets
+                            </IonButton>
+
+                            <div hidden={!formLoading}>Loading...</div>
+
+                            {/*<div className="m-12 relative mt-6 bg-red-100 p-6 rounded-xl" hidden={!formErrMsg}>*/}
+                            {/*    <p className="text-lg text-red-700 font-medium">*/}
+                            {/*        <b>{formErrMsg}</b>*/}
+                            {/*    </p>*/}
+                            {/*    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">*/}
+                            {/*        !*/}
+                            {/*    </span>*/}
+                            {/*</div>*/}
+                        </div>
+
+                    </IonContent>
+                </IonModal>
+
+                {/* For adding a new token */}
                 <IonModal
                     isOpen={addNameModalOpen}
                     onDidDismiss={() => setAddNameModalOpen(false)}
@@ -480,9 +774,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                     !
                                 </span>
                             </div>
-
                         </div>
-
 
                     </IonContent>
                 </IonModal>
@@ -495,39 +787,53 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                             </div>
                         : <div className=" ">
 
-                            {/*TODO-later: show only names (have a TODO on top as well for the data :*/}
                             {/*<IonItem style={{"width": "250px"}}>*/}
                             {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                             {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                             {/*</IonItem>*/}
 
-                            <div  >
+                            <div hidden={width <= smallWidthpx}>
+                                {/* Desktop version */}
                                 <Table
-                                    className='pt-2'
+                                    className='pt-2 w-full'
+                                    key={'name'}
+                                    dataSource={tableData}
+                                    columns={columns}
+                                    bordered
+                                    scroll={{y: 400}}
+                                    // scroll={{y: 22}} // if want show it off / shill
+
+                                    pagination={false}
+                                    style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
+                                />
+                            </div>
+                            <div hidden={width > smallWidthpx}>
+
+                                {/*Mobile Version*/}
+                                <Table
+                                    className='pt-2 w-full'
                                     key={'name'}
                                     dataSource={tableData}
                                     columns={columns}
                                     bordered
                                     // scroll={{x: 'max-content'}}
 
-                                    scroll={{y: 400}}
-                                    // scroll={{y: 22}} // if want show it off / shill
-
                                     // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
-                                    // scroll={{x: 'max-content', y: 400}}
+                                    scroll={{x: 'max-content', y: 400}}
+
                                     pagination={false}
                                     style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
                                 />
+
                             </div>
 
-                            <div className="gap-4 mb-4 grid grid-cols-12 mt-3" ref={chartRef}
+                            <div className="gap-4 mb-4 grid grid-cols-12 mt-3"
                                  // @ts-ignore
                                  hidden={foxLineData.labels.length === 0}>
                                 <div className='chart' >
-                                    {console.log("data -=-= ", foxLineData)}
                                     <Chart type='line'
                                        // @ts-ignore
-                                       data={foxLineData} height='150'
+                                       data={foxLineData} height={tableHeight}
                                        options={{
                                            responsive: true,
                                            maintainAspectRatio: true,
@@ -552,7 +858,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                 </div>
                                 <div className="chart">
                                     <Chart type='line'
-                                       data={foxLineListingsData} height='150'
+                                       data={foxLineListingsData} height={tableHeight}
                                        options={{
                                            responsive: true,
                                            maintainAspectRatio: true,
@@ -583,7 +889,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 }
                 </div>
 
-
+                <ReactTooltip />
 
                 <div hidden={true}
                      className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
