@@ -13,7 +13,7 @@ import {
     IonHeader,
     IonToolbar, IonTitle, useIonToast, IonIcon
 } from '@ionic/react';
-import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState} from 'react';
+import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useRef, useState} from 'react';
 import {Table} from 'antd' // https://ant.design/components/table/
 import { ColumnsType } from 'antd/es/table';
 import Loader from "./Loader";
@@ -146,7 +146,10 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     const [fullTableData, setFullTableData] = useState([]);
     const [tokenClickedOn, setTokenClickedOn] = useState();
     const [mySolBalance, setMySolBalance] = useState("");
+
     const [mySplTokens, setMySplTokens] = useState([]);
+    const firstUpdate = useRef(true);
+
     const [viewMyTokensClicked, setViewMyTokensClicked] = useState(false);
     const walletAddress = useSelector(
         (state: RootState) => state.wallet.walletAddress
@@ -386,14 +389,13 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     // https://github.com/solana-labs/solana-program-library/blob/master/token/js/examples/create_mint_and_transfer_tokens.ts
     // https://docs.solana.com/es/developing/clients/jsonrpc-api#gettokenaccountsbyowner
     const getUserSpls = async() => {
-
         let mySplTokensTemporary: any = [];
 
         // if no wallet is logged in ... OR didn't set multiple wallets in a cookie, then return table and do nothing else
-        if(!walletAddress && !multWalletAryFromCookie){
-            await fetchTableData();
-            return;
-        }
+        // if(!walletAddress && !multWalletAryFromCookie){
+        //     await fetchTableData();
+        //     return;
+        // }
 
         // first try with the wallet address we got logged in
         if(!walletAddress){
@@ -408,19 +410,21 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             }
         }
 
-
         // @ts-ignore
         setMySplTokens(mySplTokensTemporary);
 
         console.log(mySplTokensTemporary); // TODO: this shows data
-
-        // NOW load table data
-        // setTimeout(async () => {
-        await fetchTableData();
-        // }, 50)
-
-
     }
+
+    // load table data, after we load in user tokens
+    useEffect(() => {
+        if (firstUpdate.current) {
+            firstUpdate.current = false;
+            return;
+        }
+
+        fetchTableData();
+    }, [mySplTokens]);
 
     // call on load, when cookie array set
     useEffect(() => {
