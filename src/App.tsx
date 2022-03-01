@@ -1,4 +1,4 @@
-import { IonApp, IonMenu, IonRouterOutlet } from "@ionic/react";
+import { IonApp, IonCol, IonContent, IonGrid, IonMenu, IonPage, IonRouterOutlet, IonRow, IonSplitPane } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 // import { useEffect, useState } from "react";
 // import Search from "./pages/Search";
@@ -6,7 +6,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import { useEffect, useState } from "react";
 import { auth } from "./firebase";
 import { IUser } from "./types/User";
-import { Switch } from "react-router";
+import { Route as DefaultRoute, Route } from "react-router";
 import "./App.css";
 import Loader from "./components/Loader";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -99,34 +99,85 @@ const App = () => {
                     {user !== undefined ? (
                         <>
                             <IonReactRouter>
-                            <IonMenu menuId="sidebar" contentId="router">
-                                <Sidebar />
-                            </IonMenu>
                                 <IonRouterOutlet id="router">
-                                    <Switch>
+                                    <Route>
+                                        <IonPage>
+                                            <IonGrid className="w-screen h-screen flex flex-col relative">
+                                                <IonRow>
+                                                    <IonCol size="12">
+                                                        <HeaderContainer />
+                                                    </IonCol>
+                                                </IonRow>
+                                                <IonRow className="flex-grow">
+                                                    <IonCol
+                                                        size="12"
+                                                        className="flex h-full"
+                                                    >
+                                                        <Style>
+                                                            {`
+																@media only screen and (min-width:768px) and (max-width:992px){ 
+																	ion-split-pane {
+																		--side-min-width: none;
+																	}
+																}
+																
+																	
+															`}
+                                                        </Style>
+                                                        <IonSplitPane
+                                                            when="md"
+                                                            contentId="main"
+                                                        >
+                                                            <IonMenu
+                                                                menuId="sidebar"
+                                                                contentId="main"
+                                                            >
+                                                                <Sidebar />
+                                                            </IonMenu>
+                                                            <IonContent
+                                                                className="h-full"
+                                                                id="main"
+                                                            >
+                                                                <IonRouterOutlet>
+                                                                    <ProtectedRoute
+                                                                        path="/"
+                                                                        component={
+                                                                            Home
+                                                                        }
+                                                                        exact
+                                                                    />
 
-                                        <ProtectedRoute
-                                            path="/"
-                                            component={Home}
-                                            exact
-                                        />
-
-                                        <ProtectedRoute
-                                            path="/search/:id"
-                                            exact={true}
-                                            component={Search}
-                                        />
-                                        <AppRoute
-                                            exact
-                                            path="/Schedule"
-                                            component={Schedule}
-                                        />
-                                        <AppRoute
-                                            exact
-                                            path="/Login"
-                                            component={Login}
-                                        />
-                                    </Switch>
+                                                                    <ProtectedRoute
+                                                                        path="/search/:id"
+                                                                        exact={
+                                                                            true
+                                                                        }
+                                                                        component={
+                                                                            Search
+                                                                        }
+                                                                    />
+                                                                    <AppRoute
+                                                                        exact
+                                                                        path="/Schedule"
+                                                                        component={
+                                                                            Schedule
+                                                                        }
+                                                                    />
+                                                                    <AppRoute
+                                                                        exact
+                                                                        path="/Login"
+                                                                        component={
+                                                                            Login
+                                                                        }
+                                                                    />
+                                                                </IonRouterOutlet>
+                                                            </IonContent>
+                                                        </IonSplitPane>
+                                                    </IonCol>
+                                                </IonRow>
+                                            </IonGrid>
+                                        </IonPage>
+                                    </Route>
                                 </IonRouterOutlet>
                             </IonReactRouter>
                         </>

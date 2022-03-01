@@ -16,40 +16,29 @@ const AppRoute : React.FC<RouteProps> = (
             render={(componentProps) => (
                 <>
                     <IonPage>
-                        <>
-                            <IonGrid className="w-screen h-screen flex flex-col relative">
-                                <IonRow>
-                                    <IonCol size="12">
-                                        <HeaderContainer />
-                                    </IonCol>
-                                </IonRow>
-                                <IonRow className="flex-grow">
-                                    <IonCol size="12" className="flex h-full">
-                                        <Sidebar collapsible />
-                                        <IonContent className="h-full">
-											<IonGrid>
-												<IonRow>
-													<IonCol size="12" className="flex justify-center">	
-														{children
-															? typeof children === 'function'
-																? children(componentProps)
-																: children
-															: component
-															? React.createElement(
-																component,
-																componentProps
-															)
-															: render
-															? render(componentProps)
-															: null}
-													</IonCol>
-												</IonRow>
-											</IonGrid>
-                                        </IonContent>
-                                    </IonCol>
-                                </IonRow>
-                            </IonGrid>
-                        </>
+                        <IonContent>
+                        	<IonGrid>
+	                            <IonRow>
+	                                <IonCol
+	                                    size="12"
+	                                    className="flex justify-center"
+	                                >
+	                                    	{children
+		                                        ? typeof children === 'function'
+		                                            ? children(componentProps)
+		                                            : children
+		                                        : component
+		                                        ? React.createElement(
+		                                              component,
+		                                              componentProps
+		                                          )
+		                                        : render
+		                                        ? render(componentProps)
+		                                        : null}
+	                                </IonCol>
+	                            </IonRow>
+	                        </IonGrid>
+                        </IonContent>
                     </IonPage>
                 </>
             )}
