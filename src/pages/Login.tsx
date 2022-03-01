@@ -93,22 +93,31 @@ function Login() {
                                     <p className="font-bold">Welcome to SOL Decoder</p>
 
                                     <ul className="">
-                                        <li>Please join <a href="https://discord.gg/tEa8ZTWv" style={{"textDecoration": "underline"}}>our Discord</a> to get access to the site</li>
-                                        <li>In the future the site will be locked behind ownership of the NFT. Until the NFT releases, you can get access by being whitelisted</li>
+                                        <li>Please join <a href="https://discord.gg/sol-decoder" style={{"textDecoration": "underline"}}>our Discord</a> to get access to the site</li>
+                                        <li>In the future the site will be locked behind ownership of the NFT. Until the NFT releases, you can get access by being whitelisted, or getting a temporary role in the #self-roles channel</li>
                                         <li>View whitelisting requirements in the #whitelist-faq channel</li>
                                     </ul>
                                 </div>
                                 <br/>
 
                                 <div id="security">
-                                    <p className="font-bold">A note on Discord integration</p>
+                                    <p className="font-bold">A note on the Discord status</p>
                                     <ul>
-                                        <li>We require you to login with Discord, so that we can verify you have the proper role(s)</li>
-                                        <li>Note the permissions, seen when you click the Login button:</li>
-                                        <li style={{paddingLeft: "8px"}}>(1) Access your username, avatar, and banner</li>
-                                        <li style={{paddingLeft: "8px"}}>(2) This application cannot read your messages or send messages as you.</li>
-                                        <li>The site can never read any of your Discord messages, and asks for the most limited amount of permissions.</li>
+                                        <li>If the above Discord link doesn't work - it means we are in a closed state</li>
+                                        <li>The Discord will remain closed while we continue to build features & release an Android / iOS app</li>
+                                        <li>You may <a href="https://twitter.com/SOL_Decoder">follow our Twitter here</a> to see when the Discord opens, but also note we haven't yet
+                                            started our marketing push and haven't started posting / advertising our Twitter yet</li>
+
                                     </ul>
+
+                                    {/*<p className="font-bold">A note on Discord integration</p>*/}
+                                    {/*<ul>*/}
+                                    {/*    <li>We require you to login with Discord, so that we can verify you have the proper role(s)</li>*/}
+                                    {/*    <li>Note the permissions, seen when you click the Login button:</li>*/}
+                                    {/*    <li style={{paddingLeft: "8px"}}>(1) Access your username, avatar, and banner</li>*/}
+                                    {/*    <li style={{paddingLeft: "8px"}}>(2) This application cannot read your messages or send messages as you.</li>*/}
+                                    {/*    <li>The site can never read any of your Discord messages, and asks for the most limited amount of permissions.</li>*/}
+                                    {/*</ul>*/}
                                 </div>
 
                             </IonCard>

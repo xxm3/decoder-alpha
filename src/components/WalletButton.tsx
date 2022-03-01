@@ -72,7 +72,6 @@ function WalletButton() {
                 }
                 trigger="click" position={"bottom"} disabled={!walletAddress}>
 
-                {/*TODO: after connecting, the dropdown immediatley shows ... also part of "DC wllet" shows off screen ... also click DC then f5, still connected */}
                 <IonButton
                     color="primary"
                     ref={walletButtonRef}
