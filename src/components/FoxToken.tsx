@@ -895,6 +895,20 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                                            display: false
                                                        },
                                                        title: {display: true, text: tokenClickedOn + " - Price"},
+                                                       // tooltip: {
+                                                       //     enabled: true,
+                                                       //     usePointStyle: true,
+                                                       //     callbacks: {
+                                                       //         // To change title in tooltip
+                                                       //         title: (data: any) => { return data[0].parsed.x },
+                                                       //
+                                                       //         // To change label in tooltip
+                                                       //         label: (data: any) => {
+                                                       //             console.log(data);
+                                                       //             return data.parsed.y === 2 ? "Good" : "Critical"
+                                                       //         }
+                                                       //     },
+                                                       // },
                                                    },
                                                    scales: {
                                                        x: {

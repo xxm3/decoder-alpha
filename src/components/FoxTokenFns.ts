@@ -197,7 +197,7 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
         if(!tokenFoundInData){
             oldNamedAry[o].name = oldNamedAry[o].name + " (not listed in FF anymore)";
             oldNamedAry[o].floorPrice = "";
-            oldNamedAry[o].totalTokenListings = "";
+            // oldNamedAry[o].totalTokenListings = "";
             finalAry.push(oldNamedAry[o]);
         }
     }
