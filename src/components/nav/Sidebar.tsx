@@ -15,7 +15,7 @@ function Sidebar() {
 		</Style>
           <IonList
               lines="none"
-              className={`px-2 h-full border-r max-w-max lg:max-w-none`}
+              className={`px-2 h-full border-r md:max-w-max lg:max-w-none`}
           >
               <NavLink title="Home" icon={homeOutline} to="/" />
               <NavLink

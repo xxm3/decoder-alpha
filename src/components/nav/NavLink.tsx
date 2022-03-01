@@ -38,7 +38,7 @@ function NavLink({ to , icon , title} : Props) {
               }
               trigger="mouseenter"
           >
-              <IonItem className={`items-center ${location.pathname === to ? "active" : ""} hover:opacity-90 space-x-3 my-6 rounded`}>
+              <IonItem className={`items-center ${location.pathname === to ? "active" : ""}  hover:opacity-80 space-x-3 my-6 rounded`}>
                   <IonIcon color="inherit" icon={icon} title={undefined} />
                   <p className="block md:hidden lg:block">{title}</p>
               </IonItem>
