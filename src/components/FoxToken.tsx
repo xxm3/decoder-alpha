@@ -11,7 +11,7 @@ import {
     IonModal,
     IonContent,
     IonHeader,
-    IonToolbar, IonTitle, useIonToast, IonIcon, IonPopover
+    IonToolbar, IonTitle, useIonToast, IonIcon, IonPopover, IonRadioGroup, IonListHeader, IonRadio
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useRef, useState} from 'react';
 import {Table} from 'antd' // https://ant.design/components/table/
@@ -56,6 +56,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
     const local_host_str = 'localhost';
 
     const [popoverOpened, setPopoverOpened] = useState(null);
+    const [chartDateSelected, setChartDateSelected] = useState(null);
 
     const cookies = useMemo(() => new Cookies(), []);
     const [multWalletAryFromCookie, setMultWalletAryFromCookie] = useState(cookies.get('multWalletsAry')); // mult. wallets you have from cookies
@@ -650,7 +651,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                         isOpen={!!popoverOpened} onDidDismiss={() => setPopoverOpened(null)} >
                         <IonContent>
 
-                            <div className="p-3">
+                            <div className="p-2">
 
                                 <h3 className="font-bold pb-1 w-full">Filter Data</h3>
 
@@ -685,7 +686,52 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                     Add custom name
                                 </IonButton>
 
-                                <h3 className="font-bold pb-1 w-full pt-5">Configure Table</h3>
+                                <h3 className="font-bold pb-1 w-full pt-5">Date Format</h3>
+
+                                <IonList>
+
+                                    <IonRadioGroup value={chartDateSelected}>
+                                        {/*<IonListHeader>*/}
+                                        {/*    <IonLabel>*/}
+                                        {/*        <b></b>*/}
+                                        {/*    </IonLabel>*/}
+                                        {/*</IonListHeader>*/}
+
+                                        <IonItem>
+                                            <IonLabel>"2 hours ago"</IonLabel>
+                                            <IonRadio value="cord" />
+                                        </IonItem>
+
+                                        <IonItem>
+                                            <IonLabel>"2022-01-01 12:00"</IonLabel>
+                                            <IonRadio value="duesenberg" />
+                                        </IonItem>
+                                    </IonRadioGroup>
+                                </IonList>
+
+
+                                <h3 className="font-bold pb-1 w-full pt-5">Chart Colors</h3>
+
+                                {/*TODO*/}
+                                <IonItem>
+                                    <IonLabel position="stacked" className="font-bold">Line Color</IonLabel>
+                                    <IonInput onIonChange={(e) => setFormWalletMult(e.detail.value!)}
+                                              value={formWalletMult}
+                                              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>
+                                </IonItem>
+                                <IonItem>
+                                    <IonLabel position="stacked" className="font-bold">Shaded Area Color</IonLabel>
+                                    <IonInput onIonChange={(e) => setFormWalletMult(e.detail.value!)}
+                                              value={formWalletMult}
+                                              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>
+                                </IonItem>
+
+                                {/*<IonButton color="success" className="mt-5"*/}
+                                {/*           // onClick={() => addMultWalletsSubmit()}*/}
+                                {/*>*/}
+                                {/*    Submit*/}
+                                {/*</IonButton>*/}
+
 
                             </div>
                         </IonContent>
