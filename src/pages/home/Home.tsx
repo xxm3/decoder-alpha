@@ -21,6 +21,9 @@ import { ChartData } from 'chart.js';
 import SearchBar from '../../components/SearchBar';
 import NftPriceTable from "../../components/NftPriceTable";
 import FoxToken from "../../components/FoxToken";
+import { AxiosResponse } from 'axios';
+import { useQuery } from 'react-query';
+import SearchedWords from './SearchedWords';
 
 const Home = () => {
 
@@ -33,10 +36,8 @@ const Home = () => {
     const [popularCollections, setPopularCollection] = useState([]); // from ME
 
     const [isLoading, setIsLoading] = useState(false);
-    const [isLoadingWord, setIsLoadingWord] = useState(false);
 
     const [width, setWidth] = useState(window.innerWidth);
-    const [searchedWords, setSearchedWords] = useState([]);
 
     /**
      * Use Effects
@@ -62,7 +63,6 @@ const Home = () => {
 
     useEffect(() => {
         fetchHomePageData();
-        getSearchedWords();
     }, []);
 
     /**
@@ -123,19 +123,9 @@ const Home = () => {
         return moment(time).fromNow();
     }
 
-    const getSearchedWords = () => {
-        setIsLoadingWord(true);
-        instance
-            .get(environment.backendApi + '/getSearchedWords')
-            .then((res) => {
-                if(res.data.data) setSearchedWords(res.data.data)
-                setIsLoadingWord(false);
-            })
-            .catch((error) => {
-                setIsLoadingWord(false);
-                console.error("Error while fetching searched records ", error);
-            });
-    }
+    
+
+    
 
     /**
      * Renders
@@ -308,22 +298,9 @@ const Home = () => {
                     <NftPriceTable foo='' onSubmit={doSearch} /> 
                 </div>
 
-                {/* Searched word section */}
-                <div className='bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4'>
-                    {/* <div className={`font-bold pb-1 ${width <= 640 ? 'w-full' : 'w-56 '}`}>Recent searches by others</div> */}
-                    <div className={`font-bold pb-1`}>Recent searches by others</div>
-                    <div>
-                        {
-                            isLoadingWord ? 
-                            <div className="flex justify-center items-center">
-                                <Loader />
-                            </div> :
-                            searchedWords.map((word,i) => (
-                                <p key={i}>{word}</p>
-                            ))
-                        }
-                    </div>
-                </div>
+                {/* Components to display the searched words history */}
+                <SearchedWords />
+                    
             </div>
 
             
