@@ -8,9 +8,10 @@ interface Props {
 	to : string;
 	icon : string;
 	title : string;
+	isIconSvg ?: boolean;
 }
 
-function NavLink({ to , icon , title} : Props) {
+function NavLink({ to , icon , title, isIconSvg = false} : Props) {
 	const location = useLocation();
   return (
       <Link to={to}>
@@ -39,7 +40,7 @@ function NavLink({ to , icon , title} : Props) {
               trigger="mouseenter"
           >
               <IonItem className={`items-center ${location.pathname === to ? "active" : ""}  hover:opacity-80 space-x-3 my-6 rounded`}>
-                  <IonIcon color="inherit" icon={icon} title={undefined} />
+                 { isIconSvg ? <img src="/assets/icons/FoxTokenLogo.svg" className="h-6 w-6" alt="FoxToken"/> : <IonIcon color="inherit" icon={icon} title={undefined} />}
                   <p className="block md:hidden lg:block">{title}</p>
               </IonItem>
           </Tooltip>

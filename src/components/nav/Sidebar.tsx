@@ -23,7 +23,7 @@ function Sidebar() {
                   icon={calendarClearOutline}
                   to="/schedule"
               />
-              <NavLink title="Fox Token" icon={logoFirefox} to="/foxtoken" />
+              <NavLink title="Fox Token" icon="/assets/icons/FoxTokenLogo.svg" to="/foxtoken" isIconSvg={true}/>
           </IonList>
       </>
   );
