@@ -27,12 +27,79 @@ If you haven't done that, then you can skip that by going to environmenet.js, an
 
 ### How to code certain things
 
+DO put new things into COMPONENTS to make the code easier to read / manage
+
+DON'T use :any
+
+DON'T use ts-ignore
+
 To link to other pages:
 `<IonRouterLink href="/schedule" className="pr-7 underline text-inherit">Today's Mints</IonRouterLink>`
 
+
 To make calls to the backend:
-- use React query for data fetching. Look at how the Search page implements React Query to understand how it works
+- use React query for data fetching. Look at how the Search.tsx page implements React Query to understand how it works
 - React query reduces a lot of work that goes into managing loading, error states , caching, not sending the same requests at the same time, etc
+
+For example:
+```
+const fetchSearchMessages = async () => {
+        try {
+            const { data } = await instance.post<SearchResponse>(
+                '/searchMessages/',
+                {
+                    word: searchText,
+                    pageNumber: currentPage
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            return data;
+        } catch (e) {
+            console.error('try/catch in Search.tsx: ', e);
+            const error = e as Error & { response?: AxiosResponse };
+
+            if (error && error.response) {
+                throw new Error(String(error.response.data.body));
+            } else {
+                throw new Error('Unable to connect. Please try again later');
+            }
+        }
+    }
+
+const messageQuery = useQuery([searchText,currentPage], fetchSearchMessages, {
+        keepPreviousData : true,
+        select : (data: any) => {
+            // in case couldn't search on this
+
+            if (data?.error && data.body) {
+                throw new Error(String(data.body));
+            }
+            if(data?.totalCount > 100) {
+                data.hasMore = true;
+            }
+            return {
+                ...data,
+            }
+        },
+        retry : false
+    })
+
+# error handling
+messageQuery.isError || messageQuery?.data?.error
+
+# loading
+ {graphQuery?.isFetching ? <div className=" m-16 flex justify-center items-center"><Loader /></div> :
+
+# data
+{(messageQuery?.data?.totalCount
+
+```
+
+
 
 To do dropdowns:
 - See WalletButton.tsx and how it uses `<Tooltip>`

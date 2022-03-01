@@ -29,9 +29,9 @@ import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
 import Cookies from "universal-cookie";
+import {getLiveFoxTokenData} from "./FoxTokenFns";
 
 /**
- * TODO
  * IF WANT TO TEST THIS PAGE
  * - be logged out of wallet and test things
  * - be logged out of wallet, and add a custom wallet
@@ -44,8 +44,7 @@ interface FoxToken {
     onSubmit(bar: string): unknown;
 }
 
-function FoxToken({ foo, onSubmit }: FoxToken) {
-
+function FoxToken({foo, onSubmit}: FoxToken) {
 
     /**
      * Adding multiple wallets
@@ -64,7 +63,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     // in the modal for multiple wallets - submit button clicked
     const addMultWalletsSubmit = () => {
 
-        if(!formWalletMult || formWalletMult.length !== 44){
+        if (!formWalletMult || formWalletMult.length !== 44) {
             present({
                 message: 'Error - please enter a single, valid SOL wallet address',
                 color: 'danger',
@@ -75,14 +74,14 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
         setFormLoadingMultWallet(true);
 
-        try{
+        try {
             // let existingMultWalletsAry = cookies.get('multWalletsAry');
             // didn't set any yet
-            if(!multWalletAryFromCookie){
+            if (!multWalletAryFromCookie) {
                 cookies.set("multWalletsAry", formWalletMult);
                 setMultWalletAryFromCookie(formWalletMult);
                 // update cookie
-            }else{
+            } else {
                 const newVal = multWalletAryFromCookie + ',' + formWalletMult;
                 cookies.set("multWalletsAry", newVal.toString());
                 setMultWalletAryFromCookie(newVal);
@@ -100,7 +99,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 duration: 5000
             });
 
-        }catch(err){
+        } catch (err) {
             console.error(err);
             setFormLoadingMultWallet(false); // loading false
 
@@ -113,17 +112,32 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     }
 
     const resetMultWallets = () => {
-        if(window.confirm("Are you sure you want to reset all of your stored wallets?")){
-            cookies.remove("multWalletsAry");
 
-            present({
-                message: 'Successfully removed all wallets.',
-                color: 'success',
-                duration: 5000
-            });
+        // @ts-ignore
+        present({
+            cssClass: '',
+            header: 'Delete Wallets?',
+            message: 'Are you sure you want to reset all of your stored wallets?',
+            buttons: [
+                'Cancel',
+                {
+                    text: 'Ok', handler: () => {
 
-            setMultWalletAryFromCookie(null);
-        }
+                        cookies.remove("multWalletsAry");
+
+                        present({
+                            message: 'Successfully removed all wallets.',
+                            color: 'success',
+                            duration: 5000
+                        });
+
+                        setMultWalletAryFromCookie(null);
+
+                    }
+                },
+            ],
+        });
+
     }
 
 
@@ -134,20 +148,20 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
     // for setting height of chart, depending on what width browser is
     const tableHeight = useMemo(() => {
-        if(width > 1536) return 150;
-        if(width > 1280) return 180;
-        if(width > 1024) return 220;
-        if(width > 768) return 260;
-        if(width > 640) return 280;
+        if (width > 1536) return 150;
+        if (width > 1280) return 180;
+        if (width > 1024) return 220;
+        if (width > 768) return 260;
+        if (width > 640) return 280;
         return 330;
     }, [width]);
 
-    const [tableData, setTableData] = useState([]);
+    const [tableData, setTableData]: any = useState([]);
     const [fullTableData, setFullTableData] = useState([]);
     const [tokenClickedOn, setTokenClickedOn] = useState();
     const [mySolBalance, setMySolBalance] = useState("");
 
-    const [mySplTokens, setMySplTokens] = useState([]);
+    const [mySplTokens, setMySplTokens]: any = useState([]);
     const firstUpdate = useRef(true);
 
     const [viewMyTokensClicked, setViewMyTokensClicked] = useState(false);
@@ -157,7 +171,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
     const smallWidthpx = 768;
 
-    const defaultGraph : ChartData<any, string> = {
+    const defaultGraph: ChartData<any, string> = {
         labels: [],
         datasets: [],
     };
@@ -166,7 +180,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
 
     const columns: ColumnsType<any> = [
-        { title: 'Token', key: 'token', // dataIndex: 'token',
+        {
+            title: 'Token', key: 'token', // dataIndex: 'token',
             render: record => (
                 <>
                     <span hidden={width < smallWidthpx}>{record.token}</span>
@@ -178,36 +193,43 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             // width: 130,
             responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
-        { title: 'Price', key: 'floorPrice', dataIndex: 'floorPrice', width: 100,
+        {
+            title: 'Price', key: 'floorPrice', dataIndex: 'floorPrice', width: 100,
             sorter: (a, b) => a.floorPrice - b.floorPrice,
             responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
-        { title: 'Name', key: 'name', dataIndex: 'name',
+        {
+            title: 'Name', key: 'name', dataIndex: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
             width: 150,
             responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
-        { title: 'Total Token Listings', key: 'totalTokenListings', dataIndex: 'totalTokenListings', width: 250,
+        {
+            title: 'Total Token Listings', key: 'totalTokenListings', dataIndex: 'totalTokenListings', width: 250,
             sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,
             responsive: ['md'], // Will not be displayed below 768px
         },
-        { title: 'View Chart', key: '', width: 150,
+        {
+            title: 'View Chart', key: '', width: 150,
             render: record => (
-                <span onClick={() => viewChart(record.token, record.name)} className="cursor-pointer big-emoji">📈</span>
+                <span onClick={() => viewChart(record.token, record.name)}
+                      className="cursor-pointer big-emoji">📈</span>
             ),
             responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
-        { title: 'View in Explorer', key: '', width: 150,
+        {
+            title: 'View in Explorer', key: '', width: 150,
             render: record => (
-                <a target="_blank" className="no-underline big-emoji" href={'https://explorer.solana.com/address/' + record.token} >🌐</a>
+                <a target="_blank" className="no-underline big-emoji"
+                   href={'https://explorer.solana.com/address/' + record.token}>🌐</a>
             ),
             responsive: ['md'], // Will not be displayed below 768px
         },
-        { title: 'Which My Wallet(s)', key: 'whichMyWallets', width: 180, dataIndex: 'whichMyWallets',
+        {
+            title: 'Which Of My Wallet(s)', key: 'whichMyWallets', width: 180, dataIndex: 'whichMyWallets',
             responsive: ['md'], // Will not be displayed below 768px
             // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
         }
-
     ];
 
     /**
@@ -222,6 +244,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         function resizeWidth() {
             setWidth(window.innerWidth);
         }
+
         window.addEventListener('resize', resizeWidth);
         return () => window.removeEventListener('resize', resizeWidth);
     }, []);
@@ -247,9 +270,9 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             .get(environment.backendApi + '/receiver/foxTokenHistory?token=' + token)
             .then((res) => {
 
-                const labels = res.data.map( (el: { createdAt: any; }) => moment(el.createdAt).fromNow());
+                const labels = res.data.map((el: { createdAt: any; }) => moment(el.createdAt).fromNow());
 
-                const lineData = res.data.map( (el: { floorPrice: any; }) => parseFloat(el.floorPrice));
+                const lineData = res.data.map((el: { floorPrice: any; }) => parseFloat(el.floorPrice));
                 // console.log(lineData);
                 let datasetsAry = [{
                     type: 'line' as const,
@@ -260,7 +283,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                     data: lineData,
                 }];
 
-                const listingsData = res.data.map( (el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings));
+                const listingsData = res.data.map((el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings));
                 // console.log(listingsData);
                 let datasetsAryListings = [{
                     type: 'line' as const,
@@ -304,90 +327,113 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
         setTableData([]);
 
-        instance
-            .get(environment.backendApi + '/receiver/foxTokenAnalysis')
-            .then((res) => {
+        const liveData = await getLiveFoxTokenData();
+        setTableData(liveData)
+        console.log(liveData); // TODO
 
-                const data = res.data.data;
-                // const newData = [];
-                //
-                //
-                // for(let i in data){
-                //     if(data[i].customName){
-                //         newData.push(data[i]);
-                //     }
-                // }
-
-                // console.log(mySplTokens);
-
-                // loop through table data (all fox tokens)
-                for(let i in data){
-                    // if match, then ADD data
-                    for(let y in mySplTokens){
-                        // @ts-ignore
-                        if(mySplTokens[y].token === data[i].token){
-                            // @ts-ignore
-                            if(!data[i].whichMyWallets){ data[i].whichMyWallets = shortenedWallet(mySplTokens[y].myWallet); }
-                            // @ts-ignore
-                            else{ data[i].whichMyWallets += ", " +  shortenedWallet(mySplTokens[y].myWallet); }
-                        }
-                    }
-                }
-
-
-                setTableData(data);
-                setFullTableData(data);
-            })
-            .catch((err) => {
-                console.error("error when getting fox token data: " + err);
-            });
+        // instance
+        //     .get(environment.backendApi + '/receiver/foxTokenAnalysis')
+        //     .then((res) => {
+        //
+        //         const data = res.data.data;
+        //         // const newData = [];
+        //         //
+        //         //
+        //         // for(let i in data){
+        //         //     if(data[i].customName){
+        //         //         newData.push(data[i]);
+        //         //     }
+        //         // }
+        //
+        //         // console.log(mySplTokens);
+        //
+        //         // loop through table data (all fox tokens)... to eventually add which of these are your SPL tokens
+        //         for (let i in data) {
+        //             // loop through user tokens
+        //             for (let y in mySplTokens) {
+        //                 // if match
+        //                 // @ts-ignore
+        //                 if (mySplTokens[y].token === data[i].token) {
+        //                     // then ADD data
+        //                     // @ts-ignore
+        //                     if (!data[i].whichMyWallets) {
+        //                         data[i].whichMyWallets = shortenedWallet(mySplTokens[y].myWallet);
+        //                     }
+        //                     // @ts-ignore
+        //                     else {
+        //                         data[i].whichMyWallets += ", " + shortenedWallet(mySplTokens[y].myWallet);
+        //                     }
+        //
+        //                     break;
+        //                 }
+        //             }
+        //         }
+        //
+        //         setTableData(data);
+        //         setFullTableData(data);
+        //     })
+        //     .catch((err) => {
+        //         console.error("error when getting fox token data: " + err);
+        //     });
     }
 
 
     // give a wallet ... return all spl tokens in it
     const getSplFromWallet = async (wallet: string) => {
 
-        // console.log("going out to " + wallet);
+        try {
+            // console.log("going out to " + wallet);
 
-        // https://docs.solana.com/developing/clients/javascript-reference
-        let base58publicKey = new solanaWeb3.PublicKey(wallet.toString());
+            // https://docs.solana.com/developing/clients/javascript-reference
+            let base58publicKey = new solanaWeb3.PublicKey(wallet.toString());
 
-        const connection = new solanaWeb3.Connection(
-            solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed',
-        );
+            const connection = new solanaWeb3.Connection(
+                solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed',
+            );
 
-        // let account = await connection.getAccountInfo(base58publicKey);
-        // console.log(account?.data);
-        // https://github.com/solana-labs/solana/blob/master/web3.js/examples/get_account_info.js
-        let balance = await connection.getBalance(base58publicKey); // SOL balance
-        balance = balance / 1000000000;
-        // @ts-ignore
-        setMySolBalance(balance);
+            // let account = await connection.getAccountInfo(base58publicKey);
+            // console.log(account?.data);
+            // https://github.com/solana-labs/solana/blob/master/web3.js/examples/get_account_info.js
+            let balance = await connection.getBalance(base58publicKey); // SOL balance
+            balance = balance / 1000000000;
+            // @ts-ignore
+            setMySolBalance(balance);
 
-        // https://github.com/michaelhly/solana-py/issues/48
-        let tokenAccounts = await connection.getParsedTokenAccountsByOwner(
-            base58publicKey,
-            {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
-        );
+            // https://github.com/michaelhly/solana-py/issues/48
+            let tokenAccounts = await connection.getParsedTokenAccountsByOwner(
+                base58publicKey,
+                {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
+            );
 
-        let mySplTokensTemporaryAgainAgain: any = [];
+            let mySplTokensTemporaryAgainAgain: any = [];
 
-        for (let i in tokenAccounts.value) {
-            if (tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0) {
-                // console.log(tokenAccounts.value[i]);
-                mySplTokensTemporaryAgainAgain.push({
-                    token: tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint,
-                    myWallet: wallet
-                });
+            for (let i in tokenAccounts.value) {
+                if (tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0) {
+                    // console.log(tokenAccounts.value[i]);
+                    mySplTokensTemporaryAgainAgain.push({
+                        token: tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint,
+                        myWallet: wallet
+                    });
+                }
             }
+
+            return mySplTokensTemporaryAgainAgain;
+
+        } catch (err) {
+            present({
+                message: 'Error when getting your Whitelist tokens from your wallet',
+                color: 'danger',
+                duration: 5000
+            });
+
+            return [];
         }
 
-        return mySplTokensTemporaryAgainAgain;
     }
 
     // https://github.com/solana-labs/solana-program-library/blob/master/token/js/examples/create_mint_and_transfer_tokens.ts
     // https://docs.solana.com/es/developing/clients/jsonrpc-api#gettokenaccountsbyowner
-    const getUserSpls = async() => {
+    const getUserSpls = async () => {
         let mySplTokensTemporary: any = [];
 
         // if no wallet is logged in ... OR didn't set multiple wallets in a cookie, then return table and do nothing else
@@ -397,16 +443,17 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
         // }
 
         // first try with the wallet address we got logged in
-        if(walletAddress){
+        if (walletAddress) {
             // @ts-ignore
             mySplTokensTemporary = mySplTokensTemporary.concat(await getSplFromWallet(walletAddress));
         }
 
         // now go through the wallets in cookies
-        if(multWalletAryFromCookie){
-            for(let i in multWalletAryFromCookie.split(",")){
+        if (multWalletAryFromCookie) {
+            for (let i in multWalletAryFromCookie.split(",")) {
                 const tempWall = multWalletAryFromCookie.split(",")[i];
-                if(tempWall.length === 44){
+                // make sure it's length of a sol wallet ... and that its not the connected wallet
+                if (tempWall.length === 44 && tempWall !== walletAddress) {
                     mySplTokensTemporary = mySplTokensTemporary.concat(await getSplFromWallet(tempWall));
                 }
 
@@ -420,23 +467,38 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     }
 
     // load table data, after we load in user tokens
+    // isn't called on local host, see below useEffect
     useEffect(() => {
         if (firstUpdate.current) {
             firstUpdate.current = false;
             return;
         }
 
-        fetchTableData();
+        // only fetch data when NOT on local host ... after spl tokens is updated
+        if (window.location.href.indexOf('localhost') === -1) {
+            fetchTableData();
+        }
+
     }, [mySplTokens]);
 
     // call on load, when cookie array set
     useEffect(() => {
-        getUserSpls();
+
+        // however DON'T do this in local host (will do this elsewhere ... since get RPC blocked)
+        if (window.location.href.indexOf('localhost') === -1) {
+            getUserSpls();
+        } else {
+            fetchTableData();
+        }
+
+
     }, [multWalletAryFromCookie]);
     // also call when new wallet is connected to
     useEffect(() => {
-        getUserSpls();
-    // @ts-ignore
+        if (window.location.href.indexOf('localhost') === -1) {
+            getUserSpls();
+        }
+        // @ts-ignore
     }, [walletAddress]);
 
     /**
@@ -467,15 +529,15 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
             // console.log(resp);
 
-            if(resp.data.error){
+            if (resp.data.error) {
                 setFormLoading(false);
-                if(resp.data.message){
+                if (resp.data.message) {
                     setFormErrMsg(resp.data.message);
-                }else{
+                } else {
                     setFormErrMsg('An error occurred. Please contact us if this continues to happen');
                 }
 
-            }else{
+            } else {
                 setFormLoading(false);
                 setFormToken('');
                 setFormName('');
@@ -505,12 +567,17 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
     };
 
     // Viewing MY tokens - filter the table
-    const viewMyTokens = (wantViewTokens: boolean) => {
+    const viewMyTokens = async (wantViewTokens: boolean) => {
 
         // user wants to see MY tokens
-        if(wantViewTokens){
+        if (wantViewTokens) {
 
-            if(!multWalletAryFromCookie && !walletAddress){
+            // see other local host on here to see why
+            if (window.location.href.indexOf('localhost') !== -1) {
+                await getUserSpls();
+            }
+
+            if (!multWalletAryFromCookie && !walletAddress) {
                 present({
                     message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add it manually',
                     color: 'danger',
@@ -520,7 +587,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
             }
 
             // make sure they have tokens
-            if(mySplTokens.length === 0){
+            if (mySplTokens.length === 0) {
 
                 // show toast
                 present({
@@ -530,7 +597,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 });
                 return;
 
-            }else{
+            } else {
 
                 setViewMyTokensClicked(true);
 
@@ -538,17 +605,31 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 let newTableData: any = [];
 
                 // loop through table data (all fox tokens)
-                for(let i in tableData){
+                for (let i in tableData) {
                     // if match, then push
-                    for(let y in mySplTokens){
+                    for (let y in mySplTokens) {
                         // @ts-ignore
-                        if(mySplTokens[y].token === tableData[i].token){
+                        if (mySplTokens[y].token === tableData[i].token) {
+
+                            if (window.location.href.indexOf('localhost') !== -1) {
+                                // then ADD data
+                                // @ts-ignore
+                                if (!tableData[i].whichMyWallets) {
+                                    tableData[i].whichMyWallets = shortenedWallet(mySplTokens[y].myWallet);
+                                }
+                                // @ts-ignore
+                                else {
+                                    tableData[i].whichMyWallets += ", " + shortenedWallet(mySplTokens[y].myWallet);
+                                }
+                            }
+
                             newTableData.push(tableData[i]);
+                            break;
                         }
                     }
                 }
 
-                if(newTableData.length === 0){
+                if (newTableData.length === 0) {
                     present({
                         message: 'None of your tokens are also listed on FF Token Market :(',
                         color: 'danger',
@@ -560,8 +641,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 setTableData(newTableData);
             }
 
-        // user wants to see ALL tokens
-        }else{
+            // user wants to see ALL tokens
+        } else {
             setViewMyTokensClicked(false);
 
             setTableData(fullTableData);
@@ -585,7 +666,7 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                     <span hidden={width <= smallWidthpx} className="float-right">
                         <IonButton color="success" className="text-sm small-btn pl-5"
                                    onClick={() => clickedAddName(true)}
-                                   // data-tip="Add a custom name to one of the nameless Fox Tokens, if you know it"
+                            // data-tip="Add a custom name to one of the nameless Fox Tokens, if you know it"
                         >
                             ➕ Add custom name
                         </IonButton>
@@ -593,9 +674,9 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                         <IonButton color="secondary" className="text-sm small-btn ml-5"
                                    onClick={() => viewMyTokens(true)}
                                    hidden={viewMyTokensClicked}
-                                   // data-tip="Filter the table to view only your tokens"
+                            // data-tip="Filter the table to view only your tokens"
                         >
-                            <IonIcon icon={wallet} className="pr-1" />
+                            <IonIcon icon={wallet} className="pr-1"/>
                             View My Tokens
                         </IonButton>
                         <IonButton color="secondary" className="text-sm small-btn ml-5"
@@ -603,15 +684,15 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                    hidden={!viewMyTokensClicked}
                                    data-tip="View All Tokens"
                         >
-                            <IonIcon icon={wallet} className="pr-1" />
+                            <IonIcon icon={wallet} className="pr-1"/>
                             View All Tokens
                         </IonButton>
 
                         <IonButton color="secondary" className="text-sm small-btn ml-5"
                                    onClick={() => clickedMultWall(true)}
-                                   // data-tip="Add multiple wallets "
+                            // data-tip="Add multiple wallets "
                         >
-                            <IonIcon icon={wallet} className="pr-1" />
+                            <IonIcon icon={wallet} className="pr-1"/>
                             Add Mult Wallets
                         </IonButton>
 
@@ -623,14 +704,14 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
                         <a hidden={viewMyTokensClicked}
                            data-tip="Filter the table to view only your tokens"
-                            onClick={() => viewMyTokens(true)} className="pl-3">
-                            <IonIcon icon={wallet} className="pr-1" />
+                           onClick={() => viewMyTokens(true)} className="pl-3">
+                            <IonIcon icon={wallet} className="pr-1"/>
                         </a>
 
                          <a hidden={!viewMyTokensClicked}
                             onClick={() => viewMyTokens(false)} className="pl-3"
                             data-tip="View All Tokens">
-                            <IonIcon icon={wallet} className="pr-1" />
+                            <IonIcon icon={wallet} className="pr-1"/>
                         </a>
                     </span>
 
@@ -659,7 +740,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
                     <IonContent className="">
 
-                        <div className="ml-12 mr-12 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl" >
+                        <div
+                            className="ml-12 mr-12 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                             <div className="text-lg  font-medium">
                                 <p>This is used in conjuction with the "View My Tokens" button,
                                     where you can filter the Fox Token Market table to show only tokens in your wallet.
@@ -668,12 +750,12 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                         </div>
 
                         <div hidden={!multWalletAryFromCookie}
-                            className="ml-12 mr-12 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl" >
+                             className="ml-12 mr-12 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                             <div className="text-lg  font-medium">
                                 <span className="font-bold">Wallets Added:</span>
                                 <ul>
                                     {multWalletAryFromCookie ?
-                                        multWalletAryFromCookie.split(',').map(function(wallet: any){
+                                        multWalletAryFromCookie.split(',').map(function (wallet: any) {
                                             return <li>{wallet}</li>;
                                         })
                                         : ''}
@@ -734,13 +816,16 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
 
                     <IonContent className="">
 
-                        <div className="ml-12 mr-12 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl" >
+                        <div
+                            className="ml-12 mr-12 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                             <div className="text-lg  font-medium">
-                                <p>If a token on Fox Token Market doesn't have an official name yet, and you know for certain what NFT the token is for,
+                                <p>If a token on Fox Token Market doesn't have an official name yet, and you know for
+                                    certain what NFT the token is for,
                                     then you can use the below form to add that data</p>
                                 <p className="mt-3">Your discord name will be recorded when submitting the form.
-                                Those abusing the service will receive such punishments as having your account banned from entering data,
-                                with severe violations being permanently muted in the Discord.</p>
+                                    Those abusing the service will receive such punishments as having your account
+                                    banned from entering data,
+                                    with severe violations being permanently muted in the Discord.</p>
                             </div>
                         </div>
 
@@ -770,7 +855,8 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                                 <p className="text-lg text-red-700 font-medium">
                                     <b>{formErrMsg}</b>
                                 </p>
-                                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                                <span
+                                    className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                                     !
                                 </span>
                             </div>
@@ -780,128 +866,130 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                 </IonModal>
 
                 <div>
-                {
-                    !tableData.length
-                        ?   <div className="pt-10 flex justify-center items-center">
-                                <Loader />
+                    {
+                        !tableData.length
+                            ? <div className="pt-10 flex justify-center items-center">
+                                <Loader/>
                             </div>
-                        : <div className=" ">
+                            : <div className=" ">
 
-                            {/*<IonItem style={{"width": "250px"}}>*/}
-                            {/*    <IonLabel>Show Verified Only</IonLabel>*/}
-                            {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
-                            {/*</IonItem>*/}
+                                {/*<IonItem style={{"width": "250px"}}>*/}
+                                {/*    <IonLabel>Show Verified Only</IonLabel>*/}
+                                {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
+                                {/*</IonItem>*/}
 
-                            <div hidden={width <= smallWidthpx}>
-                                {/* Desktop version */}
-                                <Table
-                                    className='pt-2 w-full'
-                                    key={'name'}
-                                    dataSource={tableData}
-                                    columns={columns}
-                                    bordered
-                                    scroll={{y: 400}}
-                                    // scroll={{y: 22}} // if want show it off / shill
+                                <div hidden={width <= smallWidthpx}>
+                                    {/* Desktop version */}
+                                    <Table
+                                        className='pt-2 w-full'
+                                        key={'name'}
+                                        dataSource={tableData}
+                                        columns={columns}
+                                        bordered
+                                        scroll={{y: 400}}
+                                        // scroll={{y: 22}} // if want show it off / shill
 
-                                    pagination={false}
-                                    style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
-                                />
-                            </div>
-                            <div hidden={width > smallWidthpx}>
-
-                                {/*Mobile Version*/}
-                                <Table
-                                    className='pt-2 w-full'
-                                    key={'name'}
-                                    dataSource={tableData}
-                                    columns={columns}
-                                    bordered
-                                    // scroll={{x: 'max-content'}}
-
-                                    // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
-                                    scroll={{x: 'max-content', y: 400}}
-
-                                    pagination={false}
-                                    style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
-                                />
-
-                            </div>
-
-                            <div className="gap-4 mb-4 grid grid-cols-12 mt-3"
-                                 // @ts-ignore
-                                 hidden={foxLineData.labels.length === 0}>
-                                <div className='chart' >
-                                    <Chart type='line'
-                                       // @ts-ignore
-                                       data={foxLineData} height={tableHeight}
-                                       options={{
-                                           responsive: true,
-                                           maintainAspectRatio: true,
-                                           plugins: {
-                                               legend: {
-                                                   display: false
-                                               },
-                                               title: { display: true, text: tokenClickedOn + " - Price" },
-                                           },
-                                           scales: {
-                                               x: {
-                                                   ticks: {
-                                                       autoSkip: true,
-                                                       maxTicksLimit: 8
-                                                   }
-                                               },
-                                               y: {
-                                                   suggestedMin: 0,
-                                               },
-                                           }
-                                       }} />
+                                        pagination={false}
+                                        style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
+                                    />
                                 </div>
-                                <div className="chart">
-                                    <Chart type='line'
-                                       data={foxLineListingsData} height={tableHeight}
-                                       options={{
-                                           responsive: true,
-                                           maintainAspectRatio: true,
-                                           plugins: {
-                                               legend: {
-                                                   display: false
-                                               },
-                                               title: { display: true, text: 'Total Token Listings'},
-                                           },
-                                           scales: {
-                                               x: {
-                                                   ticks: {
-                                                       autoSkip: true,
-                                                       maxTicksLimit: 8
-                                                   }
-                                               },
-                                               y: {
-                                                   suggestedMin: 0,
-                                               },
-                                           }
-                                       }} />
+                                <div hidden={width > smallWidthpx}>
+
+                                    {/*Mobile Version*/}
+                                    <Table
+                                        className='pt-2 w-full'
+                                        key={'name'}
+                                        dataSource={tableData}
+                                        columns={columns}
+                                        bordered
+                                        // scroll={{x: 'max-content'}}
+
+                                        // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
+                                        scroll={{x: 'max-content', y: 400}}
+
+                                        pagination={false}
+                                        style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
+                                    />
+
                                 </div>
+
+                                <div className="gap-4 mb-4 grid grid-cols-12 mt-3"
+                                    // @ts-ignore
+                                     hidden={foxLineData.labels.length === 0}>
+                                    <div className='chart'>
+
+                                        <Chart type='line'
+                                            // @ts-ignore
+                                               data={foxLineData} height={tableHeight}
+                                               options={{
+                                                   responsive: true,
+                                                   maintainAspectRatio: true,
+                                                   plugins: {
+                                                       legend: {
+                                                           display: false
+                                                       },
+                                                       title: {display: true, text: tokenClickedOn + " - Price"},
+                                                   },
+                                                   scales: {
+                                                       x: {
+                                                           ticks: {
+                                                               autoSkip: true,
+                                                               maxTicksLimit: 8
+                                                           }
+                                                       },
+                                                       y: {
+                                                           suggestedMin: 0,
+                                                       },
+                                                   }
+                                               }}/>
+                                    </div>
+                                    <div className="chart">
+                                        <Chart type='line'
+                                               data={foxLineListingsData} height={tableHeight}
+                                               options={{
+                                                   responsive: true,
+                                                   maintainAspectRatio: true,
+                                                   plugins: {
+                                                       legend: {
+                                                           display: false
+                                                       },
+                                                       title: {display: true, text: 'Total Token Listings'},
+                                                   },
+                                                   scales: {
+                                                       x: {
+                                                           ticks: {
+                                                               autoSkip: true,
+                                                               maxTicksLimit: 8
+                                                           }
+                                                       },
+                                                       y: {
+                                                           suggestedMin: 0,
+                                                       },
+                                                   }
+                                               }}/>
+                                    </div>
+                                </div>
+
+                                <br/>
+
                             </div>
-
-                            <br/>
-
-                        </div>
-                }
+                    }
                 </div>
 
-                <ReactTooltip />
+                <ReactTooltip/>
 
                 <div hidden={true}
                      className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
                     <div className={`font-bold pb-3 w-full text-lg`}>Fox Token - Price Alerts</div>
 
                     <div>
-                        <label className={`font-bold pb-1 w-full`} htmlFor="">Get an alert when any of your WL tokens lists over a certain price</label>
+                        <label className={`font-bold pb-1 w-full`} htmlFor="">Get an alert when any of your WL tokens
+                            lists over a certain price</label>
 
                         <IonList>
                             <b>Wallet Address</b>
                             <IonItem>
-                                <IonInput placeholder="Enter Wallet Address to Monitor" ></IonInput>
+                                <IonInput placeholder="Enter Wallet Address to Monitor"></IonInput>
                                 {/* value={text} onIonChange={e => setText(e.detail.value!)} */}
                             </IonItem>
                         </IonList>
@@ -909,12 +997,12 @@ function FoxToken({ foo, onSubmit }: FoxToken) {
                         <IonList>
                             <b>Floor price of any of your WL tokens before alert</b>
                             <IonItem>
-                                <IonInput placeholder="Enter price" ></IonInput>
+                                <IonInput placeholder="Enter price"></IonInput>
                                 {/* value={text} onIonChange={e => setText(e.detail.value!)} */}
                             </IonItem>
                         </IonList>
 
-                        <IonButton color="success" className="text-sm" >
+                        <IonButton color="success" className="text-sm">
                             Submit
                         </IonButton>
                         <br/><br/>
