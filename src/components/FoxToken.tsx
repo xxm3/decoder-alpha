@@ -11,7 +11,7 @@ import {
     IonModal,
     IonContent,
     IonHeader,
-    IonToolbar, IonTitle, useIonToast, IonIcon
+    IonToolbar, IonTitle, useIonToast, IonIcon, IonPopover
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useRef, useState} from 'react';
 import {Table} from 'antd' // https://ant.design/components/table/
@@ -24,7 +24,7 @@ import {Chart} from "react-chartjs-2";
 import {getDailyCountData} from "../util/charts";
 import moment from "moment";
 import * as solanaWeb3 from '@solana/web3.js';
-import {wallet} from "ionicons/icons";
+import {addCircleOutline, addOutline, albumsOutline, cloud, cog, wallet} from "ionicons/icons";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
@@ -55,11 +55,14 @@ function FoxToken({foo, onSubmit}: FoxToken) {
 
     const local_host_str = 'localhost';
 
+    const [popoverOpened, setPopoverOpened] = useState(null);
+
     const cookies = useMemo(() => new Cookies(), []);
     const [multWalletAryFromCookie, setMultWalletAryFromCookie] = useState(cookies.get('multWalletsAry')); // mult. wallets you have from cookies
     // clicked link to add multiple wallets
     const clickedMultWall = (val: boolean) => {
         setAddMultWallModalOpen(val);
+        setPopoverOpened(null);
     }
 
     // in the modal for multiple wallets - submit button clicked
@@ -214,7 +217,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
             responsive: ['md'], // Will not be displayed below 768px
         },
         {
-            title: 'View Chart', key: '', width: 150,
+            title: 'View Chart', key: 'viewChart', width: 150,
             render: record => (
                 <span onClick={() => viewChart(record.token, record.name)}
                       className="cursor-pointer big-emoji">📈</span>
@@ -222,7 +225,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
             responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
-            title: 'View in Explorer', key: '', width: 150,
+            title: 'View in Explorer', key: 'viewExplorer', width: 150,
             render: record => (
                 <a target="_blank" className="no-underline big-emoji"
                    href={'https://explorer.solana.com/address/' + record.token}>🌐</a>
@@ -486,6 +489,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
     const [present, dismiss] = useIonToast();
     const clickedAddName = (val: boolean) => {
         setAddNameModalOpen(val);
+        setPopoverOpened(null);
     }
 
     // submit form to add new wallet
@@ -534,6 +538,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
 
     // Viewing MY tokens - filter the table
     const viewMyTokens = async (wantViewTokens: boolean) => {
+        setPopoverOpened(null);
 
         // user wants to see MY tokens
         if (wantViewTokens) {
@@ -619,6 +624,8 @@ function FoxToken({foo, onSubmit}: FoxToken) {
      * Renders
      */
 
+    // @ts-ignore
+    // @ts-ignore
     return (
         <>
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
@@ -628,58 +635,61 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                         Fox Token Market - Analysis
                     </a>
 
-                    {/*DESKTOP*/}
-                    <span hidden={width <= smallWidthpx} className="float-right">
-                        <IonButton color="success" className="text-sm small-btn pl-5"
-                                   onClick={() => clickedAddName(true)}
-                            // data-tip="Add a custom name to one of the nameless Fox Tokens, if you know it"
-                        >
-                            ➕ Add custom name
-                        </IonButton>
+                    <IonButton className="float-right text-sm small-btn " color="secondary"
+                               // onClick={() => setPopoverOpened(null) }
+                               onClick={(e: any) => { e.persist(); setPopoverOpened(e); }}
+                    >
+                        <IonIcon icon={cog} className="pr-1"/>
+                        {/*TODO: mobile...*/}
+                        Configure Table
+                    </IonButton>
 
-                        <IonButton color="secondary" className="text-sm small-btn ml-5"
-                                   onClick={() => viewMyTokens(true)}
-                                   hidden={viewMyTokensClicked}
-                            // data-tip="Filter the table to view only your tokens"
-                        >
-                            <IonIcon icon={wallet} className="pr-1"/>
-                            View My Tokens
-                        </IonButton>
-                        <IonButton color="secondary" className="text-sm small-btn ml-5"
-                                   onClick={() => viewMyTokens(false)}
-                                   hidden={!viewMyTokensClicked}
-                                   data-tip="View All Tokens"
-                        >
-                            <IonIcon icon={wallet} className="pr-1"/>
-                            View All Tokens
-                        </IonButton>
+                    <IonPopover
+                        // @ts-ignore
+                        event={popoverOpened}
+                        isOpen={!!popoverOpened} onDidDismiss={() => setPopoverOpened(null)} >
+                        <IonContent>
 
-                        <IonButton color="secondary" className="text-sm small-btn ml-5"
-                                   onClick={() => clickedMultWall(true)}
-                            // data-tip="Add multiple wallets "
-                        >
-                            <IonIcon icon={wallet} className="pr-1"/>
-                            Add Mult Wallets
-                        </IonButton>
+                            <div className="p-3">
 
-                    </span>
+                                <h3 className="font-bold pb-1 w-full">Filter Data</h3>
 
-                    {/*MOBILE*/}
-                    <span hidden={width > smallWidthpx} className="float-right">
-                        <a onClick={() => clickedAddName(true)} data-tip="Add a custom name">➕</a>
+                                <IonButton color="secondary" className="text-sm small-btn "
+                                           onClick={() => viewMyTokens(true)}
+                                           hidden={viewMyTokensClicked}
+                                >
+                                    <IonIcon icon={wallet} className="pr-1"/>
+                                    View My Tokens
+                                </IonButton>
+                                <IonButton color="secondary" className="text-sm small-btn "
+                                           onClick={() => viewMyTokens(false)}
+                                           hidden={!viewMyTokensClicked}
+                                           data-tip="View All Tokens"
+                                >
+                                    <IonIcon icon={wallet} className="pr-1"/>
+                                    View All Tokens
+                                </IonButton>
+                                <IonButton color="secondary" className="text-sm small-btn  bit-bigger-btn"
+                                           onClick={() => clickedMultWall(true)}
+                                >
+                                    <IonIcon icon={albumsOutline} className="pr-1"/>
+                                    Track Mult Wallets
+                                </IonButton>
 
-                        <a hidden={viewMyTokensClicked}
-                           data-tip="Filter the table to view only your tokens"
-                           onClick={() => viewMyTokens(true)} className="pl-3">
-                            <IonIcon icon={wallet} className="pr-1"/>
-                        </a>
+                                <h3 className="font-bold pb-1 w-full pt-5">Add Data</h3>
 
-                         <a hidden={!viewMyTokensClicked}
-                            onClick={() => viewMyTokens(false)} className="pl-3"
-                            data-tip="View All Tokens">
-                            <IonIcon icon={wallet} className="pr-1"/>
-                        </a>
-                    </span>
+                                <IonButton color="success" className="text-sm small-btn"
+                                           onClick={() => clickedAddName(true)}
+                                >
+                                    <IonIcon icon={addCircleOutline} className="pr-1"/>
+                                    Add custom name
+                                </IonButton>
+
+                                <h3 className="font-bold pb-1 w-full pt-5">Configure Table</h3>
+
+                            </div>
+                        </IonContent>
+                    </IonPopover>
 
                     <div hidden={!tableData.length || width < smallWidthpx}>
                         👪 are community added names
