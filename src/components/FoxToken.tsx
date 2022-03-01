@@ -29,7 +29,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
 import Cookies from "universal-cookie";
-import {getLiveFoxTokenData} from "./FoxTokenFns";
+import {getLiveFoxTokenData, shortenedWallet} from "./FoxTokenFns";
 
 /**
  * IF WANT TO TEST THIS PAGE
@@ -52,6 +52,8 @@ function FoxToken({foo, onSubmit}: FoxToken) {
     const [addMultWallModalOpen, setAddMultWallModalOpen] = useState(false); // model open or not
     const [formWalletMult, setFormWalletMult] = useState(''); // single wallet in the form
     const [formLoadingMultWallet, setFormLoadingMultWallet] = useState(false); // form loading
+
+    const local_host_str = 'localhost';
 
     const cookies = useMemo(() => new Cookies(), []);
     const [multWalletAryFromCookie, setMultWalletAryFromCookie] = useState(cookies.get('multWalletsAry')); // mult. wallets you have from cookies
@@ -111,6 +113,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
         }
     }
 
+    // user clicked button to delete their multiple wallets
     const resetMultWallets = () => {
 
         // @ts-ignore
@@ -190,22 +193,23 @@ function FoxToken({foo, onSubmit}: FoxToken) {
 
             ),
             sorter: (a, b) => a.token.localeCompare(b.token),
-            // width: 130,
+            width: width < smallWidthpx ? 70 : 450,
             responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
-            title: 'Price', key: 'floorPrice', dataIndex: 'floorPrice', width: 100,
+            title: 'Price', key: 'floorPrice', dataIndex: 'floorPrice',
+            width: 100,
             sorter: (a, b) => a.floorPrice - b.floorPrice,
             responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
             title: 'Name', key: 'name', dataIndex: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
-            width: 150,
+            // width: 150,
             responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
-            title: 'Total Token Listings', key: 'totalTokenListings', dataIndex: 'totalTokenListings', width: 250,
+            title: 'Total Listings', key: 'totalTokenListings', dataIndex: 'totalTokenListings', width: 150,
             sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,
             responsive: ['md'], // Will not be displayed below 768px
         },
@@ -235,10 +239,6 @@ function FoxToken({foo, onSubmit}: FoxToken) {
     /**
      * Use Effects
      */
-    // useEffect(() => {
-    //
-    // }, []);
-
     // resize window
     useEffect(() => {
         function resizeWidth() {
@@ -271,15 +271,30 @@ function FoxToken({foo, onSubmit}: FoxToken) {
             .then((res) => {
 
                 const labels = res.data.map((el: { createdAt: any; }) => moment(el.createdAt).fromNow());
-
                 const lineData = res.data.map((el: { floorPrice: any; }) => parseFloat(el.floorPrice));
+
+                // graph latest point...
+                for(let t in tableData){
+                    if(tableData[t].token === token && tableData[t].floorPrice){
+                        labels.push('a few seconds ago');
+                        lineData.push(tableData[t].floorPrice);
+                        break;
+                    }
+                }
+
+                // console.log(labels);
                 // console.log(lineData);
+
                 let datasetsAry = [{
                     type: 'line' as const,
                     label: 'Floor Price',
-                    borderColor: 'white',
+                    borderColor: '#195e83', // #14F195
                     borderWidth: 2,
-                    fill: false,
+                    fill: {
+                        target: 'origin',
+                        above: 'black',   // Area will be red above the origin
+                        // below: ''    // And blue below the origin
+                    },
                     data: lineData,
                 }];
 
@@ -288,9 +303,13 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                 let datasetsAryListings = [{
                     type: 'line' as const,
                     label: 'Total Token Listings',
-                    borderColor: 'blue',
+                    borderColor: '#195e83', // #14F195
                     borderWidth: 2,
-                    fill: false,
+                    fill: {
+                        target: 'origin',
+                        above: 'black',  // 195e83  // Area will be red above the origin
+                        // below: ''    // And blue below the origin
+                    },
                     data: listingsData,
                 }];
 
@@ -326,54 +345,10 @@ function FoxToken({foo, onSubmit}: FoxToken) {
 
         setTableData([]);
 
-        const liveData = await getLiveFoxTokenData();
-        setTableData(liveData)
-        console.log(liveData); // TODO
+        const data: any = await getLiveFoxTokenData(mySplTokens);
 
-        // instance
-        //     .get(environment.backendApi + '/receiver/foxTokenAnalysis')
-        //     .then((res) => {
-        //
-        //         const data = res.data.data;
-        //         // const newData = [];
-        //         //
-        //         //
-        //         // for(let i in data){
-        //         //     if(data[i].customName){
-        //         //         newData.push(data[i]);
-        //         //     }
-        //         // }
-        //
-        //         // console.log(mySplTokens);
-        //
-        //         // loop through table data (all fox tokens)... to eventually add which of these are your SPL tokens
-        //         for (let i in data) {
-        //             // loop through user tokens
-        //             for (let y in mySplTokens) {
-        //                 // if match
-        //                 // @ts-ignore
-        //                 if (mySplTokens[y].token === data[i].token) {
-        //                     // then ADD data
-        //                     // @ts-ignore
-        //                     if (!data[i].whichMyWallets) {
-        //                         data[i].whichMyWallets = shortenedWallet(mySplTokens[y].myWallet);
-        //                     }
-        //                     // @ts-ignore
-        //                     else {
-        //                         data[i].whichMyWallets += ", " + shortenedWallet(mySplTokens[y].myWallet);
-        //                     }
-        //
-        //                     break;
-        //                 }
-        //             }
-        //         }
-        //
-        //         setTableData(data);
-        //         setFullTableData(data);
-        //     })
-        //     .catch((err) => {
-        //         console.error("error when getting fox token data: " + err);
-        //     });
+        setTableData(data);
+        setFullTableData(data);
     }
 
 
@@ -381,7 +356,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
     const getSplFromWallet = async (wallet: string) => {
 
         try {
-            // console.log("going out to " + wallet);
+            console.log("going out to " + wallet);
 
             // https://docs.solana.com/developing/clients/javascript-reference
             let base58publicKey = new solanaWeb3.PublicKey(wallet.toString());
@@ -474,7 +449,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
         }
 
         // only fetch data when NOT on local host ... after spl tokens is updated
-        if (window.location.href.indexOf('localhost') === -1) {
+        if (window.location.href.indexOf(local_host_str) === -1) {
             fetchTableData();
         }
 
@@ -484,7 +459,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
     useEffect(() => {
 
         // however DON'T do this in local host (will do this elsewhere ... since get RPC blocked)
-        if (window.location.href.indexOf('localhost') === -1) {
+        if (window.location.href.indexOf(local_host_str) === -1) {
             getUserSpls();
         } else {
             fetchTableData();
@@ -494,7 +469,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
     }, [multWalletAryFromCookie]);
     // also call when new wallet is connected to
     useEffect(() => {
-        if (window.location.href.indexOf('localhost') === -1) {
+        if (window.location.href.indexOf(local_host_str) === -1) {
             getUserSpls();
         }
         // @ts-ignore
@@ -525,8 +500,6 @@ function FoxToken({foo, onSubmit}: FoxToken) {
         setFormErrMsg('');
 
         instance.post(environment.backendApi + '/receiver/foxTokenNameAdd', body).then(resp => {
-
-            // console.log(resp);
 
             if (resp.data.error) {
                 setFormLoading(false);
@@ -559,12 +532,6 @@ function FoxToken({foo, onSubmit}: FoxToken) {
         });
     }
 
-    const shortenedWallet = (wallet: string) => {
-        return wallet.substring(0, 4) +
-            '...' +
-            wallet.substring(wallet.length - 4);
-    };
-
     // Viewing MY tokens - filter the table
     const viewMyTokens = async (wantViewTokens: boolean) => {
 
@@ -572,7 +539,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
         if (wantViewTokens) {
 
             // see other local host on here to see why
-            if (window.location.href.indexOf('localhost') !== -1) {
+            if (window.location.href.indexOf(local_host_str) !== -1) {
                 await getUserSpls();
             }
 
@@ -610,7 +577,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                         // @ts-ignore
                         if (mySplTokens[y].token === tableData[i].token) {
 
-                            if (window.location.href.indexOf('localhost') !== -1) {
+                            if (window.location.href.indexOf(local_host_str) !== -1) {
                                 // then ADD data
                                 // @ts-ignore
                                 if (!tableData[i].whichMyWallets) {
