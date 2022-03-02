@@ -125,6 +125,16 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         fetchTableData();
     }, []);
 
+    // resize window
+    useEffect(() => {
+        function resizeWidth() {
+            setWidth(window.innerWidth);
+        }
+
+        window.addEventListener('resize', resizeWidth);
+        return () => window.removeEventListener('resize', resizeWidth);
+    }, []);
+
     /**
      * Functions
      */
@@ -149,10 +159,14 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                             <IonIcon icon={chatboxEllipsesOutline} className="pr-1"/>
                             Show Comments
                         </IonButton>
-                        <a className="float-right" hidden={width > smallWidthpx}>💬</a>
+
+                        {/*<a className="float-right" hidden={width > smallWidthpx}>*/}
+                        {/*    <IonIcon icon={chatboxEllipsesOutline} className="pr-1"/>*/}
+                        {/*</a>*/}
                     </span>
 
                 </div>
+
                 <p hidden={width < smallWidthpx}>These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel</p>
 
                 <div>
