@@ -81,7 +81,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
 
     // when click 'view chart'... will set the token then draw the chart
     useEffect(() => {
-        if(token && name){
+        if(token){ //  && name
             viewChart(); // record.token, record.name
         }
     }, [token]);
@@ -95,6 +95,15 @@ function FoxToken({foo, onSubmit}: FoxToken) {
 
     // in the modal for multiple wallets - submit button clicked
     const addMultWalletsSubmit = () => {
+
+        if(multWalletAryFromCookie && multWalletAryFromCookie.split(",").length == 3){
+            present({
+                message: 'Error - you may only track a maximum of 3 wallets',
+                color: 'danger',
+                duration: 8000
+            });
+            return;
+        }
 
         if (!formWalletMult || formWalletMult.length !== 44) {
             present({
@@ -270,6 +279,9 @@ function FoxToken({foo, onSubmit}: FoxToken) {
         }
     ];
 
+    // TODO: some bug view chart... asked parth...
+    // TODO: blue terra and few second ago empty...
+
     /**
      * Use Effects
      */
@@ -318,11 +330,15 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                     return parseFloat(el.floorPrice);
                 });
 
+                const listingsData = res.data.map((el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings));
+                // console.log(listingsData);
+
                 // graph latest point...
                 for(let t in tableData){
                     if(tableData[t].token === token && tableData[t].floorPrice){
                         labels.push('a few seconds ago');
                         lineData.push(tableData[t].floorPrice);
+                        listingsData.push(tableData[t].totalTokenListings);
                         break;
                     }
                 }
@@ -343,8 +359,6 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                     data: lineData,
                 }];
 
-                const listingsData = res.data.map((el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings));
-                // console.log(listingsData);
                 let datasetsAryListings = [{
                     type: 'line' as const,
                     label: 'Total Token Listings',
@@ -375,7 +389,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                 // console.log(foxLineData);
 
 
-                // TODO-rakesh: go to the home page ... go to fox token table ... click view chart ... make sure it SCROLLS TO BOTTOM of page (or scrolls to make the chart the top of the page)
+                // TODO-...: go to the home page ... go to fox token table ... click view chart ... make sure it SCROLLS TO BOTTOM of page (or scrolls to make the chart the top of the page)
                 // window.scrollTo(0,document.body.scrollHeight);
 
             })
@@ -767,6 +781,8 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                     <div hidden={!tableData.length || width < smallWidthpx}>
                         👪 are community added names
                     </div>
+
+                    {/*--{token}-{name}-*/}
                 </div>
 
                 {/*
@@ -792,9 +808,9 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                         <div
                             className="ml-3 mr-3 mb-2 relative mt-2 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                             <div className="font-medium"> { /* text-lg   */}
-                                <p>This is used in conjuction with the "View My Tokens" button,
-                                    where you can filter the Fox Token Market table to show only tokens in your wallet.
-                                    Use this to filter the table to your tokens that are on multiple wallets</p>
+                                <p>Used with "View My Tokens" (where you can filter the table to show only tokens in your wallet).
+                                    Use this to filter the table to tokens that are on multiple wallets.
+                                    Data is saved per browser, within your cookies.</p>
                             </div>
                         </div>
 
@@ -962,9 +978,12 @@ function FoxToken({foo, onSubmit}: FoxToken) {
 
                                 </div>
 
+                                {/*-{foxLineData.labels}-*/}
+
                                 <div className="gap-4 mb-4 grid grid-cols-12 mt-3"
                                     // @ts-ignore
-                                     hidden={foxLineData.labels.length === 0}>
+                                    //  hidden={!foxLineData.labels || foxLineData.labels}
+                                >
                                     <div className='chart'>
 
                                         <Chart type='line'
@@ -977,7 +996,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                                        legend: {
                                                            display: false
                                                        },
-                                                       title: {display: true, text: tokenClickedOn + " - Price"},
+                                                       title: {display: true, text: tokenClickedOn ? tokenClickedOn + " - Price" : "Price"},
                                                        // tooltip: {
                                                        //     enabled: true,
                                                        //     usePointStyle: true,
