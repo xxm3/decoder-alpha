@@ -279,9 +279,6 @@ function FoxToken({foo, onSubmit}: FoxToken) {
         }
     ];
 
-    // TODO: some bug view chart... asked parth...
-    // TODO: blue terra and few second ago empty...
-
     /**
      * Use Effects
      */
@@ -442,7 +439,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
 
             for (let i in tokenAccounts.value) {
                 if (tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0) {
-                    // console.log(tokenAccounts.value[i]);
+                    // console.log(tokenAccounts.value[i]); // TODO: add in uiAmount etc... cryptonaught
                     mySplTokensTemporaryAgainAgain.push({
                         token: tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint,
                         myWallet: wallet
