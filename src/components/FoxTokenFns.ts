@@ -187,20 +187,37 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
     for (let o in oldNamedAry) {
         let tokenFoundInData = false;
 
+        // console.log(oldNamedAry[o]);
+
         for(let f in finalAry){
             if(oldNamedAry[o].token === finalAry[f].token){
+
+                // NOTE: if they remove the name of a token (as they did with blue terra), but keep the token, it'll show up blank name...
+                // if(oldNamedAry[o].token === 'AyDDpSg7Q6icGx7RAntSDAuwxdMkEsRWkL4QkeqoQF1H'){
+                //     console.log(oldNamedAry[o]);
+                //     console.log(finalAry[f]);
+                // }
+
                 tokenFoundInData = true;
                 break;
             }
         }
 
         if(!tokenFoundInData){
+            // if(oldNamedAry[o].token === 'AyDDpSg7Q6icGx7RAntSDAuwxdMkEsRWkL4QkeqoQF1H'){ console.log(oldNamedAry[o].name); }
+
             oldNamedAry[o].name = oldNamedAry[o].name + " (not listed in FF anymore)";
             oldNamedAry[o].floorPrice = "";
             // oldNamedAry[o].totalTokenListings = "";
             finalAry.push(oldNamedAry[o]);
         }
     }
+
+    // for(let i in finalAry){
+    //     if(finalAry[i].token === 'AyDDpSg7Q6icGx7RAntSDAuwxdMkEsRWkL4QkeqoQF1H'){
+    //         console.log(finalAry[i]);
+    //     }
+    // }
 
     return finalAry;
 }

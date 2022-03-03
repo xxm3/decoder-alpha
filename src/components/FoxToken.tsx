@@ -439,7 +439,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
 
             for (let i in tokenAccounts.value) {
                 if (tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0) {
-                    // console.log(tokenAccounts.value[i]); // TODO: add in uiAmount etc... cryptonaught
+                    // console.log(tokenAccounts.value[i]); // TODO 2!!!: add in uiAmount etc... cryptonaught
                     mySplTokensTemporaryAgainAgain.push({
                         token: tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint,
                         myWallet: wallet
@@ -756,7 +756,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                 </IonList>
 
 
-                                {/*TODO*/}
+                                {/*TODO 1!!! */}
                                 {/*<h3 className="font-bold pb-1 w-full pt-5">Chart Colors</h3>*/}
 
                                 {/*<IonItem>*/}
