@@ -289,7 +289,7 @@ const Schedule = () => {
 
             <p className="pt-3">Projects must have {'>'} 2,000 Discord members and {'>'} 1,000 Twitter followers before showing up on the list.
                 <br/>
-                "# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them up (the higher the better)</p>
+                "# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them</p>
             {
                 isLoading
                     ? <div className="pt-10 flex justify-center items-center">

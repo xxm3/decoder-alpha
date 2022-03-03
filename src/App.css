@@ -15,10 +15,14 @@ body {
 
 .small-btn{
     height: 25px;
-    width: 200px;
+    /*width: 200px;*/
     padding: 1px;
     font-size: 14px;
 }
+.bit-bigger-btn{
+    /*width: 230px;*/
+}
+
 .big-emoji{
     font-size: 135%;
 }
@@ -26,3 +30,11 @@ body {
 .me-logo{
     max-height: 18px;
 }
+
+
+/*.popover-wrapper .popover-content{*/
+/*    position: relative !important;*/
+/*    margin: 0 auto !important;*/
+/*    left: auto !important;*/
+/*    top: auto !important;*/
+/*}*/

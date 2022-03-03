@@ -1,7 +1,7 @@
 import {
     IonButton,
     IonList,
-    IonLabel, IonItem, IonCheckbox, IonInput
+    IonLabel, IonItem, IonCheckbox, IonInput, IonIcon
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useState} from 'react';
 import {Table} from 'antd' // https://ant.design/components/table/
@@ -11,6 +11,7 @@ import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import ReactTooltip from "react-tooltip";
 import meLogo from '../images/me.png';
+import {chatboxEllipsesOutline, cog} from "ionicons/icons";
 
 interface NftPriceTableProps {
     foo?: string;
@@ -124,6 +125,16 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         fetchTableData();
     }, []);
 
+    // resize window
+    useEffect(() => {
+        function resizeWidth() {
+            setWidth(window.innerWidth);
+        }
+
+        window.addEventListener('resize', resizeWidth);
+        return () => window.removeEventListener('resize', resizeWidth);
+    }, []);
+
     /**
      * Functions
      */
@@ -145,12 +156,17 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                             className="float-right text-sm small-btn ml-5" color="secondary"
                             onClick={() => setHideComments(!hideComments)}
                         >
-                            💬 Show Comments
+                            <IonIcon icon={chatboxEllipsesOutline} className="pr-1"/>
+                            Show Comments
                         </IonButton>
-                        <a className="float-right" hidden={width > smallWidthpx}>💬</a>
+
+                        {/*<a className="float-right" hidden={width > smallWidthpx}>*/}
+                        {/*    <IonIcon icon={chatboxEllipsesOutline} className="pr-1"/>*/}
+                        {/*</a>*/}
                     </span>
 
                 </div>
+
                 <p hidden={width < smallWidthpx}>These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel</p>
 
                 <div>
