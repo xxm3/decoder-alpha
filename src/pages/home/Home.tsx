@@ -286,6 +286,7 @@ const Home = () => {
                             type="line"
                             data={stackedLineData}
                             height={chartHeight}
+							key={chartHeight}
                             options={{
                                 responsive: true,
                                 maintainAspectRatio: true,

@@ -21,7 +21,7 @@ const AppRoute : React.FC<RouteProps> = (
 	                            <IonRow>
 	                                <IonCol
 	                                    size="12"
-	                                    className="flex justify-center"
+	                                    className="flex justify-center px-5"
 	                                >
 	                                    	{children
 		                                        ? typeof children === 'function'

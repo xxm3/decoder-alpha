@@ -52,6 +52,7 @@ import HeaderContainer from "./components/nav/Header";
 import WalletButton from "./components/WalletButton";
 import Sidebar from "./components/nav/Sidebar";
 import Style from "./components/Style";
+import Theme from "./theme/Theme";
 
 
 const App = () => {
@@ -94,101 +95,103 @@ const App = () => {
 
 	return (
         <IonApp>
-            <QueryClientProvider client={queryClient}>
-                <UserContext.Provider value={user}>
-                    {user !== undefined ? (
-                        <>
-                            <IonReactRouter>
-                                <IonRouterOutlet id="router">
-                                    <Route>
-                                        <IonPage>
-                                            <IonGrid className="w-screen h-screen flex flex-col relative">
-                                                <IonRow>
-                                                    <IonCol size="12">
-                                                        <HeaderContainer />
-                                                    </IonCol>
-                                                </IonRow>
-                                                <IonRow className="flex-grow">
-                                                    <IonCol
-                                                        size="12"
-                                                        className="flex h-full"
-                                                    >
-                                                        <Style>
-                                                            {`
-																@media only screen and (min-width:768px) and (max-width:992px){ 
-																	ion-split-pane {
-																		--side-min-width: none;
+            <Theme>
+            	<QueryClientProvider client={queryClient}>
+	                <UserContext.Provider value={user}>
+	                    {user !== undefined ? (
+	                        <>
+	                            <IonReactRouter>
+	                                <IonRouterOutlet id="router">
+	                                    <Route>
+	                                        <IonPage>
+	                                            <IonGrid className="w-screen h-screen flex flex-col relative">
+	                                                <IonRow>
+	                                                    <IonCol size="12">
+	                                                        <HeaderContainer />
+	                                                    </IonCol>
+	                                                </IonRow>
+	                                                <IonRow className="flex-grow">
+	                                                    <IonCol
+	                                                        size="12"
+	                                                        className="flex h-full"
+	                                                    >
+	                                                        <Style>
+	                                                            {`
+																	@media only screen and (min-width:768px) and (max-width:992px){ 
+																		ion-split-pane {
+																			--side-min-width: none;
+																		}
 																	}
-																}
-																
 																	
-															`}
-                                                        </Style>
-                                                        <IonSplitPane
-                                                            when="md"
-                                                            contentId="main"
-                                                        >
-                                                            <IonMenu
-                                                                menuId="sidebar"
-                                                                contentId="main"
-                                                            >
-                                                                <Sidebar />
-                                                            </IonMenu>
-                                                            <IonContent
-                                                                className="h-full"
-                                                                id="main"
-                                                            >
-                                                                <IonRouterOutlet>
-                                                                    <ProtectedRoute
-                                                                        path="/"
-                                                                        component={
-                                                                            Home
-                                                                        }
-                                                                        exact
-                                                                    />
-
-                                                                    <ProtectedRoute
-                                                                        path="/search/:id"
-                                                                        exact={
-                                                                            true
-                                                                        }
-                                                                        component={
-                                                                            Search
-                                                                        }
-                                                                    />
-                                                                    <AppRoute
-                                                                        exact
-                                                                        path="/Schedule"
-                                                                        component={
-                                                                            Schedule
-                                                                        }
-                                                                    />
-                                                                    <AppRoute
-                                                                        exact
-                                                                        path="/Login"
-                                                                        component={
-                                                                            Login
-                                                                        }
-                                                                    />
-                                                                </IonRouterOutlet>
-                                                            </IonContent>
-                                                        </IonSplitPane>
-                                                    </IonCol>
-                                                </IonRow>
-                                            </IonGrid>
-                                        </IonPage>
-                                    </Route>
-                                </IonRouterOutlet>
-                            </IonReactRouter>
-                        </>
-                    ) : (
-                        <div className="mx-auto my-auto h-48 w-48">
-                            <Loader />
-                        </div>
-                    )}
-                    <ReactQueryDevtools initialIsOpen />
-                </UserContext.Provider>
-            </QueryClientProvider>
+																		
+																`}
+	                                                        </Style>
+	                                                        <IonSplitPane
+	                                                            when="md"
+	                                                            contentId="main"
+	                                                        >
+	                                                            <IonMenu
+	                                                                menuId="sidebar"
+	                                                                contentId="main"
+	                                                            >
+	                                                                <Sidebar />
+	                                                            </IonMenu>
+	                                                            <IonContent
+	                                                                className="h-full"
+	                                                                id="main"
+	                                                            >
+	                                                                <IonRouterOutlet>
+	                                                                    <ProtectedRoute
+	                                                                        path="/"
+	                                                                        component={
+	                                                                            Home
+	                                                                        }
+	                                                                        exact
+	                                                                    />
+	
+	                                                                    <ProtectedRoute
+	                                                                        path="/search/:id"
+	                                                                        exact={
+	                                                                            true
+	                                                                        }
+	                                                                        component={
+	                                                                            Search
+	                                                                        }
+	                                                                    />
+	                                                                    <AppRoute
+	                                                                        exact
+	                                                                        path="/Schedule"
+	                                                                        component={
+	                                                                            Schedule
+	                                                                        }
+	                                                                    />
+	                                                                    <AppRoute
+	                                                                        exact
+	                                                                        path="/Login"
+	                                                                        component={
+	                                                                            Login
+	                                                                        }
+	                                                                    />
+	                                                                </IonRouterOutlet>
+	                                                            </IonContent>
+	                                                        </IonSplitPane>
+	                                                    </IonCol>
+	                                                </IonRow>
+	                                            </IonGrid>
+	                                        </IonPage>
+	                                    </Route>
+	                                </IonRouterOutlet>
+	                            </IonReactRouter>
+	                        </>
+	                    ) : (
+	                        <div className="mx-auto my-auto h-48 w-48">
+	                            <Loader />
+	                        </div>
+	                    )}
+	                    <ReactQueryDevtools initialIsOpen />
+	                </UserContext.Provider>
+	            </QueryClientProvider>
+            </Theme>
         </IonApp>
     );
 

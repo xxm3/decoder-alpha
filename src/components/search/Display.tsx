@@ -86,7 +86,7 @@ const Display: React.FC<{
      */
     return (
         <>
-            <div className="p-3 messages overflow-y-scroll rounded-lg">
+            <div className="py-5 px-5 messages my-10 overflow-y-scroll rounded-lg">
                 {/* bar & line chart */}
                 {/* <DisplayGraph {...{
                     chartDataDailyCount : chartDataDailyCount ? chartDataDailyCount: {},

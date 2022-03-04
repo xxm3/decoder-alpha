@@ -14,8 +14,6 @@ import {
     IonToolbar, IonTitle, useIonToast, IonIcon
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useRef, useState} from 'react';
-import {Table} from 'antd' // https://ant.design/components/table/
-import { ColumnsType } from 'antd/es/table';
 import Loader from "./Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
@@ -30,7 +28,19 @@ import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
 import Cookies from "universal-cookie";
 import {getLiveFoxTokenData, shortenedWallet} from "./FoxTokenFns";
+import Table from './Table';
+import { Column } from '@material-table/core';
 
+interface FoxTokenData {
+	token : string;
+	floorPrice: number;name : string;
+	listedTokens : {
+		cost: number;
+		count: number;
+	}[],
+	totalTokenListings : number;
+	whichMyWallets : string;
+}
 /**
  * IF WANT TO TEST THIS PAGE
  * - be logged out of wallet and test things
@@ -159,8 +169,8 @@ function FoxToken({foo, onSubmit}: FoxToken) {
         return 330;
     }, [width]);
 
-    const [tableData, setTableData]: any = useState([]);
-    const [fullTableData, setFullTableData] = useState([]);
+    const [tableData, setTableData] = useState<FoxTokenData[]>([]);
+    const [fullTableData, setFullTableData] = useState<FoxTokenData[]>([]);
     const [tokenClickedOn, setTokenClickedOn] = useState();
     const [mySolBalance, setMySolBalance] = useState("");
 
@@ -182,56 +192,50 @@ function FoxToken({foo, onSubmit}: FoxToken) {
     const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
 
 
-    const columns: ColumnsType<any> = [
+    const columns: Column<FoxTokenData>[] = [
         {
-            title: 'Token', key: 'token', // dataIndex: 'token',
+            title: 'Token',
             render: record => (
                 <>
-                    <span hidden={width < smallWidthpx}>{record.token}</span>
-                    <span hidden={width > smallWidthpx}>{shortenedWallet(record.token)}</span>
+                    <span className="hidden md:block">{record.token}</span>
+                    <span className="md:hidden">{shortenedWallet(record.token)}</span>
                 </>
 
             ),
-            sorter: (a, b) => a.token.localeCompare(b.token),
-            width: width < smallWidthpx ? 70 : 450,
-            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+            customSort: (a, b) => a.token.localeCompare(b.token),
         },
         {
-            title: 'Price', key: 'floorPrice', dataIndex: 'floorPrice',
-            width: 100,
-            sorter: (a, b) => a.floorPrice - b.floorPrice,
-            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+            title: 'Price',
+            customSort: (a, b) => a.floorPrice - b.floorPrice,
+			render : (record) => <span>{record.floorPrice}</span>
         },
         {
-            title: 'Name', key: 'name', dataIndex: 'name',
-            sorter: (a, b) => a.name.localeCompare(b.name),
-            // width: 150,
-            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+            title: 'Name',
+            customSort: (a, b) => a.name.localeCompare(b.name),
+			render : (record) => <span>{record.name}</span>
         },
         {
-            title: 'Total Listings', key: 'totalTokenListings', dataIndex: 'totalTokenListings', width: 150,
-            sorter: (a, b) => a.totalTokenListings - b.totalTokenListings,
-            responsive: ['md'], // Will not be displayed below 768px
+            title: 'Total Listings',
+           	customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
+			render : (record) => <span>{record.totalTokenListings}</span>
+
         },
         {
-            title: 'View Chart', key: '', width: 150,
+            title: 'View Chart',
             render: record => (
                 <span onClick={() => viewChart(record.token, record.name)}
                       className="cursor-pointer big-emoji">📈</span>
             ),
-            responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         {
-            title: 'View in Explorer', key: '', width: 150,
+            title: 'View in Explorer', 
             render: record => (
                 <a target="_blank" className="no-underline big-emoji"
                    href={'https://explorer.solana.com/address/' + record.token}>🌐</a>
             ),
-            responsive: ['md'], // Will not be displayed below 768px
         },
         {
-            title: 'Which Of My Wallet(s)', key: 'whichMyWallets', width: 180, dataIndex: 'whichMyWallets',
-            responsive: ['md'], // Will not be displayed below 768px
+            title: 'Which Of My Wallet(s)',
             // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
         }
     ];
@@ -573,16 +577,13 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                 for (let i in tableData) {
                     // if match, then push
                     for (let y in mySplTokens) {
-                        // @ts-ignore
                         if (mySplTokens[y].token === tableData[i].token) {
 
                             if (window.location.href.indexOf(local_host_str) !== -1) {
                                 // then ADD data
-                                // @ts-ignore
                                 if (!tableData[i].whichMyWallets) {
                                     tableData[i].whichMyWallets = shortenedWallet(mySplTokens[y].myWallet);
                                 }
-                                // @ts-ignore
                                 else {
                                     tableData[i].whichMyWallets += ", " + shortenedWallet(mySplTokens[y].myWallet);
                                 }
@@ -843,40 +844,15 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                 {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                                 {/*</IonItem>*/}
 
-                                <div hidden={width <= smallWidthpx}>
+                                <div>
                                     {/* Desktop version */}
                                     <Table
-                                        className='pt-2 w-full'
-                                        rowKey={'name'}
-                                        dataSource={tableData}
+                                        data={tableData}
                                         columns={columns}
-                                        bordered
-                                        scroll={{y: 400}}
-                                        // scroll={{y: 22}} // if want show it off / shill
-
-                                        pagination={false}
-                                        style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
+										title="Fox Token Market - Analysis"
                                     />
                                 </div>
-                                <div hidden={width > smallWidthpx}>
-
-                                    {/*Mobile Version*/}
-                                    <Table
-                                        className='pt-2 w-full'
-                                        key={'name'}
-                                        dataSource={tableData}
-                                        columns={columns}
-                                        bordered
-                                        // scroll={{x: 'max-content'}}
-
-                                        // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
-                                        scroll={{x: 'max-content', y: 400}}
-
-                                        pagination={false}
-                                        style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
-                                    />
-
-                                </div>
+                              
 
                                 <div className="gap-4 mb-4 grid grid-cols-12 mt-3"
                                     // @ts-ignore
