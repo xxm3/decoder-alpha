@@ -76,8 +76,28 @@ function FoxToken({foo, onSubmit}: FoxToken) {
 
         // redraw the chart
         viewChart();
-        // fetchTableData();
     }, [chartDateSelected]);
+
+    // user clicked change colour
+    const [lineColorSelected, setLineColorSelected] = useState<string>(cookies.get('lineColorSelected') ? cookies.get('lineColorSelected') : "#195e83");
+    const [shadedAreaColorSelected, setShadedAreaColorSelected] = useState<string>(cookies.get('shadedAreaColorSelected') ? cookies.get('shadedAreaColorSelected') : "black")
+    // when above clicked, will redraw the chart
+    useEffect(() => {
+        if (firstUpdate.current) {
+            firstUpdate.current = false;
+            return;
+        }
+
+        // TODO: need delay..ask parth--- DEBOUNCE
+        setTimeout(()=>{
+            cookies.set('lineColorSelected', lineColorSelected);
+            cookies.set('shadedAreaColorSelected', shadedAreaColorSelected);
+
+            // redraw the chart
+            viewChart();
+        }, 2000);
+
+    }, [lineColorSelected, shadedAreaColorSelected]);
 
     // when click 'view chart'... will set the token then draw the chart
     useEffect(() => {
@@ -346,11 +366,11 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                 let datasetsAry = [{
                     type: 'line' as const,
                     label: 'Floor Price',
-                    borderColor: '#195e83', // #14F195
+                    borderColor: lineColorSelected, // #14F195
                     borderWidth: 2,
                     fill: {
                         target: 'origin',
-                        above: 'black',   // Area will be red above the origin
+                        above: shadedAreaColorSelected,   // Area will be red above the origin
                         // below: ''    // And blue below the origin
                     },
                     data: lineData,
@@ -359,11 +379,11 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                 let datasetsAryListings = [{
                     type: 'line' as const,
                     label: 'Total Token Listings',
-                    borderColor: '#195e83', // #14F195
+                    borderColor: lineColorSelected, // #14F195
                     borderWidth: 2,
                     fill: {
                         target: 'origin',
-                        above: 'black',  // 195e83  // Area will be red above the origin
+                        above: shadedAreaColorSelected,  // 195e83  // Area will be red above the origin
                         // below: ''    // And blue below the origin
                     },
                     data: listingsData,
@@ -689,14 +709,15 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                         <span hidden={width < smallWidthpx}>Fox Token Market - Analysis</span>
                         <span hidden={width > smallWidthpx}>Token Market</span>
                     </a>
-
+                    <br hidden={width > smallWidthpx} />
                     <IonButton className="float-right text-sm small-btn " color="secondary"
                                // onClick={() => setPopoverOpened(null) }
                                onClick={(e: any) => { e.persist(); setPopoverOpened(e); }}
                     >
                         <IonIcon icon={cog} className="pr-1"/>
-                        Configure Table
+                        My Tokens Filter / Add Names
                     </IonButton>
+                    <br hidden={width > smallWidthpx} />
 
                     <IonPopover
                         // @ts-ignore
@@ -755,22 +776,27 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                     </IonRadioGroup>
                                 </IonList>
 
+                                {/*TODO: MY WALLET BUGGED */}
+                                {/*TODO: BOT DESCRIPTION
+
+                                While most of these bots will be available after release, we can't guarantee that all will be available.
+                                */}
 
                                 {/*TODO 1!!! */}
-                                {/*<h3 className="font-bold pb-1 w-full pt-5">Chart Colors</h3>*/}
+                                <h3 className="font-bold pb-1 w-full pt-5">Chart Colors</h3>
 
-                                {/*<IonItem>*/}
-                                {/*    <IonLabel position="stacked" className="font-bold">Line Color</IonLabel>*/}
-                                {/*    <IonInput onIonChange={(e) => setFormWalletMult(e.detail.value!)}*/}
-                                {/*              value={formWalletMult}*/}
-                                {/*              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>*/}
-                                {/*</IonItem>*/}
-                                {/*<IonItem>*/}
-                                {/*    <IonLabel position="stacked" className="font-bold">Shaded Area Color</IonLabel>*/}
-                                {/*    <IonInput onIonChange={(e) => setFormWalletMult(e.detail.value!)}*/}
-                                {/*              value={formWalletMult}*/}
-                                {/*              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>*/}
-                                {/*</IonItem>*/}
+                                <IonItem>
+                                    <IonLabel position="stacked" className="font-bold">Line Color</IonLabel>
+                                    <IonInput onIonChange={(e) => setLineColorSelected(e.detail.value!)}
+                                              value={lineColorSelected}
+                                              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>
+                                </IonItem>
+                                <IonItem>
+                                    <IonLabel position="stacked" className="font-bold">Shaded Area Color</IonLabel>
+                                    <IonInput onIonChange={(e) => setShadedAreaColorSelected(e.detail.value!)}
+                                              value={shadedAreaColorSelected}
+                                              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>
+                                </IonItem>
                             </div>
                         </IonContent>
                     </IonPopover>
