@@ -1,7 +1,7 @@
 import {
     IonButton,
     IonList,
-    IonLabel, IonItem, IonCheckbox, IonInput
+    IonLabel, IonItem, IonCheckbox, IonInput, IonIcon
 } from '@ionic/react';
 import { useEffect, useState} from 'react';
 import Loader from "./Loader";
@@ -12,6 +12,7 @@ import { Column  } from '@material-table/core';
 import Table from './Table';
 import Style from './Style';
 import moment from 'moment';
+import {chatboxEllipsesOutline, cog} from "ionicons/icons";
 
 interface NftPriceTableProps {
     foo?: string;
@@ -161,6 +162,16 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         fetchTableData();
     }, []);
 
+    // resize window
+    useEffect(() => {
+        function resizeWidth() {
+            setWidth(window.innerWidth);
+        }
+
+        window.addEventListener('resize', resizeWidth);
+        return () => window.removeEventListener('resize', resizeWidth);
+    }, []);
+
     /**
      * Functions
      */
@@ -175,6 +186,26 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 
                
 
+                    <span hidden={!tableData.length}>
+                        <IonButton
+                            hidden={width <= smallWidthpx}
+                            className="float-right text-sm small-btn ml-5" color="secondary"
+                            onClick={() => setHideComments(!hideComments)}
+                        >
+                            <IonIcon icon={chatboxEllipsesOutline} className="pr-1"/>
+                            Show Comments
+                        </IonButton>
+
+                        {/*<a className="float-right" hidden={width > smallWidthpx}>*/}
+                        {/*    <IonIcon icon={chatboxEllipsesOutline} className="pr-1"/>*/}
+                        {/*</a>*/}
+                    </span>
+
+                </div>
+
+                <p hidden={width < smallWidthpx}>These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel</p>
+
+                <div>
                 {
                     !tableData.length
                         ?   <div className="pt-10 flex justify-center items-center">
