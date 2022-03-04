@@ -88,14 +88,15 @@ function FoxToken({foo, onSubmit}: FoxToken) {
             return;
         }
 
-        // TODO: need delay..ask parth
+        // TODO: need delay..ask parth--- DEBOUNCE
         setTimeout(()=>{
             cookies.set('lineColorSelected', lineColorSelected);
             cookies.set('shadedAreaColorSelected', shadedAreaColorSelected);
+
+            // redraw the chart
+            viewChart();
         }, 2000);
 
-        // redraw the chart
-        viewChart();
     }, [lineColorSelected, shadedAreaColorSelected]);
 
     // when click 'view chart'... will set the token then draw the chart
@@ -775,24 +776,27 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                     </IonRadioGroup>
                                 </IonList>
 
-                                {/*TODO: if website is like 1/2 screen... changes to table don't kick in and its messed up */}
+                                {/*TODO: MY WALLET BUGGED */}
+                                {/*TODO: BOT DESCRIPTION
 
+                                While most of these bots will be available after release, we can't guarantee that all will be available.
+                                */}
 
                                 {/*TODO 1!!! */}
                                 <h3 className="font-bold pb-1 w-full pt-5">Chart Colors</h3>
 
-                                {/*<IonItem>*/}
-                                {/*    <IonLabel position="stacked" className="font-bold">Line Color</IonLabel>*/}
-                                {/*    <IonInput onIonChange={(e) => setLineColorSelected(e.detail.value!)}*/}
-                                {/*              value={lineColorSelected}*/}
-                                {/*              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>*/}
-                                {/*</IonItem>*/}
-                                {/*<IonItem>*/}
-                                {/*    <IonLabel position="stacked" className="font-bold">Shaded Area Color</IonLabel>*/}
-                                {/*    <IonInput onIonChange={(e) => setShadedAreaColorSelected(e.detail.value!)}*/}
-                                {/*              value={shadedAreaColorSelected}*/}
-                                {/*              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>*/}
-                                {/*</IonItem>*/}
+                                <IonItem>
+                                    <IonLabel position="stacked" className="font-bold">Line Color</IonLabel>
+                                    <IonInput onIonChange={(e) => setLineColorSelected(e.detail.value!)}
+                                              value={lineColorSelected}
+                                              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>
+                                </IonItem>
+                                <IonItem>
+                                    <IonLabel position="stacked" className="font-bold">Shaded Area Color</IonLabel>
+                                    <IonInput onIonChange={(e) => setShadedAreaColorSelected(e.detail.value!)}
+                                              value={shadedAreaColorSelected}
+                                              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>
+                                </IonItem>
                             </div>
                         </IonContent>
                     </IonPopover>
