@@ -162,7 +162,9 @@ const Schedule = () => {
             render: record => (
                 <span>
                     {record.time}
-                    {record.mintExpiresAt}
+                    <span hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}>
+                        {record.mintExpiresAt}
+                    </span>
                     {/* {record.time !== "" && " (" + moment.utc(record.time, 'hh:mm:ss').fromNow() + ")"} */}
                     {
                         // setInterval(() => {
@@ -213,7 +215,7 @@ const Schedule = () => {
             align: 'left',
             render: record => (
                 <span>
-                    {parseInt(record.numbersOfDiscordMembers).toLocaleString()}
+                    {record.numbersOfDiscordMembers ? parseInt(record.numbersOfDiscordMembers).toLocaleString() : ''}
                 </span>
             ),
             sorter: (a: any, b: any) => a.numbersOfDiscordMembers - b.numbersOfDiscordMembers,
@@ -258,7 +260,10 @@ const Schedule = () => {
             key: 'connections',
             render: record => (
                 <>
-                    <a href={record.discordLink} className="link_underline" target='_blank'>Discord</a> <br/>
+                    <span hidden={!record.discordLink} >
+                         <a href={record.discordLink} className="link_underline" target='_blank'>Discord</a>
+                        <br/>
+                    </span>
                     <a href={record.twitterLink} className="link_underline" target='_blank'>Twitter</a>
                 </>
             ),
