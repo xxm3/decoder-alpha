@@ -708,14 +708,15 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                         <span hidden={width < smallWidthpx}>Fox Token Market - Analysis</span>
                         <span hidden={width > smallWidthpx}>Token Market</span>
                     </a>
-
+                    <br hidden={width > smallWidthpx} />
                     <IonButton className="float-right text-sm small-btn " color="secondary"
                                // onClick={() => setPopoverOpened(null) }
                                onClick={(e: any) => { e.persist(); setPopoverOpened(e); }}
                     >
                         <IonIcon icon={cog} className="pr-1"/>
-                        Configure / Add Name
+                        My Tokens Filter / Add Names
                     </IonButton>
+                    <br hidden={width > smallWidthpx} />
 
                     <IonPopover
                         // @ts-ignore

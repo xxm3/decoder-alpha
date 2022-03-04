@@ -260,7 +260,7 @@ const Schedule = () => {
             key: 'connections',
             render: record => (
                 <>
-                    <span hidden={!record.discordLink} >
+                    <span hidden={!record.discordLink || !record.numbersOfDiscordMembers} >
                          <a href={record.discordLink} className="link_underline" target='_blank'>Discord</a>
                         <br/>
                     </span>
