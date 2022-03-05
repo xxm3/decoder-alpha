@@ -3,26 +3,34 @@ import moment from 'moment';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
-import {Table} from 'antd'
-import { ColumnsType } from 'antd/es/table';
 import {IonContent, IonModal } from '@ionic/react';
 
 import './Schedule.css'
+import { Column } from '@material-table/core';
+import Table from '../../components/Table';
 
+interface Mint {
+	image: string;
+	project: string;
+	twitterLink: string;
+	discordLink: string;
+	time: string;
+	tillTheMint: string;
+	count: string;
+	price: string;
+	extras: string;
+	tenDaySearchResults: string[];
+	mintExpiresAt: string;
+	numbersOfDiscordMembers: string;
+	numbersOfTwitterFollowers : number;
+	tweetInteraction : {
+		total : number;
+		likes: number;
+		comments: number;
+		reactions: number;
+	}
+}
 const Schedule = () => {
-    interface Mint {
-        image: string,
-        project: string,
-        twitterLink: string,
-        discordLink: string,
-        time: string,
-        tillTheMint: string,
-        count: string,
-        price: string,
-        extras: string,
-        tenDaySearchResults: any,
-        mintExpiresAt: any,
-    }
 
     /**
      * States & Variables.
@@ -133,35 +141,29 @@ const Schedule = () => {
             setIsLoading(false);
         }
 
-    const columns: ColumnsType<Mint> = [
+    const columns: Column<Mint>[] = [
         {
             title: 'Name',
-            key: 'project',
-            render: record => (
+            render: (record) => (
                 <span
-                    className='cursor-pointer'
+                    className="cursor-pointer"
                     onClick={() => handleProjectClick(record)}
                 >
-              {record.project}
-            </span>
+                    {record.project}
+                </span>
             ),
-            sorter: (a, b) => a.project.localeCompare(b.project),
-            width: 180,
-            // fixed: 'left',
-            // align: 'left'
-            //   responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+            customSort: (a, b) => a.project.localeCompare(b.project),
         },
         {
             title: 'Time',
-            // dataIndex: 'time',
-            key: 'time',
-            sorter: (a: any, b: any) => a.time.split(" ")[0].split(":").join("") - b.time.split(" ")[0].split(":").join(""),
-            width: 200,
-            align: 'left',
-            render: record => (
+
+            customSort: (a, b) => +new Date(a.time) - +new Date(b.time),
+            render: (record) => (
                 <span>
                     {record.time}
-                    <span hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}>
+                    <span
+                        hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}
+                    >
                         {record.mintExpiresAt}
                     </span>
                     {/* {record.time !== "" && " (" + moment.utc(record.time, 'hh:mm:ss').fromNow() + ")"} */}
@@ -173,110 +175,97 @@ const Schedule = () => {
                     }
                 </span>
             ),
-            //   responsive: ['xs', 'sm'], // Will be displayed on every size of screen
         },
         // {
         //     title: 'Time',
-        //     key: 'tillTheMint',
-        //     width: 130,
         //     render: record => (
         //         // (record.time)
         //         <span>
         //             {record.time !== "" && moment.utc(record.time, 'hh:mm:ss').fromNow()}
         //         </span>
         //     ),
-        //     align: 'left'
-        //     // responsive: ['md'], // Will not be displayed below 768px
         // },
         {
             title: 'Price',
-            dataIndex: 'price',
-            key: 'value',
-            sorter: (a: any, b: any) => a.price.split(" ")[0] - b.price.split(" ")[0],
-            width: 150,
-            align: 'left'
-            // responsive: ['xs', 'sm'], // Will be displayed on every size of screen
+            customSort: (a, b) =>
+                +a.price.split(' ')[0] - +b.price.split(' ')[0],
+            render: (record) => <span>{record.price}</span>,
         },
         {
             title: 'Supply',
-            dataIndex: 'count',
-            key: 'count',
-            sorter: (a: any, b: any) => a.count - b.count,
-            width: 100,
-            align: 'left'
-            //   responsive: ['md'], // Will not be displayed below 768px
+            customSort: (a, b) => +a.count - +b.count,
+			render: (record) => <span>{record.count}</span>,
         },
         {
-
             title: '# Discord',
-            key: 'numbersOfDiscordMembers',
-            width: 110,
-            align: 'left',
-            render: record => (
+            render: (record) => (
                 <span>
-                    {record.numbersOfDiscordMembers ? parseInt(record.numbersOfDiscordMembers).toLocaleString() : ''}
+                    {record.numbersOfDiscordMembers
+                        ? parseInt(
+                              record.numbersOfDiscordMembers
+                          ).toLocaleString()
+                        : ''}
                 </span>
             ),
-            sorter: (a: any, b: any) => a.numbersOfDiscordMembers - b.numbersOfDiscordMembers,
-            // responsive: ['md'], // Will not be displayed below 768px
+            customSort: (a, b) =>
+                +a.numbersOfDiscordMembers - +b.numbersOfDiscordMembers,
         },
         {
-
             title: '# Twitter',
-            // dataIndex: 'numbersOfTwitterFollowers',
-            key: 'numbersOfTwitterFollowers',
-            render: record => (
+            render: (record) => (
                 <>
-                    {record.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                    {record.numbersOfTwitterFollowers
+                        ?.toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 </>
             ),
-            sorter: (a: any, b: any) => a.numbersOfTwitterFollowers - b.numbersOfTwitterFollowers,
-            width: 110,
-            align: 'left'
-            // responsive: ['md'], // Will not be displayed below 768px
+            customSort: (a, b) =>
+                a.numbersOfTwitterFollowers - b.numbersOfTwitterFollowers,
         },
         {
             title: '# Tweet Interactions',
-            key: 'tweetInteraction',
-            sorter: (a: any, b: any) => a.tweetInteraction.total - b.tweetInteraction.total,
-            render: record => (
+            customSort: (a, b) =>
+                a.tweetInteraction.total - b.tweetInteraction.total,
+            render: (record) => (
                 <>
-                <span>
-                    {record.tweetInteraction.total}
-                    {/*likes: {record.tweetInteraction?.likes} <br />*/}
-                    {/*comments: {record.tweetInteraction?.comments} <br />*/}
-                    {/*retweets: {record.tweetInteraction?.retweets}*/}
-
-                </span>
+                    <span>
+                        {record.tweetInteraction.total}
+                        {/*likes: {record.tweetInteraction?.likes} <br />*/}
+                        {/*comments: {record.tweetInteraction?.comments} <br />*/}
+                        {/*retweets: {record.tweetInteraction?.retweets}*/}
+                    </span>
                 </>
             ),
-            width: 200,
-            align: 'center'
-            // responsive: ['md'], // Will not be displayed below 768px
         },
         {
             title: 'Links',
-            key: 'connections',
-            render: record => (
+            render: (record) => (
                 <>
-                    <span hidden={!record.discordLink || !record.numbersOfDiscordMembers} >
-                         <a href={record.discordLink} className="link_underline" target='_blank'>Discord</a>
-                        <br/>
+                    <span
+                        hidden={
+                            !record.discordLink ||
+                            !record.numbersOfDiscordMembers
+                        }
+                    >
+                        <a
+                            href={record.discordLink}
+                            className="link_underline"
+                            target="_blank"
+                        >
+                            Discord
+                        </a>
+                        <br />
                     </span>
-                    <a href={record.twitterLink} className="link_underline" target='_blank'>Twitter</a>
+                    <a
+                        href={record.twitterLink}
+                        className="link_underline"
+                        target="_blank"
+                    >
+                        Twitter
+                    </a>
                 </>
             ),
-            width: 100,
-            align: 'left'
-            // responsive: ['md'], // Will not be displayed below 768px
         },
-        // {
-        //   title: 'Description',
-        //   dataIndex: 'extras',
-        //   key: 'description',
-        //   width: 300,
-        //   responsive: ['md'], // Will not be displayed below 768px
-        // },
     ];
 
     // Renders
@@ -284,16 +273,6 @@ const Schedule = () => {
 
         <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 max-w-fit mx-auto mb-10`}>
 
-            <div className="flex space-x-2 items-center">
-                <div className={`font-bold pb-1 `}>Mint Schedule - {date}</div>
-            </div>
-
-
-            {/* <div className="bg-gradient-to-b from-bg-primary to-bg-primary justify-center items-center p-4 pt-2 sticky">*/}
-
-            <p className="pt-3">Projects must have {'>'} 2,000 Discord members and {'>'} 1,000 Twitter followers before showing up on the list.
-                <br/>
-                "# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them</p>
             {
                 isLoading
                     ? <div className="pt-10 flex justify-center items-center">
@@ -304,16 +283,11 @@ const Schedule = () => {
                     <div className="p-4">
                         <br/>
                         <Table
-                            rowKey='project'
-                            dataSource={dataSource}
+                            data={dataSource}
                             columns={columns}
-                            bordered
-                            // scroll={{y: 500}}
-                            scroll={{x: 'max-content'}}
-                            // This both x & y aren't working together properly in our project. I tested out on codesandbox. It works perfectly there!!!
-                            // scroll={{x: 'max-content', y: 500}}
-                            pagination={false}
-                            style={{width: '100%', margin: '0 auto', textAlign: 'center'}}
+							title={`Mint Schedule - ${date}`}
+							description={`Projects must have > 2,000 Discord members and > 1,000 Twitter followers before showing up on the list.
+							\n "# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them`}
                         />
 
                         {/* <IonModal isOpen={isOpen}  onDidDismiss={onClose as any} >

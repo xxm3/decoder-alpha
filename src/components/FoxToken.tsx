@@ -703,14 +703,9 @@ function FoxToken({foo, onSubmit}: FoxToken) {
         <>
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
 
-                <div className={`font-bold pb-1 w-full`}>
-                    <a href="https://famousfoxes.com/tokenmarket" className="underline" target="_blank">
-
-                        <span hidden={width < smallWidthpx}>Fox Token Market - Analysis</span>
-                        <span hidden={width > smallWidthpx}>Token Market</span>
-                    </a>
+                <div className={`font-bold pb-10 w-full`}>
                     <br hidden={width > smallWidthpx} />
-                    <IonButton className="float-right text-sm small-btn " color="secondary"
+                    <IonButton className="float-right text-sm small-btn "
                                // onClick={() => setPopoverOpened(null) }
                                onClick={(e: any) => { e.persist(); setPopoverOpened(e); }}
                     >
@@ -800,10 +795,6 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                             </div>
                         </IonContent>
                     </IonPopover>
-
-                    <div hidden={!tableData.length || width < smallWidthpx}>
-                        👪 are community added names
-                    </div>
 
                     {/*--{token}-{name}-*/}
                 </div>
@@ -972,6 +963,8 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                         data={tableData}
                                         columns={columns}
 										title="Fox Token Market - Analysis"
+										description='Contains community added names'
+										url="https://famousfoxes.com/tokenmarket"
                                     />
                                 </div>
                               

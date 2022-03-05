@@ -34,11 +34,11 @@ const Search: React.FC = () => {
      */
     // for setting height of chart, depending on what width browser is
     const chartHeight = useMemo(() => {
-        if(width > 1536) return 75;
-        if(width > 1280) return 90;
-        if(width > 1024) return 110;
-        if(width > 768) return 155;
-        if(width > 640) return 200;
+        if(width > 1536) return 100;
+        if(width > 1280) return 115;
+        if(width > 1024) return 135;
+        if(width > 768) return 180;
+        if(width > 640) return 225;
         return 140;
     }, [width]);
 

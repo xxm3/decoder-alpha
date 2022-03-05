@@ -1,7 +1,8 @@
-import MaterialTable, { MaterialTableProps, } from '@material-table/core'
-import { createTheme,  MuiThemeProvider, Paper, } from '@material-ui/core';
+import MaterialTable, { MaterialTableProps } from '@material-table/core'
+import { createTheme,  MuiThemeProvider } from '@material-ui/core';
 import { colorsByName } from '../theme/Theme';
 import Style from './Style';
+import Help from './Help';
 
 
 const blue = "#0000FF";
@@ -13,7 +14,7 @@ const green = "#00FF00";
 function Table<RowData extends object>(
     props: MaterialTableProps<RowData> & {
         columns: MaterialTableProps<RowData>['columns'];
-    }
+    } & { description ?: string; url ?: string;}
 ) {
 	const theme = createTheme({
 		palette: {
@@ -22,54 +23,88 @@ function Table<RowData extends object>(
 			},
 			text : {
 				primary : colorsByName["primary"].contrast, // color of all normal text in the table
-				secondary: "#c7c7ca", // the hover color of the column headers and the color of the text which shows which page the user is on
-				disabled: red, // the hover color of the column headers and the color of the text which shows which page the user is on
+				secondary: "#d4d3d5", // the hover color of the column headers and the color of the text which shows which page the user is on
+				 // the hover color of the column headers and the color of the text which shows which page the user is on
 			},
 			action: {
 				active: colorsByName["primary"].contrast, // color of action buttons such as next page, previous page, first oage, last page, cancel search
-				disabled: colorsByName["primary"].contrast, // color of disabled action buttons
+				disabled: "#afaeb4", // color of disabled action buttons
+				selected: "#1a1b30", // selected list item in dropdown
+				hover: "#26273b", // hover color of list items in dropdown
+				hoverOpacity: 0.1
 			},
 		}
 	})
     return (
-       	 <MuiThemeProvider theme={theme}>
-				<Style>
-					{`
+        <MuiThemeProvider theme={theme}>
+            <Style>
+                {`
 						td.MuiTableCell-footer {
 							border-bottom: none;
 						}
-
-						.table-container {
-							// border-width: 1px;
-							padding: 1rem 0;
-							border-radius: 0.25rem;
-						}
-
 						
 						tbody tr:nth-child(even) {
-							// background-color: rgba(var(--ion-color-primary-rgb), 0.075);
+							background-color: rgba(var(--ion-color-primary-rgb), 0.5);
 						}
 						tbody tr:nth-child(odd) {
-							background-color: rgba(var(--ion-color-primary-rgb), 0.15);
+							background-color: rgba(var(--ion-color-primary-rgb), 0.3);
+						}						
+
+						table { 
+							--tr-border-radius : 10px;
 						}
-						
-						
+
+						table:not(first-child){
+							margin-top: 20px;
+						}
+						tbody tr:first-child td:first-child {
+							border-radius: var(--tr-border-radius) 0 0 0;
+						}
+						tbody tr:first-child td:last-child {
+							border-radius: 0 var(--tr-border-radius) 0 0;
+						}
+						tbody tr:last-child td:first-child {
+							border-radius: 0 0 0 var(--tr-border-radius);
+						}
+						tbody tr:last-child td:last-child {
+							border-radius: 0 0 var(--tr-border-radius) 0;
+						}
+
+						.MuiToolbar-root {
+							justify-content: space-between;
+							width: 100%;
+						}
 					`}
-				</Style>
-	            <MaterialTable
-	                {...props}
-	                columns={props.columns.map((column) => ({
-	                    ...column,
-	                    cellStyle: { whiteSpace: "nowrap", borderBottom : "none", padding : 20},
-	                }))}
-					options={{ 
-						headerStyle: { whiteSpace : "nowrap", borderBottom : "none",},
-					}}
-					components={{
-						Container: (props) => <Paper {...props} className="table-container"/>,
-					}}
-	            />
-	        </MuiThemeProvider>
+            </Style>
+            <MaterialTable
+                {...props}
+                columns={props.columns.map((column) => ({
+                    ...column,
+                    cellStyle: {
+                        whiteSpace: 'nowrap',
+                        borderBottom: 'none',
+                        padding: 20,
+                    },
+                }))}
+                title={
+                    <div className="flex space-x-2 min-w-max">
+                        <p className="text-xl font-medium min-w-max" role="link" onClick={() => {
+							props.url && window.open(props.url, "_blank")
+						}}>{props.title}</p>
+						{props.description && <Help description={props.description} />}
+                    </div>
+                }
+                options={{
+                    headerStyle: {
+                        fontSize: '16px',
+                        whiteSpace: 'nowrap',
+                        borderBottom: 'none',
+						paddingBottom : 25,
+                    },
+
+                }}
+            />
+        </MuiThemeProvider>
     );
 }
 

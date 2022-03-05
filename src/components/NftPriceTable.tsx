@@ -12,7 +12,7 @@ import { Column  } from '@material-table/core';
 import Table from './Table';
 import Style from './Style';
 import moment from 'moment';
-import {chatboxEllipsesOutline, cog} from "ionicons/icons";
+import {chatboxEllipsesOutline, cog, eyeOffOutline, eyeOutline} from "ionicons/icons";
 
 interface NftPriceTableProps {
     foo?: string;
@@ -186,7 +186,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 
                
 
-                    <span hidden={!tableData.length}>
+                    <span hidden={!tableData.length} className="mb-20">
                         <IonButton
                             hidden={width <= smallWidthpx}
                             className="float-right text-sm small-btn ml-5" color="secondary"
@@ -203,7 +203,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 
                 </div>
 
-                <p hidden={width < smallWidthpx}>These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel</p>
+    
 
                 <div>
                 {
@@ -217,6 +217,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                                 data={tableData}
                                 columns={columns}
 								title={"Mint Alerts Automated - Stats"}
+								description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
                             />
                         </div>
                 }
