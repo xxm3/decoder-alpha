@@ -30,6 +30,7 @@ import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
 import Cookies from "universal-cookie";
 import {getLiveFoxTokenData, shortenedWallet} from "./FoxTokenFns";
+import _ from 'lodash';
 
 /**
  * IF WANT TO TEST THIS PAGE
@@ -88,14 +89,17 @@ function FoxToken({foo, onSubmit}: FoxToken) {
             return;
         }
 
-        // TODO1): need delay..ask parth--- DEBOUNCE
-        setTimeout(()=>{
-            cookies.set('lineColorSelected', lineColorSelected);
-            cookies.set('shadedAreaColorSelected', shadedAreaColorSelected);
+        cookies.set('lineColorSelected', lineColorSelected);
+        cookies.set('shadedAreaColorSelected', shadedAreaColorSelected);
 
-            // redraw the chart
-            viewChart();
-        }, 2000);
+        // redraw the chart
+        // viewChart();
+
+        present({
+            message: 'After setting a valid color, load a new chart to see it',
+            color: 'success',
+            duration: 5000
+        });
 
     }, [lineColorSelected, shadedAreaColorSelected]);
 
@@ -776,24 +780,23 @@ function FoxToken({foo, onSubmit}: FoxToken) {
 
                                 {/*TODO 3): put this into daily-mints https://gitlab.com/nft-relay-group/functions/-/merge_requests/93 in am when he fixes */}
 
-                                {/*TODO 4): portals wl email and mirror .... plus email bayc */}
+                                {/*TODO 4): portals wl email and mirror .... plus email bayc  --- PLUS MIRROR ME DAO CHAT & GET ON OG ON # ACCTS! (boon my mint) */}
 
 
-                                {/*TODO 1!!! */}
-                                {/*<h3 className="font-bold pb-1 w-full pt-5">Chart Colors</h3>*/}
+                                <h3 className="font-bold pb-1 w-full pt-5">Chart Colors</h3>
 
-                                {/*<IonItem>*/}
-                                {/*    <IonLabel position="stacked" className="font-bold">Line Color</IonLabel>*/}
-                                {/*    <IonInput onIonChange={(e) => setLineColorSelected(e.detail.value!)}*/}
-                                {/*              value={lineColorSelected}*/}
-                                {/*              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>*/}
-                                {/*</IonItem>*/}
-                                {/*<IonItem>*/}
-                                {/*    <IonLabel position="stacked" className="font-bold">Shaded Area Color</IonLabel>*/}
-                                {/*    <IonInput onIonChange={(e) => setShadedAreaColorSelected(e.detail.value!)}*/}
-                                {/*              value={shadedAreaColorSelected}*/}
-                                {/*              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>*/}
-                                {/*</IonItem>*/}
+                                <IonItem>
+                                    <IonLabel position="stacked" className="font-bold">Line Color</IonLabel>
+                                    <IonInput onIonChange={(e) => setLineColorSelected(e.detail.value!)}
+                                              value={lineColorSelected}
+                                              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>
+                                </IonItem>
+                                <IonItem>
+                                    <IonLabel position="stacked" className="font-bold">Shaded Area Color</IonLabel>
+                                    <IonInput onIonChange={(e) => setShadedAreaColorSelected(e.detail.value!)}
+                                              value={shadedAreaColorSelected}
+                                              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>
+                                </IonItem>
 
                             </div>
                         </IonContent>
