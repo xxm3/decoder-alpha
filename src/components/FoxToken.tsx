@@ -777,26 +777,28 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                 </IonList>
 
                                 {/*TODO: MY WALLET BUGGED */}
-                                {/*TODO: BOT DESCRIPTION
 
-                                While most of these bots will be available after release, we can't guarantee that all will be available.
-                                */}
+                                {/*TODO: put this into daily-mints https://gitlab.com/nft-relay-group/functions/-/merge_requests/93 in am when he fixes */}
+
+                                {/*TODO: portals wl email and mirror*/}
+
 
                                 {/*TODO 1!!! */}
-                                <h3 className="font-bold pb-1 w-full pt-5">Chart Colors</h3>
+                                {/*<h3 className="font-bold pb-1 w-full pt-5">Chart Colors</h3>*/}
 
-                                <IonItem>
-                                    <IonLabel position="stacked" className="font-bold">Line Color</IonLabel>
-                                    <IonInput onIonChange={(e) => setLineColorSelected(e.detail.value!)}
-                                              value={lineColorSelected}
-                                              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>
-                                </IonItem>
-                                <IonItem>
-                                    <IonLabel position="stacked" className="font-bold">Shaded Area Color</IonLabel>
-                                    <IonInput onIonChange={(e) => setShadedAreaColorSelected(e.detail.value!)}
-                                              value={shadedAreaColorSelected}
-                                              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>
-                                </IonItem>
+                                {/*<IonItem>*/}
+                                {/*    <IonLabel position="stacked" className="font-bold">Line Color</IonLabel>*/}
+                                {/*    <IonInput onIonChange={(e) => setLineColorSelected(e.detail.value!)}*/}
+                                {/*              value={lineColorSelected}*/}
+                                {/*              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>*/}
+                                {/*</IonItem>*/}
+                                {/*<IonItem>*/}
+                                {/*    <IonLabel position="stacked" className="font-bold">Shaded Area Color</IonLabel>*/}
+                                {/*    <IonInput onIonChange={(e) => setShadedAreaColorSelected(e.detail.value!)}*/}
+                                {/*              value={shadedAreaColorSelected}*/}
+                                {/*              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>*/}
+                                {/*</IonItem>*/}
+
                             </div>
                         </IonContent>
                     </IonPopover>
