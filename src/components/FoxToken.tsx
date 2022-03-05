@@ -88,7 +88,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
             return;
         }
 
-        // TODO: need delay..ask parth--- DEBOUNCE
+        // TODO1): need delay..ask parth--- DEBOUNCE
         setTimeout(()=>{
             cookies.set('lineColorSelected', lineColorSelected);
             cookies.set('shadedAreaColorSelected', shadedAreaColorSelected);
@@ -405,8 +405,6 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                 // think want to keep this in ... some timing ... issue....
                 // console.log(foxLineData);
 
-
-                // TODO-...: go to the home page ... go to fox token table ... click view chart ... make sure it SCROLLS TO BOTTOM of page (or scrolls to make the chart the top of the page)
                 // window.scrollTo(0,document.body.scrollHeight);
 
             })
@@ -776,11 +774,9 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                     </IonRadioGroup>
                                 </IonList>
 
-                                {/*TODO: MY WALLET BUGGED */}
+                                {/*TODO 3): put this into daily-mints https://gitlab.com/nft-relay-group/functions/-/merge_requests/93 in am when he fixes */}
 
-                                {/*TODO: put this into daily-mints https://gitlab.com/nft-relay-group/functions/-/merge_requests/93 in am when he fixes */}
-
-                                {/*TODO: portals wl email and mirror*/}
+                                {/*TODO 4): portals wl email and mirror .... plus email bayc */}
 
 
                                 {/*TODO 1!!! */}

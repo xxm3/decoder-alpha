@@ -234,7 +234,7 @@ const Home = () => {
         <div className="w-full">
             {/* Main Content After Header - The light gray Container */}
 
-            {/*TODO: remove later*/}
+            {/*TODO 5): remove later*/}
             {/*if need to tell the user of errors*/}
             <div className="m-3 relative bg-red-100 p-4 rounded-xl">
                 <p className="text-lg text-red-700 font-medium">
