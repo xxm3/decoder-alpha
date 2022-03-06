@@ -166,12 +166,14 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
         for (let i in finalAry) {
             // loop through user tokens
             for (let y in mySplTokens) {
+
                 // if match
                 // @ts-ignore
                 if (mySplTokens[y].token === finalAry[i].token) {
                     // then ADD data
                     if (!finalAry[i].whichMyWallets) {
-                        finalAry[i].whichMyWallets = shortenedWallet(mySplTokens[y].myWallet);
+                        // TODO: test/deploy/tell cryptonaught
+                        finalAry[i].whichMyWallets = mySplTokens[y].amount + " - " + shortenedWallet(mySplTokens[y].myWallet);
                     }
                     else {
                         finalAry[i].whichMyWallets += ", " + shortenedWallet(mySplTokens[y].myWallet);
