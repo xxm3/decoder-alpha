@@ -234,16 +234,15 @@ const Home = () => {
         <div className="w-full">
             {/* Main Content After Header - The light gray Container */}
 
-            {/*TODO 5): remove later*/}
-            {/*if need to tell the user of errors*/}
-            <div className="m-3 relative bg-red-100 p-4 rounded-xl">
-                <p className="text-lg text-red-700 font-medium">
-                    <b>Our Discord ingestion bots decided to take a break from Fri @ 5pm est until Saturday at 940am est. They are back up and running now.</b>
-                </p>
-                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                    !
-                </span>
-            </div>
+            {/* if need to tell the user of errors */}
+            {/*<div className="m-3 relative bg-red-100 p-4 rounded-xl">*/}
+            {/*    <p className="text-lg text-red-700 font-medium">*/}
+            {/*        <b>Our Discord ingestion bots decided to take a break from Fri @ 5pm est until Saturday at 940am est. They are back up and running now.</b>*/}
+            {/*    </p>*/}
+            {/*    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">*/}
+            {/*        !*/}
+            {/*    </span>*/}
+            {/*</div>*/}
 
             {/* Stacked line Search stuff - The bit darker Gray Container */}
             <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-2`}>
