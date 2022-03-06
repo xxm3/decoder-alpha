@@ -119,7 +119,6 @@ function FoxToken({foo, onSubmit}: FoxToken) {
          */
 
         // TODO 777: need a "testing.md" page...
-        // TODO 777: need "amount owed" to be in the header of the table
 
         // TODO: FUKT UP
         // present({
@@ -312,14 +311,14 @@ function FoxToken({foo, onSubmit}: FoxToken) {
             ),
         },
         {
-            title: 'View in Explorer', 
+            title: 'View in Explorer',
             render: record => (
                 <a target="_blank" className="no-underline big-emoji"
                    href={'https://explorer.solana.com/address/' + record.token}>🌐</a>
             ),
         },
         {
-            title: 'Which Of My Wallet(s)',
+            title: '# Owned & Wallet',
             // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
         }
     ];
@@ -736,7 +735,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                         }}
                     >
                         <IonIcon icon={cog} className="pr-1" />
-                        Date format
+                        Customize
                     </IonButton>
                     <br hidden={width > smallWidthpx} />
 
