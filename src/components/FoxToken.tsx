@@ -30,6 +30,7 @@ import Cookies from "universal-cookie";
 import {getLiveFoxTokenData, shortenedWallet} from "./FoxTokenFns";
 import Table from './Table';
 import { Column } from '@material-table/core';
+import _ from 'lodash';
 
 interface FoxTokenData {
 	token : string;
@@ -41,6 +42,7 @@ interface FoxTokenData {
 	totalTokenListings : number;
 	whichMyWallets : string;
 }
+
 /**
  * IF WANT TO TEST THIS PAGE
  * - be logged out of wallet and test things
@@ -98,14 +100,17 @@ function FoxToken({foo, onSubmit}: FoxToken) {
             return;
         }
 
-        // TODO: need delay..ask parth--- DEBOUNCE
-        setTimeout(()=>{
-            cookies.set('lineColorSelected', lineColorSelected);
-            cookies.set('shadedAreaColorSelected', shadedAreaColorSelected);
+        cookies.set('lineColorSelected', lineColorSelected);
+        cookies.set('shadedAreaColorSelected', shadedAreaColorSelected);
 
-            // redraw the chart
-            viewChart();
-        }, 2000);
+        // redraw the chart
+        // viewChart();
+
+        present({
+            message: 'After setting a valid color, load a new chart to see it',
+            color: 'success',
+            duration: 5000
+        });
 
     }, [lineColorSelected, shadedAreaColorSelected]);
 
@@ -409,8 +414,6 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                 // think want to keep this in ... some timing ... issue....
                 // console.log(foxLineData);
 
-
-                // TODO-...: go to the home page ... go to fox token table ... click view chart ... make sure it SCROLLS TO BOTTOM of page (or scrolls to make the chart the top of the page)
                 // window.scrollTo(0,document.body.scrollHeight);
 
             })
@@ -463,9 +466,10 @@ function FoxToken({foo, onSubmit}: FoxToken) {
 
             for (let i in tokenAccounts.value) {
                 if (tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0) {
-                    // console.log(tokenAccounts.value[i]); // TODO 2!!!: add in uiAmount etc... cryptonaught
+                    // console.log(tokenAccounts.value[i]);
                     mySplTokensTemporaryAgainAgain.push({
                         token: tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint,
+                        amount: tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount,
                         myWallet: wallet
                     });
                 }
@@ -752,16 +756,12 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                     </IonRadioGroup>
                                 </IonList>
 
-                                {/*TODO: MY WALLET BUGGED */}
-                                {/*TODO: BOT DESCRIPTION
+                                {/*TODO 3): put this into daily-mints https://gitlab.com/nft-relay-group/functions/-/merge_requests/93 in am when he fixes */}
 
-                                While most of these bots will be available after release, we can't guarantee that all will be available.
-                                */}
+                                {/*TODO 4): portals wl email and mirror .... plus email bayc  --- PLUS MIRROR ME DAO CHAT & GET ON OG ON # ACCTS! (boon my mint) */}
 
-                                {/*TODO 1!!! */}
-                                <h3 className="font-bold pb-1 w-full pt-5">
-                                    Chart Colors
-                                </h3>
+
+                                <h3 className="font-bold pb-1 w-full pt-5">Chart Colors</h3>
 
                                 <IonItem>
                                     <IonLabel
@@ -797,6 +797,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                         placeholder="red, #c6ac95, rgb(255, 0, 0)"
                                     ></IonInput>
                                 </IonItem>
+
                             </div>
                         </IonContent>
                     </IonPopover>
