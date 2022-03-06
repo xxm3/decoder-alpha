@@ -106,11 +106,27 @@ function FoxToken({foo, onSubmit}: FoxToken) {
         // redraw the chart
         // viewChart();
 
-        present({
-            message: 'After setting a valid color, load a new chart to see it',
-            color: 'success',
-            duration: 5000
-        });
+        /**
+         * TODO 111: going out 3x....
+         *
+         * going out to 9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41
+         * FoxToken.tsx:435 going out to 9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41
+         * FoxToken.tsx:435 going out to 9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41
+         * 3   FoxToken.tsx:435 going out to AnUWnrpQnk98rwdQpSW7tyJv5z9uz9BPFsYxFXBJAhHd
+         * 3    FoxToken.tsx:435 going out to Fb4Xsbo8LXgshcBEjFQ3iLNfqT7o5615MdPtRRbHTAg8
+         *
+         *
+         */
+
+        // TODO 777: need a "testing.md" page...
+        // TODO 777: need "amount owed" to be in the header of the table
+
+        // TODO: FUKT UP
+        // present({
+        //     message: 'After setting a valid color, load a new chart to see it',
+        //     color: 'success',
+        //     duration: 5000
+        // });
 
     }, [lineColorSelected, shadedAreaColorSelected]);
 
@@ -462,6 +478,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                 {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
             );
 
+
             let mySplTokensTemporaryAgainAgain: any = [];
 
             for (let i in tokenAccounts.value) {
@@ -755,8 +772,6 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                         </IonItem>
                                     </IonRadioGroup>
                                 </IonList>
-
-                                {/*TODO 3): put this into daily-mints https://gitlab.com/nft-relay-group/functions/-/merge_requests/93 in am when he fixes */}
 
                                 {/*TODO 4): portals wl email and mirror .... plus email bayc  --- PLUS MIRROR ME DAO CHAT & GET ON OG ON # ACCTS! (boon my mint) */}
 
