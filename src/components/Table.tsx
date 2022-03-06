@@ -87,8 +87,8 @@ function Table<RowData extends object>(
                     },
                 }))}
                 title={
-                    <div className="flex space-x-2 min-w-max">
-                        <p className="text-xl font-medium min-w-max" role="link" onClick={() => {
+                    <div className="flex space-x-2">
+                        <p className="text-xl font-medium text-ellipsis" role="link" onClick={() => {
 							props.url && window.open(props.url, "_blank")
 						}}>{props.title}</p>
 						{props.description && <Help description={props.description} />}

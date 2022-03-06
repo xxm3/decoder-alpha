@@ -44,7 +44,7 @@ const Display: React.FC<{
     // chartDataDailyCount?: any;
     // chartDataPerSource?: any;
     // chartHeight: number;
-    messages: (Message | undefined)[];
+    messages: Message[];
     totalCount?: number;
     // isLoadingChart?: any;
     isLoadingMessages?: any;
@@ -97,7 +97,7 @@ const Display: React.FC<{
 
                 {/* list of messages, ie. search results */}
                 {messages.map((m, i) => (
-                    m ? (
+                    
                         <MessageListItem
                             onClick={() => {
                                 if (m.source === 'Twitter') {
@@ -108,10 +108,8 @@ const Display: React.FC<{
                             message={m}
                             key={m.id}
                         />
-                    ) : (
-                        <MessageListItem index={i} key={i} />
                     )
-                ))}
+                )}
 
                 {/*if you click on a message*/}
                 {selectedMessage && (

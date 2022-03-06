@@ -15,6 +15,7 @@ import SearchBar from "../SearchBar";
 import useConnectWallet from "../../hooks/useConnectWallet";
 import WalletButton from "../WalletButton";
 import Style from "../Style";
+import Help from "../Help";
 
 
 const HeaderContainer = () => {
@@ -145,10 +146,10 @@ const HeaderContainer = () => {
                                 />
                             )}
                             <div
-                                className={`flex-grow ${
+                                className={`flex-grow flex items-baseline space-x-2 ${
                                     showMobileSearch
-                                        ? 'max-w-3xl px-3'
-                                        : 'hidden lg:block'
+                                        ? 'max-w-[50rem] px-3'
+                                        : 'hidden lg:flex'
                                 }`}
                             >
                                 <SearchBar
@@ -159,6 +160,8 @@ const HeaderContainer = () => {
                                         Results include graphs, and messages you can scroll through. Click on a message to view more'
                                     disableReset="true"
                                 />
+								<Help description={`Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale"). Results include graphs, and messages you can scroll through. Click on a message to view more`}/>
+
                             </div>
                             {!showMobileSearch && (
                                 <IonIcon

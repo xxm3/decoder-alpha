@@ -12,7 +12,7 @@ import { Column  } from '@material-table/core';
 import Table from './Table';
 import Style from './Style';
 import moment from 'moment';
-import {chatboxEllipsesOutline, cog, eyeOffOutline, eyeOutline} from "ionicons/icons";
+import { eye, eyeOff, eyeOffOutline, eyeOutline} from "ionicons/icons";
 
 interface NftPriceTableProps {
     foo?: string;
@@ -182,28 +182,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 
     return (
         <>
-            <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
-
-               
-
-                    <span hidden={!tableData.length} className="mb-20">
-                        <IonButton
-                            hidden={width <= smallWidthpx}
-                            className="float-right text-sm small-btn ml-5" color="secondary"
-                            onClick={() => setHideComments(!hideComments)}
-                        >
-                            <IonIcon icon={chatboxEllipsesOutline} className="pr-1"/>
-                            Show Comments
-                        </IonButton>
-
-                        {/*<a className="float-right" hidden={width > smallWidthpx}>*/}
-                        {/*    <IonIcon icon={chatboxEllipsesOutline} className="pr-1"/>*/}
-                        {/*</a>*/}
-                    </span>
-
-                </div>
-
-    
+              
 
                 <div>
                 {
@@ -218,6 +197,14 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                                 columns={columns}
 								title={"Mint Alerts Automated - Stats"}
 								description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
+								actions={[
+									{ 
+										icon : hideComments ? () => <IonIcon icon={eye}/> :  () => <IonIcon icon={eyeOff}/>,
+										tooltip : hideComments ? "Show commentds" : "Hide comments",
+										onClick : () => setHideComments(!hideComments),
+										isFreeAction : true
+									}
+								]}
                             />
                         </div>
                 }

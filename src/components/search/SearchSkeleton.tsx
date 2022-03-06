@@ -1,6 +1,6 @@
-const SearchSkelleton = () => {
+const SearchSkeleton = () => {
   return (
-      <div className="skelleton p-3">
+      <div className="skeleton p-3">
         <div className='search__messageLoading py-2 flex'> 
             <div className="search__image mr-2" />
             <div className="w-full">
@@ -21,4 +21,4 @@ const SearchSkelleton = () => {
   )
 }
 
-export default SearchSkelleton
+export default SearchSkeleton

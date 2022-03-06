@@ -153,6 +153,7 @@ const Schedule = () => {
                 </span>
             ),
             customSort: (a, b) => a.project.localeCompare(b.project),
+			customFilterAndSearch: (term, rowData) => rowData.project.toLowerCase().includes(term.toLowerCase()),
         },
         {
             title: 'Time',

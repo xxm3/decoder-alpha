@@ -3,12 +3,6 @@
 	@apply rounded-full h-12 w-12 flex-shrink-0;
 }
 
-@keyframes ripple {
-	to {
-		width : 100%;
-		opacity : 0;
-	}
-}
 
 /* make the modal bigger */
 .modal-wrapper {

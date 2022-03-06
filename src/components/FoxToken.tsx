@@ -22,7 +22,7 @@ import {Chart} from "react-chartjs-2";
 import {getDailyCountData} from "../util/charts";
 import moment from "moment";
 import * as solanaWeb3 from '@solana/web3.js';
-import {addCircleOutline, addOutline, albumsOutline, cloud, cog, wallet} from "ionicons/icons";
+import {add, addCircleOutline, addOutline, albums, albumsOutline, cloud, cog, wallet} from "ionicons/icons";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
@@ -271,7 +271,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
         {
             title: 'Name',
             customSort: (a, b) => a.name.localeCompare(b.name),
-			render : (record) => <span>{record.name}</span>
+			render : (record) => <span>{record.name}</span>,
         },
         {
             title: 'Total Listings',
@@ -701,71 +701,52 @@ function FoxToken({foo, onSubmit}: FoxToken) {
     // @ts-ignore
     return (
         <>
-            <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
-
+            <div
+                className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}
+            >
                 <div className={`font-bold pb-10 w-full`}>
                     <br hidden={width > smallWidthpx} />
-                    <IonButton className="float-right text-sm small-btn "
-                               // onClick={() => setPopoverOpened(null) }
-                               onClick={(e: any) => { e.persist(); setPopoverOpened(e); }}
+                    <IonButton
+                        className="float-right text-sm small-btn "
+                        // onClick={() => setPopoverOpened(null) }
+                        onClick={(e: any) => {
+                            e.persist();
+                            setPopoverOpened(e);
+                        }}
                     >
-                        <IonIcon icon={cog} className="pr-1"/>
-                        My Tokens Filter / Add Names
+                        <IonIcon icon={cog} className="pr-1" />
+                        Date format
                     </IonButton>
                     <br hidden={width > smallWidthpx} />
 
                     <IonPopover
                         // @ts-ignore
                         event={popoverOpened}
-                        isOpen={!!popoverOpened} onDidDismiss={() => setPopoverOpened(null)} >
+                        isOpen={!!popoverOpened}
+                        onDidDismiss={() => setPopoverOpened(null)}
+                    >
                         <IonContent>
-
                             <div className="p-2">
-
-                                <h3 className="font-bold pb-1 w-full">Filter Data</h3>
-
-                                <IonButton color="secondary" className="text-sm small-btn "
-                                           onClick={() => viewMyTokens(true)}
-                                           hidden={viewMyTokensClicked}
-                                >
-                                    <IonIcon icon={wallet} className="pr-1"/>
-                                    View My Tokens
-                                </IonButton>
-                                <IonButton color="secondary" className="text-sm small-btn "
-                                           onClick={() => viewMyTokens(false)}
-                                           hidden={!viewMyTokensClicked}
-                                           data-tip="View All Tokens"
-                                >
-                                    <IonIcon icon={wallet} className="pr-1"/>
-                                    View All Tokens
-                                </IonButton>
-                                <IonButton color="success" className="text-sm small-btn  bit-bigger-btn"
-                                           onClick={() => clickedMultWall(true)}
-                                >
-                                    <IonIcon icon={albumsOutline} className="pr-1"/>
-                                    Track Mult Wallets
-                                </IonButton>
-
-                                <h3 className="font-bold pb-1 w-full pt-5">Add Data</h3>
-
-                                <IonButton color="success" className="text-sm small-btn"
-                                           onClick={() => clickedAddName(true)}
-                                >
-                                    <IonIcon icon={addCircleOutline} className="pr-1"/>
-                                    Add custom name
-                                </IonButton>
-
-                                <h3 className="font-bold pb-1 w-full pt-5">Date Format</h3>
+                                <h3 className="font-bold pb-1 w-full pt-5">
+                                    Date Format
+                                </h3>
 
                                 <IonList>
-                                    <IonRadioGroup value={chartDateSelected} onIonChange={e => setChartDateSelected(e.detail.value)}>
+                                    <IonRadioGroup
+                                        value={chartDateSelected}
+                                        onIonChange={(e) =>
+                                            setChartDateSelected(e.detail.value)
+                                        }
+                                    >
                                         <IonItem>
                                             <IonLabel>"2 hours ago"</IonLabel>
                                             <IonRadio value="fromNow" />
                                         </IonItem>
 
                                         <IonItem>
-                                            <IonLabel>"2022-01-01 12:00"</IonLabel>
+                                            <IonLabel>
+                                                "2022-01-01 12:00"
+                                            </IonLabel>
                                             <IonRadio value="yyyyMmDd" />
                                         </IonItem>
                                     </IonRadioGroup>
@@ -778,19 +759,43 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                 */}
 
                                 {/*TODO 1!!! */}
-                                <h3 className="font-bold pb-1 w-full pt-5">Chart Colors</h3>
+                                <h3 className="font-bold pb-1 w-full pt-5">
+                                    Chart Colors
+                                </h3>
 
                                 <IonItem>
-                                    <IonLabel position="stacked" className="font-bold">Line Color</IonLabel>
-                                    <IonInput onIonChange={(e) => setLineColorSelected(e.detail.value!)}
-                                              value={lineColorSelected}
-                                              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>
+                                    <IonLabel
+                                        position="stacked"
+                                        className="font-bold"
+                                    >
+                                        Line Color
+                                    </IonLabel>
+                                    <IonInput
+                                        onIonChange={(e) =>
+                                            setLineColorSelected(
+                                                e.detail.value!
+                                            )
+                                        }
+                                        value={lineColorSelected}
+                                        placeholder="red, #c6ac95, rgb(255, 0, 0)"
+                                    ></IonInput>
                                 </IonItem>
                                 <IonItem>
-                                    <IonLabel position="stacked" className="font-bold">Shaded Area Color</IonLabel>
-                                    <IonInput onIonChange={(e) => setShadedAreaColorSelected(e.detail.value!)}
-                                              value={shadedAreaColorSelected}
-                                              placeholder="red, #c6ac95, rgb(255, 0, 0)"></IonInput>
+                                    <IonLabel
+                                        position="stacked"
+                                        className="font-bold"
+                                    >
+                                        Shaded Area Color
+                                    </IonLabel>
+                                    <IonInput
+                                        onIonChange={(e) =>
+                                            setShadedAreaColorSelected(
+                                                e.detail.value!
+                                            )
+                                        }
+                                        value={shadedAreaColorSelected}
+                                        placeholder="red, #c6ac95, rgb(255, 0, 0)"
+                                    ></IonInput>
                                 </IonItem>
                             </div>
                         </IonContent>
@@ -806,59 +811,88 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                     isOpen={addMultWallModalOpen}
                     onDidDismiss={() => setAddMultWallModalOpen(false)}
                 >
-
                     <IonHeader>
                         <IonToolbar>
                             <IonTitle>
                                 Add Multiple Wallets
-                                <a className="float-right text-base underline cursor-pointer"
-                                   onClick={() => clickedMultWall(false)}>close</a>
+                                <a
+                                    className="float-right text-base underline cursor-pointer"
+                                    onClick={() => clickedMultWall(false)}
+                                >
+                                    close
+                                </a>
                             </IonTitle>
                         </IonToolbar>
                     </IonHeader>
 
                     <IonContent className="">
-
-                        <div
-                            className="ml-3 mr-3 mb-2 relative mt-2 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
-                            <div className="font-medium"> { /* text-lg   */}
-                                <p>Used with "View My Tokens" (where you can filter the table to show only tokens in your wallet).
-                                    Use this to filter the table to tokens that are on multiple wallets.
-                                    Data is saved per browser, within your cookies.</p>
+                        <div className="ml-3 mr-3 mb-2 relative mt-2 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
+                            <div className="font-medium">
+                                {' '}
+                                {/* text-lg   */}
+                                <p>
+                                    Used with "View My Tokens" (where you can
+                                    filter the table to show only tokens in your
+                                    wallet). Use this to filter the table to
+                                    tokens that are on multiple wallets. Data is
+                                    saved per browser, within your cookies.
+                                </p>
                             </div>
                         </div>
 
-                        <div hidden={!multWalletAryFromCookie}
-                             className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
-                            <div className="font-medium"> { /* text-lg   */}
-                                <span className="font-bold">Wallets Added:</span>
+                        <div
+                            hidden={!multWalletAryFromCookie}
+                            className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl"
+                        >
+                            <div className="font-medium">
+                                {' '}
+                                {/* text-lg   */}
+                                <span className="font-bold">
+                                    Wallets Added:
+                                </span>
                                 <ul>
-                                    {multWalletAryFromCookie ?
-                                        multWalletAryFromCookie.split(',').map(function (wallet: any) {
-                                            return <li>- {wallet}</li>;
-                                        })
+                                    {multWalletAryFromCookie
+                                        ? multWalletAryFromCookie
+                                              .split(',')
+                                              .map(function (wallet: any) {
+                                                  return <li>- {wallet}</li>;
+                                              })
                                         : ''}
                                 </ul>
                             </div>
                         </div>
 
                         <div className="ml-3 mr-3">
-
                             <IonItem>
-                                <IonLabel position="stacked" className="font-bold" >Wallet</IonLabel>
-                                <IonInput onIonChange={(e) => setFormWalletMult(e.detail.value!)}
-                                          value={formWalletMult}
-                                          placeholder="ex. 91q2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU"></IonInput>
+                                <IonLabel
+                                    position="stacked"
+                                    className="font-bold"
+                                >
+                                    Wallet
+                                </IonLabel>
+                                <IonInput
+                                    onIonChange={(e) =>
+                                        setFormWalletMult(e.detail.value!)
+                                    }
+                                    value={formWalletMult}
+                                    placeholder="ex. 91q2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU"
+                                ></IonInput>
                             </IonItem>
 
-                            <IonButton color="success" className="mt-5" hidden={formLoadingMultWallet}
-                                       onClick={() => addMultWalletsSubmit()}>
+                            <IonButton
+                                color="success"
+                                className="mt-5"
+                                hidden={formLoadingMultWallet}
+                                onClick={() => addMultWalletsSubmit()}
+                            >
                                 Submit
                             </IonButton>
                             <IonButton
                                 hidden={!multWalletAryFromCookie}
-                                color="danger" className="mt-5"
-                                onClick={() => resetMultWallets()}>
+                                color="danger"
+                                className="mt-5"
+                                onClick={() => resetMultWallets()}
+                            >
                                 Reset Stored Wallets
                             </IonButton>
 
@@ -873,7 +907,6 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                             {/*    </span>*/}
                             {/*</div>*/}
                         </div>
-
                     </IonContent>
                 </IonModal>
 
@@ -882,182 +915,260 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                     isOpen={addNameModalOpen}
                     onDidDismiss={() => setAddNameModalOpen(false)}
                 >
-
                     <IonHeader>
                         <IonToolbar>
                             <IonTitle>
                                 Add a Token Name
-                                <a className="float-right text-base underline cursor-pointer"
-                                   onClick={() => clickedAddName(false)}>close</a>
+                                <a
+                                    className="float-right text-base underline cursor-pointer"
+                                    onClick={() => clickedAddName(false)}
+                                >
+                                    close
+                                </a>
                             </IonTitle>
                         </IonToolbar>
                     </IonHeader>
 
                     <IonContent className="">
-
-                        <div
-                            className="ml-3 mr-3 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
+                        <div className="ml-3 mr-3 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                             <div className="font-medium">
-                                <p>Use this if Fox Token Market doesn't have an official name yet, and you know for
-                                    certain what the name of the NFT is</p>
+                                <p>
+                                    Use this if Fox Token Market doesn't have an
+                                    official name yet, and you know for certain
+                                    what the name of the NFT is
+                                </p>
 
-                                <span className="underline cursor-pointer" onClick={() => setViewAbuse(!viewAbuse)}>View Abuse Policy</span>
-                                <p className="mt-3" hidden={!viewAbuse}>Your discord name will be recorded when submitting the form.
-                                    Those abusing the service will receive such punishments as having your account
-                                    banned from entering data, with severe violations being permanently muted in the Discord</p>
+                                <span
+                                    className="underline cursor-pointer"
+                                    onClick={() => setViewAbuse(!viewAbuse)}
+                                >
+                                    View Abuse Policy
+                                </span>
+                                <p className="mt-3" hidden={!viewAbuse}>
+                                    Your discord name will be recorded when
+                                    submitting the form. Those abusing the
+                                    service will receive such punishments as
+                                    having your account banned from entering
+                                    data, with severe violations being
+                                    permanently muted in the Discord
+                                </p>
                             </div>
                         </div>
 
                         {/*bg-gradient-to-b from-bg-primary to-bg-secondary"*/}
                         <div className="ml-3 mr-3">
-
                             <IonItem>
-                                <IonLabel position="stacked" className="font-bold">Token</IonLabel>
-                                <IonInput onIonChange={(e) => setFormToken(e.detail.value!)}
-                                          placeholder="ex. Hxq2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU"></IonInput>
+                                <IonLabel
+                                    position="stacked"
+                                    className="font-bold"
+                                >
+                                    Token
+                                </IonLabel>
+                                <IonInput
+                                    onIonChange={(e) =>
+                                        setFormToken(e.detail.value!)
+                                    }
+                                    placeholder="ex. Hxq2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU"
+                                ></IonInput>
                             </IonItem>
 
                             <IonItem>
-                                <IonLabel position="stacked" className="font-bold">Name</IonLabel>
-                                <IonInput onIonChange={(e) => setFormName(e.detail.value!)}
-                                          placeholder="ex. Zillas vs Kong WL"></IonInput>
+                                <IonLabel
+                                    position="stacked"
+                                    className="font-bold"
+                                >
+                                    Name
+                                </IonLabel>
+                                <IonInput
+                                    onIonChange={(e) =>
+                                        setFormName(e.detail.value!)
+                                    }
+                                    placeholder="ex. Zillas vs Kong WL"
+                                ></IonInput>
                             </IonItem>
 
-                            <IonButton color="success" className="mt-5" hidden={formLoading}
-                                       onClick={() => submittedForm()}>
+                            <IonButton
+                                color="success"
+                                className="mt-5"
+                                hidden={formLoading}
+                                onClick={() => submittedForm()}
+                            >
                                 Submit
                             </IonButton>
 
                             <div hidden={!formLoading}>Loading...</div>
 
-                            <div className="m-12 relative mt-6 bg-red-100 p-6 rounded-xl" hidden={!formErrMsg}>
+                            <div
+                                className="m-12 relative mt-6 bg-red-100 p-6 rounded-xl"
+                                hidden={!formErrMsg}
+                            >
                                 <p className="text-lg text-red-700 font-medium">
                                     <b>{formErrMsg}</b>
                                 </p>
-                                <span
-                                    className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                                     !
                                 </span>
                             </div>
                         </div>
-
                     </IonContent>
                 </IonModal>
 
                 <div>
-                    {
-                        !tableData.length
-                            ? <div className="pt-10 flex justify-center items-center">
-                                <Loader/>
-                            </div>
-                            : <div className=" ">
+                    {!tableData.length ? (
+                        <div className="pt-10 flex justify-center items-center">
+                            <Loader />
+                        </div>
+                    ) : (
+                        <div className=" ">
+                            {/*<IonItem style={{"width": "250px"}}>*/}
+                            {/*    <IonLabel>Show Verified Only</IonLabel>*/}
+                            {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
+                            {/*</IonItem>*/}
 
-                                {/*<IonItem style={{"width": "250px"}}>*/}
-                                {/*    <IonLabel>Show Verified Only</IonLabel>*/}
-                                {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
-                                {/*</IonItem>*/}
+                            <Table
+                                data={tableData}
+                                columns={columns}
+                                title="Fox Token Market - Analysis"
+                                description="Contains community added names"
+                                url="https://famousfoxes.com/tokenmarket"
+                                actions={[
+                                    {
+                                        icon: () => <IonIcon icon={wallet} />,
+                                        tooltip: viewMyTokensClicked
+                                            ? 'View all tokens'
+                                            : 'View My Tokens',
+                                        onClick: () =>
+                                            viewMyTokens(!viewMyTokensClicked),
+                                        isFreeAction: true,
+                                    },
+                                    {
+                                        icon: () => <IonIcon icon={add} />,
+                                        tooltip: 'Add custom name',
+                                        onClick: () => clickedAddName(true),
+                                        isFreeAction: true,
+                                    },
+                                    {
+                                        icon: () => <IonIcon icon={albums} />,
+                                        tooltip: 'Track Mult wallets',
+                                        onClick: () => clickedMultWall(true),
+                                        isFreeAction: true,
+                                    },
+                                ]}
+                                options={{
+                                    search: false,
+                                   filtering : false
+                                }}
+                            />
 
-                                <div>
-                                    {/* Desktop version */}
-                                    <Table
-                                        data={tableData}
-                                        columns={columns}
-										title="Fox Token Market - Analysis"
-										description='Contains community added names'
-										url="https://famousfoxes.com/tokenmarket"
+                            {/*-{foxLineData.labels}-*/}
+
+                            <div
+                                className="gap-4 mb-4 grid grid-cols-12 mt-3"
+                                // @ts-ignore
+                                //  hidden={!foxLineData.labels || foxLineData.labels}
+                            >
+                                <div className="chart">
+                                    <Chart
+                                        type="line"
+                                        // @ts-ignore
+                                        data={foxLineData}
+                                        height={tableHeight}
+                                        options={{
+                                            responsive: true,
+                                            maintainAspectRatio: true,
+                                            plugins: {
+                                                legend: {
+                                                    display: false,
+                                                },
+                                                title: {
+                                                    display: true,
+                                                    text: tokenClickedOn
+                                                        ? tokenClickedOn +
+                                                          ' - Price'
+                                                        : 'Price',
+                                                },
+                                                // tooltip: {
+                                                //     enabled: true,
+                                                //     usePointStyle: true,
+                                                //     callbacks: {
+                                                //         // To change title in tooltip
+                                                //         title: (data: any) => { return data[0].parsed.x },
+                                                //
+                                                //         // To change label in tooltip
+                                                //         label: (data: any) => {
+                                                //             console.log(data);
+                                                //             return data.parsed.y === 2 ? "Good" : "Critical"
+                                                //         }
+                                                //     },
+                                                // },
+                                            },
+                                            scales: {
+                                                x: {
+                                                    ticks: {
+                                                        autoSkip: true,
+                                                        maxTicksLimit: 8,
+                                                    },
+                                                },
+                                                y: {
+                                                    suggestedMin: 0,
+                                                },
+                                            },
+                                        }}
                                     />
                                 </div>
-                              
-
-                                {/*-{foxLineData.labels}-*/}
-
-                                <div className="gap-4 mb-4 grid grid-cols-12 mt-3"
-                                    // @ts-ignore
-                                    //  hidden={!foxLineData.labels || foxLineData.labels}
-                                >
-                                    <div className='chart'>
-
-                                        <Chart type='line'
-                                            // @ts-ignore
-                                               data={foxLineData} height={tableHeight}
-                                               options={{
-                                                   responsive: true,
-                                                   maintainAspectRatio: true,
-                                                   plugins: {
-                                                       legend: {
-                                                           display: false
-                                                       },
-                                                       title: {display: true, text: tokenClickedOn ? tokenClickedOn + " - Price" : "Price"},
-                                                       // tooltip: {
-                                                       //     enabled: true,
-                                                       //     usePointStyle: true,
-                                                       //     callbacks: {
-                                                       //         // To change title in tooltip
-                                                       //         title: (data: any) => { return data[0].parsed.x },
-                                                       //
-                                                       //         // To change label in tooltip
-                                                       //         label: (data: any) => {
-                                                       //             console.log(data);
-                                                       //             return data.parsed.y === 2 ? "Good" : "Critical"
-                                                       //         }
-                                                       //     },
-                                                       // },
-                                                   },
-                                                   scales: {
-                                                       x: {
-                                                           ticks: {
-                                                               autoSkip: true,
-                                                               maxTicksLimit: 8
-                                                           }
-                                                       },
-                                                       y: {
-                                                           suggestedMin: 0,
-                                                       },
-                                                   }
-                                               }}/>
-                                    </div>
-                                    <div className="chart">
-                                        <Chart type='line'
-                                               data={foxLineListingsData} height={tableHeight}
-                                               options={{
-                                                   responsive: true,
-                                                   maintainAspectRatio: true,
-                                                   plugins: {
-                                                       legend: {
-                                                           display: false
-                                                       },
-                                                       title: {display: true, text: 'Total Token Listings'},
-                                                   },
-                                                   scales: {
-                                                       x: {
-                                                           ticks: {
-                                                               autoSkip: true,
-                                                               maxTicksLimit: 8
-                                                           }
-                                                       },
-                                                       y: {
-                                                           suggestedMin: 0,
-                                                       },
-                                                   }
-                                               }}/>
-                                    </div>
+                                <div className="chart">
+                                    <Chart
+                                        type="line"
+                                        data={foxLineListingsData}
+                                        height={tableHeight}
+                                        options={{
+                                            responsive: true,
+                                            maintainAspectRatio: true,
+                                            plugins: {
+                                                legend: {
+                                                    display: false,
+                                                },
+                                                title: {
+                                                    display: true,
+                                                    text: 'Total Token Listings',
+                                                },
+                                            },
+                                            scales: {
+                                                x: {
+                                                    ticks: {
+                                                        autoSkip: true,
+                                                        maxTicksLimit: 8,
+                                                    },
+                                                },
+                                                y: {
+                                                    suggestedMin: 0,
+                                                },
+                                            },
+                                        }}
+                                    />
                                 </div>
-
-                                <br/>
-
                             </div>
-                    }
+
+                            <br />
+                        </div>
+                    )}
                 </div>
 
-                <ReactTooltip/>
+                <ReactTooltip />
 
-                <div hidden={true}
-                     className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
-                    <div className={`font-bold pb-3 w-full text-lg`}>Fox Token - Price Alerts</div>
+                <div
+                    hidden={true}
+                    className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}
+                >
+                    <div className={`font-bold pb-3 w-full text-lg`}>
+                        Fox Token - Price Alerts
+                    </div>
 
                     <div>
-                        <label className={`font-bold pb-1 w-full`} htmlFor="">Get an alert when any of your WL tokens
-                            lists over a certain price</label>
+                        <label className={`font-bold pb-1 w-full`} htmlFor="">
+                            Get an alert when any of your WL tokens lists over a
+                            certain price
+                        </label>
 
                         <IonList>
                             <b>Wallet Address</b>
@@ -1068,7 +1179,10 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                         </IonList>
 
                         <IonList>
-                            <b>Floor price of any of your WL tokens before alert</b>
+                            <b>
+                                Floor price of any of your WL tokens before
+                                alert
+                            </b>
                             <IonItem>
                                 <IonInput placeholder="Enter price"></IonInput>
                                 {/* value={text} onIonChange={e => setText(e.detail.value!)} */}
@@ -1078,17 +1192,13 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                         <IonButton color="success" className="text-sm">
                             Submit
                         </IonButton>
-                        <br/><br/>
-
-
+                        <br />
+                        <br />
                     </div>
-
                 </div>
 
-                <br/>
-
+                <br />
             </div>
-
         </>
     );
 }

@@ -11,13 +11,8 @@ type MessageListItemProps =
     | {
           message: Message;
           onClick?: (message: Message) => any;
-          index?: never;
       }
-    | {
-          index: number;
-          message?: never;
-          onClick?: never;
-      };
+   
 
 const getDateAgo = function (time: moment.MomentInput) {
     return moment(time).fromNow();
@@ -25,7 +20,7 @@ const getDateAgo = function (time: moment.MomentInput) {
 
 const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
     (
-        { onClick, message: { message, time, source, author, id } = {}, index },
+        { onClick, message: { message, time, source, author, id } = {} },
         ref
     ) => {
         const { id: word } = useParams<{ id: string }>();
@@ -62,13 +57,10 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
             };
         }, [message, word]);
 
-        const loading = useMemo(() => !message, [message]);
 
         return (
             <div
-                className={`relative w-full items-start ${
-                    loading ? 'messageLoading py-2' : 'text-gray-200 my-2'
-                } ${
+                className={`relative w-full items-start text-gray-200 my-2 ${
                     onClick ? 'hover:bg-opacity-100 cursor-pointer' : ''
                 } py-1 space-x-4 rounded-xl text-lg flex`}
                 onClick={() =>
@@ -77,16 +69,12 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                 }
                 ref={ref}
             >
-                {loading ? (
-                    <div className="image" />
-                ) : (
+                
                     <img
                         className="image"
                         alt={source === 'Twitter' ? 'Twitter' : 'Discord'}
                         src={
-                            loading
-                                ? undefined
-                                : source === 'Twitter'
+                            source === 'Twitter'
                                 ? `https://unavatar.io/twitter/${
                                       (author as string)
                                           .split('(Twitter) ')
@@ -95,21 +83,16 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                                 : '/assets/discord.ico'
                         }
                     />
-                )}
                 <div className="flex-grow">
                     <div
-                        className={`flex font-semibold items-center space-x-2 text-base ${
-                            loading ? 'mb-5' : 'mb-1'
-                        }`}
+                        className={`flex font-semibold items-center space-x-2 text-base mb-1`}
                     >
                         <p>
-                            {loading
-                                ? 'LOADING'
-                                : `(${source} ${
+                            {source} {
                                       source !== 'Twitter' ? '- Discord' : ''
-                                  }) ${author}`}
+                                  }) {author}
                         </p>
-                        {!loading && (
+                        {(
                             <div
                                 className="text-xs text-gray-400"
                                 data-tip={new Date(
@@ -123,14 +106,9 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
 
                     {/* show the message and highlight matches */}
                     <div
-                        className={
-                            loading
-                                ? 'inline box-decoration-clone'
-                                : 'max-w-full word-wrap'
-                        }
+                        className={'max-w-full word-wrap'}
                     >
-                        {!loading
-                            ? <ReactMarkdown 
+                        {<ReactMarkdown 
 								components={{
 									strong({ children, ...props  }){
 										const strongWord = children[0]?.toString()
@@ -168,7 +146,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
 							>
 								{formattedMessage}
 							</ReactMarkdown>
-                            : 'LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING'}
+                            }
                     </div>
                     <div className="media">
                         {mediaUrls.map((url) => {
@@ -181,15 +159,6 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         })}
                     </div>
                 </div>
-
-                {loading && (
-                    <span
-                        className="ripple"
-                        style={{
-                            animationDelay: `${(index || 0) * 100}ms`,
-                        }}
-                    />
-                )}
 
                 {/*tooltip hovering over date*/}
                 <ReactTooltip />

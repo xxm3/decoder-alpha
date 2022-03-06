@@ -13,8 +13,7 @@ import { SearchResponse } from '../types/SearchResponse';
 import { dispLabelsDailyCount, getDailyCountData } from '../util/charts';
 import DisplayGraph from '../components/search/DisplayGraph';
 import Loader from '../components/Loader';
-import MessageListItem from '../components/search/MessageListItem';
-import SearchSkelleton from './SearchSkelleton';
+import SearchSkeleton from '../components/search/SearchSkeleton';
 
 const Search: React.FC = () => {
 
@@ -253,7 +252,7 @@ const Search: React.FC = () => {
 	                                        }} />}
 	                                        {/* Displaying the custom skeleton loader while fetching */}
 	                                        {messageQuery?.isFetching ?
-	                                            new Array(10).fill(0).map((_,i) => <SearchSkelleton key={i}/>) :
+	                                            new Array(10).fill(0).map((_,i) => <SearchSkeleton key={i}/>) :
 	                                        messageQuery?.isError ? <p className="text-lg text-red-700 font-medium">
 	                                            <b>{"Error while loading message"}</b>
 	                                        </p> :

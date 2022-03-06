@@ -1,4 +1,4 @@
-import { IonModal } from '@ionic/react';
+import { IonContent, IonModal } from '@ionic/react';
 import React, { useRef } from 'react';
 import { Message } from '../../types/Message';
 import MessageListItem from './MessageListItem';
@@ -6,6 +6,8 @@ import { QueryFunctionContext, useInfiniteQuery } from 'react-query';
 import { instance } from '../../axios';
 import { AxiosResponse } from 'axios';
 import ReactTooltip from "react-tooltip";
+import SearchSkeleton from "./SearchSkeleton"
+import Style from '../Style';
 
 interface MessageThreadProps {
     message: Message;
@@ -111,47 +113,55 @@ const MessageThread: React.FC<MessageThreadProps> = ({
     const mainMessageRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     return (
-        <IonModal
-            isOpen
-            onDidDismiss={onClose as any}
-            // onDidPresent={() => {
-            //     if (mainMessageRef.current) {
-            //         mainMessageRef.current.scrollIntoView({
-            //             block: 'center',
-            //             inline: 'center',
-            //         });
-            //     }
-            // }}
-        >
-            <div
-                ref={containerRef}
-                className="p-5 messages overflow-y-scroll space-y-5 h-full w-full !bg-bg-tertiary"
+        <>
+            <Style>{`
+				.message-thread-modal {
+					--max-width: 1280px;
+				}
+			`}</Style>
+            <IonModal
+                isOpen
+                onDidDismiss={onClose as any}
+                // onDidPresent={() => {
+                //     if (mainMessageRef.current) {
+                //         mainMessageRef.current.scrollIntoView({
+                //             block: 'center',
+                //             inline: 'center',
+                //         });
+                //     }
+                // }}
+                cssClass="message-thread-modal"
             >
-
+                <div
+                    ref={containerRef}
+                    className="p-5 messages overflow-y-scroll h-full w-full mx-auto"
+                >
                     {data.pages
                         .map((page) =>
                             page.map((message, i) =>
                                 message ? (
-                                    <MessageListItem
-                                        message={message}
-                                        key={message.id}
-                                        ref={
-                                            message.id === id
-                                                ? mainMessageRef
-                                                : null
-                                        }
-                                    />
+                                    <div className="my-2.5">
+                                    	<MessageListItem
+	                                        message={message}
+	                                        key={message.id}
+	                                        ref={
+	                                            message.id === id
+	                                                ? mainMessageRef
+	                                                : null
+	                                        }
+	                                    />
+                                    </div>
                                 ) : (
-                                    <MessageListItem index={i} key={i} />
+                                    <SearchSkeleton />
                                 )
                             )
                         )
                         .flat(1)}
-            </div>
+                </div>
 
-            <ReactTooltip />
-
-        </IonModal>
+                <ReactTooltip />
+            </IonModal>
+        </>
     );
 };
 
