@@ -203,6 +203,11 @@ function FoxToken({foo, onSubmit}: FoxToken) {
         }
     }
 
+    // TODO: https://famousfoxes.com/api/getSalesByAddress/3pw9Aq6v8u6RsM6EyahTFbzyr3ezLZvmSC36fPPLgLoa
+    // TODO: prem discord
+
+    // TODO: enable todaymints!! easycron
+
     // user clicked button to delete their multiple wallets
     const resetMultWallets = () => {
 

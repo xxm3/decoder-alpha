@@ -72,7 +72,7 @@ const Search: React.FC = () => {
     const scrollToTop = () => {
         window.scrollTo({
 			top : 0,
-			behavior : 'smooth'	
+			behavior : 'smooth'
 		})
     }
 
@@ -116,7 +116,8 @@ const Search: React.FC = () => {
                 '/searchMessages/',
                 {
                     word: searchText,
-                    pageNumber: currentPage
+                    pageNumber: currentPage,
+                    pageSize: 100
                 },
                 {
                     headers: {
@@ -218,7 +219,7 @@ const Search: React.FC = () => {
 
     return (
         <React.Fragment>
-			
+
                             <div ref={contentRef} className={`!overflow-y-auto ${width <= 640 ? 'w-full' : 'container'}
                                  rounded-lg pt-3 pb-6 md:px-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`} >
 
