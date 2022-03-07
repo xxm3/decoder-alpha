@@ -24,6 +24,7 @@ import {Message} from "../../types/Message";
 import MessageThread from "./MessageThread";
 import {useParams} from "react-router";
 import Loader from "../Loader";
+import Style from "../Style";
 
 ChartJS.register(...registerables);
 ChartJS.register(
@@ -83,8 +84,16 @@ const DisplayGraph:React.FC<{
 
                     <div className="flex items-center justify-center col-span-6" hidden={completelyHideChart}>
                         <p>Toggle Chart</p>
+						<Style>
+							{`
+								.toggleChart {
+									--background-checked : var(--ion-color-step-850);
+									--handle-background-checked: var(--ion-color-primary-tint)
+								}
+							`}
+						</Style>
                         <IonToggle
-                            color="dark"
+							className="toggleChart"
                             checked={showChart}
                             onClick={() => setShowChart(!showChart)}
                         />

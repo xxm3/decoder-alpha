@@ -14,8 +14,9 @@ import { dispLabelsDailyCount, getDailyCountData } from '../util/charts';
 import DisplayGraph from '../components/search/DisplayGraph';
 import Loader from '../components/Loader';
 import SearchSkeleton from '../components/search/SearchSkeleton';
+import { AppComponentProps } from '../components/Route';
 
-const Search: React.FC = () => {
+const Search: React.FC<AppComponentProps> = ( { contentRef }) => {
 
     /**
      * States & Variables
@@ -61,25 +62,17 @@ const Search: React.FC = () => {
         window.scrollTo(0,0);
     },[currentPage])
 
-    // for scrolling to top
-    const contentRef = useRef<any>(null);
 
     /**
      * Functions
      */
+
     const useMountEffect = (fun:any) => useEffect(fun, []);
 
-    const scrollToTop = () => {
-        window.scrollTo({
-			top : 0,
-			behavior : 'smooth'	
-		})
-    }
-
-    useMountEffect(scrollToTop);
+    useMountEffect(() => contentRef?.scrollToTop());
 
     const handlePage = (type: string) => {
-        contentRef.current.scrollIntoView();
+        contentRef?.scrollIntoView();
         if(type === 'next' && (!messageQuery?.isPreviousData && messageQuery?.data?.hasMore)) setCurrentPage(currentPage+1)
         else setCurrentPage(currentPage - 1)
     }
@@ -219,8 +212,7 @@ const Search: React.FC = () => {
     return (
         <React.Fragment>
 			
-                            <div ref={contentRef} className={`!overflow-y-auto ${width <= 640 ? 'w-full' : 'container'}
-                                 rounded-lg pt-3 pb-6 md:px-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`} >
+                            <div className={`h-fit container rounded-lg pt-3 pb-6 md:px-3 xl:pb-3 2xl:pb-2 lg:pb-4`} >
 
                                 {/* ERROR bar */}
                                 {graphQuery.isError || messageQuery.isError || messageQuery?.data?.error || graphQuery?.data?.error ? (
@@ -269,7 +261,7 @@ const Search: React.FC = () => {
 
                                                 {!messageQuery?.isFetching &&
                                                 <IonButton
-                                                  onClick={() => scrollToTop()}
+                                                  onClick={() => contentRef?.scrollToTop(800)}
                                                    className="float-right"
                                                 >
                                                     Scroll to Top

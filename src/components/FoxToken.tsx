@@ -11,7 +11,7 @@ import {
     IonModal,
     IonContent,
     IonHeader,
-    IonToolbar, IonTitle, useIonToast, IonIcon, IonPopover, IonRadioGroup, IonListHeader, IonRadio
+    IonToolbar, IonTitle, useIonToast, IonIcon, IonPopover, IonRadioGroup, IonListHeader, IonRadio, IonRouterLink
 } from '@ionic/react';
 import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useRef, useState} from 'react';
 import Loader from "./Loader";
@@ -31,6 +31,8 @@ import {getLiveFoxTokenData, shortenedWallet} from "./FoxTokenFns";
 import Table from './Table';
 import { Column } from '@material-table/core';
 import _ from 'lodash';
+import Style from './Style';
+import { AppComponentProps } from './Route';
 
 interface FoxTokenData {
 	token : string;
@@ -52,11 +54,10 @@ interface FoxTokenData {
  */
 
 interface FoxToken {
-    foo?: string;
-    onSubmit(bar: string): unknown;
+	contentRef: AppComponentProps["contentRef"]
 }
 
-function FoxToken({foo, onSubmit}: FoxToken) {
+function FoxToken({ contentRef }: FoxToken) {
 
     /**
      * Adding multiple wallets
@@ -255,57 +256,63 @@ function FoxToken({foo, onSubmit}: FoxToken) {
     const [foxLineData, setFoxLineData] = useState(defaultGraph);
     const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
 
+	const chartsRef = useRef<HTMLDivElement | null>(null);
 
     const columns: Column<FoxTokenData>[] = [
         {
             title: 'Token',
-            render: record => (
-                <>
+            render: (record) => (
+                <a
+                    href={`https://famousfoxes.com/tokenmarket/${record.token}`}
+                    target="_blank"
+                    className="hover:opacity-80 flex items-center space-x-3"
+                >
                     <span className="hidden md:block">{record.token}</span>
-                    <span className="md:hidden">{shortenedWallet(record.token)}</span>
-                </>
-
+                    <span className="md:hidden">
+                        {shortenedWallet(record.token)}
+                    </span>
+                    <IonIcon
+                        src="/assets/icons/newTabIcon.svg"
+                        className="newTabIcon"
+                    />
+                </a>
             ),
             customSort: (a, b) => a.token.localeCompare(b.token),
         },
         {
             title: 'Price',
             customSort: (a, b) => a.floorPrice - b.floorPrice,
-			render : (record) => <span>{record.floorPrice}</span>
+            render: (record) => <span>{record.floorPrice}</span>,
         },
         {
             title: 'Name',
             customSort: (a, b) => a.name.localeCompare(b.name),
-			render : (record) => <span>{record.name}</span>,
+            render: (record) => <span>{record.name}</span>,
         },
         {
             title: 'Total Listings',
-           	customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
-			render : (record) => <span>{record.totalTokenListings}</span>
-
+            customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
+            render: (record) => <span>{record.totalTokenListings}</span>,
         },
         {
             title: 'View Chart',
-            render: record => (
-                <span onClick={() => {
-                    setToken(record.token);
-                    setName(record.name);
-                    // useEffect above will update it...
-                }}
-                      className="cursor-pointer big-emoji">📈</span>
-            ),
-        },
-        {
-            title: 'View in Explorer', 
-            render: record => (
-                <a target="_blank" className="no-underline big-emoji"
-                   href={'https://explorer.solana.com/address/' + record.token}>🌐</a>
+            render: (record) => (
+                <span
+                    onClick={() => {
+                        setToken(record.token);
+                        setName(record.name);
+                        // useEffect above will update it...
+                    }}
+                    className="cursor-pointer big-emoji"
+                >
+                    📈
+                </span>
             ),
         },
         {
             title: 'Which Of My Wallet(s)',
             // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
-        }
+        },
     ];
 
     /**
@@ -411,10 +418,9 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                     datasets: datasetsAryListings
                 });
 
-                // think want to keep this in ... some timing ... issue....
-                // console.log(foxLineData);
+                contentRef?.scrollToPoint(0, chartsRef.current?.offsetTop ?? 0, 800)
 
-                // window.scrollTo(0,document.body.scrollHeight);
+
 
             })
             .catch((err) => {
@@ -760,8 +766,9 @@ function FoxToken({foo, onSubmit}: FoxToken) {
 
                                 {/*TODO 4): portals wl email and mirror .... plus email bayc  --- PLUS MIRROR ME DAO CHAT & GET ON OG ON # ACCTS! (boon my mint) */}
 
-
-                                <h3 className="font-bold pb-1 w-full pt-5">Chart Colors</h3>
+                                <h3 className="font-bold pb-1 w-full pt-5">
+                                    Chart Colors
+                                </h3>
 
                                 <IonItem>
                                     <IonLabel
@@ -797,7 +804,6 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                         placeholder="red, #c6ac95, rgb(255, 0, 0)"
                                     ></IonInput>
                                 </IonItem>
-
                             </div>
                         </IonContent>
                     </IonPopover>
@@ -1025,7 +1031,13 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                             {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                             {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                             {/*</IonItem>*/}
-
+                            <Style>
+                                {`
+									.newTabIcon {
+										color: var(--ion-text-color);
+									}
+								`}
+                            </Style>
                             <Table
                                 data={tableData}
                                 columns={columns}
@@ -1057,7 +1069,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                 ]}
                                 options={{
                                     search: false,
-                                   filtering : false
+                                    filtering: false,
                                 }}
                             />
 
@@ -1065,6 +1077,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
 
                             <div
                                 className="gap-4 mb-4 grid grid-cols-12 mt-3"
+								ref={chartsRef}
                                 // @ts-ignore
                                 //  hidden={!foxLineData.labels || foxLineData.labels}
                             >

@@ -1,22 +1,29 @@
 import { IonCol, IonContent, IonGrid, IonMenu, IonPage, IonRow, IonSplitPane } from "@ionic/react"
-import React from "react";
-import { Route, RouteProps } from "react-router"
-import HeaderContainer from "./nav/Header"
-import Sidebar from "./nav/Sidebar";
+import React, { useRef } from "react";
+import { Route, RouteComponentProps, RouteProps } from "react-router"
 
 
+export interface AppComponentProps extends RouteComponentProps {
+	contentRef: React.MutableRefObject<HTMLIonContentElement | null>["current"]
+}
 const AppRoute : React.FC<RouteProps> = (
     { children, render, component, ...rest}
 ) => {
+	const contentRef = useRef<HTMLIonContentElement | null>(null);
+
     return (
         <Route
             {...rest}
             component={undefined}
             children={undefined}
-            render={(componentProps) => (
-                <>
+            render={(originalProps) => {
+				const componentProps : AppComponentProps = {
+					...originalProps,
+					contentRef : contentRef.current,
+				}
+                return (<>
                     <IonPage>
-                        <IonContent>
+                        <IonContent ref={contentRef}>
                         	<IonGrid>
 	                            <IonRow>
 	                                <IonCol
@@ -40,8 +47,8 @@ const AppRoute : React.FC<RouteProps> = (
 	                        </IonGrid>
                         </IonContent>
                     </IonPage>
-                </>
-            )}
+                </>)
+			}}
         />
     );
 };

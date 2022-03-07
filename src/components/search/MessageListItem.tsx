@@ -88,7 +88,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         className={`flex font-semibold items-center space-x-2 text-base mb-1`}
                     >
                         <p>
-                            {source} {
+                            ({source} {
                                       source !== 'Twitter' ? '- Discord' : ''
                                   }) {author}
                         </p>

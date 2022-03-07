@@ -20,8 +20,9 @@ import { ChartData } from 'chart.js';
 import SearchBar from '../../components/SearchBar';
 import NftPriceTable from "../../components/NftPriceTable";
 import FoxToken from "../../components/FoxToken";
+import { AppComponentProps } from '../../components/Route';
 
-const Home = () => {
+const Home : React.FC<AppComponentProps> = ({ contentRef }) => {
 
     /**
      * States & Variables
@@ -326,7 +327,7 @@ const Home = () => {
             {/* Fox Token - Analysis */}
             <div>
                 {/* hidden={true} */}
-                <FoxToken foo="" onSubmit={doSearch} />
+                <FoxToken contentRef={contentRef} />
             </div>
 
             {/* Possible Mints ... */}

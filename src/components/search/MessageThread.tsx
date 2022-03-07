@@ -152,7 +152,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
 	                                    />
                                     </div>
                                 ) : (
-                                    <SearchSkeleton />
+                                    <SearchSkeleton key={i}/>
                                 )
                             )
                         )
