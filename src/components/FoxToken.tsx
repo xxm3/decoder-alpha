@@ -107,11 +107,24 @@ function FoxToken({ contentRef }: FoxToken) {
         // redraw the chart
         // viewChart();
 
-        present({
-            message: 'After setting a valid color, load a new chart to see it',
-            color: 'success',
-            duration: 5000
-        });
+        /**
+         * TODO 1: going out 3x....
+         *
+         * going out to 9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41
+         * FoxToken.tsx:435 going out to 9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41
+         * FoxToken.tsx:435 going out to 9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41
+         * 3   FoxToken.tsx:435 going out to AnUWnrpQnk98rwdQpSW7tyJv5z9uz9BPFsYxFXBJAhHd
+         * 3    FoxToken.tsx:435 going out to Fb4Xsbo8LXgshcBEjFQ3iLNfqT7o5615MdPtRRbHTAg8
+         *
+         *
+         */
+
+        // TODO 2: FUKT UP
+        // present({
+        //     message: 'After setting a valid color, load a new chart to see it',
+        //     color: 'success',
+        //     duration: 5000
+        // });
 
     }, [lineColorSelected, shadedAreaColorSelected]);
 
@@ -188,6 +201,8 @@ function FoxToken({ contentRef }: FoxToken) {
             });
         }
     }
+
+    // TODO 4: https://famousfoxes.com/api/getSalesByAddress/3pw9Aq6v8u6RsM6EyahTFbzyr3ezLZvmSC36fPPLgLoa
 
     // user clicked button to delete their multiple wallets
     const resetMultWallets = () => {
@@ -296,21 +311,17 @@ function FoxToken({ contentRef }: FoxToken) {
         },
         {
             title: 'View Chart',
-            render: (record) => (
-                <span
-                    onClick={() => {
-                        setToken(record.token);
-                        setName(record.name);
-                        // useEffect above will update it...
-                    }}
-                    className="cursor-pointer big-emoji"
-                >
-                    📈
-                </span>
-            ),
+			render: record => (
+				<span onClick={() => {
+					setToken(record.token);
+					setName(record.name);
+					// useEffect above will update it...
+				}}
+					className="cursor-pointer big-emoji">📈</span>
+			),
         },
         {
-            title: 'Which Of My Wallet(s)',
+            title: '# Owned & Wallet',
             // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
         },
     ];
@@ -467,6 +478,7 @@ function FoxToken({ contentRef }: FoxToken) {
                 base58publicKey,
                 {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
             );
+
 
             let mySplTokensTemporaryAgainAgain: any = [];
 
@@ -725,7 +737,7 @@ function FoxToken({ contentRef }: FoxToken) {
                         }}
                     >
                         <IonIcon icon={cog} className="pr-1" />
-                        Date format
+                        Customize
                     </IonButton>
                     <br hidden={width > smallWidthpx} />
 
@@ -762,9 +774,7 @@ function FoxToken({ contentRef }: FoxToken) {
                                     </IonRadioGroup>
                                 </IonList>
 
-                                {/*TODO 3): put this into daily-mints https://gitlab.com/nft-relay-group/functions/-/merge_requests/93 in am when he fixes */}
-
-                                {/*TODO 4): portals wl email and mirror .... plus email bayc  --- PLUS MIRROR ME DAO CHAT & GET ON OG ON # ACCTS! (boon my mint) */}
+                                {/*TODO 3): portals wl email and mirror .... plus email bayc  --- PLUS MIRROR ME DAO CHAT & GET ON OG ON # ACCTS! (boon my mint) */}
 
                                 <h3 className="font-bold pb-1 w-full pt-5">
                                     Chart Colors

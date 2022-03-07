@@ -109,7 +109,8 @@ const Search: React.FC<AppComponentProps> = ( { contentRef }) => {
                 '/searchMessages/',
                 {
                     word: searchText,
-                    pageNumber: currentPage
+                    pageNumber: currentPage,
+                    pageSize: 100 // doing 10 from backend (discord) - search.js ... 100 from frontend (website) - search.tsx
                 },
                 {
                     headers: {
