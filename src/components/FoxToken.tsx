@@ -107,7 +107,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
         // viewChart();
 
         /**
-         * TODO 111: going out 3x....
+         * TODO 1: going out 3x....
          *
          * going out to 9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41
          * FoxToken.tsx:435 going out to 9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41
@@ -118,9 +118,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
          *
          */
 
-        // TODO 777: need a "testing.md" page...
-
-        // TODO: FUKT UP
+        // TODO 2: FUKT UP
         // present({
         //     message: 'After setting a valid color, load a new chart to see it',
         //     color: 'success',
@@ -203,10 +201,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
         }
     }
 
-    // TODO: https://famousfoxes.com/api/getSalesByAddress/3pw9Aq6v8u6RsM6EyahTFbzyr3ezLZvmSC36fPPLgLoa
-    // TODO: prem discord
-
-    // TODO: enable todaymints!! easycron
+    // TODO 4: https://famousfoxes.com/api/getSalesByAddress/3pw9Aq6v8u6RsM6EyahTFbzyr3ezLZvmSC36fPPLgLoa
 
     // user clicked button to delete their multiple wallets
     const resetMultWallets = () => {
@@ -777,7 +772,7 @@ function FoxToken({foo, onSubmit}: FoxToken) {
                                     </IonRadioGroup>
                                 </IonList>
 
-                                {/*TODO 4): portals wl email and mirror .... plus email bayc  --- PLUS MIRROR ME DAO CHAT & GET ON OG ON # ACCTS! (boon my mint) */}
+                                {/*TODO 3): portals wl email and mirror .... plus email bayc  --- PLUS MIRROR ME DAO CHAT & GET ON OG ON # ACCTS! (boon my mint) */}
 
 
                                 <h3 className="font-bold pb-1 w-full pt-5">Chart Colors</h3>

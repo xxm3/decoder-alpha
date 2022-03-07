@@ -117,7 +117,7 @@ const Search: React.FC = () => {
                 {
                     word: searchText,
                     pageNumber: currentPage,
-                    pageSize: 100
+                    pageSize: 100 // doing 10 from backend (discord) - search.js ... 100 from frontend (website) - search.tsx
                 },
                 {
                     headers: {
