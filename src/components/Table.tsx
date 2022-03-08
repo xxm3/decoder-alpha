@@ -42,14 +42,14 @@ function Table<RowData extends object>(
 						td.MuiTableCell-footer {
 							border-bottom: none;
 						}
-						
+
 						tbody tr[level="0"]:nth-child(even) {
 							background-color: rgba(var(--ion-color-primary-rgb), 0.5);
 						}
 						tbody tr[level="0"]:nth-child(odd) {
 							background-color: rgba(var(--ion-color-primary-rgb), 0.3);
-						}		
-						
+						}
+
 						tr, td {
 							border-bottom : none !important;
 						}
@@ -59,10 +59,10 @@ function Table<RowData extends object>(
 						}
 
 						table:not(first-child){
-							// margin-top: 20px;
+							margin-top: 10px;
 						}
 						table th{
-						    padding: 5px !important;
+						    padding: 8px !important;
 						}
 						tbody tr:first-child td:first-child {
 							border-radius: var(--tr-border-radius) 0 0 0;

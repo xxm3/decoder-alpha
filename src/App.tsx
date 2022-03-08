@@ -92,13 +92,13 @@ const App = () => {
 	}, []);
 
 
-	const [loadingGif, setLoadingGif] = useState(true)
-	useEffect(() => {
-		const id = setTimeout(() => {
-			setLoadingGif(false)
-		}, 8000)
-		return () => clearTimeout(id)
-	}, [])
+	// const [loadingGif, setLoadingGif] = useState(true)
+	// useEffect(() => {
+	// 	const id = setTimeout(() => {
+	// 		setLoadingGif(false)
+	// 	}, 8000)
+	// 	return () => clearTimeout(id)
+	// }, [])
 
 
 	return (
@@ -106,7 +106,7 @@ const App = () => {
             <Theme>
             	<QueryClientProvider client={queryClient}>
 	                <UserContext.Provider value={user}>
-	                    {(user !== undefined && !loadingGif) ? (
+	                    {(user !== undefined) ? (
 	                        <>
 	                            <IonReactRouter>
 	                                <IonRouterOutlet id="router">

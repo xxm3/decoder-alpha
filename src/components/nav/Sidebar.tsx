@@ -32,13 +32,11 @@ function Sidebar() {
               <NavLink
                   title="Mint Stats"
                   icon={statsChart}
-                  // TODO
                   to="/mintstats"
               />
               <NavLink
                   title="Stacked Line Search"
                   icon={search}
-                  // TODO
                   to="/stackedsearch"
               />
           </IonList>
