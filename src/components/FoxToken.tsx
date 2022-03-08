@@ -92,8 +92,8 @@ function FoxToken({ contentRef }: FoxToken) {
     }, [chartDateSelected]);
 
     // user clicked change colour
-    const [lineColorSelected, setLineColorSelected] = useState<string>(cookies.get('lineColorSelected') ? cookies.get('lineColorSelected') : "#195e83");
-    const [shadedAreaColorSelected, setShadedAreaColorSelected] = useState<string>(cookies.get('shadedAreaColorSelected') ? cookies.get('shadedAreaColorSelected') : "black")
+    const [lineColorSelected, setLineColorSelected] = useState<string>(cookies.get('lineColorSelected') ? cookies.get('lineColorSelected') : "#14F195"); // #195e83
+    const [shadedAreaColorSelected, setShadedAreaColorSelected] = useState<string>(cookies.get('shadedAreaColorSelected') ? cookies.get('shadedAreaColorSelected') : "#01FF6F")
     // when above clicked, will redraw the chart
     useEffect(() => {
         if (firstUpdate.current) {
@@ -241,13 +241,22 @@ function FoxToken({ contentRef }: FoxToken) {
     const [width, setWidth] = useState(window.innerWidth);
 
     // for setting height of chart, depending on what width browser is
+    // (below was for 2 charts in one row)
+    // const tableHeight = useMemo(() => {
+    //     if (width > 1536) return 150;
+    //     if (width > 1280) return 180;
+    //     if (width > 1024) return 220;
+    //     if (width > 768) return 260;
+    //     if (width > 640) return 280;
+    //     return 330;
+    // }, [width]);
     const tableHeight = useMemo(() => {
-        if (width > 1536) return 150;
-        if (width > 1280) return 180;
-        if (width > 1024) return 220;
-        if (width > 768) return 260;
-        if (width > 640) return 280;
-        return 330;
+        if (width > 1536) return 120;
+        if (width > 1280) return 160;
+        if (width > 1024) return 200;
+        if (width > 768) return 240;
+        if (width > 640) return 260;
+        return 310;
     }, [width]);
 
     const [tableData, setTableData] = useState<FoxTokenData[]>([]);
@@ -295,17 +304,17 @@ function FoxToken({ contentRef }: FoxToken) {
             customSort: (a, b) => a.token.localeCompare(b.token),
         },
         {
-            title: 'Price',
-            customSort: (a, b) => a.floorPrice - b.floorPrice,
-            render: (record) => <span>{record.floorPrice}</span>,
-        },
-        {
             title: 'Name',
             customSort: (a, b) => a.name.localeCompare(b.name),
             render: (record) => <span>{record.name}</span>,
         },
         {
-            title: 'Total Listings',
+            title: 'Price',
+            customSort: (a, b) => a.floorPrice - b.floorPrice,
+            render: (record) => <span>{record.floorPrice}</span>,
+        },
+        {
+            title: 'Listings',
             customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
             render: (record) => <span>{record.totalTokenListings}</span>,
         },
@@ -390,31 +399,38 @@ function FoxToken({ contentRef }: FoxToken) {
                 // console.log(labels);
                 // console.log(lineData);
 
-                let datasetsAry = [{
-                    type: 'line' as const,
-                    label: 'Floor Price',
-                    borderColor: lineColorSelected, // #14F195
-                    borderWidth: 2,
-                    fill: {
-                        target: 'origin',
-                        above: shadedAreaColorSelected,   // Area will be red above the origin
-                        // below: ''    // And blue below the origin
+                let datasetsAry = [
+                    {
+                        type: 'line' as const,
+                        yAxisID: 'y1',
+                        label: 'Listings',
+                        borderColor: '#9945FF', // # purple #9945FF    #14F195
+                        borderWidth: 2,
+                        // fill: {
+                        //     target: 'origin',
+                        //     above: shadedAreaColorSelected,  // 195e83  // Area will be red above the origin
+                        //     // below: ''    // And blue below the origin
+                        // },
+                        data: listingsData,
                     },
-                    data: lineData,
-                }];
+                    {
+                        type: 'line' as const,
+                        label: 'Price',
+                        yAxisID: 'y0',
+                        borderColor: lineColorSelected,
+                        borderWidth: 2,
+                        fillOpacity: .3,
+                        fill: {
+                            target: 'origin',
+                            above: shadedAreaColorSelected,   // Area will be red above the origin
+                            // below: ''    // And blue below the origin
+                        },
+                        data: lineData,
+                    },
 
-                let datasetsAryListings = [{
-                    type: 'line' as const,
-                    label: 'Total Token Listings',
-                    borderColor: lineColorSelected, // #14F195
-                    borderWidth: 2,
-                    fill: {
-                        target: 'origin',
-                        above: shadedAreaColorSelected,  // 195e83  // Area will be red above the origin
-                        // below: ''    // And blue below the origin
-                    },
-                    data: listingsData,
-                }];
+                ];
+
+                // let datasetsAryListings = [];
 
                 // console.log(labels);
                 // console.log(datasetsAry);
@@ -424,14 +440,12 @@ function FoxToken({ contentRef }: FoxToken) {
                     labels: labels,
                     datasets: datasetsAry
                 });
-                setFoxLineListingsData({
-                    labels: labels,
-                    datasets: datasetsAryListings
-                });
+                // setFoxLineListingsData({
+                //     labels: labels,
+                //     datasets: datasetsAryListings
+                // });
 
                 contentRef?.scrollToPoint(0, chartsRef.current?.offsetTop ?? 0, 800)
-
-
 
             })
             .catch((err) => {
@@ -935,7 +949,7 @@ function FoxToken({ contentRef }: FoxToken) {
                     <IonHeader>
                         <IonToolbar>
                             <IonTitle>
-                                Add a Token Name
+                                Add a Custom Token Name
                                 <a
                                     className="float-right text-base underline cursor-pointer"
                                     onClick={() => clickedAddName(false)}
@@ -1058,7 +1072,7 @@ function FoxToken({ contentRef }: FoxToken) {
                                     {
                                         icon: () => <IonIcon icon={wallet} />,
                                         tooltip: viewMyTokensClicked
-                                            ? 'View all tokens'
+                                            ? 'View All Tokens'
                                             : 'View My Tokens',
                                         onClick: () =>
                                             viewMyTokens(!viewMyTokensClicked),
@@ -1066,13 +1080,13 @@ function FoxToken({ contentRef }: FoxToken) {
                                     },
                                     {
                                         icon: () => <IonIcon icon={add} />,
-                                        tooltip: 'Add custom name',
+                                        tooltip: 'Add Custom Token Name',
                                         onClick: () => clickedAddName(true),
                                         isFreeAction: true,
                                     },
                                     {
                                         icon: () => <IonIcon icon={albums} />,
-                                        tooltip: 'Track Mult wallets',
+                                        tooltip: 'Track Multiple wallets',
                                         onClick: () => clickedMultWall(true),
                                         isFreeAction: true,
                                     },
@@ -1094,7 +1108,6 @@ function FoxToken({ contentRef }: FoxToken) {
                                 <div className="chart">
                                     <Chart
                                         type="line"
-                                        // @ts-ignore
                                         data={foxLineData}
                                         height={tableHeight}
                                         options={{
@@ -1102,14 +1115,12 @@ function FoxToken({ contentRef }: FoxToken) {
                                             maintainAspectRatio: true,
                                             plugins: {
                                                 legend: {
-                                                    display: false,
+                                                    display: true,
                                                 },
                                                 title: {
                                                     display: true,
                                                     text: tokenClickedOn
-                                                        ? tokenClickedOn +
-                                                          ' - Price'
-                                                        : 'Price',
+                                                        ? tokenClickedOn + ' - Price' : 'Price',
                                                 },
                                                 // tooltip: {
                                                 //     enabled: true,
@@ -1127,50 +1138,99 @@ function FoxToken({ contentRef }: FoxToken) {
                                                 // },
                                             },
                                             scales: {
-                                                x: {
-                                                    ticks: {
-                                                        autoSkip: true,
-                                                        maxTicksLimit: 8,
-                                                    },
-                                                },
-                                                y: {
-                                                    suggestedMin: 0,
-                                                },
-                                            },
-                                        }}
-                                    />
-                                </div>
-                                <div className="chart">
-                                    <Chart
-                                        type="line"
-                                        data={foxLineListingsData}
-                                        height={tableHeight}
-                                        options={{
-                                            responsive: true,
-                                            maintainAspectRatio: true,
-                                            plugins: {
-                                                legend: {
-                                                    display: false,
-                                                },
-                                                title: {
+                                                // x: { // TODO
+                                                //     ticks: {
+                                                //         autoSkip: true,
+                                                //         maxTicksLimit: 8,
+                                                //     },
+                                                //     // gridLines: {
+                                                //     //     display: true,
+                                                //     // },
+                                                // },
+                                                // y: {
+                                                //     suggestedMin: 0,
+                                                // },
+                                                yAxes: [{
+                                                    // stacked: true,
                                                     display: true,
-                                                    text: 'Total Token Listings',
-                                                },
-                                            },
-                                            scales: {
-                                                x: {
-                                                    ticks: {
-                                                        autoSkip: true,
-                                                        maxTicksLimit: 8,
+                                                    position: 'left',
+                                                    type: 'linear',
+                                                    scaleLabel: {
+                                                        display: true,
                                                     },
-                                                },
-                                                y: {
-                                                    suggestedMin: 0,
-                                                },
+                                                    // gridLines : {
+                                                    //     display : true
+                                                    // },
+                                                    id: 'y1',
+                                                    // ticks: {
+                                                    //     beginAtZero:true,
+                                                    //     // callback: function (tick, index, ticks) {
+                                                    //     //     return numeral(tick).format('(0,0)');
+                                                    //     // },
+                                                    // }
+                                                }, {
+                                                    // stacked: false,
+                                                    display: true,
+                                                    position: 'right',
+                                                    type: 'linear',
+                                                    id: 'y0',
+                                                    // ticks: {
+                                                    //     max: 10,
+                                                    //     stepSize: 1,
+                                                    //     display: true,
+                                                    //     beginAtZero: true,
+                                                    //     fontSize: 13,
+                                                    //     padding: 10,
+                                                    //     // callback: function (tick, index, ticks) {
+                                                    //     //     return numeral(tick).format('$ 0,0');
+                                                    //     // }
+                                                    // }
+                                                }]
                                             },
+                                            elements: {
+                                                point:{
+                                                    radius: 0
+                                                }
+                                            }
                                         }}
                                     />
                                 </div>
+                                {/*<div className="chart">*/}
+                                    {/*<Chart*/}
+                                    {/*    type="line"*/}
+                                    {/*    data={foxLineListingsData}*/}
+                                    {/*    height={tableHeight}*/}
+                                    {/*    options={{*/}
+                                    {/*        responsive: true,*/}
+                                    {/*        maintainAspectRatio: true,*/}
+                                    {/*        plugins: {*/}
+                                    {/*            legend: {*/}
+                                    {/*                display: false,*/}
+                                    {/*            },*/}
+                                    {/*            title: {*/}
+                                    {/*                display: true,*/}
+                                    {/*                text: 'Total Token Listings',*/}
+                                    {/*            },*/}
+                                    {/*        },*/}
+                                    {/*        scales: {*/}
+                                    {/*            x: {*/}
+                                    {/*                ticks: {*/}
+                                    {/*                    autoSkip: true,*/}
+                                    {/*                    maxTicksLimit: 8,*/}
+                                    {/*                },*/}
+                                    {/*            },*/}
+                                    {/*            y: {*/}
+                                    {/*                suggestedMin: 0,*/}
+                                    {/*            },*/}
+                                    {/*        },*/}
+                                    {/*        elements: {*/}
+                                    {/*            point:{*/}
+                                    {/*                radius: 0*/}
+                                    {/*            }*/}
+                                    {/*        }*/}
+                                    {/*    }}*/}
+                                    {/*/>*/}
+                                {/*</div>*/}
                             </div>
 
                             <br />

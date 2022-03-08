@@ -42,15 +42,15 @@ function Table<RowData extends object>(
 						td.MuiTableCell-footer {
 							border-bottom: none;
 						}
-						
+
 						tbody tr:nth-child(even) {
 							background-color: rgba(var(--ion-color-primary-rgb), 0.5);
 						}
 						tbody tr:nth-child(odd) {
 							background-color: rgba(var(--ion-color-primary-rgb), 0.3);
-						}						
+						}
 
-						table { 
+						table {
 							--tr-border-radius : 10px;
 						}
 
@@ -101,7 +101,7 @@ function Table<RowData extends object>(
                         borderBottom: 'none',
 						paddingBottom : 25,
                     },
-
+                    pageSize: 10
                 }}
             />
         </MuiThemeProvider>

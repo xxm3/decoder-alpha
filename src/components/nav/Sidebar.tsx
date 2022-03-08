@@ -23,7 +23,24 @@ function Sidebar() {
                   icon={calendarClearOutline}
                   to="/schedule"
               />
-              <NavLink title="Fox Token" icon="/assets/icons/FoxTokenLogo.svg" to="/foxtoken" isIconSvg={true}/>
+              <NavLink
+                  title="WL Token Market"
+                  icon="/assets/icons/FoxTokenLogo.svg"
+                  to="/foxtoken"
+                  isIconSvg={true}
+              />
+              <NavLink
+                  title="Mint Stats"
+                  icon={calendarClearOutline}
+                  // TODO
+                  to="/mintstats"
+              />
+              <NavLink
+                  title="Stacked Line Search"
+                  icon={calendarClearOutline}
+                  // TODO
+                  to="/stackedsearch"
+              />
           </IonList>
       </>
   );

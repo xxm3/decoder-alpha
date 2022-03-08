@@ -1,7 +1,8 @@
 
 
 .chart {
-    @apply col-span-12 sm:col-span-6 p-4 text-white shadow-lg rounded-l
+    @apply col-span-12 p-4 text-white shadow-lg rounded-l
+    /*sm:col-span-6*/
 }
 
 .messages {

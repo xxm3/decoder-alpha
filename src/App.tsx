@@ -41,7 +41,6 @@ import Schedule from "./pages/schedule/Schedule";
 // const TRACKING_ID = "G-Z3GDFZ53DN";
 // ReactGA.initialize(TRACKING_ID);
 
-
 import {
 	QueryClientProvider,
   } from 'react-query'
@@ -53,7 +52,9 @@ import WalletButton from "./components/WalletButton";
 import Sidebar from "./components/nav/Sidebar";
 import Style from "./components/Style";
 import Theme from "./theme/Theme";
-
+import FoxToken from "./components/FoxToken";
+import NftPriceTable from "./components/NftPriceTable";
+import StackedSearch from "./components/StackedSearch";
 
 const App = () => {
 
@@ -90,9 +91,6 @@ const App = () => {
 		})
 	}, []);
 
-
-
-
 	return (
         <IonApp>
             <Theme>
@@ -117,60 +115,52 @@ const App = () => {
 	                                                    >
 	                                                        <Style>
 	                                                            {`
-																	@media only screen and (min-width:768px) and (max-width:992px){ 
+																	@media only screen and (min-width:768px) and (max-width:992px){
 																		ion-split-pane {
 																			--side-min-width: none;
 																		}
 																	}
-																	
-																		
 																`}
 	                                                        </Style>
-	                                                        <IonSplitPane
-	                                                            when="md"
-	                                                            contentId="main"
-	                                                        >
-	                                                            <IonMenu
-	                                                                menuId="sidebar"
-	                                                                contentId="main"
-	                                                            >
+	                                                        <IonSplitPane when="md" contentId="main">
+	                                                            <IonMenu menuId="sidebar" contentId="main">
 	                                                                <Sidebar />
 	                                                            </IonMenu>
-	                                                            <IonContent
-	                                                                className="h-full"
-	                                                                id="main"
-	                                                            >
+	                                                            <IonContent className="h-full" id="main">
 	                                                                <IonRouterOutlet>
+                                                                        {/*home page, after authenticated*/}
 	                                                                    <ProtectedRoute
-	                                                                        path="/"
-	                                                                        component={
-	                                                                            Home
-	                                                                        }
-	                                                                        exact
+	                                                                        path="/" component={ Home } exact
 	                                                                    />
-	
+
+                                                                        {/*searched on something*/}
 	                                                                    <ProtectedRoute
-	                                                                        path="/search/:id"
-	                                                                        exact={
-	                                                                            true
-	                                                                        }
-	                                                                        component={
-	                                                                            Search
-	                                                                        }
+	                                                                        path="/search/:id" exact={true} component={Search}
 	                                                                    />
-	                                                                    <AppRoute
-	                                                                        exact
-	                                                                        path="/Schedule"
-	                                                                        component={
-	                                                                            Schedule
-	                                                                        }
+
+                                                                        {/* todays mints*/}
+	                                                                    <ProtectedRoute
+	                                                                        exact path="/Schedule" component={Schedule}
 	                                                                    />
+
+                                                                        {/* fox token market */}
+                                                                        <ProtectedRoute
+                                                                            exact path="/foxtoken" component={FoxToken}
+                                                                        />
+
+                                                                        {/* mint alert automated - stats */}
+                                                                        <ProtectedRoute
+                                                                            exact path="/mintstats" component={NftPriceTable}
+                                                                        />
+
+                                                                        {/* Stacked Line Search */}
+                                                                        <ProtectedRoute
+                                                                            exact path="/stackedsearch" component={StackedSearch}
+                                                                        />
+
+                                                                        {/*login button etc...*/}
 	                                                                    <AppRoute
-	                                                                        exact
-	                                                                        path="/Login"
-	                                                                        component={
-	                                                                            Login
-	                                                                        }
+	                                                                        exact path="/Login" component={ Login}
 	                                                                    />
 	                                                                </IonRouterOutlet>
 	                                                            </IonContent>
@@ -194,9 +184,6 @@ const App = () => {
             </Theme>
         </IonApp>
     );
-
 };
-
-
 
 export default App;
