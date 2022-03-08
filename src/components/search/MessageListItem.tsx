@@ -12,7 +12,7 @@ type MessageListItemProps =
           message: Message;
           onClick?: (message: Message) => any;
       }
-   
+
 
 const getDateAgo = function (time: moment.MomentInput) {
     return moment(time).fromNow();
@@ -29,7 +29,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
             if (!message) return { formattedMessage : "", mediaUrls: [] };
             const mediaUrls: string[] = [];
 
-			
+
 
             let formattedMessage = message.replaceAll(
                 urlRegExp,
@@ -69,20 +69,21 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                 }
                 ref={ref}
             >
-                
-                    <img
-                        className="image"
-                        alt={source === 'Twitter' ? 'Twitter' : 'Discord'}
-                        src={
-                            source === 'Twitter'
-                                ? `https://unavatar.io/twitter/${
-                                      (author as string)
-                                          .split('(Twitter) ')
-                                          .slice(-1)[0]
-                                  }`
-                                : '/assets/discord.ico'
-                        }
-                    />
+
+                {/*TODO: hide this on mobile*/}
+                <img
+                    className="image "
+                    alt={source === 'Twitter' ? 'Twitter' : 'Discord'}
+                    src={
+                        source === 'Twitter'
+                            ? `https://unavatar.io/twitter/${
+                                  (author as string)
+                                      .split('(Twitter) ')
+                                      .slice(-1)[0]
+                              }`
+                            : '/assets/discord.ico'
+                    }
+                />
                 <div className="flex-grow">
                     <div
                         className={`flex font-semibold items-center space-x-2 text-base mb-1`}
@@ -108,7 +109,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                     <div
                         className={'max-w-full word-wrap'}
                     >
-                        {<ReactMarkdown 
+                        {<ReactMarkdown
 								components={{
 									strong({ children, ...props  }){
 										const strongWord = children[0]?.toString()
@@ -142,7 +143,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                                         );
 									}
 								}}
-								
+
 							>
 								{formattedMessage}
 							</ReactMarkdown>
