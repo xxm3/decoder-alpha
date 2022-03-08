@@ -90,7 +90,10 @@ function Table<RowData extends object>(
                     cellStyle: {
                         whiteSpace: 'nowrap',
                         borderBottom: 'none',
-                        padding: 14, // 20,
+                        paddingTop: 14,
+                        paddingBottom: 14,
+						paddingLeft : 25,
+						paddingRight: 20,
                     },
                 }))}
                 title={
