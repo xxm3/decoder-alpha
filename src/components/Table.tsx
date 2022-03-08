@@ -54,12 +54,15 @@ function Table<RowData extends object>(
 							border-bottom : none !important;
 						}
 
-						table { 
+						table {
 							--tr-border-radius : 10px;
 						}
 
 						table:not(first-child){
-							margin-top: 20px;
+							// margin-top: 20px;
+						}
+						table th{
+						    padding: 5px !important;
 						}
 						tbody tr:first-child td:first-child {
 							border-radius: var(--tr-border-radius) 0 0 0;
@@ -87,8 +90,7 @@ function Table<RowData extends object>(
                     cellStyle: {
                         whiteSpace: 'nowrap',
                         borderBottom: 'none',
-                        borderTop: 'none',
-                        padding: 20,
+                        padding: 14, // 20,
                     },
                 }))}
                 title={
@@ -107,6 +109,9 @@ function Table<RowData extends object>(
 						paddingBottom : 25,
 						...props.options?.headerStyle,
                     },
+                    pageSize: 10, // default rows per page
+                    emptyRowsWhenPaging: false,   // To avoid of having empty rows
+                    pageSizeOptions: [10, 20, 50, 100],    // rows selection options
 					...props.options,
                 }}
             />

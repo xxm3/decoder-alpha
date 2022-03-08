@@ -207,7 +207,7 @@ const Search: React.FC<AppComponentProps> = ( { contentRef }) => {
 
     return (
         <React.Fragment>
-			
+
                             <div className={`h-fit container rounded-lg pt-3 pb-6 md:px-3 xl:pb-3 2xl:pb-2 lg:pb-4`} >
 
                                 {/* ERROR bar */}

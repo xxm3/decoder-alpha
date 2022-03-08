@@ -526,7 +526,7 @@ function FoxToken({ contentRef }: FoxToken) {
     return (
         <>
             <div
-                className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}
+
             >
                 {/*
                     adding multiple wallets
@@ -642,7 +642,7 @@ function FoxToken({ contentRef }: FoxToken) {
                     <IonHeader>
                         <IonToolbar>
                             <IonTitle>
-                                Add a Token Name
+                                Add a Custom Token Name
                                 <a
                                     className="float-right text-base underline cursor-pointer"
                                     onClick={() => clickedAddName(false)}
@@ -657,7 +657,7 @@ function FoxToken({ contentRef }: FoxToken) {
                         <div className="ml-3 mr-3 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                             <div className="font-medium">
                                 <p>
-                                    Use this if Fox Token Market doesn't have an
+                                    Use this if Fox WL Token Market doesn't have an
                                     official name yet, and you know for certain
                                     what the name of the NFT is
                                 </p>
@@ -758,14 +758,14 @@ function FoxToken({ contentRef }: FoxToken) {
                             <Table
                                 data={tableData}
                                 columns={columns}
-                                title="Fox Token Market - Analysis"
-                                description="Contains community added names"
+                                title="Fox WL Token Market - Analysis"
+                                description="👪 Are community added names"
                                 url="https://famousfoxes.com/tokenmarket"
                                 actions={[
                                     {
                                         icon: () => <IonIcon icon={wallet} />,
                                         tooltip: viewMyTokensClicked
-                                            ? 'View all tokens'
+                                            ? 'View All Tokens'
                                             : 'View My Tokens',
                                         onClick: () =>
                                             viewMyTokens(!viewMyTokensClicked),
@@ -773,13 +773,13 @@ function FoxToken({ contentRef }: FoxToken) {
                                     },
                                     {
                                         icon: () => <IonIcon icon={add} />,
-                                        tooltip: 'Add custom name',
+                                        tooltip: 'Add Custom Token Name',
                                         onClick: () => clickedAddName(true),
                                         isFreeAction: true,
                                     },
                                     {
                                         icon: () => <IonIcon icon={albums} />,
-                                        tooltip: 'Track Mult wallets',
+                                        tooltip: 'Track Multiple wallets',
                                         onClick: () => clickedMultWall(true),
                                         isFreeAction: true,
                                     },

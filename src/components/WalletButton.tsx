@@ -44,7 +44,7 @@ function WalletButton() {
         dispatch(setWallet(null));
 
         present({
-            message: 'Wallet disconnected. Refresh the page if connecting a new wallet, to get "Fox Token Market - View My Tokens" to show properly',
+            message: 'Wallet disconnected. Refresh the page if connecting a new wallet, to get "Fox WL Token Market - View My Tokens" to show properly',
             color: 'success',
             duration: 10000
         });
@@ -58,7 +58,7 @@ function WalletButton() {
                 html={
                     <IonList lines="none" className="py-1 dropdown-list rounded items-center space-y-2 overflow-x-hidden">
                        <IonItem color="inherit">
-                       	 <IonButton 
+                       	 <IonButton
 							onClick={() => dcWallet()}
 							color="inherit"
 	                        className="border-transparent h-3/4 flex space-x-2 px-2 mx-0 w-full shadow-none hover:bg-primary-tint">

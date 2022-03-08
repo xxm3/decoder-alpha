@@ -272,7 +272,8 @@ const Schedule = () => {
     // Renders
     return (
 
-        <div className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 max-w-fit mx-auto mb-10`}>
+        <div className={``}>
+            {/*w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 max-w-fit mx-auto mb-10*/}
 
             {
                 isLoading
@@ -281,8 +282,7 @@ const Schedule = () => {
                     </div>
                     :
 
-                    <div className="p-4">
-                        <br/>
+                    <div>
                         <Table
                             data={dataSource}
                             columns={columns}
