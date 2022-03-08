@@ -112,7 +112,7 @@ const DisplayGraph:React.FC<{
         !completelyHideChart &&
         (
             <div className="gap-4 grid grid-cols-12" >
-                <div className="chart">
+                <div className="chart chart-col6">
                     <Chart
                         type="bar"
                         data={chartDataDailyCount}
@@ -139,7 +139,7 @@ const DisplayGraph:React.FC<{
                     />
                 </div>
 
-                <div className="chart">
+                <div className="chart chart-col6">
                     <Chart
                         type="bar"
                         data={chartDataPerSource}
