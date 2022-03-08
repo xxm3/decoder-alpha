@@ -7,7 +7,7 @@ import {
     IonModal,
     IonContent,
     IonHeader,
-    IonToolbar, IonTitle, useIonToast, IonIcon, 
+    IonToolbar, IonTitle, useIonToast, IonIcon,
 } from '@ionic/react';
 import { useEffect, useMemo, useRef, useState} from 'react';
 import Loader from "./Loader";
@@ -222,7 +222,7 @@ function FoxToken({ contentRef }: FoxToken) {
     const smallWidthpx = 768;
 
 
-    
+
 
 
 
@@ -790,6 +790,7 @@ function FoxToken({ contentRef }: FoxToken) {
                                 }}
                                 detailPanel={[
 									{
+                                        icon: '📈',
 										tooltip : "View Chart",
 										render : (record) => (
 											<FoxTokenCharts {...record.rowData}/>
