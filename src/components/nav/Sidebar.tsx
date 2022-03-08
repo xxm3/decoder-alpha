@@ -1,5 +1,5 @@
 import { IonList } from "@ionic/react"
-import { calendarClearOutline, homeOutline, logoFirefox } from "ionicons/icons"
+import { calendarClearOutline, homeOutline, logoFirefox, search, statsChart } from "ionicons/icons"
 import Style from "../Style";
 import NavLink from "./NavLink"
 
@@ -31,13 +31,13 @@ function Sidebar() {
               />
               <NavLink
                   title="Mint Stats"
-                  icon={calendarClearOutline}
+                  icon={statsChart}
                   // TODO
                   to="/mintstats"
               />
               <NavLink
                   title="Stacked Line Search"
-                  icon={calendarClearOutline}
+                  icon={search}
                   // TODO
                   to="/stackedsearch"
               />

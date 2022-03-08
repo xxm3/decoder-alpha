@@ -42,12 +42,16 @@ function Table<RowData extends object>(
 						td.MuiTableCell-footer {
 							border-bottom: none;
 						}
-
-						tbody tr:nth-child(even) {
+						
+						tbody tr[level="0"]:nth-child(even) {
 							background-color: rgba(var(--ion-color-primary-rgb), 0.5);
 						}
-						tbody tr:nth-child(odd) {
+						tbody tr[level="0"]:nth-child(odd) {
 							background-color: rgba(var(--ion-color-primary-rgb), 0.3);
+						}		
+						
+						tr, td {
+							border-bottom : none !important;
 						}
 
 						table {
@@ -86,7 +90,10 @@ function Table<RowData extends object>(
                     cellStyle: {
                         whiteSpace: 'nowrap',
                         borderBottom: 'none',
-                        padding: 14, // 20,
+                        paddingTop: 14,
+                        paddingBottom: 14,
+						paddingLeft : 25,
+						paddingRight: 20,
                     },
                 }))}
                 title={
@@ -98,15 +105,17 @@ function Table<RowData extends object>(
                     </div>
                 }
                 options={{
-                    headerStyle: {
-                        fontSize: '16px',
+					headerStyle: {
+						fontSize: '16px',
                         whiteSpace: 'nowrap',
                         borderBottom: 'none',
 						paddingBottom : 25,
+						...props.options?.headerStyle,
                     },
                     pageSize: 10, // default rows per page
                     emptyRowsWhenPaging: false,   // To avoid of having empty rows
-                    pageSizeOptions: [10, 20, 50, 100]    // rows selection options
+                    pageSizeOptions: [10, 20, 50, 100],    // rows selection options
+					...props.options,
                 }}
             />
         </MuiThemeProvider>
