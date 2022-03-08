@@ -43,12 +43,16 @@ function Table<RowData extends object>(
 							border-bottom: none;
 						}
 						
-						tbody tr:nth-child(even) {
+						tbody tr[level="0"]:nth-child(even) {
 							background-color: rgba(var(--ion-color-primary-rgb), 0.5);
 						}
-						tbody tr:nth-child(odd) {
+						tbody tr[level="0"]:nth-child(odd) {
 							background-color: rgba(var(--ion-color-primary-rgb), 0.3);
-						}						
+						}		
+						
+						tr, td {
+							border-bottom : none !important;
+						}
 
 						table { 
 							--tr-border-radius : 10px;
@@ -83,6 +87,7 @@ function Table<RowData extends object>(
                     cellStyle: {
                         whiteSpace: 'nowrap',
                         borderBottom: 'none',
+                        borderTop: 'none',
                         padding: 20,
                     },
                 }))}
@@ -95,13 +100,14 @@ function Table<RowData extends object>(
                     </div>
                 }
                 options={{
-                    headerStyle: {
-                        fontSize: '16px',
+					headerStyle: {
+						fontSize: '16px',
                         whiteSpace: 'nowrap',
                         borderBottom: 'none',
 						paddingBottom : 25,
+						...props.options?.headerStyle,
                     },
-
+					...props.options,
                 }}
             />
         </MuiThemeProvider>

@@ -57,12 +57,7 @@ const Search: React.FC<AppComponentProps> = ( { contentRef }) => {
         setCurrentPage(0);
     },[searchText])
 
-    // Whenever the next or previous page clicked it should scroll to top
-    useEffect(() => {
-        window.scrollTo(0,0);
-    },[currentPage])
-
-
+ 
     /**
      * Functions
      */
@@ -72,7 +67,7 @@ const Search: React.FC<AppComponentProps> = ( { contentRef }) => {
     useMountEffect(() => contentRef?.scrollToTop());
 
     const handlePage = (type: string) => {
-        contentRef?.scrollIntoView();
+        contentRef?.scrollToTop(800)
         if(type === 'next' && (!messageQuery?.isPreviousData && messageQuery?.data?.hasMore)) setCurrentPage(currentPage+1)
         else setCurrentPage(currentPage - 1)
     }

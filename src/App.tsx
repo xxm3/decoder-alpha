@@ -91,6 +91,13 @@ const App = () => {
 	}, []);
 
 
+	const [loadingGif, setLoadingGif] = useState(true)
+	useEffect(() => {
+		const id = setTimeout(() => {
+			setLoadingGif(false)
+		}, 8000)
+		return () => clearTimeout(id)
+	}, [])
 
 
 	return (
@@ -98,7 +105,7 @@ const App = () => {
             <Theme>
             	<QueryClientProvider client={queryClient}>
 	                <UserContext.Provider value={user}>
-	                    {user !== undefined ? (
+	                    {(user !== undefined && !loadingGif) ? (
 	                        <>
 	                            <IonReactRouter>
 	                                <IonRouterOutlet id="router">
@@ -185,7 +192,7 @@ const App = () => {
 	                        </>
 	                    ) : (
 	                        <div className="mx-auto my-auto h-48 w-48">
-	                            <Loader />
+	                            <img src="/assets/site-logos/Logo_Sol_decoder/Terminados/Gif/logo.gif" />
 	                        </div>
 	                    )}
 	                    <ReactQueryDevtools initialIsOpen />

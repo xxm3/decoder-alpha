@@ -3,26 +3,18 @@ import {
     IonList,
     IonLabel,
     IonItem,
-    IonCheckbox,
     IonInput,
-    IonRow,
-    IonCol,
-    IonItemDivider,
     IonModal,
     IonContent,
     IonHeader,
-    IonToolbar, IonTitle, useIonToast, IonIcon, IonPopover, IonRadioGroup, IonListHeader, IonRadio, IonRouterLink
+    IonToolbar, IonTitle, useIonToast, IonIcon, 
 } from '@ionic/react';
-import React, {KeyboardEvent, KeyboardEventHandler, useEffect, useMemo, useRef, useState} from 'react';
+import { useEffect, useMemo, useRef, useState} from 'react';
 import Loader from "./Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
-import {ChartData} from "chart.js";
-import {Chart} from "react-chartjs-2";
-import {getDailyCountData} from "../util/charts";
-import moment from "moment";
 import * as solanaWeb3 from '@solana/web3.js';
-import {add, addCircleOutline, addOutline, albums, albumsOutline, cloud, cog, wallet} from "ionicons/icons";
+import {add, albums,  close, wallet} from "ionicons/icons";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
@@ -33,17 +25,52 @@ import { Column } from '@material-table/core';
 import _ from 'lodash';
 import Style from './Style';
 import { AppComponentProps } from './Route';
+import FoxTokenCharts from './FoxTokenCharts';
+import { FoxTokenData } from '../types/FoxTokenTypes';
 
-interface FoxTokenData {
-	token : string;
-	floorPrice: number;name : string;
-	listedTokens : {
-		cost: number;
-		count: number;
-	}[],
-	totalTokenListings : number;
-	whichMyWallets : string;
-}
+const columns: Column<FoxTokenData>[] = [
+    {
+        title: 'Token',
+        render: (record) => (
+            <a
+                href={`https://famousfoxes.com/tokenmarket/${record.token}`}
+                target="_blank"
+                className="hover:opacity-80 flex items-center space-x-3"
+            >
+                <span className="hidden lg:block">{record.token}</span>
+                <span className="lg:hidden">
+                    {shortenedWallet(record.token)}
+                </span>
+                <IonIcon
+                    src="/assets/icons/newTabIcon.svg"
+                    className="newTabIcon"
+                />
+            </a>
+        ),
+        customSort: (a, b) => a.token.localeCompare(b.token),
+    },
+    {
+        title: 'Price',
+        customSort: (a, b) => a.floorPrice - b.floorPrice,
+        render: (record) => <span>{record.floorPrice}</span>,
+    },
+    {
+        title: 'Name',
+        customSort: (a, b) => a.name.localeCompare(b.name),
+        render: (record) => <span>{record.name}</span>,
+		customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().includes(term.toLowerCase()),
+    },
+    {
+        title: 'Total Listings',
+        customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
+        render: (record) => <span>{record.totalTokenListings}</span>,
+    },
+    {
+        title: '# Owned & Wallet',
+        // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
+    },
+];
+
 
 /**
  * IF WANT TO TEST THIS PAGE
@@ -68,72 +95,11 @@ function FoxToken({ contentRef }: FoxToken) {
 
     const local_host_str = 'localhost';
     const firstUpdate = useRef(true);
-    const [token, setToken] = useState<string | null>(null);
-    const [name, setName] = useState<string | null>(null);
 
     const [popoverOpened, setPopoverOpened] = useState(null);
     const [viewAbuse, setViewAbuse] = useState(false);
 
     const cookies = useMemo(() => new Cookies(), []);
-
-    // user clicked the radio for the dates in the chart
-    const [chartDateSelected, setChartDateSelected] = useState<string>(cookies.get('chartDateFormat') ? cookies.get('chartDateFormat') : 'fromNow');
-    // when above radio clicked, will redraw the chart
-    useEffect(() => {
-        if (firstUpdate.current) {
-            firstUpdate.current = false;
-            return;
-        }
-
-        cookies.set('chartDateFormat', chartDateSelected);
-
-        // redraw the chart
-        viewChart();
-    }, [chartDateSelected]);
-
-    // user clicked change colour
-    const [lineColorSelected, setLineColorSelected] = useState<string>(cookies.get('lineColorSelected') ? cookies.get('lineColorSelected') : "#195e83");
-    const [shadedAreaColorSelected, setShadedAreaColorSelected] = useState<string>(cookies.get('shadedAreaColorSelected') ? cookies.get('shadedAreaColorSelected') : "black")
-    // when above clicked, will redraw the chart
-    useEffect(() => {
-        if (firstUpdate.current) {
-            firstUpdate.current = false;
-            return;
-        }
-
-        cookies.set('lineColorSelected', lineColorSelected);
-        cookies.set('shadedAreaColorSelected', shadedAreaColorSelected);
-
-        // redraw the chart
-        // viewChart();
-
-        /**
-         * TODO 1: going out 3x....
-         *
-         * going out to 9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41
-         * FoxToken.tsx:435 going out to 9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41
-         * FoxToken.tsx:435 going out to 9udKMALG9vYXvwdQK6CUfXdsn4SiWwWtzTyMpzLF7g41
-         * 3   FoxToken.tsx:435 going out to AnUWnrpQnk98rwdQpSW7tyJv5z9uz9BPFsYxFXBJAhHd
-         * 3    FoxToken.tsx:435 going out to Fb4Xsbo8LXgshcBEjFQ3iLNfqT7o5615MdPtRRbHTAg8
-         *
-         *
-         */
-
-        // TODO 2: FUKT UP
-        // present({
-        //     message: 'After setting a valid color, load a new chart to see it',
-        //     color: 'success',
-        //     duration: 5000
-        // });
-
-    }, [lineColorSelected, shadedAreaColorSelected]);
-
-    // when click 'view chart'... will set the token then draw the chart
-    useEffect(() => {
-        if(token){ //  && name
-            viewChart(); // record.token, record.name
-        }
-    }, [token]);
 
     const [multWalletAryFromCookie, setMultWalletAryFromCookie] = useState(cookies.get('multWalletsAry')); // mult. wallets you have from cookies
     // clicked link to add multiple wallets
@@ -238,23 +204,14 @@ function FoxToken({ contentRef }: FoxToken) {
     /**
      * States & Variables
      */
-    const [width, setWidth] = useState(window.innerWidth);
 
-    // for setting height of chart, depending on what width browser is
-    const tableHeight = useMemo(() => {
-        if (width > 1536) return 150;
-        if (width > 1280) return 180;
-        if (width > 1024) return 220;
-        if (width > 768) return 260;
-        if (width > 640) return 280;
-        return 330;
-    }, [width]);
 
-    const [tableData, setTableData] = useState<FoxTokenData[]>([]);
+    const [tableData, _setTableData] = useState<FoxTokenData[]>([]);
     const [fullTableData, setFullTableData] = useState<FoxTokenData[]>([]);
-    const [tokenClickedOn, setTokenClickedOn] = useState();
     const [mySolBalance, setMySolBalance] = useState("");
 
+	const setTableData = (data: FoxTokenData[]) =>
+        _setTableData(data.map((row) => ({ ...row, id : row.token })));
     const [mySplTokens, setMySplTokens]: any = useState([]);
 
     const [viewMyTokensClicked, setViewMyTokensClicked] = useState(false);
@@ -264,80 +221,16 @@ function FoxToken({ contentRef }: FoxToken) {
 
     const smallWidthpx = 768;
 
-    const defaultGraph: ChartData<any, string> = {
-        labels: [],
-        datasets: [],
-    };
-    const [foxLineData, setFoxLineData] = useState(defaultGraph);
-    const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
 
-	const chartsRef = useRef<HTMLDivElement | null>(null);
+    
 
-    const columns: Column<FoxTokenData>[] = [
-        {
-            title: 'Token',
-            render: (record) => (
-                <a
-                    href={`https://famousfoxes.com/tokenmarket/${record.token}`}
-                    target="_blank"
-                    className="hover:opacity-80 flex items-center space-x-3"
-                >
-                    <span className="hidden md:block">{record.token}</span>
-                    <span className="md:hidden">
-                        {shortenedWallet(record.token)}
-                    </span>
-                    <IonIcon
-                        src="/assets/icons/newTabIcon.svg"
-                        className="newTabIcon"
-                    />
-                </a>
-            ),
-            customSort: (a, b) => a.token.localeCompare(b.token),
-        },
-        {
-            title: 'Price',
-            customSort: (a, b) => a.floorPrice - b.floorPrice,
-            render: (record) => <span>{record.floorPrice}</span>,
-        },
-        {
-            title: 'Name',
-            customSort: (a, b) => a.name.localeCompare(b.name),
-            render: (record) => <span>{record.name}</span>,
-        },
-        {
-            title: 'Total Listings',
-            customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
-            render: (record) => <span>{record.totalTokenListings}</span>,
-        },
-        {
-            title: 'View Chart',
-			render: record => (
-				<span onClick={() => {
-					setToken(record.token);
-					setName(record.name);
-					// useEffect above will update it...
-				}}
-					className="cursor-pointer big-emoji">📈</span>
-			),
-        },
-        {
-            title: '# Owned & Wallet',
-            // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
-        },
-    ];
+
+
 
     /**
      * Use Effects
      */
     // resize window
-    useEffect(() => {
-        function resizeWidth() {
-            setWidth(window.innerWidth);
-        }
-
-        window.addEventListener('resize', resizeWidth);
-        return () => window.removeEventListener('resize', resizeWidth);
-    }, []);
 
     /**
      * Functions
@@ -347,98 +240,7 @@ function FoxToken({ contentRef }: FoxToken) {
 
     }
 
-    // viewing the chart for a token
-    const viewChart = () => { // token: string, name: string
 
-        setFoxLineData(defaultGraph);
-        setFoxLineListingsData(defaultGraph);
-
-        // @ts-ignore
-        setTokenClickedOn(name ? `${name} (${token})` : token);
-
-        instance
-            .get(environment.backendApi + '/receiver/foxTokenHistory?token=' + token)
-            .then((res) => {
-
-                const labels = res.data.map((el: { createdAt: any; }) => {
-
-                    // user can set this in the chart
-                    if(chartDateSelected === 'fromNow'){
-                        return moment(el.createdAt).fromNow()
-                    }else{
-                        return moment(el.createdAt).format('MM-DD HH:MM');
-                    }
-
-                });
-                const lineData = res.data.map((el: { floorPrice: any; }) => {
-                    return parseFloat(el.floorPrice);
-                });
-
-                const listingsData = res.data.map((el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings));
-                // console.log(listingsData);
-
-                // graph latest point...
-                for(let t in tableData){
-                    if(tableData[t].token === token && tableData[t].floorPrice){
-                        labels.push('a few seconds ago');
-                        lineData.push(tableData[t].floorPrice);
-                        listingsData.push(tableData[t].totalTokenListings);
-                        break;
-                    }
-                }
-
-                // console.log(labels);
-                // console.log(lineData);
-
-                let datasetsAry = [{
-                    type: 'line' as const,
-                    label: 'Floor Price',
-                    borderColor: lineColorSelected, // #14F195
-                    borderWidth: 2,
-                    fill: {
-                        target: 'origin',
-                        above: shadedAreaColorSelected,   // Area will be red above the origin
-                        // below: ''    // And blue below the origin
-                    },
-                    data: lineData,
-                }];
-
-                let datasetsAryListings = [{
-                    type: 'line' as const,
-                    label: 'Total Token Listings',
-                    borderColor: lineColorSelected, // #14F195
-                    borderWidth: 2,
-                    fill: {
-                        target: 'origin',
-                        above: shadedAreaColorSelected,  // 195e83  // Area will be red above the origin
-                        // below: ''    // And blue below the origin
-                    },
-                    data: listingsData,
-                }];
-
-                // console.log(labels);
-                // console.log(datasetsAry);
-                // console.log(datasetsAryListings);
-
-                setFoxLineData({
-                    labels: labels,
-                    datasets: datasetsAry
-                });
-                setFoxLineListingsData({
-                    labels: labels,
-                    datasets: datasetsAryListings
-                });
-
-                contentRef?.scrollToPoint(0, chartsRef.current?.offsetTop ?? 0, 800)
-
-
-
-            })
-            .catch((err) => {
-                console.error("error when getting fox token history data: " + err);
-            });
-
-    }
 
     // load table data!
     const fetchTableData = async () => {
@@ -726,101 +528,6 @@ function FoxToken({ contentRef }: FoxToken) {
             <div
                 className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}
             >
-                <div className={`font-bold pb-10 w-full`}>
-                    <br hidden={width > smallWidthpx} />
-                    <IonButton
-                        className="float-right text-sm small-btn "
-                        // onClick={() => setPopoverOpened(null) }
-                        onClick={(e: any) => {
-                            e.persist();
-                            setPopoverOpened(e);
-                        }}
-                    >
-                        <IonIcon icon={cog} className="pr-1" />
-                        Customize
-                    </IonButton>
-                    <br hidden={width > smallWidthpx} />
-
-                    <IonPopover
-                        // @ts-ignore
-                        event={popoverOpened}
-                        isOpen={!!popoverOpened}
-                        onDidDismiss={() => setPopoverOpened(null)}
-                    >
-                        <IonContent>
-                            <div className="p-2">
-                                <h3 className="font-bold pb-1 w-full pt-5">
-                                    Date Format
-                                </h3>
-
-                                <IonList>
-                                    <IonRadioGroup
-                                        value={chartDateSelected}
-                                        onIonChange={(e) =>
-                                            setChartDateSelected(e.detail.value)
-                                        }
-                                    >
-                                        <IonItem>
-                                            <IonLabel>"2 hours ago"</IonLabel>
-                                            <IonRadio value="fromNow" />
-                                        </IonItem>
-
-                                        <IonItem>
-                                            <IonLabel>
-                                                "2022-01-01 12:00"
-                                            </IonLabel>
-                                            <IonRadio value="yyyyMmDd" />
-                                        </IonItem>
-                                    </IonRadioGroup>
-                                </IonList>
-
-                                {/*TODO 3): portals wl email and mirror .... plus email bayc  --- PLUS MIRROR ME DAO CHAT & GET ON OG ON # ACCTS! (boon my mint) */}
-
-                                <h3 className="font-bold pb-1 w-full pt-5">
-                                    Chart Colors
-                                </h3>
-
-                                <IonItem>
-                                    <IonLabel
-                                        position="stacked"
-                                        className="font-bold"
-                                    >
-                                        Line Color
-                                    </IonLabel>
-                                    <IonInput
-                                        onIonChange={(e) =>
-                                            setLineColorSelected(
-                                                e.detail.value!
-                                            )
-                                        }
-                                        value={lineColorSelected}
-                                        placeholder="red, #c6ac95, rgb(255, 0, 0)"
-                                    ></IonInput>
-                                </IonItem>
-                                <IonItem>
-                                    <IonLabel
-                                        position="stacked"
-                                        className="font-bold"
-                                    >
-                                        Shaded Area Color
-                                    </IonLabel>
-                                    <IonInput
-                                        onIonChange={(e) =>
-                                            setShadedAreaColorSelected(
-                                                e.detail.value!
-                                            )
-                                        }
-                                        value={shadedAreaColorSelected}
-                                        placeholder="red, #c6ac95, rgb(255, 0, 0)"
-                                    ></IonInput>
-                                </IonItem>
-                            </div>
-                        </IonContent>
-                    </IonPopover>
-
-                    {/*--{token}-{name}-*/}
-                </div>
-
                 {/*
                     adding multiple wallets
                 */}
@@ -836,7 +543,7 @@ function FoxToken({ contentRef }: FoxToken) {
                                     className="float-right text-base underline cursor-pointer"
                                     onClick={() => clickedMultWall(false)}
                                 >
-                                    close
+                                    <IonIcon icon={close} className="h-6 w-6" />
                                 </a>
                             </IonTitle>
                         </IonToolbar>
@@ -940,7 +647,7 @@ function FoxToken({ contentRef }: FoxToken) {
                                     className="float-right text-base underline cursor-pointer"
                                     onClick={() => clickedAddName(false)}
                                 >
-                                    close
+                                    <IonIcon icon={close} className="h-6 w-6" />
                                 </a>
                             </IonTitle>
                         </IonToolbar>
@@ -1078,102 +785,20 @@ function FoxToken({ contentRef }: FoxToken) {
                                     },
                                 ]}
                                 options={{
-                                    search: false,
-                                    filtering: false,
+                                    search: true,
+									detailPanelType : "single"
                                 }}
+                                detailPanel={[
+									{
+										tooltip : "View Chart",
+										render : (record) => (
+											<FoxTokenCharts {...record.rowData}/>
+										),
+									}
+								]}
                             />
 
                             {/*-{foxLineData.labels}-*/}
-
-                            <div
-                                className="gap-4 mb-4 grid grid-cols-12 mt-3"
-								ref={chartsRef}
-                                // @ts-ignore
-                                //  hidden={!foxLineData.labels || foxLineData.labels}
-                            >
-                                <div className="chart">
-                                    <Chart
-                                        type="line"
-                                        // @ts-ignore
-                                        data={foxLineData}
-                                        height={tableHeight}
-                                        options={{
-                                            responsive: true,
-                                            maintainAspectRatio: true,
-                                            plugins: {
-                                                legend: {
-                                                    display: false,
-                                                },
-                                                title: {
-                                                    display: true,
-                                                    text: tokenClickedOn
-                                                        ? tokenClickedOn +
-                                                          ' - Price'
-                                                        : 'Price',
-                                                },
-                                                // tooltip: {
-                                                //     enabled: true,
-                                                //     usePointStyle: true,
-                                                //     callbacks: {
-                                                //         // To change title in tooltip
-                                                //         title: (data: any) => { return data[0].parsed.x },
-                                                //
-                                                //         // To change label in tooltip
-                                                //         label: (data: any) => {
-                                                //             console.log(data);
-                                                //             return data.parsed.y === 2 ? "Good" : "Critical"
-                                                //         }
-                                                //     },
-                                                // },
-                                            },
-                                            scales: {
-                                                x: {
-                                                    ticks: {
-                                                        autoSkip: true,
-                                                        maxTicksLimit: 8,
-                                                    },
-                                                },
-                                                y: {
-                                                    suggestedMin: 0,
-                                                },
-                                            },
-                                        }}
-                                    />
-                                </div>
-                                <div className="chart">
-                                    <Chart
-                                        type="line"
-                                        data={foxLineListingsData}
-                                        height={tableHeight}
-                                        options={{
-                                            responsive: true,
-                                            maintainAspectRatio: true,
-                                            plugins: {
-                                                legend: {
-                                                    display: false,
-                                                },
-                                                title: {
-                                                    display: true,
-                                                    text: 'Total Token Listings',
-                                                },
-                                            },
-                                            scales: {
-                                                x: {
-                                                    ticks: {
-                                                        autoSkip: true,
-                                                        maxTicksLimit: 8,
-                                                    },
-                                                },
-                                                y: {
-                                                    suggestedMin: 0,
-                                                },
-                                            },
-                                        }}
-                                    />
-                                </div>
-                            </div>
-
-                            <br />
                         </div>
                     )}
                 </div>
