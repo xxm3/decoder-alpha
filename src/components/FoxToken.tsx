@@ -738,11 +738,14 @@ function FoxToken({ contentRef }: FoxToken) {
     return (
         <>
             <div
-                className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}
+
             >
+                {/*className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}*/}
+
                 <div className={`font-bold pb-10 w-full`}>
                     <br hidden={width > smallWidthpx} />
                     <IonButton
+                        hidden={!tableData.length}
                         className="float-right text-sm small-btn "
                         // onClick={() => setPopoverOpened(null) }
                         onClick={(e: any) => {
@@ -964,7 +967,7 @@ function FoxToken({ contentRef }: FoxToken) {
                         <div className="ml-3 mr-3 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                             <div className="font-medium">
                                 <p>
-                                    Use this if Fox Token Market doesn't have an
+                                    Use this if Fox WL Token Market doesn't have an
                                     official name yet, and you know for certain
                                     what the name of the NFT is
                                 </p>
@@ -1065,8 +1068,8 @@ function FoxToken({ contentRef }: FoxToken) {
                             <Table
                                 data={tableData}
                                 columns={columns}
-                                title="Fox Token Market - Analysis"
-                                description="Contains community added names"
+                                title="Fox WL Token Market - Analysis"
+                                description="👪 Are community added names"
                                 url="https://famousfoxes.com/tokenmarket"
                                 actions={[
                                     {
@@ -1104,6 +1107,7 @@ function FoxToken({ contentRef }: FoxToken) {
 								ref={chartsRef}
                                 // @ts-ignore
                                 //  hidden={!foxLineData.labels || foxLineData.labels}
+                                hidden={!tokenClickedOn}
                             >
                                 <div className="chart">
                                     <Chart

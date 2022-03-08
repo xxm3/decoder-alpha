@@ -55,7 +55,10 @@ function Table<RowData extends object>(
 						}
 
 						table:not(first-child){
-							margin-top: 20px;
+							// margin-top: 20px;
+						}
+						table th{
+						    padding: 5px !important;
 						}
 						tbody tr:first-child td:first-child {
 							border-radius: var(--tr-border-radius) 0 0 0;
@@ -101,7 +104,9 @@ function Table<RowData extends object>(
                         borderBottom: 'none',
 						paddingBottom : 25,
                     },
-                    pageSize: 10
+                    pageSize: 10, // default rows per page
+                    emptyRowsWhenPaging: false,   // To avoid of having empty rows
+                    pageSizeOptions: [10, 20, 50, 100]    // rows selection options
                 }}
             />
         </MuiThemeProvider>

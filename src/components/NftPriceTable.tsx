@@ -48,7 +48,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
             title: 'Name',
             render: (record) => (
                 <span
-				
+
                 >
                     {record.name}
                 </span>
@@ -182,7 +182,6 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 
     return (
         <>
-              
 
                 <div>
                 {
@@ -198,9 +197,9 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 								title={"Mint Alerts Automated - Stats"}
 								description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
 								actions={[
-									{ 
+									{
 										icon : hideComments ? () => <IonIcon icon={eye}/> :  () => <IonIcon icon={eyeOff}/>,
-										tooltip : hideComments ? "Show commentds" : "Hide comments",
+										tooltip : hideComments ? "Show Comments" : "Hide comments",
 										onClick : () => setHideComments(!hideComments),
 										isFreeAction : true
 									}
@@ -209,58 +208,57 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                         </div>
                 }
             </div>
-            <br/>
 
 
-            <div hidden={true}
-                className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
-                <div className={`font-bold pb-3 w-full text-lg`}>Mint Alerts Automated - Custom Alerts</div>
-                <div>Note: for 3 NFT holders only</div>
+            {/*<div hidden={true}*/}
+            {/*    className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>*/}
+            {/*    <div className={`font-bold pb-3 w-full text-lg`}>Mint Alerts Automated - Custom Alerts</div>*/}
+            {/*    <div>Note: for 3 NFT holders only</div>*/}
 
-                <div>
-                    <label className={`font-bold pb-1 w-full`} htmlFor="">Get an alert when the below meta gets alerted in #mint-alerts-automated</label>
+            {/*    <div>*/}
+            {/*        <label className={`font-bold pb-1 w-full`} htmlFor="">Get an alert when the below meta gets alerted in #mint-alerts-automated</label>*/}
 
-                    <IonList>
-                        <IonItem>
-                            <IonLabel>Staking/Token/Low Supply</IonLabel>
-                            <IonCheckbox slot="start" value="biff" />
-                        </IonItem>
+            {/*        <IonList>*/}
+            {/*            <IonItem>*/}
+            {/*                <IonLabel>Staking/Token/Low Supply</IonLabel>*/}
+            {/*                <IonCheckbox slot="start" value="biff" />*/}
+            {/*            </IonItem>*/}
 
-                        <IonItem>
-                            <IonLabel>Metaverse</IonLabel>
-                            <IonCheckbox slot="start" value="griff" />
-                        </IonItem>
+            {/*            <IonItem>*/}
+            {/*                <IonLabel>Metaverse</IonLabel>*/}
+            {/*                <IonCheckbox slot="start" value="griff" />*/}
+            {/*            </IonItem>*/}
 
-                        <IonItem>
-                            <IonLabel>Casino</IonLabel>
-                            <IonCheckbox slot="start" value="buford" />
-                        </IonItem>
+            {/*            <IonItem>*/}
+            {/*                <IonLabel>Casino</IonLabel>*/}
+            {/*                <IonCheckbox slot="start" value="buford" />*/}
+            {/*            </IonItem>*/}
 
-                        <IonItem>
-                            <IonLabel>P2E</IonLabel>
-                            <IonCheckbox slot="start" value="buford" />
-                        </IonItem>
+            {/*            <IonItem>*/}
+            {/*                <IonLabel>P2E</IonLabel>*/}
+            {/*                <IonCheckbox slot="start" value="buford" />*/}
+            {/*            </IonItem>*/}
 
-                        <IonItem>
-                            <IonLabel>Bot / Sniper</IonLabel>
-                            <IonCheckbox slot="start" value="buford" />
-                        </IonItem>
+            {/*            <IonItem>*/}
+            {/*                <IonLabel>Bot / Sniper</IonLabel>*/}
+            {/*                <IonCheckbox slot="start" value="buford" />*/}
+            {/*            </IonItem>*/}
 
-                        <IonItem>
-                            <IonLabel>Asian / Hong Kong devs</IonLabel>
-                            <IonCheckbox slot="start" value="buford" />
-                        </IonItem>
-                    </IonList>
+            {/*            <IonItem>*/}
+            {/*                <IonLabel>Asian / Hong Kong devs</IonLabel>*/}
+            {/*                <IonCheckbox slot="start" value="buford" />*/}
+            {/*            </IonItem>*/}
+            {/*        </IonList>*/}
 
-                    <IonButton color="success" className="text-sm" >
-                        Submit
-                    </IonButton>
-                    <br/><br/>
+            {/*        <IonButton color="success" className="text-sm" >*/}
+            {/*            Submit*/}
+            {/*        </IonButton>*/}
+            {/*        <br/><br/>*/}
 
 
-                </div>
+            {/*    </div>*/}
 
-            </div>
+            {/*</div>*/}
 
         </>
     );
