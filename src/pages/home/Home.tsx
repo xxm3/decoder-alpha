@@ -110,12 +110,14 @@ const Home : React.FC<AppComponentProps> = ({ contentRef }) => {
 
 
             <div className="m-3 relative bg-primary p-4 rounded-xl">
-                <p className="text-lg text-white font-medium">
+                <p className="text-medium text-white font-medium">
                     <b>
                         Welcome to the new SOL Decoder! New info. will be displayed on the home page here in the coming week(s), such as:
                         <br/>- New mints coming out in the next few hours
                         <br/>- New WL Tokens that were added today (both officially by Fox Token, and by users)
                         <br/>- The latest 3 Mint alerts, and top Mint alerts we gave this week, and this month
+                        <br/>- New & Trending words people put into Discord (ie. new & trending NFTs)
+                        <br/>- Things other people searched on
                         <br/>- plus other things as we develop them!
                     </b>
                 </p>

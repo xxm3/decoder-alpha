@@ -168,8 +168,6 @@ function FoxToken({ contentRef }: FoxToken) {
         }
     }
 
-    // TODO 4: https://famousfoxes.com/api/getSalesByAddress/3pw9Aq6v8u6RsM6EyahTFbzyr3ezLZvmSC36fPPLgLoa
-
     // user clicked button to delete their multiple wallets
     const resetMultWallets = () => {
 

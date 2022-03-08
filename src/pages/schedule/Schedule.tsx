@@ -224,7 +224,7 @@ const Schedule = () => {
                 a.numbersOfTwitterFollowers - b.numbersOfTwitterFollowers,
         },
         {
-            title: '# Tweet Interactions',
+            title: 'Tweet Interactions',
             customSort: (a, b) =>
                 a.tweetInteraction.total - b.tweetInteraction.total,
             render: (record) => (
