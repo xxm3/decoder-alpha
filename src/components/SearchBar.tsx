@@ -6,11 +6,10 @@ interface SearchBarProps {
     initialValue?: string;
     onSubmit(query: string): unknown;
     placeholder?: string;
-    helpMsg?: any;
-    disableReset?: any;
+    disableReset?: boolean;
 }
 
-function SearchBar({initialValue, onSubmit, placeholder, helpMsg, disableReset}: SearchBarProps) {
+function SearchBar({initialValue, onSubmit, placeholder }: SearchBarProps) {
 
     const handleKeyDown: KeyboardEventHandler<HTMLIonSearchbarElement> = (e) => {
         const {target, key} = e as KeyboardEvent<HTMLIonSearchbarElement> & { target: HTMLInputElement }
@@ -21,11 +20,7 @@ function SearchBar({initialValue, onSubmit, placeholder, helpMsg, disableReset}:
         }
     };
     const [searchValue, setSearchValue] = useState(initialValue ?? '');
-    const [present] = useIonAlert();
 
-    const getHelp = async (msg: string) => {
-        await present(msg, [{text: 'Ok'}]);
-    }
     const resetSearch = () => {
         onSubmit('');
         setSearchValue('');

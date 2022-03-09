@@ -63,7 +63,6 @@ function Login() {
         <Redirect to={next} />
     ) : (
         <>
-                <div className="w-screen min-h-screen flex flex-col  justify-center items-center">
                     {!loading ? (
                         <>
 
@@ -130,8 +129,7 @@ function Login() {
                             <Loader />
                         </div>
                     )}
-                </div>
-        </>
+                </>
     );
 }
 

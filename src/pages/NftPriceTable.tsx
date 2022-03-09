@@ -4,13 +4,13 @@ import {
     IonLabel, IonItem, IonCheckbox, IonInput, IonIcon
 } from '@ionic/react';
 import { useEffect, useState} from 'react';
-import Loader from "./Loader";
+import Loader from "../components/Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import meLogo from '../images/me.png';
 import { Column  } from '@material-table/core';
-import Table from './Table';
-import Style from './Style';
+import Table from '../components/Table';
+import Style from '../components/Style';
 import moment from 'moment';
 import { eye, eyeOff, eyeOffOutline, eyeOutline} from "ionicons/icons";
 
@@ -182,8 +182,6 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 
     return (
         <>
-
-                <div>
                 {
                     !tableData.length
                         ?   <div className="pt-10 flex justify-center items-center">
@@ -207,7 +205,6 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                             />
                         </div>
                 }
-            </div>
 
 
             {/*<div hidden={true}*/}

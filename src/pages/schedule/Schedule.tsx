@@ -3,11 +3,12 @@ import moment from 'moment';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
-import {IonContent, IonModal } from '@ionic/react';
+import {IonButton, IonContent, IonIcon, IonModal, IonRippleEffect } from '@ionic/react';
 
 import './Schedule.css'
 import { Column } from '@material-table/core';
 import Table from '../../components/Table';
+import { logoDiscord, logoTwitter } from 'ionicons/icons';
 
 interface Mint {
 	image: string;
@@ -153,7 +154,8 @@ const Schedule = () => {
                 </span>
             ),
             customSort: (a, b) => a.project.localeCompare(b.project),
-			customFilterAndSearch: (term, rowData) => rowData.project.toLowerCase().includes(term.toLowerCase()),
+            customFilterAndSearch: (term, rowData) =>
+                rowData.project.toLowerCase().includes(term.toLowerCase()),
         },
         {
             title: 'Time',
@@ -195,7 +197,7 @@ const Schedule = () => {
         {
             title: 'Supply',
             customSort: (a, b) => +a.count - +b.count,
-			render: (record) => <span>{record.count}</span>,
+            render: (record) => <span>{record.count}</span>,
         },
         {
             title: '# Discord',
@@ -241,57 +243,53 @@ const Schedule = () => {
         {
             title: 'Links',
             render: (record) => (
-                <>
-                    <span
-                        hidden={
-                            !record.discordLink ||
-                            !record.numbersOfDiscordMembers
-                        }
+                <div className="flex space-x-4">
+                    <a
+                        href={record.discordLink}
+                        target="_blank"
+						style={{
+							pointerEvents : (record.discordLink && record.numbersOfDiscordMembers) ? "initial" : "none"
+						}}
+						className={(record.discordLink && record.numbersOfDiscordMembers) ? "schedule-link" : "schedule-link-disabled"}
                     >
-                        <a
-                            href={record.discordLink}
-                            className="link_underline"
-                            target="_blank"
-                        >
-                            Discord
-                        </a>
-                        <br />
-                    </span>
+						<IonIcon icon={logoDiscord} className="big-emoji"/>
+						<IonRippleEffect />
+                    </a>
                     <a
                         href={record.twitterLink}
-                        className="link_underline"
+                        className="schedule-link"
                         target="_blank"
+
                     >
-                        Twitter
+                        <IonIcon icon={logoTwitter} className="big-emoji" />
+						<IonRippleEffect />
+
                     </a>
-                </>
+                </div>
             ),
         },
     ];
 
     // Renders
     return (
-
-        <div className={``}>
+        <>
             {/*w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 max-w-fit mx-auto mb-10*/}
 
-            {
-                isLoading
-                    ? <div className="pt-10 flex justify-center items-center">
-                        <Loader/>
-                    </div>
-                    :
-
-                    <div>
-                        <Table
-                            data={dataSource}
-                            columns={columns}
-							title={`Mint Schedule - ${date}`}
-							description={`Projects must have > 2,000 Discord members and > 1,000 Twitter followers before showing up on the list.
+            {isLoading ? (
+                <div className="pt-10 flex justify-center items-center">
+                    <Loader />
+                </div>
+            ) : (
+                <div>
+                    <Table
+                        data={dataSource}
+                        columns={columns}
+                        title={`Mint Schedule - ${date}`}
+                        description={`Projects must have > 2,000 Discord members and > 1,000 Twitter followers before showing up on the list.
 							\n "# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them`}
-                        />
+                    />
 
-                        {/* <IonModal isOpen={isOpen}  onDidDismiss={onClose as any} >
+                    {/* <IonModal isOpen={isOpen}  onDidDismiss={onClose as any} >
                           <IonContent>
                             {
                               splitCollectionName.length
@@ -303,11 +301,10 @@ const Schedule = () => {
                             }
                           </IonContent>
                         </IonModal> */}
-
-                    </div>
-            }
-        </div>
-    )
+                </div>
+            )}
+        </>
+    );
 }
 
 // @ts-ignore

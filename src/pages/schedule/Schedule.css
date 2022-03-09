@@ -1,38 +1,8 @@
-/* Override styles of antd table */
-.ant-table-body {
-    /*margin-top: 3em;*/
-}
-.ant-table-body table{
-    width: 100%;
-}
-.ant-table-body table tr td span{
-    padding-left: 8px;
+.schedule-link, .schedule-link-disabled {
+	@apply relative hover:opacity-70;
 }
 
-.ant-table-tbody .ant-table-row-level-0 {
-    border-bottom: 1px solid gray;
-}
-
-.ant-table-thead .ant-table-cell {
-    /* border-bottom: 1px solid gray; */
-    text-decoration: underline;
-}
-
-/* Override styles of antd column-sorter tooltip */
-.ant-tooltip-inner {
-    display: none;
-}
-
-/* Give background-color same as the background to ant-table-cell so it doesn't look transparent while scrolling horizontally  */
-.ant-table-cell {
-    /*background-color: #36393f;*/
-}
-
-.ant-table-body tr:nth-child(even) {
-    background-color: #181a1b;
-}
-
-/* Give underline to discord and twitter links under Links column */
-.ant-table-cell a.link_underline {
-    text-decoration: underline;
+.schedule-link-disabled {
+	@apply hover:opacity-100;
+	color: var(--ion-color-step-500)
 }

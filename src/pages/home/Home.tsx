@@ -17,9 +17,6 @@ import {Chart} from "react-chartjs-2";
 import {dispLabelsDailyCount, getDailyCountData} from '../../util/charts';
 import {data} from "autoprefixer";
 import { ChartData } from 'chart.js';
-import SearchBar from '../../components/SearchBar';
-import NftPriceTable from "../../components/NftPriceTable";
-import FoxToken from "../../components/FoxToken";
 import { AppComponentProps } from '../../components/Route';
 
 const Home : React.FC<AppComponentProps> = ({ contentRef }) => {
@@ -105,10 +102,7 @@ const Home : React.FC<AppComponentProps> = ({ contentRef }) => {
      */
 
     return (
-        <div className="w-full">
-
-
-
+        <>
             <div className="m-3 relative bg-primary p-4 rounded-xl">
                 <p className="text-medium text-white font-medium">
                     <b>
@@ -269,7 +263,7 @@ const Home : React.FC<AppComponentProps> = ({ contentRef }) => {
             {/*    </IonContent>*/}
             {/*</IonCard>*/}
 
-        </div>
+        </>
     );
 };
 

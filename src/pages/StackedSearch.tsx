@@ -2,9 +2,10 @@ import {ChartData} from "chart.js";
 import React, {useEffect, useMemo, useState} from "react";
 import {instance} from "../axios";
 import {dispLabelsDailyCount, getDailyCountData} from "../util/charts";
-import SearchBar from "./SearchBar";
-import Loader from "./Loader";
+import SearchBar from "../components/SearchBar";
+import Loader from "../components/Loader";
 import {Chart} from "react-chartjs-2";
+import Help from "../components/Help";
 
 function StackedSearch({ foo, onSubmit }: any) {
 
@@ -161,15 +162,14 @@ function StackedSearch({ foo, onSubmit }: any) {
                     Compare multiple words on a line graph
                 </div>
 
-                <div className={`max-w-2xl my-2`}>
+                <div className={`max-w-2xl my-2 flex space-x-2`}>
                     <SearchBar
                         initialValue=""
                         onSubmit={doSearch}
                         placeholder="Type to search"
-                        helpMsg='Compares multiple single words against each other (ex. "portals enviro suites").
-                    Each word will be graphed and you can compare the popularity of each word (useful to search on multiple mints in the morning and see which his more popular)'
-                        disableReset="false"
+						disableReset={false}
                     />
+					<Help description={`Compares multiple single words against each other (ex. "portals enviro suites"). Each word will be graphed and you can compare the popularity of each word (useful to search on multiple mints in the morning and see which his more popular)`}/>
                 </div>
 
                 {/*--{width}--{chartHeight}--*/}

@@ -52,9 +52,9 @@ import WalletButton from "./components/WalletButton";
 import Sidebar from "./components/nav/Sidebar";
 import Style from "./components/Style";
 import Theme from "./theme/Theme";
-import FoxToken from "./components/FoxToken";
-import NftPriceTable from "./components/NftPriceTable";
-import StackedSearch from "./components/StackedSearch";
+import FoxToken from "./pages/FoxToken";
+import NftPriceTable from "./pages/NftPriceTable";
+import StackedSearch from "./pages/StackedSearch";
 
 const App = () => {
 
@@ -104,9 +104,9 @@ const App = () => {
 	return (
         <IonApp>
             <Theme>
-            	<QueryClientProvider client={queryClient}>
-	                <UserContext.Provider value={user}>
-	                    {(user !== undefined) ? (
+                <QueryClientProvider client={queryClient}>
+                    <UserContext.Provider value={user}>
+					{(user !== undefined) ? (
 	                        <>
 	                            <IonReactRouter>
 	                                <IonRouterOutlet id="router">
@@ -188,9 +188,9 @@ const App = () => {
 	                            <img src="/assets/site-logos/Logo_Sol_decoder/Terminados/Gif/logo.gif" />
 	                        </div>
 	                    )}
-	                    <ReactQueryDevtools initialIsOpen />
-	                </UserContext.Provider>
-	            </QueryClientProvider>
+                        <ReactQueryDevtools initialIsOpen />
+                    </UserContext.Provider>
+                </QueryClientProvider>
             </Theme>
         </IonApp>
     );

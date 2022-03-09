@@ -7,10 +7,10 @@ import {
     IonModal,
     IonContent,
     IonHeader,
-    IonToolbar, IonTitle, useIonToast, IonIcon,
+    IonToolbar, IonTitle, useIonToast, IonIcon, IonSearchbar,
 } from '@ionic/react';
 import { useEffect, useMemo, useRef, useState} from 'react';
-import Loader from "./Loader";
+import Loader from "../components/Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import * as solanaWeb3 from '@solana/web3.js';
@@ -19,13 +19,13 @@ import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
 import Cookies from "universal-cookie";
-import {getLiveFoxTokenData, shortenedWallet} from "./FoxTokenFns";
-import Table from './Table';
+import {getLiveFoxTokenData, shortenedWallet} from "../components/FoxTokenFns";
+import Table from '../components/Table';
 import { Column } from '@material-table/core';
 import _ from 'lodash';
-import Style from './Style';
-import { AppComponentProps } from './Route';
-import FoxTokenCharts from './FoxTokenCharts';
+import Style from '../components/Style';
+import { AppComponentProps } from '../components/Route';
+import FoxTokenCharts from '../components/FoxTokenCharts';
 import { FoxTokenData } from '../types/FoxTokenTypes';
 
 const columns: Column<FoxTokenData>[] = [
@@ -48,6 +48,7 @@ const columns: Column<FoxTokenData>[] = [
             </a>
         ),
         customSort: (a, b) => a.token.localeCompare(b.token),
+		customFilterAndSearch: (term, rowData) => rowData.token.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Name',
@@ -505,13 +506,8 @@ function FoxToken({ contentRef }: FoxToken) {
      * Renders
      */
 
-    // @ts-ignore
-    // @ts-ignore
     return (
         <>
-            <div
-
-            >
                 {/*
                     adding multiple wallets
                 */}
@@ -769,18 +765,19 @@ function FoxToken({ contentRef }: FoxToken) {
                                     },
                                 ]}
                                 options={{
-                                    search: true,
-									detailPanelType : "single"
+									detailPanelType : "single",
+									search: true,
                                 }}
                                 detailPanel={[
 									{
-                                        icon: '📈',
+                                        icon: "📈",
 										tooltip : "View Chart",
 										render : (record) => (
 											<FoxTokenCharts {...record.rowData}/>
 										),
 									}
 								]}
+								
                             />
 
                             {/*-{foxLineData.labels}-*/}
@@ -832,7 +829,6 @@ function FoxToken({ contentRef }: FoxToken) {
                 </div>
 
                 <br />
-            </div>
         </>
     );
 }

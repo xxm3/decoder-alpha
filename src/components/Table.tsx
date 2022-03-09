@@ -1,4 +1,4 @@
-import MaterialTable, { MaterialTableProps } from '@material-table/core'
+import MaterialTable, { MaterialTableProps, MTableFilterRow } from '@material-table/core'
 import { createTheme,  MuiThemeProvider } from '@material-ui/core';
 import { colorsByName } from '../theme/Theme';
 import Style from './Style';
@@ -16,6 +16,7 @@ function Table<RowData extends object>(
         columns: MaterialTableProps<RowData>['columns'];
     } & { description ?: string; url ?: string;}
 ) {
+	const { options } = props
 	const theme = createTheme({
 		palette: {
 			background : {
@@ -56,6 +57,8 @@ function Table<RowData extends object>(
 
 						table {
 							--tr-border-radius : 10px;
+							--tr-padding-horizontal : 20px;
+							--tr-padding-vertical : 10px;
 						}
 
 						table:not(first-child){
@@ -64,6 +67,19 @@ function Table<RowData extends object>(
 						table th{
 						    padding: 8px !important;
 						}
+
+						tbody tr td:first-child {
+							padding-left: var(--tr-padding-horizontal);
+						}
+
+						tbody tr td:last-child {
+							padding-right: var(--tr-padding-horizontal);
+						}
+
+						tbody tr td {
+							padding: var(-tr-padding-vertical) 0;
+						}
+
 						tbody tr:first-child td:first-child {
 							border-radius: var(--tr-border-radius) 0 0 0;
 						}
@@ -90,10 +106,6 @@ function Table<RowData extends object>(
                     cellStyle: {
                         whiteSpace: 'nowrap',
                         borderBottom: 'none',
-                        paddingTop: 14,
-                        paddingBottom: 14,
-						paddingLeft : 25,
-						paddingRight: 20,
                     },
                 }))}
                 title={
@@ -110,12 +122,12 @@ function Table<RowData extends object>(
                         whiteSpace: 'nowrap',
                         borderBottom: 'none',
 						paddingBottom : 25,
-						...props.options?.headerStyle,
+						...options?.headerStyle,
                     },
                     pageSize: 10, // default rows per page
                     emptyRowsWhenPaging: false,   // To avoid of having empty rows
                     pageSizeOptions: [10, 20, 50, 100],    // rows selection options
-					...props.options,
+					...options,
                 }}
             />
         </MuiThemeProvider>

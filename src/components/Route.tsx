@@ -28,22 +28,24 @@ const AppRoute : React.FC<RouteProps> = (
 	                            <IonRow>
 	                                <IonCol
 	                                    size="12"
-	                                    className="flex justify-center px-4"
+	                                    className="flex justify-center px-[1vw]"
 	                                >
                                         {/*justify-center*/}
 
-	                                    	{children
-		                                        ? typeof children === 'function'
-		                                            ? children(componentProps)
-		                                            : children
-		                                        : component
-		                                        ? React.createElement(
-		                                              component,
-		                                              componentProps
-		                                          )
-		                                        : render
-		                                        ? render(componentProps)
-		                                        : null}
+	                                    	<div className="w-full">
+	                                    		{children
+			                                        ? typeof children === 'function'
+			                                            ? children(componentProps)
+			                                            : children
+			                                        : component
+			                                        ? React.createElement(
+			                                              component,
+			                                              componentProps
+			                                          )
+			                                        : render
+			                                        ? render(componentProps)
+			                                        : null}
+	                                    	</div>
 	                                </IonCol>
 	                            </IonRow>
 	                        </IonGrid>
