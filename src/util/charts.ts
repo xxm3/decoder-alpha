@@ -5,7 +5,7 @@ import { constants } from "./constants";
 
 // pass in data from backend (which is properly formatted), and return back labels for the charts
 export function dispLabelsDailyCount(indivRawFetchedData: SearchResponse["ten_day_count"], convertMmmDd: boolean){
-    let labels: any = [];
+    let labels : string[]= [];
 
     for(let obj in indivRawFetchedData){
         let date = indivRawFetchedData[obj].date;
@@ -31,7 +31,7 @@ export function getDailyCountData(fetchedData: Pick<SearchResponse, "ten_day_cou
         // rawFetchedData.ten_day_count -> [{count: 5, date: '2022-xx-xx'}, {}
         let labels = dispLabelsDailyCount(fetchedData.ten_day_count, false);
 
-        let idx = labels.findIndex((val: any) => val === fetchedData.ten_day_count[i].date);
+        let idx = labels.findIndex((val) => val === fetchedData.ten_day_count[i].date);
         datasetForChartDailyCount[idx] = fetchedData.ten_day_count[i].count; // + 1
     }
 

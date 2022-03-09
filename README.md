@@ -163,3 +163,8 @@ When you need a button indicating a PRIMARY action:
     Submit
 </IonButton>
 ```
+
+To hide somehting on mobile: give below class
+```
+hidden sm:block
+```
