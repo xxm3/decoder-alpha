@@ -7,6 +7,7 @@ import { environment } from '../environments/environment';
 import { FoxTokenData } from '../types/FoxTokenTypes';
 import Style from './Style';
 import Cookies from "universal-cookie";
+import axios from "axios";
 
 
 function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTokenData) {
@@ -27,13 +28,21 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
     //     if (width > 640) return 280;
     //     return 330;
     // }, [width]);
+    // const tableHeight = useMemo(() => {
+    //     if (width > 1536) return 120;
+    //     if (width > 1280) return 160;
+    //     if (width > 1024) return 200;
+    //     if (width > 768) return 240;
+    //     if (width > 640) return 260;
+    //     return 310;
+    // }, [width]);
     const tableHeight = useMemo(() => {
-        if (width > 1536) return 120;
-        if (width > 1280) return 160;
-        if (width > 1024) return 200;
-        if (width > 768) return 240;
-        if (width > 640) return 260;
-        return 310;
+        if (width > 1536) return 100;
+        if (width > 1280) return 140;
+        if (width > 1024) return 180;
+        if (width > 768) return 220;
+        if (width > 640) return 240;
+        return 290;
     }, [width]);
 
     const [tableData, setTableData] = useState<FoxTokenData[]>([]);
@@ -52,6 +61,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
         datasets: [],
     };
     const [foxLineData, setFoxLineData] = useState(defaultGraph);
+    const [foxSalesData, setFoxSalesData] = useState(defaultGraph);
     // const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
 
     const chartsRef = useRef<HTMLDivElement | null>(null);
@@ -67,7 +77,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
             cookies.get('lineColorSelected2') : "#14F195"); // #195e83
     const [shadedAreaColorSelected, setShadedAreaColorSelected] = useState<string>(
         cookies.get('shadedAreaColorSelected2') ?
-            cookies.get('shadedAreaColorSelected2') : "rgba(26, 255, 163, 0.1)") // #01FF6F // TODO
+            cookies.get('shadedAreaColorSelected2') : "rgba(26, 255, 163, 0.1)") // #01FF6F
     // when above clicked, will redraw the chart
     useEffect(() => {
         if (firstUpdate.current) {
@@ -112,12 +122,14 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
     // viewing the chart for a token
     const viewChart = () => { // token: string, name: string
 
+        // reset the chart
         setFoxLineData(defaultGraph);
         // setFoxLineListingsData(defaultGraph);
 
         // @ts-ignore
         setTokenClickedOn(name ? `${name} (${token})` : token);
 
+        // get the price/listings history for a SINGLE token
         instance
             .get(environment.backendApi + '/receiver/foxTokenHistory?token=' + token)
             .then((res) => {
@@ -158,7 +170,8 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                         yAxisID: 'y1',
                         label: 'Listings',
                         borderColor: '#9945FF', // # purple #9945FF    #14F195
-                        borderWidth: 2,
+                        // borderWidth: 2,
+                        // tension: 0.1,
                         data: listingsData,
                     },
                     {
@@ -166,6 +179,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                         label: 'Price',
                         yAxisID: 'y0',
                         borderColor: lineColorSelected,
+                        // tension: 0.1,
                         fill: {
                             target: 'origin',
                             above: shadedAreaColorSelected,
@@ -197,6 +211,28 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                 console.error("error when getting fox token history data: " + err);
             });
 
+        // also get the sales history for that token, from FF
+        instance
+            .post(environment.backendApi + '/receiver/foxSales', {token: token})
+            .then((res) => {
+
+                // now graph it!
+                setFoxSalesData({
+                    labels: res.data.labels,
+                    datasets: [
+                        {
+                            type: 'line' as const,
+                            label: 'Price',
+                            yAxisID: 'y0',
+                            borderColor: lineColorSelected,
+                            // tension: 0.1,
+                            data: res.data.data,
+                            showLine: false
+                        },
+                    ]
+
+                });
+            });
     }
 
 
@@ -364,7 +400,6 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                                     suggestedMin: 0,
                                 },
                                 'y1': {
-                                    // stacked: true,
                                     type: 'linear',
                                     position: 'right',
                                     scaleLabel: {
@@ -384,6 +419,39 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                             elements: {
                                 point:{
                                     radius: 0
+                                }
+                            }
+                        }}
+                    />
+
+                    {/*sales data*/}
+                    <Chart
+                        type="line"
+                        data={foxSalesData}
+                        height={tableHeight / 1.5}
+                        options={{
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Sales (note the Sales & Price graph do NOT start at the same time)',
+                                },
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        autoSkip: true,
+                                        maxTicksLimit: 8,
+                                    },
+                                },
+                            },
+                            elements: {
+                                point:{
+                                    radius: 3
                                 }
                             }
                         }}

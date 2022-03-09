@@ -50,18 +50,18 @@ const columns: Column<FoxTokenData>[] = [
         customSort: (a, b) => a.token.localeCompare(b.token),
     },
     {
-        title: 'Price',
-        customSort: (a, b) => a.floorPrice - b.floorPrice,
-        render: (record) => <span>{record.floorPrice}</span>,
-    },
-    {
         title: 'Name',
         customSort: (a, b) => a.name.localeCompare(b.name),
         render: (record) => <span>{record.name}</span>,
 		customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().includes(term.toLowerCase()),
     },
     {
-        title: 'Total Listings',
+        title: 'Price',
+        customSort: (a, b) => a.floorPrice - b.floorPrice,
+        render: (record) => <span>{record.floorPrice}</span>,
+    },
+    {
+        title: '    Listings',
         customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
         render: (record) => <span>{record.totalTokenListings}</span>,
     },
@@ -217,27 +217,13 @@ function FoxToken({ contentRef }: FoxToken) {
         (state: RootState) => state.wallet.walletAddress
     );
 
-    const smallWidthpx = 768;
-
-
-
-
-
-
-
     /**
      * Use Effects
      */
-    // resize window
 
     /**
      * Functions
      */
-    // user wants to only see verified collections
-    const setCheckedVerifiedOnly = (e: any) => {
-
-    }
-
 
 
     // load table data!

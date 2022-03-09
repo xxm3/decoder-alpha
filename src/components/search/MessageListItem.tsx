@@ -70,7 +70,6 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                 ref={ref}
             >
 
-                {/*TODO: hide this on mobile*/}
                 <img
                     className="image hidden sm:block"
                     alt={source === 'Twitter' ? 'Twitter' : 'Discord'}
