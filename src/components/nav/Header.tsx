@@ -102,7 +102,8 @@ const HeaderContainer = () => {
 				`}
                 </Style>
                 <IonToolbar>
-                    <div className="justify-between space-x-8 flex items-center pt-3">
+                    <div className="justify-between space-x-8 flex items-center">
+                        {/*pt-3*/}
                         {!showMobileSearch && (
                             <div className="flex items-center space-x-4">
                                 {/*hamburger sidebar*/}
