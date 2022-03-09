@@ -16,33 +16,26 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
     /**
      * States & Variables
      */
+
+    // resize window
     const [width, setWidth] = useState(window.innerWidth);
+    useEffect(() => {
+        function resizeWidth() {
+            setWidth(window.innerWidth);
+        }
+
+        window.addEventListener('resize', resizeWidth);
+        return () => window.removeEventListener('resize', resizeWidth);
+    }, []);
 
     // for setting height of chart, depending on what width browser is
-    // (below was for 2 charts in one row)
-    // const tableHeight = useMemo(() => {
-    //     if (width > 1536) return 150;
-    //     if (width > 1280) return 180;
-    //     if (width > 1024) return 220;
-    //     if (width > 768) return 260;
-    //     if (width > 640) return 280;
-    //     return 330;
-    // }, [width]);
-    // const tableHeight = useMemo(() => {
-    //     if (width > 1536) return 120;
-    //     if (width > 1280) return 160;
-    //     if (width > 1024) return 200;
-    //     if (width > 768) return 240;
-    //     if (width > 640) return 260;
-    //     return 310;
-    // }, [width]);
     const tableHeight = useMemo(() => {
         if (width > 1536) return 100;
-        if (width > 1280) return 140;
-        if (width > 1024) return 180;
-        if (width > 768) return 220;
-        if (width > 640) return 240;
-        return 290;
+        if (width > 1280) return 105;
+        if (width > 1024) return 160; // TODO: test 1280 and below
+        if (width > 768) return 200;
+        if (width > 640) return 220;
+        return 250;
     }, [width]);
 
     const [tableData, setTableData] = useState<FoxTokenData[]>([]);
@@ -350,6 +343,8 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 		</Style>
         	<div className="foxTokenCharts px-5 gap-4 grid grid-cols-12" ref={chartsRef}>
 
+                {/*TODO*/}
+                {/*--{width}--*/}
 
                 <div className="chart">
                     <Chart
