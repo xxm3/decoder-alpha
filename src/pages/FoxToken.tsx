@@ -62,14 +62,15 @@ const columns: Column<FoxTokenData>[] = [
         render: (record) => <span>{record.floorPrice}</span>,
     },
     {
-        title: '    Listings',
+        title: 'Listings',
         customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
         render: (record) => <span>{record.totalTokenListings}</span>,
     },
-    {
-        title: '# Owned & Wallet',
-        // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
-    },
+    // TODO: parth needs to fix
+    // {
+    //     title: '# Owned & Wallet',
+    //     // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
+    // }
 ];
 
 
@@ -777,7 +778,7 @@ function FoxToken({ contentRef }: FoxToken) {
 										),
 									}
 								]}
-								
+
                             />
 
                             {/*-{foxLineData.labels}-*/}
