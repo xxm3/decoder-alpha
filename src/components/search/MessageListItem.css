@@ -1,23 +1,8 @@
-.ripple {
-	animation: ripple 800ms linear infinite;
-	@apply bg-bg-tertiary w-0 h-full left-0 top-0 absolute !mx-0;
-	clip-path: polygon(0 0, 100% 0, 72% 100%, 0% 100%);
-}
-
-@keyframes ripple {
-	to {
-		width : 100%;
-		opacity : 0;
-	}
-}
-
-.messageLoading p {
-	@apply bg-bg-primary text-xs text-bg-primary;
-}
 
 .image {
-	@apply rounded-full h-12 w-12 flex-shrink-0 bg-bg-primary;
+	@apply rounded-full h-12 w-12 flex-shrink-0;
 }
+
 
 /* make the modal bigger */
 .modal-wrapper {
@@ -28,4 +13,8 @@
 .media > img,
 .media > video {
     @apply max-w-sm;
+}
+
+.searched_word {
+	color: #00d0ff
 }

@@ -41,7 +41,13 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
         'CdQseFmnPh2JBiz5747dJ6oYXK9NKnbdFRfiXTcZuaXT', 'DSkMMc8AYiXQMTMuBCjj3PLfW9nPUy8MiRCbt6FWwUks', 'ASHTTPcMddo7RsYHEyTv3nutMWvK8S4wgFUy3seAohja',
         'FnVPD3fRutXcibEHDYP1gv8kuYJx2SNCi2EizcAsR4wN', 'YLTrJGCqZpwZZbCN2D3KTg4PuGBofto8ciqYdPoQEgd', 'PHnyhLEnsD9SiP9tk9kHHKiCxCTPFnymzPspDqAicMe',
         '8z1jFyg9heBFvKVvqMHJQ4UXQqomNpYZHWCsEJhQYaBd', 'GkiLvPrtfzaCm4m8qS8XCzFmSk2uJrP5vcVnhFBk6P7j', 'Caw4P6ypHsU2grSUHEUPAKa2g6g5qT1YRcQDJXLRMfDr',
-        '2hvKBnhXZVvZadKX5QKkiyU7pVXXe5ZNMZhAoeXJdHxj', 'GkCYKY6iLuNjoRmNuBHDRMUtcUCSE5buiQpPeq9iuq5u', 'PZkvackT12qPefdXNPrQr51cPfsMfSZBjm812kjn1H3'];
+        '2hvKBnhXZVvZadKX5QKkiyU7pVXXe5ZNMZhAoeXJdHxj', 'GkCYKY6iLuNjoRmNuBHDRMUtcUCSE5buiQpPeq9iuq5u', 'PZkvackT12qPefdXNPrQr51cPfsMfSZBjm812kjn1H3',
+
+        'FBdRvc9CmHUf8ib2sV8PDv2oiFAmyxoftjid3Uv9e4kK','9ndpxWPBWNZ7TiBdbWiE88RLSiN2wdNnRBVbxFwySiiK','J4dhSHX6a438GXHoNUaATCMnyLfLaVbEaHFFatScRoZj',
+        'GrzAJAGvTigSHGb64JYBECnvhD23cA21ADtYgPoS3PM3','GdeT55oxg67xcVB3CjkAZveDQo1rfz6XQD7icv8N1JKs','38mqzHtHLmUMCZyuZKEQB8Zkg2fGkToYw4gVwPC3NoH3',
+        'G9tt98aYSznRk7jWsfuz9FnTdokxS6Brohdo9hSmjTRB','2rQeQ3h5S5W7LAT4SrygjPXVGF25kfce5QiW1BKMNFwz','3GfdtDnQC6mjkdr9cEaSr9mjS2VnSYoVypQiT2PPRBch',
+        '72NBPHtsUkLvk4KpPcDCiDnaHPoP8XvBGZsjcsSSkyi9',
+        ];
 
     // loop through the 5,000 tokens FF has
     for (let r in rawTokenData) {
@@ -172,7 +178,6 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
                 if (mySplTokens[y].token === finalAry[i].token) {
                     // then ADD data
                     if (!finalAry[i].whichMyWallets) {
-                        // TODO: test/deploy/tell cryptonaught
                         finalAry[i].whichMyWallets = mySplTokens[y].amount + " - " + shortenedWallet(mySplTokens[y].myWallet);
                     }
                     else {

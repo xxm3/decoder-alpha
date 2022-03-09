@@ -63,7 +63,6 @@ function Login() {
         <Redirect to={next} />
     ) : (
         <>
-                <div className="w-screen min-h-screen flex flex-col  justify-center items-center">
                     {!loading ? (
                         <>
 
@@ -105,8 +104,8 @@ function Login() {
                                     <ul>
                                         <li>If the above Discord link doesn't work - it means we are in a closed state</li>
                                         <li>The Discord will remain closed while we continue to build features & release an Android / iOS app</li>
-                                        <li>You may <a href="https://twitter.com/SOL_Decoder">follow our Twitter here</a> to see when the Discord opens, but also note we haven't yet
-                                            started our marketing push and haven't started posting / advertising our Twitter yet</li>
+                                        <li>You may <a href="https://twitter.com/SOL_Decoder" className="underline">follow our Twitter here</a> to see when the Discord opens. Note we haven't yet
+                                            started our marketing push, and haven't started posting / advertising our Twitter yet</li>
 
                                     </ul>
 
@@ -130,8 +129,7 @@ function Login() {
                             <Loader />
                         </div>
                     )}
-                </div>
-        </>
+                </>
     );
 }
 

@@ -13,10 +13,10 @@ import { SearchResponse } from '../types/SearchResponse';
 import { dispLabelsDailyCount, getDailyCountData } from '../util/charts';
 import DisplayGraph from '../components/search/DisplayGraph';
 import Loader from '../components/Loader';
-import Header from '../components/header/Header';
-import SearchSkelleton from './SearchSkelleton';
+import SearchSkeleton from '../components/search/SearchSkeleton';
+import { AppComponentProps } from '../components/Route';
 
-const Search: React.FC = () => {
+const Search: React.FC<AppComponentProps> = ( { contentRef }) => {
 
     /**
      * States & Variables
@@ -34,11 +34,11 @@ const Search: React.FC = () => {
      */
     // for setting height of chart, depending on what width browser is
     const chartHeight = useMemo(() => {
-        if(width > 1536) return 75;
-        if(width > 1280) return 90;
-        if(width > 1024) return 110;
-        if(width > 768) return 155;
-        if(width > 640) return 200;
+        if(width > 1536) return 100;
+        if(width > 1280) return 115;
+        if(width > 1024) return 135;
+        if(width > 768) return 180;
+        if(width > 640) return 225;
         return 140;
     }, [width]);
 
@@ -57,27 +57,17 @@ const Search: React.FC = () => {
         setCurrentPage(0);
     },[searchText])
 
-    // Whenever the next or previous page clicked it should scroll to top
-    useEffect(() => {
-        window.scrollTo(0,0);
-    },[currentPage])
-
-    // for scrolling to top
-    const contentRef = useRef<any>(null);
-
+ 
     /**
      * Functions
      */
+
     const useMountEffect = (fun:any) => useEffect(fun, []);
 
-    const scrollToTop = () => {
-        contentRef.current.scrollIntoView();
-    }
-
-    useMountEffect(scrollToTop);
+    useMountEffect(() => contentRef?.scrollToTop());
 
     const handlePage = (type: string) => {
-        contentRef.current.scrollIntoView();
+        contentRef?.scrollToTop(800)
         if(type === 'next' && (!messageQuery?.isPreviousData && messageQuery?.data?.hasMore)) setCurrentPage(currentPage+1)
         else setCurrentPage(currentPage - 1)
     }
@@ -114,7 +104,8 @@ const Search: React.FC = () => {
                 '/searchMessages/',
                 {
                     word: searchText,
-                    pageNumber: currentPage
+                    pageNumber: currentPage,
+                    pageSize: 100 // doing 10 from backend (discord) - search.js ... 100 from frontend (website) - search.tsx
                 },
                 {
                     headers: {
@@ -216,16 +207,6 @@ const Search: React.FC = () => {
 
     return (
         <React.Fragment>
-            {/* <IonPage> */}
-                {/* Because of this IonContent component the scroll became infinite */}
-                {/* <IonContent ref={contentRef} fullscreen> */}
-                    {/* <Header /> */}
-
-                        {/*min-h-screen*/}
-
-                        {/* The bit darker Gray Container */}
-                            <div ref={contentRef} className={`!overflow-y-auto ${width <= 640 ? 'w-full' : 'container'}
-                                bg-satin-3 rounded-lg pt-3 pb-6 md:px-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`} >
 
                                 {/* ERROR bar */}
                                 {graphQuery.isError || messageQuery.isError || messageQuery?.data?.error || graphQuery?.data?.error ? (
@@ -248,23 +229,23 @@ const Search: React.FC = () => {
                                         graphQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                         <b>{"Error while loading message"}</b>
                                         </p> :
-                                        <DisplayGraph {...{
-                                            chartDataDailyCount : graphQuery?.data.chartDataDailyCount,
-                                            chartDataPerSource : graphQuery?.data.chartDataPerSource,
-                                            chartHeight,
-                                            isLoadingChart:graphQuery?.isLoading,
-                                            totalCount: messageQuery?.data?.totalCount
-                                        }} />}
-                                        {/* Displaying the custom skeleton loader while fetching */}
-                                        {messageQuery?.isFetching ?
-                                            new Array(10).fill(0).map(elm => <SearchSkelleton />) :
-                                        messageQuery?.isError ? <p className="text-lg text-red-700 font-medium">
-                                            <b>{"Error while loading message"}</b>
-                                        </p> :
-                                        <Display {...{
-                                            messages : messageQuery?.data?.messages ?? [],
-                                            totalCount: messageQuery?.data?.totalCount
-                                        }}/>}
+                                      	  <DisplayGraph {...{
+	                                            chartDataDailyCount : graphQuery?.data.chartDataDailyCount,
+	                                            chartDataPerSource : graphQuery?.data.chartDataPerSource,
+	                                            chartHeight,
+	                                            isLoadingChart:graphQuery?.isLoading,
+	                                            totalCount: messageQuery?.data?.totalCount
+	                                        }} />}
+	                                        {/* Displaying the custom skeleton loader while fetching */}
+	                                        {messageQuery?.isFetching ?
+	                                            new Array(10).fill(0).map((_,i) => <SearchSkeleton key={i}/>) :
+	                                        messageQuery?.isError ? <p className="text-lg text-red-700 font-medium">
+	                                            <b>{"Error while loading message"}</b>
+	                                        </p> :
+	                                        <Display {...{
+	                                            messages : messageQuery?.data?.messages ?? [],
+	                                            totalCount: messageQuery?.data?.totalCount
+	                                        }}/>}
 
                                         {(messageQuery?.data?.totalCount ?? 0) > 5 && (
                                             <>
@@ -274,7 +255,7 @@ const Search: React.FC = () => {
 
                                                 {!messageQuery?.isFetching &&
                                                 <IonButton
-                                                  onClick={() => scrollToTop()}
+                                                  onClick={() => contentRef?.scrollToTop(800)}
                                                    className="float-right"
                                                 >
                                                     Scroll to Top
@@ -284,9 +265,6 @@ const Search: React.FC = () => {
 
                                     </>
                                 )}
-                            </div>
-                {/* </IonContent> */}
-            {/* </IonPage> */}
         </React.Fragment>
     );
 };

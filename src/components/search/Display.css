@@ -1,26 +1,14 @@
-/* width */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
 
-/* Track */
-::-webkit-scrollbar-track {
-    border-radius: 100vh;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #541B6C;
-    border-radius: 100vh;
-    border: 2px solid #1E1B27;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #1F1932;
-}
 
 .chart {
-    @apply col-span-12 sm:col-span-6 p-4 text-white shadow-lg rounded-l bg-cbg
+    @apply col-span-12 p-4 text-white shadow-lg rounded-l
+}
+
+.chart-col6{
+   @apply sm:col-span-6
+}
+
+.messages {
+	--background : var(--ion-color-step-150);
+	background-color: var(--background);
 }
