@@ -159,11 +159,6 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                         label: 'Listings',
                         borderColor: '#9945FF', // # purple #9945FF    #14F195
                         borderWidth: 2,
-                        // fill: {
-                        //     target: 'origin',
-                        //     above: shadedAreaColorSelected,  // 195e83  // Area will be red above the origin
-                        //     // below: ''    // And blue below the origin
-                        // },
                         data: listingsData,
                     },
                     {
@@ -333,7 +328,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                                     display: true,
                                 },
                                 title: {
-                                    display: true,
+                                    display: false,
                                     text: tokenClickedOn
                                         ? tokenClickedOn + ' - Price' : 'Price  ',
                                 },
