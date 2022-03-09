@@ -52,7 +52,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
         datasets: [],
     };
     const [foxLineData, setFoxLineData] = useState(defaultGraph);
-    const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
+    // const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
 
     const chartsRef = useRef<HTMLDivElement | null>(null);
 
@@ -62,8 +62,12 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
 
     // user clicked change colour
-    const [lineColorSelected, setLineColorSelected] = useState<string>(cookies.get('lineColorSelected') ? cookies.get('lineColorSelected') : "#14F195"); // #195e83
-    const [shadedAreaColorSelected, setShadedAreaColorSelected] = useState<string>(cookies.get('shadedAreaColorSelected') ? cookies.get('shadedAreaColorSelected') : "#01FF6F")
+    const [lineColorSelected, setLineColorSelected] = useState<string>(
+        cookies.get('lineColorSelected2') ?
+            cookies.get('lineColorSelected2') : "#14F195"); // #195e83
+    const [shadedAreaColorSelected, setShadedAreaColorSelected] = useState<string>(
+        cookies.get('shadedAreaColorSelected2') ?
+            cookies.get('shadedAreaColorSelected2') : "rgba(26, 255, 163, 0.1)") // #01FF6F // TODO
     // when above clicked, will redraw the chart
     useEffect(() => {
         if (firstUpdate.current) {
@@ -71,8 +75,9 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
             return;
         }
 
-        cookies.set('lineColorSelected', lineColorSelected);
-        cookies.set('shadedAreaColorSelected', shadedAreaColorSelected);
+        // TODO: renable these, after you can get the code to NOT call this on page load
+        // cookies.set('lineColorSelected2', lineColorSelected);
+        // cookies.set('shadedAreaColorSelected2', shadedAreaColorSelected);
 
         // redraw the chart
         // viewChart();
@@ -108,7 +113,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
     const viewChart = () => { // token: string, name: string
 
         setFoxLineData(defaultGraph);
-        setFoxLineListingsData(defaultGraph);
+        // setFoxLineListingsData(defaultGraph);
 
         // @ts-ignore
         setTokenClickedOn(name ? `${name} (${token})` : token);
@@ -166,12 +171,9 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                         label: 'Price',
                         yAxisID: 'y0',
                         borderColor: lineColorSelected,
-                        borderWidth: 2,
-                        fillOpacity: .3,
                         fill: {
                             target: 'origin',
-                            above: shadedAreaColorSelected,   // Area will be red above the origin
-                            // below: ''    // And blue below the origin
+                            above: shadedAreaColorSelected,
                         },
                         data: lineData,
                     },
@@ -333,7 +335,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                                 title: {
                                     display: true,
                                     text: tokenClickedOn
-                                        ? tokenClickedOn + ' - Price' : 'Price',
+                                        ? tokenClickedOn + ' - Price' : 'Price  ',
                                 },
                                 // tooltip: {
                                 //     enabled: true,
@@ -351,55 +353,39 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                                 // },
                             },
                             scales: {
-                                // x: { // TODO
-                                //     ticks: {
-                                //         autoSkip: true,
-                                //         maxTicksLimit: 8,
-                                //     },
-                                //     // gridLines: {
-                                //     //     display: true,
-                                //     // },
-                                // },
-                                // y: {
-                                //     suggestedMin: 0,
-                                // },
-                                yAxes: [{
+                                // https://www.chartjs.org/docs/latest/axes/cartesian/
+                                // https://stackoverflow.com/questions/51296950/charts-js-graph-with-multiple-y-axes
+                                'y0': {
                                     // stacked: true,
-                                    display: true,
-                                    position: 'left',
                                     type: 'linear',
+                                    position: 'left',
                                     scaleLabel: {
                                         display: true,
+                                        labelString: 'Listings'
                                     },
-                                    // gridLines : {
-                                    //     display : true
-                                    // },
-                                    id: 'y1',
-                                    // ticks: {
-                                    //     beginAtZero:true,
-                                    //     // callback: function (tick, index, ticks) {
-                                    //     //     return numeral(tick).format('(0,0)');
-                                    //     // },
-                                    // }
-                                }, {
-                                    // stacked: false,
-                                    display: true,
-                                    position: 'right',
+                                    grid: {
+                                        color: '#b3b3ff'
+                                    },
+                                    suggestedMin: 0,
+                                },
+                                'y1': {
+                                    // stacked: true,
                                     type: 'linear',
-                                    id: 'y0',
-                                    // ticks: {
-                                    //     max: 10,
-                                    //     stepSize: 1,
-                                    //     display: true,
-                                    //     beginAtZero: true,
-                                    //     fontSize: 13,
-                                    //     padding: 10,
-                                    //     // callback: function (tick, index, ticks) {
-                                    //     //     return numeral(tick).format('$ 0,0');
-                                    //     // }
-                                    // }
-                                }]
+                                    position: 'right',
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Price'
+                                    },
+                                    suggestedMin: 0,
+                                },
+                                x: {
+                                    ticks: {
+                                        autoSkip: true,
+                                        maxTicksLimit: 8,
+                                    },
+                                },
                             },
+                            // get rid of points on graph
                             elements: {
                                 point:{
                                     radius: 0
