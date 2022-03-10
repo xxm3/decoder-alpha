@@ -6,7 +6,7 @@ const Loader: React.FC = () => {
 
            <img src="/assets/site-logos/logo-loop-black-bg.gif" />
 
-            <div className="mt-3 text-gray-200 font-mono font-bold">Loading...</div>
+            <div className="mt-3 text-gray-200 font-mono font-bold pl-14">Loading...</div>
             {/*text-sm sm:text-xs*/}
 
         </div>

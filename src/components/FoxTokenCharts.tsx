@@ -32,10 +32,10 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
     const tableHeight = useMemo(() => {
         if (width > 1536) return 100;
         if (width > 1280) return 105;
-        if (width > 1024) return 160; // TODO: test 1280 and below
-        if (width > 768) return 200;
-        if (width > 640) return 220;
-        return 250;
+        if (width > 1024) return 120;
+        if (width > 768) return 160;
+        if (width > 640) return 180;
+        return 200;
     }, [width]);
 
     const [tableData, setTableData] = useState<FoxTokenData[]>([]);
@@ -78,7 +78,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
             return;
         }
 
-        // TODO: renable these, after you can get the code to NOT call this on page load
+        // TODO-parth: renable these, after you can get the code to NOT call this on page load
         // cookies.set('lineColorSelected2', lineColorSelected);
         // cookies.set('shadedAreaColorSelected2', shadedAreaColorSelected);
 
@@ -342,9 +342,6 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 			`}
 		</Style>
         	<div className="foxTokenCharts px-5 gap-4 grid grid-cols-12" ref={chartsRef}>
-
-                {/*TODO*/}
-                {/*--{width}--*/}
 
                 <div className="chart">
                     <Chart
