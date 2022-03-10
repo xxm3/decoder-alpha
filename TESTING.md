@@ -40,7 +40,7 @@
 - enter a new Fox custom name, make sure shows up in Discord
 - run the daily schedule URL, make sure shows up in Discord
 
-### Discord bots - automated - discord-parser-receiver and our python code
+### Discord bots - automated - discord-parser-receiver and our python code (which parses links from discord chat)
 (1) if wanting to use the Test RDS, make sure it is running, then update .runtimeconfig.json (search for mydb_test here for creds) (change back after done...)
 (2) switch the firebase.json's (to get firestore running locally if needed) (change back after done...)
 (3) then run `NODE_ENV=debug ENABLE_DISCORD=true TEST_VEHN_DOJO=true firebase emulators:start --inspect-functions`,
