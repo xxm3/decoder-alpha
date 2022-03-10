@@ -1,0 +1,51 @@
+
+
+
+What we are: A discord with over a dozen bots:
+
+- Several discords and dozens of twitter accounts are monitored / stored in an internal database, and **new mints that people post about are parsed and sent to the discord to #🎲｜mint-alerts-automated  and #🎲｜raw-mint-feed **. URLs are automatically posted, along with instantly posting the Candy Machine ID and mint details. The majority of the time, people in other discords will just post a link to a new mint, and not tag everyone. Using this, you no longer need to be in discord / twitter all day to catch mints. You also have more confidence in these mints, as multiple discords could be linking / discussing them, thus showing hype and demand
+
+- After minting, you can use #🪄｜mag-eden-nft-alerts to **see when it gets listed on MagicEden**, and if it gets to the "Popular Collections" of MagicEden
+
+- A **curated set of mints** is posted to #🎲｜daily-mints , showing screenshots of the website's search results related to that mint
+
+- In the future, there will be support for **showing messages that have Discord invites involving whitelists** amongst your Discord rooms (currently done in <#931623835164344370>  but invites don't often come through properly), and **showing messages that have google doc links in them, which are often whitelist forms**
+
+
+
+
+**Discord Overview**:
+:earth_americas: **For everyone**:
+- #💡｜ideas-and-bugs - Discuss new ideas for the site and discord, or bugs you encountered
+- #🔎｜after-action-report  - Show the successes of mints that was alerted, while trying to analyze what made them so successful
+- #📢｜self-roles - To get the role that allows you to be pinged about mint related events (such as when a new mint URL is posted to multiple discords)
+
+:one:  **For holders of one NFT (and in meantime, for whitelisted members)**:
+- #👪｜alpha-chat - Talk NFTs and get/give alpha
+- #🎲｜daily-mints - Automated posts about upcoming NFTs
+- #🪄｜mag-eden-nft-alerts - Shows when any new NFT is listed on Magic Eden (with at least 20 SOL volume in 20 minutes), or any NFT hits the "Popular Collections" list
+-  #🎲｜mint-feed-delayed - any mint URLs the bot picks up from various discords, but on a 10 minute delay. These are otherwise posted live to #🎲｜mint-alerts-automated and #🎲｜raw-mint-feed for 3 NFT holders
+- #🤖｜decode-bot-commands - A bot command to get mint details & Candy Machine ID of a website
+
+:three: **For holders of three NFTs (and in meantime, for whitelisted members)**:
+- #👪｜triple-alpha-chat - Talk NFTs and get/give alpha
+- #🎲｜mint-alerts-automated - Live feed that parses links from several discords and dozens of twitter accounts. Alerts when any link could contain a new mint, before it is released. Must be linked from two discords before it shows up. Candy Machine ID and mint details are also posted, if found
+- #🎲｜raw-mint-feed - Live feed that is similar to #🎲｜mint-alerts-automated, but shows mints even if it comes from a single Discord / Twitter, and shows duplicates of each URL
+- #💬｜discord-inv-parser - Detects when discord links are sent, with the same message having the words "whitelist" "wl" or "og" in it. Perhaps it could be a new NFT where you can get early whitelist to?
+
+ 🤖 Current Bot Commands users can use:
+```
+- /search keyword:... --- Does a search on the Discords/Twitters
+- /cmid url:... --- Takes a URL that has a live mint, and returns mint information and the CMv2 ID on it
+- /token address:... --- Get Fox Token Market info from a WL token address
+- /wallet-tokens: address:... Get Fox Token Market info for all tokens in an address
+```
+
+
+
+
+
+
+
+
+

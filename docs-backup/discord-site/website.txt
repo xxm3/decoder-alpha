@@ -1,0 +1,60 @@
+What we are: A website that interacts with discord messages & tweets, shows daily mints, and interacts with Fox Token Market
+
+- **Search on an NFT to see what several discords / twitters posted about it**. You no longer need to hop around multiple discords to just the hype of an upcoming / current / one of your existing NFTs. Lots of bullish messages from several discords will usually lead to a hyped mint ... while barely seeing any posts about an NFT you minted two weeks ago could mean little demand thus a slow decline in price
+
+
+
+
+
+
+
+
+
+
+- Above is after you do a search from the header, to see charts and messages across all the Discords
+- Click on any message to see the messages around it, as well as scroll through that Discord feed
+- You can hide the chart, and for that browser it will be permanently hidden
+
+
+
+
+View information about mints releasing today
+
+
+
+
+
+
+
+- View information about the Fox Token Market website, which is used to buy and sell whitelist tokens for upcoming mints
+
+
+
+
+
+
+
+
+
+
+- The above shows price updates / summaries from #🎲｜mint-alerts-automated , so you can see how we did in the past
+
+
+
+
+
+
+
+- When on the home page, use the above to compare multiple words (ie. multiple NFTs) against each other, using all the messages from the several Discords we pull from
+- Very useful for plugging in several things in the morning, and seeing which NFT is most hyped
+
+
+
+
+
+
+
+
+
+
+

@@ -22,7 +22,6 @@ import Cookies from "universal-cookie";
 import {getLiveFoxTokenData, shortenedWallet} from "../components/FoxTokenFns";
 import Table from '../components/Table';
 import { Column } from '@material-table/core';
-import _ from 'lodash';
 import Style from '../components/Style';
 import { AppComponentProps } from '../components/Route';
 import FoxTokenCharts from '../components/FoxTokenCharts';
@@ -66,21 +65,12 @@ const columns: Column<FoxTokenData>[] = [
         customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
         render: (record) => <span>{record.totalTokenListings}</span>,
     },
-    // TODO: parth needs to fix
-    // {
-    //     title: '# Owned & Wallet',
-    //     // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
-    // }
+    {
+        title: '# Owned & Wallet',
+        render: (record) => <span>{record.whichMyWallets}</span>,
+        // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
+    }
 ];
-
-
-/**
- * IF WANT TO TEST THIS PAGE
- * - be logged out of wallet and test things
- * - be logged out of wallet, and add a custom wallet
- * - log in wallet, test
- * - log in wallet, add 1-2 custom wallets
- */
 
 interface FoxToken {
 	contentRef: AppComponentProps["contentRef"]
@@ -436,7 +426,7 @@ function FoxToken({ contentRef }: FoxToken) {
 
             if (!multWalletAryFromCookie && !walletAddress) {
                 present({
-                    message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add it manually',
+                    message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add one (or three!) manually',
                     color: 'danger',
                     duration: 5000
                 });
@@ -708,7 +698,8 @@ function FoxToken({ contentRef }: FoxToken) {
                                 hidden={!formErrMsg}
                             >
                                 <p className="text-lg text-red-700 font-medium">
-                                    <b>{formErrMsg}</b>
+                                    {/*{formErrMsg}*/}
+                                    <b>An error occurred, please try again later</b>
                                 </p>
                                 <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                                     !
