@@ -122,17 +122,16 @@ const Home : React.FC<AppComponentProps> = ({ contentRef }) => {
 
 
 
-            {/*TODO: remove....*/}
-
             {/* if need to tell the user of errors */}
-            <div className="m-3 relative bg-red-100 p-4 rounded-xl">
-                <p className="text-lg text-red-700 font-medium">
-                    <b>Our Discord ingestion bots decided to take a break from Thurs @ 10:00pm est until Friday at 9:00am est. They are back up and running now.</b>
-                </p>
-                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                    !
-                </span>
-            </div>
+
+            {/*<div className="m-3 relative bg-red-100 p-4 rounded-xl">*/}
+            {/*    <p className="text-lg text-red-700 font-medium">*/}
+            {/*        <b>Our Discord ingestion bots decided to take a break from Thurs @ 10:00pm est until Friday @ 9:00am est. They are back up and running now.</b>*/}
+            {/*    </p>*/}
+            {/*    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">*/}
+            {/*        !*/}
+            {/*    </span>*/}
+            {/*</div>*/}
 
 
 
