@@ -8,13 +8,14 @@ import {IonButton, IonContent, IonIcon, IonModal, IonRippleEffect } from '@ionic
 import './Schedule.css'
 import { Column } from '@material-table/core';
 import Table from '../../components/Table';
-import { logoDiscord, logoTwitter } from 'ionicons/icons';
+import { logoDiscord, logoTwitter, link } from 'ionicons/icons';
 
 interface Mint {
 	image: string;
 	project: string;
 	twitterLink: string;
 	discordLink: string;
+	projectLink: string;
 	time: string;
 	tillTheMint: string;
 	count: string;
@@ -263,6 +264,16 @@ const Schedule = () => {
                     >
                         <IonIcon icon={logoTwitter} className="big-emoji" />
 						<IonRippleEffect />
+
+                    </a>
+                    <a
+                        href={record.projectLink}
+                        className={(record.projectLink && record.projectLink) ? "schedule-link" : "schedule-link-disabled"}
+                        target="_blank"
+
+                    >
+                        <IonIcon icon={link} className="big-emoji" />
+                        <IonRippleEffect />
 
                     </a>
                 </div>
