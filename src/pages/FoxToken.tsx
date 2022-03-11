@@ -698,8 +698,8 @@ function FoxToken({ contentRef }: FoxToken) {
                                 hidden={!formErrMsg}
                             >
                                 <p className="text-lg text-red-700 font-medium">
-                                    {/*{formErrMsg}*/}
-                                    <b>An error occurred, please try again later</b>
+                                    {typeof formErrMsg === "string" ? formErrMsg : 'An error occurred, please try again later'}
+                                    {/*<b>An error occurred, please try again later</b>*/}
                                 </p>
                                 <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                                     !
