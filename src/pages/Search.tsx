@@ -106,7 +106,8 @@ const Search: React.FC<AppComponentProps> = ( { contentRef }) => {
                 {
                     word: searchText,
                     pageNumber: currentPage,
-                    discordUsername: userName,
+                    // not sure why you would want to pss their username...commenting this out
+                    // discordUsername: '... ...';    // <- Took from the API response "/users/@me" from the postman. Need to change,
                     pageSize: 100 // doing 10 from backend (discord) - search.js ... 100 from frontend (website) - search.tsx
                 },
                 {
