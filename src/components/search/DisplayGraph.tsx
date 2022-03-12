@@ -24,6 +24,7 @@ import {Message} from "../../types/Message";
 import MessageThread from "./MessageThread";
 import {useParams} from "react-router";
 import Loader from "../Loader";
+import Style from "../Style";
 
 ChartJS.register(...registerables);
 ChartJS.register(
@@ -52,7 +53,7 @@ const DisplayGraph:React.FC<{
     isLoadingChart,
     totalCount
 }) => {
-    
+
     const cookies = useMemo(() => new Cookies(), []);
     const [showChart, setShowChart] = useState(String(cookies.get('showChart')) === 'false' ? false : true);
     const {id: word} = useParams<{ id: string; }>();
@@ -65,34 +66,41 @@ const DisplayGraph:React.FC<{
      useEffect(() => {
         cookies.set("showChart", String(showChart));
     }, [showChart, cookies])
-    
-    
+
+
     /**
      * Renders
      */
   return (
-    <div>  
+    <div>
         <div className="gap-4 mb-4 grid grid-cols-12">
 
             {/*search header*/}
             {totalCount && (
                 <>
                     <p className={`font-bold ${completelyHideChart ? "col-span-12" : "col-span-6"} sm:text-center`}>
-                        Searched on "{decodeURIComponent(word)}" ({totalCount} results last{' '}
-                        {constants().numDaysBackGraphs} days)
+                        Searched on "{decodeURIComponent(word)}" ({totalCount} results last 10 days)
                     </p>
 
                     <div className="flex items-center justify-center col-span-6" hidden={completelyHideChart}>
                         <p>Toggle Chart</p>
+						<Style>
+							{`
+								.toggleChart {
+									--background-checked : var(--ion-color-step-850);
+									--handle-background-checked: var(--ion-color-primary-tint)
+								}
+							`}
+						</Style>
                         <IonToggle
-                            color="dark"
+							className="toggleChart"
                             checked={showChart}
                             onClick={() => setShowChart(!showChart)}
                         />
                     </div>
                 </>
             )}
-            </div>          
+            </div>
         {/* bar & line chart */}
         {/* starting with loading */}
         {isLoadingChart ?
@@ -104,7 +112,7 @@ const DisplayGraph:React.FC<{
         !completelyHideChart &&
         (
             <div className="gap-4 grid grid-cols-12" >
-                <div className="chart">
+                <div className="chart chart-col6">
                     <Chart
                         type="bar"
                         data={chartDataDailyCount}
@@ -131,7 +139,7 @@ const DisplayGraph:React.FC<{
                     />
                 </div>
 
-                <div className="chart">
+                <div className="chart chart-col6">
                     <Chart
                         type="bar"
                         data={chartDataPerSource}

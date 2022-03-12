@@ -16,7 +16,7 @@ const SearchedWords = () => {
                 'Content-Type': 'application/json',
             },
         })
-        
+
         return data;
     } catch (e) {
 
@@ -33,7 +33,7 @@ const SearchedWords = () => {
 
   const searchWordsQuery = useQuery(['searchWords'], getSearchedWords, {
     select : (data: any) => {
-      
+
         // Error handling
         if (data?.error && data.message) {
             throw new Error(String(data.message));
@@ -51,16 +51,16 @@ const SearchedWords = () => {
 
   return (
     <div className='bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4'>
-      {searchWordsQuery?.isFetching ? 
+      {searchWordsQuery?.isFetching ?
         <div className="flex justify-center items-center">
             <Loader />
         </div>
-        :   
+        :
         <>
           <div className={`font-bold pb-1`}>Recent searches by others</div>
           <div>
               {
-                searchWordsQuery?.data?.data.map((word:any) => (
+                searchWordsQuery?.data?.data?.map((word:any) => (
                   <p>{word.searchterm.length > 20 ? word.searchterm.substring(0,20) : word.searchterm}</p>
                 ))
               }

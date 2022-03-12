@@ -26,6 +26,7 @@ import {useParams} from "react-router";
 import Loader from "../Loader";
 import DisplayGraph from "./DisplayGraph";
 
+
 ChartJS.register(...registerables);
 ChartJS.register(
     ArcElement,
@@ -43,7 +44,7 @@ const Display: React.FC<{
     // chartDataDailyCount?: any;
     // chartDataPerSource?: any;
     // chartHeight: number;
-    messages: (Message | undefined)[];
+    messages: Message[];
     totalCount?: number;
     // isLoadingChart?: any;
     isLoadingMessages?: any;
@@ -85,8 +86,7 @@ const Display: React.FC<{
      */
     return (
         <>
-
-            <div className="p-3 overflow-y-scroll rounded-lg">
+            <div className="py-5 px-5 messages my-2 overflow-y-scroll rounded-lg">
                 {/* bar & line chart */}
                 {/* <DisplayGraph {...{
                     chartDataDailyCount : chartDataDailyCount ? chartDataDailyCount: {},
@@ -97,7 +97,7 @@ const Display: React.FC<{
 
                 {/* list of messages, ie. search results */}
                 {messages.map((m, i) => (
-                    m ? (
+                    
                         <MessageListItem
                             onClick={() => {
                                 if (m.source === 'Twitter') {
@@ -108,10 +108,8 @@ const Display: React.FC<{
                             message={m}
                             key={m.id}
                         />
-                    ) : (
-                        <MessageListItem index={i} key={i} />
                     )
-                ))}
+                )}
 
                 {/*if you click on a message*/}
                 {selectedMessage && (

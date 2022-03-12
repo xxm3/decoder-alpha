@@ -1,5 +1,4 @@
-
-import { IonApp, IonCol, IonContent, IonGrid, IonMenu, IonRouterLink, IonRouterOutlet, IonRow } from "@ionic/react";
+import { IonApp, IonCol, IonContent, IonGrid, IonMenu, IonPage, IonRouterOutlet, IonRow, IonSplitPane } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 // import { useEffect, useState } from "react";
 // import Search from "./pages/Search";
@@ -7,7 +6,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import { useEffect, useState } from "react";
 import { auth } from "./firebase";
 import { IUser } from "./types/User";
-import { Switch } from "react-router";
+import { Route as DefaultRoute, Route } from "react-router";
 import "./App.css";
 import Loader from "./components/Loader";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -38,20 +37,24 @@ import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Schedule from "./pages/schedule/Schedule";
 
-
 // // https://javascript.plainenglish.io/how-to-setup-and-add-google-analytics-to-your-react-app-fd361f47ac7b
 // const TRACKING_ID = "G-Z3GDFZ53DN";
 // ReactGA.initialize(TRACKING_ID);
-
 
 import {
 	QueryClientProvider,
   } from 'react-query'
 import { ReactQueryDevtools } from "react-query/devtools"
 import { queryClient } from "./queryClient";
-import WalletButton from "./components/WalletButton";
 import AppRoute from "./components/Route";
-
+import HeaderContainer from "./components/nav/Header";
+import WalletButton from "./components/WalletButton";
+import Sidebar from "./components/nav/Sidebar";
+import Style from "./components/Style";
+import Theme from "./theme/Theme";
+import FoxToken from "./pages/FoxToken";
+import NftPriceTable from "./pages/NftPriceTable";
+import StackedSearch from "./pages/StackedSearch";
 
 const App = () => {
 
@@ -89,78 +92,108 @@ const App = () => {
 	}, []);
 
 
+	// const [loadingGif, setLoadingGif] = useState(true)
+	// useEffect(() => {
+	// 	const id = setTimeout(() => {
+	// 		setLoadingGif(false)
+	// 	}, 8000)
+	// 	return () => clearTimeout(id)
+	// }, [])
 
 
 	return (
         <IonApp>
-            <QueryClientProvider client={queryClient}>
-                <UserContext.Provider value={user}>
-                    {user !== undefined ? (
-                        <>
-                            <IonMenu menuId="sidebar" contentId="router" className="md:hidden">
-                                <IonContent>
-                                    <IonGrid className="ion-padding">
-                                        <IonRow>
-                                            <IonCol size="12">
-                                                {/* below repeated on Header.tsx and App.tsx */}
+            <Theme>
+                <QueryClientProvider client={queryClient}>
+                    <UserContext.Provider value={user}>
+					{(user !== undefined) ? (
+	                        <>
+	                            <IonReactRouter>
+	                                <IonRouterOutlet id="router">
+	                                    <Route>
+	                                        <IonPage>
+	                                            <IonGrid className="w-screen h-screen flex flex-col relative">
+	                                                <IonRow>
+	                                                    <IonCol size="12">
+	                                                        <HeaderContainer />
+	                                                    </IonCol>
+	                                                </IonRow>
+	                                                <IonRow className="flex-grow">
+	                                                    <IonCol
+	                                                        size="12"
+	                                                        className="flex h-full"
+	                                                    >
+	                                                        <Style>
+	                                                            {`
+																	@media only screen and (min-width:768px) and (max-width:992px){
+																		ion-split-pane {
+																			--side-min-width: none;
+																		}
+																	}
+																`}
+	                                                        </Style>
+	                                                        <IonSplitPane when="md" contentId="main">
+	                                                            <IonMenu menuId="sidebar" contentId="main">
+	                                                                <Sidebar />
+	                                                            </IonMenu>
+	                                                            <IonContent className="h-full" id="main">
+	                                                                <IonRouterOutlet>
+                                                                        {/*home page, after authenticated*/}
+	                                                                    <ProtectedRoute
+	                                                                        path="/" component={ Home } exact
+	                                                                    />
 
-                                                <WalletButton />
-                                                <br/><br/>
+                                                                        {/*searched on something*/}
+	                                                                    <ProtectedRoute
+	                                                                        path="/search/:id" exact={true} component={Search}
+	                                                                    />
 
-                                                <IonRouterLink href="/schedule" className="pr-7 underline text-inherit">Today's Mints</IonRouterLink>
+                                                                        {/* todays mints*/}
+	                                                                    <ProtectedRoute
+	                                                                        exact path="/Schedule" component={Schedule}
+	                                                                    />
 
+                                                                        {/* fox token market */}
+                                                                        <ProtectedRoute
+                                                                            exact path="/foxtoken" component={FoxToken}
+                                                                        />
 
-                                            </IonCol>
-                                        </IonRow>
-                                    </IonGrid>
-                                </IonContent>
-                            </IonMenu>
-                            <IonReactRouter>
-                                <IonRouterOutlet id="router">
-                                    <Switch>
-                                        {/* <ProtectedRoute
-											path="/"
-											exact={true}
-											render={() => (
-												<IonButton
-													onClick={() => auth.signOut()}
-												>
-													Sign out
-												</IonButton>
-											)}
-										/> */}
+                                                                        {/* mint alert automated - stats */}
+                                                                        <ProtectedRoute
+                                                                            exact path="/mintstats" component={NftPriceTable}
+                                                                        />
 
-										<ProtectedRoute
-											path="/"
-											// component={HomePage}
-		                                    component={Home}
-											exact
-										/>
+                                                                        {/* Stacked Line Search */}
+                                                                        <ProtectedRoute
+                                                                            exact path="/stackedsearch" component={StackedSearch}
+                                                                        />
 
-										<ProtectedRoute
-											path="/search/:id"
-											exact={true}
-											component={Search}
-										/>
-										<AppRoute exact path="/Schedule" component={Schedule} />
-										<AppRoute exact path="/Login" component={Login} />
-									</Switch>
-								</IonRouterOutlet>
-							</IonReactRouter>
-						</>
-					) : (
-						<div className="mx-auto my-auto h-48 w-48">
-							<Loader />
-						</div>
-					)}
-					<ReactQueryDevtools initialIsOpen />
-				</UserContext.Provider>
-			</QueryClientProvider>
-		</IonApp>
-	);
-
+                                                                        {/*login button etc...*/}
+	                                                                    <AppRoute
+	                                                                        exact path="/Login" component={ Login}
+	                                                                    />
+	                                                                </IonRouterOutlet>
+	                                                            </IonContent>
+	                                                        </IonSplitPane>
+	                                                    </IonCol>
+	                                                </IonRow>
+	                                            </IonGrid>
+	                                        </IonPage>
+	                                    </Route>
+	                                </IonRouterOutlet>
+	                            </IonReactRouter>
+	                        </>
+	                    ) : (
+	                        <div className="mx-auto my-auto h-48 w-48">
+	                            <img src="/assets/site-logos/Logo_Sol_decoder/Terminados/Gif/logo.gif" />
+	                        </div>
+	                    )}
+                        <ReactQueryDevtools initialIsOpen />
+                    </UserContext.Provider>
+                </QueryClientProvider>
+            </Theme>
+        </IonApp>
+    );
 };
-
-
 
 export default App;

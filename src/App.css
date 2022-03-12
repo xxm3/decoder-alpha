@@ -15,10 +15,14 @@ body {
 
 .small-btn{
     height: 25px;
-    width: 200px;
+    /*width: 200px;*/
     padding: 1px;
     font-size: 14px;
 }
+.bit-bigger-btn{
+    /*width: 230px;*/
+}
+
 .big-emoji{
     font-size: 135%;
 }
@@ -26,3 +30,73 @@ body {
 .me-logo{
     max-height: 18px;
 }
+
+@font-face {
+	font-family: 'Logo';
+	src: local('Logo'), url(./fonts/ubuntu_title/ubuntu-title-fr-1.1.ttf) format('truetype');
+	/* other formats include: 'woff2', 'truetype, 'opentype',
+							  'embedded-opentype', and 'svg' */
+}
+
+.logo {
+	font-family: "Logo";
+	@apply !text-3xl hover:opacity-80
+}
+
+ion-button {
+	--box-shadow: none
+}
+
+ion-split-pane {
+	--side-width: 10vw;
+}
+
+ion-item {
+	--padding-start: 0;
+	--inner-padding-start: 0;
+	--padding-end: 0;
+	--inner-padding-end: 0;
+	--padding-top: 0;
+	--inner-padding-top: 0;
+	--padding-start: 0;
+	--inner-padding-bottom: 0;
+}
+/* width */
+::-webkit-scrollbar {
+    width: 8px !important;
+    height: 8px !important;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    border-radius: 100vh;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #541B6C !important;
+    border-radius: 100vh;
+	border: none !important;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #1F1932 !important;
+}
+
+
+/*.popover-wrapper .popover-content{*/
+/*    position: relative !important;*/
+/*    margin: 0 auto !important;*/
+/*    left: auto !important;*/
+/*    top: auto !important;*/
+/*}*/
+
+
+/*ion-menu{*/
+/*    --width: 234px !important;*/
+/*    width: 234px !important;*/
+/*}*/
+/*ion-menu ion-list{*/
+/*    width: 233px;*/
+/*}*/
