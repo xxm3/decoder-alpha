@@ -1,0 +1,16 @@
+ What we are: Overview:
+
+
+A "Google-like" search engine for Solana NFTs, with automated alerting capabilities for talked about mints, a daily mint schedule, plus must use features to help with Fox Token Market.
+
+We have a fully working website & tons of Discord bots, storing 25,000+ messages every day from 10+ private discords (one with a floor price of over 100 SOL and two with a floor price of over 50 SOL), as well as dozens of twitter accounts. We provide automated analysis to the user (such as alerting when new mints get posted in their discord chat), and provide a website to do one search that hits all of those discords/twitters.
+
+We also store all of the whitelist tokens from Fox Token Market, and provide various quality-of-life features and price history charts on them.
+
+Everything is live now and free to use before mint, with near daily updates and soon to come Apple and Android apps.
+
+https://docs.soldecoder.app/books/site-and-discord-overview/page/discord-overview
+
+https://docs.soldecoder.app/books/site-and-discord-overview/page/site-app-overview 
+
+
