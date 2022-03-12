@@ -25,7 +25,6 @@ const Search: React.FC<AppComponentProps> = ( { contentRef }) => {
     const [currentPage, setCurrentPage] = useState(0);
     // const [searchText, setSearchText] = useState(useParams<{id: string}>());
 
-    const userName = 'DevRakesh';    // <- Took from the API response "/users/@me" from the postman. Need to change
 
     const { id : searchText} = useParams<{
         id : string;
