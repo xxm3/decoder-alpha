@@ -6,7 +6,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import { useEffect, useState } from "react";
 import { auth } from "./firebase";
 import { IUser } from "./types/User";
-import { Route as DefaultRoute, Route } from "react-router";
+import { Route } from "react-router";
 import "./App.css";
 import Loader from "./components/Loader";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -184,9 +184,19 @@ const App = () => {
 	                            </IonReactRouter>
 	                        </>
 	                    ) : (
-	                        <div className="mx-auto my-auto h-48 w-48">
-	                            <img src="/assets/site-logos/Logo_Sol_decoder/Terminados/Gif/logo.gif" />
-	                        </div>
+	                       <IonReactRouter>
+							   <IonRouterOutlet>
+								   <Route>
+									   <IonPage>
+										   <IonContent fullscreen>
+							   					<div className="flex h-full w-full justify-center items-center">
+													   <Loader />
+												</div>
+										   </IonContent>
+									   </IonPage>
+								   </Route>
+							   </IonRouterOutlet>
+							</IonReactRouter>
 	                    )}
                         <ReactQueryDevtools initialIsOpen />
                     </UserContext.Provider>
