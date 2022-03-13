@@ -63,7 +63,12 @@ const SearchedWords = () => {
             <ul style={{listStyle: 'disc'}}>
               {
                 searchWordsQuery?.data?.data?.map((word:any) => (
-                  <li>{word.searchterm.length > 20 ? word.searchterm.substring(0,20) : word.searchterm} ({moment(word.createdAt).fromNow()})</li>
+                  <li key={word.createdAt}>
+                      {word.searchterm.length > 20 ?
+                          word.searchterm.substring(0,20) + "..." :
+                          word.searchterm}
+                      &nbsp; ({moment(word.createdAt).fromNow()})
+                  </li>
                   ))
                 }
             </ul>

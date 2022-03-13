@@ -628,9 +628,9 @@ function FoxToken({ contentRef }: FoxToken) {
                         <div className="ml-3 mr-3 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                             <div className="font-medium">
                                 <p>
-                                    Use this if Fox WL Token Market doesn't have an
+                                    Use this if a token on the Fox WL Token Market doesn't have an
                                     official name yet, and you know for certain
-                                    what the name of the NFT is
+                                    what the name of the token is
                                 </p>
 
                                 <span
@@ -744,15 +744,15 @@ function FoxToken({ contentRef }: FoxToken) {
                                         isFreeAction: true,
                                     },
                                     {
-                                        icon: () => <IonIcon icon={add} />,
-                                        tooltip: 'Add Custom Token Name',
-                                        onClick: () => clickedAddName(true),
-                                        isFreeAction: true,
-                                    },
-                                    {
                                         icon: () => <IonIcon icon={albums} />,
                                         tooltip: 'Track Multiple wallets',
                                         onClick: () => clickedMultWall(true),
+                                        isFreeAction: true,
+                                    },
+                                    {
+                                        icon: () => <IonIcon icon={add} />,
+                                        tooltip: 'Add Custom Token Name',
+                                        onClick: () => clickedAddName(true),
                                         isFreeAction: true,
                                     },
                                 ]}
