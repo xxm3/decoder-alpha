@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
+import moment from "moment";
 
 const SearchedWords = () => {
 
@@ -57,13 +58,15 @@ const SearchedWords = () => {
         </div>
         :
         <>
-          <div className={`font-bold pb-1`}>Recent searches by others</div>
+          <div className={`font-bold pb-1`}>Recent Community Searches</div>
           <div>
+            <ul style={{listStyle: 'disc'}}>
               {
                 searchWordsQuery?.data?.data?.map((word:any) => (
-                  <p>{word.searchterm.length > 20 ? word.searchterm.substring(0,20) : word.searchterm}</p>
-                ))
-              }
+                  <li>{word.searchterm.length > 20 ? word.searchterm.substring(0,20) : word.searchterm} ({moment(word.createdAt).fromNow()})</li>
+                  ))
+                }
+            </ul>
           </div>
       </>}
     </div>

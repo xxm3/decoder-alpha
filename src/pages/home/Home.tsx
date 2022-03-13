@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './Home.css';
 import moment from "moment";
 import { AppComponentProps } from '../../components/Route';
+import SearchedWords from './SearchedWords';
 
 const Home : React.FC<AppComponentProps> = ({ contentRef }) => {
 
@@ -96,6 +97,7 @@ const Home : React.FC<AppComponentProps> = ({ contentRef }) => {
                     :)
                 </span>
             </div>
+            <SearchedWords />
 
 
 
