@@ -25,6 +25,7 @@ const Search: React.FC<AppComponentProps> = ( { contentRef }) => {
     const [currentPage, setCurrentPage] = useState(0);
     // const [searchText, setSearchText] = useState(useParams<{id: string}>());
 
+
     const { id : searchText} = useParams<{
         id : string;
     }>();
@@ -57,7 +58,7 @@ const Search: React.FC<AppComponentProps> = ( { contentRef }) => {
         setCurrentPage(0);
     },[searchText])
 
- 
+
     /**
      * Functions
      */
@@ -105,6 +106,8 @@ const Search: React.FC<AppComponentProps> = ( { contentRef }) => {
                 {
                     word: searchText,
                     pageNumber: currentPage,
+                    // not sure why you would want to pss their username...commenting this out
+                    // discordUsername: '... ...';    // <- Took from the API response "/users/@me" from the postman. Need to change,
                     pageSize: 100 // doing 10 from backend (discord) - search.js ... 100 from frontend (website) - search.tsx
                 },
                 {

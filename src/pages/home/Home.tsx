@@ -1,36 +1,14 @@
-import { IonLabel, IonCard, IonRow, IonCol, IonContent, IonPage } from '@ionic/react';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useState} from 'react';
 import './Home.css';
-import Card from './Card';
-import CollectionCard from './CollectionCard';
-import Loader from "../../components/Loader";
-import {environment} from "../../environments/environment";
 import moment from "moment";
-import {
-    resolveToWalletAddress,
-    getParsedNftAccountsByOwner
-} from "@nfteyez/sol-rayz";
-import {Connection, programs} from '@metaplex/js';
-import {instance} from "../../axios";
-import {Chart} from "react-chartjs-2";
-// import {dispLabelsDailyCount, getDailyCountData} from '../../components/feMiscFunctions';
-import {dispLabelsDailyCount, getDailyCountData} from '../../util/charts';
-import {data} from "autoprefixer";
-import { ChartData } from 'chart.js';
 import { AppComponentProps } from '../../components/Route';
+import SearchedWords from './SearchedWords';
 
 const Home : React.FC<AppComponentProps> = ({ contentRef }) => {
 
     /**
      * States & Variables
      */
-    const [userNfts, setUserNfts] = useState([]); // from user wallet
-    const [homePageData, setHomePageData] = useState([]); // ie. possible mints...
-    const [newCollections, setNewCollection] = useState([]); // from ME
-    const [popularCollections, setPopularCollection] = useState([]); // from ME
-
-    const [isLoading, setIsLoading] = useState(false);
-
     /**
      * Use Effects
      */
@@ -119,6 +97,7 @@ const Home : React.FC<AppComponentProps> = ({ contentRef }) => {
                     :)
                 </span>
             </div>
+            <SearchedWords />
 
 
 
