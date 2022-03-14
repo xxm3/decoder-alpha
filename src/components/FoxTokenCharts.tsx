@@ -7,12 +7,14 @@ import { environment } from '../environments/environment';
 import { FoxTokenData } from '../types/FoxTokenTypes';
 import Style from './Style';
 import Cookies from "universal-cookie";
+import {useIonToast} from "@ionic/react";
 
 function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTokenData) {
 
     /**
      * States & Variables
      */
+    const [present, dismiss] = useIonToast();
 
     // resize window
     const [width, setWidth] = useState(window.innerWidth);
@@ -178,6 +180,12 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
             })
             .catch((err) => {
                 console.error("error when getting fox token history data: " + err);
+
+                present({
+                    message: 'Error - unable to load chart data. Please refresh and try again',
+                    color: 'danger',
+                    duration: 8000
+                });
             });
 
         // also get the sales history for that token, from FF
@@ -322,88 +330,6 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                         }}
                     />
                 </div>
-
-
-                {/*old stuff from parth...*/}
-
-                {/*<div className="chart sm:col-span-12 lg:col-span-6">*/}
-	            {/*    <Chart*/}
-	            {/*        type="line"*/}
-	            {/*        // @ts-ignore*/}
-	            {/*        data={foxLineData}*/}
-	            {/*        height={150}*/}
-	            {/*        options={{*/}
-	            {/*            responsive: true,*/}
-	            {/*            maintainAspectRatio: true,*/}
-	            {/*            plugins: {*/}
-	            {/*                legend: {*/}
-	            {/*                    display: false,*/}
-	            {/*                },*/}
-	            {/*                title: {*/}
-	            {/*                    display: true,*/}
-	            {/*                    text: 'Price',*/}
-	            {/*                },*/}
-	            {/*                // tooltip: {*/}
-	            {/*                //     enabled: true,*/}
-	            {/*                //     usePointStyle: true,*/}
-	            {/*                //     callbacks: {*/}
-	            {/*                //         // To change title in tooltip*/}
-	            {/*                //         title: (data: any) => { return data[0].parsed.x },*/}
-	            {/*                //*/}
-	            {/*                //         // To change label in tooltip*/}
-	            {/*                //         label: (data: any) => {*/}
-	            {/*                //             console.log(data);*/}
-	            {/*                //             return data.parsed.y === 2 ? "Good" : "Critical"*/}
-	            {/*                //         }*/}
-	            {/*                //     },*/}
-	            {/*                // },*/}
-	            {/*            },*/}
-	            {/*            scales: {*/}
-	            {/*                x: {*/}
-	            {/*                    ticks: {*/}
-	            {/*                        autoSkip: true,*/}
-	            {/*                        maxTicksLimit: 8,*/}
-	            {/*                    },*/}
-	            {/*                },*/}
-	            {/*                y: {*/}
-	            {/*                    suggestedMin: 0,*/}
-	            {/*                },*/}
-	            {/*            },*/}
-	            {/*        }}*/}
-	            {/*    />*/}
-	            {/*</div>*/}
-	            {/*<div className="chart sm:col-span-12 lg:col-span-6">*/}
-	            {/*    <Chart*/}
-	            {/*        type="line"*/}
-	            {/*        data={foxLineListingsData}*/}
-	            {/*        height={150}*/}
-	            {/*        options={{*/}
-	            {/*            responsive: true,*/}
-	            {/*            maintainAspectRatio: true,*/}
-	            {/*            plugins: {*/}
-	            {/*                legend: {*/}
-	            {/*                    display: false,*/}
-	            {/*                },*/}
-	            {/*                title: {*/}
-	            {/*                    display: true,*/}
-	            {/*                    text: 'Total Token Listings',*/}
-	            {/*                },*/}
-	            {/*            },*/}
-	            {/*            scales: {*/}
-	            {/*                x: {*/}
-	            {/*                    ticks: {*/}
-	            {/*                        autoSkip: true,*/}
-	            {/*                        maxTicksLimit: 8,*/}
-	            {/*                    },*/}
-	            {/*                },*/}
-	            {/*                y: {*/}
-	            {/*                    suggestedMin: 0,*/}
-	            {/*                },*/}
-	            {/*            },*/}
-	            {/*        }}*/}
-	            {/*    />*/}
-	            {/*</div>*/}
-
 
 	        </div>
         </>

@@ -4,6 +4,8 @@ import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
 import moment from "moment";
+import { Link, useLocation } from "react-router-dom";
+import {IonCard} from "@ionic/react";
 
 const SearchedWords = () => {
 
@@ -63,11 +65,13 @@ const SearchedWords = () => {
             <ul style={{listStyle: 'disc'}}>
               {
                 searchWordsQuery?.data?.data?.map((word:any) => (
-                  <li key={word.createdAt}>
-                      {word.searchterm.length > 20 ?
-                          word.searchterm.substring(0,20) + "..." :
-                          word.searchterm}
-                      &nbsp; ({moment(word.createdAt).fromNow()})
+                  <li key={word.createdAt} className="ml-3">
+                      <Link to={'search/' + word.searchterm} className="underline">
+                          {word.searchterm.length > 20 ?
+                              word.searchterm.substring(0,20) + "..." :
+                              word.searchterm}
+                          {/*&nbsp; ({moment(word.createdAt).fromNow()})*/}
+                      </Link>
                   </li>
                   ))
                 }
