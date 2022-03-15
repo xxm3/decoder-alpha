@@ -9,71 +9,14 @@ const Home : React.FC<AppComponentProps> = ({ contentRef }) => {
     /**
      * States & Variables
      */
+
     /**
      * Use Effects
      */
 
-    // useEffect(() => {
-    //     fetchHomePageData();
-    // }, []);
-
     /**
      * Functions
      */
-    // gets the user's nft's from their wallet
-    // from https://github.com/NftEyez/sol-rayz
-    // const getNfts = async (passedWalletAddress: string) => {
-    //     const publicAddress = passedWalletAddress;
-    //     const rawNftArray = await getParsedNftAccountsByOwner({
-    //         publicAddress,
-    //     });
-    //     // console.log("raw user nfts: ", rawNftArray);
-    //     let modifiedUserNfts: any = [];
-    //     for (let i in rawNftArray) {
-    //         const uri = rawNftArray[i].data.uri;
-    //         if (uri.indexOf("arweave") !== -1) {
-    //             let moreData: any = {};
-    //             await axios.get(uri).then((res) => {
-    //                 // push unique collections only
-    //                 // @ts-ignore
-    //                 if (!modifiedUserNfts.map(item => item.name).includes(res.data.collection.name)) {
-    //                     modifiedUserNfts.push({
-    //                         img: res.data.image,
-    //                         name: res.data.collection.name
-    //                     });
-    //                 }
-    //             }).catch((err) => {
-    //                 console.error("error when getting arweave data: " + err);
-    //             });
-    //         }
-    //         // console.log("modified user nfts: ", modifiedUserNfts);
-    //         // @ts-ignore
-    //         setUserNfts(modifiedUserNfts);
-    //     }
-    // }
-
-    // get data for home page
-    // const fetchHomePageData = () => {
-    //     setIsLoading(true);
-    //     instance
-    //         .get(environment.backendApi + '/homeData')
-    //         .then((res) => {
-    //             setHomePageData(res.data.data.possibleMintLinks);
-    //             setNewCollection(res.data.data.new_collections);
-    //             setPopularCollection(res.data.data.popular_collections);
-    //             // console.log("res1----------------", homePageData);
-    //
-    //             setIsLoading(false);
-    //         })
-    //         .catch((err) => {
-    //             setIsLoading(false);
-    //             console.error("error when getting home page data: " + err);
-    //         });
-    // };
-
-    const getDateAgo = function (time: any){
-        return moment(time).fromNow();
-    }
 
     /**
      * Renders
