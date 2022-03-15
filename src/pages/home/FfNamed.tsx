@@ -7,14 +7,14 @@ import moment from "moment";
 import {Link, useLocation} from "react-router-dom";
 import {IonCard} from "@ionic/react";
 
-const SearchedWords = () => {
+const FfNamed = () => {
 
     /**
      * Functions
      */
-    const getSearchedWords = async () => {
+    const getFfNamed = async () => {
         try {
-            const {data} = await instance.get(environment.backendApi + '/getSearchedWords', {
+            const {data} = await instance.get(environment.backendApi + '/getFfNames', {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -23,7 +23,7 @@ const SearchedWords = () => {
             return data;
         } catch (e) {
 
-            console.error('try/catch in Search.tsx: ', e);
+            console.error('try/catch in FfNamed.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
 
             if (error && error.response) {
@@ -34,7 +34,7 @@ const SearchedWords = () => {
         }
     }
 
-    const searchWordsQuery = useQuery(['searchWords'], getSearchedWords, {
+    const ffNamedQuery = useQuery(['ffNamed'], getFfNamed, {
         select: (data: any) => {
 
             // Error handling
@@ -52,26 +52,27 @@ const SearchedWords = () => {
      * Use Effects
      */
 
+    /**
+     *
+     */
     return (
         <div className='bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4'>
-            {searchWordsQuery?.isFetching ?
+            {ffNamedQuery?.isFetching ?
                 <div className="flex justify-center items-center">
                     <Loader/>
                 </div>
                 :
                 <>
-                    <div className={`font-bold pb-1`}>Recent Community Searches</div>
+                    <div className={`font-bold pb-1`}>New Fox WL Token Market Names</div>
                     <div>
                         <ul style={{listStyle: 'disc'}}>
                             {
-                                searchWordsQuery?.data?.data?.map((word: any) => (
-                                    <li key={word.createdAt} className="ml-3">
-                                        <Link to={'search/' + word.searchterm} className="underline">
-                                            {word?.searchterm?.length > 20 ?
-                                                word.searchterm.substring(0, 20) + "..." :
-                                                word.searchterm}
-                                            {/*&nbsp; ({moment(word.createdAt).fromNow()})*/}
-                                        </Link>
+                                ffNamedQuery?.data?.data?.map((obj: any) => (
+                                    <li key={obj.createdAt} className="ml-3">
+                                        {/*<Link to={'search/' + obj.msg} className="underline">*/}
+                                            {obj.msg}
+                                            &nbsp; ({moment(obj.createdAt).fromNow()})
+                                        {/*</Link>*/}
                                     </li>
                                 ))
                             }
@@ -82,4 +83,4 @@ const SearchedWords = () => {
     )
 }
 
-export default SearchedWords
+export default FfNamed;

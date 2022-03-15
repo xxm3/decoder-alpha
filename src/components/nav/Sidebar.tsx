@@ -30,7 +30,7 @@ function Sidebar() {
                   external={''}
               />
               <NavLink
-                  title="WL Token Market"
+                  title="Fox WL Token Market"
                   icon="/assets/icons/FoxTokenLogo.svg"
                   to="/foxtoken"
                   isIconSvg={true}
