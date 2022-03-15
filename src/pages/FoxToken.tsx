@@ -26,6 +26,7 @@ import Style from '../components/Style';
 import { AppComponentProps } from '../components/Route';
 import FoxTokenCharts from '../components/FoxTokenCharts';
 import { FoxTokenData } from '../types/FoxTokenTypes';
+import moment from 'moment';
 
 const columns: Column<FoxTokenData>[] = [
     {
@@ -64,6 +65,11 @@ const columns: Column<FoxTokenData>[] = [
         title: 'Listings',
         customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
         render: (record) => <span>{record.totalTokenListings}</span>,
+    },
+    {
+        title: 'Last Sale',
+        customSort: (a, b) => new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
+        render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : null}</span>,
     },
     {
         title: '# Owned & Wallet',
@@ -472,7 +478,6 @@ function FoxToken({ contentRef }: FoxToken) {
                         }
                     }
                 }
-
                 if (newTableData.length === 0) {
                     present({
                         message: 'None of your tokens are also listed on FF Token Market :(',
@@ -482,7 +487,16 @@ function FoxToken({ contentRef }: FoxToken) {
                     return;
                 }
 
-                setTableData(newTableData);
+                instance
+                    .post(`${environment.backendApi}/receiver/foxTokenLatestListing`, { tokens: newTableData.map((x: any) => x.token) })
+                    .then((res) => {
+                        const sales = res.data.data.sales;
+                        sales.forEach((sale: {token: string, lastSaleDate: string}) => {
+                            const row = newTableData.find((d: any) => d.token === sale.token);
+                            row.lastSaleDate = sale.lastSaleDate;
+                        });
+                    }).finally(() => setTableData(newTableData));
+
             }
 
             // user wants to see ALL tokens

@@ -110,7 +110,6 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
     // viewing the chart for a token
     const viewChart = () => { // token: string, name: string
-
         // reset the chart
         setFoxLineData(defaultGraph);
 
@@ -210,7 +209,15 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
                 });
             });
-    }
+
+            instance
+                .post(`${environment.backendApi}/receiver/foxTokenLatestListing`, { tokens: [token] })
+                .then((res) => {
+                    // TODO: Update table data with the last listing date
+                    // sales = res.data.data.sales
+                    console.log(res);
+                });
+        }
 
     return (
         <>
