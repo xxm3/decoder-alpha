@@ -63,37 +63,38 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
     const cookies = useMemo(() => new Cookies(), []);
 
+    const lineColorSelected = "#14F195";
+    const shadedAreaColorSelected = "rgba(26, 255, 163, 0.1)";
 
     // user clicked change colour
-    const [lineColorSelected, setLineColorSelected] = useState<string>(
-        cookies.get('lineColorSelected2') ?
-            cookies.get('lineColorSelected2') : "#14F195"); // #195e83
-    const [shadedAreaColorSelected, setShadedAreaColorSelected] = useState<string>(
-        cookies.get('shadedAreaColorSelected2') ?
-            cookies.get('shadedAreaColorSelected2') : "rgba(26, 255, 163, 0.1)") // #01FF6F
-    // when above clicked, will redraw the chart
-    useEffect(() => {
-        if (firstUpdate.current) {
-            firstUpdate.current = false;
-            return;
-        }
-
-        // TODO-parth: renable these, after you can get the code to NOT call this on page load
-        // cookies.set('lineColorSelected2', lineColorSelected);
-        // cookies.set('shadedAreaColorSelected2', shadedAreaColorSelected);
-
-        // redraw the chart
-        // viewChart();
-
-
-        // present({
-        //     message: 'After setting a valid color, load a new chart to see it',
-        //     color: 'success',
-        //     duration: 5000
-        // });
-
-    }, [lineColorSelected, shadedAreaColorSelected]);
-
+    // const [lineColorSelected, setLineColorSelected] = useState<string>(
+    //     cookies.get('lineColorSelected2') ?
+    //         cookies.get('lineColorSelected2') : "#14F195"); // #195e83
+    // const [shadedAreaColorSelected, setShadedAreaColorSelected] = useState<string>(
+    //     cookies.get('shadedAreaColorSelected2') ?
+    //         cookies.get('shadedAreaColorSelected2') : "rgba(26, 255, 163, 0.1)") // #01FF6F
+    // // when above clicked, will redraw the chart
+    // useEffect(() => {
+    //     if (firstUpdate.current) {
+    //         firstUpdate.current = false;
+    //         return;
+    //     }
+    //
+    //     // (IF doing this) re-enable these, after you can get the code to NOT call this on page load
+    //     // cookies.set('lineColorSelected2', lineColorSelected);
+    //     // cookies.set('shadedAreaColorSelected2', shadedAreaColorSelected);
+    //
+    //     // redraw the chart
+    //     // viewChart();
+    //
+    //     // (IF doing this) I used to have the below code in a use effect (in the “customize” button on fox table) in “}, [lineColorSelected, shadedAreaColorSelected]);” — well I still do but you removed it for whatever reason. We need a better ui/ux  (or need below to work) — to tell a user what to do after they are changing the color in the chart
+    //     // present({
+    //     //     message: 'After setting a valid color, load a new chart to see it',
+    //     //     color: 'success',
+    //     //     duration: 5000
+    //     // });
+    //
+    // }, [lineColorSelected, shadedAreaColorSelected]);
 
     // user clicked the radio for the dates in the chart
     const [chartDateSelected, setChartDateSelected] = useState<string>(cookies.get('chartDateFormat') ? cookies.get('chartDateFormat') : 'fromNow');
@@ -119,6 +120,8 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
         // @ts-ignore
         setTokenClickedOn(name ? `${name} (${token})` : token);
+
+        // console.log(token);
 
         // get the price/listings history for a SINGLE token
         instance
@@ -214,6 +217,16 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                 });
             });
     }
+
+    // need to call it duh...
+    useEffect(() => {
+        if (firstUpdate.current) {
+            firstUpdate.current = false;
+            return;
+        }
+
+        viewChart();
+    }, []);
 
     return (
         <>
