@@ -81,22 +81,25 @@ const Home : React.FC<AppComponentProps> = ({ contentRef }) => {
 
     return (
         <>
-            <div className="m-3 relative bg-primary p-4 rounded-xl">
-                <p className="text-medium text-white font-medium">
-                    <b>
-                        Welcome to the new SOL Decoder! New info. will be displayed on the home page here in the coming week(s), such as:
-                        <br/>- New mints coming out in the next few hours
-                        <br/>- New WL Tokens that were added today (both officially by Fox Token, and by users)
-                        <br/>- The latest 3 Mint alerts, and top Mint alerts we gave this week, and this month
-                        <br/>- New & Trending words people put into Discord (ie. new & trending NFTs)
-                        <br/>- Things other people searched on
-                        <br/>- plus other things as we develop them!
-                    </b>
-                </p>
-                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                    :)
-                </span>
-            </div>
+
+            {/*<div className="m-3 relative bg-primary p-4 rounded-xl">*/}
+            {/*    <p className="text-medium text-white font-medium">*/}
+            {/*        <b>*/}
+            {/*            Welcome to the new SOL Decoder! New info. will be displayed on the home page here in the coming week(s), such as:*/}
+            {/*            <br/>- New mints coming out in the next few hours*/}
+            {/*            <br/>- New WL Tokens that were added today (both officially by Fox Token, and by users)*/}
+            {/*            <br/>- The latest 3 Mint alerts, and top Mint alerts we gave this week, and this month*/}
+            {/*            <br/>- New & Trending words people put into Discord (ie. new & trending NFTs)*/}
+            {/*            <br/>- plus other things as we develop them!*/}
+            {/*        </b>*/}
+            {/*    </p>*/}
+            {/*    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">*/}
+            {/*        :)*/}
+            {/*    </span>*/}
+            {/*</div>*/}
+
+
+            {/* Recent Community Searches */}
             <SearchedWords />
 
 
@@ -112,136 +115,6 @@ const Home : React.FC<AppComponentProps> = ({ contentRef }) => {
             {/*    </span>*/}
             {/*</div>*/}
 
-
-
-
-            {/* Possible Mints ... */}
-
-            {/*{false && (*/}
-            {/*    <>*/}
-            {/*        <IonCard>*/}
-            {/*            <IonLabel className="text-4xl text-blue-600">*/}
-            {/*                Possible Mints*/}
-            {/*            </IonLabel>*/}
-
-            {/*            {isLoading && (*/}
-            {/*                <div className="pt-10 flex justify-center items-center">*/}
-            {/*                    <Loader />*/}
-            {/*                </div>*/}
-            {/*            )}*/}
-            {/*            <div hidden={isLoading}>*/}
-            {/*                {homePageData.map((product: any, index: any) => (*/}
-            {/*                    <>*/}
-            {/*                        <Card*/}
-            {/*                            key={index}*/}
-            {/*                            url={product.url}*/}
-            {/*                            readableTimestamp={getDateAgo(*/}
-            {/*                                product.timestamp*/}
-            {/*                            )}*/}
-            {/*                            source={product.source}*/}
-            {/*                        />*/}
-            {/*                    </>*/}
-            {/*                ))}*/}
-            {/*            </div>*/}
-            {/*        </IonCard>*/}
-            {/*        <div>*/}
-            {/*            <IonRow>*/}
-            {/*                <IonLabel className="text-4xl text-blue-600">*/}
-            {/*                    New Collection*/}
-            {/*                </IonLabel>*/}
-            {/*            </IonRow>*/}
-
-            {/*            /!* loading bar *!/*/}
-            {/*            {isLoading && (*/}
-            {/*                <div className="pt-10 flex justify-center items-center">*/}
-            {/*                    <Loader />*/}
-            {/*                </div>*/}
-            {/*            )}*/}
-            {/*            <div hidden={!isLoading}>*/}
-            {/*                <IonRow className="bg-lime-700">*/}
-            {/*                    {newCollections.map(*/}
-            {/*                        (collection: any, index: any) => (*/}
-            {/*                            <IonCol>*/}
-            {/*                                <CollectionCard*/}
-            {/*                                    key={index}*/}
-            {/*                                    name={collection.name}*/}
-            {/*                                    description={*/}
-            {/*                                        collection.description*/}
-            {/*                                    }*/}
-            {/*                                    image={collection.image}*/}
-            {/*                                    website={collection.website}*/}
-            {/*                                    twitter={collection.twitter}*/}
-            {/*                                    discord={collection.discord}*/}
-            {/*                                    categories={*/}
-            {/*                                        collection.categories*/}
-            {/*                                    }*/}
-            {/*                                    splitName={collection.splitName}*/}
-            {/*                                    link={collection.link}*/}
-            {/*                                    timestamp={collection.timestamp}*/}
-            {/*                                    readableTimestamp={*/}
-            {/*                                        collection.readableTimestamp*/}
-            {/*                                    }*/}
-            {/*                                />*/}
-            {/*                            </IonCol>*/}
-            {/*                        )*/}
-            {/*                    )}*/}
-            {/*                </IonRow>*/}
-
-            {/*                <IonRow>*/}
-            {/*                    <IonLabel className="text-4xl text-blue-600">*/}
-            {/*                        Popular Collection*/}
-            {/*                    </IonLabel>*/}
-            {/*                </IonRow>*/}
-
-            {/*                <IonRow>*/}
-            {/*                    {popularCollections.map(*/}
-            {/*                        (collection: any, index) => (*/}
-            {/*                            <IonCol>*/}
-            {/*                                <CollectionCard*/}
-            {/*                                    key={index}*/}
-            {/*                                    name={collection.name}*/}
-            {/*                                    description={*/}
-            {/*                                        collection.description*/}
-            {/*                                    }*/}
-            {/*                                    image={collection.image}*/}
-            {/*                                    website={collection.website}*/}
-            {/*                                    twitter={collection.twitter}*/}
-            {/*                                    discord={collection.discord}*/}
-            {/*                                    categories={*/}
-            {/*                                        collection.categories*/}
-            {/*                                    }*/}
-            {/*                                    splitName={collection.splitName}*/}
-            {/*                                    link={collection.link}*/}
-            {/*                                    timestamp={collection.timestamp}*/}
-            {/*                                    readableTimestamp={*/}
-            {/*                                        collection.readableTimestamp*/}
-            {/*                                    }*/}
-            {/*                                />*/}
-            {/*                            </IonCol>*/}
-            {/*                        )*/}
-            {/*                    )}*/}
-            {/*                </IonRow>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </>*/}
-            {/*)}*/}
-
-
-            {/* user's NFTs */}
-            {/*<h3>User NFTs:</h3>*/}
-            {/*<IonCard>*/}
-            {/*    <IonContent>*/}
-            {/*        <IonRow className="bg-lime-700" hidden={userNfts.length === 0}>*/}
-            {/*            {userNfts.map((collection: any, index: any) => (*/}
-            {/*                <IonCol>*/}
-            {/*                    {collection.name}*/}
-            {/*                    <br/>*/}
-            {/*                    <img style={{height: "100px"}} src={collection.img} alt="" />*/}
-            {/*                </IonCol>*/}
-            {/*            ))}*/}
-            {/*        </IonRow>*/}
-            {/*    </IonContent>*/}
-            {/*</IonCard>*/}
 
         </>
     );

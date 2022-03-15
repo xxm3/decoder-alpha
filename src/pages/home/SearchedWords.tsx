@@ -67,7 +67,7 @@ const SearchedWords = () => {
                 searchWordsQuery?.data?.data?.map((word:any) => (
                   <li key={word.createdAt} className="ml-3">
                       <Link to={'search/' + word.searchterm} className="underline">
-                          {word.searchterm.length > 20 ?
+                          {word?.searchterm?.length > 20 ?
                               word.searchterm.substring(0,20) + "..." :
                               word.searchterm}
                           {/*&nbsp; ({moment(word.createdAt).fromNow()})*/}

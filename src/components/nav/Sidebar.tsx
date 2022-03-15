@@ -17,37 +17,42 @@ function Sidebar() {
               lines="none"
               className={`px-2 h-full border-r md:max-w-max lg:max-w-none`}
           >
-              <NavLink title="Home" icon={homeOutline} to="/" external={false} />
+              <NavLink
+                  title="Home"
+                  icon={homeOutline}
+                  to="/"
+                  external={''}
+              />
               <NavLink
                   title="Today's Mints"
                   icon={calendarClearOutline}
                   to="/schedule"
-                  external={false}
+                  external={''}
               />
               <NavLink
                   title="WL Token Market"
                   icon="/assets/icons/FoxTokenLogo.svg"
                   to="/foxtoken"
                   isIconSvg={true}
-                  external={false}
+                  external={''}
               />
               <NavLink
                   title="Mint Stats"
                   icon={statsChart}
                   to="/mintstats"
-                  external={false}
+                  external={''}
               />
               <NavLink
                   title="Stacked Line Search"
                   icon={search}
                   to="/stackedsearch"
-                  external={false}
+                  external={''}
               />
               <NavLink
                   title="Docs"
                   icon={book}
-                  to="https://docs.soldecoder.app/books/site-and-discord-overview/page/sol-decoder-overview"
-                  external={true}
+                  to="#"
+                  external={'https://docs.soldecoder.app/books/site-and-discord-overview/page/sol-decoder-overview'}
               />
 
           </IonList>

@@ -22,38 +22,6 @@ const Home = () => {
     const [popularCollections, setPopularCollection] = useState([]); // from ME
     const [isLoading, setIsLoading] = useState(false);
 
-    // gets the user's nft's from their wallet
-    // from https://github.com/NftEyez/sol-rayz
-    // const getNfts = async (passedWalletAddress: string) => {
-    //     const publicAddress = passedWalletAddress;
-    //     const rawNftArray = await getParsedNftAccountsByOwner({
-    //         publicAddress,
-    //     });
-    //     // console.log("raw user nfts: ", rawNftArray);
-    //     let modifiedUserNfts: any = [];
-    //     for (let i in rawNftArray) {
-    //         const uri = rawNftArray[i].data.uri;
-    //         if (uri.indexOf("arweave") !== -1) {
-    //             let moreData: any = {};
-    //             await axios.get(uri).then((res) => {
-    //                 // push unique collections only
-    //                 // @ts-ignore
-    //                 if (!modifiedUserNfts.map(item => item.name).includes(res.data.collection.name)) {
-    //                     modifiedUserNfts.push({
-    //                         img: res.data.image,
-    //                         name: res.data.collection.name
-    //                     });
-    //                 }
-    //             }).catch((err) => {
-    //                 console.error("error when getting arweave data: " + err);
-    //             });
-    //         }
-    //         // console.log("modified user nfts: ", modifiedUserNfts);
-    //         // @ts-ignore
-    //         setUserNfts(modifiedUserNfts);
-    //     }
-    // }
-
     // get data for home page
     const fetchHomePageData = () => {
         setIsLoading(true);

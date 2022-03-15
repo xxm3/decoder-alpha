@@ -1,13 +1,16 @@
 import { ChartData } from 'chart.js';
 import moment from 'moment';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Chart } from 'react-chartjs-2';
 import { instance } from '../axios';
 import { environment } from '../environments/environment';
 import { FoxTokenData } from '../types/FoxTokenTypes';
 import Style from './Style';
 import Cookies from "universal-cookie";
 import {useIonToast} from "@ionic/react";
+
+import { Chart } from 'react-chartjs-2';
+// import { Chart, Interaction } from 'chart.js';
+// import {CrosshairPlugin,Interpolate} from 'chartjs-plugin-crosshair';
 
 function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTokenData) {
 
