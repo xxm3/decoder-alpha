@@ -26,6 +26,7 @@ import Style from '../components/Style';
 import {AppComponentProps} from '../components/Route';
 import FoxTokenCharts from '../components/FoxTokenCharts';
 import {FoxTokenData} from '../types/FoxTokenTypes';
+import {useHistory} from "react-router";
 
 const columns: Column<FoxTokenData>[] = [
     {
@@ -79,6 +80,7 @@ interface FoxToken {
 function FoxToken({contentRef}: FoxToken) {
 
     const [present, dismiss] = useIonToast();
+    const history = useHistory();
 
     /**
      * Adding multiple wallets
@@ -430,7 +432,7 @@ function FoxToken({contentRef}: FoxToken) {
 
             if (!multWalletAryFromCookie && !walletAddress) {
                 present({
-                    message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add one (or three!) manually',
+                    message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add one (or three!) manually. Then you can filter this table to only the tokens in your wallet.',
                     color: 'danger',
                     duration: 5000
                 });
@@ -442,7 +444,7 @@ function FoxToken({contentRef}: FoxToken) {
 
                 // show toast
                 present({
-                    message: 'No tokens found on your wallet(s) :(',
+                    message: 'No tokens found on your wallet(s) :( Tokens must be in your wallet, and have an active listing on Fox Token Market',
                     color: 'danger',
                     duration: 5000
                 });
@@ -622,7 +624,7 @@ function FoxToken({contentRef}: FoxToken) {
 
                 <IonContent className="">
                     <div
-                        className="ml-3 mr-3 mb-5 relative mt-6 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
+                        className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                         <div className="font-medium">
                             <p>
                                 Use this if a token on the Fox WL Token Market doesn't have an
@@ -763,13 +765,12 @@ function FoxToken({contentRef}: FoxToken) {
                                         viewMyTokens(!viewMyTokensClicked),
                                     isFreeAction: true,
                                 },
-                                // TODO
-                                // {
-                                //     icon: () => <IonIcon icon={notifications}/>,
-                                //     tooltip: 'Alert on new Tokens to your Wallet',
-                                //     onClick: () => window.open('/alerts'), // TODO: history
-                                //     isFreeAction: true,
-                                // },
+                                {
+                                    icon: () => <IonIcon icon={notifications}/>,
+                                    tooltip: 'Alert on new Tokens to your Wallet',
+                                    onClick: () => history.push('/alerts'),
+                                    isFreeAction: true,
+                                },
                                 {
                                     icon: () => <IonIcon icon={albums}/>,
                                     tooltip: 'Track Multiple wallets',

@@ -160,6 +160,12 @@ When using react query stuff:
 When using the old way of instance.get:
 - see Schedule.tsx
 
+---
+
+If want to refresh a query when you go back to the window, or click back into the page:
+```
+ refetchOnWindowFocus: true,
+```
 
 
 #### Links to read

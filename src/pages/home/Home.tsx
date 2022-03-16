@@ -49,10 +49,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
             </div>
 
             {/*Recent FF Named Stuff*/}
-            {/*TODO: test then release*/}
-            <div hidden={window.location.hostname !== 'localhost'}>
-                <FfNamed/>
-            </div>
+            <FfNamed/>
 
             {/* if need to tell the user of errors */}
 

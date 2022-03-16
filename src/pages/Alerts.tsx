@@ -20,8 +20,9 @@ import {
 } from "@ionic/react";
 import {close} from "ionicons/icons";
 import {environment} from "../environments/environment";
+import {Link, useLocation} from "react-router-dom";
 
-function StackedSearch({ foo, onSubmit }: any) {
+function StackedSearch({foo, onSubmit}: any) {
 
     /**
      * States & Variables
@@ -120,95 +121,73 @@ function StackedSearch({ foo, onSubmit }: any) {
     return (
         <>
 
-            {/*
-                modal - set alerts on your tokens
-            */}
-            <IonModal
-                isOpen={alertNewTokensModalOpen}
-                onDidDismiss={() => clickedAlertNewTokens(false)}
-            >
-                <IonHeader>
-                    <IonToolbar>
-                        <IonTitle>
-                            Add Alerts for new Tokens
-                            <a
-                                className="float-right text-base underline cursor-pointer"
-                                onClick={() => clickedAlertNewTokens(false)}
-                            >
-                                <IonIcon icon={close} className="h-6 w-6"/>
-                            </a>
-                        </IonTitle>
-                    </IonToolbar>
-                </IonHeader>
+            <h3>Alerts on New WL Tokens to your Wallet</h3>
 
-                <IonContent className="">
-                    <div
-                        className="ml-3 mr-3 mb-2 relative mt-2 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
-                        <div className="font-medium">
-                            <p>
-                                This alerts you when any WL Token (that is also listed on Fox Token Market) gets added to your wallet. Add a single SOL wallet address below.
-                            </p>
-                        </div>
-                    </div>
+            <div
+                className="ml-3 mr-3 mb-2 relative mt-2 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
+                <div className="font-medium">
+                    <p>
+                        This alerts you when any WL Token (that is also listed on Fox Token Market) gets added to your
+                        wallet. Add a single SOL wallet address below.
+                    </p>
+                </div>
+            </div>
 
-                    {/*<div*/}
-                    {/*    hidden={!multWalletAryFromCookie}*/}
-                    {/*    className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl"*/}
-                    {/*>*/}
-                    {/*    <div className="font-medium">*/}
-                    {/*        <span className="font-bold">*/}
-                    {/*                Wallets Added:*/}
-                    {/*            </span>*/}
-                    {/*        <ul>*/}
-                    {/*            {multWalletAryFromCookie*/}
-                    {/*                ? multWalletAryFromCookie*/}
-                    {/*                    .split(',')*/}
-                    {/*                    .map(function (wallet: any) {*/}
-                    {/*                        return <li key={wallet}>- {wallet}</li>;*/}
-                    {/*                    })*/}
-                    {/*                : ''}*/}
-                    {/*        </ul>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
+            <div className="ml-3 mr-3">
+                <IonItem>
+                    <IonLabel position="stacked" className="font-bold">
+                        SOL Wallet Address
+                    </IonLabel>
+                    <IonInput
+                        onIonChange={(e) =>
+                            setFormAddAlertToken(e.detail.value!)
+                        }
+                        value={formAddAlertToken}
+                        placeholder="ex. 91q2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU"
+                    ></IonInput>
+                </IonItem>
 
-                    <div className="ml-3 mr-3">
-                        <IonItem>
-                            <IonLabel position="stacked" className="font-bold">
-                                SOL Wallet Address
-                            </IonLabel>
-                            <IonInput
-                                onIonChange={(e) =>
-                                    setFormAddAlertToken(e.detail.value!)
-                                }
-                                value={formAddAlertToken}
-                                placeholder="ex. 91q2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU"
-                            ></IonInput>
-                        </IonItem>
+                <IonButton
+                    color="success"
+                    className="mt-5"
+                    hidden={formLoadingAddAlertToken}
+                    onClick={() => addAlertsTokenSubmit(true)}
+                >
+                    Submit
+                </IonButton>
+                {/*<IonButton*/}
+                {/*    hidden={!multWalletAryFromCookie}*/}
+                {/*    color="danger"*/}
+                {/*    className="mt-5"*/}
+                {/*    onClick={() => resetMultWallets()}*/}
+                {/*>*/}
+                {/*    Reset Stored Wallets*/}
+                {/*</IonButton>*/}
 
-                        <IonButton
-                            color="success"
-                            className="mt-5"
-                            hidden={formLoadingAddAlertToken}
-                            onClick={() => addAlertsTokenSubmit(true)}
-                        >
-                            Submit
-                        </IonButton>
-                        {/*<IonButton*/}
-                        {/*    hidden={!multWalletAryFromCookie}*/}
-                        {/*    color="danger"*/}
-                        {/*    className="mt-5"*/}
-                        {/*    onClick={() => resetMultWallets()}*/}
-                        {/*>*/}
-                        {/*    Reset Stored Wallets*/}
-                        {/*</IonButton>*/}
+                <div hidden={!formLoadingAddAlertToken}>Loading...</div>
+            </div>
 
-                        <div hidden={!formLoadingAddAlertToken}>Loading...</div>
-                    </div>
-                </IonContent>
-            </IonModal>
+            <hr className="m-5" />
+
+            <h3 className="font-medium mb-3">Discord Managed Alerts</h3>
+
+            <h4 className="font-medium">New Fox WL Token Market Names</h4>
+            The <a href="https://discord.com/channels/925207817923743794/951513272132182066" target="_blank" className="underline">#analytics-etc</a> channel in Discord
+            and the home page of the site shows when WL tokens get official names by the Famous Fox team,
+            or when a user of SOL Decoder adds a custom name to one.
+            <br/>
+            Visit <a href="https://discord.com/channels/925207817923743794/938996145529712651 target=_blank" className="underline">#self-roles</a> in Discord and get the <b>@fox-wl-alerts</b> role to get alerts when this happens
+
+            <br/><br/>
+            <h4 className="font-medium">Mint Alerts (parsed from Discord)</h4>
+            The <a href="https://discord.com/channels/925207817923743794/925215482561302529" target="_blank" className="underline">#mint-alerts-automated</a> channel in Discord
+            and the <Link to={'mintstats'} className="underline">Mint Stats</Link> page of the site is a live feed that parses links from the discords we watch. It alerts when any link could contain a new mint, before or while it is released. The mint must be linked from two discords before it shows up. On Discord, Candy Machine ID and mint details are also posted, if found.
+            <br/>
+            Visit <a href="https://discord.com/channels/925207817923743794/938996145529712651 target=_blank" className="underline">#self-roles</a> in Discord and get the <b>@Minter</b> role to get alerts when this happens
 
         </>
     );
 }
+
 export default StackedSearch;
 

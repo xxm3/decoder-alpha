@@ -64,6 +64,7 @@ const FfNamed = () => {
                 ...data,
             }
         },
+        refetchOnWindowFocus: true,
         retry: false
     })
 
@@ -84,12 +85,12 @@ const FfNamed = () => {
                 <>
                     <div className={`font-bold pb-1`}>
                         New Fox WL Token Market Names
-                        <Tooltip trigger="mouseenter" position="bottom"
-                                 html={<IonItem lines="none" className='max-w-[320px] rounded help-tooltip whitespace-pre-line'>
-Alerts currently done through Discord. Visit #self-roles and get the @fox-wl-alerts role. This gives pings when WL tokens get official names by the Famous Fox team, or when a user of SOL Decoder adds a custom name to one.<br/><br/>These are otherwise sent to the #analytics-etc channel in Discord
-                                 </IonItem>}>
-                                <IonIcon className="rounded-full help-tooltip p-1 text-lg" icon={notifications} />
-                        </Tooltip>
+{/*                        <Tooltip trigger="mouseenter" position="bottom"*/}
+{/*                                 html={<IonItem lines="none" className='max-w-[320px] rounded help-tooltip whitespace-pre-line'>*/}
+{/*Alerts currently done through Discord. Visit #self-roles and get the @fox-wl-alerts role. This gives pings when WL tokens get official names by the Famous Fox team, or when a user of SOL Decoder adds a custom name to one.<br/><br/>These are otherwise sent to the #analytics-etc channel in Discord*/}
+{/*                                 </IonItem>}>*/}
+{/*                                <IonIcon className="rounded-full help-tooltip p-1 text-lg" icon={notifications} />*/}
+{/*                        </Tooltip>*/}
 
                     </div>
                     <div>
@@ -99,7 +100,7 @@ Alerts currently done through Discord. Visit #self-roles and get the @fox-wl-ale
                                     <li key={obj.createdAt} className="ml-3">
                                         {/*<Link to={'search/' + obj.msg} className="underline">*/}
                                             {obj.msg.replaceAll("**", "")}
-                                            &nbsp; ({moment(obj.createdAt).fromNow()})
+                                            &nbsp;({moment(obj.createdAt).fromNow()})
                                         {/*</Link>*/}
                                     </li>
                                 ))

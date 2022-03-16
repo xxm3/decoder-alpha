@@ -215,6 +215,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 								title={"Mint Alerts Automated - Stats"}
 								description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
 								actions={[
+                                    // TODO: need alert icon...
 									{
 										icon : hideComments ? () => <IonIcon icon={eye}/> :  () => <IonIcon icon={eyeOff}/>,
 										tooltip : hideComments ? "Show Comments" : "Hide comments",

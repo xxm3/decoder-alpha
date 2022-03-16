@@ -48,13 +48,12 @@ function Sidebar() {
                     to="/stackedsearch"
                     external={''}
                 />
-                {/*TODO*/}
-                {/*<NavLink*/}
-                {/*    title="Alerts"*/}
-                {/*    icon={notifications}*/}
-                {/*    to="/alerts"*/}
-                {/*    external={''}*/}
-                {/*/>*/}
+                <NavLink
+                    title="Alerts"
+                    icon={notifications}
+                    to="/alerts"
+                    external={''}
+                />
                 <NavLink
                     title="Docs"
                     icon={book}
