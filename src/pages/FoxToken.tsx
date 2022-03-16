@@ -488,7 +488,7 @@ function FoxToken({ contentRef }: FoxToken) {
                 }
 
                 instance
-                    .post(`${environment.backendApi}/receiver/foxTokenLatestListing`, { tokens: newTableData.map((x: any) => x.token) })
+                    .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
                     .then((res) => {
                         const sales = res.data.data.sales;
                         sales.forEach((sale: {token: string, lastSaleDate: string}) => {

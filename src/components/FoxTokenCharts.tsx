@@ -211,7 +211,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
             });
 
             instance
-                .post(`${environment.backendApi}/receiver/foxTokenLatestListing`, { tokens: [token] })
+                .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: [token] })
                 .then((res) => {
                     // TODO: Update table data with the last listing date
                     // sales = res.data.data.sales

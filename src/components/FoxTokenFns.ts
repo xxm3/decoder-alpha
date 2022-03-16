@@ -11,8 +11,6 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
     let rawTokenData: any;
     let verifiedTokenData: any;
     let prettyData: any = {};
-    let customNamesAry: any;
-    let oldNamedAry: any;
 
     // get the data
     const headers = {
@@ -27,14 +25,6 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
     // get whitelisted named data from FF
     await axios.get('https://dens.famousfoxes.com/whitelist.json', {headers: headers}).then((data) => {
         verifiedTokenData = data.data;
-    });
-    // get custom names we added to our site, from ourselves
-    await instance.get(environment.backendApi + '/receiver/foxTokenCustomNames', {headers: headers}).then((data) => {
-        customNamesAry = data.data;
-    });
-    // get names that could be old as well (ie. token from a month ago that isn't traded, but we could still look up data on)
-    await instance.get(environment.backendApi + '/receiver/foxTokenOldNamed', {headers: headers}).then((data) => {
-        oldNamedAry = data.data;
     });
 
     const addressToSkip = ['4NUoCXBsCVUXPyQL3UmMU3dRUZ3WNQgY1USC7eAY8zSG', '14AnHZYk1CvtTCq5jvYMX7Fx7pnWDmgQJvADxP9Q4jYN', 'GzpRsvnKXKz586kRLkjdppR4dUCFwHa2qaszKkPUQx6g',
@@ -121,23 +111,6 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
             }
         }
 
-        // else loop through our CUSTOM names array
-        for(let c in customNamesAry){
-            if(customNamesAry[c].token === key){
-
-                // only do things if doesn't have official name
-                if(!prettyDataMorePopulated[key].name) {
-                    // prettyDataMorePopulated[key].name = customNamesAry[c].customName;
-                    if (!prettyDataMorePopulated[key].customName) {
-                        prettyDataMorePopulated[key].customName = customNamesAry[c].customName;
-                    } else {
-                        prettyDataMorePopulated[key].customName += ", " + customNamesAry[c].customNam;
-                    }
-
-                    break;
-                }
-            }
-        }
     }
 
     // hnghhhh loop yet again to see anything with custom names and add emoji
@@ -190,41 +163,6 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
         }
     }
 
-    // get names that could be old as well (ie. token from a month ago that isn't traded, but we could still look up data on)
-    for (let o in oldNamedAry) {
-        let tokenFoundInData = false;
-
-        // console.log(oldNamedAry[o]);
-
-        for(let f in finalAry){
-            if(oldNamedAry[o].token === finalAry[f].token){
-
-                // NOTE: if they remove the name of a token (as they did with blue terra), but keep the token, it'll show up blank name...
-                // if(oldNamedAry[o].token === 'AyDDpSg7Q6icGx7RAntSDAuwxdMkEsRWkL4QkeqoQF1H'){
-                //     console.log(oldNamedAry[o]);
-                //     console.log(finalAry[f]);
-                // }
-
-                tokenFoundInData = true;
-                break;
-            }
-        }
-
-        if(!tokenFoundInData){
-            // if(oldNamedAry[o].token === 'AyDDpSg7Q6icGx7RAntSDAuwxdMkEsRWkL4QkeqoQF1H'){ console.log(oldNamedAry[o].name); }
-
-            oldNamedAry[o].name = oldNamedAry[o].name + " (not listed in FF anymore)";
-            oldNamedAry[o].floorPrice = "";
-            // oldNamedAry[o].totalTokenListings = "";
-            finalAry.push(oldNamedAry[o]);
-        }
-    }
-
-    // for(let i in finalAry){
-    //     if(finalAry[i].token === 'AyDDpSg7Q6icGx7RAntSDAuwxdMkEsRWkL4QkeqoQF1H'){
-    //         console.log(finalAry[i]);
-    //     }
-    // }
 
     return finalAry;
 }
