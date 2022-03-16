@@ -106,6 +106,7 @@ To do dropdowns:
 
 To do tooltips:
 - MessageListItem.tsx with its <ReactTooltip /> and data-tip
+- ... or nevermind do <Tooltip
 
 To do alert popups:
 - See useConnectWallet.ts and how it uses `useIonAlert()`
@@ -168,3 +169,11 @@ To hide somehting on mobile: give below class
 ```
 hidden sm:block
 ```
+Another example:
+```
+<span className="hidden xl:block">{record.token}</span>
+<span className="xl:hidden">
+{shortenedWallet(record.token)}
+</span>
+```
+

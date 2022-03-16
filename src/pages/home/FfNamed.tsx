@@ -5,7 +5,9 @@ import {environment} from '../../environments/environment';
 import Loader from '../../components/Loader';
 import moment from "moment";
 import {Link, useLocation} from "react-router-dom";
-import {IonCard} from "@ionic/react";
+import {IonButton, IonCard, IonIcon, IonItem} from "@ionic/react";
+import {alertOutline, helpOutline, notificationsOutline, wallet} from "ionicons/icons";
+import {Tooltip} from "react-tippy";
 
 const FfNamed = () => {
 
@@ -63,7 +65,19 @@ const FfNamed = () => {
                 </div>
                 :
                 <>
-                    <div className={`font-bold pb-1`}>New Fox WL Token Market Names</div>
+                    <div className={`font-bold pb-1`}>
+                        New Fox WL Token Market Names
+                        {/*<IonButton className="mb-4 p-1">*/}
+                        {/*    <IonIcon icon={notificationsOutline}  />*/}
+                        {/*</IonButton>*/}
+                        <Tooltip trigger="mouseenter" position="bottom"
+                                 html={<IonItem lines="none" className='max-w-[320px] rounded help-tooltip whitespace-pre-line'>
+Alerts currently done through Discord. Visit #self-roles and get the @fox-wl-alerts role. This gives pings when WL tokens get official names by the Famous Fox team, or when a user of SOL Decoder adds a custom name to one.<br/><br/>These are otherwise sent to the #analytics-etc channel
+                                 </IonItem>}>
+                                <IonIcon className="rounded-full help-tooltip p-1 text-lg" icon={notificationsOutline} />
+                        </Tooltip>
+
+                    </div>
                     <div>
                         <ul style={{listStyle: 'disc'}}>
                             {
@@ -76,6 +90,9 @@ const FfNamed = () => {
                                     </li>
                                 ))
                             }
+                                <li className="ml-3 underline">
+                                    <a href="https://discord.com/channels/925207817923743794/951513272132182066" target="_blank">View More in Discord</a>
+                                </li>
                         </ul>
                     </div>
                 </>}

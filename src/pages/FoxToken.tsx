@@ -36,8 +36,8 @@ const columns: Column<FoxTokenData>[] = [
                 target="_blank"
                 className="hover:opacity-80 flex items-center space-x-3"
             >
-                <span className="hidden lg:block">{record.token}</span>
-                <span className="lg:hidden">
+                <span className="hidden xl:block">{record.token}</span>
+                <span className="xl:hidden">
                     {shortenedWallet(record.token)}
                 </span>
                 <IonIcon
@@ -762,7 +762,7 @@ function FoxToken({contentRef}: FoxToken) {
                             data={tableData}
                             columns={columns}
                             title="Fox WL Token Market"
-                            description="👪 are community added names"
+                            description="👪 are community added names. 'Not Listed' means it is not listed for sale anymore, and shown for historical purposes"
                             url="https://famousfoxes.com/tokenmarket"
                             actions={[
                                 {
