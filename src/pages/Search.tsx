@@ -2,10 +2,10 @@ import React, {useCallback, useMemo, useRef} from 'react';
 import Display from '../components/search/Display';
 import {useState, useEffect} from 'react';
 import {
-    IonButton, IonContent, IonPage,
+    IonButton, IonContent, IonPage, useIonToast,
 } from '@ionic/react';
 import './Search.css';
-import {useParams} from 'react-router';
+import {useHistory, useParams} from 'react-router';
 import {instance} from '../axios';
 import {useQuery} from 'react-query';
 import {AxiosResponse} from 'axios';
@@ -21,6 +21,9 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
     /**
      * States & Variables
      */
+    const [present, dismiss] = useIonToast();
+    const history = useHistory();
+
     const [width, setWidth] = useState(window.innerWidth);
     const [currentPage, setCurrentPage] = useState(0);
     // const [searchText, setSearchText] = useState(useParams<{id: string}>());
@@ -122,10 +125,26 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
             console.error('try/catch in Search.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
 
+            // if (error && error.response) {
+            //     throw new Error(String(error.response.data.body));
+            // } else {
+            //     throw new Error('Unable to connect. Please try again later');
+            // }
+
+            let msg = '';
             if (error && error.response) {
-                throw new Error(String(error.response.data.body));
+                msg = String(error.response.data.body);
             } else {
-                throw new Error('Unable to connect. Please try again later');
+                msg = 'Unable to connect. Please try again later';
+            }
+
+            present({
+                message: msg,
+                color: 'danger',
+                duration: 5000
+            });
+            if(msg.includes('logging in again')){
+                history.push("/login");
             }
         }
     }

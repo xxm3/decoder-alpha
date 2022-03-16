@@ -14,7 +14,7 @@ import Loader from "../components/Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import * as solanaWeb3 from '@solana/web3.js';
-import {add, albums, chevronDown, chevronUp, close, wallet} from "ionicons/icons";
+import {add, albums, chevronDown, chevronUp, close, notifications, notificationsOutline, wallet} from "ionicons/icons";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
@@ -78,6 +78,8 @@ interface FoxToken {
 
 function FoxToken({contentRef}: FoxToken) {
 
+    const [present, dismiss] = useIonToast();
+
     /**
      * Adding multiple wallets
      */
@@ -88,7 +90,7 @@ function FoxToken({contentRef}: FoxToken) {
     const local_host_str = 'localhost';
     const firstUpdate = useRef(true);
 
-    const [popoverOpened, setPopoverOpened] = useState(null);
+    // const [popoverOpened, setPopoverOpened] = useState(null);
     const [viewAbuse, setViewAbuse] = useState(false);
 
     const cookies = useMemo(() => new Cookies(), []);
@@ -103,7 +105,7 @@ function FoxToken({contentRef}: FoxToken) {
     // clicked link to add multiple wallets
     const clickedMultWall = (val: boolean) => {
         setAddMultWallModalOpen(val);
-        setPopoverOpened(null);
+        // setPopoverOpened(null);
     }
 
     // in the modal for multiple wallets - submit button clicked
@@ -196,7 +198,6 @@ function FoxToken({contentRef}: FoxToken) {
 
     }
 
-
     /**
      * States & Variables
      */
@@ -223,10 +224,8 @@ function FoxToken({contentRef}: FoxToken) {
      * Functions
      */
 
-
-        // load table data!
+    // load table data!
     const fetchTableData = async () => {
-
             setTableData([]);
 
             const data: any = await getLiveFoxTokenData(mySplTokens);
@@ -368,10 +367,9 @@ function FoxToken({contentRef}: FoxToken) {
     const [formName, setFormName] = useState('');
     const [formLoading, setFormLoading] = useState(false);
     const [formErrMsg, setFormErrMsg] = useState('');
-    const [present, dismiss] = useIonToast();
     const clickedAddName = (val: boolean) => {
         setAddNameModalOpen(val);
-        setPopoverOpened(null);
+        // setPopoverOpened(null);
     }
 
     // submit form to add new wallet
@@ -420,7 +418,7 @@ function FoxToken({contentRef}: FoxToken) {
 
     // Viewing MY tokens - filter the table
     const viewMyTokens = async (wantViewTokens: boolean) => {
-        setPopoverOpened(null);
+        // setPopoverOpened(null);
 
         // user wants to see MY tokens
         if (wantViewTokens) {
@@ -506,11 +504,11 @@ function FoxToken({contentRef}: FoxToken) {
         <>
 
             {/*
-                adding multiple wallets
+                modal - adding multiple wallets
             */}
             <IonModal
                 isOpen={addMultWallModalOpen}
-                onDidDismiss={() => setAddMultWallModalOpen(false)}
+                onDidDismiss={() => clickedMultWall(false)}
             >
                 <IonHeader>
                     <IonToolbar>
@@ -570,7 +568,7 @@ function FoxToken({contentRef}: FoxToken) {
                                 position="stacked"
                                 className="font-bold"
                             >
-                                Wallet
+                                SOL Wallet Address
                             </IonLabel>
                             <IonInput
                                 onIonChange={(e) =>
@@ -599,20 +597,11 @@ function FoxToken({contentRef}: FoxToken) {
                         </IonButton>
 
                         <div hidden={!formLoading}>Loading...</div>
-
-                        {/*<div className="m-12 relative mt-6 bg-red-100 p-6 rounded-xl" hidden={!formErrMsg}>*/}
-                        {/*    <p className="text-lg text-red-700 font-medium">*/}
-                        {/*        <b>{formErrMsg}</b>*/}
-                        {/*    </p>*/}
-                        {/*    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">*/}
-                        {/*        !*/}
-                        {/*    </span>*/}
-                        {/*</div>*/}
                     </div>
                 </IonContent>
             </IonModal>
 
-            {/* For adding a new token */}
+            {/* modal - For adding a new token */}
             <IonModal
                 isOpen={addNameModalOpen}
                 onDidDismiss={() => setAddNameModalOpen(false)}
@@ -774,6 +763,13 @@ function FoxToken({contentRef}: FoxToken) {
                                         viewMyTokens(!viewMyTokensClicked),
                                     isFreeAction: true,
                                 },
+                                // TODO
+                                // {
+                                //     icon: () => <IonIcon icon={notifications}/>,
+                                //     tooltip: 'Alert on new Tokens to your Wallet',
+                                //     onClick: () => window.open('/alerts'), // TODO: history
+                                //     isFreeAction: true,
+                                // },
                                 {
                                     icon: () => <IonIcon icon={albums}/>,
                                     tooltip: 'Track Multiple wallets',
@@ -810,46 +806,6 @@ function FoxToken({contentRef}: FoxToken) {
 
             <ReactTooltip/>
 
-            <div
-                hidden={true}
-                className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}
-            >
-                <div className={`font-bold pb-3 w-full text-lg`}>
-                    Fox Token - Price Alerts
-                </div>
-
-                <div>
-                    <label className={`font-bold pb-1 w-full`} htmlFor="">
-                        Get an alert when any of your WL tokens lists over a
-                        certain price
-                    </label>
-
-                    <IonList>
-                        <b>Wallet Address</b>
-                        <IonItem>
-                            <IonInput placeholder="Enter Wallet Address to Monitor"></IonInput>
-                            {/* value={text} onIonChange={e => setText(e.detail.value!)} */}
-                        </IonItem>
-                    </IonList>
-
-                    <IonList>
-                        <b>
-                            Floor price of any of your WL tokens before
-                            alert
-                        </b>
-                        <IonItem>
-                            <IonInput placeholder="Enter price"></IonInput>
-                            {/* value={text} onIonChange={e => setText(e.detail.value!)} */}
-                        </IonItem>
-                    </IonList>
-
-                    <IonButton color="success" className="text-sm">
-                        Submit
-                    </IonButton>
-                    <br/>
-                    <br/>
-                </div>
-            </div>
 
             <br/>
         </>

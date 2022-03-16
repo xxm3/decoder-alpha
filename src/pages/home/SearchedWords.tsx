@@ -5,9 +5,13 @@ import {environment} from '../../environments/environment';
 import Loader from '../../components/Loader';
 import moment from "moment";
 import {Link, useLocation} from "react-router-dom";
-import {IonCard} from "@ionic/react";
+import {IonCard, useIonToast} from "@ionic/react";
+import {useHistory} from "react-router";
 
 const SearchedWords = () => {
+
+    const [present, dismiss] = useIonToast();
+    const history = useHistory();
 
     /**
      * Functions
@@ -22,15 +26,26 @@ const SearchedWords = () => {
 
             return data;
         } catch (e) {
-
             console.error('try/catch in Search.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
 
+            let msg = '';
             if (error && error.response) {
-                throw new Error(String(error.response.data.body));
+                msg = String(error.response.data.body);
             } else {
-                throw new Error('Unable to connect. Please try again later');
+                msg = 'Unable to connect. Please try again later';
             }
+
+            present({
+                message: msg,
+                color: 'danger',
+                duration: 5000
+            });
+            if(msg.includes('logging in again')){
+                history.push("/login");
+            }
+
+            // throw new Error(msg);
         }
     }
 

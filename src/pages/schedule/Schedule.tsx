@@ -3,12 +3,13 @@ import moment from 'moment';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
-import {IonButton, IonContent, IonIcon, IonModal, IonRippleEffect } from '@ionic/react';
+import {IonButton, IonContent, IonIcon, IonModal, IonRippleEffect, useIonToast} from '@ionic/react';
 
 import './Schedule.css'
 import { Column } from '@material-table/core';
 import Table from '../../components/Table';
 import { logoDiscord, logoTwitter, link } from 'ionicons/icons';
+import {useHistory} from "react-router";
 
 interface Mint {
 	image: string;
@@ -37,6 +38,9 @@ const Schedule = () => {
     /**
      * States & Variables.
      */
+    const [present, dismiss] = useIonToast();
+    const history = useHistory();
+
     const [date, setDate] = useState('')
     const [mints, setMints] = useState<Mint[]>([])
     const [splitCollectionName, setSplitCollectionName] = useState([])
@@ -86,9 +90,27 @@ const Schedule = () => {
                 setDate(res.data.data.date);
                 setIsLoading(false);
             })
-            .catch((err) => {
+            .catch((error) => {
                 setIsLoading(false);
-                console.error("error when getting mints: " + err);
+
+                console.error("error when getting mints: " + error);
+
+                let msg = '';
+                if (error && error.response) {
+                    msg = String(error.response.data.body);
+                } else {
+                    msg = 'Unable to connect. Please try again later';
+                }
+
+                present({
+                    message: msg,
+                    color: 'danger',
+                    duration: 5000
+                });
+                if(msg.includes('logging in again')){
+                    history.push("/login");
+                }
+
             })
     }
 

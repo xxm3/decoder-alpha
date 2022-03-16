@@ -279,10 +279,14 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                                     // stacked: true,
                                     type: 'linear',
                                     position: 'left',
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Listings'
-                                    },
+                                    // label:{
+                                    //     display: true,
+                                    //     labelString: 'Listings'
+                                    // },
+                                    // scaleLabel: {
+                                    //     display: true,
+                                    //     labelString: 'Listings'
+                                    // },
                                     grid: {
                                         color: '#b3b3ff'
                                     },
@@ -291,10 +295,10 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                                 'y1': {
                                     type: 'linear',
                                     position: 'right',
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Price'
-                                    },
+                                    // scaleLabel: {
+                                    //     display: true,
+                                    //     labelString: 'Price'
+                                    // },
                                     suggestedMin: 0,
                                 },
                                 x: {

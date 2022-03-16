@@ -5,11 +5,15 @@ import {environment} from '../../environments/environment';
 import Loader from '../../components/Loader';
 import moment from "moment";
 import {Link, useLocation} from "react-router-dom";
-import {IonButton, IonCard, IonIcon, IonItem} from "@ionic/react";
-import {alertOutline, helpOutline, notificationsOutline, wallet} from "ionicons/icons";
+import {IonButton, IonCard, IonIcon, IonItem, useIonToast} from "@ionic/react";
+import {alertOutline, helpOutline, notifications, notificationsOutline, wallet} from "ionicons/icons";
 import {Tooltip} from "react-tippy";
+import {useHistory} from "react-router";
 
 const FfNamed = () => {
+
+    const [present, dismiss] = useIonToast();
+    const history = useHistory();
 
     /**
      * Functions
@@ -24,15 +28,28 @@ const FfNamed = () => {
 
             return data;
         } catch (e) {
-
             console.error('try/catch in FfNamed.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
 
+            let msg = '';
+
             if (error && error.response) {
-                throw new Error(String(error.response.data.body));
+                msg = String(error.response.data.body);
             } else {
-                throw new Error('Unable to connect. Please try again later');
+                msg = 'Unable to connect. Please try again later';
             }
+
+            present({
+                message: msg,
+                color: 'danger',
+                duration: 5000
+            });
+
+            if(msg.includes('logging in again')){
+                history.push("/login");
+            }
+
+            // throw new Error(msg);
         }
     }
 
@@ -67,14 +84,11 @@ const FfNamed = () => {
                 <>
                     <div className={`font-bold pb-1`}>
                         New Fox WL Token Market Names
-                        {/*<IonButton className="mb-4 p-1">*/}
-                        {/*    <IonIcon icon={notificationsOutline}  />*/}
-                        {/*</IonButton>*/}
                         <Tooltip trigger="mouseenter" position="bottom"
                                  html={<IonItem lines="none" className='max-w-[320px] rounded help-tooltip whitespace-pre-line'>
-Alerts currently done through Discord. Visit #self-roles and get the @fox-wl-alerts role. This gives pings when WL tokens get official names by the Famous Fox team, or when a user of SOL Decoder adds a custom name to one.<br/><br/>These are otherwise sent to the #analytics-etc channel
+Alerts currently done through Discord. Visit #self-roles and get the @fox-wl-alerts role. This gives pings when WL tokens get official names by the Famous Fox team, or when a user of SOL Decoder adds a custom name to one.<br/><br/>These are otherwise sent to the #analytics-etc channel in Discord
                                  </IonItem>}>
-                                <IonIcon className="rounded-full help-tooltip p-1 text-lg" icon={notificationsOutline} />
+                                <IonIcon className="rounded-full help-tooltip p-1 text-lg" icon={notifications} />
                         </Tooltip>
 
                     </div>
@@ -84,7 +98,7 @@ Alerts currently done through Discord. Visit #self-roles and get the @fox-wl-ale
                                 ffNamedQuery?.data?.data?.map((obj: any) => (
                                     <li key={obj.createdAt} className="ml-3">
                                         {/*<Link to={'search/' + obj.msg} className="underline">*/}
-                                            {obj.msg}
+                                            {obj.msg.replaceAll("**", "")}
                                             &nbsp; ({moment(obj.createdAt).fromNow()})
                                         {/*</Link>*/}
                                     </li>
