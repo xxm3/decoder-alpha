@@ -767,7 +767,7 @@ function FoxToken({contentRef}: FoxToken) {
                             data={tableData}
                             columns={columns}
                             title="Fox WL Token Market"
-                            description="👪 are community added names. 'Not Listed' means it is not listed for sale anymore, and shown for historical purposes"
+                            description="👪 are community added names. 'Not Listed' means it is not listed for sale anymore, and shown for historical purposes. Last Sale column is only updated when viewing the chart or your own tokens"
                             url="https://famousfoxes.com/tokenmarket"
                             actions={[
                                 {
