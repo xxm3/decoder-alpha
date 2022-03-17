@@ -150,7 +150,7 @@ const App = () => {
 
                                                                         {/* todays mints*/}
 	                                                                    <ProtectedRoute
-	                                                                        exact path="/Schedule" component={Schedule}
+	                                                                        exact path="/schedule" component={Schedule}
 	                                                                    />
 
                                                                         {/* fox token market */}
@@ -170,7 +170,7 @@ const App = () => {
 
                                                                         {/*login button etc...*/}
 	                                                                    <AppRoute
-	                                                                        exact path="/Login" component={ Login}
+	                                                                        exact path="/login" component={ Login}
 	                                                                    />
 	                                                                </IonRouterOutlet>
 	                                                            </IonContent>

@@ -8,6 +8,7 @@ import { FoxTokenData } from '../types/FoxTokenTypes';
 import Style from './Style';
 import Cookies from "universal-cookie";
 import axios from "axios";
+import useFoxTokenChartCookies from './useFoxTokenChartCookies';
 
 
 function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTokenData) {
@@ -64,13 +65,14 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
     const cookies = useMemo(() => new Cookies(), []);
 
 
+	const {
+		chartDateSelected,
+		lineColorSelected,
+		shadedAreaColorSelected,
+	} = useFoxTokenChartCookies()
+
     // user clicked change colour
-    const [lineColorSelected, setLineColorSelected] = useState<string>(
-        cookies.get('lineColorSelected2') ?
-            cookies.get('lineColorSelected2') : "#14F195"); // #195e83
-    const [shadedAreaColorSelected, setShadedAreaColorSelected] = useState<string>(
-        cookies.get('shadedAreaColorSelected2') ?
-            cookies.get('shadedAreaColorSelected2') : "rgba(26, 255, 163, 0.1)") // #01FF6F
+   
     // when above clicked, will redraw the chart
     useEffect(() => {
         if (firstUpdate.current) {
@@ -96,7 +98,6 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
 
     // user clicked the radio for the dates in the chart
-    const [chartDateSelected, setChartDateSelected] = useState<string>(cookies.get('chartDateFormat') ? cookies.get('chartDateFormat') : 'fromNow');
     // when above radio clicked, will redraw the chart
     useEffect(() => {
         if (firstUpdate.current) {
@@ -104,11 +105,8 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
             return;
         }
 
-        cookies.set('chartDateFormat', chartDateSelected);
-
-        // redraw the chart
         viewChart();
-    }, [chartDateSelected]);
+    }, [chartDateSelected, lineColorSelected, shadedAreaColorSelected]);
 
 
 

@@ -5,7 +5,7 @@ interface Props {
 
 function Style({ children, global = false } : Props) {
   return (
-	<style {...{ jsx : "true", global : global.toString()}}>
+	<style {...{ jsx : true, global}}>
 		{children}
 	</style>
   )
