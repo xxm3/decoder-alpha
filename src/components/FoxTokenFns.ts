@@ -36,7 +36,7 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
         'FBdRvc9CmHUf8ib2sV8PDv2oiFAmyxoftjid3Uv9e4kK','9ndpxWPBWNZ7TiBdbWiE88RLSiN2wdNnRBVbxFwySiiK','J4dhSHX6a438GXHoNUaATCMnyLfLaVbEaHFFatScRoZj',
         'GrzAJAGvTigSHGb64JYBECnvhD23cA21ADtYgPoS3PM3','GdeT55oxg67xcVB3CjkAZveDQo1rfz6XQD7icv8N1JKs','38mqzHtHLmUMCZyuZKEQB8Zkg2fGkToYw4gVwPC3NoH3',
         'G9tt98aYSznRk7jWsfuz9FnTdokxS6Brohdo9hSmjTRB','2rQeQ3h5S5W7LAT4SrygjPXVGF25kfce5QiW1BKMNFwz','3GfdtDnQC6mjkdr9cEaSr9mjS2VnSYoVypQiT2PPRBch',
-        '72NBPHtsUkLvk4KpPcDCiDnaHPoP8XvBGZsjcsSSkyi9',
+        '72NBPHtsUkLvk4KpPcDCiDnaHPoP8XvBGZsjcsSSkyi9', '3K6rftdAaQYMPunrtNRHgnK2UAtjm2JwyT2oCiTDouYE'
         ];
 
     // loop through the 5,000 tokens FF has

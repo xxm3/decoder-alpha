@@ -1,7 +1,7 @@
 import {
     IonButton,
     IonList,
-    IonLabel, IonItem, IonCheckbox, IonInput, IonIcon
+    IonLabel, IonItem, IonCheckbox, IonInput, IonIcon, useIonToast
 } from '@ionic/react';
 import { useEffect, useState} from 'react';
 import Loader from "../components/Loader";
@@ -12,7 +12,8 @@ import { Column  } from '@material-table/core';
 import Table from '../components/Table';
 import Style from '../components/Style';
 import moment from 'moment';
-import { eye, eyeOff, eyeOffOutline, eyeOutline} from "ionicons/icons";
+import {eye, eyeOff, eyeOffOutline, eyeOutline, notifications} from "ionicons/icons";
+import {useHistory} from "react-router";
 
 interface NftPriceTableProps {
     foo?: string;
@@ -38,6 +39,9 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
     /**
      * States & Variables
      */
+    const [present, dismiss] = useIonToast();
+    const history = useHistory();
+
     const [tableData, setTableData] = useState<MintData[]>([]);
     const [hideComments, setHideComments] = useState(true);
     const [width, setWidth] = useState(window.innerWidth);
@@ -155,8 +159,24 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                 .then((res) => {
                     setTableData(res.data);
                 })
-                .catch((err) => {
-                    console.error("error when getting mint alerts automated: " + err);
+                .catch((error) => {
+                    console.error("error when getting mint alerts automated: " + error);
+
+                    let msg = '';
+                    if (error && error.response) {
+                        msg = String(error.response.data.body);
+                    } else {
+                        msg = 'Unable to connect. Please try again later';
+                    }
+
+                    present({
+                        message: msg,
+                        color: 'danger',
+                        duration: 5000
+                    });
+                    if(msg.includes('logging in again')){
+                        history.push("/login");
+                    }
                 });
         }
         fetchTableData();
@@ -195,6 +215,12 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 								title={"Mint Alerts Automated - Stats"}
 								description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
 								actions={[
+                                    {
+                                        icon: () => <IonIcon icon={notifications}/>,
+                                        tooltip: 'Alerts for new links',
+                                        onClick: () => history.push('/alerts#ma'),
+                                        isFreeAction: true,
+                                    },
 									{
 										icon : hideComments ? () => <IonIcon icon={eye}/> :  () => <IonIcon icon={eyeOff}/>,
 										tooltip : hideComments ? "Show Comments" : "Hide comments",

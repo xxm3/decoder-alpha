@@ -3,12 +3,13 @@ import moment from 'moment';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
-import {IonButton, IonContent, IonIcon, IonModal, IonRippleEffect } from '@ionic/react';
+import {IonButton, IonContent, IonIcon, IonModal, IonRippleEffect, useIonToast} from '@ionic/react';
 
 import './Schedule.css'
 import { Column } from '@material-table/core';
 import Table from '../../components/Table';
 import { logoDiscord, logoTwitter, link } from 'ionicons/icons';
+import {useHistory} from "react-router";
 
 interface Mint {
 	image: string;
@@ -37,6 +38,9 @@ const Schedule = () => {
     /**
      * States & Variables.
      */
+    const [present, dismiss] = useIonToast();
+    const history = useHistory();
+
     const [date, setDate] = useState('')
     const [mints, setMints] = useState<Mint[]>([])
     const [splitCollectionName, setSplitCollectionName] = useState([])
@@ -86,9 +90,27 @@ const Schedule = () => {
                 setDate(res.data.data.date);
                 setIsLoading(false);
             })
-            .catch((err) => {
+            .catch((error) => {
                 setIsLoading(false);
-                console.error("error when getting mints: " + err);
+
+                console.error("error when getting mints: " + error);
+
+                let msg = '';
+                if (error && error.response) {
+                    msg = String(error.response.data.body);
+                } else {
+                    msg = 'Unable to connect. Please try again later';
+                }
+
+                present({
+                    message: msg,
+                    color: 'danger',
+                    duration: 5000
+                });
+                if(msg.includes('logging in again')){
+                    history.push("/login");
+                }
+
             })
     }
 
@@ -145,10 +167,49 @@ const Schedule = () => {
 
     const columns: Column<Mint>[] = [
         {
+            title: '',
+            render: (record) => (
+                <div className="flex space-x-3">
+                    <a
+                        href={record.discordLink}
+                        target="_blank"
+                        style={{
+                            pointerEvents : (record.discordLink && record.numbersOfDiscordMembers) ? "initial" : "none"
+                        }}
+                        className={(record.discordLink && record.numbersOfDiscordMembers) ? "schedule-link" : "schedule-link-disabled"}
+                    >
+                        <IonIcon icon={logoDiscord} className="big-emoji"/>
+                        <IonRippleEffect />
+                    </a>
+                    <a
+                        href={record.twitterLink}
+                        className="schedule-link"
+                        target="_blank"
+
+                    >
+                        <IonIcon icon={logoTwitter} className="big-emoji" />
+                        <IonRippleEffect />
+
+                    </a>
+                    <a
+                        href={record.projectLink}
+                        className={(record.projectLink && record.projectLink) ? "schedule-link" : "schedule-link-disabled"}
+                        target="_blank"
+
+                    >
+                        <IonIcon icon={link} className="big-emoji" />
+                        <IonRippleEffect />
+
+                    </a>
+                </div>
+            ),
+        },
+        {
             title: 'Name',
             render: (record) => (
                 <span
-                    className="cursor-pointer"
+                    // cursor-pointer
+                    className=""
                     onClick={() => handleProjectClick(record)}
                 >
                     {record.project}
@@ -160,7 +221,6 @@ const Schedule = () => {
         },
         {
             title: 'Time',
-
             customSort: (a, b) => +new Date(a.time) - +new Date(b.time),
             render: (record) => (
                 <span>
@@ -180,20 +240,12 @@ const Schedule = () => {
                 </span>
             ),
         },
-        // {
-        //     title: 'Time',
-        //     render: record => (
-        //         // (record.time)
-        //         <span>
-        //             {record.time !== "" && moment.utc(record.time, 'hh:mm:ss').fromNow()}
-        //         </span>
-        //     ),
-        // },
         {
             title: 'Price',
             customSort: (a, b) =>
                 +a.price.split(' ')[0] - +b.price.split(' ')[0],
-            render: (record) => <span>{record.price}</span>,
+            render: (record) => <span dangerouslySetInnerHTML={{ __html: record.price.replace(",", "<br>") }}></span>,
+            // width: "80px"
         },
         {
             title: 'Supply',
@@ -241,44 +293,6 @@ const Schedule = () => {
                 </>
             ),
         },
-        {
-            title: 'Links',
-            render: (record) => (
-                <div className="flex space-x-4">
-                    <a
-                        href={record.discordLink}
-                        target="_blank"
-						style={{
-							pointerEvents : (record.discordLink && record.numbersOfDiscordMembers) ? "initial" : "none"
-						}}
-						className={(record.discordLink && record.numbersOfDiscordMembers) ? "schedule-link" : "schedule-link-disabled"}
-                    >
-						<IonIcon icon={logoDiscord} className="big-emoji"/>
-						<IonRippleEffect />
-                    </a>
-                    <a
-                        href={record.twitterLink}
-                        className="schedule-link"
-                        target="_blank"
-
-                    >
-                        <IonIcon icon={logoTwitter} className="big-emoji" />
-						<IonRippleEffect />
-
-                    </a>
-                    <a
-                        href={record.projectLink}
-                        className={(record.projectLink && record.projectLink) ? "schedule-link" : "schedule-link-disabled"}
-                        target="_blank"
-
-                    >
-                        <IonIcon icon={link} className="big-emoji" />
-                        <IonRippleEffect />
-
-                    </a>
-                </div>
-            ),
-        },
     ];
 
     // Renders
@@ -296,6 +310,11 @@ const Schedule = () => {
                         data={dataSource}
                         columns={columns}
                         title={`Mint Schedule - ${date}`}
+                        // options={{
+                        //     rowStyle: {
+                        //         overflowWrap: 'break-word'
+                        //     }
+                        // }}
                         description={`Projects must have > 2,000 Discord members and > 1,000 Twitter followers before showing up on the list.
 							\n "# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them`}
                     />

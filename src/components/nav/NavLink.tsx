@@ -8,15 +8,16 @@ interface Props {
     icon: string;
     title: string;
     isIconSvg?: boolean;
-    external: boolean;
+    external: string;
 }
 
-function NavLink({to, icon, title, isIconSvg = false, external = false}: Props) {
+function NavLink({to, icon, title, isIconSvg = false, external = ''}: Props) {
     const location = useLocation();
 
-    const goExternal = () => {
+    const goExternal = (toAddr: string) => {
+        console.log(toAddr);
         if(external){
-            window.open(to, "_blank");
+            window.open(toAddr, "_blank");
         }
     };
 
@@ -39,7 +40,7 @@ function NavLink({to, icon, title, isIconSvg = false, external = false}: Props) 
                 `}
             </Style>
 
-            <Link to={to} onClick={() => goExternal()}>
+            <Link to={to} onClick={() => goExternal(external)}>
                 <Tooltip
                     html={
                         <span className="hidden md:block lg:hidden tooltip-title px-4 py-2 rounded text-[15px]">
