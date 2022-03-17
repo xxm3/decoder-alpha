@@ -25,7 +25,8 @@ import {Column} from '@material-table/core';
 import Style from '../components/Style';
 import {AppComponentProps} from '../components/Route';
 import FoxTokenCharts from '../components/FoxTokenCharts';
-import {FoxTokenData} from '../types/FoxTokenTypes';
+import { FoxTokenData } from '../types/FoxTokenTypes';
+import moment from 'moment';
 import {useHistory} from "react-router";
 import FfNamed from "./home/FfNamed";
 
@@ -49,13 +50,13 @@ const columns: Column<FoxTokenData>[] = [
             </a>
         ),
         customSort: (a, b) => a.token.localeCompare(b.token),
-        customFilterAndSearch: (term, rowData) => rowData.token.toLowerCase().includes(term.toLowerCase()),
+		customFilterAndSearch: (term, rowData) => rowData.token?.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Name',
         customSort: (a, b) => a.name.localeCompare(b.name),
         render: (record) => <span>{record.name}</span>,
-        customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().includes(term.toLowerCase()),
+		customFilterAndSearch: (term, rowData) => rowData.name?.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Price',
@@ -66,6 +67,11 @@ const columns: Column<FoxTokenData>[] = [
         title: 'Listings',
         customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
         render: (record) => <span>{record.totalTokenListings}</span>,
+    },
+    {
+        title: 'Last Sale',
+        customSort: (a, b) => new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
+        render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : null}</span>,
     },
     {
         title: '# Owned & Wallet',
@@ -478,7 +484,6 @@ function FoxToken({contentRef}: FoxToken) {
                         }
                     }
                 }
-
                 if (newTableData.length === 0) {
                     present({
                         message: 'None of your tokens are also listed on FF Token Market :(',
@@ -488,7 +493,16 @@ function FoxToken({contentRef}: FoxToken) {
                     return;
                 }
 
-                setTableData(newTableData);
+                instance
+                    .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
+                    .then((res) => {
+                        const sales = res.data.data.sales;
+                        sales.forEach((sale: {token: string, lastSaleDate: string}) => {
+                            const row = newTableData.find((d: any) => d.token === sale.token);
+                            row.lastSaleDate = sale.lastSaleDate;
+                        });
+                    }).finally(() => setTableData(newTableData));
+
             }
 
             // user wants to see ALL tokens
@@ -755,7 +769,7 @@ function FoxToken({contentRef}: FoxToken) {
                             data={tableData}
                             columns={columns}
                             title="Fox WL Token Market"
-                            description="👪 are community added names. 'Not Listed' means it is not listed for sale anymore, and shown for historical purposes"
+                            description="👪 are community added names. 'Not Listed' means it is not listed for sale anymore, and shown for historical purposes. The Last Sale column is only updated when viewing the chart or your own tokens (which updates it for others as well)"
                             url="https://famousfoxes.com/tokenmarket"
                             actions={[
                                 {
