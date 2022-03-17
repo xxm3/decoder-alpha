@@ -27,6 +27,7 @@ import {AppComponentProps} from '../components/Route';
 import FoxTokenCharts from '../components/FoxTokenCharts';
 import {FoxTokenData} from '../types/FoxTokenTypes';
 import {useHistory} from "react-router";
+import FfNamed from "./home/FfNamed";
 
 const columns: Column<FoxTokenData>[] = [
     {
@@ -731,9 +732,10 @@ function FoxToken({contentRef}: FoxToken) {
                 </span>
             </div>
 
+            {/*the table*/}
             <div>
                 {!tableData.length ? (
-                    <div className="pt-10 flex justify-center items-center">
+                    <div className="pt-10 flex justify-center items-center mb-20">
                         <Loader/>
                     </div>
                 ) : (
@@ -804,6 +806,9 @@ function FoxToken({contentRef}: FoxToken) {
                     </div>
                 )}
             </div>
+
+            {/*recent FF tokens*/}
+            <FfNamed/>
 
             <ReactTooltip/>
 

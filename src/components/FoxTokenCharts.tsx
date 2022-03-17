@@ -146,6 +146,14 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
                 const listingsData = res.data.map((el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings));
 
+                if(lineData.length === 0 && listingsData.length === 0){
+                    present({
+                        message: 'Unable to get price & listings data on this!',
+                        color: 'danger',
+                        duration: 8000
+                    });
+                }
+
                 // graph latest point...
                 for(let t in tableData){
                     if(tableData[t].token === token && tableData[t].floorPrice){

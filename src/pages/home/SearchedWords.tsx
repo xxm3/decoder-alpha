@@ -60,7 +60,7 @@ const SearchedWords = () => {
                 ...data,
             }
         },
-        refetchOnWindowFocus: true,
+        // refetchOnWindowFocus: true,
         retry: false
     })
 
