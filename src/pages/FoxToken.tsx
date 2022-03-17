@@ -23,11 +23,11 @@ import {getLiveFoxTokenData, shortenedWallet} from "../components/FoxTokenFns";
 import Table from '../components/Table';
 import { Column } from '@material-table/core';
 import _ from 'lodash';
-import Style from '../components/Style';
 import { AppComponentProps } from '../components/Route';
 import FoxTokenCharts from '../components/FoxTokenCharts';
 import { FoxTokenData } from '../types/FoxTokenTypes';
 import useFoxTokenChartCookies from '../components/useFoxTokenChartCookies';
+import { css } from '@emotion/react';
 
 const columns: Column<FoxTokenData>[] = [
     {
@@ -44,7 +44,9 @@ const columns: Column<FoxTokenData>[] = [
                 </span>
                 <IonIcon
                     src="/assets/icons/newTabIcon.svg"
-                    className="newTabIcon"
+                    css={css`
+						color: var(--ion-text-color);
+					`}
                 />
             </a>
         ),
@@ -727,13 +729,6 @@ function FoxToken({ contentRef }: FoxToken) {
                         {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                         {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                         {/*</IonItem>*/}
-                        <Style>
-                            {`
-									.newTabIcon {
-										color: var(--ion-text-color);
-									}
-								`}
-                        </Style>
                         <Table
                             data={tableData}
                             columns={columns}

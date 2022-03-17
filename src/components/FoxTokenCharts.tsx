@@ -5,10 +5,10 @@ import { Chart } from 'react-chartjs-2';
 import { instance } from '../axios';
 import { environment } from '../environments/environment';
 import { FoxTokenData } from '../types/FoxTokenTypes';
-import Style from './Style';
 import Cookies from "universal-cookie";
 import axios from "axios";
 import useFoxTokenChartCookies from './useFoxTokenChartCookies';
+import { css } from '@emotion/react';
 
 
 function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTokenData) {
@@ -331,15 +331,9 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
     return (
         <>
-		<Style>
-			{`
-				.foxTokenCharts {
-					background-color: var(--ion-color-step-50);
-				}
-
-			`}
-		</Style>
-        	<div className="foxTokenCharts px-5 gap-4 grid grid-cols-12" ref={chartsRef}>
+        	<div className="foxTokenCharts px-5 gap-4 grid grid-cols-12" css={css`
+				background-color: var(--ion-color-step-50);
+			`} ref={chartsRef}>
 
                 {/*TODO*/}
                 {/*--{width}--*/}

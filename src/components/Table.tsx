@@ -1,7 +1,7 @@
+import { css } from '@emotion/react';
 import MaterialTable, { MaterialTableProps, MTableFilterRow } from '@material-table/core'
 import { createTheme,  MuiThemeProvider } from '@material-ui/core';
 import { colorsByName } from '../theme/Theme';
-import Style from './Style';
 import Help from './Help';
 
 
@@ -38,8 +38,7 @@ function Table<RowData extends object>(
 	})
     return (
         <MuiThemeProvider theme={theme}>
-            <Style>
-                {`
+            <div css={css`
 						td.MuiTableCell-footer {
 							border-bottom: none;
 						}
@@ -97,39 +96,39 @@ function Table<RowData extends object>(
 							justify-content: space-between;
 							width: 100%;
 						}
-					`}
-            </Style>
-            <MaterialTable
-                {...props}
-                columns={props.columns.map((column) => ({
-                    ...column,
-                    cellStyle: {
-                        whiteSpace: 'nowrap',
-                        borderBottom: 'none',
-                    },
-                }))}
-                title={
-                    <div className="flex space-x-2">
-                        <p className="text-xl font-medium text-ellipsis" role="link" onClick={() => {
-							props.url && window.open(props.url, "_blank")
-						}}>{props.title}</p>
-						{props.description && <Help description={props.description} />}
-                    </div>
-                }
-                options={{
-					headerStyle: {
-						fontSize: '16px',
-                        whiteSpace: 'nowrap',
-                        borderBottom: 'none',
-						paddingBottom : 25,
-						...options?.headerStyle,
-                    },
-                    pageSize: 10, // default rows per page
-                    emptyRowsWhenPaging: false,   // To avoid of having empty rows
-                    pageSizeOptions: [10, 20, 50, 100],    // rows selection options
-					...options,
-                }}
-            />
+			`}>
+            	<MaterialTable
+	                {...props}
+	                columns={props.columns.map((column) => ({
+	                    ...column,
+	                    cellStyle: {
+	                        whiteSpace: 'nowrap',
+	                        borderBottom: 'none',
+	                    },
+	                }))}
+	                title={
+	                    <div className="flex space-x-2">
+	                        <p className="text-xl font-medium text-ellipsis" role="link" onClick={() => {
+								props.url && window.open(props.url, "_blank")
+							}}>{props.title}</p>
+							{props.description && <Help description={props.description} />}
+	                    </div>
+	                }
+	                options={{
+						headerStyle: {
+							fontSize: '16px',
+	                        whiteSpace: 'nowrap',
+	                        borderBottom: 'none',
+							paddingBottom : 25,
+							...options?.headerStyle,
+	                    },
+	                    pageSize: 10, // default rows per page
+	                    emptyRowsWhenPaging: false,   // To avoid of having empty rows
+	                    pageSizeOptions: [10, 20, 50, 100],    // rows selection options
+						...options,
+	                }}
+	            />
+            </div>
         </MuiThemeProvider>
     );
 }

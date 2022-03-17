@@ -1,21 +1,17 @@
+import { css } from "@emotion/react";
 import { IonList } from "@ionic/react"
 import { calendarClearOutline, homeOutline, logoFirefox, search, statsChart } from "ionicons/icons"
-import Style from "../Style";
 import NavLink from "./NavLink"
 
 function Sidebar() {
   return (
       <>
-		<Style>
-			{`
-				ion-list {
-					border-color: var(--ion-color-step-150)
-				}
-			`}
-		</Style>
           <IonList
               lines="none"
               className={`px-2 h-full border-r md:max-w-max lg:max-w-none`}
+			  css={css`
+				  border-color: var(--ion-color-step-150);
+			  `}
           >
               <NavLink title="Home" icon={homeOutline} to="/" />
               <NavLink
