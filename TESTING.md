@@ -54,5 +54,10 @@
 
 (in the section `## URLs we use ie. URLs to test with` - mostly just test the ones with **** in them)
 
+### 11) Testing on a phone
 
+https://developer.chrome.com/docs/devtools/remote-debugging/
 
+https://prowe214.medium.com/tip-how-to-view-localhost-web-apps-on-your-phone-ad6b2c883a7c#:~:text=On%20your%20mobile%20device's%20browser,don't%20leave%20it%20off.
+- https://www.whatismyip.com
+- http://24.88.49.<ip>:3000/

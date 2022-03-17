@@ -41,6 +41,7 @@
     "axios": "^0.24.0",
     "chai": "^4.3.4",
     "chart.js": "^3.7.0",
+    "chartjs-plugin-crosshair": "^1.2.0",
     "dotenv": "^14.2.0",
     "faker": "^5.5.3",
     "firebase": "^8.8.0",
@@ -95,6 +96,7 @@
     ]
   },
   "devDependencies": {
+    "@types/chartjs-plugin-crosshair": "^1.1.1",
     "@types/faker": "^5.5.9",
     "@types/firebase": "^3.2.1",
     "autoprefixer": "^10.4.2",

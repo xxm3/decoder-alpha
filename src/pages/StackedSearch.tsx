@@ -6,12 +6,17 @@ import SearchBar from "../components/SearchBar";
 import Loader from "../components/Loader";
 import {Chart} from "react-chartjs-2";
 import Help from "../components/Help";
+import {useIonToast} from "@ionic/react";
+import {useHistory} from "react-router";
 
 function StackedSearch({ foo, onSubmit }: any) {
 
     /**
      * States & Variables
      */
+    const [present, dismiss] = useIonToast();
+    const history = useHistory();
+
     const [width, setWidth] = useState(window.innerWidth);
 
     /**
@@ -133,16 +138,33 @@ function StackedSearch({ foo, onSubmit }: any) {
             // set various variables
             setGraphStackedLoading(false);
 
-        } catch (e: any) {
-            console.error("try/catch in Home.tsx.doSearch: ", e);
+        } catch (error: any) {
+            setGraphStackedLoading(false);
 
-            if (e && e.response) {
-                setErrorSearchStacked(String(e.response.data.body));
+            console.error("try/catch in Home.tsx.doSearch: ", error);
+
+            // if (e && e.response) {
+            //     setErrorSearchStacked(String(e.response.data.body));
+            // } else {
+            //     setErrorSearchStacked('Unable to connect. Please try again later');
+            // }
+
+            let msg = '';
+            if (error && error.response) {
+                msg = String(error.response.data.body);
             } else {
-                setErrorSearchStacked('Unable to connect. Please try again later');
+                msg = 'Unable to connect. Please try again later';
             }
 
-            setGraphStackedLoading(false);
+            present({
+                message: msg,
+                color: 'danger',
+                duration: 5000
+            });
+            if(msg.includes('logging in again')){
+                history.push("/login");
+            }
+
         }
     }
 

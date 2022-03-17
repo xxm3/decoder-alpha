@@ -21,10 +21,10 @@ function SearchBar({initialValue, onSubmit, placeholder }: SearchBarProps) {
     };
     const [searchValue, setSearchValue] = useState(initialValue ?? '');
 
-    const resetSearch = () => {
-        onSubmit('');
-        setSearchValue('');
-    }
+    // const resetSearch = () => {
+    //     onSubmit('');
+    //     setSearchValue('');
+    // }
 
     return (
         <>
