@@ -724,7 +724,13 @@ function FoxToken({ contentRef }: FoxToken) {
                         <Loader />
                     </div>
                 ) : (
-                    <div className=" ">
+                    <div css={css`
+						@media (max-width: 576px){
+							.MuiToolbar-root > .MuiTextField-root { 
+								display : none;
+							}
+						}
+					`}>
                         {/*<IonItem style={{"width": "250px"}}>*/}
                         {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                         {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
