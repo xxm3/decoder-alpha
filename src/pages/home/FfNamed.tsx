@@ -76,7 +76,9 @@ const FfNamed = () => {
      *
      */
     return (
-        <div className='bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4'>
+        // bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4
+        <div className='secondary-bg-forced m-1 p-4 rounded-xl'>
+
             {ffNamedQuery?.isFetching ?
                 <div className="flex justify-center items-center">
                     {/*<Loader/>*/}
@@ -86,12 +88,15 @@ const FfNamed = () => {
                 <>
                     <div className={`font-bold pb-1`}>
                         New Fox WL Token Market Names
-{/*                        <Tooltip trigger="mouseenter" position="bottom"*/}
-{/*                                 html={<IonItem lines="none" className='max-w-[320px] rounded help-tooltip whitespace-pre-line'>*/}
-{/*Alerts currently done through Discord. Visit #self-roles and get the @fox-wl-alerts role. This gives pings when WL tokens get official names by the Famous Fox team, or when a user of SOL Decoder adds a custom name to one.<br/><br/>These are otherwise sent to the #analytics-etc channel in Discord*/}
-{/*                                 </IonItem>}>*/}
-{/*                                <IonIcon className="rounded-full help-tooltip p-1 text-lg" icon={notifications} />*/}
-{/*                        </Tooltip>*/}
+                        <Tooltip
+                                trigger="mouseenter" position="bottom"
+                                 html={<IonItem lines="none" className='max-w-[320px] rounded help-tooltip whitespace-pre-line'>
+                                     Alerts on new names
+                                 </IonItem>}>
+                                <IonIcon
+                                    onClick={() => history.push('/alerts#fnn')}
+                                    className="rounded-full help-tooltip p-1 text-lg cursor-pointer" icon={notifications} />
+                        </Tooltip>
 
                     </div>
                     <div>

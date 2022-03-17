@@ -768,7 +768,7 @@ function FoxToken({contentRef}: FoxToken) {
                                 {
                                     icon: () => <IonIcon icon={notifications}/>,
                                     tooltip: 'Alert on new Tokens to your Wallet',
-                                    onClick: () => history.push('/alerts'),
+                                    onClick: () => history.push('/alerts#fnt'),
                                     isFreeAction: true,
                                 },
                                 {

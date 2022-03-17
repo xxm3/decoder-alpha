@@ -63,8 +63,10 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
     const cookies = useMemo(() => new Cookies(), []);
 
-    const lineColorSelected = "#14F195";
-    const shadedAreaColorSelected = "rgba(26, 255, 163, 0.1)";
+    // # purple #9945FF - for listings
+    const lineColorSelected = "#14F195"; // green - for price
+    // color repeated on App.css & FoxTokenCharts.tsx
+    const shadedAreaColorSelected = "rgba(67, 192, 187, 0.1)"; // "rgba(26, 255, 163, 0.1)"; // lighter shade of green
 
     // user clicked change colour
     // const [lineColorSelected, setLineColorSelected] = useState<string>(
@@ -159,7 +161,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                         type: 'line' as const,
                         yAxisID: 'y1',
                         label: 'Listings',
-                        borderColor: '#9945FF', // # purple #9945FF    #14F195
+                        borderColor: '#9945FF',
                         data: listingsData,
                     },
                     {
