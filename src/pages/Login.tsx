@@ -87,13 +87,13 @@ function Login() {
                             </p>
 
 
-                            <IonCard className="p-4">
+                            <div className="p-4">
                                 <div id="welcome">
                                     <p className="font-bold">Welcome to SOL Decoder</p>
 
                                     <ul className="">
                                         {/*<li>Please join <a href="https://discord.gg/sol-decoder" style={{"textDecoration": "underline"}}>our Discord</a> to get access to the site</li>*/}
-                                        <li>In the future the site will be locked behind ownership of the NFT. Until the NFT releases, you can get access by being whitelisted, or getting a temporary role in our Discord's #self-roles channel</li>
+                                        <li>In the future the site will be locked behind ownership of the NFT. Until the NFT releases, you can get access by simply joining our Discord</li>
                                         <li>View whitelisting requirements in the #whitelist-faq channel</li>
                                     </ul>
                                 </div>
@@ -120,7 +120,7 @@ function Login() {
                                     {/*</ul>*/}
                                 </div>
 
-                            </IonCard>
+                            </div>
 
 
                         </>
