@@ -9,15 +9,17 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
     // get whitelisted named data from FF
     const verifiedTokenData = (await axios.get('https://dens.famousfoxes.com/whitelist.json')).data;
 
+    // TODO: If length less 500... Tell them refresh.. (or me fix the bug)
+
     // Use the data aggregation logic from the backend, but use data obtained from clientside-called FamousFoxes API
     const results = (await instance.post(`${environment.backendApi}/receiver/foxTokenAnalysis`, {
-        doScrape: true,
-        saveToDb: false, // TODO: not returning now.. when both comented out
+        // doScrape: true,
+        // saveToDb: false,
         rawTokenData,
         verifiedTokenData
     })).data;
 
-    // TODO: do the 401 thing...
+    // TODO-m: do the 401 thing???...
 
     // loop through table data (all fox tokens)... to eventually add which of these are your SPL tokens
     for (const splToken of mySplTokens) {

@@ -79,12 +79,12 @@ function StackedSearch({foo, onSubmit}: any) {
             instance
                 .post(environment.backendApi + '/receiver/foxSales', {
                     token: formAddAlertToken,
-                    enable: enable // TODO: able to remove the alert (unsub etc...)
+                    enable: enable // TODO-m: able to remove the alert (unsub etc...)
                 })
                 .then((res) => {
                     const data = res.data;
 
-                    // TODO:
+                    // TODO-m:
                     console.log(data);
 
                     present({
@@ -105,13 +105,13 @@ function StackedSearch({foo, onSubmit}: any) {
                 });
             });
 
-            // TODO: able to tell where alert going to (discord or web)
+            // TODO-m: able to tell where alert going to (discord or web)
 
-            // TODO: home page to view alerts?
+            // TODO-m: home page to view alerts?
 
-            // TODO: !! test by sending me tokens!
+            // TODO-m: !! test by sending me tokens!
 
-            // TODO: update docs.sol ... and the temp cookie (after renaming the cookie)
+            // TODO-m: update docs.sol ... and the temp cookie (after renaming the cookie)
 
         } catch (err) {
             console.error(err);
