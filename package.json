@@ -7,7 +7,7 @@
     "react-error-overlay": "6.0.9"
   },
   "scripts": {
-    "start": "DISABLE_ESLINT_PLUGIN=true GENERATE_SOURCEMAP=false react-scripts start",
+    "start": " react-scripts start",
     "build-fukt-asked-parth": "craco build",
     "build": "react-scripts build",
     "test": "react-scripts test",
