@@ -5,17 +5,26 @@ import { Link, useLocation } from "react-router-dom";
 import { Tooltip } from "react-tippy";
 
 interface Props {
-	to : string;
-	icon : string;
-	title : string;
-	isIconSvg ?: boolean;
+    to: string;
+    icon: string;
+    title: string;
+    isIconSvg?: boolean;
+    external?: string;
 }
 
-function NavLink({ to , icon , title, isIconSvg = false} : Props) {
+function NavLink({ to , icon , title, isIconSvg = false, external = ''} : Props) {
 	const location = useLocation();
+
+	const goExternal = (toAddr: string) => {
+        console.log(toAddr);
+        if(toAddr){
+            window.open(toAddr, "_blank");
+        }
+    };
+
   return (
      <IonMenuToggle autoHide={false} menu="sidebar">
-     	 <Link to={to}>
+     	 <Link to={to} onClick={() => goExternal(external)}>
 	          <Tooltip
 	              html={
 	                  <span className="hidden md:block lg:hidden  px-4 py-2 rounded text-[15px]" css={css`
@@ -45,4 +54,4 @@ function NavLink({ to , icon , title, isIconSvg = false} : Props) {
   );
 }
 
-export default NavLink
+export default NavLink;

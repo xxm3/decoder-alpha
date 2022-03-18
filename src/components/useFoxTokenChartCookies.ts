@@ -10,7 +10,7 @@ const isColor = (strColor : string) => {
 function useFoxTokenChartCookies() {
 	const [chartDateSelected, setChartDateSelected] = useCookieState<"fromNow" | "yyyyMmDd">("chartDateSelected", "fromNow", (val) => ["fromNow", "yyyyMmDd"].includes(val));
 	const [lineColorSelected, setLineColorSelected] = useCookieState<string>("lineAreaColor", "#14F195", isColor );
-	const [shadedAreaColorSelected, setShadedAreaColorSelected] = useCookieState<string>("shadedAreaColor", "rgba(26, 255, 163, 0.1)", isColor);
+	const [shadedAreaColorSelected, setShadedAreaColorSelected] = useCookieState<string>("shadedAreaColor", "rgba(67, 192, 187, 0.1", isColor);
 	return {
 		chartDateSelected,
 		setChartDateSelected,

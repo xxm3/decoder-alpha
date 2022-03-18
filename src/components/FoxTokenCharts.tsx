@@ -1,7 +1,6 @@
 import { ChartData } from 'chart.js';
 import moment from 'moment';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Chart } from 'react-chartjs-2';
 import { instance } from '../axios';
 import { environment } from '../environments/environment';
 import { FoxTokenData } from '../types/FoxTokenTypes';
@@ -9,14 +8,18 @@ import Cookies from "universal-cookie";
 import axios from "axios";
 import useFoxTokenChartCookies from './useFoxTokenChartCookies';
 import { css } from '@emotion/react';
+import {useIonToast} from "@ionic/react";
 
+import { Chart } from 'react-chartjs-2';
+// import { Chart, Interaction } from 'chart.js';
+// import {CrosshairPlugin,Interpolate} from 'chartjs-plugin-crosshair';
 
 function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTokenData) {
-
 
     /**
      * States & Variables
      */
+    const [present, dismiss] = useIonToast();
 
     // resize window
     const [width, setWidth] = useState(window.innerWidth);
@@ -33,22 +36,20 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
     const tableHeight = useMemo(() => {
         if (width > 1536) return 100;
         if (width > 1280) return 105;
-        if (width > 1024) return 160; // TODO: test 1280 and below
-        if (width > 768) return 200;
-        if (width > 640) return 220;
-        return 250;
+        if (width > 1024) return 120;
+        if (width > 768) return 160;
+        if (width > 640) return 180;
+        return 200;
     }, [width]);
 
     const [tableData, setTableData] = useState<FoxTokenData[]>([]);
-    const [fullTableData, setFullTableData] = useState<FoxTokenData[]>([]);
+    // const [fullTableData, setFullTableData] = useState<FoxTokenData[]>([]);
     const [tokenClickedOn, setTokenClickedOn] = useState();
-    const [mySolBalance, setMySolBalance] = useState("");
 
-    const [mySplTokens, setMySplTokens]: any = useState([]);
-
-    const [viewMyTokensClicked, setViewMyTokensClicked] = useState(false);
-
-    const smallWidthpx = 768;
+    // const [mySolBalance, setMySolBalance] = useState("");
+    // const [mySplTokens, setMySplTokens]: any = useState([]);
+    // const [viewMyTokensClicked, setViewMyTokensClicked] = useState(false);
+    // const smallWidthpx = 768;
 
     const defaultGraph: ChartData<any, string> = {
         labels: [],
@@ -63,7 +64,6 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
     const firstUpdate = useRef(true);
 
     const cookies = useMemo(() => new Cookies(), []);
-
 
 	const {
 		chartDateSelected,
@@ -80,19 +80,8 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
             return;
         }
 
-        // TODO: renable these, after you can get the code to NOT call this on page load
-        // cookies.set('lineColorSelected2', lineColorSelected);
-        // cookies.set('shadedAreaColorSelected2', shadedAreaColorSelected);
-
         // redraw the chart
-        // viewChart();
-
-
-        // present({
-        //     message: 'After setting a valid color, load a new chart to see it',
-        //     color: 'success',
-        //     duration: 5000
-        // });
+        viewChart();
 
     }, [lineColorSelected, shadedAreaColorSelected]);
 
@@ -109,16 +98,15 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
     }, [chartDateSelected, lineColorSelected, shadedAreaColorSelected]);
 
 
-
     // viewing the chart for a token
     const viewChart = () => { // token: string, name: string
-
         // reset the chart
         setFoxLineData(defaultGraph);
-        // setFoxLineListingsData(defaultGraph);
 
         // @ts-ignore
         setTokenClickedOn(name ? `${name} (${token})` : token);
+
+        // console.log(token);
 
         // get the price/listings history for a SINGLE token
         instance
@@ -140,7 +128,14 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                 });
 
                 const listingsData = res.data.map((el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings));
-                // console.log(listingsData);
+
+                if(lineData.length === 0 && listingsData.length === 0){
+                    present({
+                        message: 'Unable to get price & listings data on this!',
+                        color: 'danger',
+                        duration: 8000
+                    });
+                }
 
                 // graph latest point...
                 for(let t in tableData){
@@ -152,17 +147,12 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                     }
                 }
 
-                // console.log(labels);
-                // console.log(lineData);
-
                 let datasetsAry = [
                     {
                         type: 'line' as const,
                         yAxisID: 'y1',
                         label: 'Listings',
-                        borderColor: '#9945FF', // # purple #9945FF    #14F195
-                        // borderWidth: 2,
-                        // tension: 0.1,
+                        borderColor: '#9945FF',
                         data: listingsData,
                     },
                     {
@@ -170,36 +160,31 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                         label: 'Price',
                         yAxisID: 'y0',
                         borderColor: lineColorSelected,
-                        // tension: 0.1,
                         fill: {
                             target: 'origin',
                             above: shadedAreaColorSelected,
                         },
                         data: lineData,
                     },
-
                 ];
-
-                // let datasetsAryListings = [];
 
                 // console.log(labels);
                 // console.log(datasetsAry);
-                // console.log(datasetsAryListings);
 
                 setFoxLineData({
                     labels: labels,
                     datasets: datasetsAry
                 });
-                // setFoxLineListingsData({
-                //     labels: labels,
-                //     datasets: datasetsAryListings
-                // });
-
-                // contentRef?.scrollToPoint(0, chartsRef.current?.offsetTop ?? 0, 800)
 
             })
             .catch((err) => {
                 console.error("error when getting fox token history data: " + err);
+
+                present({
+                    message: 'Error - unable to load chart data. Please refresh and try again',
+                    color: 'danger',
+                    duration: 8000
+                });
             });
 
         // also get the sales history for that token, from FF
@@ -224,119 +209,31 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
                 });
             });
-    }
 
+            instance
+                .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: [token] })
+                .then((res) => {
+                    // TODO: Update table data with the last listing date
+                    // sales = res.data.data.sales
+                    console.log(res);
+                });
+        }
 
+    // need to call it duh...
+    useEffect(() => {
+        if (firstUpdate.current) {
+            firstUpdate.current = false;
+            return;
+        }
 
-
-    // old stuff from parth...
-
-	// const defaultGraph: ChartData<any, string> = {
-    //     labels: [],
-    //     datasets: [],
-    // };
-	// const [foxLineData, setFoxLineData] = useState(defaultGraph);
-    // const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
-    //
-    //
-	// const chartsRef = useRef<HTMLDivElement | null>(null);
-    //
-    //
-	// useEffect(() => {
-	// 	if(token){
-	// 		viewChart(token)
-	// 	}
-	// }, [token])
-    // // viewing the chart for a token
-    // const viewChart = (token : string) => {
-    //     // token: string, name: string
-    //
-    //     setFoxLineData(defaultGraph);
-    //     setFoxLineListingsData(defaultGraph);
-    //
-    //     instance
-    //         .get(
-    //             environment.backendApi +
-    //                 '/receiver/foxTokenHistory?token=' +
-    //                 token
-    //         )
-    //         .then((res) => {
-    //             const labels = res.data.map((el: { createdAt: any }) => {
-    //                 return moment(el.createdAt).fromNow();
-    //             });
-    //             const lineData = res.data.map((el: { floorPrice: any }) => {
-    //                 return parseFloat(el.floorPrice);
-    //             });
-    //
-    //             const listingsData = res.data.map(
-    //                 (el: { totalTokenListings: any }) =>
-    //                     parseInt(el.totalTokenListings)
-    //             );
-    //
-    //
-	// 			labels.push('a few seconds ago');
-	// 			lineData.push(floorPrice);
-	// 			listingsData.push(totalTokenListings);
-    //
-    //             let datasetsAry = [
-    //                 {
-    //                     type: 'line' as const,
-    //                     label: 'Floor Price',
-    //                     borderColor: '#195e83', // #14F195
-    //                     borderWidth: 2,
-    //                     fill: {
-    //                         target: 'origin',
-    //                     },
-    //                     data: lineData,
-    //                 },
-    //             ];
-    //
-    //             let datasetsAryListings = [
-    //                 {
-    //                     type: 'line' as const,
-    //                     label: 'Total Token Listings',
-    //                     borderColor: '#195e83', // #14F195
-    //                     borderWidth: 2,
-    //                     fill: {
-    //                         target: 'origin',
-    //                     },
-    //                     data: listingsData,
-    //                 },
-    //             ];
-    //
-    //             // console.log(labels);
-    //             // console.log(datasetsAry);
-    //             // console.log(datasetsAryListings);
-    //
-    //             setFoxLineData({
-    //                 labels: labels,
-    //                 datasets: datasetsAry,
-    //             });
-    //             setFoxLineListingsData({
-    //                 labels: labels,
-    //                 datasets: datasetsAryListings,
-    //             });
-	// 			chartsRef.current?.scrollIntoView({ behavior: 'smooth' });
-    //
-    //         })
-    //         .catch((err) => {
-    //             console.error(
-    //                 'error when getting fox token history data: ' + err
-    //             );
-    //         });
-    //
-    //
-    // };
-
+        viewChart();
+    }, []);
 
     return (
         <>
         	<div className="foxTokenCharts px-5 gap-4 grid grid-cols-12" css={css`
 				background-color: var(--ion-color-step-50);
 			`} ref={chartsRef}>
-
-                {/*TODO*/}
-                {/*--{width}--*/}
 
                 <div className="chart">
                     <Chart
@@ -377,10 +274,14 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                                     // stacked: true,
                                     type: 'linear',
                                     position: 'left',
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Listings'
-                                    },
+                                    // label:{
+                                    //     display: true,
+                                    //     labelString: 'Listings'
+                                    // },
+                                    // scaleLabel: {
+                                    //     display: true,
+                                    //     labelString: 'Listings'
+                                    // },
                                     grid: {
                                         color: '#b3b3ff'
                                     },
@@ -389,10 +290,10 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                                 'y1': {
                                     type: 'linear',
                                     position: 'right',
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Price'
-                                    },
+                                    // scaleLabel: {
+                                    //     display: true,
+                                    //     labelString: 'Price'
+                                    // },
                                     suggestedMin: 0,
                                 },
                                 x: {
@@ -444,88 +345,6 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                         }}
                     />
                 </div>
-
-
-                {/*old stuff from parth...*/}
-
-                {/*<div className="chart sm:col-span-12 lg:col-span-6">*/}
-	            {/*    <Chart*/}
-	            {/*        type="line"*/}
-	            {/*        // @ts-ignore*/}
-	            {/*        data={foxLineData}*/}
-	            {/*        height={150}*/}
-	            {/*        options={{*/}
-	            {/*            responsive: true,*/}
-	            {/*            maintainAspectRatio: true,*/}
-	            {/*            plugins: {*/}
-	            {/*                legend: {*/}
-	            {/*                    display: false,*/}
-	            {/*                },*/}
-	            {/*                title: {*/}
-	            {/*                    display: true,*/}
-	            {/*                    text: 'Price',*/}
-	            {/*                },*/}
-	            {/*                // tooltip: {*/}
-	            {/*                //     enabled: true,*/}
-	            {/*                //     usePointStyle: true,*/}
-	            {/*                //     callbacks: {*/}
-	            {/*                //         // To change title in tooltip*/}
-	            {/*                //         title: (data: any) => { return data[0].parsed.x },*/}
-	            {/*                //*/}
-	            {/*                //         // To change label in tooltip*/}
-	            {/*                //         label: (data: any) => {*/}
-	            {/*                //             console.log(data);*/}
-	            {/*                //             return data.parsed.y === 2 ? "Good" : "Critical"*/}
-	            {/*                //         }*/}
-	            {/*                //     },*/}
-	            {/*                // },*/}
-	            {/*            },*/}
-	            {/*            scales: {*/}
-	            {/*                x: {*/}
-	            {/*                    ticks: {*/}
-	            {/*                        autoSkip: true,*/}
-	            {/*                        maxTicksLimit: 8,*/}
-	            {/*                    },*/}
-	            {/*                },*/}
-	            {/*                y: {*/}
-	            {/*                    suggestedMin: 0,*/}
-	            {/*                },*/}
-	            {/*            },*/}
-	            {/*        }}*/}
-	            {/*    />*/}
-	            {/*</div>*/}
-	            {/*<div className="chart sm:col-span-12 lg:col-span-6">*/}
-	            {/*    <Chart*/}
-	            {/*        type="line"*/}
-	            {/*        data={foxLineListingsData}*/}
-	            {/*        height={150}*/}
-	            {/*        options={{*/}
-	            {/*            responsive: true,*/}
-	            {/*            maintainAspectRatio: true,*/}
-	            {/*            plugins: {*/}
-	            {/*                legend: {*/}
-	            {/*                    display: false,*/}
-	            {/*                },*/}
-	            {/*                title: {*/}
-	            {/*                    display: true,*/}
-	            {/*                    text: 'Total Token Listings',*/}
-	            {/*                },*/}
-	            {/*            },*/}
-	            {/*            scales: {*/}
-	            {/*                x: {*/}
-	            {/*                    ticks: {*/}
-	            {/*                        autoSkip: true,*/}
-	            {/*                        maxTicksLimit: 8,*/}
-	            {/*                    },*/}
-	            {/*                },*/}
-	            {/*                y: {*/}
-	            {/*                    suggestedMin: 0,*/}
-	            {/*                },*/}
-	            {/*            },*/}
-	            {/*        }}*/}
-	            {/*    />*/}
-	            {/*</div>*/}
-
 
 	        </div>
         </>

@@ -36,7 +36,6 @@ DON'T use ts-ignore
 To link to other pages:
 `<IonRouterLink href="/schedule" className="pr-7 underline text-inherit">Today's Mints</IonRouterLink>`
 
-
 To make calls to the backend:
 - use React query for data fetching. Look at how the Search.tsx page implements React Query to understand how it works
 - React query reduces a lot of work that goes into managing loading, error states , caching, not sending the same requests at the same time, etc
@@ -62,11 +61,24 @@ const fetchSearchMessages = async () => {
             console.error('try/catch in Search.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
 
+            let msg = '';
+
             if (error && error.response) {
-                throw new Error(String(error.response.data.body));
+                msg = String(error.response.data.body);
             } else {
-                throw new Error('Unable to connect. Please try again later');
+                msg = 'Unable to connect. Please try again later';
             }
+
+            present({
+                message: msg,
+                color: 'danger',
+                duration: 5000
+            });
+            if(msg.includes('logging in again')){
+                history.push("/login");
+            }
+
+            // throw new Error(msg);
         }
     }
 
@@ -99,13 +111,12 @@ messageQuery.isError || messageQuery?.data?.error
 
 ```
 
-
-
 To do dropdowns:
 - See WalletButton.tsx and how it uses `<Tooltip>`
 
 To do tooltips:
 - MessageListItem.tsx with its <ReactTooltip /> and data-tip
+- ... or nevermind do <Tooltip
 
 To do alert popups:
 - See useConnectWallet.ts and how it uses `useIonAlert()`
@@ -119,9 +130,48 @@ To use toasts
 
 Global states....
 - see state.walletAddress... (to get)
+```
+  const walletAddress = useSelector(
+  (state: RootState) => state.wallet.walletAddress
+  );
+```
 - see dispatch(setWallet... (to set)
 
-...
+
+To hide something on mobile: give below class
+```
+hidden sm:block
+```
+Another example:
+```
+<span className="hidden xl:block">{record.token}</span>
+<span className="xl:hidden">
+{shortenedWallet(record.token)}
+</span>
+```
+
+Redirecting users:
+```
+let history = useHistory();
+
+history.push("/login");
+```
+
+Error handling on connections to our backend:
+
+When using react query stuff:
+- see the try/catch within Ffnamed.tsx - getFfNamed()
+
+When using the old way of instance.get:
+- see Schedule.tsx
+
+---
+
+If want to refresh a query when you go back to the window, or click back into the page:
+```
+ refetchOnWindowFocus: true,
+```
+
 
 #### Links to read
 - For Error handling using reactQuery -  https://react-query.tanstack.com/guides/query-functions#handling-and-throwing-errors
@@ -138,6 +188,11 @@ Global states....
 #### How to style a new page, when you create it
 
 When you want an even darker section under there (ie. a "card"):
+```
+<div className="secondary-bg-forced m-1 p-4 rounded-xl">
+```
+
+Or NEVERMIND below not used...
 ```
 <div className={`bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-2`}>
 ```
@@ -162,9 +217,4 @@ When you need a button indicating a PRIMARY action:
  <IonButton color="success" className="text-sm" >
     Submit
 </IonButton>
-```
-
-To hide somehting on mobile: give below class
-```
-hidden sm:block
 ```

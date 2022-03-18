@@ -55,6 +55,7 @@ import FoxToken from "./pages/FoxToken";
 import NftPriceTable from "./pages/NftPriceTable";
 import StackedSearch from "./pages/StackedSearch";
 import { css } from "@emotion/react";
+import Alerts from "./pages/Alerts";
 
 const App = () => {
 
@@ -162,6 +163,11 @@ const App = () => {
                                                                         {/* Stacked Line Search */}
                                                                         <ProtectedRoute
                                                                             exact path="/stackedsearch" component={StackedSearch}
+                                                                        />
+
+                                                                        {/* Alerts */}
+                                                                        <ProtectedRoute
+                                                                            exact path="/alerts" component={Alerts}
                                                                         />
 
                                                                         {/*login button etc...*/}
