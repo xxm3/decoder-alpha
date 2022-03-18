@@ -58,7 +58,7 @@ const columns: Column<FoxTokenData>[] = [
     },
     {
         title: 'Price',
-        customSort: (a, b) => parseFloat(String(a.floorPrice)) - parseFloat(String(b.floorPrice)),
+        customSort: (a, b) => a.floorPrice - b.floorPrice,
         render: (record) => <span>{record.floorPrice}</span>,
     },
     {
@@ -237,8 +237,25 @@ function FoxToken({contentRef}: FoxToken) {
 
             const data: any = await getLiveFoxTokenData(mySplTokens);
 
-            setTableData(data);
-            setFullTableData(data);
+            // sometimes only gets named ones...
+            if(data.length > 50 && data.length < 500){
+                present({
+                    message: 'We had trouble loading all tokens. Refresh to load all tokens',
+                    color: 'danger',
+                    duration: 5000
+                });
+            }
+
+            if(data.length > 0){
+                setTableData(data);
+                setFullTableData(data);
+            }else{
+                present({
+                    message: 'Unable to load data. Refresh and try again.',
+                    color: 'danger',
+                    duration: 5000
+                });
+            }
         }
 
 
@@ -462,6 +479,7 @@ function FoxToken({contentRef}: FoxToken) {
             } else {
 
                 setViewMyTokensClicked(true);
+                // setTableData([]);
 
                 // new array of data we'll set later
                 let newTableData: any = [];
@@ -486,6 +504,7 @@ function FoxToken({contentRef}: FoxToken) {
                         }
                     }
                 }
+
                 if (newTableData.length === 0) {
                     present({
                         message: 'None of your tokens are also listed on FF Token Market :(',
@@ -495,6 +514,10 @@ function FoxToken({contentRef}: FoxToken) {
                     return;
                 }
 
+                // this should instantly show the table to the user
+                setTableData(newTableData);
+
+                // but then we need to go out and get their latest sales data... takes about 1.5 sec per token
                 instance
                     .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
                     .then((res) => {
@@ -503,8 +526,10 @@ function FoxToken({contentRef}: FoxToken) {
                             const row = newTableData.find((d: any) => d.token === sale.token);
                             row.lastSaleDate = sale.lastSaleDate;
                         });
-                    }).finally(() => setTableData(newTableData));
-
+                    }).finally(() => {
+                        // once we get the data, then we can set it yet again...
+                        setTableData(newTableData)
+                    });
             }
 
             // user wants to see ALL tokens
@@ -771,7 +796,11 @@ function FoxToken({contentRef}: FoxToken) {
                             data={tableData}
                             columns={columns}
                             title="Fox WL Token Market"
-                            description="👪 are community added names. 'Not Listed' means it is not listed for sale anymore, and shown for historical purposes. The Last Sale column is only updated when viewing the chart or your own tokens (which updates it for others as well)"
+                            description="
+                            👪 are community added names.
+                            The Last Sale column is only updated when viewing the chart or your own tokens (which updates it for others as well).
+                            'Not Listed' means it is not listed for sale anymore, and shown for historical purposes.
+                            "
                             url="https://famousfoxes.com/tokenmarket"
                             actions={[
                                 {

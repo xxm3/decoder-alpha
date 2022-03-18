@@ -234,12 +234,13 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
             });
 
+            // TODO: when test_vehn is run ... need to point to test DB...
+
             instance
                 .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: [token] })
                 .then((res) => {
-                    // TODO: Update table data with the last listing date
+                    // (nice to have) Update table data with the last listing date
                     // sales = res.data.data.sales
-                    console.log(res);
                 });
         }
 

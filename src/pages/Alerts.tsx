@@ -160,14 +160,21 @@ function StackedSearch({foo, onSubmit}: any) {
                         ></IonInput>
                     </IonItem>
 
-                    <IonButton
-                        color="primary"
-                        className="mt-5"
-                        hidden={formLoadingAddAlertToken}
-                        onClick={() => addAlertsTokenSubmit(true)}
-                    >
-                        Submit
+
+                    {/*TODO*/}
+                    <IonButton>
+                    COMING SOON
                     </IonButton>
+
+                    {/*<IonButton*/}
+                    {/*    color="primary"*/}
+                    {/*    className="mt-5"*/}
+                    {/*    hidden={formLoadingAddAlertToken}*/}
+                    {/*    onClick={() => addAlertsTokenSubmit(true)}*/}
+                    {/*>*/}
+                    {/*    Submit*/}
+                    {/*</IonButton>*/}
+
                     {/*<IonButton*/}
                     {/*    hidden={!multWalletAryFromCookie}*/}
                     {/*    color="danger"*/}

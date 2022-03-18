@@ -9,8 +9,6 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
     // get whitelisted named data from FF
     const verifiedTokenData = (await axios.get('https://dens.famousfoxes.com/whitelist.json')).data;
 
-    // TODO: If length less 500... Tell them refresh.. (or me fix the bug)
-
     // Use the data aggregation logic from the backend, but use data obtained from clientside-called FamousFoxes API
     const results = (await instance.post(`${environment.backendApi}/receiver/foxTokenAnalysis`, {
         // doScrape: true,
@@ -19,7 +17,7 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
         verifiedTokenData
     })).data;
 
-    // TODO-m: do the 401 thing???...
+    // NOTE: we don't have the "got 401 - go login" because the "FFNamed" on this page should do that
 
     // loop through table data (all fox tokens)... to eventually add which of these are your SPL tokens
     for (const splToken of mySplTokens) {
