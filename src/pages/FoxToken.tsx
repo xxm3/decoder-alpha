@@ -430,6 +430,7 @@ function FoxToken({contentRef}: FoxToken) {
         // TODO: within this page, make a call to a NEW endpoint on foxtokenparser.js
         // TODO: you can call this /userViewedMyToken
         // TODO: look at the code for instance.get - on how to send this, total 4 lines of code on frontend
+        // TODO: TEST THIS!!
         // called the api below but not sure if there is anything to be done with the response or after the api is hit
         const viewTokenResponse = await instance.post(environment.backendApi + '/receiver/foxTokenNameAdd');
 
