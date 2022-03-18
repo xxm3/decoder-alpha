@@ -76,6 +76,7 @@ const App = () => {
             window.location.replace("https://soldecoder.app");
         }
 
+        // code supposed to update the authorization header whenever the token changes
 		return auth.onIdTokenChanged(user => {
             console.log(user);
 			if (user) {

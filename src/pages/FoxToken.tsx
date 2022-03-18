@@ -39,10 +39,8 @@ const columns: Column<FoxTokenData>[] = [
                 target="_blank"
                 className="hover:opacity-80 flex items-center space-x-3"
             >
-                <span className="hidden xl:block">{record.token}</span>
-                <span className="xl:hidden">
-                    {shortenedWallet(record.token)}
-                </span>
+                {shortenedWallet(record.token)}
+                &nbsp;
                 <IonIcon
                     src="/assets/icons/newTabIcon.svg"
                     className="newTabIcon"

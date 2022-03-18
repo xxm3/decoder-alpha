@@ -222,8 +222,16 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                             showLine: false
                         },
                     ]
-
                 });
+
+                if(res.data.data.length === 0){
+                    present({
+                        message: 'No sales data found!',
+                        color: 'danger',
+                        duration: 5000
+                    });
+                }
+
             });
 
             instance
@@ -336,6 +344,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
                     {/*sales data*/}
                     <Chart
+                        hidden={foxSalesData?.labels?.length === 0}
                         type="line"
                         data={foxSalesData}
                         height={tableHeight / 1.5}
