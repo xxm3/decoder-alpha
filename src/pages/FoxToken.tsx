@@ -460,7 +460,7 @@ function FoxToken({contentRef}: FoxToken) {
         // user wants to see MY tokens
         if (wantViewTokens) {
 
-            // TODO: TEST: within this page, make a call to a NEW endpoint on foxtokenparser.js ... you can call this /userViewedMyToken ... look at the code for instance.get - on how to send this, total 4 lines of code on frontend
+            // TODO-WL: TEST: within this page, make a call to a NEW endpoint on foxtokenparser.js ... you can call this /userViewedMyToken ... look at the code for instance.get - on how to send this, total 4 lines of code on frontend
             // called the api below but not sure if there is anything to be done with the response or after the api is hit
             // const viewTokenResponse = await instance.get(environment.backendApi + '/receiver/userViewedMyToken');
 
@@ -534,11 +534,13 @@ function FoxToken({contentRef}: FoxToken) {
                 instance
                     .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
                     .then((res) => {
-                        const sales = res.data.data.sales;
-                        sales.forEach((sale: {token: string, lastSaleDate: string}) => {
-                            const row = newTableData.find((d: any) => d.token === sale.token);
-                            row.lastSaleDate = sale.lastSaleDate;
-                        });
+                        const sales = res?.data?.data.sales;
+                        if(sales){
+                            sales.forEach((sale: {token: string, lastSaleDate: string}) => {
+                                const row = newTableData.find((d: any) => d.token === sale.token);
+                                row.lastSaleDate = sale.lastSaleDate;
+                            });
+                        }
                     }).finally(() => {
 
                         // TODO: not setting properly, maybe is the var name...

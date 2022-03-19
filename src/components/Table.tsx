@@ -43,10 +43,10 @@ function Table<RowData extends object>(
 							border-bottom: none;
 						}
 
-						tbody tr[level="0"]:nth-child(even) {
+						tbody tr[level="0"]:nth-of-type(even) {
 							background-color: rgba(var(--ion-color-primary-rgb), 0.5);
 						}
-						tbody tr[level="0"]:nth-child(odd) {
+						tbody tr[level="0"]:nth-of-type(odd) {
 							background-color: rgba(var(--ion-color-primary-rgb), 0.3);
 						}
 
@@ -60,14 +60,14 @@ function Table<RowData extends object>(
 							--tr-padding-vertical : 10px;
 						}
 
-						table:not(first-child){
+						table:not(first-of-type){
 							margin-top: 10px;
 						}
 						table th{
 						    padding: 8px !important;
 						}
 
-						tbody tr td:first-child {
+						tbody tr td:first-of-type {
 							padding-left: var(--tr-padding-horizontal);
 						}
 
@@ -79,13 +79,13 @@ function Table<RowData extends object>(
 							padding: var(-tr-padding-vertical) 0;
 						}
 
-						tbody tr:first-child td:first-child {
+						tbody tr:first-of-type td:first-of-type {
 							border-radius: var(--tr-border-radius) 0 0 0;
 						}
-						tbody tr:first-child td:last-child {
+						tbody tr:first-of-type td:last-child {
 							border-radius: 0 var(--tr-border-radius) 0 0;
 						}
-						tbody tr:last-child td:first-child {
+						tbody tr:last-child td:first-of-type {
 							border-radius: 0 0 0 var(--tr-border-radius);
 						}
 						tbody tr:last-child td:last-child {
