@@ -836,12 +836,6 @@ function FoxToken({contentRef}: FoxToken) {
                                     onClick: () => clickedMultWall(true),
                                     isFreeAction: true,
                                 },
-                                {
-									icon: () => <IonIcon icon={add}/>,
-                                    tooltip: 'Add Custom Token Name',
-                                    onClick: () => clickedAddName(true),
-                                    isFreeAction: true,
-								},
 								{
 									icon: () => <IonIcon icon={add}/>,
                                     tooltip: 'Add Custom Token Name',
