@@ -234,8 +234,6 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
             });
 
-            // TODO: when test_vehn is run ... need to point to test DB...
-
             instance
                 .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: [token] })
                 .then((res) => {
