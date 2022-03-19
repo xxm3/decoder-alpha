@@ -249,8 +249,8 @@ const Schedule = () => {
         },
         {
             title: 'Supply',
-            customSort: (a, b) => +a.count - +b.count,
-            render: (record) => <span>{record.count}</span>,
+            customSort: (a, b) => + a.count.replace(',', '') - + b.count.replace(',', ''),
+            render: (record) => <span>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>,
         },
         {
             title: '# Discord',
