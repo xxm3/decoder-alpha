@@ -2,28 +2,42 @@
 import { IonIcon, IonItem } from '@ionic/react'
 import { Tooltip } from 'react-tippy'
 import { helpOutline } from "ionicons/icons"
-import Style from './Style'
+import { css } from '@emotion/react';
 
 interface Props {
 	description: string;
 }
 function Help({ description } : Props) {
-  return (
-	<>
-		<Style>{`
-			.help-tooltip {
+	const helpToolTipStyle = css`
 				--background : var(--ion-color-step-300);
 				background-color: var(--background);
 				--padding-top: 0.5rem;
 				--padding-bottom: var(--padding-top);
-			}
-		`}</Style>
-		<Tooltip trigger="mouseenter" position="bottom" html={<IonItem lines="none" className='max-w-[320px] rounded help-tooltip whitespace-pre-line'>{description}</IonItem>}>
-			<IonIcon className="rounded-full help-tooltip p-1 text-lg" icon={helpOutline} />
-		</Tooltip>
-	</>
-
-  )
+			`
+  return (
+      < >
+          <Tooltip
+              trigger="mouseenter"
+              position="bottom-end"
+              html={
+                  <IonItem
+                      lines="none"
+                      className="max-w-[320px] rounded whitespace-pre-line"
+					  css={helpToolTipStyle}
+                  >
+                      {description}
+                  </IonItem>
+              }
+			 
+          >
+              <IonIcon
+                  className="rounded-full p-1 text-lg"
+                  icon={helpOutline}
+				  css={helpToolTipStyle}
+              />
+          </Tooltip>
+      </>
+  );
 }
 
 export default Help

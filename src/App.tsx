@@ -50,11 +50,11 @@ import AppRoute from "./components/Route";
 import HeaderContainer from "./components/nav/Header";
 import WalletButton from "./components/WalletButton";
 import Sidebar from "./components/nav/Sidebar";
-import Style from "./components/Style";
 import Theme from "./theme/Theme";
 import FoxToken from "./pages/FoxToken";
 import NftPriceTable from "./pages/NftPriceTable";
 import StackedSearch from "./pages/StackedSearch";
+import { css } from "@emotion/react";
 import Alerts from "./pages/Alerts";
 
 const App = () => {
@@ -125,16 +125,12 @@ const App = () => {
 	                                                        size="12"
 	                                                        className="flex h-full"
 	                                                    >
-	                                                        <Style>
-	                                                            {`
+	                                                        <IonSplitPane when="md" contentId="main" 
+																css={css`
 																	@media only screen and (min-width:768px) and (max-width:992px){
-																		ion-split-pane {
 																			--side-min-width: none;
-																		}
 																	}
-																`}
-	                                                        </Style>
-	                                                        <IonSplitPane when="md" contentId="main">
+																`}>
 	                                                            <IonMenu menuId="sidebar" contentId="main">
 	                                                                <Sidebar />
 	                                                            </IonMenu>
@@ -152,7 +148,7 @@ const App = () => {
 
                                                                         {/* todays mints*/}
 	                                                                    <ProtectedRoute
-	                                                                        exact path="/Schedule" component={Schedule}
+	                                                                        exact path="/schedule" component={Schedule}
 	                                                                    />
 
                                                                         {/* fox token market */}
@@ -177,7 +173,7 @@ const App = () => {
 
                                                                         {/*login button etc...*/}
 	                                                                    <AppRoute
-	                                                                        exact path="/Login" component={ Login}
+	                                                                        exact path="/login" component={ Login}
 	                                                                    />
 	                                                                </IonRouterOutlet>
 	                                                            </IonContent>

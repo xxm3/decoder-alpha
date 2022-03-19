@@ -13,9 +13,9 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0]) => {
 	) : (
 		<Route
 			{...props}
-			render={({ location }) => (
+			render={() => (
 				// if user is not authenticated redirect user to login page
-				<Redirect to={`/login?next=${location.pathname}`} />
+			<Redirect to={`/login?next=${props.path ?? "/"}`} />
 			)}
 			component={undefined}
 			children={undefined}

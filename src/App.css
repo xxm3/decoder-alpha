@@ -52,14 +52,14 @@ ion-split-pane {
 }
 
 ion-item {
-	--padding-start: 0;
 	--inner-padding-start: 0;
-	--padding-end: 0;
 	--inner-padding-end: 0;
 	--padding-top: 0;
 	--inner-padding-top: 0;
-	--padding-start: 0;
 	--inner-padding-bottom: 0;
+	--padding-horizontal : 1rem;
+	--padding-start: var(--padding-horizontal);
+	--padding-end: var(--padding-horizontal);
 }
 /* width */
 ::-webkit-scrollbar {

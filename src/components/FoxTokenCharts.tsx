@@ -4,8 +4,10 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { instance } from '../axios';
 import { environment } from '../environments/environment';
 import { FoxTokenData } from '../types/FoxTokenTypes';
-import Style from './Style';
 import Cookies from "universal-cookie";
+import axios from "axios";
+import useFoxTokenChartCookies from './useFoxTokenChartCookies';
+import { css } from '@emotion/react';
 import {useIonToast} from "@ionic/react";
 
 import { Chart } from 'react-chartjs-2';
@@ -63,43 +65,28 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
     const cookies = useMemo(() => new Cookies(), []);
 
-    // # purple #9945FF - for listings
-    const lineColorSelected = "#14F195"; // green - for price
-    // color repeated on App.css & FoxTokenCharts.tsx
-    const shadedAreaColorSelected = "rgba(67, 192, 187, 0.1)"; // "rgba(26, 255, 163, 0.1)"; // lighter shade of green
+	const {
+		chartDateSelected,
+		lineColorSelected,
+		shadedAreaColorSelected,
+	} = useFoxTokenChartCookies()
 
     // user clicked change colour
-    // const [lineColorSelected, setLineColorSelected] = useState<string>(
-    //     cookies.get('lineColorSelected2') ?
-    //         cookies.get('lineColorSelected2') : "#14F195"); // #195e83
-    // const [shadedAreaColorSelected, setShadedAreaColorSelected] = useState<string>(
-    //     cookies.get('shadedAreaColorSelected2') ?
-    //         cookies.get('shadedAreaColorSelected2') : "rgba(26, 255, 163, 0.1)") // #01FF6F
-    // // when above clicked, will redraw the chart
-    // useEffect(() => {
-    //     if (firstUpdate.current) {
-    //         firstUpdate.current = false;
-    //         return;
-    //     }
-    //
-    //     // (IF doing this) re-enable these, after you can get the code to NOT call this on page load
-    //     // cookies.set('lineColorSelected2', lineColorSelected);
-    //     // cookies.set('shadedAreaColorSelected2', shadedAreaColorSelected);
-    //
-    //     // redraw the chart
-    //     // viewChart();
-    //
-    //     // (IF doing this) I used to have the below code in a use effect (in the “customize” button on fox table) in “}, [lineColorSelected, shadedAreaColorSelected]);” — well I still do but you removed it for whatever reason. We need a better ui/ux  (or need below to work) — to tell a user what to do after they are changing the color in the chart
-    //     // present({
-    //     //     message: 'After setting a valid color, load a new chart to see it',
-    //     //     color: 'success',
-    //     //     duration: 5000
-    //     // });
-    //
-    // }, [lineColorSelected, shadedAreaColorSelected]);
+
+    // when above clicked, will redraw the chart
+    useEffect(() => {
+        if (firstUpdate.current) {
+            firstUpdate.current = false;
+            return;
+        }
+
+        // redraw the chart
+        viewChart();
+
+    }, [lineColorSelected, shadedAreaColorSelected]);
+
 
     // user clicked the radio for the dates in the chart
-    const [chartDateSelected, setChartDateSelected] = useState<string>(cookies.get('chartDateFormat') ? cookies.get('chartDateFormat') : 'fromNow');
     // when above radio clicked, will redraw the chart
     useEffect(() => {
         if (firstUpdate.current) {
@@ -107,11 +94,8 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
             return;
         }
 
-        cookies.set('chartDateFormat', chartDateSelected);
-
-        // redraw the chart
         viewChart();
-    }, [chartDateSelected]);
+    }, [chartDateSelected, lineColorSelected, shadedAreaColorSelected]);
 
 
     // viewing the chart for a token
@@ -254,15 +238,9 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
     return (
         <>
-		<Style>
-			{`
-				.foxTokenCharts {
-					background-color: var(--ion-color-step-50);
-				}
-
-			`}
-		</Style>
-        	<div className="foxTokenCharts px-5 gap-4 grid grid-cols-12" ref={chartsRef}>
+        	<div className="foxTokenCharts px-5 gap-4 grid grid-cols-12" css={css`
+				background-color: var(--ion-color-step-50);
+			`} ref={chartsRef}>
 
                 <div className="chart">
                     <Chart

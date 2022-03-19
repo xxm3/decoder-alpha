@@ -1,4 +1,4 @@
-import Style from "../components/Style"
+
 
 interface Color {
 	name : string;
@@ -34,7 +34,7 @@ function Theme({ children } : {
 }) {
   return (
       <>
-          <Style global>{`
+          <style>{`
 		 	:root {
 				${colors.map(color => `
 					--ion-color-${color.name} : ${color.main};
@@ -45,7 +45,7 @@ function Theme({ children } : {
 					--ion-color-${color.name}-tint : ${color.tint};
 				`).join("\n")}
 			} 
-		  `}</Style>
+		  `}</style>
 		  {children}
       </>
   );

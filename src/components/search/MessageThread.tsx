@@ -7,7 +7,7 @@ import { instance } from '../../axios';
 import { AxiosResponse } from 'axios';
 import ReactTooltip from "react-tooltip";
 import SearchSkeleton from "./SearchSkeleton"
-import Style from '../Style';
+import { css } from '@emotion/react';
 
 interface MessageThreadProps {
     message: Message;
@@ -114,11 +114,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({
     const containerRef = useRef<HTMLDivElement>(null);
     return (
         <>
-            <Style>{`
-				.message-thread-modal {
-					--max-width: 1280px;
-				}
-			`}</Style>
             <IonModal
                 isOpen
                 onDidDismiss={onClose as any}
@@ -130,7 +125,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                 //         });
                 //     }
                 // }}
-                cssClass="message-thread-modal"
+				
             >
                 <div
                     ref={containerRef}

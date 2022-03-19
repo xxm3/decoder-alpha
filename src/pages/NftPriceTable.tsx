@@ -10,7 +10,6 @@ import {environment} from "../environments/environment";
 import meLogo from '../images/me.png';
 import { Column  } from '@material-table/core';
 import Table from '../components/Table';
-import Style from '../components/Style';
 import moment from 'moment';
 import {eye, eyeOff, eyeOffOutline, eyeOutline, notifications} from "ionicons/icons";
 import {useHistory} from "react-router";

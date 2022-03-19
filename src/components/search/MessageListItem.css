@@ -6,8 +6,9 @@
 
 /* make the modal bigger */
 .modal-wrapper {
-    --width: 75%;
+    --width: 90vw;
     --height: 75%;
+	--max-width: 1280px;
 }
 
 .media > img,

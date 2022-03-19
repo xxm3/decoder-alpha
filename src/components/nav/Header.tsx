@@ -14,8 +14,8 @@ import { queryClient } from "../../queryClient";
 import SearchBar from "../SearchBar";
 import useConnectWallet from "../../hooks/useConnectWallet";
 import WalletButton from "../WalletButton";
-import Style from "../Style";
 import Help from "../Help";
+import { css } from "@emotion/react";
 
 
 const HeaderContainer = () => {
@@ -87,20 +87,15 @@ const HeaderContainer = () => {
 
     return (
         <>
-            <IonHeader className={`py-2 ${showMobileSearch ? "px-10" : "pr-10"}`}>
-                <Style>
-                    {`
-					ion-header {
-
-					}
-					ion-header, ion-toolbar {
-						--background: var(--ion-background-color);
+            <IonHeader 
+				className={`py-2 ${showMobileSearch ? "px-10" : "pr-10"}`}
+				css={css`
+					--background: var(--ion-background-color);
+					ion-toolbar {
 						background-color: var(--background)
-					}
-					ion-menu-button {
-						font-size: 32px;
+					}	
 				`}
-                </Style>
+			>
                 <IonToolbar>
                     <div className="justify-between space-x-8 flex items-center">
                         {/*pt-3*/}
@@ -111,6 +106,9 @@ const HeaderContainer = () => {
                                     color="white"
                                     menu="sidebar"
                                     className="md:hidden ion-no-padding"
+									css={css`
+										font-size: 32px;
+									`}
                                 />
 
                                 {/*site logo & home*/}
