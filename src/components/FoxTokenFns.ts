@@ -11,11 +11,13 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
 
     // Use the data aggregation logic from the backend, but use data obtained from clientside-called FamousFoxes API
     const results = (await instance.post(`${environment.backendApi}/receiver/foxTokenAnalysis`, {
-        doScrape: true,
-        saveToDb: false,
+        // doScrape: true,
+        // saveToDb: false,
         rawTokenData,
         verifiedTokenData
     })).data;
+
+    // NOTE: we don't have the "got 401 - go login" because the "FFNamed" on this page should do that
 
     // loop through table data (all fox tokens)... to eventually add which of these are your SPL tokens
     for (const splToken of mySplTokens) {

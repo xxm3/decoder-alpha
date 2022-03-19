@@ -206,16 +206,25 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                             showLine: false
                         },
                     ]
-
                 });
+
+                if(res.data.data.length === 0){
+                    present({
+                        message: 'No sales data found!',
+                        color: 'danger',
+                        duration: 5000
+                    });
+                }
+
             });
+
+            // TODO: when test_vehn is run ... need to point to test DB...
 
             instance
                 .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: [token] })
                 .then((res) => {
-                    // TODO: Update table data with the last listing date
+                    // (nice to have) Update table data with the last listing date
                     // sales = res.data.data.sales
-                    console.log(res);
                 });
         }
 
@@ -314,6 +323,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
                     {/*sales data*/}
                     <Chart
+                        hidden={foxSalesData?.labels?.length === 0}
                         type="line"
                         data={foxSalesData}
                         height={tableHeight / 1.5}
