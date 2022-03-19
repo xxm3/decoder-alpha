@@ -844,117 +844,117 @@ function FoxToken({contentRef}: FoxToken) {
                                     onClick: () => clickedAddName(true),
                                     isFreeAction: true,
 								},
-								{
-                                    icon: () => (
-                                        <>
-                                            <IonIcon
-                                                icon={cog}
-                                            />
-                                            <IonPopover
-                                                isOpen={!!popoverOpened}
-                                                onDidDismiss={() =>
-                                                    setPopoverOpened(false)
-                                                }
-                                            >
-                                                <IonContent>
-                                                    <div className="p-2">
-                                                        <h3 className="font-bold pb-1 w-full pt-5">
-                                                            Date Format
-                                                        </h3>
-
-                                                        <IonList>
-                                                            <IonRadioGroup
-                                                                value={
-                                                                    chartDateSelected
-                                                                }
-                                                                onIonChange={(
-                                                                    e
-                                                                ) =>
-                                                                    setChartDateSelected(
-                                                                        e.detail
-                                                                            .value
-                                                                    )
-                                                                }
-                                                            >
-                                                                <IonItem>
-                                                                    <IonLabel>
-                                                                        "2 hours
-                                                                        ago"
-                                                                    </IonLabel>
-                                                                    <IonRadio value="fromNow" />
-                                                                </IonItem>
-
-                                                                <IonItem>
-                                                                    <IonLabel>
-                                                                        "2022-01-01
-                                                                        12:00"
-                                                                    </IonLabel>
-                                                                    <IonRadio value="yyyyMmDd" />
-                                                                </IonItem>
-                                                            </IonRadioGroup>
-                                                        </IonList>
-
-                                                        <h3 className="font-bold pb-1 w-full pt-5">
-                                                            Chart Colors
-                                                        </h3>
-
-                                                        <IonItem>
-                                                            <IonLabel
-                                                                position="stacked"
-                                                                className="font-bold"
-                                                            >
-                                                                Line Color
-                                                            </IonLabel>
-                                                            <IonInput
-                                                                onIonChange={(
-                                                                    e
-                                                                ) =>
-                                                                    setLineColorSelected(
-                                                                        e.detail
-                                                                            .value!
-                                                                    )
-                                                                }
-                                                                value={
-                                                                    lineColorSelected
-                                                                }
-                                                                placeholder="red, #c6ac95, rgb(255, 0, 0)"
-                                                            ></IonInput>
-                                                        </IonItem>
-                                                        <IonItem>
-                                                            <IonLabel
-                                                                position="stacked"
-                                                                className="font-bold"
-                                                            >
-                                                                Shaded Area
-                                                                Color
-                                                            </IonLabel>
-                                                            <IonInput
-                                                                onIonChange={(
-                                                                    e
-                                                                ) =>
-                                                                    setShadedAreaColorSelected(
-                                                                        e.detail
-                                                                            .value!
-                                                                    )
-                                                                }
-                                                                value={
-                                                                    shadedAreaColorSelected
-                                                                }
-                                                                placeholder="red, #c6ac95, rgb(255, 0, 0)"
-                                                            ></IonInput>
-                                                        </IonItem>
-                                                    </div>
-                                                </IonContent>
-                                            </IonPopover>
-
-                                            {/*--{token}-{name}-*/}
-                                        </>
-                                    ),
-                                    tooltip: 'Customise',
-                                    isFreeAction: true,
-									onClick: () => setPopoverOpened(true)
-                                },
-
+                                // BUG-92-commented-out-4
+								// {
+                                //     icon: () => (
+                                //         <>
+                                //             <IonIcon
+                                //                 icon={cog}
+                                //             />
+                                //             <IonPopover
+                                //                 isOpen={!!popoverOpened}
+                                //                 onDidDismiss={() =>
+                                //                     setPopoverOpened(false)
+                                //                 }
+                                //             >
+                                //                 <IonContent>
+                                //                     <div className="p-2">
+                                //                         <h3 className="font-bold pb-1 w-full pt-5">
+                                //                             Date Format
+                                //                         </h3>
+                                //
+                                //                         <IonList>
+                                //                             <IonRadioGroup
+                                //                                 value={
+                                //                                     chartDateSelected
+                                //                                 }
+                                //                                 onIonChange={(
+                                //                                     e
+                                //                                 ) =>
+                                //                                     setChartDateSelected(
+                                //                                         e.detail
+                                //                                             .value
+                                //                                     )
+                                //                                 }
+                                //                             >
+                                //                                 <IonItem>
+                                //                                     <IonLabel>
+                                //                                         "2 hours
+                                //                                         ago"
+                                //                                     </IonLabel>
+                                //                                     <IonRadio value="fromNow" />
+                                //                                 </IonItem>
+                                //
+                                //                                 <IonItem>
+                                //                                     <IonLabel>
+                                //                                         "2022-01-01
+                                //                                         12:00"
+                                //                                     </IonLabel>
+                                //                                     <IonRadio value="yyyyMmDd" />
+                                //                                 </IonItem>
+                                //                             </IonRadioGroup>
+                                //                         </IonList>
+                                //
+                                //                         <h3 className="font-bold pb-1 w-full pt-5">
+                                //                             Chart Colors
+                                //                         </h3>
+                                //
+                                //                         <IonItem>
+                                //                             <IonLabel
+                                //                                 position="stacked"
+                                //                                 className="font-bold"
+                                //                             >
+                                //                                 Line Color
+                                //                             </IonLabel>
+                                //                             <IonInput
+                                //                                 onIonChange={(
+                                //                                     e
+                                //                                 ) =>
+                                //                                     setLineColorSelected(
+                                //                                         e.detail
+                                //                                             .value!
+                                //                                     )
+                                //                                 }
+                                //                                 value={
+                                //                                     lineColorSelected
+                                //                                 }
+                                //                                 placeholder="red, #c6ac95, rgb(255, 0, 0)"
+                                //                             ></IonInput>
+                                //                         </IonItem>
+                                //                         <IonItem>
+                                //                             <IonLabel
+                                //                                 position="stacked"
+                                //                                 className="font-bold"
+                                //                             >
+                                //                                 Shaded Area
+                                //                                 Color
+                                //                             </IonLabel>
+                                //                             <IonInput
+                                //                                 onIonChange={(
+                                //                                     e
+                                //                                 ) =>
+                                //                                     setShadedAreaColorSelected(
+                                //                                         e.detail
+                                //                                             .value!
+                                //                                     )
+                                //                                 }
+                                //                                 value={
+                                //                                     shadedAreaColorSelected
+                                //                                 }
+                                //                                 placeholder="red, #c6ac95, rgb(255, 0, 0)"
+                                //                             ></IonInput>
+                                //                         </IonItem>
+                                //                     </div>
+                                //                 </IonContent>
+                                //             </IonPopover>
+                                //
+                                //             {/*--{token}-{name}-*/}
+                                //         </>
+                                //     ),
+                                //     tooltip: 'Customise',
+                                //     isFreeAction: true,
+								// 	onClick: () => setPopoverOpened(true)
+                                // },
                             ]}
                             options={{
                                 detailPanelType: "single",

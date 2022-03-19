@@ -41,9 +41,9 @@ const SearchedWords = () => {
                 color: 'danger',
                 duration: 5000
             });
-            if(msg.includes('logging in again')){
-                history.push("/login");
-            }
+            // if(msg.includes('logging in again')){
+            //     history.push("/login");
+            // }
 
             // throw new Error(msg);
         }
