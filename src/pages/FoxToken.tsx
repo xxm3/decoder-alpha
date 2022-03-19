@@ -125,7 +125,7 @@ function FoxToken({contentRef}: FoxToken) {
     // clicked link to add multiple wallets
     const clickedMultWall = (val: boolean) => {
         setAddMultWallModalOpen(val);
-        setPopoverOpened(false);
+        // setPopoverOpened(false);
     }
 
     // in the modal for multiple wallets - submit button clicked
@@ -406,7 +406,7 @@ function FoxToken({contentRef}: FoxToken) {
     const [formErrMsg, setFormErrMsg] = useState('');
     const clickedAddName = (val: boolean) => {
         setAddNameModalOpen(val);
-        setPopoverOpened(false);
+        // setPopoverOpened(false);
     }
 
     // submit form to add new wallet
@@ -540,6 +540,8 @@ function FoxToken({contentRef}: FoxToken) {
                             row.lastSaleDate = sale.lastSaleDate;
                         });
                     }).finally(() => {
+
+                        // TODO: not setting properly, maybe is the var name...
                         // once we get the data, then we can set it yet again...
                         setTableData(newTableData)
                     });
