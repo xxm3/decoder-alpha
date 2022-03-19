@@ -29,8 +29,6 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
             if (!message) return { formattedMessage : "", mediaUrls: [] };
             const mediaUrls: string[] = [];
 
-
-
             let formattedMessage = message.replaceAll(
                 urlRegExp,
                 (url) => {
@@ -70,6 +68,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                 ref={ref}
             >
 
+                {/*hide this on mobile*/}
                 <img
                     className="image hidden sm:block"
                     alt={source === 'Twitter' ? 'Twitter' : 'Discord'}
@@ -87,14 +86,16 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                     <div
                         className={`flex font-semibold items-center space-x-2 text-base mb-1`}
                     >
+                        {/*source & author*/}
                         <p>
                             ({source} {
                                       source !== 'Twitter' ? '- Discord' : ''
                                   }) {author}
                         </p>
+                        {/*time*/}
                         {(
                             <div
-                                className="text-xs text-gray-400"
+                                className="text-xs text-gray-400 " // underline cursor-pointer
                                 data-tip={new Date(
                                     time as string
                                 ).toLocaleString()}

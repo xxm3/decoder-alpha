@@ -10,9 +10,8 @@ import {environment} from "../environments/environment";
 import meLogo from '../images/me.png';
 import { Column  } from '@material-table/core';
 import Table from '../components/Table';
-import Style from '../components/Style';
 import moment from 'moment';
-import { eye, eyeOff, eyeOffOutline, eyeOutline} from "ionicons/icons";
+import {eye, eyeOff, eyeOffOutline, eyeOutline, notifications} from "ionicons/icons";
 import {useHistory} from "react-router";
 
 interface NftPriceTableProps {
@@ -215,7 +214,12 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 								title={"Mint Alerts Automated - Stats"}
 								description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
 								actions={[
-                                    // TODO: need alert icon...
+                                    {
+                                        icon: () => <IonIcon icon={notifications}/>,
+                                        tooltip: 'Alerts for new links',
+                                        onClick: () => history.push('/alerts#ma'),
+                                        isFreeAction: true,
+                                    },
 									{
 										icon : hideComments ? () => <IonIcon icon={eye}/> :  () => <IonIcon icon={eyeOff}/>,
 										tooltip : hideComments ? "Show Comments" : "Hide comments",

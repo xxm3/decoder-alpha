@@ -130,6 +130,11 @@ To use toasts
 
 Global states....
 - see state.walletAddress... (to get)
+```
+  const walletAddress = useSelector(
+  (state: RootState) => state.wallet.walletAddress
+  );
+```
 - see dispatch(setWallet... (to set)
 
 
@@ -183,6 +188,11 @@ If want to refresh a query when you go back to the window, or click back into th
 #### How to style a new page, when you create it
 
 When you want an even darker section under there (ie. a "card"):
+```
+<div className="secondary-bg-forced m-1 p-4 rounded-xl">
+```
+
+Or NEVERMIND below not used...
 ```
 <div className={`bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4 mb-2`}>
 ```

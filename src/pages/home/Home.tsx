@@ -26,21 +26,22 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
     return (
         <>
 
-            <div className="m-3 relative bg-primary p-4 rounded-xl">
-                <p className="text-medium text-white font-medium">
-                    <b>
-                        Welcome to the new SOL Decoder! New info. will be displayed on the home page here in the coming week(s), such as:
-                        <br/>- New WL Tokens that were added (both officially by Fox Token, and by users)
-                        <br/>- New mints coming out in the next few hours
-                        <br/>- The latest 3 Mint alerts, and top Mint alerts we gave this week, and this month
-                        <br/>- New & Trending words people put into Discord (ie. new & trending NFTs)
-                        <br/>- Recent community searches, and other things as we develop them!
-                    </b>
-                </p>
-                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                    :)
-                </span>
-            </div>
+                            {/*<div className="secondary-bg-forced m-3 relative p-4 rounded-xl">*/}
+            {/*<div className="secondary-bg-forced m-1 p-4 rounded-xl">*/}
+            {/*    <p className="text-medium text-white font-medium">*/}
+            {/*        <b>*/}
+            {/*            Welcome to the new SOL Decoder! New info. will be displayed on the home page here in the coming week(s), such as:*/}
+            {/*            <br/>- New WL Tokens that were added (both officially by Fox Token, and by users)*/}
+            {/*            <br/>- New mints coming out in the next few hours*/}
+            {/*            <br/>- The latest 3 Mint alerts, and top Mint alerts we gave this week, and this month*/}
+            {/*            <br/>- New & Trending words people put into Discord (ie. new & trending NFTs)*/}
+            {/*            <br/>- Recent community searches, and other things as we develop them!*/}
+            {/*        </b>*/}
+            {/*    </p>*/}
+                                {/*<span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">*/}
+                                {/*    :)*/}
+                                {/*</span>*/}
+            {/*</div>*/}
 
 
             {/* Recent Community Searches */}

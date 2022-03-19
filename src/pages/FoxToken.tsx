@@ -7,26 +7,31 @@ import {
     IonModal,
     IonContent,
     IonHeader,
-    IonToolbar, IonTitle, useIonToast, IonIcon, IonSearchbar,
+    IonToolbar, IonTitle, useIonToast, IonIcon, IonSearchbar, IonPopover, IonRadioGroup, IonRadio,
 } from '@ionic/react';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import Loader from "../components/Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import * as solanaWeb3 from '@solana/web3.js';
-import {add, albums, chevronDown, chevronUp, close, notifications, notificationsOutline, wallet} from "ionicons/icons";
+import {add, albums, chevronDown, chevronUp, close, notifications, notificationsOutline, wallet, cog} from "ionicons/icons";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
 import Cookies from "universal-cookie";
 import {getLiveFoxTokenData, shortenedWallet} from "../components/FoxTokenFns";
 import Table from '../components/Table';
-import {Column} from '@material-table/core';
-import Style from '../components/Style';
-import {AppComponentProps} from '../components/Route';
+import { Column } from '@material-table/core';
+import _ from 'lodash';
+import { AppComponentProps } from '../components/Route';
 import FoxTokenCharts from '../components/FoxTokenCharts';
-import {FoxTokenData} from '../types/FoxTokenTypes';
+import { FoxTokenData } from '../types/FoxTokenTypes';
+import useFoxTokenChartCookies from '../components/useFoxTokenChartCookies';
+import { css } from '@emotion/react';
+import moment from 'moment';
 import {useHistory} from "react-router";
+import FfNamed from "./home/FfNamed";
+import usePersistentState from "../hooks/usePersistentState"
 
 const columns: Column<FoxTokenData>[] = [
     {
@@ -37,24 +42,24 @@ const columns: Column<FoxTokenData>[] = [
                 target="_blank"
                 className="hover:opacity-80 flex items-center space-x-3"
             >
-                <span className="hidden xl:block">{record.token}</span>
-                <span className="xl:hidden">
-                    {shortenedWallet(record.token)}
-                </span>
+                {shortenedWallet(record.token)}
+                &nbsp;
                 <IonIcon
                     src="/assets/icons/newTabIcon.svg"
-                    className="newTabIcon"
+                    css={css`
+						color: var(--ion-text-color);
+					`}
                 />
             </a>
         ),
         customSort: (a, b) => a.token.localeCompare(b.token),
-        customFilterAndSearch: (term, rowData) => rowData.token.toLowerCase().includes(term.toLowerCase()),
+		customFilterAndSearch: (term, rowData) => rowData.token?.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Name',
         customSort: (a, b) => a.name.localeCompare(b.name),
         render: (record) => <span>{record.name}</span>,
-        customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().includes(term.toLowerCase()),
+		customFilterAndSearch: (term, rowData) => rowData.name?.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Price',
@@ -65,6 +70,11 @@ const columns: Column<FoxTokenData>[] = [
         title: 'Listings',
         customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
         render: (record) => <span>{record.totalTokenListings}</span>,
+    },
+    {
+        title: 'Last Sale',
+        customSort: (a, b) => new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
+        render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : null}</span>,
     },
     {
         title: '# Owned & Wallet',
@@ -92,14 +102,22 @@ function FoxToken({contentRef}: FoxToken) {
     const local_host_str = 'localhost';
     const firstUpdate = useRef(true);
 
-    // const [popoverOpened, setPopoverOpened] = useState(null);
+    const [popoverOpened, setPopoverOpened] = useState(false);
     const [viewAbuse, setViewAbuse] = useState(false);
 
     const cookies = useMemo(() => new Cookies(), []);
 
-    const [hidHelpTop, setHidHelpTop] = useState(cookies.get('hidHelpTop') === "true" ? true : false );
+	const {
+		chartDateSelected,
+		setChartDateSelected,
+		lineColorSelected,
+		setLineColorSelected,
+		shadedAreaColorSelected,
+		setShadedAreaColorSelected
+	} = useFoxTokenChartCookies()
+    const [hidHelpTop, setHidHelpTop] = usePersistentState<boolean>('hidHelpTop', false)
+
     const clickedSetHidHelpTop = () => {
-        cookies.set('hidHelpTop', "true");
         setHidHelpTop(true);
     }
 
@@ -107,7 +125,7 @@ function FoxToken({contentRef}: FoxToken) {
     // clicked link to add multiple wallets
     const clickedMultWall = (val: boolean) => {
         setAddMultWallModalOpen(val);
-        // setPopoverOpened(null);
+        // setPopoverOpened(false);
     }
 
     // in the modal for multiple wallets - submit button clicked
@@ -232,8 +250,25 @@ function FoxToken({contentRef}: FoxToken) {
 
             const data: any = await getLiveFoxTokenData(mySplTokens);
 
-            setTableData(data);
-            setFullTableData(data);
+            // sometimes only gets named ones...
+            if(data.length > 50 && data.length < 500){
+                present({
+                    message: 'We had trouble loading all tokens. Refresh to load all tokens',
+                    color: 'danger',
+                    duration: 5000
+                });
+            }
+
+            if(data.length > 0){
+                setTableData(data);
+                setFullTableData(data);
+            }else{
+                present({
+                    message: 'Unable to load data. Refresh and try again.',
+                    color: 'danger',
+                    duration: 5000
+                });
+            }
         }
 
 
@@ -371,7 +406,7 @@ function FoxToken({contentRef}: FoxToken) {
     const [formErrMsg, setFormErrMsg] = useState('');
     const clickedAddName = (val: boolean) => {
         setAddNameModalOpen(val);
-        // setPopoverOpened(null);
+        // setPopoverOpened(false);
     }
 
     // submit form to add new wallet
@@ -425,6 +460,10 @@ function FoxToken({contentRef}: FoxToken) {
         // user wants to see MY tokens
         if (wantViewTokens) {
 
+            // TODO: TEST: within this page, make a call to a NEW endpoint on foxtokenparser.js ... you can call this /userViewedMyToken ... look at the code for instance.get - on how to send this, total 4 lines of code on frontend
+            // called the api below but not sure if there is anything to be done with the response or after the api is hit
+            // const viewTokenResponse = await instance.get(environment.backendApi + '/receiver/userViewedMyToken');
+
             // see other local host on here to see why
             if (window.location.href.indexOf(local_host_str) !== -1) {
                 await getUserSpls();
@@ -453,6 +492,7 @@ function FoxToken({contentRef}: FoxToken) {
             } else {
 
                 setViewMyTokensClicked(true);
+                // setTableData([]);
 
                 // new array of data we'll set later
                 let newTableData: any = [];
@@ -487,7 +527,24 @@ function FoxToken({contentRef}: FoxToken) {
                     return;
                 }
 
+                // this should instantly show the table to the user
                 setTableData(newTableData);
+
+                // but then we need to go out and get their latest sales data... takes about 1.5 sec per token
+                instance
+                    .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
+                    .then((res) => {
+                        const sales = res.data.data.sales;
+                        sales.forEach((sale: {token: string, lastSaleDate: string}) => {
+                            const row = newTableData.find((d: any) => d.token === sale.token);
+                            row.lastSaleDate = sale.lastSaleDate;
+                        });
+                    }).finally(() => {
+
+                        // TODO: not setting properly, maybe is the var name...
+                        // once we get the data, then we can set it yet again...
+                        setTableData(newTableData)
+                    });
             }
 
             // user wants to see ALL tokens
@@ -709,6 +766,7 @@ function FoxToken({contentRef}: FoxToken) {
                 </IonContent>
             </IonModal>
 
+            {/* please don't remove this... we need this to teach the user... */}
             <div className="m-3 relative bg-primary p-4 rounded-xl" hidden={hidHelpTop}>
                 <p className="text-medium text-white font-medium">
                     <b>
@@ -723,7 +781,7 @@ function FoxToken({contentRef}: FoxToken) {
                         className="text-sm space-x-1"
                         onClick={() => { clickedSetHidHelpTop() }}
                     >
-                       Got it!
+                        Got it!
                     </IonButton>
                 </p>
                 <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
@@ -734,30 +792,33 @@ function FoxToken({contentRef}: FoxToken) {
             <div>
                 {!tableData.length ? (
                     <div className="pt-10 flex justify-center items-center">
-                        <Loader/>
+                        <Loader />
                     </div>
                 ) : (
-                    <div className=" ">
+                    <div css={css`
+						@media (max-width: 576px){
+							.MuiToolbar-root > .MuiTextField-root {
+								display : none;
+							}
+						}
+					`}>
                         {/*<IonItem style={{"width": "250px"}}>*/}
                         {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                         {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                         {/*</IonItem>*/}
-                        <Style>
-                            {`
-									.newTabIcon {
-										color: var(--ion-text-color);
-									}
-								`}
-                        </Style>
                         <Table
                             data={tableData}
                             columns={columns}
                             title="Fox WL Token Market"
-                            description="👪 are community added names. 'Not Listed' means it is not listed for sale anymore, and shown for historical purposes"
+                            description="
+                            👪 are community added names.
+                            The Last Sale column is only updated when viewing the chart or your own tokens (which updates it for others as well).
+                            'Not Listed' means it is not listed for sale anymore, and shown for historical purposes.
+                            "
                             url="https://famousfoxes.com/tokenmarket"
                             actions={[
                                 {
-                                    icon: () => <IonIcon icon={wallet}/>,
+                                    icon: () => <IonIcon icon={wallet} />,
                                     tooltip: viewMyTokensClicked
                                         ? 'View All Tokens'
                                         : 'View My Tokens',
@@ -768,7 +829,7 @@ function FoxToken({contentRef}: FoxToken) {
                                 {
                                     icon: () => <IonIcon icon={notifications}/>,
                                     tooltip: 'Alert on new Tokens to your Wallet',
-                                    onClick: () => history.push('/alerts'),
+                                    onClick: () => history.push('/alerts#fnt'),
                                     isFreeAction: true,
                                 },
                                 {
@@ -777,12 +838,123 @@ function FoxToken({contentRef}: FoxToken) {
                                     onClick: () => clickedMultWall(true),
                                     isFreeAction: true,
                                 },
-                                {
-                                    icon: () => <IonIcon icon={add}/>,
+								{
+									icon: () => <IonIcon icon={add}/>,
                                     tooltip: 'Add Custom Token Name',
                                     onClick: () => clickedAddName(true),
                                     isFreeAction: true,
+								},
+								{
+                                    icon: () => (
+                                        <>
+                                            <IonIcon
+                                                icon={cog}
+                                            />
+                                            <IonPopover
+                                                isOpen={!!popoverOpened}
+                                                onDidDismiss={() =>
+                                                    setPopoverOpened(false)
+                                                }
+                                            >
+                                                <IonContent>
+                                                    <div className="p-2">
+                                                        <h3 className="font-bold pb-1 w-full pt-5">
+                                                            Date Format
+                                                        </h3>
+
+                                                        <IonList>
+                                                            <IonRadioGroup
+                                                                value={
+                                                                    chartDateSelected
+                                                                }
+                                                                onIonChange={(
+                                                                    e
+                                                                ) =>
+                                                                    setChartDateSelected(
+                                                                        e.detail
+                                                                            .value
+                                                                    )
+                                                                }
+                                                            >
+                                                                <IonItem>
+                                                                    <IonLabel>
+                                                                        "2 hours
+                                                                        ago"
+                                                                    </IonLabel>
+                                                                    <IonRadio value="fromNow" />
+                                                                </IonItem>
+
+                                                                <IonItem>
+                                                                    <IonLabel>
+                                                                        "2022-01-01
+                                                                        12:00"
+                                                                    </IonLabel>
+                                                                    <IonRadio value="yyyyMmDd" />
+                                                                </IonItem>
+                                                            </IonRadioGroup>
+                                                        </IonList>
+
+                                                        <h3 className="font-bold pb-1 w-full pt-5">
+                                                            Chart Colors
+                                                        </h3>
+
+                                                        <IonItem>
+                                                            <IonLabel
+                                                                position="stacked"
+                                                                className="font-bold"
+                                                            >
+                                                                Line Color
+                                                            </IonLabel>
+                                                            <IonInput
+                                                                onIonChange={(
+                                                                    e
+                                                                ) =>
+                                                                    setLineColorSelected(
+                                                                        e.detail
+                                                                            .value!
+                                                                    )
+                                                                }
+                                                                value={
+                                                                    lineColorSelected
+                                                                }
+                                                                placeholder="red, #c6ac95, rgb(255, 0, 0)"
+                                                            ></IonInput>
+                                                        </IonItem>
+                                                        <IonItem>
+                                                            <IonLabel
+                                                                position="stacked"
+                                                                className="font-bold"
+                                                            >
+                                                                Shaded Area
+                                                                Color
+                                                            </IonLabel>
+                                                            <IonInput
+                                                                onIonChange={(
+                                                                    e
+                                                                ) =>
+                                                                    setShadedAreaColorSelected(
+                                                                        e.detail
+                                                                            .value!
+                                                                    )
+                                                                }
+                                                                value={
+                                                                    shadedAreaColorSelected
+                                                                }
+                                                                placeholder="red, #c6ac95, rgb(255, 0, 0)"
+                                                            ></IonInput>
+                                                        </IonItem>
+                                                    </div>
+                                                </IonContent>
+                                            </IonPopover>
+
+                                            {/*--{token}-{name}-*/}
+                                        </>
+                                    ),
+                                    tooltip: 'Customise',
+                                    isFreeAction: true,
+									onClick: () => setPopoverOpened(true)
                                 },
+
                             ]}
                             options={{
                                 detailPanelType: "single",
@@ -805,6 +977,9 @@ function FoxToken({contentRef}: FoxToken) {
                 )}
             </div>
 
+            {/*recent FF tokens*/}
+            <FfNamed/>
+
             <ReactTooltip/>
 
 
@@ -814,4 +989,3 @@ function FoxToken({contentRef}: FoxToken) {
 }
 
 export default FoxToken;
-

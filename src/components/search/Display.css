@@ -9,6 +9,7 @@
 }
 
 .messages {
+    /* backgrounds repeated on App.css & Display.css */
 	--background : var(--ion-color-step-150);
 	background-color: var(--background);
 }

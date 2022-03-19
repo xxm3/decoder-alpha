@@ -1,58 +1,48 @@
+import { css } from "@emotion/react";
 import {IonList} from "@ionic/react"
 import {book, calendarClearOutline, homeOutline, logoFirefox, notifications, search, statsChart} from "ionicons/icons"
-import Style from "../Style";
 import NavLink from "./NavLink"
 
 function Sidebar() {
     return (
         <>
-            <Style>
-                {`
-				ion-list {
-					border-color: var(--ion-color-step-150)
-				}
-			`}
-            </Style>
             <IonList
                 lines="none"
                 className={`px-2 h-full border-r md:max-w-max lg:max-w-none`}
+				css={css`
+				  border-color: var(--ion-color-step-150);
+			  `}
             >
                 <NavLink
                     title="Home"
                     icon={homeOutline}
                     to="/"
-                    external={''}
                 />
                 <NavLink
                     title="Today's Mints"
                     icon={calendarClearOutline}
                     to="/schedule"
-                    external={''}
                 />
                 <NavLink
                     title="Fox WL Token Market"
                     icon="/assets/icons/FoxTokenLogo.svg"
                     to="/foxtoken"
                     isIconSvg={true}
-                    external={''}
                 />
                 <NavLink
                     title="Mint Stats"
                     icon={statsChart}
                     to="/mintstats"
-                    external={''}
                 />
                 <NavLink
                     title="Stacked Line Search"
                     icon={search}
                     to="/stackedsearch"
-                    external={''}
                 />
                 <NavLink
                     title="Alerts"
                     icon={notifications}
                     to="/alerts"
-                    external={''}
                 />
                 <NavLink
                     title="Docs"

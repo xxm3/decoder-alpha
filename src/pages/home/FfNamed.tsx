@@ -64,7 +64,7 @@ const FfNamed = () => {
                 ...data,
             }
         },
-        refetchOnWindowFocus: true,
+        // refetchOnWindowFocus: true,
         retry: false
     })
 
@@ -76,42 +76,49 @@ const FfNamed = () => {
      *
      */
     return (
-        <div className='bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4'>
+        <>
+
             {ffNamedQuery?.isFetching ?
                 <div className="flex justify-center items-center">
-                    <Loader/>
+                    {/*<Loader/>*/}
+                    {/*Loading. . .*/}
                 </div>
                 :
                 <>
-                    <div className={`font-bold pb-1`}>
-                        New Fox WL Token Market Names
-{/*                        <Tooltip trigger="mouseenter" position="bottom"*/}
-{/*                                 html={<IonItem lines="none" className='max-w-[320px] rounded help-tooltip whitespace-pre-line'>*/}
-{/*Alerts currently done through Discord. Visit #self-roles and get the @fox-wl-alerts role. This gives pings when WL tokens get official names by the Famous Fox team, or when a user of SOL Decoder adds a custom name to one.<br/><br/>These are otherwise sent to the #analytics-etc channel in Discord*/}
-{/*                                 </IonItem>}>*/}
-{/*                                <IonIcon className="rounded-full help-tooltip p-1 text-lg" icon={notifications} />*/}
-{/*                        </Tooltip>*/}
+                    <div className='secondary-bg-forced m-1 p-4 rounded-xl'>
+                        <div className={`font-bold pb-1`}>
+                            New Fox WL Token Market Names
+                            <Tooltip
+                                    trigger="mouseenter" position="bottom"
+                                     html={<IonItem lines="none" className='max-w-[320px] rounded help-tooltip whitespace-pre-line'>
+                                         Alerts on new names
+                                     </IonItem>}>
+                                    <IonIcon
+                                        onClick={() => history.push('/alerts#fnn')}
+                                        className="rounded-full help-tooltip p-1 text-lg cursor-pointer" icon={notifications} />
+                            </Tooltip>
 
-                    </div>
-                    <div>
-                        <ul style={{listStyle: 'disc'}}>
-                            {
-                                ffNamedQuery?.data?.data?.map((obj: any) => (
-                                    <li key={obj.createdAt} className="ml-3">
-                                        {/*<Link to={'search/' + obj.msg} className="underline">*/}
-                                            {obj.msg.replaceAll("**", "")}
-                                            &nbsp;({moment(obj.createdAt).fromNow()})
-                                        {/*</Link>*/}
+                        </div>
+                        <div>
+                            <ul style={{listStyle: 'disc'}}>
+                                {
+                                    ffNamedQuery?.data?.data?.map((obj: any) => (
+                                        <li key={obj.createdAt} className="ml-3">
+                                            {/*<Link to={'search/' + obj.msg} className="underline">*/}
+                                                {obj.msg.replaceAll("**", "")}
+                                                &nbsp;({moment(obj.createdAt).fromNow()})
+                                            {/*</Link>*/}
+                                        </li>
+                                    ))
+                                }
+                                    <li className="ml-3 underline">
+                                        <a href="https://discord.com/channels/925207817923743794/951513272132182066" target="_blank">View More in Discord</a>
                                     </li>
-                                ))
-                            }
-                                <li className="ml-3 underline">
-                                    <a href="https://discord.com/channels/925207817923743794/951513272132182066" target="_blank">View More in Discord</a>
-                                </li>
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
                 </>}
-        </div>
+        </>
     )
 }
 
