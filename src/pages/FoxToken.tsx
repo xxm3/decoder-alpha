@@ -987,4 +987,3 @@ function FoxToken({contentRef}: FoxToken) {
 }
 
 export default FoxToken;
-

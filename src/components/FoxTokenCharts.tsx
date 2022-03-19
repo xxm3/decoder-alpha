@@ -72,7 +72,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 	} = useFoxTokenChartCookies()
 
     // user clicked change colour
-   
+
     // when above clicked, will redraw the chart
     useEffect(() => {
         if (firstUpdate.current) {
@@ -217,8 +217,6 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                 }
 
             });
-
-            // TODO: when test_vehn is run ... need to point to test DB...
 
             instance
                 .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: [token] })
