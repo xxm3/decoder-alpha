@@ -764,6 +764,29 @@ function FoxToken({contentRef}: FoxToken) {
                 </IonContent>
             </IonModal>
 
+            {/* please don't remove this... we need this to teach the user... */}
+            <div className="m-3 relative bg-primary p-4 rounded-xl" hidden={hidHelpTop}>
+                <p className="text-medium text-white font-medium">
+                    <b>
+                        <IonIcon icon={wallet}/> Click this on the top right of the table, to filter the table to only the whitelist tokens in your wallet. You may either connect your wallet in the top right of the site, or add 1-3 wallets with the "+" button discussed below
+                        <br/> <IonIcon icon={albums}/> Used with the above "View My Tokens", use this to filter the table to tokens that are on multiple wallets. You may add up to three wallets to watch
+                        <br/> <IonIcon icon={add}/> Use this if a token on the Fox WL Token Market doesn't have an official name yet, and you know for certain what the name of the token is
+                        <br/> 📈 Show a Price, Listings, and Sales history charts for that token
+                    </b>
+                    <br/>
+                    <IonButton
+                        color="secondary"
+                        className="text-sm space-x-1"
+                        onClick={() => { clickedSetHidHelpTop() }}
+                    >
+                        Got it!
+                    </IonButton>
+                </p>
+                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                    ?
+                </span>
+            </div>
+
             <div>
                 {!tableData.length ? (
                     <div className="pt-10 flex justify-center items-center">
@@ -772,7 +795,7 @@ function FoxToken({contentRef}: FoxToken) {
                 ) : (
                     <div css={css`
 						@media (max-width: 576px){
-							.MuiToolbar-root > .MuiTextField-root { 
+							.MuiToolbar-root > .MuiTextField-root {
 								display : none;
 							}
 						}
@@ -875,8 +898,6 @@ function FoxToken({contentRef}: FoxToken) {
                                                             </IonRadioGroup>
                                                         </IonList>
 
-                                                        {/*TODO 3): portals wl email and mirror .... plus email bayc  --- PLUS MIRROR ME DAO CHAT & GET ON OG ON # ACCTS! (boon my mint) */}
-
                                                         <h3 className="font-bold pb-1 w-full pt-5">
                                                             Chart Colors
                                                         </h3>
@@ -937,7 +958,7 @@ function FoxToken({contentRef}: FoxToken) {
                                     isFreeAction: true,
 									onClick: () => setPopoverOpened(true)
                                 },
-								
+
                             ]}
                             options={{
                                 detailPanelType: "single",
