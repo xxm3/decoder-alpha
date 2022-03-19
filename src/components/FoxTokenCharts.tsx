@@ -73,29 +73,30 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
     // user clicked change colour
 
+    // BUG-92-commented-out-2
     // when above clicked, will redraw the chart
-    useEffect(() => {
-        if (firstUpdate.current) {
-            firstUpdate.current = false;
-            return;
-        }
+    // useEffect(() => {
+    //     if (firstUpdate.current) {
+    //         firstUpdate.current = false;
+    //         return;
+    //     }
+    //
+    //     // redraw the chart
+    //     viewChart();
+    //
+    // }, [lineColorSelected, shadedAreaColorSelected]);
 
-        // redraw the chart
-        viewChart();
-
-    }, [lineColorSelected, shadedAreaColorSelected]);
-
-
+    // BUG-92-commented-out-3
     // user clicked the radio for the dates in the chart
     // when above radio clicked, will redraw the chart
-    useEffect(() => {
-        if (firstUpdate.current) {
-            firstUpdate.current = false;
-            return;
-        }
-
-        viewChart();
-    }, [chartDateSelected, lineColorSelected, shadedAreaColorSelected]);
+    // useEffect(() => {
+    //     if (firstUpdate.current) {
+    //         firstUpdate.current = false;
+    //         return;
+    //     }
+    //
+    //     viewChart();
+    // }, [chartDateSelected, lineColorSelected, shadedAreaColorSelected]);
 
 
     // viewing the chart for a token
@@ -228,10 +229,11 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
     // need to call it duh...
     useEffect(() => {
-        if (firstUpdate.current) {
-            firstUpdate.current = false;
-            return;
-        }
+        // BUG-92-commented-out-1
+        // if (firstUpdate.current) {
+        //     firstUpdate.current = false;
+        //     return;
+        // }
 
         viewChart();
     }, []);
