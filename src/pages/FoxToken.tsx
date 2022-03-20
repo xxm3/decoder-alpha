@@ -473,7 +473,7 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add one (or three!) manually. Then you can filter this table to only the tokens in your wallet.',
                     color: 'danger',
-                    duration: 5000
+                    duration: 10000
                 });
                 return;
             }
@@ -534,18 +534,18 @@ function FoxToken({contentRef}: FoxToken) {
                 instance
                     .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
                     .then((res) => {
-                        const sales = res?.data?.data.sales;
+                        const sales = res?.data?.data.salesData;
                         if(sales){
                             sales.forEach((sale: {token: string, lastSaleDate: string}) => {
                                 const row = newTableData.find((d: any) => d.token === sale.token);
                                 row.lastSaleDate = sale.lastSaleDate;
                             });
+
+                            // once we get the data, then we can set it yet again...
+                            setTableData(newTableData);
                         }
                     }).finally(() => {
 
-                        // TODO: not setting properly, maybe is the var name...
-                        // once we get the data, then we can set it yet again...
-                        setTableData(newTableData)
                     });
             }
 
