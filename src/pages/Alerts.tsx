@@ -79,13 +79,12 @@ function StackedSearch({foo, onSubmit}: any) {
             instance
                 .post(environment.backendApi + '/receiver/foxSales', {
                     token: formAddAlertToken,
-                    enable: enable // TODO-m: able to remove the alert (unsub etc...)
+                    enable: enable
                 })
                 .then((res) => {
                     const data = res.data;
 
-                    // TODO-m:
-                    console.log(data);
+                    // console.log(data);
 
                     present({
                         message: 'Successfully added the alert',
@@ -105,13 +104,18 @@ function StackedSearch({foo, onSubmit}: any) {
                 });
             });
 
-            // TODO-m: able to tell where alert going to (discord or web)
-
-            // TODO-m: home page to view alerts?
-
-            // TODO-m: !! test by sending me tokens!
-
-            // TODO-m: update docs.sol ... and the temp cookie (after renaming the cookie)
+            /**
+             * TODO-m: alerts!
+             *
+             * able to tell where alert going to (discord or web)
+             *
+             * test by sending me tokens!
+             *
+             * update docs.sol ... and the temp cookie (after renaming the cookie) (so we can tell people about alerts)
+             *
+             * look for enable:enable ... able to remove the alert (unsub etc...)
+             * home page to view recent alerts?
+             */
 
         } catch (err) {
             console.error(err);
@@ -131,7 +135,7 @@ function StackedSearch({foo, onSubmit}: any) {
     return (
         <>
 
-            <div className="secondary-bg-forced m-1 p-4 rounded-xl">
+            <div hidden={true} className="secondary-bg-forced m-1 p-4 rounded-xl">
                 <h4 className={`font-medium ${window.location.href.includes('fnt') ? 'text-red-600 font-medium' : ''}`}>
                     Alerts on New WL Tokens to your Wallet
                 </h4>
@@ -160,11 +164,6 @@ function StackedSearch({foo, onSubmit}: any) {
                         ></IonInput>
                     </IonItem>
 
-
-                    {/*TODO !!! */}
-                    <IonButton>
-                    COMING SOON
-                    </IonButton>
 
                     {/*<IonButton*/}
                     {/*    color="primary"*/}

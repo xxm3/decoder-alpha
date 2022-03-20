@@ -460,9 +460,8 @@ function FoxToken({contentRef}: FoxToken) {
         // user wants to see MY tokens
         if (wantViewTokens) {
 
-            // TODO-WL: TEST: within this page, make a call to a NEW endpoint on foxtokenparser.js ... you can call this /userViewedMyToken ... look at the code for instance.get - on how to send this, total 4 lines of code on frontend
-            // called the api below but not sure if there is anything to be done with the response or after the api is hit
-            // const viewTokenResponse = await instance.get(environment.backendApi + '/receiver/userViewedMyToken');
+            // set the fact they viewed their token
+            instance.get(environment.backendApi + '/receiver/userViewedMyToken');
 
             // see other local host on here to see why
             if (window.location.href.indexOf(local_host_str) !== -1) {
