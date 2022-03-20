@@ -4,6 +4,7 @@ import moment from "moment";
 import {AppComponentProps} from '../../components/Route';
 import SearchedWords from './SearchedWords';
 import FfNamed from "./FfNamed";
+import Whitelist from './Whitelist';
 
 const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
@@ -43,7 +44,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                                 {/*</span>*/}
             {/*</div>*/}
 
-
+            <Whitelist/>
             {/* Recent Community Searches */}
             <div hidden={window.location.hostname !== 'localhost'}>
                 <SearchedWords/>
