@@ -44,17 +44,22 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                                 {/*</span>*/}
             {/*</div>*/}
 
-            <Whitelist/>
-            {/* Recent Community Searches */}
-            <div hidden={window.location.hostname !== 'localhost'}>
-                <SearchedWords/>
-            </div>
 
             {/*Recent FF Named Stuff*/}
             <FfNamed/>
 
-            {/* if need to tell the user of errors */}
 
+            {/* for user to get used-the-site- role */}
+            <Whitelist/>
+
+
+            {/* Recent Community Searches */}
+            {/*<div hidden={window.location.hostname !== 'localhost'}>*/}
+            {/*    <SearchedWords/>*/}
+            {/*</div>*/}
+
+
+            {/* if need to tell the user of errors */}
             {/*<div className="m-3 relative bg-red-100 p-4 rounded-xl">*/}
             {/*    <p className="text-lg text-red-700 font-medium">*/}
             {/*        <b>Our Discord ingestion bots decided to take a break from Thurs @ 10:00pm est until Friday @ 9:00am est. They are back up and running now.</b>*/}
