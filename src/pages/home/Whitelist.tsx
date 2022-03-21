@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import { IonIcon, useIonToast } from "@ionic/react";
-import {checkbox, checkmarkCircleOutline, closeCircleOutline, square} from 'ionicons/icons';
+import { checkmarkCircleOutline, closeCircleOutline } from 'ionicons/icons';
 import { Link } from 'react-router-dom';
 import Help from '../../components/Help';
 
@@ -11,7 +11,8 @@ const Whitelist = () => {
 
     const [present] = useIonToast();
 
-    const convertWordCase = (word: string) => {
+    // Convert camelCase string to Title Case (e.g performedSearch -> Performed Search)
+    const convertWordCase = (word: string): string => {
         const replaced = word.replace(/([A-Z])/g, " $1");
         return replaced.charAt(0).toUpperCase() + replaced.slice(1);
     }
@@ -70,7 +71,7 @@ const Whitelist = () => {
         retry: false
     }) as any;
 
-    const getStepHelp = (type: any) => {
+    const getStepHelp = (type: any): string => {
         switch (type) {
             case 'performedSearch':
                 return 'Do a search from the header of the site (which returns results from all the discords/twitters we monitor)';
@@ -85,6 +86,7 @@ const Whitelist = () => {
             case 'didStackedSearch':
                 return 'Perform a search on the "Stacked Line Search" page (which compares multiple words against each other)';
         }
+        return '';
     }
 
     /**
@@ -92,7 +94,7 @@ const Whitelist = () => {
      */
 
     // @ts-ignore
-        return (
+    return (
         <div >
             {userWhitelistDataQuery?.isFetching ?
                 <div className="flex justify-center items-center">
@@ -122,10 +124,8 @@ const Whitelist = () => {
                                             <Link hidden={step.link === '/'} className='underline ml-1' to={step.link}>{step.label}</Link>
                                             <span hidden={step.link !== '/'} className='ml-1'>{step.label}</span>
                                             <span className="ml-1">
-                                            <Help
-                                                // @ts-ignore
-                                                description={getStepHelp(step.step)} />
-                                        </span>
+                                                <Help description={getStepHelp(step.step)} />
+                                            </span>
                                         </div>
                                     ))
                                 }
