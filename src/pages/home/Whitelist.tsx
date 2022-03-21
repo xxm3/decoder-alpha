@@ -79,7 +79,7 @@ const Whitelist = () => {
             case 'viewedFoxTokenPage':
                 return 'View the "Fox WL Token" page (which shows a table of whitelist tokens you can buy/sell)';
             case 'viewedMyToken':
-                return 'On the "Fox WL Token" page, click the "View My Tokens" button to filter the table. Note your wallet must be connected, or you can click the "Add Multiple Wallets" button to manually add 1-3 wallets';
+                return 'On the "Fox WL Token" page, click the "View My Tokens" button (which is on the top right of the table) to filter the table. Note your wallet must be connected, or you can click the "Add Multiple Wallets" button to manually add 1-3 wallets';
             case 'viewedMintStats':
                 return 'View the "Mint Stats" page (which shows statistics on the mints we automatically parsed from discord)';
             case 'didStackedSearch':

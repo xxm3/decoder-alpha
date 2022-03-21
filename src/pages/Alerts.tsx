@@ -104,6 +104,8 @@ function StackedSearch({foo, onSubmit}: any) {
                 });
             });
 
+            // TODO: need test daily mint hourly... for a day
+
             /**
              * TODO-m: alerts!
              *

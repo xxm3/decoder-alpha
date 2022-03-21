@@ -166,6 +166,7 @@ const Schedule = () => {
             setIsLoading(false);
         }
 
+    // @ts-ignore
     const columns: Column<Mint>[] = [
         {
             title: '',
@@ -245,7 +246,7 @@ const Schedule = () => {
             title: 'Price',
             customSort: (a, b) =>
                 +a.price.split(' ')[0] - +b.price.split(' ')[0],
-            render: (record) => <span dangerouslySetInnerHTML={{ __html: record.price.replace(",public", "public<br>") }}></span>,
+            render: (record) => <span dangerouslySetInnerHTML={{ __html: record.price.replace("public", "<br>public") }}></span>,
             // width: "80px"
         },
         {
@@ -254,35 +255,31 @@ const Schedule = () => {
             render: (record) => <span>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>,
         },
         {
-            title: '# Discord',
+            title: 'Discord (all)',
             render: (record) => (
-                <span>
+                <>
                     {record.numbersOfDiscordMembers
-                        ? parseInt(
-                              record.numbersOfDiscordMembers
-                          ).toLocaleString()
-                        : ''}
-                </span>
+                        ?.toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                </>
             ),
-            customSort: (a, b) =>
-                +a.numbersOfDiscordMembers - +b.numbersOfDiscordMembers,
+            // @ts-ignore
+            customSort: (a, b) => a.numbersOfDiscordMembers - b.numbersOfDiscordMembers,
         },
         {
-            title: '# Discord Online',
+            title: 'Discord (online)',
             render: (record) => (
-                <span>
+                <>
                     {record.DiscordOnlineMembers
-                        ? parseInt(
-                            record.DiscordOnlineMembers
-                        ).toLocaleString()
-                        : ''}
-                </span>
+                        ?.toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                </>
             ),
-            customSort: (a, b) =>
-                +a.DiscordOnlineMembers - +b.DiscordOnlineMembers,
+            // @ts-ignore
+            customSort: (a, b) => a.DiscordOnlineMembers - b.DiscordOnlineMembers,
         },
         {
-            title: '# Twitter',
+            title: 'Twitter',
             render: (record) => (
                 <>
                     {record.numbersOfTwitterFollowers
