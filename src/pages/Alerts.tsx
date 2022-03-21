@@ -107,7 +107,7 @@ function StackedSearch({foo, onSubmit}: any) {
             /**
              * TODO-alerts: alerts!
              *
-             * n the UI tell the user the alert is going to discord over DMs
+             * in the UI tell the user the alert is going to discord over DMs
              *
              * once done:
              * - test this by sending yourself tokens between wallets
