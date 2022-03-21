@@ -16,7 +16,7 @@ function NavLink({ to , icon , title, isIconSvg = false, external = ''} : Props)
 	const location = useLocation();
 
 	const goExternal = (toAddr: string) => {
-        console.log(toAddr);
+        // console.log(toAddr);
         if(toAddr){
             window.open(toAddr, "_blank");
         }
@@ -35,13 +35,13 @@ function NavLink({ to , icon , title, isIconSvg = false, external = ''} : Props)
 	              }
 	              trigger="mouseenter"
 				  css={css`
-	
+
 					  ion-item.active {
 						--background : var(--ion-color-primary);
 					}
 				  `}
 	          >
-	              <IonItem className={`items-center  hover:opacity-80 space-x-3 my-6 rounded`} 
+	              <IonItem className={`items-center  hover:opacity-80 space-x-3 my-6 rounded`}
 				  css={css`
 						${location.pathname === to ? `--background : var(--ion-color-primary);` : ``}
 				  `}>

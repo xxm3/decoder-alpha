@@ -5,12 +5,16 @@ import {AppComponentProps} from '../../components/Route';
 import SearchedWords from './SearchedWords';
 import FfNamed from "./FfNamed";
 import Whitelist from './Whitelist';
+import {useLocation} from 'react-router-dom';
 
 const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
     /**
      * States & Variables
      */
+    // const useQuery = () => new URLSearchParams(useLocation().search);
+    // const query = useQuery();
+    // const devMode = query.get('devMode');
 
     /**
      * Use Effects
@@ -46,11 +50,14 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
 
             {/*Recent FF Named Stuff*/}
-            <FfNamed/>
+            <FfNamed />
 
 
             {/* for user to get used-the-site- role */}
-            <Whitelist/>
+            {/*<div hidden={!devMode}>*/}
+                <Whitelist />
+            {/*</div>*/}
+
 
 
             {/* Recent Community Searches */}

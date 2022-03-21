@@ -45,6 +45,7 @@ const Whitelist = () => {
             if (data?.error && data.message) {
                 throw new Error(String(data.message));
             }
+
             // types REPEATED on user_whitelist.js and Whitelist.tsx
             const steps = [
                 ['performedSearch', '/'],
@@ -92,34 +93,39 @@ const Whitelist = () => {
 
     // @ts-ignore
         return (
-        <div className="secondary-bg-forced m-1 p-4 rounded-xl">
+        <div >
             {userWhitelistDataQuery?.isFetching ?
                 <div className="flex justify-center items-center">
                     {/*<Loader/>*/}
-                    Loading . . .
+                    {/*Loading . . .*/}
                 </div>
                 :
                 <>
-                    <div className={`font-bold pb-1`}>"used-the-site" role progress</div>
-                    <div>Use the below features to be granted the "used-the-site" role in Discord, which is required to keep your whitelist</div>
-                    <div>
-                        <div style={{ listStyle: '' }}>
-                            {
-                                userWhitelistDataQuery?.data.map((step: any) => (
-                                    <div key={step.step} className="ml-0 mt-2">
-                                        <IonIcon className="text-green-500" hidden={step.value} icon={checkmarkCircleOutline} />
-                                        <IonIcon className="text-red-500" hidden={!step.value} icon={closeCircleOutline} />
+                    {/* TODO: implement ??? or implmenet "hey  you did everythign but not whitelist.. here's how?" ... or implement "gratz you just got it!" */}
+                    {/*-{userWhitelistDataQuery?.data}-*/}
+                    {/*hidden={userWhitelistDataQuery?.data?.didAllSiteFunctions}*/}
+                    <div className="secondary-bg-forced m-1 p-4 rounded-xl">
+                        <div className={`font-bold pb-1`}>"used-the-site" role progress</div>
+                        <div>Use the below features to be granted the "used-the-site" role in Discord, which is required to get/keep whitelist. See <b>#whitelist-faq</b> in Discord for more details</div>
+                        <div>
+                            <div style={{ listStyle: '' }}>
+                                {
+                                    userWhitelistDataQuery?.data?.map((step: any) => (
+                                        <div key={step.step} className="ml-0 mt-2">
+                                            <IonIcon className="text-green-500" hidden={step.value === false} icon={checkmarkCircleOutline} />
+                                            <IonIcon className="text-red-500" hidden={step.value === true} icon={closeCircleOutline} />
 
-                                        <Link hidden={step.link === '/'} className='underline ml-1' to={step.link}>{step.label}</Link>
-                                        <span hidden={step.link !== '/'} className='ml-1'>{step.label}</span>
-                                        <span className="ml-1">
+                                            <Link hidden={step.link === '/'} className='underline ml-1' to={step.link}>{step.label}</Link>
+                                            <span hidden={step.link !== '/'} className='ml-1'>{step.label}</span>
+                                            <span className="ml-1">
                                             <Help
                                                 // @ts-ignore
                                                 description={getStepHelp(step.step)} />
                                         </span>
-                                    </div>
-                                ))
-                            }
+                                        </div>
+                                    ))
+                                }
+                            </div>
                         </div>
                     </div>
                 </>}
