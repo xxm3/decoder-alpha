@@ -25,6 +25,7 @@ interface Mint {
 	tenDaySearchResults: string[];
 	mintExpiresAt: string;
 	numbersOfDiscordMembers: string;
+    DiscordOnlineMembers: string;
 	numbersOfTwitterFollowers : number;
 	tweetInteraction : {
 		total : number;
@@ -265,6 +266,20 @@ const Schedule = () => {
             ),
             customSort: (a, b) =>
                 +a.numbersOfDiscordMembers - +b.numbersOfDiscordMembers,
+        },
+        {
+            title: '# Discord Online',
+            render: (record) => (
+                <span>
+                    {record.DiscordOnlineMembers
+                        ? parseInt(
+                            record.DiscordOnlineMembers
+                        ).toLocaleString()
+                        : ''}
+                </span>
+            ),
+            customSort: (a, b) =>
+                +a.DiscordOnlineMembers - +b.DiscordOnlineMembers,
         },
         {
             title: '# Twitter',
