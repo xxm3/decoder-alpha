@@ -104,24 +104,24 @@ function StackedSearch({foo, onSubmit}: any) {
                 });
             });
 
-            // TODO: 10 thing twitter (...perform one miss period ... no alerts to wallet.... mintalert first)...ask michael > post twitter ...... send Jay
-
-            // TODO: need test daily mint hourly... for a day
-
             /**
-             * TODO-m: alerts!
+             * TODO-alerts: alerts!
              *
-             * able to tell where alert going to (discord or web)
+             * n the UI tell the user the alert is going to discord over DMs
              *
-             * test by sending me tokens!
+             * once done:
+             * - test this by sending yourself tokens between wallets
+             * - add to the intro on top of fox page what this is ... then renam the cookie)
+             * - update docs.sol
              *
-             * update docs.sol ... and the temp cookie (after renaming the cookie) (so we can tell people about alerts)
-             *
-             * look for enable:enable ... able to remove the alert (unsub etc...)
-             * home page to view recent alerts?
-             *
-             * ... join dead kings disc
+             * ONCE IN PROD:
+             * - look for enable:enable ... make it so you are able to remove the alert (unsub etc...)
+             * - add a new section to home page ...to view recent alerts?
              */
+
+            // TODO-mike: need test daily mint hourly... for a day
+            // TODO-mike: again fix mint-alerts ... test with "https://mint.dahsnft.com/" ... damjan said -> do debugging step by step and see what can fix it. I think it's either that the two messages are handled the same way and two embeds are sent or the embed itself triggers a message handle and repeats the process
+            // TODO-miek: join dead kings disc
 
         } catch (err) {
             console.error(err);
@@ -141,7 +141,8 @@ function StackedSearch({foo, onSubmit}: any) {
     return (
         <>
 
-            <div hidden={true} className="secondary-bg-forced m-1 p-4 rounded-xl">
+            {/*hidden={true} c*/}
+            <div className="secondary-bg-forced m-1 p-4 rounded-xl">
                 <h4 className={`font-medium ${window.location.href.includes('fnt') ? 'text-red-600 font-medium' : ''}`}>
                     Alerts on New WL Tokens to your Wallet
                 </h4>
@@ -170,15 +171,14 @@ function StackedSearch({foo, onSubmit}: any) {
                         ></IonInput>
                     </IonItem>
 
-
-                    {/*<IonButton*/}
-                    {/*    color="primary"*/}
-                    {/*    className="mt-5"*/}
-                    {/*    hidden={formLoadingAddAlertToken}*/}
-                    {/*    onClick={() => addAlertsTokenSubmit(true)}*/}
-                    {/*>*/}
-                    {/*    Submit*/}
-                    {/*</IonButton>*/}
+                    <IonButton
+                        color="primary"
+                        className="mt-5"
+                        hidden={formLoadingAddAlertToken}
+                        onClick={() => addAlertsTokenSubmit(true)}
+                    >
+                        Submit
+                    </IonButton>
 
                     {/*<IonButton*/}
                     {/*    hidden={!multWalletAryFromCookie}*/}
