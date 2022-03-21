@@ -105,7 +105,7 @@ function StackedSearch({foo, onSubmit}: any) {
             });
 
             /**
-             * TODO-alerts: alerts!
+             * TO DO-alerts: alerts!
              *
              * in the UI tell the user the alert is going to discord over DMs
              *
