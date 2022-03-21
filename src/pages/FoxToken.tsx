@@ -460,7 +460,6 @@ function FoxToken({contentRef}: FoxToken) {
         // user wants to see MY tokens
         if (wantViewTokens) {
 
-            // TODO: night
             // set the fact they viewed their token
             instance.get(environment.backendApi + '/receiver/userViewedMyToken');
 

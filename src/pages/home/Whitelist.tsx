@@ -101,6 +101,10 @@ const Whitelist = () => {
                 </div>
                 :
                 <>
+                    {/*TODO: user clicks view my token... need alert pop up or something...*/}
+                    {/*TODO: add mult wallets -> add manual wallet(s)*/}
+                    {/*TODO: debug why taking so long....*/}
+
                     {/* TODO: implement ??? or implmenet "hey  you did everythign but not whitelist.. here's how?" ... or implement "gratz you just got it!" */}
                     {/*-{userWhitelistDataQuery?.data}-*/}
                     {/*hidden={userWhitelistDataQuery?.data?.didAllSiteFunctions}*/}

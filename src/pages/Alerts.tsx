@@ -104,6 +104,8 @@ function StackedSearch({foo, onSubmit}: any) {
                 });
             });
 
+            // TODO: 10 thing twitter (...perform one miss period ... no alerts to wallet.... mintalert first)...ask michael > post twitter ...... send Jay
+
             // TODO: need test daily mint hourly... for a day
 
             /**
@@ -117,6 +119,8 @@ function StackedSearch({foo, onSubmit}: any) {
              *
              * look for enable:enable ... able to remove the alert (unsub etc...)
              * home page to view recent alerts?
+             *
+             * ... join dead kings disc
              */
 
         } catch (err) {

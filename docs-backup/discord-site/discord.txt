@@ -6,7 +6,7 @@ Community are our public facing channels
 - general - general chat for public users.
 - ideas-and-bugs - Discuss new ideas for the site and discord, or bugs you encountered
 - twitter-influencers - Shows posts made by dozens of SOL Twitter influencers / analysts. These are then stored in our database to be searched on 
-- after-action-report  - Show the successes of mints that was alerted, while trying to analyze what made them so successful
+
 
 
 
@@ -47,3 +47,10 @@ This is a live feed that parses links from the discords / twitters we watch. It 
 
 
 The majority of the time, people in other discords will just post a link to a new mint, and not tag others. Using this, you no longer need to be in discord / twitter all day to catch certain hyped mints. You also have more confidence in these mints, as multiple discords will be linking / discussing them, thus showing hype and demand
+
+
+
+
+Learn More
+
+Site Overview
