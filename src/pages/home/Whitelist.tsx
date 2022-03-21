@@ -103,6 +103,12 @@ const Whitelist = () => {
                 </div>
                 :
                 <>
+
+                    {/*// TODO-mike: need test daily mint hourly... for a day*/}
+                    {/*// TODO-mike: again fix mint-alerts ... test with "https://mint.dahsnft.com/" ... damjan said -> do debugging step by step and see what can fix it. I think it's either that the two messages are handled the same way and two embeds are sent or the embed itself triggers a message handle and repeats the process*/}
+                    {/*// TODO-miek: join dead kings disc*/}
+
+
                     {/*TODO: user clicks view my token... need alert pop up or something...*/}
                     {/*TODO: add mult wallets -> add manual wallet(s)*/}
                     {/*TODO: debug why taking so long....*/}

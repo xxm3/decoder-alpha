@@ -119,10 +119,6 @@ function StackedSearch({foo, onSubmit}: any) {
              * - add a new section to home page ...to view recent alerts?
              */
 
-            // TODO-mike: need test daily mint hourly... for a day
-            // TODO-mike: again fix mint-alerts ... test with "https://mint.dahsnft.com/" ... damjan said -> do debugging step by step and see what can fix it. I think it's either that the two messages are handled the same way and two embeds are sent or the embed itself triggers a message handle and repeats the process
-            // TODO-miek: join dead kings disc
-
         } catch (err) {
             console.error(err);
             setFormLoadingAddAlertToken(false); // loading false
