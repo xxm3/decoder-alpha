@@ -71,11 +71,12 @@ const columns: Column<FoxTokenData>[] = [
         customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
         render: (record) => <span>{record.totalTokenListings}</span>,
     },
-    {
-        title: 'Last Sale',
-        customSort: (a, b) => new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
-        render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : null}</span>,
-    },
+    // REMOVING-FF-FOR-NOW
+    // {
+    //     title: 'Last Sale',
+    //     customSort: (a, b) => new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
+    //     render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : null}</span>,
+    // },
     {
         title: '# Owned & Wallet',
         render: (record) => <span>{record.whichMyWallets}</span>,
@@ -221,8 +222,6 @@ function FoxToken({contentRef}: FoxToken) {
     /**
      * States & Variables
      */
-
-
     const [tableData, _setTableData] = useState<FoxTokenData[]>([]);
     const [fullTableData, setFullTableData] = useState<FoxTokenData[]>([]);
     const [mySolBalance, setMySolBalance] = useState("");
@@ -529,23 +528,25 @@ function FoxToken({contentRef}: FoxToken) {
                 // this should instantly show the table to the user
                 setTableData(newTableData);
 
+                // REMOVING-FF-FOR-NOW
                 // but then we need to go out and get their latest sales data... takes about 1.5 sec per token
-                instance
-                    .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
-                    .then((res) => {
-                        const sales = res?.data?.data.salesData;
-                        if(sales){
-                            sales.forEach((sale: {token: string, lastSaleDate: string}) => {
-                                const row = newTableData.find((d: any) => d.token === sale.token);
-                                row.lastSaleDate = sale.lastSaleDate;
-                            });
+                // instance
+                //     .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
+                //     .then((res) => {
+                //         const sales = res?.data?.data.salesData;
+                //         if(sales){
+                //             sales.forEach((sale: {token: string, lastSaleDate: string}) => {
+                //                 const row = newTableData.find((d: any) => d.token === sale.token);
+                //                 row.lastSaleDate = sale.lastSaleDate;
+                //             });
+                //
+                //             // once we get the data, then we can set it yet again...
+                //             setTableData(newTableData);
+                //         }
+                //     }).finally(() => {
+                //
+                //     });
 
-                            // once we get the data, then we can set it yet again...
-                            setTableData(newTableData);
-                        }
-                    }).finally(() => {
-
-                    });
             }
 
             // user wants to see ALL tokens
@@ -813,9 +814,10 @@ function FoxToken({contentRef}: FoxToken) {
                             title="Fox WL Token Market"
                             description="
                             👪 are community added names.
-                            The Last Sale column is only updated when viewing the chart or your own tokens (which updates it for others as well).
                             'Not Listed' means it is not listed for sale anymore, and shown for historical purposes.
                             "
+                            // REMOVING-FF-FOR-NOW
+                            // The Last Sale column is only updated when viewing the chart or your own tokens (which updates it for others as well).
                             url="https://famousfoxes.com/tokenmarket"
                             actions={[
                                 {
