@@ -327,7 +327,7 @@ const Schedule = () => {
                         //         overflowWrap: 'break-word'
                         //     }
                         // }}
-                        description={`Projects must have > 2,000 Discord members and online Discord members > 300 and  Twitter followers > 1,000  before showing up on the list.
+                        description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
 							\n "# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them`}
                     />
 
