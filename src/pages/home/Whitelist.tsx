@@ -104,21 +104,20 @@ const Whitelist = () => {
                 :
                 <>
 
-                    {/*TODO: need a 830pm cronjob on old PC ... to spit to daily mints.. that @ me and vahag...*/}
+                    {/* TODO: google docs whitelist (for twitter) ... with invite bot */}
 
+                    {/*TODO: need a 830pm cronjob on old PC ... to spit to daily mints.. that @ me and vahag...*/}
                     {/*// TODO-mike: need test daily mint hourly... for a day*/}
 
-                    {/*// TODO-mike: again fix mint-alerts ... test with "https://mint.dahsnft.com/" ... damjan said -> do debugging step by step and see what can fix it. I think it's either that the two messages are handled the same way and two embeds are sent or the embed itself triggers a message handle and repeats the process
-                            --- ALSO look at the dates each mint was posted ... only alert if the two dates were within a day or two of each other... */}
+                    {/*// TODO: join dead kings disc ... plus mirror fox */}
 
-                    {/*// TODO-miek: join dead kings disc ... plus mirror fox */}
-
-
-                    {/*TODO: user clicks view my token... need alert pop up or something...*/}
-                    {/*TODO: add mult wallets -> add manual wallet(s)*/}
-                    {/*TODO: debug why taking so long....*/}
-
-                    {/* TODO: implement ??? or implmenet "hey  you did everythign but not whitelist.. here's how?" ... or implement "gratz you just got it!" */}
+                    {/*
+                        TODO: whitelist optimization
+                        user clicks view my token... need alert pop up or something...
+                        add mult wallets -> add manual wallet(s)
+                        debug why taking so long....
+                         implement ??? or implmenet "hey  you did everythign but not whitelist.. here's how?" ... or implement "gratz you just got it!"
+                    */}
                     {/*-{userWhitelistDataQuery?.data}-*/}
                     {/*hidden={userWhitelistDataQuery?.data?.didAllSiteFunctions}*/}
                     <div className="secondary-bg-forced m-1 p-4 rounded-xl">
