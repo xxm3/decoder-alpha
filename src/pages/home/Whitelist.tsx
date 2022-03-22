@@ -104,9 +104,14 @@ const Whitelist = () => {
                 :
                 <>
 
+                    {/*TODO: need a 830pm cronjob on old PC ... to spit to daily mints.. that @ me and vahag...*/}
+
                     {/*// TODO-mike: need test daily mint hourly... for a day*/}
-                    {/*// TODO-mike: again fix mint-alerts ... test with "https://mint.dahsnft.com/" ... damjan said -> do debugging step by step and see what can fix it. I think it's either that the two messages are handled the same way and two embeds are sent or the embed itself triggers a message handle and repeats the process*/}
-                    {/*// TODO-miek: join dead kings disc*/}
+
+                    {/*// TODO-mike: again fix mint-alerts ... test with "https://mint.dahsnft.com/" ... damjan said -> do debugging step by step and see what can fix it. I think it's either that the two messages are handled the same way and two embeds are sent or the embed itself triggers a message handle and repeats the process
+                            --- ALSO look at the dates each mint was posted ... only alert if the two dates were within a day or two of each other... */}
+
+                    {/*// TODO-miek: join dead kings disc ... plus mirror fox */}
 
 
                     {/*TODO: user clicks view my token... need alert pop up or something...*/}

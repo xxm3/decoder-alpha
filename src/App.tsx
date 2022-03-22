@@ -70,15 +70,15 @@ const App = () => {
 	// const [walletAddress, setWalletAdress] = useState(null);
 
 	useEffect(() => {
-
         // first redirect if on old URL
-        if (window.location.hostname.indexOf('localhost') === -1 && window.location.hostname.indexOf('soldecoder.app') === -1) {
-            window.location.replace("https://soldecoder.app");
-        }
+        // if (window.location.hostname.indexOf('localhost') === -1 && window.location.hostname.indexOf('soldecoder.app') === -1) {
+        //     window.location.replace("https://soldecoder.app");
+        // }
 
-        // code supposed to update the authorization header whenever the token changes
+        // code that is supposed to update the authorization header whenever the token changes
 		return auth.onIdTokenChanged(user => {
-            console.log(user);
+            console.info(`token changed, getting new one for: ${JSON.stringify(user, null, 4)}`);
+
 			if (user) {
                 user.getIdToken().then(
                     (token) => {
@@ -92,16 +92,6 @@ const App = () => {
             }
 		})
 	}, []);
-
-
-	// const [loadingGif, setLoadingGif] = useState(true)
-	// useEffect(() => {
-	// 	const id = setTimeout(() => {
-	// 		setLoadingGif(false)
-	// 	}, 8000)
-	// 	return () => clearTimeout(id)
-	// }, [])
-
 
 	return (
         <IonApp>
@@ -125,7 +115,7 @@ const App = () => {
 	                                                        size="12"
 	                                                        className="flex h-full"
 	                                                    >
-	                                                        <IonSplitPane when="md" contentId="main" 
+	                                                        <IonSplitPane when="md" contentId="main"
 																css={css`
 																	@media only screen and (min-width:768px) and (max-width:992px){
 																			--side-min-width: none;

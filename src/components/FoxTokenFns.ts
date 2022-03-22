@@ -4,7 +4,7 @@ import { instance } from "../axios";
 
 export async function getLiveFoxTokenData(mySplTokens: any) {
 
-    // get token data directly from FF
+    // get token data directly from FF, from the user's browser
     const rawTokenData = (await axios.get('https://dens.famousfoxes.com/cache.json')).data;
     // get whitelisted named data from FF
     const verifiedTokenData = (await axios.get('https://dens.famousfoxes.com/whitelist.json')).data;
