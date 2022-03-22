@@ -31,24 +31,6 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
     return (
         <>
 
-                            {/*<div className="secondary-bg-forced m-3 relative p-4 rounded-xl">*/}
-            {/*<div className="secondary-bg-forced m-1 p-4 rounded-xl">*/}
-            {/*    <p className="text-medium text-white font-medium">*/}
-            {/*        <b>*/}
-            {/*            Welcome to the new SOL Decoder! New info. will be displayed on the home page here in the coming week(s), such as:*/}
-            {/*            <br/>- New WL Tokens that were added (both officially by Fox Token, and by users)*/}
-            {/*            <br/>- New mints coming out in the next few hours*/}
-            {/*            <br/>- The latest 3 Mint alerts, and top Mint alerts we gave this week, and this month*/}
-            {/*            <br/>- New & Trending words people put into Discord (ie. new & trending NFTs)*/}
-            {/*            <br/>- Recent community searches, and other things as we develop them!*/}
-            {/*        </b>*/}
-            {/*    </p>*/}
-                                {/*<span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">*/}
-                                {/*    :)*/}
-                                {/*</span>*/}
-            {/*</div>*/}
-
-
             {/*Recent FF Named Stuff*/}
             <FfNamed />
 
@@ -75,6 +57,15 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
             {/*        !*/}
             {/*    </span>*/}
             {/*</div>*/}
+
+            <div className="m-3 relative bg-red-100 p-4 rounded-xl">
+                <p className="text-lg text-red-700 font-medium">
+                    <b>Our Discord bot to record your progress and add the role will be down from 6:15pm EST - 6:25pm EST</b>
+                </p>
+                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                    !
+                </span>
+            </div>
 
 
         </>
