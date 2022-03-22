@@ -4,18 +4,15 @@ import { instance } from "../axios";
 
 export async function getLiveFoxTokenData(mySplTokens: any) {
 
-    // TODO: need to have this call redis etc...
     // get token data directly from FF, from the user's browser
-    const rawTokenData = (await axios.get('https://dens.famousfoxes.com/cache.json')).data;
-    // get whitelisted named data from FF
-    const verifiedTokenData = (await axios.get('https://dens.famousfoxes.com/whitelist.json')).data;
+    // const rawTokenData = (await axios.get('https://dens.famousfoxes.com/cache.json')).data;
+    // // get whitelisted named data from FF
+    // const verifiedTokenData = (await axios.get('https://dens.famousfoxes.com/whitelist.json')).data;
 
     // Use the data aggregation logic from the backend, but use data obtained from clientside-called FamousFoxes API
     const results = (await instance.post(`${environment.backendApi}/receiver/foxTokenAnalysis`, {
-        // doScrape: true,
-        // saveToDb: false,
-        rawTokenData,
-        verifiedTokenData
+        // rawTokenData,
+        // verifiedTokenData
     })).data;
 
     // NOTE: we don't have the "got 401 - go login" because the "FFNamed" on this page should do that

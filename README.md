@@ -10,7 +10,8 @@
 Visit the site - http://localhost:3000
 
 Note: This connects to the backend locally. That backend would need access to the RDS database, and appropriate secrets configured.
-If you haven't done that, then you can skip that by going to environmenet.js, and switching the two "backendApi". Just don't keep that in there permanently
+If you haven't done that, then you can skip that by going to environmenet.js, and switching the two "backendApi". Just don't keep that in there permanently.
+You will then need to get yourself authenticated in backend, so give me your IP so I can do that in the backend's verify.js.
 
 ### To deploy to Prod
 1. Run `npm run test-mocha && npm run build && firebase deploy --only hosting`
