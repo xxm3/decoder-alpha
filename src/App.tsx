@@ -76,19 +76,11 @@ const App = () => {
         // }
 
         // code that is supposed to update the authorization header whenever the token changes
-		return auth.onIdTokenChanged(user => {
-            console.info(`token changed, getting new one for: ${JSON.stringify(user, null, 4)}`);
-
+		return auth.onAuthStateChanged(user => {
 			if (user) {
-                user.getIdToken().then(
-                    (token) => {
-                        (instance.defaults.headers.common.Authorization = `Bearer ${token}`);
-
-                        setUser({ id: user.uid });
-                    });
+                setUser({ id: user.uid });
             } else {
                 setUser(null);
-                instance.defaults.headers.common = {};
             }
 		})
 	}, []);
