@@ -58,7 +58,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
             {/*    </span>*/}
             {/*</div>*/}
 
-
+            {/*TODO*/}
             <div className="m-3 relative bg-red-100 p-4 rounded-xl">
                 <p className="text-lg text-red-700 font-medium">
                     <b>Our Discord bot to record your "used-the-site" role progress is currently down. It will be fixed later today (Wed Mar 23rd). Plenty of time to get the role, so no rush!</b>

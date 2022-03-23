@@ -26,11 +26,15 @@ function Login() {
     }, []);
 
     const [error, setError] = useState(discordError);
+
     // loading state which stores whether an access token is being issued or not
     const [loading, setLoading] = useState(!!code);
+
+
     useEffect(() => {
         if (code && !error && !user) {
             // exchange authorization code given by discord for an access token which we can sign in with using firebase
+            // this is defined on discord_auth.js
             instance
                 .post(
                     '/getToken',
