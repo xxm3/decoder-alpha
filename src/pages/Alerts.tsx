@@ -138,7 +138,7 @@ function StackedSearch({foo, onSubmit}: any) {
         <>
 
             {/*hidden={true} c*/}
-            <div className="secondary-bg-forced m-1 p-4 rounded-xl">
+            <div hidden={true} className="secondary-bg-forced m-1 p-4 rounded-xl">
                 <h4 className={`font-medium ${window.location.href.includes('fnt') ? 'text-red-600 font-medium' : ''}`}>
                     Alerts on New WL Tokens to your Wallet
                 </h4>

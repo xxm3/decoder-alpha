@@ -10,7 +10,7 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
     // const verifiedTokenData = (await axios.get('https://dens.famousfoxes.com/whitelist.json')).data;
 
     // Use the data aggregation logic from the backend, but use data obtained from clientside-called FamousFoxes API
-    const results = (await instance.post(`${environment.backendApi}/receiver/foxTokenAnalysis`, {
+    const results = (await instance.get(`${environment.backendApi}/receiver/foxTokenAnalysis`, {
         // rawTokenData,
         // verifiedTokenData
     })).data;

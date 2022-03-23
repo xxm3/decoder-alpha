@@ -821,7 +821,7 @@ function FoxToken({contentRef}: FoxToken) {
                             url="https://famousfoxes.com/tokenmarket"
                             actions={[
                                 {
-                                    icon: () => <IonIcon icon={wallet} />,
+                                    icon: () => <IonIcon icon={wallet} className="text-red-600 text-4xl" />,
                                     tooltip: viewMyTokensClicked
                                         ? 'View All Tokens'
                                         : 'View My Tokens',

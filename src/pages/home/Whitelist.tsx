@@ -106,10 +106,10 @@ const Whitelist = () => {
 
                     {/* TODO: google docs whitelist (for twitter) ... with invite bot */}
 
-                    {/*TODO: need a 830pm cronjob on old PC ... to spit to daily mints.. that @ me and vahag...*/}
+                    {/*TODO: need a 830pm cronjob on old PC ... to spit to daily mints.. that @ me and vahag (told him)...*/}
                     {/*// TODO-mike: need test daily mint hourly... for a day*/}
 
-                    {/*// TODO: join dead kings disc ... plus mirror fox */}
+                    {/*// TODO: join dead kings disc ... plus mirror foxn(or maybe nm... mirror turtle) */}
 
                     {/*
                         TODO: whitelist optimization
