@@ -15,6 +15,7 @@ import "./Login.css"
  * - user hits the site, and hits "ProtectedRoute.tsx" (which ignores localhost)
  * - ProctedRoute.tsx brings them to Login.tsx
  * - Login.tsx sends them to discord_auth.js, to get a token from discord
+ * // TODO: finish...
  */
 function Login() {
     const user = useUser();

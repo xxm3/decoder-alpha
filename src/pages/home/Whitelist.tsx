@@ -122,7 +122,7 @@ const Whitelist = () => {
                     {/*hidden={userWhitelistDataQuery?.data?.didAllSiteFunctions}*/}
                     <div className="secondary-bg-forced m-1 p-4 rounded-xl">
                         <div className={`font-bold pb-1`}>"used-the-site" role progress</div>
-                        <div>Use the below features to be granted the "used-the-site" role in Discord, which is required to get/keep whitelist. See <b>#whitelist-faq</b> in Discord for more details</div>
+                        <div>Use the below features to be granted the "used-the-site" role in Discord, which is required to get/keep whitelist. See <b>#whitelist-faq</b> in Discord for more details. After everything is checked, it may take a few minutes to show up in Discord.</div>
                         <div>
                             <div style={{ listStyle: '' }}>
                                 {
