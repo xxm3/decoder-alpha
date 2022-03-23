@@ -8,7 +8,14 @@ import {environment} from '../environments/environment';
 import {auth} from '../firebase';
 import "./Login.css"
 
-// The "Login" page to which all unauthenticated users are redirected to
+/**
+ * The "Login" page to which all unauthenticated users are redirected to
+ *
+ * Workflow:
+ * - user hits the site, and hits "ProtectedRoute.tsx" (which ignores localhost)
+ * - ProctedRoute.tsx brings them to Login.tsx
+ * - Login.tsx sends them to discord_auth.js, to get a token from discord
+ */
 function Login() {
     const user = useUser();
     const { next, code, discordError } = useMemo(() => {
