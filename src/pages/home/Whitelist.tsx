@@ -104,10 +104,6 @@ const Whitelist = () => {
                 :
                 <>
 
-                    {/*TODO: need a 830pm cronjob on old PC ... to spit to daily mints.. that @ me and vahag (told him).. 0--- TEST.*/}
-
-                    {/*// TODO: join dead kings disc ... plus mirror foxn(or maybe nm... mirror turtle) */}
-
                     {/*
                         TODO: whitelist optimization
                         user clicks view my token... need alert pop up or something...

@@ -57,7 +57,7 @@ function StackedSearch({foo, onSubmit}: any) {
     //     // setPopoverOpened(null);
     // }
 
-    // in the form for multiple wallets - submit button clicked
+    // in the form for alert on a token - submit button clicked
     const addAlertsTokenSubmit = (enable: boolean) => {
 
         if (!formAddAlertToken || formAddAlertToken.length !== 44) {
@@ -76,6 +76,7 @@ function StackedSearch({foo, onSubmit}: any) {
             setFormAddAlertToken(''); // clear the form
             // setMultWalletAryFromCookie(cookies.get('multWalletsAry')); // set array to show user on frontend
 
+            // TODO: i think this is the wrong endpoint? this is endpoint for getting sales
             instance
                 .post(environment.backendApi + '/receiver/foxSales', {
                     token: formAddAlertToken,
@@ -105,7 +106,7 @@ function StackedSearch({foo, onSubmit}: any) {
             });
 
             /**
-             * TO DO-alerts: alerts!
+             * TODO -alerts: alerts!
              *
              * in the UI tell the user the alert is going to discord over DMs
              *
@@ -137,8 +138,7 @@ function StackedSearch({foo, onSubmit}: any) {
     return (
         <>
 
-            {/*hidden={true} c*/}
-            <div hidden={true} className="secondary-bg-forced m-1 p-4 rounded-xl">
+            <div className="secondary-bg-forced m-1 p-4 rounded-xl">
                 <h4 className={`font-medium ${window.location.href.includes('fnt') ? 'text-red-600 font-medium' : ''}`}>
                     Alerts on New WL Tokens to your Wallet
                 </h4>
