@@ -20,7 +20,7 @@ function StackedSearch({ foo, onSubmit }: any) {
     const [present, dismiss] = useIonToast();
     const [formAddalertWalletAddress, setFormAddalertWalletAddress] = useState('');
     const [formLoadingAddalertWalletAddress, setFormLoadingAddalertWalletAddress] = useState(false); // form loading
-
+    const [alertWalletAddress, setAlertWalletAddress] = useState('');
     const walletAddress = useSelector(
         (state: RootState) => state.wallet.walletAddress
     );
@@ -30,12 +30,20 @@ function StackedSearch({ foo, onSubmit }: any) {
     /**
      * Use Effects
      */
+    /**
+     * Use Effects
+     */
+    useEffect(() => {
+        instance
+            .get(`${environment.backendApi}/currentUser`)
+            .then((res: any) => setAlertWalletAddress(res.data.user.walletAddress));
+    });
 
     // fill in their wallet from 'connect wallet', if set...
-    useEffect(() => {
-        // @ts-ignore
-        setFormAddalertWalletAddress(walletAddress);
-    }, [walletAddress]);
+    // useEffect(() => {
+    //     // @ts-ignore
+    //     setFormAddalertWalletAddress(walletAddress);
+    // }, [walletAddress]);
 
     /**
      * Functions
@@ -46,9 +54,10 @@ function StackedSearch({ foo, onSubmit }: any) {
     // }
 
     // in the form for alert on a token - submit button clicked
-    const addAlertsTokenSubmit = (enable: boolean) => {
+    // Should remove if unsubscribing
+    const modifyAlertWalletSubmit = (shouldRemove: boolean) => {
 
-        if (!formAddalertWalletAddress || formAddalertWalletAddress.length !== 44) {
+        if ((!formAddalertWalletAddress || formAddalertWalletAddress.length !== 44) && !shouldRemove) {
             present({
                 message: 'Error - please enter a single, valid SOL wallet address',
                 color: 'danger',
@@ -63,12 +72,14 @@ function StackedSearch({ foo, onSubmit }: any) {
         // setMultWalletAryFromCookie(cookies.get('multWalletsAry')); // set array to show user on frontend
 
         instance
-            .post(`${environment.backendApi}/receiver/addAlertWallet`, {
-                walletAddress: formAddalertWalletAddress,
+            .post(`${environment.backendApi}/receiver/modifyAlertWallet`, {
+                walletAddress: formAddalertWalletAddress || null,
+                shouldRemove
             })
             .then((res) => {
+                const actionVerb = shouldRemove ? 'removed' : 'added';
                 present({
-                    message: 'Successfully added the alert',
+                    message: `Successfully ${actionVerb} the alert wallet address`,
                     color: 'success',
                     duration: 5000
                 });
@@ -116,32 +127,38 @@ function StackedSearch({ foo, onSubmit }: any) {
                     <div className="font-medium">
                         <p>
                             This alerts you when any WL Token (that is also listed on Fox Token Market) gets added to your
-                            wallet. Add a single SOL wallet address below.
+                            wallet. Add a single SOL wallet address below. The alert will be sent to you via a Discord DM by our automated discord bot.
                         </p>
                     </div>
                 </div>
 
                 <div className="ml-3 mr-3">
-                    <IonItem>
+                    <IonItem hidden={!!alertWalletAddress}>
                         <IonLabel position="stacked" className="font-bold">
                             SOL Wallet Address
                         </IonLabel>
-                        <IonInput
-                            onIonChange={(e) =>
-                                setFormAddalertWalletAddress(e.detail.value!)
-                            }
-                            value={formAddalertWalletAddress}
-                            placeholder="ex. 91q2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU"
-                        ></IonInput>
+                        <IonInput onIonChange={(e) =>
+                            setFormAddalertWalletAddress(e.detail.value!)
+                        }
+                        value={formAddalertWalletAddress}
+                        placeholder="ex. 91q2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU" />
                     </IonItem>
-
+                    <div hidden={!alertWalletAddress}>Your current alert wallet: {alertWalletAddress}</div>
                     <IonButton
                         color="primary"
                         className="mt-5"
-                        hidden={formLoadingAddalertWalletAddress}
-                        onClick={() => addAlertsTokenSubmit(true)}
+                        hidden={formLoadingAddalertWalletAddress || !!alertWalletAddress}
+                        onClick={() => modifyAlertWalletSubmit(false)}
                     >
                         Submit
+                    </IonButton>
+                    <IonButton
+                        color="danger"
+                        className="mt-5"
+                        hidden={formLoadingAddalertWalletAddress || !alertWalletAddress}
+                        onClick={() => modifyAlertWalletSubmit(true)}
+                    >
+                        Unsubscribe
                     </IonButton>
 
                     {/*<IonButton*/}
