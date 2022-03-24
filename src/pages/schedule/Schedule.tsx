@@ -209,13 +209,16 @@ const Schedule = () => {
         {
             title: 'Name',
             render: (record) => (
-                <span
-                    // cursor-pointer
-                    className=""
-                    onClick={() => handleProjectClick(record)}
-                >
+                <>
+                    <img  className ="avatarImg" key={record.image} src={record.image} />
+                    <span
+                        // cursor-pointer
+                        className=""
+                        onClick={() => handleProjectClick(record)}
+                    >
                     {record.project}
                 </span>
+                </>
             ),
             customSort: (a, b) => a.project.localeCompare(b.project),
             customFilterAndSearch: (term, rowData) =>
