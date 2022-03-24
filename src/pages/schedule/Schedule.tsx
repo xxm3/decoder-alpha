@@ -246,7 +246,7 @@ const Schedule = () => {
             title: 'Price',
             customSort: (a, b) =>
                 +a.price.split(' ')[0] - +b.price.split(' ')[0],
-            render: (record) => <span dangerouslySetInnerHTML={{ __html: record.price.replace("public", "<br>public") }}></span>,
+            render: (record) => <span dangerouslySetInnerHTML={{ __html: record.price.replace(/public/gi, "<br>public") }}></span>,
             // width: "80px"
         },
         {

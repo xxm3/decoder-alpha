@@ -53,7 +53,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                 <span
 
                 >
-                    {record.name}
+                    {record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())}
                 </span>
             ),
             customSort: (a, b) => a.name.localeCompare(b.name),

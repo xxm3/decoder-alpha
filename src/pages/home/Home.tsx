@@ -58,15 +58,14 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
             {/*    </span>*/}
             {/*</div>*/}
 
-            {/* TODO-DAMJAN */}
-            <div className="m-3 relative bg-red-100 p-4 rounded-xl">
-                <p className="text-lg text-red-700 font-medium">
-                    <b>Our Discord bot to record your "used-the-site" role progress is currently down. It will be fixed later today (Wed Mar 23rd). Plenty of time to get the role, so no rush!</b>
-                </p>
-                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                    !
-                </span>
-            </div>
+            {/*<div className="m-3 relative bg-red-100 p-4 rounded-xl">*/}
+            {/*    <p className="text-lg text-red-700 font-medium">*/}
+            {/*        <b>Our Discord bot to record your "used-the-site" role progress is currently down. It will be fixed later today (Wed Mar 23rd). Plenty of time to get the role, so no rush!</b>*/}
+            {/*    </p>*/}
+            {/*    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">*/}
+            {/*        !*/}
+            {/*    </span>*/}
+            {/*</div>*/}
 
 
         </>

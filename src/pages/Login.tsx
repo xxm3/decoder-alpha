@@ -8,7 +8,17 @@ import {environment} from '../environments/environment';
 import {auth} from '../firebase';
 import "./Login.css"
 
-// The "Login" page to which all unauthenticated users are redirected to
+/**
+ * The "Login" page to which all unauthenticated users are redirected to
+ *
+ * Workflow:
+ * - user hits the site, and hits "ProtectedRoute.tsx" (which ignores localhost)
+ * - ProctedRoute.tsx brings them to Login.tsx
+ * - Login.tsx sends them to discord_auth.js, to get a token from discord
+ * - discord_auth.js goes to discord and gets a token, returns it to login.tsx
+ * - Login.tsx signs them in
+ * - also axios.ts is used for getting new tokens
+ */
 function Login() {
     const user = useUser();
     const { next, code, discordError } = useMemo(() => {
@@ -95,7 +105,7 @@ function Login() {
                                     <p className="font-bold">Welcome to SOL Decoder</p>
 
                                     <ul className="">
-                                        <li>Please join <a href="https://discord.gg/nJn9qmJ2mm" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a> to get a role which allows access to the site. In the future the site will be locked behind ownership of our NFT</li>
+                                        <li>Please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a> to get a role which allows access to the site. In the future the site will be locked behind ownership of our NFT</li>
                                         <li>View whitelisting info in the <b>#whitelist-faq</b> channel within Discord</li>
                                     </ul>
                                 </div>

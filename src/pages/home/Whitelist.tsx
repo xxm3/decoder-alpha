@@ -104,25 +104,20 @@ const Whitelist = () => {
                 :
                 <>
 
-                    {/* TODO: google docs whitelist (for twitter) ... with invite bot */}
-
-                    {/*TODO: need a 830pm cronjob on old PC ... to spit to daily mints.. that @ me and vahag (told him)...*/}
-                    {/*// TODO-mike: need test daily mint hourly... for a day*/}
-
-                    {/*// TODO: join dead kings disc ... plus mirror foxn(or maybe nm... mirror turtle) */}
-
                     {/*
                         TODO: whitelist optimization
                         user clicks view my token... need alert pop up or something...
                         add mult wallets -> add manual wallet(s)
                         debug why taking so long....
                          implement ??? or implmenet "hey  you did everythign but not whitelist.. here's how?" ... or implement "gratz you just got it!"
+
+                         TODO: close whitelist app... open later to 50 users
                     */}
                     {/*-{userWhitelistDataQuery?.data}-*/}
                     {/*hidden={userWhitelistDataQuery?.data?.didAllSiteFunctions}*/}
                     <div className="secondary-bg-forced m-1 p-4 rounded-xl">
                         <div className={`font-bold pb-1`}>"used-the-site" role progress</div>
-                        <div>Use the below features to be granted the "used-the-site" role in Discord, which is required to get/keep whitelist. See <b>#whitelist-faq</b> in Discord for more details</div>
+                        <div>Use the below features to be granted the "used-the-site" role in Discord, which is required to get/keep whitelist. See <b>#whitelist-faq</b> in Discord for more details. After everything is checked, it may take a few minutes to show up in Discord.</div>
                         <div>
                             <div style={{ listStyle: '' }}>
                                 {

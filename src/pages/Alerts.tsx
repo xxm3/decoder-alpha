@@ -45,7 +45,7 @@ function StackedSearch({ foo, onSubmit }: any) {
     //     // setPopoverOpened(null);
     // }
 
-    // in the form for multiple wallets - submit button clicked
+    // in the form for alert on a token - submit button clicked
     const addAlertsTokenSubmit = (enable: boolean) => {
 
         if (!formAddalertWalletAddress || formAddalertWalletAddress.length !== 44) {
