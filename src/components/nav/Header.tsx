@@ -56,7 +56,7 @@ const HeaderContainer = () => {
             if(window.innerWidth > 1000){
                 setHeaderPlaceholder("Search Discord/tweets & view graphs");
             }else{
-                setHeaderPlaceholder("Type to search");
+                setHeaderPlaceholder("Type then press enter");
             }
         }
 
@@ -87,16 +87,17 @@ const HeaderContainer = () => {
 
     return (
         <>
-            <IonHeader 
-				className={`py-2 ${showMobileSearch ? "px-10" : "pr-10"}`}
+            <IonHeader
+				className={`py-2 ${showMobileSearch ? "px-2" : "pr-10"}`}
 				css={css`
 					--background: var(--ion-background-color);
 					ion-toolbar {
 						background-color: var(--background)
-					}	
+					}
 				`}
 			>
                 <IonToolbar>
+
                     <div className="justify-between space-x-8 flex items-center">
                         {/*pt-3*/}
                         {!showMobileSearch && (
@@ -157,7 +158,11 @@ const HeaderContainer = () => {
                                     placeholder={headerPlaceholder}
                                     disableReset
                                 />
-								<Help description={`Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale"). Results include graphs, and messages you can scroll through. Click on a message to view more`}/>
+
+                                <span className="hidden sm:block">
+                                    <Help
+                                        description={`Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale"). Results include graphs, and messages you can scroll through. Click on a message to view more`}/>
+                                </span>
 
                             </div>
                             {!showMobileSearch && (
