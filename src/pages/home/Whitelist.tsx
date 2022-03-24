@@ -110,6 +110,8 @@ const Whitelist = () => {
                         add mult wallets -> add manual wallet(s)
                         debug why taking so long....
                          implement ??? or implmenet "hey  you did everythign but not whitelist.. here's how?" ... or implement "gratz you just got it!"
+
+                         TODO: close whitelist app... open later to 50 users
                     */}
                     {/*-{userWhitelistDataQuery?.data}-*/}
                     {/*hidden={userWhitelistDataQuery?.data?.didAllSiteFunctions}*/}
