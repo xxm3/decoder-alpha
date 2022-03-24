@@ -27,7 +27,7 @@ const Home: React.FC<AppComponentProps> = ({ contentRef }) => {
             .get(`${environment.backendApi}/recentAlerts`)
             .then((res: any) => setAlerts(res.data.alerts))
             .catch() // ?;
-    });
+    }, []);
     /**
      * Functions
      */
