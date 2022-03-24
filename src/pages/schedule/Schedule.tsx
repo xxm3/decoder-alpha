@@ -210,7 +210,7 @@ const Schedule = () => {
             title: 'Name',
             render: (record) => (
                 <>
-                    <img  className ="avatarImg" key={record.image} src={record.image} />
+                    <img  className ={`avatarImg ${!record?.image?'hidden': ''}`} key={record?.image} src={record?.image} />
                     <span
                         // cursor-pointer
                         className=""
