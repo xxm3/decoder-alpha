@@ -1,38 +1,26 @@
-import {ChartData} from "chart.js";
-import React, {useEffect, useMemo, useState} from "react";
-import {instance} from "../axios";
-import {dispLabelsDailyCount, getDailyCountData} from "../util/charts";
-import SearchBar from "../components/SearchBar";
-import Loader from "../components/Loader";
-import {Chart} from "react-chartjs-2";
-import Help from "../components/Help";
+import { useEffect, useState } from "react";
+import { instance } from "../axios";
 import {
     IonButton,
-    IonContent,
-    IonHeader,
-    IonIcon,
     IonInput,
     IonItem,
     IonLabel,
-    IonModal,
-    IonTitle,
-    IonToolbar, useIonToast
+    useIonToast
 } from "@ionic/react";
-import {close} from "ionicons/icons";
-import {environment} from "../environments/environment";
-import {Link, useLocation} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {RootState} from "../redux/store";
+import { environment } from "../environments/environment";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
-function StackedSearch({foo, onSubmit}: any) {
+function StackedSearch({ foo, onSubmit }: any) {
 
     /**
      * States & Variables
      */
     const [present, dismiss] = useIonToast();
-    const [formAddAlertToken, setFormAddAlertToken] = useState('');
-    const [formLoadingAddAlertToken, setFormLoadingAddAlertToken] = useState(false); // form loading
-
+    const [formAddalertWalletAddress, setFormAddalertWalletAddress] = useState('');
+    const [formLoadingAddalertWalletAddress, setFormLoadingAddalertWalletAddress] = useState(false); // form loading
+    const [alertWalletAddress, setAlertWalletAddress] = useState('');
     const walletAddress = useSelector(
         (state: RootState) => state.wallet.walletAddress
     );
@@ -42,69 +30,72 @@ function StackedSearch({foo, onSubmit}: any) {
     /**
      * Use Effects
      */
+    /**
+     * Use Effects
+     */
+    useEffect(() => {
+        instance
+            .get(`${environment.backendApi}/currentUser`)
+            .then((res: any) => setAlertWalletAddress(res.data.user.walletAddress));
+    });
 
     // fill in their wallet from 'connect wallet', if set...
-    useEffect(() => {
-        // @ts-ignore
-        setFormAddAlertToken(walletAddress);
-    }, [walletAddress]);
+    // useEffect(() => {
+    //     // @ts-ignore
+    //     setFormAddalertWalletAddress(walletAddress);
+    // }, [walletAddress]);
 
     /**
      * Functions
      */
-    // const clickedAlertNewTokens = (val: boolean) => {
-    //     setAlertNewTokensModalOpen(val);
-    //     // setPopoverOpened(null);
-    // }
+        // const clickedAlertNewTokens = (val: boolean) => {
+        //     setAlertNewTokensModalOpen(val);
+        //     // setPopoverOpened(null);
+        // }
 
-    // in the form for alert on a token - submit button clicked
-    const addAlertsTokenSubmit = (enable: boolean) => {
+        // in the form for alert on a token - submit button clicked
+        // Should remove if unsubscribing
+    const modifyAlertWalletSubmit = (shouldRemove: boolean) => {
 
-        if (!formAddAlertToken || formAddAlertToken.length !== 44) {
-            present({
-                message: 'Error - please enter a single, valid SOL wallet address',
-                color: 'danger',
-                duration: 5000
-            });
-            return;
-        }
+            if ((!formAddalertWalletAddress || formAddalertWalletAddress.length !== 44) && !shouldRemove) {
+                present({
+                    message: 'Error - please enter a single, valid SOL wallet address',
+                    color: 'danger',
+                    duration: 5000
+                });
+                return;
+            }
 
-        setFormLoadingAddAlertToken(true);
+            setFormLoadingAddalertWalletAddress(true);
 
-        try {
-            setFormLoadingAddAlertToken(false); // loading false
-            setFormAddAlertToken(''); // clear the form
+            setFormAddalertWalletAddress(''); // clear the form
             // setMultWalletAryFromCookie(cookies.get('multWalletsAry')); // set array to show user on frontend
 
             instance
-                .post(environment.backendApi + '/receiver/foxSales', {
-                    token: formAddAlertToken,
-                    enable: enable
+                .post(`${environment.backendApi}/receiver/modifyAlertWallet`, {
+                    walletAddress: formAddalertWalletAddress || null,
+                    shouldRemove
                 })
                 .then((res) => {
-                    const data = res.data;
-
-                    // console.log(data);
-
+                    const actionVerb = shouldRemove ? 'removed' : 'added';
                     present({
-                        message: 'Successfully added the alert',
+                        message: `Successfully ${actionVerb} the alert wallet address`,
                         color: 'success',
                         duration: 5000
                     });
 
                 }).catch(err => {
-
                 console.error(err);
-                setFormLoadingAddAlertToken(false); // loading false
-
                 present({
-                    message: 'An error occurred when adding the Alert',
+                    message: err.msg,
                     color: 'danger',
                     duration: 5000
                 });
-            });
+            }).finally(() => setFormLoadingAddalertWalletAddress(false));
 
             /**
+             * TO DO-alerts: alerts!
+             *
              * in the UI tell the user the alert is going to discord over DMs
              *
              * once done:
@@ -117,17 +108,7 @@ function StackedSearch({foo, onSubmit}: any) {
              * - add a new section to home page ...to view recent alerts?
              */
 
-        } catch (err) {
-            console.error(err);
-            setFormLoadingAddAlertToken(false); // loading false
-
-            present({
-                message: 'An error occurred when adding the Alert',
-                color: 'danger',
-                duration: 5000
-            });
         }
-    }
 
     /**
      * Renders
@@ -135,7 +116,8 @@ function StackedSearch({foo, onSubmit}: any) {
     return (
         <>
 
-            <div hidden={true} className="secondary-bg-forced m-1 p-4 rounded-xl">
+            {/*hidden={true} c*/}
+            <div className="secondary-bg-forced m-1 p-4 rounded-xl">
                 <h4 className={`font-medium ${window.location.href.includes('fnt') ? 'text-red-600 font-medium' : ''}`}>
                     Alerts on New WL Tokens to your Wallet
                 </h4>
@@ -145,32 +127,38 @@ function StackedSearch({foo, onSubmit}: any) {
                     <div className="font-medium">
                         <p>
                             This alerts you when any WL Token (that is also listed on Fox Token Market) gets added to your
-                            wallet. Add a single SOL wallet address below.
+                            wallet. Add a single SOL wallet address below. The alert will be sent to you via a Discord DM by our automated discord bot.
                         </p>
                     </div>
                 </div>
 
                 <div className="ml-3 mr-3">
-                    <IonItem>
+                    <IonItem hidden={!!alertWalletAddress}>
                         <IonLabel position="stacked" className="font-bold">
                             SOL Wallet Address
                         </IonLabel>
-                        <IonInput
-                            onIonChange={(e) =>
-                                setFormAddAlertToken(e.detail.value!)
-                            }
-                            value={formAddAlertToken}
-                            placeholder="ex. 91q2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU"
-                        ></IonInput>
+                        <IonInput onIonChange={(e) =>
+                            setFormAddalertWalletAddress(e.detail.value!)
+                        }
+                                  value={formAddalertWalletAddress}
+                                  placeholder="ex. 91q2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU" />
                     </IonItem>
-
+                    <div hidden={!alertWalletAddress}>Your current alert wallet: {alertWalletAddress}</div>
                     <IonButton
                         color="primary"
                         className="mt-5"
-                        hidden={formLoadingAddAlertToken}
-                        onClick={() => addAlertsTokenSubmit(true)}
+                        hidden={formLoadingAddalertWalletAddress || !!alertWalletAddress}
+                        onClick={() => modifyAlertWalletSubmit(false)}
                     >
                         Submit
+                    </IonButton>
+                    <IonButton
+                        color="danger"
+                        className="mt-5"
+                        hidden={formLoadingAddalertWalletAddress || !alertWalletAddress}
+                        onClick={() => modifyAlertWalletSubmit(true)}
+                    >
+                        Unsubscribe
                     </IonButton>
 
                     {/*<IonButton*/}
@@ -182,7 +170,7 @@ function StackedSearch({foo, onSubmit}: any) {
                     {/*    Reset Stored Wallets*/}
                     {/*</IonButton>*/}
 
-                    <div hidden={!formLoadingAddAlertToken}>Loading...</div>
+                    <div hidden={!formLoadingAddalertWalletAddress}>Loading...</div>
                 </div>
             </div>
 
@@ -199,7 +187,7 @@ function StackedSearch({foo, onSubmit}: any) {
                 The <a href="https://discord.com/channels/925207817923743794/951513272132182066" target="_blank" className="underline">#analytics-etc</a> channel in Discord
                 and the home page of the site shows when WL tokens get official names by the Famous Fox team,
                 or when a user of SOL Decoder adds a custom name to one.
-                <br/>
+                <br />
                 Visit <a href="https://discord.com/channels/925207817923743794/938996145529712651 target=_blank" className="underline">#self-roles</a> in Discord and get the <b>@fox-wl-alerts</b> role to get alerts when this happens
             </div>
 
@@ -209,7 +197,7 @@ function StackedSearch({foo, onSubmit}: any) {
                 </h4>
                 The <a href="https://discord.com/channels/925207817923743794/925215482561302529" target="_blank" className="underline">#mint-alerts-automated</a> channel in Discord
                 and the <Link to={'mintstats'} className="underline">Mint Stats</Link> page of the site is a live feed that parses links from the discords we watch. It alerts when any link could contain a new mint, before or while it is released. The mint must be linked from two discords before it shows up. On Discord, Candy Machine ID and mint details are also posted, if found.
-                <br/>
+                <br />
                 Visit <a href="https://discord.com/channels/925207817923743794/938996145529712651 target=_blank" className="underline">#self-roles</a> in Discord and get the <b>@Minter</b> role to get alerts when this happens
             </div>
 
