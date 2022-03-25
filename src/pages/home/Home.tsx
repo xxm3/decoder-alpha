@@ -1,17 +1,20 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import './Home.css';
 import moment from "moment";
-import {AppComponentProps} from '../../components/Route';
+import { AppComponentProps } from '../../components/Route';
 import SearchedWords from './SearchedWords';
 import FfNamed from "./FfNamed";
 import Whitelist from './Whitelist';
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { instance } from '../../axios';
+import { environment } from '../../environments/environment';
 
-const Home: React.FC<AppComponentProps> = ({contentRef}) => {
+const Home: React.FC<AppComponentProps> = ({ contentRef }) => {
 
     /**
      * States & Variables
      */
+    const [alerts, setAlerts] = useState([]);
     // const useQuery = () => new URLSearchParams(useLocation().search);
     // const query = useQuery();
     // const devMode = query.get('devMode');
@@ -19,7 +22,12 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
     /**
      * Use Effects
      */
-
+    useEffect(() => {
+        instance
+            .get(`${environment.backendApi}/recentAlerts`)
+            .then((res: any) => setAlerts(res.data.alerts))
+            .catch() // ?;
+    }, []);
     /**
      * Functions
      */
@@ -37,7 +45,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
             {/* for user to get used-the-site- role */}
             {/*<div hidden={!devMode}>*/}
-                <Whitelist />
+            <Whitelist />
             {/*</div>*/}
 
 
