@@ -8,7 +8,7 @@ import {
     useIonToast
 } from "@ionic/react";
 import { environment } from "../environments/environment";
-import { Link } from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 
@@ -26,6 +26,10 @@ function StackedSearch({ foo, onSubmit }: any) {
     );
 
     // const [alertNewTokensModalOpen, setAlertNewTokensModalOpen] = useState(false); // model open or not
+
+    const useQuery = () => new URLSearchParams(useLocation().search);
+    const query = useQuery();
+    const devMode = query.get('devMode');
 
     /**
      * Use Effects
@@ -117,7 +121,7 @@ function StackedSearch({ foo, onSubmit }: any) {
         <>
 
             {/*hidden={true} c*/}
-            <div className="secondary-bg-forced m-1 p-4 rounded-xl">
+            <div hidden={!devMode} className="secondary-bg-forced m-1 p-4 rounded-xl">
                 <h4 className={`font-medium ${window.location.href.includes('fnt') ? 'text-red-600 font-medium' : ''}`}>
                     Alerts on New WL Tokens to your Wallet
                 </h4>
@@ -126,8 +130,10 @@ function StackedSearch({ foo, onSubmit }: any) {
                     className="ml-3 mr-3 mb-2 relative mt-2 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                     <div className="font-medium">
                         <p>
-                            This alerts you when any WL Token (that is also listed on Fox Token Market) gets added to your
-                            wallet. Add a single SOL wallet address below. The alert will be sent to you via a Discord DM by our automated discord bot.
+                            This alerts you when any WL Token (that is also listed on Fox Token Market) gets added to your wallet.
+                            Add a single SOL wallet address below.
+                            The alert will be sent to you via a Discord DM by our bot.
+                            At this time, <a className="underline text-blue-500" target="_blank" href="https://support.discord.com/hc/en-us/articles/217916488-Blocking-Privacy-Settings-">you must enable DMs from all users in our server</a> (note we will NEVER DM you with mint links).
                         </p>
                     </div>
                 </div>
@@ -173,9 +179,8 @@ function StackedSearch({ foo, onSubmit }: any) {
                     <div hidden={!formLoadingAddalertWalletAddress}>Loading...</div>
                 </div>
             </div>
-
-
             <hr className="m-5" />
+
 
             <h3 className="text-xl font-medium mb-3">Discord Managed Alerts</h3>
 
