@@ -206,4 +206,3 @@ function StackedSearch({ foo, onSubmit }: any) {
 }
 
 export default StackedSearch;
-
