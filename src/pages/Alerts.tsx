@@ -76,7 +76,6 @@ function StackedSearch({foo, onSubmit}: any) {
             setFormAddAlertToken(''); // clear the form
             // setMultWalletAryFromCookie(cookies.get('multWalletsAry')); // set array to show user on frontend
 
-            // TODO: i think this is the wrong endpoint? this is endpoint for getting sales
             instance
                 .post(environment.backendApi + '/receiver/foxSales', {
                     token: formAddAlertToken,
@@ -106,8 +105,6 @@ function StackedSearch({foo, onSubmit}: any) {
             });
 
             /**
-             * TODO -alerts: alerts!
-             *
              * in the UI tell the user the alert is going to discord over DMs
              *
              * once done:
