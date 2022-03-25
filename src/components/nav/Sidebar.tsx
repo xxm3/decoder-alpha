@@ -1,6 +1,15 @@
 import { css } from "@emotion/react";
 import {IonList} from "@ionic/react"
-import {book, calendarClearOutline, homeOutline, logoFirefox, notifications, search, statsChart} from "ionicons/icons"
+import {
+    book,
+    calendarClearOutline,
+    homeOutline,
+    logoFirefox,
+    logoTwitter,
+    notifications,
+    search,
+    statsChart
+} from "ionicons/icons"
 import NavLink from "./NavLink"
 
 function Sidebar() {
@@ -48,7 +57,13 @@ function Sidebar() {
                     title="Docs"
                     icon={book}
                     to="#"
-                    external={'https://docs.soldecoder.app/books/site-and-discord-overview/page/sol-decoder-overview'}
+                    external={'https://docs.soldecoder.app'}
+                />
+                <NavLink
+                    title="Twitter"
+                    icon={logoTwitter}
+                    to="#"
+                    external={'https://twitter.com/SOL_Decoder'}
                 />
 
             </IonList>

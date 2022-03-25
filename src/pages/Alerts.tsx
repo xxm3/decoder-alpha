@@ -57,7 +57,7 @@ function StackedSearch({foo, onSubmit}: any) {
     //     // setPopoverOpened(null);
     // }
 
-    // in the form for multiple wallets - submit button clicked
+    // in the form for alert on a token - submit button clicked
     const addAlertsTokenSubmit = (enable: boolean) => {
 
         if (!formAddAlertToken || formAddAlertToken.length !== 44) {
@@ -76,16 +76,16 @@ function StackedSearch({foo, onSubmit}: any) {
             setFormAddAlertToken(''); // clear the form
             // setMultWalletAryFromCookie(cookies.get('multWalletsAry')); // set array to show user on frontend
 
+            // TODO: i think this is the wrong endpoint? this is endpoint for getting sales
             instance
                 .post(environment.backendApi + '/receiver/foxSales', {
                     token: formAddAlertToken,
-                    enable: enable // TODO-m: able to remove the alert (unsub etc...)
+                    enable: enable
                 })
                 .then((res) => {
                     const data = res.data;
 
-                    // TODO-m:
-                    console.log(data);
+                    // console.log(data);
 
                     present({
                         message: 'Successfully added the alert',
@@ -105,13 +105,20 @@ function StackedSearch({foo, onSubmit}: any) {
                 });
             });
 
-            // TODO-m: able to tell where alert going to (discord or web)
-
-            // TODO-m: home page to view alerts?
-
-            // TODO-m: !! test by sending me tokens!
-
-            // TODO-m: update docs.sol ... and the temp cookie (after renaming the cookie)
+            /**
+             * TODO -alerts: alerts!
+             *
+             * in the UI tell the user the alert is going to discord over DMs
+             *
+             * once done:
+             * - test this by sending yourself tokens between wallets
+             * - add to the intro on top of fox page what this is ... then renam the cookie)
+             * - update docs.sol
+             *
+             * ONCE IN PROD:
+             * - look for enable:enable ... make it so you are able to remove the alert (unsub etc...)
+             * - add a new section to home page ...to view recent alerts?
+             */
 
         } catch (err) {
             console.error(err);
@@ -131,7 +138,7 @@ function StackedSearch({foo, onSubmit}: any) {
     return (
         <>
 
-            <div className="secondary-bg-forced m-1 p-4 rounded-xl">
+            <div hidden={true} className="secondary-bg-forced m-1 p-4 rounded-xl">
                 <h4 className={`font-medium ${window.location.href.includes('fnt') ? 'text-red-600 font-medium' : ''}`}>
                     Alerts on New WL Tokens to your Wallet
                 </h4>
@@ -160,20 +167,14 @@ function StackedSearch({foo, onSubmit}: any) {
                         ></IonInput>
                     </IonItem>
 
-
-                    {/*TODO*/}
-                    <IonButton>
-                    COMING SOON
+                    <IonButton
+                        color="primary"
+                        className="mt-5"
+                        hidden={formLoadingAddAlertToken}
+                        onClick={() => addAlertsTokenSubmit(true)}
+                    >
+                        Submit
                     </IonButton>
-
-                    {/*<IonButton*/}
-                    {/*    color="primary"*/}
-                    {/*    className="mt-5"*/}
-                    {/*    hidden={formLoadingAddAlertToken}*/}
-                    {/*    onClick={() => addAlertsTokenSubmit(true)}*/}
-                    {/*>*/}
-                    {/*    Submit*/}
-                    {/*</IonButton>*/}
 
                     {/*<IonButton*/}
                     {/*    hidden={!multWalletAryFromCookie}*/}

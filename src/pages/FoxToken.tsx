@@ -71,11 +71,12 @@ const columns: Column<FoxTokenData>[] = [
         customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
         render: (record) => <span>{record.totalTokenListings}</span>,
     },
-    {
-        title: 'Last Sale',
-        customSort: (a, b) => new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
-        render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : null}</span>,
-    },
+    // REMOVING-FF-FOR-NOW
+    // {
+    //     title: 'Last Sale',
+    //     customSort: (a, b) => new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
+    //     render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : null}</span>,
+    // },
     {
         title: '# Owned & Wallet',
         render: (record) => <span>{record.whichMyWallets}</span>,
@@ -221,8 +222,6 @@ function FoxToken({contentRef}: FoxToken) {
     /**
      * States & Variables
      */
-
-
     const [tableData, _setTableData] = useState<FoxTokenData[]>([]);
     const [fullTableData, setFullTableData] = useState<FoxTokenData[]>([]);
     const [mySolBalance, setMySolBalance] = useState("");
@@ -460,9 +459,8 @@ function FoxToken({contentRef}: FoxToken) {
         // user wants to see MY tokens
         if (wantViewTokens) {
 
-            // TODO: TEST: within this page, make a call to a NEW endpoint on foxtokenparser.js ... you can call this /userViewedMyToken ... look at the code for instance.get - on how to send this, total 4 lines of code on frontend
-            // called the api below but not sure if there is anything to be done with the response or after the api is hit
-            // const viewTokenResponse = await instance.get(environment.backendApi + '/receiver/userViewedMyToken');
+            // set the fact they viewed their token
+            instance.get(environment.backendApi + '/receiver/userViewedMyToken');
 
             // see other local host on here to see why
             if (window.location.href.indexOf(local_host_str) !== -1) {
@@ -473,7 +471,7 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add one (or three!) manually. Then you can filter this table to only the tokens in your wallet.',
                     color: 'danger',
-                    duration: 5000
+                    duration: 10000
                 });
                 return;
             }
@@ -530,21 +528,25 @@ function FoxToken({contentRef}: FoxToken) {
                 // this should instantly show the table to the user
                 setTableData(newTableData);
 
+                // REMOVING-FF-FOR-NOW
                 // but then we need to go out and get their latest sales data... takes about 1.5 sec per token
-                instance
-                    .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
-                    .then((res) => {
-                        const sales = res.data.data.sales;
-                        sales.forEach((sale: {token: string, lastSaleDate: string}) => {
-                            const row = newTableData.find((d: any) => d.token === sale.token);
-                            row.lastSaleDate = sale.lastSaleDate;
-                        });
-                    }).finally(() => {
+                // instance
+                //     .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
+                //     .then((res) => {
+                //         const sales = res?.data?.data.salesData;
+                //         if(sales){
+                //             sales.forEach((sale: {token: string, lastSaleDate: string}) => {
+                //                 const row = newTableData.find((d: any) => d.token === sale.token);
+                //                 row.lastSaleDate = sale.lastSaleDate;
+                //             });
+                //
+                //             // once we get the data, then we can set it yet again...
+                //             setTableData(newTableData);
+                //         }
+                //     }).finally(() => {
+                //
+                //     });
 
-                        // TODO: not setting properly, maybe is the var name...
-                        // once we get the data, then we can set it yet again...
-                        setTableData(newTableData)
-                    });
             }
 
             // user wants to see ALL tokens
@@ -812,13 +814,14 @@ function FoxToken({contentRef}: FoxToken) {
                             title="Fox WL Token Market"
                             description="
                             👪 are community added names.
-                            The Last Sale column is only updated when viewing the chart or your own tokens (which updates it for others as well).
                             'Not Listed' means it is not listed for sale anymore, and shown for historical purposes.
                             "
+                            // REMOVING-FF-FOR-NOW
+                            // The Last Sale column is only updated when viewing the chart or your own tokens (which updates it for others as well).
                             url="https://famousfoxes.com/tokenmarket"
                             actions={[
                                 {
-                                    icon: () => <IonIcon icon={wallet} />,
+                                    icon: () => <IonIcon icon={wallet} className="text-red-600 text-4xl" />,
                                     tooltip: viewMyTokensClicked
                                         ? 'View All Tokens'
                                         : 'View My Tokens',

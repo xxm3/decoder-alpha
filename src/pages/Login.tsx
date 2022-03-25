@@ -8,7 +8,17 @@ import {environment} from '../environments/environment';
 import {auth} from '../firebase';
 import "./Login.css"
 
-// The "Login" page to which all unauthenticated users are redirected to
+/**
+ * The "Login" page to which all unauthenticated users are redirected to
+ *
+ * Workflow:
+ * - user hits the site, and hits "ProtectedRoute.tsx" (which ignores localhost)
+ * - ProctedRoute.tsx brings them to Login.tsx
+ * - Login.tsx sends them to discord_auth.js, to get a token from discord
+ * - discord_auth.js goes to discord and gets a token, returns it to login.tsx
+ * - Login.tsx signs them in
+ * - also axios.ts is used for getting new tokens
+ */
 function Login() {
     const user = useUser();
     const { next, code, discordError } = useMemo(() => {
@@ -26,11 +36,15 @@ function Login() {
     }, []);
 
     const [error, setError] = useState(discordError);
+
     // loading state which stores whether an access token is being issued or not
     const [loading, setLoading] = useState(!!code);
+
+
     useEffect(() => {
         if (code && !error && !user) {
             // exchange authorization code given by discord for an access token which we can sign in with using firebase
+            // this is defined on discord_auth.js
             instance
                 .post(
                     '/getToken',
@@ -86,28 +100,22 @@ function Login() {
                                 {error}
                             </p>
 
-
                             <div className="p-4">
                                 <div id="welcome">
                                     <p className="font-bold">Welcome to SOL Decoder</p>
 
                                     <ul className="">
-                                        {/*<li>Please join <a href="https://discord.gg/sol-decoder" style={{"textDecoration": "underline"}}>our Discord</a> to get access to the site</li>*/}
-                                        <li>In the future the site will be locked behind ownership of the NFT. Until the NFT releases, you can get access by simply joining our Discord</li>
-                                        <li>View whitelisting requirements in the #whitelist-faq channel</li>
+                                        <li>Please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a> to get a role which allows access to the site. In the future the site will be locked behind ownership of our NFT</li>
+                                        <li>View whitelisting info in the <b>#whitelist-faq</b> channel within Discord</li>
                                     </ul>
                                 </div>
                                 <br/>
 
                                 <div id="security">
-                                    <p className="font-bold">A note on the Discord status</p>
+                                    <p className="font-bold">Other links:</p>
                                     <ul>
-                                        {/*<li>If the above Discord link doesn't work - it means we are in a closed state</li>*/}
-                                        <li>The Discord is currently in a closed state.</li>
-                                        <li>The Discord will remain closed while we continue to build features & release an Android / iOS app</li>
-                                        <li>You may <a href="https://twitter.com/SOL_Decoder" className="underline">follow our Twitter here</a> to see when the Discord opens. Note we haven't yet
-                                            started our marketing push, and haven't started posting / advertising our Twitter yet</li>
-
+                                        <li>Follow us <a href="https://twitter.com/SOL_Decoder" target="_blank" className="underline">on Twitter</a></li>
+                                        <li>Read our <a href="https://docs.soldecoder.app" target="_blank" className="underline">docs here</a> </li>
                                     </ul>
 
                                     {/*<p className="font-bold">A note on Discord integration</p>*/}

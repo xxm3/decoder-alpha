@@ -25,6 +25,7 @@ interface Mint {
 	tenDaySearchResults: string[];
 	mintExpiresAt: string;
 	numbersOfDiscordMembers: string;
+    DiscordOnlineMembers: string;
 	numbersOfTwitterFollowers : number;
 	tweetInteraction : {
 		total : number;
@@ -165,6 +166,7 @@ const Schedule = () => {
             setIsLoading(false);
         }
 
+    // @ts-ignore
     const columns: Column<Mint>[] = [
         {
             title: '',
@@ -207,13 +209,16 @@ const Schedule = () => {
         {
             title: 'Name',
             render: (record) => (
-                <span
-                    // cursor-pointer
-                    className=""
-                    onClick={() => handleProjectClick(record)}
-                >
+                <>
+                    <img  className ={`avatarImg ${!record?.image?'hidden': ''}`} key={record?.image} src={record?.image} />
+                    <span
+                        // cursor-pointer
+                        className=""
+                        onClick={() => handleProjectClick(record)}
+                    >
                     {record.project}
                 </span>
+                </>
             ),
             customSort: (a, b) => a.project.localeCompare(b.project),
             customFilterAndSearch: (term, rowData) =>
@@ -244,7 +249,7 @@ const Schedule = () => {
             title: 'Price',
             customSort: (a, b) =>
                 +a.price.split(' ')[0] - +b.price.split(' ')[0],
-            render: (record) => <span dangerouslySetInnerHTML={{ __html: record.price.replace(",", "<br>") }}></span>,
+            render: (record) => <span dangerouslySetInnerHTML={{ __html: record.price.replace(/public/gi, "<br>public") }}></span>,
             // width: "80px"
         },
         {
@@ -253,21 +258,31 @@ const Schedule = () => {
             render: (record) => <span>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>,
         },
         {
-            title: '# Discord',
+            title: 'Discord (all)',
             render: (record) => (
-                <span>
+                <>
                     {record.numbersOfDiscordMembers
-                        ? parseInt(
-                              record.numbersOfDiscordMembers
-                          ).toLocaleString()
-                        : ''}
-                </span>
+                        ?.toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                </>
             ),
-            customSort: (a, b) =>
-                +a.numbersOfDiscordMembers - +b.numbersOfDiscordMembers,
+            // @ts-ignore
+            customSort: (a, b) => a.numbersOfDiscordMembers - b.numbersOfDiscordMembers,
         },
         {
-            title: '# Twitter',
+            title: 'Discord (online)',
+            render: (record) => (
+                <>
+                    {record.DiscordOnlineMembers
+                        ?.toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                </>
+            ),
+            // @ts-ignore
+            customSort: (a, b) => a.DiscordOnlineMembers - b.DiscordOnlineMembers,
+        },
+        {
+            title: 'Twitter',
             render: (record) => (
                 <>
                     {record.numbersOfTwitterFollowers
@@ -315,7 +330,7 @@ const Schedule = () => {
                         //         overflowWrap: 'break-word'
                         //     }
                         // }}
-                        description={`Projects must have > 2,000 Discord members and > 1,000 Twitter followers before showing up on the list.
+                        description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
 							\n "# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them`}
                     />
 

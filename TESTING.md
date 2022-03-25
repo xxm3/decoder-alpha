@@ -12,7 +12,7 @@
 ### 3) Testing Fox Token page:
 - A) Make sure filled out
 - B) make sure search works
-- C) test 'add custom token name'
+- C) test 'add custom token name' (make sure discord alert sent)
 - D) test 'track multiple wallets'
 - E) expand a chart, make sure both charts fill out
 
@@ -36,7 +36,7 @@
 - A) test all the bots listed in deploy-commands.js
 
 ### 8) Discord bots - automated - some of them
-- A) enter a new Fox custom name, make sure shows up in Discord
+- A) enter a new Fox custom name, make sure shows up in Discord (talked more about in 4.B.)
 - B) run the daily schedule URL, make sure shows up in Discord
 
 ### 9) Discord bots - automated - discord-parser-receiver and our python code (which parses links from discord chat)
@@ -53,6 +53,9 @@
 ### 10) TEST THE VARIOUS URLs (especially those attached to cronjobs) on the bottom of readme.md
 
 (in the section `## URLs we use ie. URLs to test with` - mostly just test the ones with **** in them)
+
+Special notes:
+- when testing foxTokenAnalysis?doScrape=true, make sure the "official token added" was sent to Discord
 
 ### 11) Testing on a phone
 
