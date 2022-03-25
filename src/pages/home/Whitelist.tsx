@@ -111,8 +111,9 @@ const Whitelist = () => {
 
                         user clicks view my token... need alert pop up or something...
                         add mult wallets -> add manual wallet(s)
-                        debug why taking so long....
                          implement ??? or implmenet "hey  you did everythign but not whitelist.. here's how?" ... or implement "gratz you just got it!"
+
+                       view my token / view mint stats / stacked serach - needs refresh?
                     */}
                     {/*-{userWhitelistDataQuery?.data}-*/}
                     {/*hidden={userWhitelistDataQuery?.data?.didAllSiteFunctions}*/}
