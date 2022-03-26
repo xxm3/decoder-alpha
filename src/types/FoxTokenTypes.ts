@@ -8,4 +8,6 @@ export interface FoxTokenData {
 	totalTokenListings : number;
 	whichMyWallets : string;
     lastSaleDate: string;
+    twitter: string;
+    discord: string;
 }
