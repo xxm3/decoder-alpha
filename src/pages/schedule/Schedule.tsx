@@ -172,6 +172,8 @@ const Schedule = () => {
             title: '',
             render: (record) => (
                 <div className="flex space-x-3">
+
+                    {/*discord*/}
                     <a
                         href={record.discordLink}
                         target="_blank"
@@ -183,6 +185,8 @@ const Schedule = () => {
                         <IonIcon icon={logoDiscord} className="big-emoji"/>
                         <IonRippleEffect />
                     </a>
+
+                    {/*twitter*/}
                     <a
                         href={record.twitterLink}
                         className="schedule-link"

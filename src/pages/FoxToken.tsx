@@ -7,14 +7,25 @@ import {
     IonModal,
     IonContent,
     IonHeader,
-    IonToolbar, IonTitle, useIonToast, IonIcon, IonSearchbar, IonPopover, IonRadioGroup, IonRadio,
+    IonToolbar, IonTitle, useIonToast, IonIcon, IonSearchbar, IonPopover, IonRadioGroup, IonRadio, IonRippleEffect,
 } from '@ionic/react';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import Loader from "../components/Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import * as solanaWeb3 from '@solana/web3.js';
-import {add, albums, chevronDown, chevronUp, close, notifications, notificationsOutline, wallet, cog} from "ionicons/icons";
+import {
+    add,
+    albums,
+    chevronDown,
+    chevronUp,
+    close,
+    notifications,
+    notificationsOutline,
+    wallet,
+    cog,
+    logoDiscord, logoTwitter
+} from "ionicons/icons";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
@@ -37,21 +48,64 @@ const columns: Column<FoxTokenData>[] = [
     {
         title: 'Token',
         render: (record) => (
-            <a
-                href={`https://famousfoxes.com/tokenmarket/${record.token}`}
-                target="_blank"
-                className="hover:opacity-80 flex items-center space-x-3"
-            >
+            <span className="">
+
+                <span className="relative top-1 pr-3">
+                    {/*ff link*/}
+                    <a
+                        href={`https://famousfoxes.com/tokenmarket/${record.token}`}
+                        target="_blank"
+                        className="hover:opacity-80 float-left"
+                        >
+                        <img
+                            src="/assets/icons/FoxTokenLogo.svg"
+                            css={css`color: var(--ion-text-color);`}
+                            className="h-5 pr-1"
+                        />
+                    </a>
+
+                    {/*solscan*/}
+                    <a
+                        href={`https://solscan.io/token/${record.token}`}
+                        target="_blank"
+                        className="hover:opacity-80"
+                    >
+                        <img
+                            src="/assets/icons/solscan.png"
+                            className="h-5 pr-1 float-left"
+                        />
+                    </a>
+
+
+                    {/*twitter*/}
+                    <a
+                        href={'https://twitter.com/' + record.twitter}
+                        className="hover:opacity-80"
+                        target="_blank"
+                        hidden={!record.twitter}
+                    >
+                        <IonIcon icon={logoTwitter} className="big-emoji float-left" />
+                        <IonRippleEffect />
+                    </a>
+
+                    {/*discord*/}
+                    <a
+                        href={'https://discord.gg/' + record.discord}
+                        target="_blank"
+                        className={"hover:opacity-80 pr-1"}
+                        hidden={!record.discord}
+                        >
+                        <IonIcon icon={logoDiscord} className="big-emoji float-left"/>
+                        <IonRippleEffect />
+                    </a>
+
+
+                </span>
+
                 {shortenedWallet(record.token)}
-                &nbsp;
-                <IonIcon
-                    src="/assets/icons/newTabIcon.svg"
-                    css={css`
-						color: var(--ion-text-color);
-					`}
-                />
-            </a>
+            </span>
         ),
+        width: "300px",
         customSort: (a, b) => a.token.localeCompare(b.token),
 		customFilterAndSearch: (term, rowData) => rowData.token?.toLowerCase().includes(term.toLowerCase()),
     },
@@ -82,18 +136,7 @@ const columns: Column<FoxTokenData>[] = [
         render: (record) => <span>{record.whichMyWallets}</span>,
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
     },
-    {
-        title: 'Twitter',
-        customSort: (a, b) => a.twitter?.localeCompare(b.twitter),
-        render: (record) => <a className="text-blue-300" target="_blank" href={`https://twitter.com/${record.twitter}`} rel="noreferrer">{record.twitter}</a>,
-        customFilterAndSearch: (term, rowData) => rowData.twitter?.toLowerCase().includes(term.toLowerCase()),
-    },
-    {
-        title: 'Discord',
-        customSort: (a, b) => a.discord?.localeCompare(b.discord),
-        render: (record) => <a className="text-blue-300" target="_blank" href={`https://discord.gg/${record.discord}`} rel="noreferrer">{record.discord}</a>,
-        customFilterAndSearch: (term, rowData) => rowData.discord?.toLowerCase().includes(term.toLowerCase()),
-    },
+
 ];
 
 interface FoxToken {

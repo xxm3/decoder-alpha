@@ -255,6 +255,11 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                         options={{
                             responsive: true,
                             maintainAspectRatio: true,
+                            // https://stackoverflow.com/questions/42804237/hover-mode-on-chart-js
+                            hover: {
+                                mode: 'nearest',
+                                intersect: true
+                            },
                             plugins: {
                                 legend: {
                                     display: true,
@@ -264,6 +269,10 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                                     text: tokenClickedOn
                                         ? tokenClickedOn + ' - Price' : 'Price  ',
                                 },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
                                 // tooltip: {
                                 //     enabled: true,
                                 //     usePointStyle: true,
