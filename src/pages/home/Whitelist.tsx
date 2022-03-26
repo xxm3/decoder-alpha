@@ -47,7 +47,7 @@ const Whitelist = () => {
                 throw new Error(String(data.message));
             }
 
-            // types REPEATED on user_whitelist.js and Whitelist.tsx
+            // types REPEATED on user_whitelist.js and Whitelist.tsx and discord.js
             const steps = [
                 ['performedSearch', '/'],
                 ['viewedTodaysMints', 'schedule'],
