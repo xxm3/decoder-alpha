@@ -109,6 +109,11 @@ const Whitelist = () => {
 
                         close whitelist app... open later to 50 users
 
+                            REPLICATE TEMP-DISCORD ONTO WHITELIST SO DONT BREAK OG!!
+
+                            VAHAG ----  TIME LEFT  `VIA 3 HRS` ---- order the top 7 to be daily mints online
+
+
                         user clicks view my token... need alert pop up or something...
                         add mult wallets -> add manual wallet(s)
                          implement ??? or implmenet "hey  you did everythign but not whitelist.. here's how?" ... or implement "gratz you just got it!"
