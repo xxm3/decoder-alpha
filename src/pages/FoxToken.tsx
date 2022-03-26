@@ -81,7 +81,19 @@ const columns: Column<FoxTokenData>[] = [
         title: '# Owned & Wallet',
         render: (record) => <span>{record.whichMyWallets}</span>,
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
-    }
+    },
+    {
+        title: 'Twitter',
+        customSort: (a, b) => a.twitter?.localeCompare(b.twitter),
+        render: (record) => <a className="text-blue-300" target="_blank" href={`https://twitter.com/${record.twitter}`} rel="noreferrer">{record.twitter}</a>,
+        customFilterAndSearch: (term, rowData) => rowData.twitter?.toLowerCase().includes(term.toLowerCase()),
+    },
+    {
+        title: 'Discord',
+        customSort: (a, b) => a.discord?.localeCompare(b.discord),
+        render: (record) => <a className="text-blue-300" target="_blank" href={`https://discord.gg/${record.discord}`} rel="noreferrer">{record.discord}</a>,
+        customFilterAndSearch: (term, rowData) => rowData.discord?.toLowerCase().includes(term.toLowerCase()),
+    },
 ];
 
 interface FoxToken {
