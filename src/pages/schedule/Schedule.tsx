@@ -21,6 +21,7 @@ interface Mint {
 	tillTheMint: string;
 	count: string;
 	price: string;
+    wlPrice: string;
 	extras: string;
 	tenDaySearchResults: string[];
 	mintExpiresAt: string;
@@ -254,6 +255,13 @@ const Schedule = () => {
             customSort: (a, b) =>
                 +a.price.split(' ')[0] - +b.price.split(' ')[0],
             render: (record) => <span dangerouslySetInnerHTML={{ __html: record.price.replace(/public/gi, "<br>public") }}></span>,
+            // width: "80px"
+        },
+        {
+            title: 'WL Token',
+            customSort: (a, b) =>
+                +a.wlPrice.split(' ')[0] - +b.wlPrice.split(' ')[0],
+            render: (record) => <span dangerouslySetInnerHTML={{ __html: record.wlPrice.replace(/public/gi, "<br>public") }}></span>,
             // width: "80px"
         },
         {
