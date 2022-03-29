@@ -257,14 +257,19 @@ const Schedule = () => {
             render: (record) => <span dangerouslySetInnerHTML={{ __html: record.price.replace(/public/gi, "<br>public") }}></span>,
             // width: "80px"
         },
-        {
-            title: 'WL Token',
-            customSort: (a, b) =>
-                +a.wlPrice.split(' ')[0] - +b.wlPrice.split(' ')[0],
-            // render: (record) => <span dangerouslySetInnerHTML={{ __html: record.wlPrice.replace(/public/gi, "<br>public") }}></span>,
-            render: (record) => <span>{record.wlPrice}</span>,
-            // width: "80px"
-        },
+        // {
+        //     title: 'WL Token',
+        //     customSort: (a, b) =>
+        //         +a.wlPrice.split(' ')[0] - +b.wlPrice.split(' ')[0],
+        //     // render: (record) => <span dangerouslySetInnerHTML={{ __html: record.wlPrice.replace(/public/gi, "<br>public") }}></span>,
+        //     render: (record) => <span>{record.wlPrice}</span>,
+        //     // render: (record) =>  <span dangerouslySetInnerHTML=
+        //     //                                {{
+        //     //                                    __html: record.wlPrice ? `
+        //     //                                    ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice})` : record.price.replace(/public/gi, "<br>public").replace('SOL', '')
+        //     //                                }}></span>,
+        //     // width: "80px"
+        // },
         {
             title: 'Supply',
             customSort: (a, b) => + a.count.replace(',', '') - + b.count.replace(',', ''),
