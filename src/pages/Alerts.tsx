@@ -120,8 +120,9 @@ function StackedSearch({ foo, onSubmit }: any) {
     return (
         <>
 
-            {/* hidden={true}  hidden={!devMode} */}
-            <div  hidden={true} className="secondary-bg-forced m-1 p-4 rounded-xl">
+            {/*TODO*/}
+            {/* hidden={true}   */}
+            <div hidden={!devMode} className="secondary-bg-forced m-1 p-4 rounded-xl">
                 <h4 className={`font-medium ${window.location.href.includes('fnt') ? 'text-red-600 font-medium' : ''}`}>
                     Alerts on New WL Tokens to your Wallet
                 </h4>

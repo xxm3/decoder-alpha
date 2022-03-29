@@ -261,7 +261,8 @@ const Schedule = () => {
             title: 'WL Token',
             customSort: (a, b) =>
                 +a.wlPrice.split(' ')[0] - +b.wlPrice.split(' ')[0],
-            render: (record) => <span dangerouslySetInnerHTML={{ __html: record.wlPrice.replace(/public/gi, "<br>public") }}></span>,
+            // render: (record) => <span dangerouslySetInnerHTML={{ __html: record.wlPrice.replace(/public/gi, "<br>public") }}></span>,
+            render: (record) => <span>{record.wlPrice}</span>,
             // width: "80px"
         },
         {
