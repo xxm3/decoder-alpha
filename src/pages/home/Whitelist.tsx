@@ -105,6 +105,7 @@ const Whitelist = () => {
                 <>
 
                     {/*
+
                         TODO: whitelist optimization
 
                         Need bots overview… not stacked (for all whitelist stuff)
