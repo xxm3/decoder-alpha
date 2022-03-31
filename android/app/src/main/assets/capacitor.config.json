@@ -1,0 +1,6 @@
+{
+	"appId": "com.NftDiscordRelay",
+	"appName": "NftDiscordRelay",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
