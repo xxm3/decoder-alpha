@@ -3,7 +3,7 @@ import {
     IonList,
     IonLabel, IonItem, IonCheckbox, IonInput, IonIcon, useIonToast
 } from '@ionic/react';
-import { useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import Loader from "../components/Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
@@ -25,6 +25,7 @@ interface MintData {
 	highestPrice: string;
 	pctChange: number;
 	meta : string|null;
+    image : string;
 	comments: string|null;
 	meUrl : string;
 	mintUrl: string;
@@ -50,11 +51,12 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         {
             title: 'Name',
             render: (record) => (
-                <span
-
-                >
+               <>
+                   <img  className ={`avatarImg ${!record?.image?'hiddenImg': ''}`} key={record?.image} src={record?.image} />
+                <span>
                     {record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())}
                 </span>
+               </>
             ),
             customSort: (a, b) => a.name.localeCompare(b.name),
 			searchable: true,
