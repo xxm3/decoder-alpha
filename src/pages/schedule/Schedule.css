@@ -19,3 +19,8 @@
 .hiddenImg{
     visibility: hidden;
 }
+
+.foxImg{
+    width: 23px;
+    display: inherit;
+}

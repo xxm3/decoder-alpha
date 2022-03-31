@@ -107,11 +107,13 @@ const Whitelist = () => {
                     {/*
                         TODO: whitelist optimization
 
-                        close whitelist app... open later to 50 users
+                        >>> wallet monitor... - implement from damjan ......
+
+                        Need bots overview… not stacked (for all whitelist stuff)
+
+                        anydesk on phone
 
                             REPLICATE TEMP-DISCORD ONTO WHITELIST SO DONT BREAK OG!!
-
-                            VAHAG ----  TIME LEFT  `VIA 3 HRS` ---- order the top 7 to be daily mints online
 
 
                         user clicks view my token... need alert pop up or something...

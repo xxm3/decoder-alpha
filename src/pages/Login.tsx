@@ -12,12 +12,7 @@ import "./Login.css"
  * The "Login" page to which all unauthenticated users are redirected to
  *
  * Workflow:
- * - user hits the site, and hits "ProtectedRoute.tsx" (which ignores localhost)
- * - ProctedRoute.tsx brings them to Login.tsx
- * - Login.tsx sends them to discord_auth.js, to get a token from discord
- * - discord_auth.js goes to discord and gets a token, returns it to login.tsx
- * - Login.tsx signs them in
- * - also axios.ts is used for getting new tokens
+go
  */
 function Login() {
     const user = useUser();

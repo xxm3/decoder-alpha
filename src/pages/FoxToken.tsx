@@ -50,17 +50,17 @@ const columns: Column<FoxTokenData>[] = [
         render: (record) => (
             <span className="">
 
-                <span className="relative top-1 pr-3">
+                <span className="relative top-1 pr-3 w-24" >
                     {/*ff link*/}
                     <a
                         href={`https://famousfoxes.com/tokenmarket/${record.token}`}
                         target="_blank"
-                        className="hover:opacity-80 float-left"
+                        className="hover:opacity-80 "
                         >
                         <img
                             src="/assets/icons/FoxTokenLogo.svg"
                             css={css`color: var(--ion-text-color);`}
-                            className="h-5 pr-1"
+                            className="h-5 pr-1 inline mb-4"
                         />
                     </a>
 
@@ -72,7 +72,7 @@ const columns: Column<FoxTokenData>[] = [
                     >
                         <img
                             src="/assets/icons/solscan.png"
-                            className="h-5 pr-1 float-left"
+                            className="h-5 pr-1 inline mb-4"
                         />
                     </a>
 
@@ -84,7 +84,7 @@ const columns: Column<FoxTokenData>[] = [
                         target="_blank"
                         hidden={!record.twitter}
                     >
-                        <IonIcon icon={logoTwitter} className="big-emoji float-left" />
+                        <IonIcon icon={logoTwitter} className="big-emoji " />
                         <IonRippleEffect />
                     </a>
 
@@ -95,12 +95,12 @@ const columns: Column<FoxTokenData>[] = [
                         className={"hover:opacity-80 pr-1"}
                         hidden={!record.discord}
                         >
-                        <IonIcon icon={logoDiscord} className="big-emoji float-left"/>
+                        <IonIcon icon={logoDiscord} className="big-emoji "/>
                         <IonRippleEffect />
                     </a>
-
-
                 </span>
+
+                <br className="xl:hidden lg:hidden" />
 
                 {shortenedWallet(record.token)}
             </span>
@@ -827,10 +827,21 @@ function FoxToken({contentRef}: FoxToken) {
             <div className="m-3 relative bg-primary p-4 rounded-xl" hidden={hidHelpTop}>
                 <p className="text-medium text-white font-medium">
                     <b>
-                        <IonIcon icon={wallet}/> Click this on the top right of the table, to filter the table to only the whitelist tokens in your wallet. You may either connect your wallet in the top right of the site, or add 1-3 wallets with the "+" button discussed below
-                        <br/> <IonIcon icon={albums}/> Used with the above "View My Tokens", use this to filter the table to tokens that are on multiple wallets. You may add up to three wallets to watch
-                        <br/> <IonIcon icon={add}/> Use this if a token on the Fox WL Token Market doesn't have an official name yet, and you know for certain what the name of the token is
-                        <br/> 📈 Show a Price, Listings, and Sales history charts for that token
+                        - Want to see which tokens in your wallet are actually worth something? Click this <IonIcon icon={wallet} className="text-red-600 text-2xl" /> to show ONLY the tokens that are in your wallet and their respective FP
+                        {/*Click this on the top right of the table, to filter the table to only the whitelist tokens in your wallet. You may either connect your wallet in the top right of the site, or add 1-3 wallets with the "+" button discussed below*/}
+                        <br/>
+
+                        - If you want to add a wallet manually, click this <IonIcon icon={albums} className="text-2xl" />  to add the wallet of your choosing
+                        {/*Used with the above "View My Tokens", use this to filter the table to tokens that are on multiple wallets. You may add up to three wallets to watch*/}
+                        <br/>
+
+                        - Know what the name of a token is? Click <IonIcon icon={add} className="text-2xl" /> and share the knowledge
+                        {/*Use this if a token on the Fox WL Token Market doesn't have an official name yet, and you know for certain what the name of the token is*/}
+                        <br/>
+
+                        <div className="pt-1">- Click 📈 to show a Price / Listing chart for that token</div>
+
+
                     </b>
                     <br/>
                     <IonButton
@@ -885,7 +896,7 @@ function FoxToken({contentRef}: FoxToken) {
                                     isFreeAction: true,
                                 },
                                 {
-                                    icon: () => <IonIcon icon={notifications}/>,
+                                    icon: () => <IonIcon icon={notifications} className="" />,
                                     tooltip: 'Alert on new Tokens to your Wallet',
                                     onClick: () => history.push('/alerts#fnt'),
                                     isFreeAction: true,
