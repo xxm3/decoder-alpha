@@ -132,8 +132,13 @@ const columns: Column<FoxTokenData>[] = [
     //     render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : null}</span>,
     // },
     {
-        title: '# Owned & Wallet',
-        render: (record) => <span>{record.whichMyWallets}</span>,
+        title: '# Owned',
+        render: (record) => <span>{record.whichMyWallets ? record.whichMyWallets.split('-')[0] : '' }</span>,
+        // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
+    },
+    {
+        title: 'Wallet',
+        render: (record) => <span>{record.whichMyWallets ? record.whichMyWallets.split('-')[1] : ''}</span>,
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
     },
 

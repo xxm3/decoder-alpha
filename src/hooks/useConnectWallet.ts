@@ -18,7 +18,7 @@ function useConnectWallet() {
 					// Set the user's publicKey in state to be used later!
 					dispatch(setWallet(response.publicKey.toString()));
 			} else if(options === null){
-				await present('Please get a Phantom Wallet!', [{text: 'Ok'}]);
+				await present('Please get a Phantom Wallet! Note a wallet is not required to use the site - you can add wallet(s) manually on the Fox Token page', [{text: 'Ok'}]);
 			}
 	}, [dispatch, present])
 	return connectWallet

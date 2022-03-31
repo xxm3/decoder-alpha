@@ -107,8 +107,6 @@ const Whitelist = () => {
                     {/*
                         TODO: whitelist optimization
 
-                        >>> wallet monitor... - implement from damjan ......
-
                         Need bots overview… not stacked (for all whitelist stuff)
 
                         anydesk on phone
