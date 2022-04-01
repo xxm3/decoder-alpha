@@ -18,11 +18,7 @@ import Help from "../Help";
 import { css } from "@emotion/react";
 import "./Header.scss"
 
-
-
 const HeaderContainer = () => {
-
-
     const { id } = useParams<{ id?: string; }>()
     let history = useHistory();
     const [showMobileSearch, setShowMobileSearch] = useState(false);
