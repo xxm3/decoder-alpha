@@ -8,13 +8,13 @@ import Cookies from "universal-cookie";
 import axios from "axios";
 import useFoxTokenChartCookies from './useFoxTokenChartCookies';
 import { css } from '@emotion/react';
-import {useIonToast} from "@ionic/react";
+import { useIonToast } from "@ionic/react";
 
 import { Chart } from 'react-chartjs-2';
 // import { Chart, Interaction } from 'chart.js';
 // import {CrosshairPlugin,Interpolate} from 'chartjs-plugin-crosshair';
 
-function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTokenData) {
+function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTokenData) {
 
     /**
      * States & Variables
@@ -65,11 +65,11 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
     const cookies = useMemo(() => new Cookies(), []);
 
-	const {
-		chartDateSelected,
-		lineColorSelected,
-		shadedAreaColorSelected,
-	} = useFoxTokenChartCookies()
+    const {
+        chartDateSelected,
+        lineColorSelected,
+        shadedAreaColorSelected,
+    } = useFoxTokenChartCookies()
 
     // user clicked change colour
 
@@ -117,9 +117,9 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                 const labels = res.data.map((el: { createdAt: any; }) => {
 
                     // user can set this in the chart
-                    if(chartDateSelected === 'fromNow'){
+                    if (chartDateSelected === 'fromNow') {
                         return moment(el.createdAt).fromNow()
-                    }else{
+                    } else {
                         return moment(el.createdAt).format('MM-DD HH:MM');
                     }
 
@@ -130,7 +130,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
                 const listingsData = res.data.map((el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings));
 
-                if(lineData.length === 0 && listingsData.length === 0){
+                if (lineData.length === 0 && listingsData.length === 0) {
                     present({
                         message: 'Unable to get price & listings data on this!',
                         color: 'danger',
@@ -139,8 +139,8 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                 }
 
                 // graph latest point...
-                for(let t in tableData){
-                    if(tableData[t].token === token && tableData[t].floorPrice){
+                for (let t in tableData) {
+                    if (tableData[t].token === token && tableData[t].floorPrice) {
                         labels.push('a few seconds ago');
                         lineData.push(tableData[t].floorPrice);
                         listingsData.push(tableData[t].totalTokenListings);
@@ -228,7 +228,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
         //             // sales = res.data.data.sales
         //         });
 
-        }
+    }
 
     // need to call it duh...
     useEffect(() => {
@@ -243,7 +243,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
 
     return (
         <>
-        	<div className="foxTokenCharts px-5 gap-4 grid grid-cols-12" css={css`
+            <div className="foxTokenCharts px-5 gap-4 grid grid-cols-12" css={css`
 				background-color: var(--ion-color-step-50);
 			`} ref={chartsRef}>
 
@@ -285,7 +285,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                                 'y0': {
                                     // stacked: true,
                                     type: 'linear',
-                                    position: 'left',
+                                    position: 'right',
                                     // label:{
                                     //     display: true,
                                     //     labelString: 'Listings'
@@ -301,7 +301,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                                 },
                                 'y1': {
                                     type: 'linear',
-                                    position: 'right',
+                                    position: 'left',
                                     // scaleLabel: {
                                     //     display: true,
                                     //     labelString: 'Price'
@@ -317,7 +317,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                             },
                             // get rid of points on graph
                             elements: {
-                                point:{
+                                point: {
                                     radius: 0
                                 }
                             }
@@ -360,7 +360,7 @@ function FoxTokenCharts({ token , name, floorPrice, totalTokenListings,} : FoxTo
                     {/*/>*/}
                 </div>
 
-	        </div>
+            </div>
         </>
     );
 }
