@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.NftDiscordRelay',
-  appName: 'NftDiscordRelay',
+  appName: 'SOL Decoder',
   webDir: 'build',
   bundledWebRuntime: false
 };

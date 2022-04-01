@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">NftDiscordRelay</string>
-    <string name="title_activity_main">NftDiscordRelay</string>
+    <string name="app_name">SOL Decoder</string>
+    <string name="title_activity_main">SOL Decoder</string>
     <string name="package_name">com.NftDiscordRelay</string>
     <string name="custom_url_scheme">com.NftDiscordRelay</string>
 </resources>
