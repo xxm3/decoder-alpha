@@ -143,12 +143,20 @@ To hide something on mobile: give below class
 ```
 hidden sm:block
 ```
-Another example:
+Another example of small and large
 ```
 <span className="hidden xl:block">{record.token}</span>
 <span className="xl:hidden">
 {shortenedWallet(record.token)}
 </span>
+```
+Again hiding on various large:
+```
+<div
+    className="xl:hidden lg:hidden md:hidden"
+>
+    <WalletButton />
+</div>
 ```
 
 Redirecting users:

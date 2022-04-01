@@ -100,4 +100,32 @@ const SearchedWords = () => {
     )
 }
 
+
+// BUNCH OF CRAPPY STUFF
+
+// <>
+//     <div className={`font-bold pb-1`}>Recent Community Searches</div>
+//     <div>
+//         <div className="flex flex-col h-auto w-full flex-auto">
+//             <div className='grid grid-cols-2 2xl:gap-5 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-8 gap-10 py-0 w-full'>
+//                 {
+//                     searchWordsQuery?.data?.data?.map((word: any) => (
+//                         <div key={word.createdAt} className="flex justify-center items-center border border-primary shadow-lg w-full rounded h-40 cursor-pointer text-center ">
+//                             <Link to={'search/' + word.searchterm} className="bg-primary text-white font-bold py-2 px-4 rounded">
+//                                 {word?.searchterm?.length > 20 ?
+//                                     word.searchterm.substring(0, 20) + "..." :
+//                                     word.searchterm}
+//                                 {/*&nbsp; ({moment(word.createdAt).fromNow()})*/}
+//                             </Link>
+//                         </div>
+//                     ))
+//                 }
+//             </div>
+//         </div>
+//     </div>
+// </>
+
+
+
+
 export default SearchedWords

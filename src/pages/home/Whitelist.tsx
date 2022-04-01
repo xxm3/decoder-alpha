@@ -47,7 +47,7 @@ const Whitelist = () => {
                 throw new Error(String(data.message));
             }
 
-            // types REPEATED on user_whitelist.js and Whitelist.tsx
+            // types REPEATED on user_whitelist.js and Whitelist.tsx and discord.js
             const steps = [
                 ['performedSearch', '/'],
                 ['viewedTodaysMints', 'schedule'],
@@ -105,13 +105,21 @@ const Whitelist = () => {
                 <>
 
                     {/*
+
                         TODO: whitelist optimization
+
+                        Need bots overview… not stacked (for all whitelist stuff)
+
+                        anydesk on phone
+
+                            REPLICATE TEMP-DISCORD ONTO WHITELIST SO DONT BREAK OG!!
+
+
                         user clicks view my token... need alert pop up or something...
                         add mult wallets -> add manual wallet(s)
-                        debug why taking so long....
                          implement ??? or implmenet "hey  you did everythign but not whitelist.. here's how?" ... or implement "gratz you just got it!"
 
-                         TODO: close whitelist app... open later to 50 users
+                       view my token / view mint stats / stacked serach - needs refresh?
                     */}
                     {/*-{userWhitelistDataQuery?.data}-*/}
                     {/*hidden={userWhitelistDataQuery?.data?.didAllSiteFunctions}*/}
