@@ -1,0 +1,6 @@
+{
+	"appId": "com.soldecoder.app",
+	"appName": "SolDecoder",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}

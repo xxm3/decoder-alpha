@@ -1,5 +1,5 @@
 {
-  "name": "NftDiscordRelay",
+  "name": "SolDecoder",
   "version": "0.1.0",
   "description": "NftDiscordRelay client",
   "private": true,
@@ -9,13 +9,23 @@
   "scripts": {
     "start": "DISABLE_ESLINT_PLUGIN=true GENERATE_SOURCEMAP=false node scripts/start.js",
     "build": "node scripts/build.js",
+    "ionic:build": "npm run build",
+    "ionic:serve": "npm run start",
     "test": "node scripts/test.js",
     "test-mocha": "mocha --timeout 10000 --recursive",
-    "ionic:build": "node scripts/build.js",
-    "ionic:serve": "node scripts/start.js"
+	"start:ios" : "ionic capacitor run ios -l --external"
   },
   "dependencies": {
+    "@awesome-cordova-plugins/core": "^5.40.0",
+    "@awesome-cordova-plugins/in-app-browser": "^5.40.0",
     "@babel/core": "^7.16.0",
+    "@capacitor/android": "^3.4.3",
+    "@capacitor/app": "1.1.1",
+    "@capacitor/core": "3.4.3",
+    "@capacitor/haptics": "1.1.4",
+    "@capacitor/ios": "3.4.3",
+    "@capacitor/keyboard": "1.2.2",
+    "@capacitor/status-bar": "1.0.8",
     "@emotion/react": "^11.8.2",
     "@ionic/react": "^5.5.0",
     "@ionic/react-router": "^5.5.0",
@@ -50,6 +60,8 @@
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "chai": "^4.3.4",
     "chart.js": "^3.7.0",
+    "chartjs-plugin-crosshair": "^1.2.0",
+    "cordova-plugin-inappbrowser": "^5.0.0",
     "css-loader": "^6.5.1",
     "css-minimizer-webpack-plugin": "^3.2.0",
     "dotenv": "^10.0.0",
@@ -57,7 +69,6 @@
     "eslint": "^8.3.0",
     "eslint-config-react-app": "^7.0.0",
     "eslint-webpack-plugin": "^3.1.1",
-    "chartjs-plugin-crosshair": "^1.2.0",
     "faker": "^5.5.3",
     "file-loader": "^6.2.0",
     "firebase": "^8.8.0",
@@ -93,6 +104,7 @@
     "react-tooltip": "^4.2.21",
     "resolve": "^1.20.0",
     "resolve-url-loader": "^4.0.0",
+    "sass": "^1.49.10",
     "sass-loader": "^12.3.0",
     "semver": "^7.3.5",
     "source-map-loader": "^3.0.0",
@@ -138,6 +150,7 @@
     ]
   },
   "devDependencies": {
+    "@capacitor/cli": "3.4.3",
     "@emotion/babel-plugin": "^11.7.2",
     "@types/chartjs-plugin-crosshair": "^1.1.1",
     "@types/faker": "^5.5.9",

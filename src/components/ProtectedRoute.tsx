@@ -24,3 +24,6 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0]) => {
 };
 
 export default ProtectedRoute;
+
+
+
