@@ -46,7 +46,7 @@ function Login() {
             // exchange authorization code given by discord for an access token which we can sign in with using firebase
             // this is defined on discord_auth.js
 
-			console.log(code)
+			// console.log(code)
             instance
                 .post(
                     '/getToken',
