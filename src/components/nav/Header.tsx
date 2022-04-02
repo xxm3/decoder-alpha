@@ -5,8 +5,8 @@ import {
     IonToolbar,
     IonMenuButton,
 } from "@ionic/react";
-import { useEffect, useState} from "react";
-import {useHistory, useParams} from 'react-router';
+import { useEffect, useState } from "react";
+import { useHistory, useParams } from 'react-router';
 import {
     arrowBack, search,
 } from 'ionicons/icons';
@@ -16,14 +16,10 @@ import useConnectWallet from "../../hooks/useConnectWallet";
 import WalletButton from "../WalletButton";
 import Help from "../Help";
 import { css } from "@emotion/react";
-
+import "./Header.scss"
 
 const HeaderContainer = () => {
-
-    /**
-     * States & Variables
-     */
-    const { id } = useParams<{ id ?: string;}>()
+    const { id } = useParams<{ id?: string; }>()
     let history = useHistory();
     const [showMobileSearch, setShowMobileSearch] = useState(false);
 
@@ -38,7 +34,7 @@ const HeaderContainer = () => {
         const onLoad = async () => {
             // connecting SOL wallet
             try {
-                await connectWallet({onlyIfTrusted: true});
+                await connectWallet({ onlyIfTrusted: true });
             } catch (error) {
                 console.error(error);
             }
@@ -46,16 +42,16 @@ const HeaderContainer = () => {
 
         // resize window stuff
         function resizeWidth() {
-            if(window.innerWidth > smallHeaderWidth){
+            if (window.innerWidth > smallHeaderWidth) {
                 setShowMobileSearch(false);
             }
             smallPlaceholder();
         }
         // set the placeholder of the header search bar
-        function smallPlaceholder(){
-            if(window.innerWidth > 1000){
+        function smallPlaceholder() {
+            if (window.innerWidth > 1000) {
                 setHeaderPlaceholder("Search Discord/tweets & view graphs");
-            }else{
+            } else {
                 setHeaderPlaceholder("Type then press enter");
             }
         }
@@ -75,7 +71,7 @@ const HeaderContainer = () => {
     function handleSearch(val: string) {
         val = val.trim();
 
-        if(val.length === 0) return;
+        if (val.length === 0) return;
         const queryKey = ["messages", id];
         queryClient.resetQueries(queryKey);
         history.push(`/search/${encodeURIComponent(val)}`);
@@ -88,14 +84,14 @@ const HeaderContainer = () => {
     return (
         <>
             <IonHeader
-				className={`py-2 ${showMobileSearch ? "px-2" : "pr-10"}`}
-				css={css`
+                className={`py-2 ${showMobileSearch ? "px-2" : "pr-10"}`}
+                css={css`
 					--background: var(--ion-background-color);
 					ion-toolbar {
 						background-color: var(--background)
 					}
 				`}
-			>
+            >
                 <IonToolbar>
 
                     <div className="justify-between space-x-8 flex items-center">
@@ -107,7 +103,7 @@ const HeaderContainer = () => {
                                     color="white"
                                     menu="sidebar"
                                     className="md:hidden ion-no-padding"
-									css={css`
+                                    css={css`
 										font-size: 32px;
 									`}
                                 />
@@ -120,22 +116,21 @@ const HeaderContainer = () => {
                                 >
                                     <div className="flex items-center space-x-3">
                                         <img
-                                            className="h-10"
+                                            className="logo-height"
                                             src="/assets/site-logos/logo-transparent.png"
                                             alt="logo"
                                         />
-                                        <p>SOL Decoder</p>
+                                        <p className="headerName">SOL Decoder</p>
                                     </div>
                                 </IonRouterLink>
                             </div>
                         )}
 
                         <div
-                            className={`flex-grow flex items-center ${
-                                showMobileSearch
-                                    ? 'space-x-8'
-                                    : 'lg:max-w-xl justify-end lg:justify-start'
-                            }`}
+                            className={`flex-grow flex items-center ${showMobileSearch
+                                ? 'space-x-8'
+                                : 'lg:max-w-xl justify-end lg:justify-start'
+                                }`}
                         >
                             {showMobileSearch && (
                                 <IonIcon
@@ -146,11 +141,10 @@ const HeaderContainer = () => {
                                 />
                             )}
                             <div
-                                className={`flex-grow flex items-baseline space-x-2 ${
-                                    showMobileSearch
-                                        ? 'max-w-[50rem] px-3'
-                                        : 'hidden lg:flex'
-                                }`}
+                                className={`flex-grow flex items-baseline space-x-2 ${showMobileSearch
+                                    ? 'max-w-[50rem] px-3'
+                                    : 'hidden lg:flex'
+                                    }`}
                             >
                                 <SearchBar
                                     onSubmit={handleSearch}
@@ -161,7 +155,7 @@ const HeaderContainer = () => {
 
                                 <span className="hidden sm:block">
                                     <Help
-                                        description={`Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale"). Results include graphs, and messages you can scroll through. Click on a message to view more`}/>
+                                        description={`Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale"). Results include graphs, and messages you can scroll through. Click on a message to view more`} />
                                 </span>
 
                             </div>

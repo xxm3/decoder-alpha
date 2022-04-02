@@ -1,0 +1,6 @@
+{
+	"appId": "com.NftDiscordRelay",
+	"appName": "SOL Decoder",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
