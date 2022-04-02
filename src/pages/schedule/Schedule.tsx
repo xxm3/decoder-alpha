@@ -340,7 +340,7 @@ const Schedule = () => {
                         //     }
                         // }}
                         description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
-							\n "# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them`}
+							\n "# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them. The Fox logo in the price is the official WL Token price that comes from the Fox Token Market`}
                     />
 
                     {/* <IonModal isOpen={isOpen}  onDidDismiss={onClose as any} >
