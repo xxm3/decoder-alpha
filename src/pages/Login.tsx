@@ -1,4 +1,4 @@
-import {IonButton, IonCard } from '@ionic/react';
+import {IonButton, IonCard, isPlatform } from '@ionic/react';
 import {useEffect, useMemo, useState} from 'react';
 import {Redirect} from 'react-router';
 import {instance} from '../axios';
@@ -7,7 +7,7 @@ import {useUser} from '../context/UserContext';
 import {environment} from '../environments/environment';
 import {auth} from '../firebase';
 import "./Login.css"
-
+import { InAppBrowser }  from "@awesome-cordova-plugins/in-app-browser"
 /**
  * The "Login" page to which all unauthenticated users are redirected to
  *
@@ -16,30 +16,37 @@ go
  */
 function Login() {
     const user = useUser();
-    const { next, code, discordError } = useMemo(() => {
+    const { nextUrl, urlCode, discordError } = useMemo(() => {
         const params = new URLSearchParams(window.location.search);
         // the login page also works as the redirect page for discord oauth
 
         // authorization code returned by discord in the search query after user authorises the site
-        const code = params.get('code');
+        const urlCode = params.get('code');
 
         // the url to redirect to after user succesfully logs in
-        const next = params.get('next') || params.get('state') || '/';
+        const nextUrl = params.get('next') || params.get('state') || '/';
         // the error , if any, returned by discord
         const discordError = params.get('error_description');
-        return { code, next, discordError };
+        return { urlCode, nextUrl, discordError };
     }, []);
 
     const [error, setError] = useState(discordError);
+
+	const [code,setCode] = useState(urlCode);
+	const [next,setNext] = useState(nextUrl);
 
     // loading state which stores whether an access token is being issued or not
     const [loading, setLoading] = useState(!!code);
 
 
+	const isMobileDevice = useMemo(() => isPlatform("mobile"), []);
+
     useEffect(() => {
         if (code && !error && !user) {
             // exchange authorization code given by discord for an access token which we can sign in with using firebase
             // this is defined on discord_auth.js
+
+			console.log(code)
             instance
                 .post(
                     '/getToken',
@@ -55,7 +62,7 @@ function Login() {
                     return auth.signInWithCustomToken(data.body);
                 })
                 .catch((e) => {
-                    // console.log(e);
+                    console.log(e); 
                     if (e.response?.status === 403)
                         setError("You need a proper role in Discord before accessing the site");
                     else setError('Something went wrong. Please try again');
@@ -80,12 +87,32 @@ function Login() {
                                     const params = new URLSearchParams();
                                     params.set(
                                         'redirect_uri',
-                                        `${window.location.origin}/login`
+                                        `${!isMobileDevice ? window.location.origin : environment.ionicAppUrl}/login`
                                     );
                                     params.set('state', next);
-                                    window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${
+                                    const urlToRedirect = `https://discord.com/api/oauth2/authorize?client_id=${
                                         environment.clientId
                                     }&response_type=code&scope=identify&${params.toString()}`;
+									setError("")
+									if(isMobileDevice){
+										const browser = InAppBrowser.create(urlToRedirect, '_blank', 'location=yes');
+										browser.on("beforeload")
+										browser.on('loadstart').subscribe(event => {
+											const eventUrl = new URL(event.url)
+											if(eventUrl.origin === environment.ionicAppUrl && eventUrl.pathname === '/login'){
+												const code = eventUrl.searchParams.get('code');
+												if(code){ 
+													setCode(code) 
+													setLoading(true)
+												};
+												setNext(eventUrl.searchParams.get("next") || eventUrl.searchParams.get('state') || "/");
+												browser.close();
+											}
+										})
+									}
+									else{
+										window.location.href = urlToRedirect;
+									}
                                 }}
                             >
                                 Login with Discord
