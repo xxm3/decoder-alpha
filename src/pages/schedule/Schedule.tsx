@@ -12,27 +12,28 @@ import { logoDiscord, logoTwitter, link } from 'ionicons/icons';
 import {useHistory} from "react-router";
 
 interface Mint {
-	image: string;
-	project: string;
-	twitterLink: string;
-	discordLink: string;
-	projectLink: string;
-	time: string;
-	tillTheMint: string;
-	count: string;
-	price: string;
-	extras: string;
-	tenDaySearchResults: string[];
-	mintExpiresAt: string;
-	numbersOfDiscordMembers: string;
+    image: string;
+    project: string;
+    twitterLink: string;
+    discordLink: string;
+    projectLink: string;
+    time: string;
+    tillTheMint: string;
+    count: string;
+    price: string;
+    wlPrice: string;
+    extras: string;
+    tenDaySearchResults: string[];
+    mintExpiresAt: string;
+    numbersOfDiscordMembers: string;
     DiscordOnlineMembers: string;
-	numbersOfTwitterFollowers : number;
-	tweetInteraction : {
-		total : number;
-		likes: number;
-		comments: number;
-		reactions: number;
-	}
+    numbersOfTwitterFollowers : number;
+    tweetInteraction : {
+        total : number;
+        likes: number;
+        comments: number;
+        reactions: number;
+    }
 }
 const Schedule = () => {
 
@@ -57,22 +58,22 @@ const Schedule = () => {
      * So as we are scrapping the data every hour and since we would have an hour old data
      * this will keep updating the time of when the mint will expire
      */
-     const addMintExpiresAt = () => {
+    const addMintExpiresAt = () => {
         for(let i = 0; i < dataSource.length; i++) {
             if(dataSource[i].time !== "")
-            dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";
+                dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";
         }
-          setMints([...dataSource]);
-     }
+        setMints([...dataSource]);
+    }
 
-     useEffect(() => {
+    useEffect(() => {
         dataSource.length && addMintExpiresAt();
 
         const interval = setInterval(() => {
-          for(let i = 0; i < dataSource.length; i++) {
-              if(dataSource[i].time !== "")
-              dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")"
-          }
+            for(let i = 0; i < dataSource.length; i++) {
+                if(dataSource[i].time !== "")
+                    dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")"
+            }
             setMints([...dataSource])
         }, 60000)
 
@@ -172,6 +173,8 @@ const Schedule = () => {
             title: '',
             render: (record) => (
                 <div className="flex space-x-3">
+
+                    {/*discord*/}
                     <a
                         href={record.discordLink}
                         target="_blank"
@@ -183,6 +186,8 @@ const Schedule = () => {
                         <IonIcon icon={logoDiscord} className="big-emoji"/>
                         <IonRippleEffect />
                     </a>
+
+                    {/*twitter*/}
                     <a
                         href={record.twitterLink}
                         className="schedule-link"
@@ -210,7 +215,7 @@ const Schedule = () => {
             title: 'Name',
             render: (record) => (
                 <>
-                    <img  className ={`avatarImg ${!record?.image?'hidden': ''}`} key={record?.image} src={record?.image} />
+                    <img  className ={`avatarImg ${!record?.image?'hiddenImg': ''}`} key={record?.image} src={record?.image} />
                     <span
                         // cursor-pointer
                         className=""
@@ -249,7 +254,11 @@ const Schedule = () => {
             title: 'Price',
             customSort: (a, b) =>
                 +a.price.split(' ')[0] - +b.price.split(' ')[0],
-            render: (record) => <span dangerouslySetInnerHTML={{ __html: record.price.replace(/public/gi, "<br>public") }}></span>,
+            render: (record) =>  <span dangerouslySetInnerHTML=
+                                           {{
+                                               __html: record.wlPrice ? `
+                                               ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice})` : record.price.replace(/public/gi, "<br>public").replace('SOL', '')
+                                           }}></span>,
             // width: "80px"
         },
         {

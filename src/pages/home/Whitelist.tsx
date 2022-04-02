@@ -3,8 +3,8 @@ import { AxiosResponse } from 'axios';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import { IonIcon, useIonToast } from "@ionic/react";
-import { checkmarkCircleOutline, closeCircleOutline } from 'ionicons/icons';
-import { Link } from 'react-router-dom';
+import {checkmarkCircleOutline, closeCircleOutline, helpOutline} from 'ionicons/icons';
+import {Link, useLocation} from 'react-router-dom';
 import Help from '../../components/Help';
 
 const Whitelist = () => {
@@ -47,12 +47,12 @@ const Whitelist = () => {
                 throw new Error(String(data.message));
             }
 
-            // types REPEATED on user_whitelist.js and Whitelist.tsx
+            // types REPEATED on user_whitelist.js and Whitelist.tsx and discord.js
             const steps = [
                 ['performedSearch', '/'],
                 ['viewedTodaysMints', 'schedule'],
                 ['viewedFoxTokenPage', 'foxtoken'],
-                ['viewedMyToken', 'foxtoken'],
+                ['viewedMyToken', 'foxtoken?viewmytoken=true'],
                 ['viewedMintStats', 'mintstats'],
                 ['didStackedSearch', 'stackedsearch'],
             ];
@@ -80,7 +80,7 @@ const Whitelist = () => {
             case 'viewedFoxTokenPage':
                 return 'View the "Fox WL Token" page (which shows a table of whitelist tokens you can buy/sell)';
             case 'viewedMyToken':
-                return 'On the "Fox WL Token" page, click the "View My Tokens" button (which is on the top right of the table) to filter the table. Note your wallet must be connected, or you can click the "Add Multiple Wallets" button to manually add 1-3 wallets';
+                return 'On the "Fox WL Token" page, click the "View My Tokens" button (which is A BIG BUTTON IN RED on the top right of the table - CLICK IT) to filter the table. Note your wallet must be connected, or you can click the "Add Multiple Wallets" button to manually add 1-3 wallets';
             case 'viewedMintStats':
                 return 'View the "Mint Stats" page (which shows statistics on the mints we automatically parsed from discord)';
             case 'didStackedSearch':
@@ -105,19 +105,41 @@ const Whitelist = () => {
                 <>
 
                     {/*
+
                         TODO: whitelist optimization
+
+                        Need bots overview… not stacked (for all whitelist stuff)
+
+                        anydesk on phone
+
+                            REPLICATE TEMP-DISCORD ONTO WHITELIST SO DONT BREAK OG!!
+
+
                         user clicks view my token... need alert pop up or something...
                         add mult wallets -> add manual wallet(s)
-                        debug why taking so long....
-                         implement ??? or implmenet "hey  you did everythign but not whitelist.. here's how?" ... or implement "gratz you just got it!"
+                         implement ??? or implmenet "hey  you did everything but not whitelist.. here's how?" ... or implement "gratz you just got it!"
 
-                         TODO: close whitelist app... open later to 50 users
+                       view my token / view mint stats / stacked search - needs refresh?
                     */}
                     {/*-{userWhitelistDataQuery?.data}-*/}
                     {/*hidden={userWhitelistDataQuery?.data?.didAllSiteFunctions}*/}
                     <div className="secondary-bg-forced m-1 p-4 rounded-xl">
-                        <div className={`font-bold pb-1`}>"used-the-site" role progress</div>
-                        <div>Use the below features to be granted the "used-the-site" role in Discord, which is required to get/keep whitelist. See <b>#whitelist-faq</b> in Discord for more details. After everything is checked, it may take a few minutes to show up in Discord.</div>
+                        <div className={`font-bold pb-1`}>Want to keep or help get whitelist?</div>
+                        {/*"used-the-site" role progress*/}
+                        <div>
+                            Use the below features to be granted the <b>"used-the-site"</b> role in Discord. See <b>#whitelist-faq</b> in Discord for more details. After everything is checked, it may take a few minutes to show up in Discord.
+                            <br/>
+
+                            <span>
+                                It is <b>NOT enough</b> that you just log in and click around.
+                                You <b>MUST</b> follow the below steps - turn everything into <IonIcon className="text-green-500" icon={checkmarkCircleOutline} />
+                                and hover over the
+                                    <Help description='' />
+                                if you get stuck! This takes less than 5 minutes to complete.
+                            </span>
+
+                            {/*<span>If you joined in February or before - you might see that everything is red. </span>*/}
+                        </div>
                         <div>
                             <div style={{ listStyle: '' }}>
                                 {
@@ -135,6 +157,11 @@ const Whitelist = () => {
                                     ))
                                 }
                             </div>
+
+                            <b>Troubleshooting:</b>
+                            <ul>
+                                <li></li>
+                            </ul>
                         </div>
                     </div>
                 </>}

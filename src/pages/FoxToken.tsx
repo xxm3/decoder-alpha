@@ -7,14 +7,25 @@ import {
     IonModal,
     IonContent,
     IonHeader,
-    IonToolbar, IonTitle, useIonToast, IonIcon, IonSearchbar, IonPopover, IonRadioGroup, IonRadio,
+    IonToolbar, IonTitle, useIonToast, IonIcon, IonSearchbar, IonPopover, IonRadioGroup, IonRadio, IonRippleEffect,
 } from '@ionic/react';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import Loader from "../components/Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import * as solanaWeb3 from '@solana/web3.js';
-import {add, albums, chevronDown, chevronUp, close, notifications, notificationsOutline, wallet, cog} from "ionicons/icons";
+import {
+    add,
+    albums,
+    chevronDown,
+    chevronUp,
+    close,
+    notifications,
+    notificationsOutline,
+    wallet,
+    cog,
+    logoDiscord, logoTwitter
+} from "ionicons/icons";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
@@ -32,26 +43,70 @@ import moment from 'moment';
 import {useHistory} from "react-router";
 import FfNamed from "./home/FfNamed";
 import usePersistentState from "../hooks/usePersistentState"
+import {useLocation} from 'react-router-dom';
 
 const columns: Column<FoxTokenData>[] = [
     {
         title: 'Token',
         render: (record) => (
-            <a
-                href={`https://famousfoxes.com/tokenmarket/${record.token}`}
-                target="_blank"
-                className="hover:opacity-80 flex items-center space-x-3"
-            >
+            <span className="">
+
+                <span className="relative top-1 pr-3 w-24" >
+                    {/*ff link*/}
+                    <a
+                        href={`https://famousfoxes.com/tokenmarket/${record.token}`}
+                        target="_blank"
+                        className="hover:opacity-80 "
+                        >
+                        <img
+                            src="/assets/icons/FoxTokenLogo.svg"
+                            css={css`color: var(--ion-text-color);`}
+                            className="h-5 pr-1 inline mb-4"
+                        />
+                    </a>
+
+                    {/*solscan*/}
+                    <a
+                        href={`https://solscan.io/token/${record.token}`}
+                        target="_blank"
+                        className="hover:opacity-80"
+                    >
+                        <img
+                            src="/assets/icons/solscan.png"
+                            className="h-5 pr-1 inline mb-4"
+                        />
+                    </a>
+
+
+                    {/*twitter*/}
+                    <a
+                        href={'https://twitter.com/' + record.twitter}
+                        className="hover:opacity-80"
+                        target="_blank"
+                        hidden={!record.twitter}
+                    >
+                        <IonIcon icon={logoTwitter} className="big-emoji " />
+                        <IonRippleEffect />
+                    </a>
+
+                    {/*discord*/}
+                    <a
+                        href={'https://discord.gg/' + record.discord}
+                        target="_blank"
+                        className={"hover:opacity-80 pr-1"}
+                        hidden={!record.discord}
+                        >
+                        <IonIcon icon={logoDiscord} className="big-emoji "/>
+                        <IonRippleEffect />
+                    </a>
+                </span>
+
+                <br className="xl:hidden lg:hidden" />
+
                 {shortenedWallet(record.token)}
-                &nbsp;
-                <IonIcon
-                    src="/assets/icons/newTabIcon.svg"
-                    css={css`
-						color: var(--ion-text-color);
-					`}
-                />
-            </a>
+            </span>
         ),
+        width: "300px",
         customSort: (a, b) => a.token.localeCompare(b.token),
 		customFilterAndSearch: (term, rowData) => rowData.token?.toLowerCase().includes(term.toLowerCase()),
     },
@@ -78,10 +133,16 @@ const columns: Column<FoxTokenData>[] = [
     //     render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : null}</span>,
     // },
     {
-        title: '# Owned & Wallet',
-        render: (record) => <span>{record.whichMyWallets}</span>,
+        title: '# Owned',
+        render: (record) => <span>{record.whichMyWallets ? record.whichMyWallets.split('-')[0] : '' }</span>,
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
-    }
+    },
+    {
+        title: 'Wallet',
+        render: (record) => <span>{record.whichMyWallets ? record.whichMyWallets.split('-')[1] : ''}</span>,
+        // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
+    },
+
 ];
 
 interface FoxToken {
@@ -92,6 +153,10 @@ function FoxToken({contentRef}: FoxToken) {
 
     const [present, dismiss] = useIonToast();
     const history = useHistory();
+
+    const useQuery = () => new URLSearchParams(useLocation().search);
+    const query = useQuery();
+    const viewmytoken = query.get('viewmytoken');
 
     /**
      * Adding multiple wallets
@@ -361,6 +426,17 @@ function FoxToken({contentRef}: FoxToken) {
         // console.log(mySplTokensTemporary);
     }
 
+    // useEffect(() => {
+    //     console.log(viewmytoken);
+    //     if(viewmytoken){
+    //         present({
+    //             message: 'Click the red button on the top right to check off this step',
+    //             color: 'danger',
+    //             duration: 10000
+    //         });
+    //     }
+    // }, [viewmytoken])
+
     // load table data, after we load in user tokens
     // isn't called on local host, see below useEffect
     useEffect(() => {
@@ -563,6 +639,18 @@ function FoxToken({contentRef}: FoxToken) {
 
     return (
         <>
+
+            <div hidden={!viewmytoken} className="m-3 relative bg-red-100 p-4 rounded-xl">
+                <p className="text-lg text-red-700 font-medium">
+                    <ul>
+                        <li>- Click the red button <IonIcon icon={wallet} className="text-red-600 text-2xl" /> on the top right of the table to check off this step</li>
+                        <li>- Note you did NOT have to connect your wallet, click the third button <IonIcon icon={albums} className="text-2xl text-gray-500" /> to manually add a wallet</li>
+                    </ul>
+                </p>
+                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                    !
+                </span>
+            </div>
 
             {/*
                 modal - adding multiple wallets
@@ -772,10 +860,21 @@ function FoxToken({contentRef}: FoxToken) {
             <div className="m-3 relative bg-primary p-4 rounded-xl" hidden={hidHelpTop}>
                 <p className="text-medium text-white font-medium">
                     <b>
-                        <IonIcon icon={wallet}/> Click this on the top right of the table, to filter the table to only the whitelist tokens in your wallet. You may either connect your wallet in the top right of the site, or add 1-3 wallets with the "+" button discussed below
-                        <br/> <IonIcon icon={albums}/> Used with the above "View My Tokens", use this to filter the table to tokens that are on multiple wallets. You may add up to three wallets to watch
-                        <br/> <IonIcon icon={add}/> Use this if a token on the Fox WL Token Market doesn't have an official name yet, and you know for certain what the name of the token is
-                        <br/> 📈 Show a Price, Listings, and Sales history charts for that token
+                        - Want to see which tokens in your wallet are actually worth something? Click this <IonIcon icon={wallet} className="text-red-600 text-2xl" /> to show ONLY the tokens that are in your wallet and their respective FP
+                        {/*Click this on the top right of the table, to filter the table to only the whitelist tokens in your wallet. You may either connect your wallet in the top right of the site, or add 1-3 wallets with the "+" button discussed below*/}
+                        <br/>
+
+                        - If you want to add a wallet manually, click this <IonIcon icon={albums} className="text-2xl" />  to add the wallet of your choosing
+                        {/*Used with the above "View My Tokens", use this to filter the table to tokens that are on multiple wallets. You may add up to three wallets to watch*/}
+                        <br/>
+
+                        - Know what the name of a token is? Click <IonIcon icon={add} className="text-2xl" /> and share the knowledge
+                        {/*Use this if a token on the Fox WL Token Market doesn't have an official name yet, and you know for certain what the name of the token is*/}
+                        <br/>
+
+                        <div className="pt-1">- Click 📈 to show a Price / Listing chart for that token</div>
+
+
                     </b>
                     <br/>
                     <IonButton
@@ -830,7 +929,7 @@ function FoxToken({contentRef}: FoxToken) {
                                     isFreeAction: true,
                                 },
                                 {
-                                    icon: () => <IonIcon icon={notifications}/>,
+                                    icon: () => <IonIcon icon={notifications} className="" />,
                                     tooltip: 'Alert on new Tokens to your Wallet',
                                     onClick: () => history.push('/alerts#fnt'),
                                     isFreeAction: true,

@@ -11,6 +11,7 @@ import {
     statsChart
 } from "ionicons/icons"
 import NavLink from "./NavLink"
+import WalletButton from '../WalletButton';
 
 function Sidebar() {
     return (
@@ -65,6 +66,12 @@ function Sidebar() {
                     to="#"
                     external={'https://twitter.com/SOL_Decoder'}
                 />
+
+                <div
+                    className="xl:hidden lg:hidden md:hidden"
+                >
+                    <WalletButton />
+                </div>
 
             </IonList>
         </>
