@@ -43,6 +43,7 @@ import moment from 'moment';
 import {useHistory} from "react-router";
 import FfNamed from "./home/FfNamed";
 import usePersistentState from "../hooks/usePersistentState"
+import {useLocation} from 'react-router-dom';
 
 const columns: Column<FoxTokenData>[] = [
     {
@@ -152,6 +153,10 @@ function FoxToken({contentRef}: FoxToken) {
 
     const [present, dismiss] = useIonToast();
     const history = useHistory();
+
+    const useQuery = () => new URLSearchParams(useLocation().search);
+    const query = useQuery();
+    const viewmytoken = query.get('viewmytoken');
 
     /**
      * Adding multiple wallets
@@ -421,6 +426,17 @@ function FoxToken({contentRef}: FoxToken) {
         // console.log(mySplTokensTemporary);
     }
 
+    // useEffect(() => {
+    //     console.log(viewmytoken);
+    //     if(viewmytoken){
+    //         present({
+    //             message: 'Click the red button on the top right to check off this step',
+    //             color: 'danger',
+    //             duration: 10000
+    //         });
+    //     }
+    // }, [viewmytoken])
+
     // load table data, after we load in user tokens
     // isn't called on local host, see below useEffect
     useEffect(() => {
@@ -623,6 +639,18 @@ function FoxToken({contentRef}: FoxToken) {
 
     return (
         <>
+
+            <div hidden={!viewmytoken} className="m-3 relative bg-red-100 p-4 rounded-xl">
+                <p className="text-lg text-red-700 font-medium">
+                    <ul>
+                        <li>- Click the red button <IonIcon icon={wallet} className="text-red-600 text-2xl" /> on the top right of the table to check off this step</li>
+                        <li>- Note you did NOT have to connect your wallet, click the third button <IonIcon icon={albums} className="text-2xl text-gray-500" /> to manually add a wallet</li>
+                    </ul>
+                </p>
+                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                    !
+                </span>
+            </div>
 
             {/*
                 modal - adding multiple wallets

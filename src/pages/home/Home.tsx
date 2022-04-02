@@ -39,14 +39,18 @@ const Home: React.FC<AppComponentProps> = ({ contentRef }) => {
     return (
         <>
 
-            {/*Recent FF Named Stuff*/}
-            <FfNamed />
-
 
             {/* for user to get used-the-site- role */}
             {/*<div hidden={!devMode}>*/}
             <Whitelist />
             {/*</div>*/}
+
+
+            {/*Recent FF Named Stuff*/}
+            <FfNamed />
+
+
+
 
 
 
