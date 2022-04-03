@@ -13,7 +13,8 @@
     "ionic:serve": "npm run start",
     "test": "node scripts/test.js",
     "test-mocha": "mocha --timeout 10000 --recursive",
-    "start:ios": "ionic capacitor run ios -l --external"
+    "start:mobile": "ionic capacitor run -l --external",
+	"build:mobile" : "ionic capacitor build --prod"
   },
   "dependencies": {
     "@awesome-cordova-plugins/core": "^5.40.0",
