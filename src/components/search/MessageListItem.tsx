@@ -87,7 +87,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         className={`flex font-semibold items-center space-x-2 text-base mb-1`}
                     >
                         {/*source & author*/}
-                        <p>
+                        <p className='c-res-title-text'>
                             ({source} {
                                       source !== 'Twitter' ? '- Discord' : ''
                                   }) {author}
@@ -95,7 +95,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         {/*time*/}
                         {(
                             <div
-                                className="text-xs text-gray-400 " // underline cursor-pointer
+                                className="text-xs text-gray-400 c-res-time-text" // underline cursor-pointer
                                 data-tip={new Date(
                                     time as string
                                 ).toLocaleString()}
@@ -107,7 +107,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
 
                     {/* show the message and highlight matches */}
                     <div
-                        className={'max-w-full word-wrap'}
+                        className={'max-w-full word-wrap c-res-list-wrapper'}
                     >
                         {<ReactMarkdown
 								components={{

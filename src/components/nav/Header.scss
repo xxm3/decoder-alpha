@@ -7,3 +7,17 @@
 .logo-height {
     height: 2rem;
 }
+.c-header-search {
+    @media screen and (max-width: 425px) {
+        padding-left: 0rem !important;
+        padding-right: 0 !important;
+        margin-left: 15px !important;
+        max-width: 100% !important;
+        ion-searchbar {
+            padding-inline-end: 7px; 
+        }
+        .searchbar-input.sc-ion-searchbar-md {
+            padding-inline-end: 7px;
+        }
+    }
+}

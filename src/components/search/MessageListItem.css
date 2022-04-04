@@ -6,7 +6,7 @@
 
 /* make the modal bigger */
 .modal-wrapper {
-    --width: 90vw;
+    --width: 100vw;
     --height: 75%;
 	--max-width: 1280px;
 }
@@ -18,4 +18,21 @@
 
 .searched_word {
 	color: #00d0ff
+}
+
+@media screen and (max-width: 425px) {
+    .c-res-messages {
+        padding: 0px !important;
+    }
+    .c-res-list-wrapper p {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+    .c-res-time-text {
+        font-size: 10px;
+        min-width: 80px;
+    }
+    .c-res-title-text {
+        font-size: 14px;
+    }
 }
