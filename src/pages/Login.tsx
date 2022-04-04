@@ -8,12 +8,19 @@ import {environment} from '../environments/environment';
 import {auth} from '../firebase';
 import "./Login.css"
 import { InAppBrowser }  from "@awesome-cordova-plugins/in-app-browser"
+
 /**
  * The "Login" page to which all unauthenticated users are redirected to
  *
  * Workflow:
-go
+ * - user hits the site, and hits "ProtectedRoute.tsx" (which ignores localhost)
+ * - ProctedRoute.tsx brings them to Login.tsx
+ * - Login.tsx sends them to discord_auth.js, to get a token from discord
+ * - discord_auth.js goes to discord and gets a token, returns it to login.tsx
+ * - Login.tsx signs them in
+ * - also axios.ts is used for getting new tokens
  */
+
 function Login() {
     const user = useUser();
     const { nextUrl, urlCode, discordError } = useMemo(() => {
@@ -62,7 +69,7 @@ function Login() {
                     return auth.signInWithCustomToken(data.body);
                 })
                 .catch((e) => {
-                    console.log(e); 
+                    console.log(e);
                     if (e.response?.status === 403)
                         setError("You need a proper role in Discord before accessing the site");
                     else setError('Something went wrong. Please try again');
@@ -101,8 +108,8 @@ function Login() {
 											const eventUrl = new URL(event.url)
 											if(eventUrl.origin === environment.ionicAppUrl && eventUrl.pathname === '/login'){
 												const code = eventUrl.searchParams.get('code');
-												if(code){ 
-													setCode(code) 
+												if(code){
+													setCode(code)
 													setLoading(true)
 												};
 												setNext(eventUrl.searchParams.get("next") || eventUrl.searchParams.get('state') || "/");

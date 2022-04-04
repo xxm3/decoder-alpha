@@ -51,7 +51,7 @@ const columns: Column<FoxTokenData>[] = [
         render: (record) => (
             <span className="">
 
-                <span className="relative top-1 pr-3 w-24" >
+                <span className="relative top-2 pr-3 w-24" >
                     {/*ff link*/}
                     <a
                         href={`https://famousfoxes.com/tokenmarket/${record.token}`}
