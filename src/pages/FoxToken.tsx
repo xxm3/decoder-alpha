@@ -78,27 +78,7 @@ const columns: Column<FoxTokenData>[] = [
                     </a>
 
 
-                    {/*twitter*/}
-                    <a
-                        href={'https://twitter.com/' + record.twitter}
-                        className="hover:opacity-80"
-                        target="_blank"
-                        hidden={!record.twitter}
-                    >
-                        <IonIcon icon={logoTwitter} className="big-emoji " />
-                        <IonRippleEffect />
-                    </a>
 
-                    {/*discord*/}
-                    <a
-                        href={'https://discord.gg/' + record.discord}
-                        target="_blank"
-                        className={"hover:opacity-80 pr-1"}
-                        hidden={!record.discord}
-                        >
-                        <IonIcon icon={logoDiscord} className="big-emoji "/>
-                        <IonRippleEffect />
-                    </a>
                 </span>
 
                 <br className="xl:hidden lg:hidden" />
@@ -142,6 +122,33 @@ const columns: Column<FoxTokenData>[] = [
         render: (record) => <span>{record.whichMyWallets ? record.whichMyWallets.split('-')[1] : ''}</span>,
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
     },
+    {
+        title: '',
+        render: (record) =>
+            <>
+                {/*twitter*/}
+                <a
+                    href={'https://twitter.com/' + record.twitter}
+                    className="hover:opacity-80"
+                    target="_blank"
+                    hidden={!record.twitter}
+                >
+                    <IonIcon icon={logoTwitter} className="big-emoji " />
+                    <IonRippleEffect />
+                </a>
+
+                {/*discord*/}
+                <a
+                    href={'https://discord.gg/' + record.discord}
+                    target="_blank"
+                    className={"hover:opacity-80 pr-1"}
+                    hidden={!record.discord}
+                >
+                    <IonIcon icon={logoDiscord} className="big-emoji "/>
+                    <IonRippleEffect />
+                </a>
+            </>
+    }
 
 ];
 

@@ -230,11 +230,11 @@ const Schedule = () => {
                 rowData.project.toLowerCase().includes(term.toLowerCase()),
         },
         {
-            title: 'Time',
+            title: 'Time (UTC)',
             customSort: (a, b) => +new Date(a.time) - +new Date(b.time),
             render: (record) => (
                 <span>
-                    {record.time}
+                    {record.time.replace('UTC', '')}
                     <span
                         hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}
                     >
