@@ -252,7 +252,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                 `}
                 ref={chartsRef}
             >
-                <div className="chart">
+                <div className="chart chart-width">
                     <Chart
                         type="line"
                         data={foxLineData}
