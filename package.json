@@ -7,7 +7,7 @@
     "react-error-overlay": "6.0.9"
   },
   "scripts": {
-    "start": "DISABLE_ESLINT_PLUGIN=true GENERATE_SOURCEMAP=false node scripts/start.js",
+    "start": " node scripts/start.js",
     "build": "node scripts/build.js",
     "ionic:build": "npm run build",
     "ionic:serve": "npm run start",

@@ -4,8 +4,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { instance } from '../axios';
 import { environment } from '../environments/environment';
 import { FoxTokenData } from '../types/FoxTokenTypes';
-import Cookies from "universal-cookie";
-import axios from "axios";
+import Cookies from 'universal-cookie';
+import axios from 'axios';
 import useFoxTokenChartCookies from './useFoxTokenChartCookies';
 import { css } from '@emotion/react';
 import { useIonToast } from "@ionic/react";
@@ -14,9 +14,7 @@ import { Chart } from 'react-chartjs-2';
 import "./FoxTokenCharts.scss"
 // import { Chart, Interaction } from 'chart.js';
 // import {CrosshairPlugin,Interpolate} from 'chartjs-plugin-crosshair';
-
 function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTokenData) {
-
     /**
      * States & Variables
      */
@@ -59,18 +57,15 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
     const [foxLineData, setFoxLineData] = useState(defaultGraph);
     const [foxSalesData, setFoxSalesData] = useState(defaultGraph);
     // const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
-
+    console.log('foxLineData ------------', foxLineData);
     const chartsRef = useRef<HTMLDivElement | null>(null);
 
     const firstUpdate = useRef(true);
 
     const cookies = useMemo(() => new Cookies(), []);
 
-    const {
-        chartDateSelected,
-        lineColorSelected,
-        shadedAreaColorSelected,
-    } = useFoxTokenChartCookies()
+    const { chartDateSelected, lineColorSelected, shadedAreaColorSelected } =
+        useFoxTokenChartCookies();
 
     // user clicked change colour
 
@@ -99,9 +94,9 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
     //     viewChart();
     // }, [chartDateSelected, lineColorSelected, shadedAreaColorSelected]);
 
-
     // viewing the chart for a token
-    const viewChart = () => { // token: string, name: string
+    const viewChart = () => {
+        // token: string, name: string
         // reset the chart
         setFoxLineData(defaultGraph);
 
@@ -112,30 +107,34 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
 
         // get the price/listings history for a SINGLE token
         instance
-            .get(environment.backendApi + '/receiver/foxTokenHistory?token=' + token)
+            .get(
+                environment.backendApi +
+                    '/receiver/foxTokenHistory?token=' +
+                    token
+            )
             .then((res) => {
-
-                const labels = res.data.map((el: { createdAt: any; }) => {
-
+                const labels = res.data.map((el: { createdAt: any }) => {
                     // user can set this in the chart
                     if (chartDateSelected === 'fromNow') {
                         return moment(el.createdAt).fromNow()
                     } else {
                         return moment(el.createdAt).format('MM-DD HH:MM');
                     }
-
                 });
-                const lineData = res.data.map((el: { floorPrice: any; }) => {
+                const lineData = res.data.map((el: { floorPrice: any }) => {
                     return parseFloat(el.floorPrice);
                 });
 
-                const listingsData = res.data.map((el: { totalTokenListings: any; }) => parseInt(el.totalTokenListings));
+                const listingsData = res.data.map(
+                    (el: { totalTokenListings: any }) =>
+                        parseInt(el.totalTokenListings)
+                );
 
                 if (lineData.length === 0 && listingsData.length === 0) {
                     present({
                         message: 'Unable to get price & listings data on this!',
                         color: 'danger',
-                        duration: 8000
+                        duration: 8000,
                     });
                 }
 
@@ -176,17 +175,19 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
 
                 setFoxLineData({
                     labels: labels,
-                    datasets: datasetsAry
+                    datasets: datasetsAry,
                 });
-
             })
             .catch((err) => {
-                console.error("error when getting fox token history data: " + err);
+                console.error(
+                    'error when getting fox token history data: ' + err
+                );
 
                 present({
-                    message: 'Error - unable to load chart data. Please refresh and try again',
+                    message:
+                        'Error - unable to load chart data. Please refresh and try again',
                     color: 'danger',
-                    duration: 8000
+                    duration: 8000,
                 });
             });
 
@@ -229,8 +230,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
         //             // (nice to have) Update table data with the last listing date
         //             // sales = res.data.data.sales
         //         });
-
-    }
+    };
 
     // need to call it duh...
     useEffect(() => {
@@ -245,11 +245,14 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
 
     return (
         <>
-            <div className="foxTokenCharts px-5 gap-4 grid grid-cols-12" css={css`
-				background-color: var(--ion-color-step-50);
-			`} ref={chartsRef}>
-
-                <div className="chart chart-width">
+            <div
+                className="foxTokenCharts px-5 gap-4 grid grid-cols-12"
+                css={css`
+                    background-color: var(--ion-color-step-50);
+                `}
+                ref={chartsRef}
+            >
+                <div className="chart">
                     <Chart
                         type="line"
                         data={foxLineData}
@@ -260,7 +263,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                             // https://stackoverflow.com/questions/42804237/hover-mode-on-chart-js
                             hover: {
                                 mode: 'nearest',
-                                intersect: true
+                                intersect: true,
                             },
                             plugins: {
                                 legend: {
@@ -269,12 +272,13 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                                 title: {
                                     display: false,
                                     text: tokenClickedOn
-                                        ? tokenClickedOn + ' - Price' : 'Price  ',
+                                        ? tokenClickedOn + ' - Price'
+                                        : 'Price  ',
                                 },
                                 tooltip: {
                                     mode: 'index',
-                                    intersect: false
-                                }
+                                    intersect: false,
+                                },
                                 // tooltip: {
                                 //     enabled: true,
                                 //     usePointStyle: true,
@@ -293,31 +297,53 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                             scales: {
                                 // https://www.chartjs.org/docs/latest/axes/cartesian/
                                 // https://stackoverflow.com/questions/51296950/charts-js-graph-with-multiple-y-axes
-                                'y0': {
-                                    // stacked: true,
+                                // yAxes: [
+                                //     {
+                                //         display: true,
+                                //         position: 'left',
+                                //         type: 'linear',
+                                //         // scaleLabel: {
+                                //         //     display: true,
+                                //         //     labelString: 'USD',
+                                //         //     beginAtZero: true,
+                                //         // },
+                                //     },
+                                // ],
+                                y0: {
+                                    stacked: true,
                                     type: 'linear',
                                     position: 'left',
-                                    // label:{
+
+                                    // label: {
                                     //     display: true,
-                                    //     labelString: 'Listings'
+                                    //     labelString: 'Listings',
                                     // },
-                                    // scaleLabel: {
-                                    //     display: true,
-                                    //     labelString: 'Listings'
-                                    // },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Price',
+                                    },
                                     grid: {
-                                        color: '#b3b3ff'
+                                        color: '#b3b3ff',
                                     },
                                     suggestedMin: 0,
+                                    title: {
+                                        display: true,
+                                        text: 'Price',
+                                    },
                                 },
-                                'y1': {
+                                y1: {
+                                    stacked: false,
                                     type: 'linear',
                                     position: 'right',
-                                    // scaleLabel: {
-                                    //     display: true,
-                                    //     labelString: 'Price'
-                                    // },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Listings',
+                                    },
                                     suggestedMin: 0,
+                                    title: {
+                                        display: true,
+                                        text: 'Listings',
+                                    },
                                 },
                                 x: {
                                     ticks: {
@@ -329,9 +355,9 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                             // get rid of points on graph
                             elements: {
                                 point: {
-                                    radius: 0
-                                }
-                            }
+                                    radius: 0,
+                                },
+                            },
                         }}
                     />
 
@@ -370,7 +396,6 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                     {/*    }}*/}
                     {/*/>*/}
                 </div>
-
             </div>
         </>
     );
