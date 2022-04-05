@@ -57,7 +57,6 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
     const [foxLineData, setFoxLineData] = useState(defaultGraph);
     const [foxSalesData, setFoxSalesData] = useState(defaultGraph);
     // const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
-    console.log('foxLineData ------------', foxLineData);
     const chartsRef = useRef<HTMLDivElement | null>(null);
 
     const firstUpdate = useRef(true);
@@ -170,8 +169,8 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                 ];
 
                 // console.log(labels);
-                console.log("Arrays ::: foxLineData ===>>> ", foxLineData)
-                console.log(datasetsAry);
+                // console.log("Arrays ::: foxLineData ===>>> ", foxLineData)
+                // console.log(datasetsAry);
 
                 setFoxLineData({
                     labels: labels,
