@@ -5,20 +5,29 @@ import {instance} from '../axios';
 import Loader from '../components/Loader';
 import {useUser} from '../context/UserContext';
 import {environment} from '../environments/environment';
+
 import {auth} from '../firebase';
+import { getAuth, signInWithCustomToken } from "firebase/auth";
+
 import "./Login.css"
 import { InAppBrowser }  from "@awesome-cordova-plugins/in-app-browser"
 
 /**
  * The "Login" page to which all unauthenticated users are redirected to
  *
- * Workflow:
+ * Frontend Workflow:
  * - user hits the site, and hits "ProtectedRoute.tsx" (which ignores localhost)
  * - ProctedRoute.tsx brings them to Login.tsx
  * - Login.tsx sends them to discord_auth.js, to get a token from discord
  * - discord_auth.js goes to discord and gets a token, returns it to login.tsx
  * - Login.tsx signs them in
+ *
  * - also axios.ts is used for getting new tokens
+ * - also environment.js sets isDev (OVERRIDES FOR LOCAL), also read from ProtectedRoute.tsx to protect our routes or not
+ *
+ * Backend
+ * - middleware is in from verify.js
+ *   - has some (OVERRIDES FOR LOCAL) to skip logging in via localhost
  */
 
 function Login() {
@@ -66,8 +75,7 @@ function Login() {
                 )
                 .then(({ data }) => {
                     // console.log(data);
-                    return auth.signInWithCustomToken(data.body);
-                    // return signInWithCustomToken(auth, data.body); // TODO: why damjan did this
+                    return signInWithCustomToken(auth, data.body);
                 })
                 .catch((e) => {
                     console.log(e);

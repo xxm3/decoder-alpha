@@ -16,6 +16,7 @@ const app = initializeApp({
 });
 
 export const auth = getAuth(app);
+
 if (isDev) connectAuthEmulator(auth, 'http://localhost:9099');
 
 
