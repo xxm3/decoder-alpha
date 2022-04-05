@@ -14,7 +14,8 @@
     "test": "node scripts/test.js",
     "test-mocha": "mocha --timeout 10000 --recursive",
     "start:mobile": "ionic capacitor run -l --external",
-	"build:mobile" : "ionic capacitor build --prod"
+    "build:mobile": "ionic capacitor build --prod",
+    "build:apk": "ionic capacitor build android --prod --release --no-open && cd android && ./gradlew assembleRelease && (path-exists androidKeyStore.keystore || keytool -genkey -v -keystore androidKeyStore.keystore -alias androidKeyStore -keyalg RSA -keysize 2048 -validity 10000) && java -jar apksigner.jar -ks androidKeyStore.keystore -a app/build/outputs/apk/release/app-release-unsigned.apk -ksAlias androidKeyStore"
   },
   "dependencies": {
     "@awesome-cordova-plugins/core": "^5.40.0",
@@ -158,6 +159,7 @@
     "@types/faker": "^5.5.9",
     "@types/firebase": "^3.2.1",
     "autoprefixer": "^10.4.2",
+    "path-exists-cli": "^2.0.0",
     "postcss": "^8.4.5",
     "tailwindcss": "^3.0.18"
   },
