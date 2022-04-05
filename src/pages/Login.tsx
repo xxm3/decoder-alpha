@@ -66,7 +66,7 @@ function Login() {
                 )
                 .then(({ data }) => {
                     // console.log(data);
-                    return auth.signInWithCustomToken(data.body);
+                    return signInWithCustomToken(auth, data.body);
                 })
                 .catch((e) => {
                     console.log(e);
