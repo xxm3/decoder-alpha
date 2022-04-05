@@ -1,3 +1,7 @@
+import { useLayoutEffect } from "react";
+import { useSelector } from "react-redux";
+import usePersistentState from "../hooks/usePersistentState";
+import { RootState } from "../redux/store";
 
 
 interface Color {
@@ -32,6 +36,13 @@ export const colorsByName : { [name : string] : Color }= colors.reduce(
 function Theme({ children } : {
 	children : React.ReactNode
 }) {
+
+	const [mode] = usePersistentState("mode", "dark");
+
+  useLayoutEffect(() => {
+	document.body.classList.remove("light", "dark");
+	document.body.classList.add(mode);
+  }, [mode])
   return (
       <>
           <style>{`

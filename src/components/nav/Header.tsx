@@ -4,11 +4,12 @@ import {
     IonIcon,
     IonToolbar,
     IonMenuButton,
+	IonButton,
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from 'react-router';
 import {
-    arrowBack, search,
+    arrowBack, moon, search, sunny,
 } from 'ionicons/icons';
 import { queryClient } from "../../queryClient";
 import SearchBar from "../SearchBar";
@@ -17,6 +18,8 @@ import WalletButton from "../WalletButton";
 import Help from "../Help";
 import { css } from "@emotion/react";
 import "./Header.scss"
+import usePersistentState from "../../hooks/usePersistentState";
+
 
 const HeaderContainer = () => {
     const { id } = useParams<{ id?: string; }>()
@@ -28,6 +31,9 @@ const HeaderContainer = () => {
     const connectWallet = useConnectWallet();
 
     const [headerPlaceholder, setHeaderPlaceholder] = useState('');
+
+
+	const [mode, setMode] = usePersistentState<"dark" | "light">("mode", "dark");
 
     // onload useEffect
     useEffect(() => {
@@ -84,16 +90,15 @@ const HeaderContainer = () => {
     return (
         <>
             <IonHeader
-                className={`py-2 ${showMobileSearch ? "px-2" : "pr-10"}`}
+                className={`py-2 ${showMobileSearch ? 'px-2' : 'pr-10'}`}
                 css={css`
-					--background: var(--ion-background-color);
-					ion-toolbar {
-						background-color: var(--background)
-					}
-				`}
+                    --background: var(--ion-background-color);
+                    ion-toolbar {
+                        background-color: var(--background);
+                    }
+                `}
             >
                 <IonToolbar>
-
                     <div className="justify-between space-x-8 flex items-center">
                         {/*pt-3*/}
                         {!showMobileSearch && (
@@ -104,8 +109,8 @@ const HeaderContainer = () => {
                                     menu="sidebar"
                                     className="md:hidden ion-no-padding"
                                     css={css`
-										font-size: 32px;
-									`}
+                                        font-size: 32px;
+                                    `}
                                 />
 
                                 {/*site logo & home*/}
@@ -120,17 +125,20 @@ const HeaderContainer = () => {
                                             src="/assets/site-logos/logo-transparent.png"
                                             alt="logo"
                                         />
-                                        <p className="headerName">SOL Decoder</p>
+                                        <p className="headerName">
+                                            SOL Decoder
+                                        </p>
                                     </div>
                                 </IonRouterLink>
                             </div>
                         )}
 
                         <div
-                            className={`flex-grow flex items-center ${showMobileSearch
-                                ? 'space-x-8'
-                                : 'lg:max-w-xl justify-end lg:justify-start'
-                                }`}
+                            className={`flex-grow flex items-center ${
+                                showMobileSearch
+                                    ? 'space-x-8'
+                                    : 'lg:max-w-xl justify-end lg:justify-start'
+                            }`}
                         >
                             {showMobileSearch && (
                                 <IonIcon
@@ -141,10 +149,11 @@ const HeaderContainer = () => {
                                 />
                             )}
                             <div
-                                className={`flex-grow flex items-baseline space-x-2 c-header-search ${showMobileSearch
-                                    ? 'max-w-[50rem] px-3'
-                                    : 'hidden lg:flex'
-                                    }`}
+                                className={`flex-grow flex items-baseline space-x-2 c-header-search ${
+                                    showMobileSearch
+                                        ? 'max-w-[50rem] px-3'
+                                        : 'hidden lg:flex'
+                                }`}
                             >
                                 <SearchBar
                                     onSubmit={handleSearch}
@@ -155,9 +164,9 @@ const HeaderContainer = () => {
 
                                 <span className="hidden sm:block">
                                     <Help
-                                        description={`Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale"). Results include graphs, and messages you can scroll through. Click on a message to view more`} />
+                                        description={`Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale"). Results include graphs, and messages you can scroll through. Click on a message to view more`}
+                                    />
                                 </span>
-
                             </div>
                             {!showMobileSearch && (
                                 <IonIcon
@@ -169,11 +178,31 @@ const HeaderContainer = () => {
                             )}
                         </div>
 
-                        <div
-                            className="hidden md:flex items-center"
-                            hidden={showMobileSearch}
-                        >
-                            <WalletButton />
+                        <div className="flex space-x-4 items-center">
+                            <div
+                                className="hidden md:flex items-center"
+                                hidden={showMobileSearch}
+                            >
+                                <WalletButton />
+                            </div>
+                            <IonButton 
+								onClick={() => {
+									setMode(mode === "dark" ? "light" : "dark");
+								}}
+								 fill="clear" color={mode === "dark" ? "light" : "dark"} shape="round" css={css`
+								--padding-horizontal: 4px;
+								--padding-vertical: 4px;
+								--padding-start: var(--padding-horizontal);
+								--padding-end :  var(--padding-horizontal);
+								--padding-top: var(--padding-vertical);
+								--padding-bottom: var(--padding-vertical);
+
+								--dimensions: 48px;
+								height: var(--dimensions);
+								width : var(--dimensions);
+							`}>
+                                <IonIcon  icon={mode === "dark" ? sunny : moon} className="h-7 w-7" />
+                            </IonButton>
                         </div>
                     </div>
                 </IonToolbar>
