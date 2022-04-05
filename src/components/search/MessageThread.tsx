@@ -1,5 +1,5 @@
 import { IonContent, IonModal } from '@ionic/react';
-import React, { useRef } from 'react';
+import React, { useRef , useState} from 'react';
 import { Message } from '../../types/Message';
 import MessageListItem from './MessageListItem';
 import { QueryFunctionContext, useInfiniteQuery } from 'react-query';
@@ -8,6 +8,7 @@ import { AxiosResponse } from 'axios';
 import ReactTooltip from "react-tooltip";
 import SearchSkeleton from "./SearchSkeleton"
 import { css } from '@emotion/react';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 interface MessageThreadProps {
     message: Message;
@@ -112,11 +113,15 @@ const MessageThread: React.FC<MessageThreadProps> = ({
 
     const mainMessageRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+
+    const [isModalOpen, setIsModalOpen] = useState(true)
     return (
         <>
             <IonModal
-                isOpen
+                isOpen = {isModalOpen}
                 onDidDismiss={onClose as any}
+       
+                
                 // onDidPresent={() => {
                 //     if (mainMessageRef.current) {
                 //         mainMessageRef.current.scrollIntoView({
@@ -131,11 +136,14 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                     ref={containerRef}
                     className="p-5 c-res-messages messages overflow-y-scroll h-full w-full mx-auto"
                 >
+                    <div onClick={()=> setIsModalOpen(false)}  className=' justify-end text-red-500  flex m-3'  >
+                        <HighlightOffIcon className='text-2xl'/>
+                    </div>
                     {data.pages
                         .map((page) =>
                             page.map((message, i) =>
                                 message ? (
-                                    <div className="my-1.5">
+                                    <div className="my-1.5" key={i}>
                                     	<MessageListItem
 	                                        message={message}
 	                                        key={message.id}
