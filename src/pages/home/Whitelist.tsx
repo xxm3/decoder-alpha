@@ -110,16 +110,9 @@ const Whitelist = () => {
 
                         Need bots overview… not stacked (for all whitelist stuff)
 
-                        anydesk on phone
-
                             REPLICATE TEMP-DISCORD ONTO WHITELIST SO DONT BREAK OG!!
 
-
-                        user clicks view my token... need alert pop up or something...
                         add mult wallets -> add manual wallet(s)
-                         implement ??? or implmenet "hey  you did everything but not whitelist.. here's how?" ... or implement "gratz you just got it!"
-
-                       view my token / view mint stats / stacked search - needs refresh?
                     */}
                     {/*-{userWhitelistDataQuery?.data}-*/}
                     {/*hidden={userWhitelistDataQuery?.data?.didAllSiteFunctions}*/}
