@@ -11,6 +11,7 @@ import { css } from '@emotion/react';
 import { useIonToast } from "@ionic/react";
 
 import { Chart } from 'react-chartjs-2';
+import "./FoxTokenCharts.scss"
 // import { Chart, Interaction } from 'chart.js';
 // import {CrosshairPlugin,Interpolate} from 'chartjs-plugin-crosshair';
 
@@ -154,7 +155,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                         yAxisID: 'y1',
                         label: 'Listings',
                         borderColor: '#9945FF',
-                        data: listingsData,
+                        data: lineData,
                     },
                     {
                         type: 'line' as const,
@@ -165,12 +166,13 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                             target: 'origin',
                             above: shadedAreaColorSelected,
                         },
-                        data: lineData,
+                        data: listingsData,
                     },
                 ];
 
                 // console.log(labels);
-                // console.log(datasetsAry);
+                console.log("Arrays ::: foxLineData ===>>> ", foxLineData)
+                console.log(datasetsAry);
 
                 setFoxLineData({
                     labels: labels,
@@ -247,7 +249,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
 				background-color: var(--ion-color-step-50);
 			`} ref={chartsRef}>
 
-                <div className="chart">
+                <div className="chart chart-width">
                     <Chart
                         type="line"
                         data={foxLineData}
@@ -294,7 +296,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                                 'y0': {
                                     // stacked: true,
                                     type: 'linear',
-                                    position: 'right',
+                                    position: 'left',
                                     // label:{
                                     //     display: true,
                                     //     labelString: 'Listings'
@@ -310,7 +312,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                                 },
                                 'y1': {
                                     type: 'linear',
-                                    position: 'left',
+                                    position: 'right',
                                     // scaleLabel: {
                                     //     display: true,
                                     //     labelString: 'Price'

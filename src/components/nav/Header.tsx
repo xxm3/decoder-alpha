@@ -141,7 +141,7 @@ const HeaderContainer = () => {
                                 />
                             )}
                             <div
-                                className={`flex-grow flex items-baseline space-x-2 ${showMobileSearch
+                                className={`flex-grow flex items-baseline space-x-2 c-header-search ${showMobileSearch
                                     ? 'max-w-[50rem] px-3'
                                     : 'hidden lg:flex'
                                     }`}

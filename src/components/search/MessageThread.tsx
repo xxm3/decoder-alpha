@@ -129,13 +129,13 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             >
                 <div
                     ref={containerRef}
-                    className="p-5 messages overflow-y-scroll h-full w-full mx-auto"
+                    className="p-5 c-res-messages messages overflow-y-scroll h-full w-full mx-auto"
                 >
                     {data.pages
                         .map((page) =>
                             page.map((message, i) =>
                                 message ? (
-                                    <div className="my-2.5">
+                                    <div className="my-1.5">
                                     	<MessageListItem
 	                                        message={message}
 	                                        key={message.id}
