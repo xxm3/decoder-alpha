@@ -85,7 +85,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                 />
                 <div className="flex-grow">
                     <div
-                        className={`flex font-semibold items-center space-x-2 text-base mb-1`}
+                        className={`flex font-semibold items-center space-x-2 text-base mb-1  justify-between`}
                     >
                         {/*source & author*/}
                         <p className='c-res-title-text'>
