@@ -24,7 +24,6 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
         ref
     ) => {
         const { id: word } = useParams<{ id: string }>();
-
         const { formattedMessage, mediaUrls } = useMemo(() => {
             if (!message) return { formattedMessage : "", mediaUrls: [] };
             const mediaUrls: string[] = [];
@@ -54,7 +53,6 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                 mediaUrls: mediaUrls,
             };
         }, [message, word]);
-
 
         return (
             <div
@@ -116,7 +114,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
 										return <b {...props} className={strongWord?.toString().toLowerCase() === word.toLowerCase() ? "searched_word" : ""}>{children}</b>
 									},
 									a({ href, ...props }){
-										return <a href={href} onClick={e => e.stopPropagation()} {...props} className="text-blue-300" target="_blank" />
+										return <a href={href} onClick={e => e.stopPropagation() } {...props} className="white" target="_blank" />
 									},
 									code({node, inline, className, children, ...props}) {
 										const codeWord = children[0]?.toString()
