@@ -16,8 +16,11 @@
     @apply max-w-sm;
 }
 
-.searched_word {
+.dark .searched_word {
 	color: #00d0ff
+}
+.light .searched_word {
+	color: var(--ion-color-primary);
 }
 
 @media screen and (max-width: 425px) {

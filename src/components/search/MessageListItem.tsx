@@ -6,6 +6,7 @@ import './MessageListItem.css';
 import ReactTooltip from 'react-tooltip';
 import { getUrlExtension, mediaTypes, urlRegExp } from '../../util/getURLs';
 import ReactMarkdown from "react-markdown";
+import { css } from '@emotion/react';
 
 type MessageListItemProps =
     | {
@@ -58,7 +59,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
 
         return (
             <div
-                className={`relative w-full items-start text-gray-200 my-2 ${
+                className={`relative w-full items-start  my-2 ${
                     onClick ? 'hover:bg-opacity-100 cursor-pointer' : ''
                 } py-1 space-x-4 rounded-xl text-lg flex`}
                 onClick={() =>
@@ -116,7 +117,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
 										return <b {...props} className={strongWord?.toString().toLowerCase() === word.toLowerCase() ? "searched_word" : ""}>{children}</b>
 									},
 									a({ href, ...props }){
-										return <a href={href} onClick={e => e.stopPropagation()} {...props} className="text-blue-300" target="_blank" />
+										return <a href={href} onClick={e => e.stopPropagation()} {...props} className="text-blue-300 dark:text-blue-600" target="_blank" />
 									},
 									code({node, inline, className, children, ...props}) {
 										const codeWord = children[0]?.toString()

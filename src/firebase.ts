@@ -2,10 +2,10 @@ import { instance } from './axios';
 import { notifications } from 'ionicons/icons';
 import { initializeApp } from "firebase/app";
 import { environment, isDev } from './environments/environment';
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getMessaging, onMessage } from "firebase/messaging";
 import { getAuth, connectAuthEmulator } from "firebase/auth";
 
-const app = initializeApp({
+export const app = initializeApp({
     apiKey: "AIzaSyAMQYGpOBTeY2fOQYnW-pxZggPfsUXb6bs",
     authDomain: "nft-discord-relay.firebaseapp.com",
     projectId: "nft-discord-relay",
@@ -33,16 +33,3 @@ onMessage(messaging, (payload) => {
         image: '/assets/site-logos/logo-transparent.png',
     });
 });
-
-getToken(messaging, {
-    vapidKey: "BN0qlY8sox-k4Pxrw26P5rv0vyX-04zNHf0z_jWBQikTnw14b4b4Vd_37-jpNozwvDgajgyQuwnbb0jC1HMAamM"
-})
-    .then((currentToken) => {
-        if (currentToken) {
-            instance.post(`${environment.backendApi}/setUserFcmToken`, {currentToken});
-        } else {
-            console.error('No registration token available. Request permission to generate one.');
-        }
-    }).catch((err) => {
-        console.error('An error occurred while retrieving token. ', err);
-    });
