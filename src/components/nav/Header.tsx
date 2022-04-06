@@ -178,31 +178,39 @@ const HeaderContainer = () => {
                             )}
                         </div>
 
-                        <div className="flex space-x-4 items-center">
-                            <div
-                                className="hidden md:flex items-center"
-                                hidden={showMobileSearch}
+                        <div
+                            className="flex space-x-4 items-center"
+                            hidden={showMobileSearch}
+                        >
+                            <IonButton
+                                className="ml-auto"
+                                onClick={() => {
+                                    setMode(mode === 'dark' ? 'light' : 'dark');
+                                }}
+                                fill="clear"
+                                color={mode === 'dark' ? 'light' : 'dark'}
+                                shape="round"
+                                css={css`
+                                    --padding-horizontal: 4px;
+                                    --padding-vertical: 4px;
+                                    --padding-start: var(--padding-horizontal);
+                                    --padding-end: var(--padding-horizontal);
+                                    --padding-top: var(--padding-vertical);
+                                    --padding-bottom: var(--padding-vertical);
+
+                                    --dimensions: 48px;
+                                    height: var(--dimensions);
+                                    width: var(--dimensions);
+                                `}
                             >
+                                <IonIcon
+                                    icon={mode === 'dark' ? sunny : moon}
+                                    className="h-7 w-7"
+                                />
+                            </IonButton>
+                            <div className="hidden md:flex items-center">
                                 <WalletButton />
                             </div>
-                            <IonButton 
-								onClick={() => {
-									setMode(mode === "dark" ? "light" : "dark");
-								}}
-								 fill="clear" color={mode === "dark" ? "light" : "dark"} shape="round" css={css`
-								--padding-horizontal: 4px;
-								--padding-vertical: 4px;
-								--padding-start: var(--padding-horizontal);
-								--padding-end :  var(--padding-horizontal);
-								--padding-top: var(--padding-vertical);
-								--padding-bottom: var(--padding-vertical);
-
-								--dimensions: 48px;
-								height: var(--dimensions);
-								width : var(--dimensions);
-							`}>
-                                <IonIcon  icon={mode === "dark" ? sunny : moon} className="h-7 w-7" />
-                            </IonButton>
                         </div>
                     </div>
                 </IonToolbar>

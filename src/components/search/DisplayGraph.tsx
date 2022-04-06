@@ -17,7 +17,6 @@ import {
     Tooltip,
     ArcElement,
     registerables,
-    defaults,
     ChartData,
 } from 'chart.js';
 import {Message} from "../../types/Message";
@@ -37,8 +36,6 @@ ChartJS.register(
     Legend,
     Tooltip
 );
-
-defaults.color = '#FFFFFF';
 
 const DisplayGraph:React.FC<{
     chartDataDailyCount?: any;
@@ -86,7 +83,8 @@ const DisplayGraph:React.FC<{
                         <p>Toggle Chart</p>
                         <IonToggle
 							css={css`
-								--background-checked : var(--ion-color-step-850);
+								
+								--background-checked : var(--ion-color-step-250);
 								--handle-background-checked: var(--ion-color-primary-tint);
 							`}
                             checked={showChart}

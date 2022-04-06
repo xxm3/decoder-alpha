@@ -102,11 +102,16 @@ ion-item {
 /*}*/
 
 
-.secondary-bg-forced{
+.dark .secondary-bg-forced{
     /* color repeated on App.css & FoxTokenCharts.tsx -- pretty much color of our logo */
     /*background-color: rgb(67, 192, 187, 0.5); !* rgba(26, 255, 163, 0.3); !* 0.1 *!*/
 
     /* backgrounds repeated on App.css & Display.css */
     --background : var(--ion-color-step-150);
+    background-color: var(--background);
+}
+
+.light .secondary-bg-forced {
+	--background :  var(--ion-color-step-150);
     background-color: var(--background);
 }

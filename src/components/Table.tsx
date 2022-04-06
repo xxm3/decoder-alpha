@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import MaterialTable, { MaterialTableProps, MTableFilterRow } from '@material-table/core'
 import { createTheme,  MuiThemeProvider } from '@material-ui/core';
+import usePersistentState from '../hooks/usePersistentState';
 import { colorsByName } from '../theme/Theme';
 import Help from './Help';
 
@@ -16,26 +17,45 @@ function Table<RowData extends object>(
         columns: MaterialTableProps<RowData>['columns'];
     } & { description ?: string; url ?: string;}
 ) {
-	const { options } = props
+	const { options } = props;
+
+	const [mode] = usePersistentState("mode", "dark");
+
+	const isDarkMode = mode === "dark";
+	const textColor = isDarkMode ? colorsByName["primary"].contrast : "#161616"
 	const theme = createTheme({
 		palette: {
 			background : {
-				paper : "#01021A", // background color of table
+				paper : isDarkMode ? "#01021A" : "#f5f5f5", // background color of table
 			},
 			text : {
-				primary : colorsByName["primary"].contrast, // color of all normal text in the table
-				secondary: "#d4d3d5", // the hover color of the column headers and the color of the text which shows which page the user is on
+				primary : textColor, // color of all normal text in the table
+				secondary: isDarkMode ? "#d4d3d5" : "#434343", // the hover color of the column headers and the color of the text which shows which page the user is on
 				 // the hover color of the column headers and the color of the text which shows which page the user is on
 			},
 			action: {
-				active: colorsByName["primary"].contrast, // color of action buttons such as next page, previous page, first oage, last page, cancel search
-				disabled: "#afaeb4", // color of disabled action buttons
-				selected: "#1a1b30", // selected list item in dropdown
-				hover: "#26273b", // hover color of list items in dropdown
+				active: textColor, // color of action buttons such as next page, previous page, first oage, last page, cancel search
+				disabled: isDarkMode ? "#afaeb4" : "#595959", // color of disabled action buttons
+				selected:  isDarkMode ? "#1a1b30" : "#dfdfdf", // selected list item in dropdown
+				hover: isDarkMode ? "#26273b" : "#d4d4d4", // hover color of list items in dropdown
 				hoverOpacity: 0.1
 			},
 		}
 	})
+	const title = (
+        <div className="space-x-2 flex">
+            <span
+                className="text-xl font-medium text-ellipsis"
+                role="link"
+                onClick={() => {
+                    props.url && window.open(props.url, '_blank');
+                }}
+            >
+                {props.title}
+            </span>
+            {props.description && <Help description={props.description} />}
+        </div>
+    );
     return (
         <MuiThemeProvider theme={theme}>
             <div css={css`
@@ -43,11 +63,28 @@ function Table<RowData extends object>(
 							border-bottom: none;
 						}
 
-						tbody tr[level="0"]:nth-of-type(even) {
+						.MuiPaper-root {
+							box-shadow: none !important;
+						}
+						.dark tbody tr[level="0"]:nth-of-type(even) {
 							background-color: rgba(var(--ion-color-primary-rgb), 0.5);
 						}
-						tbody tr[level="0"]:nth-of-type(odd) {
+						.dark tbody tr[level="0"]:nth-of-type(odd) {
 							background-color: rgba(var(--ion-color-primary-rgb), 0.3);
+						}
+
+						table {
+							box-shadow: none;
+						}
+						tbody {
+							color: var(--ion-color-primary-contrast);
+						}
+
+						tbody tr[level="0"]:nth-of-type(even) {
+							background-color: #022f92;
+						}
+						tbody tr[level="0"]:nth-of-type(odd) {
+							background-color: #013fc7;
 						}
 
 						tr, td {
@@ -97,6 +134,7 @@ function Table<RowData extends object>(
 							width: 100%;
 						}
 			`}>
+				<div className='sm:hidden'>{title}</div>
             	<MaterialTable
 	                {...props}
 	                columns={props.columns.map((column) => ({
@@ -107,14 +145,9 @@ function Table<RowData extends object>(
 	                    },
 	                }))}
 	                title={
-	                    <div className="flex space-x-2 hidden sm:block">
-	                        <span className="text-xl font-medium text-ellipsis" role="link" onClick={() => {
-								props.url && window.open(props.url, "_blank")
-							}}>
-                                {props.title}
-                            </span>
-							{props.description && <Help description={props.description} />}
-	                    </div>
+	                   <div className='hidden sm:block'>
+						   {title}
+					   </div>
 	                }
 	                options={{
 						headerStyle: {

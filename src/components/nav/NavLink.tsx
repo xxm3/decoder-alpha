@@ -28,7 +28,7 @@ function NavLink({ to , icon , title, isIconSvg = false, external = ''} : Props)
 	          <Tooltip
 	              html={
 	                  <span className="hidden md:block lg:hidden  px-4 py-2 rounded text-[15px]" css={css`
-						  background-color: var(--ion-color-step-150);
+						  background-color: var(--ion-color-step-500)
 					  `}>
 	                      {title}
 	                  </span>
