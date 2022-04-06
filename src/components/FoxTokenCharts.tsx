@@ -262,7 +262,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                             // https://stackoverflow.com/questions/42804237/hover-mode-on-chart-js
                             hover: {
                                 mode: 'nearest',
-                                intersect: true,
+                                intersect: true
                             },
                             plugins: {
                                 legend: {
