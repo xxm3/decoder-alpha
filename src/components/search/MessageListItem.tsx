@@ -6,10 +6,12 @@ import './MessageListItem.css';
 import ReactTooltip from 'react-tooltip';
 import { getUrlExtension, mediaTypes, urlRegExp } from '../../util/getURLs';
 import ReactMarkdown from "react-markdown";
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 type MessageListItemProps =
     | {
           message: Message;
+          isFromMsgThread?:boolean;
           onClick?: (message: Message) => any;
       }
 
@@ -20,7 +22,7 @@ const getDateAgo = function (time: moment.MomentInput) {
 
 const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
     (
-        { onClick, message: { message, time, source, author, id } = {} },
+        { onClick, isFromMsgThread,message: { message, time, source, author, id } = {} },
         ref
     ) => {
         const { id: word } = useParams<{ id: string }>();
@@ -92,13 +94,20 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         </p>
                         {/*time*/}
                         {(
+                           
                             <div
-                                className="text-xs text-gray-400 c-res-time-text" // underline cursor-pointer
+                                className="text-xs text-gray-400 c-res-time-text flex justify-between items-center" // underline cursor-pointer
                                 data-tip={new Date(
                                     time as string
                                 ).toLocaleString()}
                             >
-                                {getDateAgo(time)}
+                                <div className='whitespace-nowrap'>
+                                    {getDateAgo(time)}
+                                </div>
+                                <div>
+                                    {isFromMsgThread? <></> :
+                                    <VisibilityIcon className='ml-2 text-blue-500'/>}
+                                </div>
                             </div>
                         )}
                     </div>
