@@ -146,6 +146,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                                     <div className="my-1.5" key={i}>
                                     	<MessageListItem
 	                                        message={message}
+                                            isFromMsgThread={true}
 	                                        key={message.id}
 	                                        ref={
 	                                            message.id === id
