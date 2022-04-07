@@ -1,14 +1,13 @@
 import { css } from "@emotion/react";
 import {IonList} from "@ionic/react"
 import {
-    book,
+    bookOutline,
     calendarClearOutline,
     homeOutline,
-    logoFirefox,
     logoTwitter,
-    notifications,
-    search,
-    statsChart
+    notificationsOutline,
+    searchOutline,
+    statsChartOutline
 } from "ionicons/icons"
 import NavLink from "./NavLink"
 import WalletButton from '../WalletButton';
@@ -41,22 +40,22 @@ function Sidebar() {
                 />
                 <NavLink
                     title="Mint Stats"
-                    icon={statsChart}
+                    icon={statsChartOutline}
                     to="/mintstats"
                 />
                 <NavLink
                     title="Stacked Line Search"
-                    icon={search}
+                    icon={searchOutline}
                     to="/stackedsearch"
                 />
                 <NavLink
                     title="Alerts"
-                    icon={notifications}
+                    icon={notificationsOutline}
                     to="/alerts"
                 />
                 <NavLink
                     title="Docs"
-                    icon={book}
+                    icon={bookOutline}
                     to="#"
                     external={'https://docs.soldecoder.app'}
                 />

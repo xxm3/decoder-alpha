@@ -8,8 +8,17 @@
    @apply sm:col-span-6
 }
 
-.messages {
+.dark .messages {
     /* backgrounds repeated on App.css & Display.css */
 	--background : var(--ion-color-step-150);
 	background-color: var(--background);
+}
+
+.light .messages {
+	--background : var(--ion-color-step-100);
+	background-color: var(--background);
+}
+
+.messages {
+	color: var(--ion-text-color) !important;
 }

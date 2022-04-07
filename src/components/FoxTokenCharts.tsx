@@ -151,13 +151,13 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                     {
                         type: 'line' as const,
                         yAxisID: 'y1',
-                        label: 'Listings',
+                        label: 'Price',
                         borderColor: '#9945FF',
                         data: lineData,
                     },
                     {
                         type: 'line' as const,
-                        label: 'Price',
+                        label: 'Listings',
                         yAxisID: 'y0',
                         borderColor: lineColorSelected,
                         fill: {
@@ -311,7 +311,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                                 y0: {
                                     stacked: true,
                                     type: 'linear',
-                                    position: 'left',
+                                    position: 'right',
 
                                     // label: {
                                     //     display: true,
@@ -319,7 +319,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                                     // },
                                     scaleLabel: {
                                         display: true,
-                                        labelString: 'Price',
+                                        labelString: 'Listings',
                                     },
                                     grid: {
                                         color: '#b3b3ff',
@@ -327,21 +327,21 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                                     suggestedMin: 0,
                                     title: {
                                         display: true,
-                                        text: 'Price',
+                                        text: 'Listings',
                                     },
                                 },
                                 y1: {
                                     stacked: false,
                                     type: 'linear',
-                                    position: 'right',
+                                    position: 'left',
                                     scaleLabel: {
                                         display: true,
-                                        labelString: 'Listings',
+                                        labelString: 'Price',
                                     },
                                     suggestedMin: 0,
                                     title: {
                                         display: true,
-                                        text: 'Listings',
+                                        text: 'Price',
                                     },
                                 },
                                 x: {

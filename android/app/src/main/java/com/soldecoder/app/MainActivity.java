@@ -1,4 +1,4 @@
-package com.NftDiscordRelay;
+package com.soldecoder.app;
 
 import com.getcapacitor.BridgeActivity;
 

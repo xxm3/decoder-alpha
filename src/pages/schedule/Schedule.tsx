@@ -49,9 +49,7 @@ const Schedule = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     let dataSource = mints
-
     
-
     /**
      * This will call the every minute to update the mints array and assign mintExpiresAt field
      * which is calculated with moment.fromNow()
@@ -62,10 +60,8 @@ const Schedule = () => {
         for(let i = 0; i < dataSource.length; i++) {
             if(dataSource[i].time !== "")
                 dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";
-              
         }
         setMints([...dataSource]);
-        
     }
     
 
@@ -80,7 +76,7 @@ const Schedule = () => {
             }
             setMints([...dataSource])
         }, 60000)
-
+       
         return () => clearInterval(interval);
     }, [dataSource.length]);
 
@@ -98,9 +94,7 @@ const Schedule = () => {
             })
             .catch((error) => {
                 setIsLoading(false);
-
                 console.error("error when getting mints: " + error);
-
                 let msg = '';
                 if (error && error.response) {
                     msg = String(error.response.data.body);
@@ -124,6 +118,14 @@ const Schedule = () => {
         fetchMintsData();     
     }, []);
 
+    const timeCount = (time:any) => {
+        var hours:number = Math.abs((moment.duration(moment(new Date()).diff(+ moment.utc(time,'h:mm:ss')))).asHours()) ;
+        if(hours <= 2){
+            return true
+        }else{
+            return false
+        }
+    }
 
     // This will call the mintExpiresAt function every minute to update tillTheMint's time
     // useEffect(() => {
@@ -339,8 +341,8 @@ const Schedule = () => {
                         columns={columns}
                         title={`Mint Schedule - ${date}`}
                         options={{
-                            rowStyle: rowData =>  ({
-                                backgroundColor : rowData.mintExpiresAt === " (in 2 hours)"  ? '#981C1E80' : "",
+                            rowStyle:( rowData:any) =>  ({
+                                backgroundColor : timeCount (rowData?.time) ? '#981C1E80' : "",
                             })
                         }}
                         description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
