@@ -9,10 +9,10 @@ interface Props {
 }
 function Help({ description } : Props) {
 	const helpToolTipStyle = css`
-				--background : var(--ion-color-step-300);
-				background-color: var(--background);
 				--padding-top: 0.5rem;
 				--padding-bottom: var(--padding-top);
+				--background: var(--ion-color-step-300);
+				background: var(--background);
 			`
   return (
       < >

@@ -1,3 +1,8 @@
+import { Chart } from "chart.js";
+import { useLayoutEffect } from "react";
+import { useSelector } from "react-redux";
+import usePersistentState from "../hooks/usePersistentState";
+import { RootState } from "../redux/store";
 
 
 interface Color {
@@ -29,9 +34,18 @@ export const colorsByName : { [name : string] : Color }= colors.reduce(
     {}
 );
 
+Chart.defaults.scale.grid.display = false;
 function Theme({ children } : {
 	children : React.ReactNode
 }) {
+
+	const [mode] = usePersistentState("mode", "dark");
+
+  useLayoutEffect(() => {
+	document.documentElement.classList.remove("light", "dark");
+	document.documentElement.classList.add(mode);
+	Chart.defaults.color = mode === "dark" ? colorsByName.primary.contrast : "#161616";
+  }, [mode])
   return (
       <>
           <style>{`

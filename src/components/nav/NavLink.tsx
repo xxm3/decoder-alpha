@@ -28,7 +28,7 @@ function NavLink({ to , icon , title, isIconSvg = false, external = ''} : Props)
 	          <Tooltip
 	              html={
 	                  <span className="hidden md:block lg:hidden  px-4 py-2 rounded text-[15px]" css={css`
-						  background-color: var(--ion-color-step-150);
+						  background-color: var(--ion-color-step-500)
 					  `}>
 	                      {title}
 	                  </span>
@@ -38,13 +38,12 @@ function NavLink({ to , icon , title, isIconSvg = false, external = ''} : Props)
 
 					  ion-item.active {
 						--background : var(--ion-color-primary);
+						--color : var(--ion-color-primary-contrast);
 					}
 				  `}
 	          >
-	              <IonItem className={`items-center  hover:opacity-80 space-x-3 my-6 rounded`}
-				  css={css`
-						${location.pathname === to ? `--background : var(--ion-color-primary);` : ``}
-				  `}>
+	              <IonItem className={`items-center  hover:opacity-80 space-x-3 my-6 rounded ${location.pathname === to ? `active` : ``}`}
+				>
 	                 { isIconSvg ? <img src="/assets/icons/FoxTokenLogo.svg" className="h-6 w-6" alt="FoxToken"/> : <IonIcon color="inherit" icon={icon} title={undefined} />}
 	                  <p className="block md:hidden lg:block">{title}</p>
 	              </IonItem>

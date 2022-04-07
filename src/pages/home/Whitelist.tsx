@@ -110,16 +110,9 @@ const Whitelist = () => {
 
                         Need bots overview… not stacked (for all whitelist stuff)
 
-                        anydesk on phone
-
                             REPLICATE TEMP-DISCORD ONTO WHITELIST SO DONT BREAK OG!!
 
-
-                        user clicks view my token... need alert pop up or something...
                         add mult wallets -> add manual wallet(s)
-                         implement ??? or implmenet "hey  you did everything but not whitelist.. here's how?" ... or implement "gratz you just got it!"
-
-                       view my token / view mint stats / stacked search - needs refresh?
                     */}
                     {/*-{userWhitelistDataQuery?.data}-*/}
                     {/*hidden={userWhitelistDataQuery?.data?.didAllSiteFunctions}*/}
@@ -158,9 +151,11 @@ const Whitelist = () => {
                                 }
                             </div>
 
+                            <br/>
                             <b>Troubleshooting:</b>
                             <ul>
-                                <li></li>
+                                <li>- If you are clicking around and nothing turns green, AND you joined the server in February or before, <a href="https://discord.com/channels/925207817923743794/955986068937769050/958113662923591691" target="_blank" className="underline">then click this and follow it</a></li>
+                                <li>- If everything is green but you haven't gotten your role after 3 minutes, then please open a ticket and we'll get back to you</li>
                             </ul>
                         </div>
                     </div>

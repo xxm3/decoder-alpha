@@ -7,21 +7,24 @@
     "react-error-overlay": "6.0.9"
   },
   "scripts": {
-    "start": "DISABLE_ESLINT_PLUGIN=true GENERATE_SOURCEMAP=false node scripts/start.js",
+    "start": " node scripts/start.js",
     "build": "node scripts/build.js",
     "ionic:build": "npm run build",
     "ionic:serve": "npm run start",
     "test": "node scripts/test.js",
     "test-mocha": "mocha --timeout 10000 --recursive",
-	"start:ios" : "ionic capacitor run ios -l --external"
+    "start:mobile": "ionic capacitor run -l --external",
+    "build:mobile": "ionic capacitor build --prod",
+    "build:apk": "ionic capacitor build android --prod --release --no-open && cd android && ./gradlew assembleRelease && (path-exists androidKeyStore.keystore || keytool -genkey -v -keystore androidKeyStore.keystore -alias androidKeyStore -keyalg RSA -keysize 2048 -validity 10000) && java -jar apksigner.jar -ks androidKeyStore.keystore -a app/build/outputs/apk/release/app-release-unsigned.apk -ksAlias androidKeyStore",
+    "compile:apk": "ionic capacitor build android --info --no-build --prod --release --no-open && cd android && ./gradlew assembleRelease && (path-exists androidKeyStore.keystore || keytool -genkey -v -keystore androidKeyStore.keystore -alias androidKeyStore -keyalg RSA -keysize 2048 -validity 10000) && java -jar apksigner.jar -ks androidKeyStore.keystore -a app/build/outputs/apk/release/app-release-unsigned.apk -ksAlias androidKeyStore"
   },
   "dependencies": {
     "@awesome-cordova-plugins/core": "^5.40.0",
     "@awesome-cordova-plugins/in-app-browser": "^5.40.0",
     "@babel/core": "^7.16.0",
-    "@capacitor/android": "^3.4.3",
+    "@capacitor/android": "3.4.3",
     "@capacitor/app": "1.1.1",
-    "@capacitor/core": "3.4.3",
+    "@capacitor/core": "^3.4.3",
     "@capacitor/haptics": "1.1.4",
     "@capacitor/ios": "3.4.3",
     "@capacitor/keyboard": "1.2.2",
@@ -61,6 +64,7 @@
     "chai": "^4.3.4",
     "chart.js": "^3.7.0",
     "chartjs-plugin-crosshair": "^1.2.0",
+    "cordova-plugin-cleartext": "^1.0.0",
     "cordova-plugin-inappbrowser": "^5.0.0",
     "css-loader": "^6.5.1",
     "css-minimizer-webpack-plugin": "^3.2.0",
@@ -71,7 +75,7 @@
     "eslint-webpack-plugin": "^3.1.1",
     "faker": "^5.5.3",
     "file-loader": "^6.2.0",
-    "firebase": "^8.8.0",
+    "firebase": "^9.6.10",
     "fs-extra": "^10.0.0",
     "html-webpack-plugin": "^5.5.0",
     "identity-obj-proxy": "^3.0.0",
@@ -150,12 +154,13 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/cli": "3.4.3",
+    "@capacitor/cli": "^3.4.3",
     "@emotion/babel-plugin": "^11.7.2",
     "@types/chartjs-plugin-crosshair": "^1.1.1",
     "@types/faker": "^5.5.9",
     "@types/firebase": "^3.2.1",
     "autoprefixer": "^10.4.2",
+    "path-exists-cli": "^2.0.0",
     "postcss": "^8.4.5",
     "tailwindcss": "^3.0.18"
   },
