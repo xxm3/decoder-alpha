@@ -95,7 +95,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         </p>
                         {/*time*/}
                         {(
-                           
+
                             <div
                                 className="text-xs text-gray-400 c-res-time-text flex justify-between items-center" // underline cursor-pointer
                                 data-tip={new Date(
@@ -107,7 +107,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                                 </div>
                                 <div>
                                     {isFromMsgThread? <></> :
-                                    <VisibilityIcon className='ml-2 text-blue-500'/>}
+                                    <VisibilityIcon className='ml-2 text-blue-500' data-tip='Click to see chat history after this message' />}
                                 </div>
                             </div>
                         )}

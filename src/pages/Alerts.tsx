@@ -148,6 +148,9 @@ function StackedSearch({foo, onSubmit}: any) {
         <>
 
             {/* TODO-alerts: enable */}
+            {/*TODO: figure out web notif's no work in prod for me ... maybe try diff browser*/}
+            {/*TODO: WHY CANT I GET MY WALLET TO SHOW UP AS UDPATED EITHER*/}
+
             {/* hidden={true}   */}
             <div hidden={!devMode} className="secondary-bg-forced m-1 p-4 rounded-xl">
                 <h4 className={`font-medium ${window.location.href.includes('fnt') ? 'text-red-600 font-medium' : ''}`}>

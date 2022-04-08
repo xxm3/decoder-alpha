@@ -49,7 +49,7 @@ const Schedule = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     let dataSource = mints
-    
+
     /**
      * This will call the every minute to update the mints array and assign mintExpiresAt field
      * which is calculated with moment.fromNow()
@@ -63,7 +63,7 @@ const Schedule = () => {
         }
         setMints([...dataSource]);
     }
-    
+
 
 
     useEffect(() => {
@@ -76,7 +76,7 @@ const Schedule = () => {
             }
             setMints([...dataSource])
         }, 60000)
-       
+
         return () => clearInterval(interval);
     }, [dataSource.length]);
 
@@ -115,11 +115,13 @@ const Schedule = () => {
     }
 
     useEffect(() => {
-        fetchMintsData();     
+        fetchMintsData();
     }, []);
 
     const timeCount = (time:any) => {
         var hours:number = Math.abs((moment.duration(moment(new Date()).diff(+ moment.utc(time,'h:mm:ss')))).asHours()) ;
+        // TODO: figure this out - why not updating on nprod?
+        console.log(hours);
         if(hours <= 2){
             return true
         }else{
