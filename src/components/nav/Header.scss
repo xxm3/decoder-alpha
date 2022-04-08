@@ -21,3 +21,10 @@
         }
     }
 }
+
+@media screen and (max-width: 425px) {
+    .pr-10 {
+        padding-right: 0px !important;
+    }
+}
+
