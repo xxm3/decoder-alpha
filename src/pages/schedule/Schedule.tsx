@@ -120,8 +120,6 @@ const Schedule = () => {
 
     const timeCount = (time:any) => {
         var hours:number = Math.abs((moment.duration(moment(new Date()).diff(+ moment.utc(time,'h:mm:ss')))).asHours()) ;
-        // TODO: figure this out - why not updating on nprod?
-        console.log(hours);
         if(hours <= 2){
             return true
         }else{
