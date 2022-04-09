@@ -28,8 +28,6 @@ const Home: React.FC<AppComponentProps> = ({ contentRef }) => {
             .then((res: any) => setAlerts(res.data.alerts))
             .catch() // ?;
     }, []);
-
-    console.log('alerts',alerts)
     /**
      * Functions
      */
