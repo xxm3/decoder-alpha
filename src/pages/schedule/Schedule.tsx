@@ -341,12 +341,16 @@ const Schedule = () => {
                         columns={columns}
                         title={`Mint Schedule - ${date}`}
                         options={{
-                            rowStyle:( rowData:any) =>  ({
-                                backgroundColor : timeCount (rowData?.time) ? '#981C1E80' : "",
-                            })
+                            // TODO: freelance: all jacked up... don't make it red just make it bold...
+                            // rowStyle:( rowData:any) =>  ({
+                            //     backgroundColor : timeCount (rowData?.time) ? '#981C1E80' : "",
+                            // })
                         }}
                         description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
-							\n "# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them. The Fox logo in the price is the official WL Token price that comes from the Fox Token Market`}
+							\n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.
+							The Fox logo in the price is the official WL Token price that comes from the Fox Token Market.
+							Rows in red mean the mint comes out in two hours or less.
+							`}
                     />
 
                     {/* <IonModal isOpen={isOpen}  onDidDismiss={onClose as any} >
