@@ -9,6 +9,7 @@ import {IonButton, IonCard, IonIcon, IonItem, useIonToast} from "@ionic/react";
 import {alertOutline, helpOutline, notifications, notificationsOutline, wallet} from "ionicons/icons";
 import {Tooltip} from "react-tippy";
 import {useHistory} from "react-router";
+import './Home.css'
 
 const FfNamed = () => {
 
@@ -103,17 +104,22 @@ const FfNamed = () => {
                             <ul style={{listStyle: 'disc'}}>
                                 {
                                     ffNamedQuery?.data?.data?.map((obj: any) => (
-                                        <li key={obj.createdAt} className="ml-3">
+                                        <li key={obj.createdAt} className="ml-3 flex justify-between p-2">
                                             {/*<Link to={'search/' + obj.msg} className="underline">*/}
+                                            <div className='w-full text-left'>
                                                 {obj.msg.replaceAll("**", "")}
-                                                &nbsp;({moment(obj.createdAt).fromNow()})
+                                            </div>
+                                              <div className='w-3/5 text-right text-gray-400'>
+                                              ({moment(obj.createdAt).fromNow()})
+                                              </div>
+                                                
                                             {/*</Link>*/}
                                         </li>
                                     ))
                                 }
-                                    <li className="ml-3 underline">
+                                    <div className="ml-3 underline text-blue-300 dark:text-blue-500 text-lg font-semibold ">
                                         <a href="https://discord.com/channels/925207817923743794/951513272132182066" target="_blank">View More in Discord</a>
-                                    </li>
+                                    </div>
                             </ul>
                         </div>
                     </div>
