@@ -245,7 +245,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
     return (
         <>
             <div
-                className="foxTokenCharts px-5 gap-4 grid grid-cols-12 "
+                className="foxTokenCharts px-5 gap-4 grid grid-cols-12 default-chart-theme "
                 css={css`
                     background-color: var(--ion-color-step-50);
                 `}
