@@ -4,6 +4,7 @@ import moment from "moment";
 import { AppComponentProps } from '../../components/Route';
 import SearchedWords from './SearchedWords';
 import FfNamed from "./FfNamed";
+import RecentAlerts from './RecentAlerts';
 import Whitelist from './Whitelist';
 import { useLocation } from 'react-router-dom';
 import { instance } from '../../axios';
@@ -25,7 +26,7 @@ const Home: React.FC<AppComponentProps> = ({ contentRef }) => {
     useEffect(() => {
         instance
             .get(`${environment.backendApi}/recentAlerts`)
-            .then((res: any) => setAlerts(res.data.alerts))
+            .then((res: any) => setAlerts(res.data))
             .catch() // ?;
     }, []);
     /**
@@ -48,6 +49,10 @@ const Home: React.FC<AppComponentProps> = ({ contentRef }) => {
 
             {/*Recent FF Named Stuff*/}
             <FfNamed />
+
+            {/* recent alerts */}
+            {alerts?.length === 0 ? null  : <RecentAlerts alerts = {alerts} /> }
+            
 
 
 
