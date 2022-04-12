@@ -341,7 +341,6 @@ const Schedule = () => {
                         columns={columns}
                         title={`Mint Schedule - ${date}`}
                         options={{
-                            // TODO: freelance: all jacked up... don't make it red just make it bold...
                             rowStyle:( rowData:any) =>  ({
                                 fontWeight: timeCount (rowData?.time) ? '900' : "100"
                                 // backgroundColor : timeCount (rowData?.time) ? '#981C1E80' : "",
