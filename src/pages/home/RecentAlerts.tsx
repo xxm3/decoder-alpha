@@ -46,7 +46,7 @@ const RecentAlerts = (props:any) => {
                         <Tooltip
                                 trigger="mouseenter" position="bottom"
                                  html={<IonItem lines="none" className='max-w-[320px] rounded help-tooltip whitespace-pre-line'>
-                                     Alerts on new names
+                                     Shows all of your recent alerts, such as when a token listed on Fox Token Market is dropped into your wallet
                                  </IonItem>}>
                                 <IonIcon
                                     onClick={() => history.push('/alerts#fnn')}
