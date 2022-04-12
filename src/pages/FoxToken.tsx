@@ -151,6 +151,79 @@ const columns: Column<FoxTokenData>[] = [
     }
 
 ];
+const columns_mobile: Column<FoxTokenData>[] = [
+    {
+        title: 'Details',
+        render: (record:any) => (
+            <span className="">
+
+                <span className="relative top-2 pr-3 w-24" >
+                    {/*ff link*/}
+                    <a
+                        href={`https://famousfoxes.com/tokenmarket/${record.token}`}
+                        target="_blank"
+                        className="hover:opacity-80 "
+                        >
+                        <img
+                            src="/assets/icons/FoxTokenLogo.svg"
+                            css={css`color: var(--ion-text-color);`}
+                            className="h-5 pr-1 inline mb-4"
+                        />
+                    </a>
+
+                    {/*solscan*/}
+                    <a
+                        href={`https://solscan.io/token/${record.token}`}
+                        target="_blank"
+                        className="hover:opacity-80"
+                    >
+                        <img
+                            src="/assets/icons/solscan.png"
+                            className="h-5 pr-1 inline mb-4"
+                        />
+                    </a>
+
+
+
+                </span>
+
+                <br className="xl:hidden lg:hidden" />
+
+                {record.row_obj.token&& <><span>Token: {shortenedWallet(record.row_obj.token)}</span></>}
+                {record.row_obj.name&& <><br/><span >Name : {record.row_obj.name}</span></>}
+                {record.row_obj.floorPrice && <><br/><span>Price : {record.row_obj.floorPrice}</span></>}
+                {record.row_obj.totalTokenListings&& <><br/><span>Listing :{record.row_obj.totalTokenListings}</span></>}
+                {record.row_obj.whichMyWallets &&<><br/><span>Owned :{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[0] : ''}</span></>}
+                {record.row_obj.whichMyWallets&& <><br/><span>Wallet :{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[1] : ''}</span></>}
+               <br/> <a
+                    href={'https://twitter.com/' + record.twitter}
+                    className="hover:opacity-80"
+                    target="_blank"
+                    hidden={!record.twitter}
+                >
+                    <IonIcon icon={logoTwitter} className="big-emoji " />
+                    <IonRippleEffect />
+                </a>
+
+                {/*discord*/}
+                <a
+                    href={'https://discord.gg/' + record.discord}
+                    target="_blank"
+                    className={"hover:opacity-80 pr-1"}
+                    hidden={!record.discord}
+                >
+                    <IonIcon icon={logoDiscord} className="big-emoji "/>
+                    <IonRippleEffect />
+                </a>
+
+            </span>
+        ),
+        width: "300px",
+        customSort: (a, b) => a.token.localeCompare(b.token),
+		customFilterAndSearch: (term, rowData) => rowData.token?.toLowerCase().includes(term.toLowerCase()),
+    },
+
+];
 
 interface FoxToken {
     contentRef: AppComponentProps["contentRef"]
@@ -177,6 +250,8 @@ function FoxToken({contentRef}: FoxToken) {
 
     const [popoverOpened, setPopoverOpened] = useState(false);
     const [viewAbuse, setViewAbuse] = useState(false);
+    const [isMobile,setIsMobile] = useState(false)
+
 
     const cookies = useMemo(() => new Cookies(), []);
 
@@ -201,6 +276,11 @@ function FoxToken({contentRef}: FoxToken) {
         // setPopoverOpened(false);
     }
 
+    useEffect(() => {
+        if (window.innerWidth < 525){
+            setIsMobile(true)
+        }
+    }, [window.innerWidth])
     // in the modal for multiple wallets - submit button clicked
     const addMultWalletsSubmit = () => {
 
@@ -299,7 +379,7 @@ function FoxToken({contentRef}: FoxToken) {
     const [mySolBalance, setMySolBalance] = useState("");
 
     const setTableData = (data: FoxTokenData[]) =>
-        _setTableData(data.map((row) => ({...row, id: row.token})));
+        _setTableData(data.map((row) => ({...row,row_obj:row, id: row.token})));
     const [mySplTokens, setMySplTokens]: any = useState([]);
 
     const [viewMyTokensClicked, setViewMyTokensClicked] = useState(false);
@@ -914,9 +994,10 @@ function FoxToken({contentRef}: FoxToken) {
                         {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                         {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                         {/*</IonItem>*/}
-                        <Table
+                         <Table 
+                            // id="fox-table-id"
                             data={tableData}
-                            columns={columns}
+                            columns={ isMobile ? columns_mobile :columns }
                             title="Fox WL Token Market"
                             description="
                             👪 are community added names.
@@ -953,7 +1034,13 @@ function FoxToken({contentRef}: FoxToken) {
                                     onClick: () => clickedAddName(true),
                                     isFreeAction: true,
 								},
-                                // BUG-92-commented-out-4
+                                
+                            ]}
+                            options={{
+                                detailPanelType: "single",
+                                search: true,
+                            }}
+                              // BUG-92-commented-out-4
 								// {
                                 //     icon: () => (
                                 //         <>
@@ -1064,11 +1151,6 @@ function FoxToken({contentRef}: FoxToken) {
                                 //     isFreeAction: true,
 								// 	onClick: () => setPopoverOpened(true)
                                 // },
-                            ]}
-                            options={{
-                                detailPanelType: "single",
-                                search: true,
-                            }}
                             detailPanel={[
                                 {
                                     icon: "📈",
@@ -1080,7 +1162,6 @@ function FoxToken({contentRef}: FoxToken) {
                             ]}
 
                         />
-
                         {/*-{foxLineData.labels}-*/}
                     </div>
                 )}
