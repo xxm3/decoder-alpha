@@ -22,7 +22,7 @@ const RecentAlerts = (props:any) => {
      * Functions
      */
 
-     
+
     /**
      * Use Effects
      */
@@ -38,7 +38,7 @@ const RecentAlerts = (props:any) => {
      */
     return (
         <>
-        
+
                 <>
                 <div className='secondary-bg-forced m-1 p-4 rounded-xl'>
                     <div className={`font-bold pb-1`}>
@@ -65,17 +65,17 @@ const RecentAlerts = (props:any) => {
                                         </div>
                                         <div className='h-px bg-slate-700 w-full mt-2'/>
                                     </li>
-                                    
+
                                 ))
                             }
                         </ul>
-                    </div> 
-                    : <div className="m-3 flex justify-center text-center text-slate-400 "> No alert found</div>
+                    </div>
+                    : <div className="m-3 flex justify-center text-center text-slate-400 "> No alerts found</div>
                     }
-                    
+
                 </div>
             </>
-               
+
         </>
     )
 }

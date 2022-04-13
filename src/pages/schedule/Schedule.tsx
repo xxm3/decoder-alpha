@@ -125,12 +125,8 @@ const Schedule = () => {
     }, []);
 
     const timeCount = (time:any) => {
-        var hours:number = Math.abs((moment.duration(moment(new Date()).diff(+ moment.utc(time,'h:mm:ss')))).asHours()) ;
-        if(hours > 0 && hours < 2){
-            return true
-        }else{
-            return false
-        }
+        const hours:number = -1 * moment.duration(moment(new Date()).diff(+ moment.utc(time,'h:mm:ss'))).asHours();
+        return hours >= 0 && hours <= 2;
     }
 
     // This will call the mintExpiresAt function every minute to update tillTheMint's time
@@ -211,13 +207,13 @@ const Schedule = () => {
                     {record?.numbersOfDiscordMembers && <span><br/><b>Discord (all) : </b>{record.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                     {record?.DiscordOnlineMembers && <span><br/><b>Discord (online) : </b>{record.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                     {record?.numbersOfTwitterFollowers && <span><br/><b>Twitter : </b>{record.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                    {record?.tweetInteraction?.total && <span><br/><b>Twitter Interaction : </b>{record.tweetInteraction.total}</span>}
+                    {record?.tweetInteraction?.total && <span><br/><b>Twitter Interactions : </b>{record.tweetInteraction.total}</span>}
                     </span>
 
                 </div>
             ),
         },
-    
+
     ];
 
     const columns: Column<Mint>[] = [
