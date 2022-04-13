@@ -4,8 +4,20 @@
         width: 360px;    
         padding-left: 0 !important;
     }
+    @media screen and(max-width:414px) {
+        width: 400px;    
+        padding-left: 0 !important;
+    }
+    @media screen and(max-width:393px) {
+        width: 375px; 
+        padding-left: 0 !important;   
+    }
+    @media screen and(max-width:375px) {
+        width: 350px; 
+        padding-left: 0 !important;   
+    }
     @media screen and(max-width:360px) {
-        width: 300px; 
+        width: 350px; 
         padding-left: 0 !important;   
     }
     @media screen and(max-width:320px) {
@@ -14,6 +26,9 @@
     }
 }
 .foxTokenCharts {
+    @media screen and(max-width:768px) { 
+        padding-left: 0 !important;
+    }
     @media screen and(max-width:425px) { 
         padding-left: 0 !important;
     }
@@ -27,6 +42,9 @@
 
 .MuiTableCell-paddingNone:last-child {
     @media screen and(max-width:425px) {
+        padding: 0 !important;
+    }
+    @media screen and(max-width:1000px) {
         padding: 0 !important;
     }
 }

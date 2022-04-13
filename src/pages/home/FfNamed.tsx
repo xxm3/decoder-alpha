@@ -104,15 +104,17 @@ const FfNamed = () => {
                             <ul style={{listStyle: 'disc'}}>
                                 {
                                     ffNamedQuery?.data?.data?.map((obj: any) => (
-                                        <li key={obj.createdAt} className="ml-3 flex justify-between p-2">
+                                        <li key={obj.createdAt} className="ml-3  ">
                                             {/*<Link to={'search/' + obj.msg} className="underline">*/}
+                                            <div className="ml-1 flex justify-between p-1">
                                             <div className='w-full text-left'>
                                                 {obj.msg.replaceAll("**", "")}
                                             </div>
                                               <div className='w-3/5 text-right text-gray-400'>
                                               ({moment(obj.createdAt).fromNow()})
                                               </div>
-                                                
+                                              </div>
+                                              <div className='h-px bg-slate-700 w-full mt-2'/>
                                             {/*</Link>*/}
                                         </li>
                                     ))

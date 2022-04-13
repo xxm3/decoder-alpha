@@ -12,10 +12,13 @@ import { environment } from '../../environments/environment';
 
 const Home: React.FC<AppComponentProps> = ({ contentRef }) => {
 
+
     /**
      * States & Variables
      */
-    const [alerts, setAlerts] = useState([]);
+    // const [alerts, setAlerts] = useState([]);
+    const [isMobile,setIsMobile] = useState(false)
+
     // const useQuery = () => new URLSearchParams(useLocation().search);
     // const query = useQuery();
     // const devMode = query.get('devMode');
@@ -23,12 +26,18 @@ const Home: React.FC<AppComponentProps> = ({ contentRef }) => {
     /**
      * Use Effects
      */
-    useEffect(() => {
-        instance
-            .get(`${environment.backendApi}/recentAlerts`)
-            .then((res: any) => setAlerts(res.data))
-            .catch() // ?;
-    }, []);
+     useEffect(() => {
+        if (window.innerWidth < 525){
+            setIsMobile(true)
+        }
+    }, [window.innerWidth])
+
+    // useEffect(() => {
+    //     instance
+    //         .get(`${environment.backendApi}/recentAlerts`)
+    //         .then((res: any) => setAlerts(res.data))
+    //         .catch() // ?;
+    // }, []);
     /**
      * Functions
      */
@@ -39,26 +48,29 @@ const Home: React.FC<AppComponentProps> = ({ contentRef }) => {
 
     return (
         <>
-
+            { isMobile ?
+             <>
+                <Whitelist />
+                <FfNamed />
+                <RecentAlerts />
+             </> : <>
+              <div className='flex flex-row w-full'>
+                    <div className='w-1/2 '>
+                        <Whitelist />
+                    </div>
+                    <div className='w-1/2'>
+                                {/*Recent FF Named Stuff*/}
+                         <FfNamed />
+                    </div>
+              </div>
+                {/* recent alerts */}
+                    <RecentAlerts />  
+            </>
+             } 
 
             {/* for user to get used-the-site- role */}
             {/*<div hidden={!devMode}>*/}
-            <Whitelist />
-            {/*</div>*/}
-
-
-            {/*Recent FF Named Stuff*/}
-            <FfNamed />
-
-            {/* recent alerts */}
-            {alerts?.length === 0 ? null  : <RecentAlerts alerts = {alerts} /> }
-            
-
-
-
-
-
-
+           
             {/* Recent Community Searches */}
             {/*<div hidden={window.location.hostname !== 'localhost'}>*/}
             {/*    <SearchedWords/>*/}
