@@ -125,7 +125,7 @@ function StackedSearch({ foo, onSubmit }: any) {
                 });
             }
 
-            const labels = dispLabelsDailyCount(rawFetchedData[0].ten_day_count, true);
+            const labels = dispLabelsDailyCount(rawFetchedData[0]?.ten_day_count, true);
 
             // console.log(labels);
             // console.log(datasetsAry);

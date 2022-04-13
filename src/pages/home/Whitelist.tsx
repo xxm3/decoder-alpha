@@ -67,7 +67,8 @@ const Whitelist = () => {
                 ...results,
             ]
         },
-        refetchOnWindowFocus: true,
+        // hnghh save $
+        // refetchOnWindowFocus: true,
         retry: false
     }) as any;
 
@@ -104,23 +105,13 @@ const Whitelist = () => {
                 :
                 <>
 
-                    {/*
-
-                        TODO: whitelist optimization
-
-                        Need bots overview… not stacked (for all whitelist stuff)
-
-                            REPLICATE TEMP-DISCORD ONTO WHITELIST SO DONT BREAK OG!!
-
-                        add mult wallets -> add manual wallet(s)
-                    */}
                     {/*-{userWhitelistDataQuery?.data}-*/}
                     {/*hidden={userWhitelistDataQuery?.data?.didAllSiteFunctions}*/}
                     <div className="secondary-bg-forced m-1 p-4 rounded-xl">
-                        <div className={`font-bold pb-1`}>Want to keep or help get whitelist?</div>
+                        <div className={`font-bold pb-1`}>Want to be able to submit your wallet, or help get whitelisted?</div>
                         {/*"used-the-site" role progress*/}
                         <div>
-                            Use the below features to be granted the <b>"used-the-site"</b> role in Discord. See <b>#whitelist-faq</b> in Discord for more details. After everything is checked, it may take a few minutes to show up in Discord.
+                            Use the below features to be granted the <b>"used-the-site"</b> role in Discord. See <b>#whitelist-faq</b> in Discord for more details. <b className='text-red-500'>Manually refresh the page to see updates.</b> After everything is checked, it may take a few minutes to show up in Discord.
                             <br/>
 
                             <span>

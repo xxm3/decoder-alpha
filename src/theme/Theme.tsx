@@ -44,7 +44,8 @@ function Theme({ children } : {
   useLayoutEffect(() => {
 	document.documentElement.classList.remove("light", "dark");
 	document.documentElement.classList.add(mode);
-	Chart.defaults.color = mode === "dark" ? colorsByName.primary.contrast : "#161616";
+	// Chart.defaults.color = mode === "dark" ? colorsByName.primary.contrast : "#161616";
+	Chart.defaults.color = colorsByName.primary.contrast ;
   }, [mode])
   return (
       <>

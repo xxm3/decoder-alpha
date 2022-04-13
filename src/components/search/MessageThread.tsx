@@ -134,11 +134,12 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             >
                 <div
                     ref={containerRef}
-                    className="p-5 c-res-messages messages overflow-y-scroll h-full w-full mx-auto"
+                    className="p-5 c-res-messages messages h-full w-full mx-auto"
                 >
                     <div onClick={()=> setIsModalOpen(false)}  className=' justify-end text-red-500  flex m-3'  >
                         <HighlightOffIcon className='text-2xl'/>
                     </div>
+                    <div className='overflow-y-scroll h-full w-full mx-auto p-5'>
                     {data.pages
                         .map((page) =>
                             page.map((message, i) =>
@@ -146,6 +147,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                                     <div className="my-1.5" key={i}>
                                     	<MessageListItem
 	                                        message={message}
+                                            isFromMsgThread={true}
 	                                        key={message.id}
 	                                        ref={
 	                                            message.id === id
@@ -160,6 +162,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                             )
                         )
                         .flat(1)}
+                        </div>
                 </div>
 
                 <ReactTooltip />

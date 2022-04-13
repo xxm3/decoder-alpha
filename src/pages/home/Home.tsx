@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './Home.css';
 import moment from "moment";
-import { AppComponentProps } from '../../components/Route';
+import {AppComponentProps} from '../../components/Route';
 import SearchedWords from './SearchedWords';
 import FfNamed from "./FfNamed";
+import RecentAlerts from './RecentAlerts';
 import Whitelist from './Whitelist';
-import { useLocation } from 'react-router-dom';
-import { instance } from '../../axios';
-import { environment } from '../../environments/environment';
+import {useLocation} from 'react-router-dom';
+import {instance} from '../../axios';
+import {environment} from '../../environments/environment';
 
-const Home: React.FC<AppComponentProps> = ({ contentRef }) => {
+const Home: React.FC<AppComponentProps> = ({contentRef}) => {
+
 
     /**
      * States & Variables
      */
-    const [alerts, setAlerts] = useState([]);
+        // const [alerts, setAlerts] = useState([]);
+    const [isMobile, setIsMobile] = useState(false)
+
     // const useQuery = () => new URLSearchParams(useLocation().search);
     // const query = useQuery();
     // const devMode = query.get('devMode');
@@ -23,11 +27,17 @@ const Home: React.FC<AppComponentProps> = ({ contentRef }) => {
      * Use Effects
      */
     useEffect(() => {
-        instance
-            .get(`${environment.backendApi}/recentAlerts`)
-            .then((res: any) => setAlerts(res.data.alerts))
-            .catch() // ?;
-    }, []);
+        if (window.innerWidth < 525) {
+            setIsMobile(true)
+        }
+    }, [window.innerWidth])
+
+    // useEffect(() => {
+    //     instance
+    //         .get(`${environment.backendApi}/recentAlerts`)
+    //         .then((res: any) => setAlerts(res.data))
+    //         .catch() // ?;
+    // }, []);
     /**
      * Functions
      */
@@ -38,21 +48,31 @@ const Home: React.FC<AppComponentProps> = ({ contentRef }) => {
 
     return (
         <>
+            {isMobile ?
+                <>
+                    <Whitelist/>
+                    <FfNamed/>
+                    <RecentAlerts/>
+                </> : <>
 
+                    <Whitelist />
+
+                    <div className='flex flex-row w-full'>
+                        <div className='w-1/2 '>
+                            {/*Recent FF Named Stuff*/}
+                            <FfNamed/>
+                        </div>
+                        <div className='w-1/2'>
+                            {/* recent alerts */}
+                            <RecentAlerts/>
+                        </div>
+                    </div>
+
+                </>
+            }
 
             {/* for user to get used-the-site- role */}
             {/*<div hidden={!devMode}>*/}
-            <Whitelist />
-            {/*</div>*/}
-
-
-            {/*Recent FF Named Stuff*/}
-            <FfNamed />
-
-
-
-
-
 
             {/* Recent Community Searches */}
             {/*<div hidden={window.location.hostname !== 'localhost'}>*/}

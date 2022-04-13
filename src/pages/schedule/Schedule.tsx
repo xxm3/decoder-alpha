@@ -4,7 +4,6 @@ import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
 import {IonButton, IonContent, IonIcon, IonModal, IonRippleEffect, useIonToast} from '@ionic/react';
-
 import './Schedule.css'
 import { Column } from '@material-table/core';
 import Table from '../../components/Table';
@@ -46,9 +45,10 @@ const Schedule = () => {
     const [date, setDate] = useState('')
     const [mints, setMints] = useState<Mint[]>([])
     const [splitCollectionName, setSplitCollectionName] = useState([])
-
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [isMobile,setIsMobile] = useState(false)
+
 
     let dataSource = mints
 
@@ -66,6 +66,8 @@ const Schedule = () => {
         setMints([...dataSource]);
     }
 
+
+
     useEffect(() => {
         dataSource.length && addMintExpiresAt();
 
@@ -80,7 +82,11 @@ const Schedule = () => {
         return () => clearInterval(interval);
     }, [dataSource.length]);
 
-
+    useEffect(() => {
+        if (window.innerWidth < 525){
+            setIsMobile(true)
+        }
+    }, [window.innerWidth])
     // Get today's mints
     const fetchMintsData = () => {
         setIsLoading(true);
@@ -94,9 +100,7 @@ const Schedule = () => {
             })
             .catch((error) => {
                 setIsLoading(false);
-
                 console.error("error when getting mints: " + error);
-
                 let msg = '';
                 if (error && error.response) {
                     msg = String(error.response.data.body);
@@ -120,6 +124,10 @@ const Schedule = () => {
         fetchMintsData();
     }, []);
 
+    const timeCount = (time:any) => {
+        const hours:number = -1 * moment.duration(moment(new Date()).diff(+ moment.utc(time,'h:mm:ss'))).asHours();
+        return hours >= 0 && hours <= 2;
+    }
 
     // This will call the mintExpiresAt function every minute to update tillTheMint's time
     // useEffect(() => {
@@ -168,6 +176,46 @@ const Schedule = () => {
         }
 
     // @ts-ignore
+    const columns_mobile: Column<Mint>[] = [
+        {
+            title: 'Details',
+            render: (record) => (
+                <div >
+                    <div className="flex space-x-3">
+                    {/*discord*/}
+                    <a href={record.discordLink} target="_blank" style={{ pointerEvents : (record.discordLink && record.numbersOfDiscordMembers) ? "initial" : "none"}}className={(record.discordLink && record.numbersOfDiscordMembers) ? "schedule-link" : "schedule-link-disabled"}>
+                        <IonIcon icon={logoDiscord} className="big-emoji"/>
+                        <IonRippleEffect />
+                    </a>
+                    {/*twitter*/}
+                    <a href={record.twitterLink} className="schedule-link" target="_blank">
+                        <IonIcon icon={logoTwitter} className="big-emoji" />
+                        <IonRippleEffect />
+                    </a>
+                    {/* Link */}
+                    <a href={record.projectLink} className={(record.projectLink && record.projectLink) ? "schedule-link" : "schedule-link-disabled"} target="_blank">
+                        <IonIcon icon={link} className="big-emoji" />
+                        <IonRippleEffect />
+                    </a>
+                    </div>
+
+                    <span className="" onClick={() => handleProjectClick(record)}>
+                    {record?.project && <span><b>Name : </b>{record.project}</span> }
+                    {record?.mintExpiresAt && <span><br/><b>Time (UTC) :</b>{record.mintExpiresAt}</span>}
+                    {record?.price && <><br/><b>Price : </b><span dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice})` : record.price.replace(/public/gi, "<br>public").replace('SOL', '')}}/></>}
+                    {record?.count &&  <span><br/><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span> }
+                    {record?.numbersOfDiscordMembers && <span><br/><b>Discord (all) : </b>{record.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                    {record?.DiscordOnlineMembers && <span><br/><b>Discord (online) : </b>{record.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                    {record?.numbersOfTwitterFollowers && <span><br/><b>Twitter : </b>{record.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                    {record?.tweetInteraction?.total && <span><br/><b>Twitter Interactions : </b>{record.tweetInteraction.total}</span>}
+                    </span>
+
+                </div>
+            ),
+        },
+
+    ];
+
     const columns: Column<Mint>[] = [
         {
             title: '',
@@ -332,15 +380,19 @@ const Schedule = () => {
                 <div>
                     <Table
                         data={dataSource}
-                        columns={columns}
+                        columns={ isMobile ? columns_mobile : columns}
                         title={`Mint Schedule - ${date}`}
-                        // options={{
-                        //     rowStyle: {
-                        //         overflowWrap: 'break-word'
-                        //     }
-                        // }}
+                        options={{
+                            rowStyle:( rowData:any) =>  ({
+                                fontWeight: timeCount (rowData?.time) ? '900' : ""
+                                // backgroundColor : timeCount (rowData?.time) ? '#981C1E80' : "",
+                            })
+                        }}
                         description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
-							\n "# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them. The Fox logo in the price is the official WL Token price that comes from the Fox Token Market`}
+							\n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.
+							The Fox logo in the price is the official WL Token price that comes from the Fox Token Market.
+							Rows in bold mean the mint comes out in two hours or less.
+							`}
                     />
 
                     {/* <IonModal isOpen={isOpen}  onDidDismiss={onClose as any} >

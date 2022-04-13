@@ -57,7 +57,6 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
     const [foxLineData, setFoxLineData] = useState(defaultGraph);
     const [foxSalesData, setFoxSalesData] = useState(defaultGraph);
     // const [foxLineListingsData, setFoxLineListingsData] = useState(defaultGraph);
-    console.log('foxLineData ------------', foxLineData);
     const chartsRef = useRef<HTMLDivElement | null>(null);
 
     const firstUpdate = useRef(true);
@@ -170,8 +169,8 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                 ];
 
                 // console.log(labels);
-                console.log("Arrays ::: foxLineData ===>>> ", foxLineData)
-                console.log(datasetsAry);
+                // console.log("Arrays ::: foxLineData ===>>> ", foxLineData)
+                // console.log(datasetsAry);
 
                 setFoxLineData({
                     labels: labels,
@@ -246,7 +245,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
     return (
         <>
             <div
-                className="foxTokenCharts px-5 gap-4 grid grid-cols-12"
+                className="foxTokenCharts px-5 gap-4 grid grid-cols-12 default-chart-theme "
                 css={css`
                     background-color: var(--ion-color-step-50);
                 `}
@@ -263,7 +262,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                             // https://stackoverflow.com/questions/42804237/hover-mode-on-chart-js
                             hover: {
                                 mode: 'nearest',
-                                intersect: true,
+                                intersect: true
                             },
                             plugins: {
                                 legend: {

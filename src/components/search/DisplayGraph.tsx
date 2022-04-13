@@ -64,7 +64,6 @@ const DisplayGraph:React.FC<{
         cookies.set("showChart", String(showChart));
     }, [showChart, cookies])
 
-
     /**
      * Renders
      */
@@ -74,12 +73,12 @@ const DisplayGraph:React.FC<{
 
             {/*search header*/}
             {totalCount && (
-                <>
-                    <p className={`font-bold ${completelyHideChart ? "col-span-12" : "col-span-6"} sm:text-center`}>
+                <> 
+                    <p className={`font-bold ${completelyHideChart ? "col-span-12" : window.innerWidth <= 360 ? "col-span-12 text-center" : "col-span-6"} sm:text-center`}>
                         Searched on "{decodeURIComponent(word)}" ({totalCount} results last 10 days)
                     </p>
 
-                    <div className="flex items-center justify-center col-span-6" hidden={completelyHideChart}>
+                    <div className= {window.innerWidth <= 360 ?  "flex items-center justify-center col-span-12" : "flex items-center justify-center col-span-6"}  hidden={completelyHideChart}>
                         <p>Toggle Chart</p>
                         <IonToggle
 							css={css`
@@ -90,10 +89,11 @@ const DisplayGraph:React.FC<{
                             checked={showChart}
                             onClick={() => setShowChart(!showChart)}
                         />
+                
                     </div>
                 </>
             )}
-            </div>
+        </div>
         {/* bar & line chart */}
         {/* starting with loading */}
         {isLoadingChart ?
