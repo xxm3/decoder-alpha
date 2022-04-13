@@ -38,7 +38,7 @@ const RecentAlerts = (props:any) => {
      */
     return (
         <>
-        {alerts?
+        
                 <>
                 <div className='secondary-bg-forced m-1 p-4 rounded-xl'>
                     <div className={`font-bold pb-1`}>
@@ -46,7 +46,7 @@ const RecentAlerts = (props:any) => {
                         <Tooltip
                                 trigger="mouseenter" position="bottom"
                                  html={<IonItem lines="none" className='max-w-[320px] rounded help-tooltip whitespace-pre-line'>
-                                     Shows all of your recent alerts, such as when a token listed on Fox Token Market is dropped into your wallet
+                                    Shows all of your recent alerts, such as when a token listed on Fox Token Market is dropped into your wallet
                                  </IonItem>}>
                                 <IonIcon
                                     onClick={() => history.push('/alerts#fnn')}
@@ -54,7 +54,7 @@ const RecentAlerts = (props:any) => {
                         </Tooltip>
 
                     </div>
-                    <div>
+                    {alerts.length ? <div>
                         <ul style={{listStyle: 'disc'}}>
                             {
                                alerts && alerts.map((obj: any, index:number) => (
@@ -69,15 +69,13 @@ const RecentAlerts = (props:any) => {
                                 ))
                             }
                         </ul>
-                    </div>
+                    </div> 
+                    : <div className="m-3 flex justify-center text-center text-slate-400 "> No alert found</div>
+                    }
+                    
                 </div>
             </>
-                :
-                <div className="flex justify-center items-center">
-                {/*<Loader/>*/}
-                {/*Loading. . .*/}
-            </div>
-               }
+               
         </>
     )
 }

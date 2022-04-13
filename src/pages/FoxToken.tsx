@@ -156,6 +156,27 @@ const columns_mobile: Column<FoxTokenData>[] = [
         title: 'Details',
         render: (record:any) => (
             <span className="">
+            {/*twitter*/}
+                {record.twitter ? <a
+                    href={'https://twitter.com/' + record.twitter}
+                    className="hover:opacity-80"
+                    target="_blank"
+                    hidden={!record.twitter}
+                >
+                    <IonIcon icon={logoTwitter} className="big-emoji " />
+                    <IonRippleEffect />
+                </a> : null }
+                
+                {/*discord*/}
+                { record.discord ? <> <a
+                    href={'https://discord.gg/' + record.discord}
+                    target="_blank"
+                    className={"hover:opacity-80 pr-1"}
+                    hidden={!record.discord}
+                >
+                    <IonIcon icon={logoDiscord} className="big-emoji "/>
+                    <IonRippleEffect />
+                </a> <br/> </> : null }
 
                 <span className="relative top-2 pr-3 w-24" >
                     {/*ff link*/}
@@ -183,39 +204,15 @@ const columns_mobile: Column<FoxTokenData>[] = [
                         />
                     </a>
 
-
-
                 </span>
 
                 <br className="xl:hidden lg:hidden" />
-
-                {record.row_obj.token&& <><span>Token: {shortenedWallet(record.row_obj.token)}</span></>}
-                {record.row_obj.name&& <><br/><span >Name : {record.row_obj.name}</span></>}
-                {record.row_obj.floorPrice && <><br/><span>Price : {record.row_obj.floorPrice}</span></>}
-                {record.row_obj.totalTokenListings&& <><br/><span>Listing :{record.row_obj.totalTokenListings}</span></>}
-                {record.row_obj.whichMyWallets &&<><br/><span>Owned :{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[0] : ''}</span></>}
-                {record.row_obj.whichMyWallets&& <><br/><span>Wallet :{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[1] : ''}</span></>}
-               <br/> <a
-                    href={'https://twitter.com/' + record.twitter}
-                    className="hover:opacity-80"
-                    target="_blank"
-                    hidden={!record.twitter}
-                >
-                    <IonIcon icon={logoTwitter} className="big-emoji " />
-                    <IonRippleEffect />
-                </a>
-
-                {/*discord*/}
-                <a
-                    href={'https://discord.gg/' + record.discord}
-                    target="_blank"
-                    className={"hover:opacity-80 pr-1"}
-                    hidden={!record.discord}
-                >
-                    <IonIcon icon={logoDiscord} className="big-emoji "/>
-                    <IonRippleEffect />
-                </a>
-
+                {record?.row_obj?.token && <><span> <b>Token : </b>{shortenedWallet(record.row_obj.token)}</span></>}
+                {record?.row_obj?.name && <><br/><span ><b>Name : </b>{record.row_obj.name}</span></>}
+                {record?.row_obj?.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice}</span></>}
+                {record?.row_obj?.totalTokenListings && <><br/><span><b>Listing : </b>{record.row_obj.totalTokenListings}</span></>}
+                {record?.row_obj?.whichMyWallets &&<><br/><span><b>Owned : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[0] : ''}</span></>}
+                {record?.row_obj?.whichMyWallets && <><br/><span><b>Wallet : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[1] : ''}</span></>}
             </span>
         ),
         width: "300px",

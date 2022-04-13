@@ -47,6 +47,8 @@ const Schedule = () => {
     const [splitCollectionName, setSplitCollectionName] = useState([])
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [isMobile,setIsMobile] = useState(false)
+
 
     let dataSource = mints
 
@@ -80,7 +82,11 @@ const Schedule = () => {
         return () => clearInterval(interval);
     }, [dataSource.length]);
 
-
+    useEffect(() => {
+        if (window.innerWidth < 525){
+            setIsMobile(true)
+        }
+    }, [window.innerWidth])
     // Get today's mints
     const fetchMintsData = () => {
         setIsLoading(true);
@@ -120,7 +126,7 @@ const Schedule = () => {
 
     const timeCount = (time:any) => {
         var hours:number = Math.abs((moment.duration(moment(new Date()).diff(+ moment.utc(time,'h:mm:ss')))).asHours()) ;
-        if(hours <= 2){
+        if(hours > 0 && hours < 2){
             return true
         }else{
             return false
@@ -174,6 +180,46 @@ const Schedule = () => {
         }
 
     // @ts-ignore
+    const columns_mobile: Column<Mint>[] = [
+        {
+            title: 'Details',
+            render: (record) => (
+                <div >
+                    <div className="flex space-x-3">
+                    {/*discord*/}
+                    <a href={record.discordLink} target="_blank" style={{ pointerEvents : (record.discordLink && record.numbersOfDiscordMembers) ? "initial" : "none"}}className={(record.discordLink && record.numbersOfDiscordMembers) ? "schedule-link" : "schedule-link-disabled"}>
+                        <IonIcon icon={logoDiscord} className="big-emoji"/>
+                        <IonRippleEffect />
+                    </a>
+                    {/*twitter*/}
+                    <a href={record.twitterLink} className="schedule-link" target="_blank">
+                        <IonIcon icon={logoTwitter} className="big-emoji" />
+                        <IonRippleEffect />
+                    </a>
+                    {/* Link */}
+                    <a href={record.projectLink} className={(record.projectLink && record.projectLink) ? "schedule-link" : "schedule-link-disabled"} target="_blank">
+                        <IonIcon icon={link} className="big-emoji" />
+                        <IonRippleEffect />
+                    </a>
+                    </div>
+
+                    <span className="" onClick={() => handleProjectClick(record)}>
+                    {record?.project && <span><b>Name : </b>{record.project}</span> }
+                    {record?.mintExpiresAt && <span><br/><b>Time (UTC) :</b>{record.mintExpiresAt}</span>}
+                    {record?.price && <><br/><b>Price : </b><span dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice})` : record.price.replace(/public/gi, "<br>public").replace('SOL', '')}}/></>}
+                    {record?.count &&  <span><br/><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span> }
+                    {record?.numbersOfDiscordMembers && <span><br/><b>Discord (all) : </b>{record.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                    {record?.DiscordOnlineMembers && <span><br/><b>Discord (online) : </b>{record.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                    {record?.numbersOfTwitterFollowers && <span><br/><b>Twitter : </b>{record.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                    {record?.tweetInteraction?.total && <span><br/><b>Twitter Interaction : </b>{record.tweetInteraction.total}</span>}
+                    </span>
+
+                </div>
+            ),
+        },
+    
+    ];
+
     const columns: Column<Mint>[] = [
         {
             title: '',
@@ -338,18 +384,18 @@ const Schedule = () => {
                 <div>
                     <Table
                         data={dataSource}
-                        columns={columns}
+                        columns={ isMobile ? columns_mobile : columns}
                         title={`Mint Schedule - ${date}`}
                         options={{
-                            // rowStyle:( rowData:any) =>  ({
-                            //     fontWeight: timeCount (rowData?.time) ? '900' : "100"
-                            //     // backgroundColor : timeCount (rowData?.time) ? '#981C1E80' : "",
-                            // })
+                            rowStyle:( rowData:any) =>  ({
+                                fontWeight: timeCount (rowData?.time) ? '900' : ""
+                                // backgroundColor : timeCount (rowData?.time) ? '#981C1E80' : "",
+                            })
                         }}
                         description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
 							\n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.
 							The Fox logo in the price is the official WL Token price that comes from the Fox Token Market.
-							Rows in red mean the mint comes out in two hours or less.
+							Rows in bold mean the mint comes out in two hours or less.
 							`}
                     />
 
