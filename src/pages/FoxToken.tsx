@@ -166,7 +166,7 @@ const columns_mobile: Column<FoxTokenData>[] = [
                     <IonIcon icon={logoTwitter} className="big-emoji " />
                     <IonRippleEffect />
                 </a> : null }
-                
+
                 {/*discord*/}
                 { record.discord ? <> <a
                     href={'https://discord.gg/' + record.discord}
@@ -728,7 +728,7 @@ function FoxToken({contentRef}: FoxToken) {
                 <p className="text-lg text-red-700 font-medium">
                     <ul>
                         <li>- Click the red button <IonIcon icon={wallet} className="text-red-600 text-2xl" /> on the top right of the table to check off this step</li>
-                        <li>- Note you did NOT have to connect your wallet, click the third button <IonIcon icon={albums} className="text-2xl text-gray-500" /> to manually add a wallet</li>
+                        <li>- Note you do NOT have to connect your wallet, click the third button <IonIcon icon={albums} className="text-2xl text-gray-500" /> to manually add a wallet</li>
                     </ul>
                 </p>
                 <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
@@ -991,7 +991,7 @@ function FoxToken({contentRef}: FoxToken) {
                         {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                         {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                         {/*</IonItem>*/}
-                         <Table 
+                         <Table
                             // id="fox-table-id"
                             data={tableData}
                             columns={ isMobile ? columns_mobile :columns }
@@ -1031,7 +1031,7 @@ function FoxToken({contentRef}: FoxToken) {
                                     onClick: () => clickedAddName(true),
                                     isFreeAction: true,
 								},
-                                
+
                             ]}
                             options={{
                                 detailPanelType: "single",
