@@ -40,7 +40,7 @@ body {
 
 .logo {
 	font-family: "Logo";
-	@apply !text-3xl hover:opacity-80
+	@apply hover:opacity-80
 }
 
 ion-button {

@@ -19,6 +19,10 @@ import Help from "../Help";
 import { css } from "@emotion/react";
 import "./Header.scss"
 import usePersistentState from "../../hooks/usePersistentState";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { auth } from "../../firebase";
+import { signInAnonymously } from "firebase/auth";
 
 
 const HeaderContainer = () => {
@@ -32,6 +36,7 @@ const HeaderContainer = () => {
 
     const [headerPlaceholder, setHeaderPlaceholder] = useState('');
 
+	const isDemo = useSelector<RootState>(state => state.demo.demo);
 
 	const [mode, setMode] = usePersistentState<"dark" | "light">("mode", "dark");
 
@@ -115,7 +120,7 @@ const HeaderContainer = () => {
 
                                 {/*site logo & home*/}
                                 <IonRouterLink
-                                    className="text-2xl logo"
+                                    className="text-2xl"
                                     routerLink="/"
                                     color="text"
                                 >
@@ -125,9 +130,15 @@ const HeaderContainer = () => {
                                             src="/assets/site-logos/logo-transparent.png"
                                             alt="logo"
                                         />
-                                        <p className="headerName">
+                                        <span className="headerName logo">
                                             SOL Decoder
-                                        </p>
+                                        </span>
+										<sup hidden={!isDemo} className=" text-red-500" onClick={(e) => {
+											e.stopPropagation();
+											auth.signOut()
+										}}>
+											demo
+										</sup>
                                     </div>
                                 </IonRouterLink>
                             </div>
