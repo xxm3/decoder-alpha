@@ -99,7 +99,7 @@ const columns: Column<FoxTokenData>[] = [
     {
         title: 'Price',
         customSort: (a, b) => a.floorPrice - b.floorPrice,
-        render: (record) => <span>{record.floorPrice}</span>,
+        render: (record) => <span>{record.floorPrice} ◎</span>,
     },
     {
         title: 'Listings',
@@ -209,7 +209,7 @@ const columns_mobile: Column<FoxTokenData>[] = [
                 <br className="xl:hidden lg:hidden" />
                 {record?.row_obj?.token && <><span> <b>Token : </b>{shortenedWallet(record.row_obj.token)}</span></>}
                 {record?.row_obj?.name && <><br/><span ><b>Name : </b>{record.row_obj.name}</span></>}
-                {record?.row_obj?.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice}</span></>}
+                {record?.row_obj?.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice} ◎</span></>}
                 {record?.row_obj?.totalTokenListings && <><br/><span><b>Listing : </b>{record.row_obj.totalTokenListings}</span></>}
                 {record?.row_obj?.whichMyWallets &&<><br/><span><b>Owned : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[0] : ''}</span></>}
                 {record?.row_obj?.whichMyWallets && <><br/><span><b>Wallet : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[1] : ''}</span></>}
