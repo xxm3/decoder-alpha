@@ -217,7 +217,7 @@ function StackedSearch({ foo, onSubmit }: any) {
                     ) : (
                         // graph itself
                         <div
-                            className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg"
+                            className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg default-chart-theme"
                             hidden={
                                 graphStackedLoading ||
                                 stackedLineData.labels?.length === 1

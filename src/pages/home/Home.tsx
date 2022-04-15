@@ -17,7 +17,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
      * States & Variables
      */
         // const [alerts, setAlerts] = useState([]);
-    const [isMobile, setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(false);
 
     // const useQuery = () => new URLSearchParams(useLocation().search);
     // const query = useQuery();
@@ -63,8 +63,9 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                             <FfNamed/>
                         </div>
                         <div className='w-1/2'>
+                            {/*TODO: HNGHHH*/}
                             {/* recent alerts */}
-                            <RecentAlerts/>
+                            {/*<RecentAlerts/>*/}
                         </div>
                     </div>
 
