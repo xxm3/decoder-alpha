@@ -5,11 +5,13 @@ import {
     IonToolbar,
     IonMenuButton,
 	IonButton,
+	IonBadge,
+	IonRippleEffect,
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from 'react-router';
 import {
-    arrowBack, moon, search, sunny,
+    arrowBack, close, moon, search, sunny,
 } from 'ionicons/icons';
 import { queryClient } from "../../queryClient";
 import SearchBar from "../SearchBar";
@@ -133,12 +135,15 @@ const HeaderContainer = () => {
                                         <span className="headerName logo">
                                             SOL Decoder
                                         </span>
-										<sup hidden={!isDemo} className=" text-red-500" onClick={(e) => {
+										<IonBadge color="primary" hidden={!isDemo} className="relative flex space-x-1 hover:opacity-90 py-2 px-3 items-center" onClick={(e) => {
+											e.preventDefault()
 											e.stopPropagation();
 											auth.signOut()
 										}}>
-											demo
-										</sup>
+											<p>demo</p>
+											<IonIcon icon={close} />
+											<IonRippleEffect />
+										</IonBadge>
                                     </div>
                                 </IonRouterLink>
                             </div>

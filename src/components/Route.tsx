@@ -25,7 +25,7 @@ const AppRoute : React.FC<RouteProps> = (
                     <IonPage>
                         <IonContent ref={contentRef}>
                         	<div className="flex flex-col h-full">
-                        		<IonGrid className="flex-grow">
+                        		<IonGrid className="flex-grow w-full">
 		                            <IonRow>
 		                                <IonCol
 		                                    size="12"
