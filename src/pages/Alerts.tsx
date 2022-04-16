@@ -14,6 +14,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import { getMessaging, getToken } from "firebase/messaging";
 import { app } from "../firebase";
+import { AxiosError } from "axios";
 
 function StackedSearch({foo, onSubmit}: any) {
 
@@ -99,10 +100,10 @@ function StackedSearch({foo, onSubmit}: any) {
                     instance
                         .get(`${environment.backendApi}/currentUser`)
                         .then((res: any) => setAlertWalletAddress(res.data.user.walletAddress));
-                }).catch(err => {
-                console.error(err);
+                }).catch((err : AxiosError) => {
+                
                 present({
-                    message: err.msg,
+                    message: err.response?.data.body || "Something went wrong",
                     color: 'danger',
                     duration: 5000
                 });
