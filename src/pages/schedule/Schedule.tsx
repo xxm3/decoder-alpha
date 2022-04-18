@@ -111,7 +111,8 @@ const Schedule = () => {
                 present({
                     message: msg,
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
                 // if(msg.includes('logging in again')){
                 //     history.push("/login");
@@ -212,6 +213,9 @@ const Schedule = () => {
 
                 </div>
             ),
+            customSort: (a, b) => a.project.localeCompare(b.project),
+            customFilterAndSearch: (term, rowData) =>
+                rowData.project.toLowerCase().includes(term.toLowerCase()),
         },
 
     ];

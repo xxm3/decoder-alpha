@@ -70,7 +70,8 @@ function StackedSearch({foo, onSubmit}: any) {
                 present({
                     message: 'Error - please enter a single, valid SOL wallet address',
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'hide', handler: () => dismiss() }],
                 });
                 return;
             }
@@ -92,7 +93,8 @@ function StackedSearch({foo, onSubmit}: any) {
                     present({
                         message: `Successfully ${actionVerb} the alert wallet address`,
                         color: 'success',
-                        duration: 5000
+                        duration: 5000,
+                        buttons: [{ text: 'hide', handler: () => dismiss() }],
                     });
                     setDiscordDms(false);
                     setFirebaseAlerts(false);
@@ -104,7 +106,8 @@ function StackedSearch({foo, onSubmit}: any) {
                 present({
                     message: err.msg,
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'hide', handler: () => dismiss() }],
                 });
             }).finally(() => setFormLoadingAddalertWalletAddress(false));
 
