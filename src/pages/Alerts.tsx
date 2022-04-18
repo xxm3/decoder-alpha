@@ -66,7 +66,7 @@ function StackedSearch({foo, onSubmit}: any) {
         // Should remove if unsubscribing
     const modifyAlertWalletSubmit = (shouldRemove: boolean) => {
 
-            if ((!formAddalertWalletAddress || formAddalertWalletAddress.length !== 44) && !shouldRemove) {
+            if ((!formAddalertWalletAddress || (formAddalertWalletAddress.length !== 43 && formAddalertWalletAddress.length !== 44)) && !shouldRemove) {
                 present({
                     message: 'Error - please enter a single, valid SOL wallet address',
                     color: 'danger',

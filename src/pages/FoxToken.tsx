@@ -290,7 +290,7 @@ function FoxToken({contentRef}: FoxToken) {
             return;
         }
 
-        if (!formWalletMult || formWalletMult.length !== 44) {
+        if (!formWalletMult || (formWalletMult.length !== 43 && formWalletMult.length !== 44)) {
             present({
                 message: 'Error - please enter a single, valid SOL wallet address',
                 color: 'danger',

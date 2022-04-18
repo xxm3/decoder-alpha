@@ -63,7 +63,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                             <FfNamed/>
                         </div>
                         <div className='w-1/2'>
-                            {/*TODO: HNGHHH*/}
+                            {/*TODO: FIX ME CMON */}
                             {/* recent alerts */}
                             {/*<RecentAlerts/>*/}
                         </div>

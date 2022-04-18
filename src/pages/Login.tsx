@@ -162,8 +162,17 @@ function Login() {
 
                             <br/>
 
-                            {/*TODO: do below */}
+                            {/*TODO: buy the NFT here */}
+
+                            <hr/>
+                            <br/>
+
                             <p className="font-bold">Want to try a demo?</p>
+
+                            <p>Full access to SOL Decoder is only available to those holding one of our NFTs. If you still want to click around the site to
+                            see what we offer, then try out the demo below. Note that you will only see old data, and some features are disabled.</p>
+                            <br/>
+
                             <IonButton onClick={() => {
                                 auth.setPersistence(browserSessionPersistence)
                                 signInAnonymously(auth)
