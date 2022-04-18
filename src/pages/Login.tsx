@@ -7,10 +7,12 @@ import {useUser} from '../context/UserContext';
 import {environment} from '../environments/environment';
 
 import {auth} from '../firebase';
-import { getAuth, signInWithCustomToken } from "firebase/auth";
+import { browserLocalPersistence, browserSessionPersistence, signInAnonymously, signInWithCustomToken } from "firebase/auth";
 
 import "./Login.css"
 import { InAppBrowser }  from "@awesome-cordova-plugins/in-app-browser"
+import { useDispatch } from "react-redux"
+import { setDemo } from '../redux/slices/demoSlice';
 
 /**
  * The "Login" page to which all unauthenticated users are redirected to
@@ -31,6 +33,8 @@ import { InAppBrowser }  from "@awesome-cordova-plugins/in-app-browser"
  */
 
 function Login() {
+
+	const dispatch = useDispatch();
     const user = useUser();
     const { nextUrl, urlCode, discordError } = useMemo(() => {
         const params = new URLSearchParams(window.location.search);
@@ -75,6 +79,7 @@ function Login() {
                 )
                 .then(({ data }) => {
                     // console.log(data);
+					auth.setPersistence(browserLocalPersistence)
                     return signInWithCustomToken(auth, data.body);
                 })
                 .catch((e) => {
@@ -146,6 +151,10 @@ function Login() {
                                 <li>Please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a> to get a role which allows access to the site. In the future the site will be locked behind ownership of our NFT</li>
                                 <li>View whitelisting info in the <b>#whitelist-faq</b> channel within Discord</li>
                             </ul>
+							<IonButton onClick={() => {
+								auth.setPersistence(browserSessionPersistence)
+								signInAnonymously(auth)
+							}}>Try a demo of SOL Decoder</IonButton>
                         </div>
                         <br/>
 

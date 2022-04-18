@@ -160,6 +160,7 @@ function Table<RowData extends object>(
 	                    pageSize: 10, // default rows per page
 	                    emptyRowsWhenPaging: false,   // To avoid of having empty rows
 	                    pageSizeOptions: [10, 20, 50, 100],    // rows selection options
+						paging : props.data.length > 10,
 						...options,
 	                }}
 	            />

@@ -24,31 +24,38 @@ const AppRoute : React.FC<RouteProps> = (
                 return (<>
                     <IonPage>
                         <IonContent ref={contentRef}>
-                        	<IonGrid>
-	                            <IonRow>
-	                                <IonCol
-	                                    size="12"
-	                                    className="flex justify-center px-[1vw]"
-	                                >
-                                        {/*justify-center*/}
-
-	                                    	<div className="w-full">
-	                                    		{children
-			                                        ? typeof children === 'function'
-			                                            ? children(componentProps)
-			                                            : children
-			                                        : component
-			                                        ? React.createElement(
-			                                              component,
-			                                              componentProps
-			                                          )
-			                                        : render
-			                                        ? render(componentProps)
-			                                        : null}
-	                                    	</div>
-	                                </IonCol>
-	                            </IonRow>
-	                        </IonGrid>
+                        	<div className="flex flex-col h-full">
+                        		<IonGrid className="flex-grow w-full">
+		                            <IonRow>
+		                                <IonCol
+		                                    size="12"
+		                                    className="flex justify-center px-[1vw]"
+		                                >
+	                                        {/*justify-center*/}
+	
+	
+		                                    		<div className="w-full">
+			                                    		{children
+					                                        ? typeof children === 'function'
+					                                            ? children(componentProps)
+					                                            : children
+					                                        : component
+					                                        ? React.createElement(
+					                                              component,
+					                                              componentProps
+					                                          )
+					                                        : render
+					                                        ? render(componentProps)
+					                                        : null}
+			                                    	</div>
+	
+		                                </IonCol>
+		                            </IonRow>
+		                        </IonGrid>
+								<footer className="text-center py-2 text-sm text-gray-500">
+									© RST LLC
+								</footer>
+                        	</div>
                         </IonContent>
                     </IonPage>
                 </>)

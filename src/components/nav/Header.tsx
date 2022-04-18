@@ -5,11 +5,13 @@ import {
     IonToolbar,
     IonMenuButton,
 	IonButton,
+	IonBadge,
+	IonRippleEffect,
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from 'react-router';
 import {
-    arrowBack, moon, search, sunny,
+    arrowBack, close, moon, search, sunny,
 } from 'ionicons/icons';
 import { queryClient } from "../../queryClient";
 import SearchBar from "../SearchBar";
@@ -19,6 +21,10 @@ import Help from "../Help";
 import { css } from "@emotion/react";
 import "./Header.scss"
 import usePersistentState from "../../hooks/usePersistentState";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { auth } from "../../firebase";
+import { signInAnonymously } from "firebase/auth";
 
 
 const HeaderContainer = () => {
@@ -32,6 +38,7 @@ const HeaderContainer = () => {
 
     const [headerPlaceholder, setHeaderPlaceholder] = useState('');
 
+	const isDemo = useSelector<RootState>(state => state.demo.demo);
 
 	const [mode, setMode] = usePersistentState<"dark" | "light">("mode", "dark");
 
@@ -115,7 +122,7 @@ const HeaderContainer = () => {
 
                                 {/*site logo & home*/}
                                 <IonRouterLink
-                                    className="text-2xl logo"
+                                    className="text-2xl"
                                     routerLink="/"
                                     color="text"
                                 >
@@ -125,9 +132,18 @@ const HeaderContainer = () => {
                                             src="/assets/site-logos/logo-transparent.png"
                                             alt="logo"
                                         />
-                                        <p className="headerName">
+                                        <span className="headerName logo">
                                             SOL Decoder
-                                        </p>
+                                        </span>
+										<IonBadge color="primary" hidden={!isDemo} className="relative flex space-x-1 hover:opacity-90 py-2 px-3 items-center" onClick={(e) => {
+											e.preventDefault()
+											e.stopPropagation();
+											auth.signOut()
+										}}>
+											<p>demo</p>
+											<IonIcon icon={close} />
+											<IonRippleEffect />
+										</IonBadge>
                                     </div>
                                 </IonRouterLink>
                             </div>
