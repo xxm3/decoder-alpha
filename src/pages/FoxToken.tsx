@@ -92,7 +92,7 @@ const columns: Column<FoxTokenData>[] = [
     },
     {
         title: 'Name',
-        customSort: (a, b) => a.name.localeCompare(b.name),
+        customSort: (a, b) => a?.name?.localeCompare(b?.name),
         render: (record) => <span>{record.name}</span>,
 		customFilterAndSearch: (term, rowData) => rowData.name?.toLowerCase().includes(term.toLowerCase()),
     },
@@ -285,7 +285,8 @@ function FoxToken({contentRef}: FoxToken) {
             present({
                 message: 'Error - you may only track a maximum of 3 wallets',
                 color: 'danger',
-                duration: 8000
+                duration: 8000,
+                buttons: [{ text: 'hide', handler: () => dismiss() }],
             });
             return;
         }
@@ -294,7 +295,8 @@ function FoxToken({contentRef}: FoxToken) {
             present({
                 message: 'Error - please enter a single, valid SOL wallet address',
                 color: 'danger',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
             return;
         }
@@ -323,7 +325,8 @@ function FoxToken({contentRef}: FoxToken) {
             present({
                 message: 'Successfully added the wallet',
                 color: 'success',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
 
         } catch (err) {
@@ -333,7 +336,8 @@ function FoxToken({contentRef}: FoxToken) {
             present({
                 message: 'An error occurred when adding your Wallet',
                 color: 'danger',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
         }
     }
@@ -403,7 +407,8 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'We had trouble loading all tokens. Refresh to load all tokens',
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
             }
 
@@ -414,7 +419,8 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'Unable to load data. Refresh and try again.',
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
             }
         }
@@ -467,7 +473,8 @@ function FoxToken({contentRef}: FoxToken) {
             present({
                 message: 'Error when getting your Whitelist tokens from your wallet',
                 color: 'danger',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
 
             return [];
@@ -600,7 +607,8 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'Successfully added the name. Refresh to see it',
                     color: 'success',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
             }
 
@@ -631,7 +639,8 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add one (or three!) manually. Then you can filter this table to only the tokens in your wallet.',
                     color: 'danger',
-                    duration: 10000
+                    duration: 10000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
                 return;
             }
@@ -643,7 +652,8 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'No tokens found on your wallet(s) :( Tokens must be in your wallet, and have an active listing on Fox Token Market',
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
                 return;
 
@@ -680,7 +690,8 @@ function FoxToken({contentRef}: FoxToken) {
                     present({
                         message: 'None of your tokens are also listed on FF Token Market :(',
                         color: 'danger',
-                        duration: 5000
+                        duration: 5000,
+                        buttons: [{ text: 'X', handler: () => dismiss() }],
                     });
                     return;
                 }

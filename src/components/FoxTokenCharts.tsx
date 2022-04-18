@@ -187,6 +187,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                         'Error - unable to load chart data. Please refresh and try again',
                     color: 'danger',
                     duration: 8000,
+                    buttons: [{ text: 'hide', handler: () => dismiss() }],
                 });
             });
 
