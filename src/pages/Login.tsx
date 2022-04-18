@@ -149,12 +149,7 @@ function Login() {
 
                             <ul className="">
                                 <li>Please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a> to get a role which allows access to the site. In the future the site will be locked behind ownership of our NFT</li>
-                                <li>View whitelisting info in the <b>#whitelist-faq</b> channel within Discord</li>
                             </ul>
-							<IonButton onClick={() => {
-								auth.setPersistence(browserSessionPersistence)
-								signInAnonymously(auth)
-							}}>Try a demo of SOL Decoder</IonButton>
                         </div>
                         <br/>
 
@@ -164,6 +159,15 @@ function Login() {
                                 <li>Follow us <a href="https://twitter.com/SOL_Decoder" target="_blank" className="underline">on Twitter</a></li>
                                 <li>Read our <a href="https://docs.soldecoder.app" target="_blank" className="underline">docs here</a> </li>
                             </ul>
+
+                            <br/>
+
+                            {/*TODO: do below */}
+                            <p className="font-bold">Want to try a demo?</p>
+                            <IonButton onClick={() => {
+                                auth.setPersistence(browserSessionPersistence)
+                                signInAnonymously(auth)
+                            }}>Try the demo</IonButton>
 
                             {/*<p className="font-bold">A note on Discord integration</p>*/}
                             {/*<ul>*/}

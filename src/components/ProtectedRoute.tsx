@@ -8,7 +8,7 @@ import AppRoute from "./Route";
 const ProtectedRoute = (props: Parameters<typeof AppRoute>[0]) => {
 	const user = useUser();
 	return user
-        || isDev
+        // || isDev
     ? (
 		<AppRoute {...props} />
 	) : (
