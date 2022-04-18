@@ -10,7 +10,7 @@ import {useState} from 'react';
 
 const Whitelist = () => {
 
-    const [present] = useIonToast();
+    const [present,dismiss] = useIonToast();
 
     const [didAllSteps, setDidAllSteps] = useState(false);
 
@@ -43,7 +43,8 @@ const Whitelist = () => {
             present({
                 message: msg,
                 color: 'danger',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
         }
     }
