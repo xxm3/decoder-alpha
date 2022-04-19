@@ -228,6 +228,8 @@ interface FoxToken {
 
 function FoxToken({contentRef}: FoxToken) {
 
+	const isDemo = useSelector<RootState, boolean>((state : RootState) => state.demo.demo);
+
     const [present, dismiss] = useIonToast();
     const history = useHistory();
 
@@ -1005,13 +1007,14 @@ function FoxToken({contentRef}: FoxToken) {
                             url="https://famousfoxes.com/tokenmarket"
                             actions={[
                                 {
-                                    icon: () => <IonIcon icon={wallet} className="text-red-600 text-4xl" />,
+                                    icon: () => <IonIcon icon={wallet} className={!isDemo ? "text-red-600 text-4xl" : ""} />,
                                     tooltip: viewMyTokensClicked
                                         ? 'View All Tokens'
                                         : 'View My Tokens',
                                     onClick: () =>
                                         viewMyTokens(!viewMyTokensClicked),
                                     isFreeAction: true,
+									disabled: isDemo
                                 },
                                 {
                                     icon: () => <IonIcon icon={notifications} className="" />,
@@ -1024,6 +1027,7 @@ function FoxToken({contentRef}: FoxToken) {
                                     tooltip: 'Track Multiple wallets',
                                     onClick: () => clickedMultWall(true),
                                     isFreeAction: true,
+									disabled: isDemo
                                 },
 								{
 									icon: () => <IonIcon icon={add}/>,
