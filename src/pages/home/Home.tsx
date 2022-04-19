@@ -50,12 +50,17 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
         <>
             {isMobile ?
                 <>
-                    <Whitelist/>
+                    {/*FOR MOBILE*/}
+                    {/*<Whitelist/>*/}
+
                     <FfNamed/>
-                    <RecentAlerts/>
+
+                    {/*TODO: FIX ME CMON */}
+                    {/*<RecentAlerts/>*/}
                 </> : <>
 
-                    <Whitelist />
+                    {/*FOR DESKTOP*/}
+                    {/*<Whitelist />*/}
 
                     <div className='flex flex-row w-full'>
                         <div className='w-1/2 '>
