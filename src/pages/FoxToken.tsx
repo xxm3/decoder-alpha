@@ -249,7 +249,7 @@ function FoxToken({contentRef}: FoxToken) {
     const [viewAbuse, setViewAbuse] = useState(false);
     const [isMobile,setIsMobile] = useState(false)
 
-
+    const [mode] = usePersistentState("mode", "dark");
     const cookies = useMemo(() => new Cookies(), []);
 
 	const {
@@ -1047,6 +1047,11 @@ function FoxToken({contentRef}: FoxToken) {
                             options={{
                                 detailPanelType: "single",
                                 search: true,
+                                rowStyle:( rowData:any) =>  ({
+                                    backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
+                                    color: mode === 'dark' ? "" : '#4B5563',
+                                    borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
+                                }),
                             }}
                               // BUG-92-commented-out-4
 								// {
