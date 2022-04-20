@@ -1036,6 +1036,7 @@ function FoxToken({contentRef}: FoxToken) {
                             options={{
                                 detailPanelType: "single",
                                 search: true,
+								columnsButton: true
                             }}
                               // BUG-92-commented-out-4
 								// {
