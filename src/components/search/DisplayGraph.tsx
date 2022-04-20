@@ -74,7 +74,7 @@ const DisplayGraph:React.FC<{
 
             {/*search header*/}
             {totalCount && (
-                <> 
+                <>
                     <p className={`font-bold ${completelyHideChart ? "col-span-12" : window.innerWidth <= 360 ? "col-span-12 text-center" : "col-span-6"} sm:text-center`}>
                         Searched on "{decodeURIComponent(word)}" ({totalCount} results last 10 days)
                     </p>
@@ -83,14 +83,14 @@ const DisplayGraph:React.FC<{
                         <p>Toggle Chart</p>
                         <IonToggle
 							css={css`
-								
+
 								--background-checked : var(--ion-color-step-250);
 								--handle-background-checked: var(--ion-color-primary-tint);
 							`}
                             checked={showChart}
                             onClick={() => setShowChart(!showChart)}
                         />
-                
+
                     </div>
                 </>
             )}
@@ -154,7 +154,7 @@ const DisplayGraph:React.FC<{
                                 },
                                 title: {
                                     display: true,
-                                    text: '# of messages per Discord',
+                                    text: '# of messages per Discord (last 10 days)',
                                     color: mode === 'dark' ? 'white' : 'black'
                                 },
                             },

@@ -89,7 +89,7 @@ const FfNamed = () => {
                 <>
                     <div className='secondary-bg-forced m-1 p-4 rounded-xl'>
                         <div className={`font-bold pb-1`}>
-                            New Fox WL Token Market Names
+                            New Fox Token Market Names
                             <Tooltip
                                     trigger="mouseenter" position="bottom"
                                      html={<IonItem lines="none" className='max-w-[320px] rounded help-tooltip whitespace-pre-line'>

@@ -44,7 +44,7 @@ function WalletButton() {
         dispatch(setWallet(null));
 
         present({
-            message: 'Wallet disconnected. Refresh the page if connecting a new wallet, to get "Fox WL Token Market - View My Tokens" to show properly',
+            message: 'Wallet disconnected. Refresh the page if connecting a new wallet, to get "Fox Token Market - View My Tokens" to show properly',
             color: 'success',
             duration: 10000,
             buttons: [{ text: 'hide', handler: () => dismiss() }],
