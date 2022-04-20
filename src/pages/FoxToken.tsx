@@ -92,14 +92,14 @@ const columns: Column<FoxTokenData>[] = [
     },
     {
         title: 'Name',
-        customSort: (a, b) => a.name.localeCompare(b.name),
+        customSort: (a, b) => a?.name?.localeCompare(b?.name),
         render: (record) => <span>{record.name}</span>,
 		customFilterAndSearch: (term, rowData) => rowData.name?.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Price',
         customSort: (a, b) => a.floorPrice - b.floorPrice,
-        render: (record) => <span>{record.floorPrice}</span>,
+        render: (record) => <span>{record.floorPrice} ◎</span>,
     },
     {
         title: 'Listings',
@@ -166,7 +166,7 @@ const columns_mobile: Column<FoxTokenData>[] = [
                     <IonIcon icon={logoTwitter} className="big-emoji " />
                     <IonRippleEffect />
                 </a> : null }
-                
+
                 {/*discord*/}
                 { record.discord ? <> <a
                     href={'https://discord.gg/' + record.discord}
@@ -209,7 +209,7 @@ const columns_mobile: Column<FoxTokenData>[] = [
                 <br className="xl:hidden lg:hidden" />
                 {record?.row_obj?.token && <><span> <b>Token : </b>{shortenedWallet(record.row_obj.token)}</span></>}
                 {record?.row_obj?.name && <><br/><span ><b>Name : </b>{record.row_obj.name}</span></>}
-                {record?.row_obj?.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice}</span></>}
+                {record?.row_obj?.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice} ◎</span></>}
                 {record?.row_obj?.totalTokenListings && <><br/><span><b>Listing : </b>{record.row_obj.totalTokenListings}</span></>}
                 {record?.row_obj?.whichMyWallets &&<><br/><span><b>Owned : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[0] : ''}</span></>}
                 {record?.row_obj?.whichMyWallets && <><br/><span><b>Wallet : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[1] : ''}</span></>}
@@ -285,16 +285,18 @@ function FoxToken({contentRef}: FoxToken) {
             present({
                 message: 'Error - you may only track a maximum of 3 wallets',
                 color: 'danger',
-                duration: 8000
+                duration: 8000,
+                buttons: [{ text: 'hide', handler: () => dismiss() }],
             });
             return;
         }
 
-        if (!formWalletMult || formWalletMult.length !== 44) {
+        if (!formWalletMult || (formWalletMult.length !== 43 && formWalletMult.length !== 44)) {
             present({
                 message: 'Error - please enter a single, valid SOL wallet address',
                 color: 'danger',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
             return;
         }
@@ -323,7 +325,8 @@ function FoxToken({contentRef}: FoxToken) {
             present({
                 message: 'Successfully added the wallet',
                 color: 'success',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
 
         } catch (err) {
@@ -333,7 +336,8 @@ function FoxToken({contentRef}: FoxToken) {
             present({
                 message: 'An error occurred when adding your Wallet',
                 color: 'danger',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
         }
     }
@@ -403,7 +407,8 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'We had trouble loading all tokens. Refresh to load all tokens',
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
             }
 
@@ -414,7 +419,8 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'Unable to load data. Refresh and try again.',
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
             }
         }
@@ -467,7 +473,8 @@ function FoxToken({contentRef}: FoxToken) {
             present({
                 message: 'Error when getting your Whitelist tokens from your wallet',
                 color: 'danger',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
 
             return [];
@@ -600,7 +607,8 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'Successfully added the name. Refresh to see it',
                     color: 'success',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
             }
 
@@ -631,7 +639,8 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add one (or three!) manually. Then you can filter this table to only the tokens in your wallet.',
                     color: 'danger',
-                    duration: 10000
+                    duration: 10000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
                 return;
             }
@@ -643,7 +652,8 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'No tokens found on your wallet(s) :( Tokens must be in your wallet, and have an active listing on Fox Token Market',
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
                 return;
 
@@ -680,7 +690,8 @@ function FoxToken({contentRef}: FoxToken) {
                     present({
                         message: 'None of your tokens are also listed on FF Token Market :(',
                         color: 'danger',
-                        duration: 5000
+                        duration: 5000,
+                        buttons: [{ text: 'X', handler: () => dismiss() }],
                     });
                     return;
                 }
@@ -728,7 +739,7 @@ function FoxToken({contentRef}: FoxToken) {
                 <p className="text-lg text-red-700 font-medium">
                     <ul>
                         <li>- Click the red button <IonIcon icon={wallet} className="text-red-600 text-2xl" /> on the top right of the table to check off this step</li>
-                        <li>- Note you did NOT have to connect your wallet, click the third button <IonIcon icon={albums} className="text-2xl text-gray-500" /> to manually add a wallet</li>
+                        <li>- Note you do NOT have to connect your wallet, click the third button <IonIcon icon={albums} className="text-2xl text-gray-500" /> to manually add a wallet</li>
                     </ul>
                 </p>
                 <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
@@ -991,7 +1002,7 @@ function FoxToken({contentRef}: FoxToken) {
                         {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                         {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                         {/*</IonItem>*/}
-                         <Table 
+                         <Table
                             // id="fox-table-id"
                             data={tableData}
                             columns={ isMobile ? columns_mobile :columns }
@@ -1031,7 +1042,7 @@ function FoxToken({contentRef}: FoxToken) {
                                     onClick: () => clickedAddName(true),
                                     isFreeAction: true,
 								},
-                                
+
                             ]}
                             options={{
                                 detailPanelType: "single",

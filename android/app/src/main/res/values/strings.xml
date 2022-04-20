@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">SolDecoder</string>
-    <string name="title_activity_main">SolDecoder</string>
+    <string name="app_name">SOL Decoder</string>
+    <string name="title_activity_main">SOL Decoder</string>
     <string name="package_name">com.soldecoder.app</string>
     <string name="custom_url_scheme">com.soldecoder.app</string>
 </resources>

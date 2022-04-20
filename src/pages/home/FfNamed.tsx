@@ -43,7 +43,8 @@ const FfNamed = () => {
             present({
                 message: msg,
                 color: 'danger',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
 
             // if(msg.includes('logging in again')){

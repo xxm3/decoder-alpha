@@ -86,7 +86,7 @@ function Login() {
                     console.log(e);
                     if (e.response?.status === 403)
                         setError("You need a proper role in Discord before accessing the site");
-                    else setError('Something went wrong. Please try again');
+                    else setError('Something went wrong. Please try again, and try using a VPN (ie. people in Russia currently banned)');
                 })
                 .finally(() => {
                     setLoading(false);
@@ -148,13 +148,12 @@ function Login() {
                             <p className="font-bold">Welcome to SOL Decoder</p>
 
                             <ul className="">
-                                <li>Please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a> to get a role which allows access to the site. In the future the site will be locked behind ownership of our NFT</li>
-                                <li>View whitelisting info in the <b>#whitelist-faq</b> channel within Discord</li>
+                                <li>
+                                    Use of the site / apps is locked to holders of one of our NFTs, <a href="https://magiceden.io/marketplace/soldecoder" className="underline" target="_blank">which you can purchase here</a>. After purchasing one,
+                                    please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a>
+                                    and verify with Matrica to get a role which allows access to the site.
+                                </li>
                             </ul>
-							<IonButton onClick={() => {
-								auth.setPersistence(browserSessionPersistence)
-								signInAnonymously(auth)
-							}}>Try a demo of SOL Decoder</IonButton>
                         </div>
                         <br/>
 
@@ -164,6 +163,24 @@ function Login() {
                                 <li>Follow us <a href="https://twitter.com/SOL_Decoder" target="_blank" className="underline">on Twitter</a></li>
                                 <li>Read our <a href="https://docs.soldecoder.app" target="_blank" className="underline">docs here</a> </li>
                             </ul>
+
+                            <br/>
+
+                            {/*TODO: buy the NFT here */}
+
+                            <hr/>
+                            <br/>
+
+                            <p className="font-bold">Want to try a demo?</p>
+
+                            <p>Full access to SOL Decoder is only available to those holding one of our NFTs. If you still want to click around the site to
+                            see what we offer, then try out the demo below. Note that you will only see old data, and some features are disabled.</p>
+                            <br/>
+
+                            <IonButton onClick={() => {
+                                auth.setPersistence(browserSessionPersistence)
+                                signInAnonymously(auth)
+                            }}>Try the demo</IonButton>
 
                             {/*<p className="font-bold">A note on Discord integration</p>*/}
                             {/*<ul>*/}

@@ -111,7 +111,8 @@ const Schedule = () => {
                 present({
                     message: msg,
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
                 // if(msg.includes('logging in again')){
                 //     history.push("/login");
@@ -202,16 +203,19 @@ const Schedule = () => {
                     <span className="" onClick={() => handleProjectClick(record)}>
                     {record?.project && <span><b>Name : </b>{record.project}</span> }
                     {record?.mintExpiresAt && <span><br/><b>Time (UTC) :</b>{record.mintExpiresAt}</span>}
-                    {record?.price && <><br/><b>Price : </b><span dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice})` : record.price.replace(/public/gi, "<br>public").replace('SOL', '')}}/></>}
+                    {record?.price && <><br/><b>Price : </b><span dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}/></>}
                     {record?.count &&  <span><br/><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span> }
                     {record?.numbersOfDiscordMembers && <span><br/><b>Discord (all) : </b>{record.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                     {record?.DiscordOnlineMembers && <span><br/><b>Discord (online) : </b>{record.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                     {record?.numbersOfTwitterFollowers && <span><br/><b>Twitter : </b>{record.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                    {record?.tweetInteraction?.total && <span><br/><b>Twitter Interactions : </b>{record.tweetInteraction.total}</span>}
+                    {record?.tweetInteraction?.total && <span><br/><b>Twitter Interaction : </b>{record.tweetInteraction.total}</span>}
                     </span>
 
                 </div>
             ),
+            customSort: (a, b) => a.project.localeCompare(b.project),
+            customFilterAndSearch: (term, rowData) =>
+                rowData.project.toLowerCase().includes(term.toLowerCase()),
         },
 
     ];
@@ -303,11 +307,11 @@ const Schedule = () => {
             title: 'Price',
             customSort: (a, b) =>
                 +a.price.split(' ')[0] - +b.price.split(' ')[0],
-            render: (record) =>  <span dangerouslySetInnerHTML=
-                                           {{
-                                               __html: record.wlPrice ? `
-                                               ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice})` : record.price.replace(/public/gi, "<br>public").replace('SOL', '')
-                                           }}></span>,
+                render: (record) =>  <><span dangerouslySetInnerHTML=
+                {{
+                    __html: record.wlPrice ? `
+                    ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
+                }}></span></>,
             // width: "80px"
         },
         {

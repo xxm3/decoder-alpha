@@ -24,6 +24,7 @@ import MessageThread from "./MessageThread";
 import {useParams} from "react-router";
 import Loader from "../Loader";
 import { css } from "@emotion/react";
+import usePersistentState from "../../hooks/usePersistentState";
 
 ChartJS.register(...registerables);
 ChartJS.register(
@@ -54,8 +55,8 @@ const DisplayGraph:React.FC<{
     const cookies = useMemo(() => new Cookies(), []);
     const [showChart, setShowChart] = useState(String(cookies.get('showChart')) === 'false' ? false : true);
     const {id: word} = useParams<{ id: string; }>();
-
     const completelyHideChart = false; // useMemo(() => word.indexOf(" ") !== -1 ? true : false, [word]);
+    const [mode] = usePersistentState("mode", "dark");
 
     /**
      * Use Effects
@@ -118,12 +119,21 @@ const DisplayGraph:React.FC<{
                                 title: {
                                     display: true,
                                     text: '# of messages per day (from several Discords)',
+                                    color: mode === 'dark' ? 'white' : 'black'
                                 },
                             },
                             scales: {
                                 y: {
                                     suggestedMin: 0,
-                                }
+                                    ticks: {
+                                        color: mode === 'dark' ? 'white' : 'black'
+                                    },
+                                },
+                                x: {
+                                    ticks: {
+                                        color: mode === 'dark' ? 'white' : 'black'
+                                    },
+                                },
                             },
                             responsive: true,
                             maintainAspectRatio: true,
@@ -145,6 +155,19 @@ const DisplayGraph:React.FC<{
                                 title: {
                                     display: true,
                                     text: '# of messages per Discord',
+                                    color: mode === 'dark' ? 'white' : 'black'
+                                },
+                            },
+                            scales: {
+                                y: {
+                                    ticks: {
+                                        color: mode === 'dark' ? 'white' : 'black'
+                                    },
+                                },
+                                x: {
+                                    ticks: {
+                                        color: mode === 'dark' ? 'white' : 'black'
+                                    },
                                 },
                             },
                             responsive: true,
