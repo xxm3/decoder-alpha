@@ -323,7 +323,7 @@ const Schedule = () => {
                     __html: record.wlPrice ? `
                     ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
                 }}></span></>,
-            // width: "80px"
+            width: "100px",
         },
         {
             title: 'Supply',

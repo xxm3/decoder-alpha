@@ -992,11 +992,12 @@ function FoxToken({contentRef}: FoxToken) {
                     </div>
                 ) : (
                     <div css={css`
-						@media (max-width: 576px){
+                    /* show search in mobile */
+						/* @media (max-width: 576px){
 							.MuiToolbar-root > .MuiTextField-root {
 								display : none;
 							}
-						}
+						} */
 					`}>
                         {/*<IonItem style={{"width": "250px"}}>*/}
                         {/*    <IonLabel>Show Verified Only</IonLabel>*/}
@@ -1016,7 +1017,7 @@ function FoxToken({contentRef}: FoxToken) {
                             url="https://famousfoxes.com/tokenmarket"
                             actions={[
                                 {
-                                    icon: () => <IonIcon icon={wallet} className="text-red-600 text-4xl" />,
+                                    icon: () => <IonIcon icon={wallet} className="text-red-600 text-3xl" />,
                                     tooltip: viewMyTokensClicked
                                         ? 'View All Tokens'
                                         : 'View My Tokens',
@@ -1044,9 +1045,14 @@ function FoxToken({contentRef}: FoxToken) {
 								},
 
                             ]}
+                            
                             options={{
                                 detailPanelType: "single",
                                 search: true,
+                                searchFieldStyle:{
+                                    marginLeft:-30,
+                                    width:150
+                                },
                                 rowStyle:( rowData:any) =>  ({
                                     backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
                                     color: mode === 'dark' ? "" : '#4B5563',
