@@ -148,7 +148,11 @@ function Login() {
                             <p className="font-bold">Welcome to SOL Decoder</p>
 
                             <ul className="">
-                                <li>Please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a> to get a role which allows access to the site. In the future the site will be locked behind ownership of our NFT</li>
+                                <li>
+                                    Use of the site / apps is locked to holders of one of our NFTs, <a href="https://magiceden.io/marketplace/soldecoder" className="underline" target="_blank">which you can purchase here</a>. After purchasing one,
+                                    please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a>
+                                    and verify with Matrica to get a role which allows access to the site.
+                                </li>
                             </ul>
                         </div>
                         <br/>
