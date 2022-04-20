@@ -12,8 +12,8 @@ import {environment} from "../environments/environment";
 import {Link, useLocation} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
-// import { getMessaging, getToken } from "firebase/messaging";
-// import { app } from "../firebase";
+import { getMessaging, getToken } from "firebase/messaging";
+import { app } from "../firebase";
 
 function StackedSearch({foo, onSubmit}: any) {
 
@@ -128,21 +128,21 @@ function StackedSearch({foo, onSubmit}: any) {
 
         }
 
-    // const getFcmToken = () =>  {
-    //     if (!firebaseAlerts) return;
-    //     getToken(getMessaging(app), {
-    //         vapidKey: "BN0qlY8sox-k4Pxrw26P5rv0vyX-04zNHf0z_jWBQikTnw14b4b4Vd_37-jpNozwvDgajgyQuwnbb0jC1HMAamM"
-    //     })
-    //         .then((currentToken) => {
-    //             if (currentToken) {
-    //                 instance.post(`${environment.backendApi}/setUserFcmToken`, {currentToken});
-    //             } else {
-    //                 console.error('No registration token available. Request permission to generate one.');
-    //             }
-    //         }).catch((err) => {
-    //             console.error('An error occurred while retrieving token. ', err);
-    //         });
-    // }
+    const getFcmToken = () =>  {
+        if (!firebaseAlerts) return;
+        getToken(getMessaging(app), {
+            vapidKey: "BN0qlY8sox-k4Pxrw26P5rv0vyX-04zNHf0z_jWBQikTnw14b4b4Vd_37-jpNozwvDgajgyQuwnbb0jC1HMAamM"
+        })
+            .then((currentToken) => {
+                if (currentToken) {
+                    instance.post(`${environment.backendApi}/setUserFcmToken`, {currentToken});
+                } else {
+                    console.error('No registration token available. Request permission to generate one.');
+                }
+            }).catch((err) => {
+                console.error('An error occurred while retrieving token. ', err);
+            });
+    }
 
     /**
      * Renders
@@ -206,7 +206,7 @@ function StackedSearch({foo, onSubmit}: any) {
                         color="primary"
                         className="mt-5"
                         hidden={formLoadingAddalertWalletAddress || !!alertWalletAddress}
-                        onClick={() => { modifyAlertWalletSubmit(false); }}
+                        onClick={() => { modifyAlertWalletSubmit(false); getFcmToken();}}
                         disabled={(!discordDMs && !firebaseAlerts) || !formAddalertWalletAddress}
                     >
                         Submit

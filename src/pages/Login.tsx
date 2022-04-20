@@ -7,7 +7,7 @@ import {useUser} from '../context/UserContext';
 import {environment} from '../environments/environment';
 
 import {auth} from '../firebase';
-// import { browserLocalPersistence, browserSessionPersistence, signInAnonymously, signInWithCustomToken } from "firebase/auth";
+import { browserLocalPersistence, browserSessionPersistence, signInAnonymously, signInWithCustomToken } from "firebase/auth";
 
 import "./Login.css"
 import { InAppBrowser }  from "@awesome-cordova-plugins/in-app-browser"
@@ -79,14 +79,14 @@ function Login() {
                 )
                 .then(({ data }) => {
                     // console.log(data);
-					// auth.setPersistence(browserLocalPersistence)
-                    return auth.signInWithCustomToken(data.body);
+					auth.setPersistence(browserLocalPersistence)
+                    return signInWithCustomToken(auth, data.body);
                 })
                 .catch((e) => {
                     console.log(e);
                     if (e.response?.status === 403)
                         setError("You need a proper role in Discord before accessing the site");
-                    else setError('Something went wrong. Please try again');
+                    else setError('Something went wrong. Please try again, and try using a VPN (ie. people in Russia currently banned)');
                 })
                 .finally(() => {
                     setLoading(false);
@@ -148,7 +148,11 @@ function Login() {
                             <p className="font-bold">Welcome to SOL Decoder</p>
 
                             <ul className="">
-                                <li>Please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a> to get a role which allows access to the site. In the future the site will be locked behind ownership of our NFT</li>
+                                <li>
+                                    Use of the site / apps is locked to holders of one of our NFTs, <a href="https://magiceden.io/marketplace/soldecoder" className="underline" target="_blank">which you can purchase here</a>. After purchasing one,
+                                    please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a>
+                                    and verify with Matrica to get a role which allows access to the site.
+                                </li>
                             </ul>
                         </div>
                         <br/>
@@ -173,10 +177,10 @@ function Login() {
                             see what we offer, then try out the demo below. Note that you will only see old data, and some features are disabled.</p>
                             <br/>
 
-                            {/* <IonButton onClick={() => {
+                            <IonButton onClick={() => {
                                 auth.setPersistence(browserSessionPersistence)
                                 signInAnonymously(auth)
-                            }}>Try the demo</IonButton> */}
+                            }}>Try the demo</IonButton>
 
                             {/*<p className="font-bold">A note on Discord integration</p>*/}
                             {/*<ul>*/}
