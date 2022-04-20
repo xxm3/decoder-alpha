@@ -86,7 +86,7 @@ function Login() {
                     console.log(e);
                     if (e.response?.status === 403)
                         setError("You need a proper role in Discord before accessing the site");
-                    else setError('Something went wrong. Please try again');
+                    else setError('Something went wrong. Please try again, and try using a VPN (ie. people in Russia currently banned)');
                 })
                 .finally(() => {
                     setLoading(false);
