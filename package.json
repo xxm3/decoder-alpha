@@ -66,6 +66,7 @@
     "chartjs-plugin-crosshair": "^1.2.0",
     "cordova-plugin-cleartext": "^1.0.0",
     "cordova-plugin-inappbrowser": "^5.0.0",
+    "cordova-plugin-ionic": "5.5.2",
     "css-loader": "^6.5.1",
     "css-minimizer-webpack-plugin": "^3.2.0",
     "dotenv": "^10.0.0",
