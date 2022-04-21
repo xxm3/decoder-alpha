@@ -136,6 +136,7 @@ const HeaderContainer = () => {
                                             SOL Decoder
                                         </span>
 
+
                                         {isDemo ?<IonBadge color="primary" hidden={!isDemo} className="relative hidden sm:flex space-x-1 hover:opacity-90 py-2 px-3 items-center" onClick={(e) => {
 											e.preventDefault()
 											e.stopPropagation();
