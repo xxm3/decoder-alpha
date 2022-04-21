@@ -107,11 +107,11 @@ const columns: Column<FoxTokenData>[] = [
         render: (record) => <span>{record.totalTokenListings}</span>,
     },
     // REMOVING-FF-FOR-NOW
-    // {
-    //     title: 'Last Sale',
-    //     customSort: (a, b) => new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
-    //     render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : null}</span>,
-    // },
+    {
+        title: 'Last Sale',
+        customSort: (a, b) => new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
+        render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : null}</span>,
+    },
     {
         title: '# Owned',
         render: (record) => <span>{record.whichMyWallets ? record.whichMyWallets.split('-')[0] : '' }</span>,
@@ -210,7 +210,8 @@ const columns_mobile: Column<FoxTokenData>[] = [
                 {record?.row_obj?.token && <><span> <b>Token : </b>{shortenedWallet(record.row_obj.token)}</span></>}
                 {record?.row_obj?.name && <><br/><span ><b>Name : </b>{record.row_obj.name}</span></>}
                 {record?.row_obj?.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice} ◎</span></>}
-                {record?.row_obj?.totalTokenListings && <><br/><span><b>Listing : </b>{record.row_obj.totalTokenListings}</span></>}
+                {record?.row_obj?.totalTokenListings && <><br/><span><b>Listings : </b>{record.row_obj.totalTokenListings}</span></>}
+                {record?.row_obj?.lastSaleDate && <><br/><span><b>Last Sale Date : </b>{moment(record.row_obj.lastSaleDate).fromNow()}</span></>}
                 {record?.row_obj?.whichMyWallets &&<><br/><span><b>Owned : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[0] : ''}</span></>}
                 {record?.row_obj?.whichMyWallets && <><br/><span><b>Wallet : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[1] : ''}</span></>}
             </span>
@@ -701,22 +702,22 @@ function FoxToken({contentRef}: FoxToken) {
 
                 // REMOVING-FF-FOR-NOW
                 // but then we need to go out and get their latest sales data... takes about 1.5 sec per token
-                // instance
-                //     .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
-                //     .then((res) => {
-                //         const sales = res?.data?.data.salesData;
-                //         if(sales){
-                //             sales.forEach((sale: {token: string, lastSaleDate: string}) => {
-                //                 const row = newTableData.find((d: any) => d.token === sale.token);
-                //                 row.lastSaleDate = sale.lastSaleDate;
-                //             });
-                //
-                //             // once we get the data, then we can set it yet again...
-                //             setTableData(newTableData);
-                //         }
-                //     }).finally(() => {
-                //
-                //     });
+                instance
+                    .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
+                    .then((res) => {
+                        const sales = res?.data?.data.salesData;
+                        if(sales){
+                            sales.forEach((sale: {token: string, lastSaleDate: string}) => {
+                                const row = newTableData.find((d: any) => d.token === sale.token);
+                                row.lastSaleDate = sale.lastSaleDate;
+                            });
+
+                            // once we get the data, then we can set it yet again...
+                            setTableData(newTableData);
+                        }
+                    }).finally(() => {
+
+                    });
 
             }
 
@@ -869,7 +870,7 @@ function FoxToken({contentRef}: FoxToken) {
                         className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                         <div className="font-medium">
                             <p>
-                                Use this if a token on the Fox WL Token Market doesn't have an
+                                Use this if a token on the Fox Token Market doesn't have an
                                 official name yet, and you know for certain
                                 what the name of the token is
                             </p>
@@ -964,7 +965,7 @@ function FoxToken({contentRef}: FoxToken) {
                         <br/>
 
                         - Know what the name of a token is? Click <IonIcon icon={add} className="text-2xl" /> and share the knowledge
-                        {/*Use this if a token on the Fox WL Token Market doesn't have an official name yet, and you know for certain what the name of the token is*/}
+                        {/*Use this if a token on the Fox Token Market doesn't have an official name yet, and you know for certain what the name of the token is*/}
                         <br/>
 
                         <div className="pt-1">- Click 📈 to show a Price / Listing chart for that token</div>
@@ -1007,13 +1008,15 @@ function FoxToken({contentRef}: FoxToken) {
                             // id="fox-table-id"
                             data={tableData}
                             columns={ isMobile ? columns_mobile :columns }
-                            title="Fox WL Token Market"
+                            title="Fox Token Market"
                             description="
                             👪 are community added names.
                             'Not Listed' means it is not listed for sale anymore, and shown for historical purposes.
+                            The Last Sale column is only updated when viewing the chart or your own tokens (which updates it for others as well).
                             "
                             // REMOVING-FF-FOR-NOW
-                            // The Last Sale column is only updated when viewing the chart or your own tokens (which updates it for others as well).
+                            // ^^
+
                             url="https://famousfoxes.com/tokenmarket"
                             actions={[
                                 {
