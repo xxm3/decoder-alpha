@@ -23,7 +23,7 @@ import "./Header.scss"
 import usePersistentState from "../../hooks/usePersistentState";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-// import { auth } from "../../firebase";
+import { auth } from "../../firebase";
 // import { signInAnonymously } from "firebase/auth";
 
 
@@ -135,10 +135,11 @@ const HeaderContainer = () => {
                                         <span className="headerName logo">
                                             SOL Decoder
                                         </span>
-                                        {isDemo ? <IonBadge color="primary"  className="relative flex space-x-1 hover:opacity-90 py-2 px-3 items-center" onClick={(e) => {
+
+                                        {isDemo ?<IonBadge color="primary" hidden={!isDemo} className="relative hidden sm:flex space-x-1 hover:opacity-90 py-2 px-3 items-center" onClick={(e) => {
 											e.preventDefault()
 											e.stopPropagation();
-											// auth.signOut()
+											auth.signOut()
 										}}>
 											<p>demo</p>
 											<IonIcon icon={close} />
