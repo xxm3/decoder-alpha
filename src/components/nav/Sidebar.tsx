@@ -57,7 +57,7 @@ function Sidebar() {
                     to="/schedule"
                 />
                 <NavLink
-                    title="Fox WL Token Market"
+                    title="Fox Token Market"
                     icon="/assets/icons/FoxTokenLogo.svg"
                     to="/foxtoken"
                     isIconSvg={true}

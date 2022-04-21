@@ -86,7 +86,7 @@ function Login() {
                     console.log(e);
                     if (e.response?.status === 403)
                         setError("You need a proper role in Discord before accessing the site");
-                    else setError('Something went wrong. Please try again, and try using a VPN (ie. people in Russia currently banned)');
+                    else setError('Something went wrong. Please try again, and try using a VPN program, not a VPN in your browser (ie. people in Russia currently banned by Google)');
                 })
                 .finally(() => {
                     setLoading(false);
@@ -149,8 +149,10 @@ function Login() {
 
                             <ul className="">
                                 <li>
-                                    Use of the site / apps is locked to holders of one of our NFTs, <a href="https://magiceden.io/marketplace/soldecoder" className="underline" target="_blank">which you can purchase here</a>. After purchasing one,
-                                    please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a>
+                                    Use of the site / apps is locked to holders of one of our NFTs, <a href="https://magiceden.io/marketplace/soldecoder" className="underline" target="_blank">which you can purchase here</a>.
+                                    <br/>
+                                    After purchasing one,
+                                    please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a> &nbsp;
                                     and verify with Matrica to get a role which allows access to the site.
                                 </li>
                             </ul>
