@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": " node scripts/start.js",
-    "build": "ionic build",
+    "build": "node scripts/build.js",
     "ionic:build": "npm run build",
     "ionic:serve": "npm run start",
     "test": "node scripts/test.js",
