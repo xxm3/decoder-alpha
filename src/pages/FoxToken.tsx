@@ -292,7 +292,7 @@ function FoxToken({contentRef}: FoxToken) {
                 buttons: [{ text: 'X', handler: () => dismiss() }],
             });
 		}
-		
+
 	})
     // clicked link to add multiple wallets
     const clickedMultWall = (val: boolean) => {
@@ -325,7 +325,7 @@ function FoxToken({contentRef}: FoxToken) {
 
 			throw new Error(msg);
 		}
-		
+
 	}, {
 		onError : (error : Error) => {
 			present({
@@ -396,7 +396,7 @@ function FoxToken({contentRef}: FoxToken) {
 
 			throw new Error(msg);
 		}
-		
+
 	}, {
 		onError : (error : Error) => {
 			present({
@@ -427,7 +427,7 @@ function FoxToken({contentRef}: FoxToken) {
             buttons: [
                 'Cancel',
                 {
-                    text: 'Ok', 
+                    text: 'Ok',
 					handler: () => {
                         resetMultWallet.mutate();
 					}
@@ -618,7 +618,7 @@ function FoxToken({contentRef}: FoxToken) {
 				fetchTableData();
 			}
 		}
-       
+
 
 
     }, [multWallet, multWalletLoading]);
@@ -781,7 +781,7 @@ function FoxToken({contentRef}: FoxToken) {
                             // once we get the data, then we can set it yet again...
                             setTableData(newTableData);
                         }
-                    }).finally(() => {
+                    // }).finally(() => {
 
                     });
 
@@ -861,8 +861,7 @@ function FoxToken({contentRef}: FoxToken) {
                                 Used with "View My Tokens" (where you can filter
                                 the table to show only tokens in your wallet).
                                 Use this to filter the table to tokens that are
-                                on multiple wallets. Data is saved per browser,
-                                within your cookies.
+                                on multiple wallets. Data is saved cross-platform.
                             </p>
                         </div>
                     </div>
@@ -1137,7 +1136,7 @@ function FoxToken({contentRef}: FoxToken) {
                                     isFreeAction: true,
                                 },
                             ]}
-                            
+
                             options={{
                                 detailPanelType: 'single',
                                 search: true,
