@@ -27,4 +27,9 @@
         padding-right: 0px !important;
     }
 }
+@media screen and (max-width: 360px) {
+    .logo-height {
+        height: 1.5rem;
+    }
+}
 

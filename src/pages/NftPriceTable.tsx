@@ -13,6 +13,7 @@ import Table from '../components/Table';
 import moment from 'moment';
 import {eye, eyeOff, eyeOffOutline, eyeOutline, notifications} from "ionicons/icons";
 import {useHistory} from "react-router";
+import usePersistentState from '../hooks/usePersistentState';
 
 interface NftPriceTableProps {
     foo?: string;
@@ -47,7 +48,9 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
     const [tableData, setTableData] = useState<MintData[]>([]);
     const [hideComments, setHideComments] = useState(true);
     const [width, setWidth] = useState(window.innerWidth);
-    const [isMobile, setIsMobile] = useState(false)
+
+    const [isMobile,setIsMobile] = useState(false);
+    const [mode] = usePersistentState("mode", "dark");
 
     const smallWidthpx = 768;
 
@@ -249,36 +252,73 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
 
     return (
         <>
-            {
-                !tableData.length
-                    ? <div className="pt-10 flex justify-center items-center">
-                        <Loader/>
-                    </div>
-                    : <div className=" "> {/* max-w-fit mx-auto */}
 
-                        <Table
-                            data={tableData}
-                            columns={isMobile ? columns_mobile : columns}
-                            title={"Mint Alerts Automated - Stats"}
-                            description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
-                            actions={[
-                                {
-                                    icon: () => <IonIcon icon={notifications}/>,
-                                    tooltip: 'Alerts for new links',
-                                    onClick: () => history.push('/alerts#ma'),
-                                    isFreeAction: true,
-                                },
-                                {
-                                    icon: hideComments ? () => <IonIcon icon={eye}/> : () => <IonIcon icon={eyeOff}/>,
-                                    tooltip: hideComments ? "Show Comments" : "Hide comments",
-                                    onClick: () => setHideComments(!hideComments),
-                                    isFreeAction: true
-                                }
-                            ]}
-                        />
-                    </div>
-            }
+            {/*{*/}
+            {/*    !tableData.length*/}
+            {/*        ? <div className="pt-10 flex justify-center items-center">*/}
+            {/*            <Loader/>*/}
+            {/*        </div>*/}
+            {/*        : <div className=" "> /!* max-w-fit mx-auto *!/*/}
 
+            {/*            <Table*/}
+            {/*                data={tableData}*/}
+            {/*                columns={isMobile ? columns_mobile : columns}*/}
+            {/*                title={"Mint Alerts Automated - Stats"}*/}
+            {/*                description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"*/}
+            {/*                actions={[*/}
+            {/*                    {*/}
+            {/*                        icon: () => <IonIcon icon={notifications}/>,*/}
+            {/*                        tooltip: 'Alerts for new links',*/}
+            {/*                        onClick: () => history.push('/alerts#ma'),*/}
+            {/*                        isFreeAction: true,*/}
+            {/*                    },*/}
+            {/*                    {*/}
+            {/*                        icon: hideComments ? () => <IonIcon icon={eye}/> : () => <IonIcon icon={eyeOff}/>,*/}
+            {/*                        tooltip: hideComments ? "Show Comments" : "Hide comments",*/}
+            {/*                        onClick: () => setHideComments(!hideComments),*/}
+            {/*                        isFreeAction: true*/}
+            {/*                    }*/}
+            {/*                ]}*/}
+            {/*            />*/}
+            {/*        </div>*/}
+            {/*}*/}
+
+                {
+                    !tableData.length
+                        ?   <div className="pt-10 flex justify-center items-center">
+                                <Loader />
+                            </div>
+                        : <div className=" "> {/* max-w-fit mx-auto */}
+
+                            <Table
+                                data={tableData}
+                                columns={ isMobile ? columns_mobile : columns}
+                                options={{
+                                    rowStyle:( rowData:any) =>  ({
+                                        backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
+                                        color: mode === 'dark' ? "" : '#4B5563',
+                                        borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
+                                    }),
+                                }}
+								title={"Mint Alerts Automated - Stats"}
+								description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
+								actions={[
+                                    {
+                                        icon: () => <IonIcon icon={notifications}/>,
+                                        tooltip: 'Alerts for new links',
+                                        onClick: () => history.push('/alerts#ma'),
+                                        isFreeAction: true,
+                                    },
+									{
+										icon : hideComments ? () => <IonIcon icon={eye}/> :  () => <IonIcon icon={eyeOff}/>,
+										tooltip : hideComments ? "Show Comments" : "Hide comments",
+										onClick : () => setHideComments(!hideComments),
+										isFreeAction : true
+									}
+								]}
+                            />
+                        </div>
+                }
 
             {/*<div hidden={true}*/}
             {/*    className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>*/}

@@ -7,7 +7,7 @@ import {useUser} from '../context/UserContext';
 import {environment} from '../environments/environment';
 
 import {auth} from '../firebase';
-import { browserLocalPersistence, browserSessionPersistence, signInAnonymously, signInWithCustomToken } from "firebase/auth";
+import {  signInAnonymously, signInWithCustomToken ,browserSessionPersistence} from "firebase/auth";
 
 import "./Login.css"
 import { InAppBrowser }  from "@awesome-cordova-plugins/in-app-browser"
@@ -79,7 +79,7 @@ function Login() {
                 )
                 .then(({ data }) => {
                     // console.log(data);
-					auth.setPersistence(browserLocalPersistence)
+					// auth.setPersistence(browserLocalPersistence)
                     return signInWithCustomToken(auth, data.body);
                 })
                 .catch((e) => {
@@ -180,7 +180,7 @@ function Login() {
                             <br/>
 
                             <IonButton onClick={() => {
-                                auth.setPersistence(browserSessionPersistence)
+                                // auth.setPersistence(browserSessionPersistence)
                                 signInAnonymously(auth)
                             }}>Try the demo</IonButton>
 
