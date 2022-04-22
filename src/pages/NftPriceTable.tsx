@@ -3,12 +3,12 @@ import {
     IonList,
     IonLabel, IonItem, IonCheckbox, IonInput, IonIcon, useIonToast
 } from '@ionic/react';
-import React, { useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Loader from "../components/Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import meLogo from '../images/me.png';
-import { Column  } from '@material-table/core';
+import {Column} from '@material-table/core';
 import Table from '../components/Table';
 import moment from 'moment';
 import {eye, eyeOff, eyeOffOutline, eyeOutline, notifications} from "ionicons/icons";
@@ -16,25 +16,27 @@ import {useHistory} from "react-router";
 
 interface NftPriceTableProps {
     foo?: string;
+
     onSubmit(bar: string): unknown;
 }
 
 interface MintData {
-	name : string;
-	mintPrice: string;
-	highestPrice: string;
-	pctChange: number;
-	meta : string|null;
-    image : string;
-	comments: string|null;
-	meUrl : string;
-	mintUrl: string;
-	createdAt : string;
-	updatedAt : string;
-	numDiscordsAlerted : number;
-	stillBeingTracked: number;
+    name: string;
+    mintPrice: string;
+    highestPrice: string;
+    pctChange: number;
+    meta: string | null;
+    image: string;
+    comments: string | null;
+    meUrl: string;
+    mintUrl: string;
+    createdAt: string;
+    updatedAt: string;
+    numDiscordsAlerted: number;
+    stillBeingTracked: number;
 }
-function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
+
+function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
 
     /**
      * States & Variables
@@ -45,7 +47,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
     const [tableData, setTableData] = useState<MintData[]>([]);
     const [hideComments, setHideComments] = useState(true);
     const [width, setWidth] = useState(window.innerWidth);
-    const [isMobile,setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(false)
 
     const smallWidthpx = 768;
 
@@ -53,40 +55,52 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         {
             title: 'Details',
             render: (record) => (
-               <>
-                <b>Name : </b>{record?.image ? <img  className ={`avatarImg ${!record?.image?'hiddenImg': ''}`} key={record?.image} src={record?.image} /> : null}
-                <span>{record.name ? record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()) : '-' }</span>
-                <span><br/><b>Mint Date : </b>{record.createdAt ? moment(record.createdAt).fromNow() : "-"}</span>
-                <span><br/><b>Mint Price : </b>{record.mintPrice ? `${record.mintPrice} ◎` : '-'}</span>
-                <span><br/><b>High Price : </b>{record.highestPrice ? `${record.highestPrice} ◎` : "-"}</span>
-                <span><br/><b>% Change : </b>{record.pctChange ? <span className={ record.pctChange > 0 ? 'greenPctChange' : 'redPctChange'}hidden={!record.pctChange}>{record.pctChange ? record.pctChange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','): ''}%</span>: '-'}</span> 
-                <span><br/><b>Meta : </b>{record.meta ? record.meta : '-'}</span>
-                <span className='flex flex-row items-center'><br/><b>ME URL : </b> {record.meUrl ? <a href={record.meUrl} target="_blank" className="big-emoji" hidden={!record.meUrl || record.meUrl.length < 5}><img src={meLogo} className="me-logo ml-2" /></a>  : '-' }</span>
-                <span><b>Mint URL : </b>{record.mintUrl ? <a href={record.mintUrl} target="_blank" className="big-emoji" hidden={record.mintUrl.length < 5}> 🌐 </a> : "-" }</span>
-                <span><br/><b>Comments : </b>{record.comments ? <span hidden={hideComments}>{record.comments}</span> : "-" }</span>
-                
-               </>
+                <>
+                    <b>Name : </b>{record?.image ?
+                    <img className={`avatarImg ${!record?.image ? 'hiddenImg' : ''}`} key={record?.image}
+                         src={record?.image}/> : null}
+                    <span>{record.name ? record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()) : '-'}</span>
+                    <span><br/><b>Mint Date : </b>{record.createdAt ? moment(record.createdAt).fromNow() : "-"}</span>
+                    <span><br/><b>Mint Price : </b>{record.mintPrice ? `${record.mintPrice} ◎` : '-'}</span>
+                    <span><br/><b>High Price : </b>{record.highestPrice ? `${record.highestPrice} ◎` : "-"}</span>
+                    <span><br/><b>% Change : </b>{record.pctChange ?
+                        <span className={record.pctChange > 0 ? 'greenPctChange' : 'redPctChange'}
+                              hidden={!record.pctChange}>{record.pctChange ? record.pctChange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''}%</span> : '-'}</span>
+                    <span><br/><b>Meta : </b>{record.meta ? record.meta : '-'}</span>
+                    <span className='flex flex-row items-center'><br/><b>ME URL : </b> {record.meUrl ?
+                        <a href={record.meUrl} target="_blank" className="big-emoji"
+                           hidden={!record.meUrl || record.meUrl.length < 5}><img src={meLogo}
+                                                                                  className="me-logo ml-2"/></a> : '-'}</span>
+                    <span><b>Mint URL : </b>{record.mintUrl ?
+                        <a href={record.mintUrl} target="_blank" className="big-emoji"
+                           hidden={record.mintUrl.length < 5}> 🌐 </a> : "-"}</span>
+                    <span><br/><b>Comments : </b>{record.comments ?
+                        <span hidden={hideComments}>{record.comments}</span> : "-"}</span>
+
+                </>
             ),
             customSort: (a, b) => a.name.localeCompare(b.name),
-			searchable: true,
-			customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().includes(term.toLowerCase()),
+            searchable: true,
+            customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().includes(term.toLowerCase()),
         },
-     
+
     ];
     const columns: Column<MintData>[] = [
         {
             title: 'Name',
             render: (record) => (
-               <>
-                   <img  className ={`avatarImg ${!record?.image?'hiddenImg': ''}`} key={record?.image} src={record?.image} />
-                <span>
+                <>
+                    {/*TODO*/}
+                    {/*<img className={`avatarImg ${!record?.image ? 'hiddenImg' : ''}`} key={record?.image}*/}
+                    {/*     src={record?.image}/>*/}
+                    <span>
                     {record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())}
                 </span>
-               </>
+                </>
             ),
             customSort: (a, b) => a.name.localeCompare(b.name),
-			searchable: true,
-			customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().includes(term.toLowerCase()),
+            searchable: true,
+            customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().includes(term.toLowerCase()),
         },
         {
             title: 'Mint Date',
@@ -101,13 +115,13 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         {
             title: 'Mint Price',
             customSort: (a, b) => +a.mintPrice - +b.mintPrice,
-			render: (record) => <span>{record.mintPrice} ◎</span>,
+            render: (record) => <span>{record.mintPrice} ◎</span>,
 
         },
         {
             title: 'High Price',
             customSort: (a, b) => +a.highestPrice - +b.highestPrice,
-			render: (record) => <span>{ record.highestPrice ? `${record.highestPrice} ◎` : "-"}</span>,
+            render: (record) => <span>{record.highestPrice ? `${record.highestPrice} ◎` : "-"}</span>,
 
         },
         {
@@ -122,8 +136,8 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                 >
                     {record.pctChange
                         ? record.pctChange
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                         : ''}
                     %
                 </span>
@@ -131,8 +145,8 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         },
         {
             title: 'Meta',
-			sorting: false,
-			render: (record) => <span>{record.meta}</span>,
+            sorting: false,
+            render: (record) => <span>{record.meta}</span>,
         },
         {
             title: 'ME URL',
@@ -143,10 +157,10 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                     className="big-emoji"
                     hidden={!record.meUrl || record.meUrl.length < 5}
                 >
-                    <img src={meLogo} className="me-logo" />
+                    <img src={meLogo} className="me-logo"/>
                 </a>
             ),
-			sorting: false
+            sorting: false
         },
         {
             title: 'Mint URL',
@@ -160,7 +174,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                     🌐
                 </a>
             ),
-			sorting: false
+            sorting: false
         },
         {
             title: 'Comments',
@@ -168,7 +182,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                 // <span>{(record.comments.length > 90) ? record.comments.substr(0, 90 - 1) + '...' : record.comments}</span>
                 <span hidden={hideComments}>{record.comments}</span>
             ),
-			sorting: false
+            sorting: false
         },
     ];
 
@@ -200,7 +214,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                         message: msg,
                         color: 'danger',
                         duration: 5000,
-                        buttons: [{ text: 'X', handler: () => dismiss() }],
+                        buttons: [{text: 'X', handler: () => dismiss()}],
                     });
                     // if(msg.includes('logging in again')){
                     //     history.push("/login");
@@ -211,7 +225,7 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
     }, []);
 
     useEffect(() => {
-        if (window.innerWidth < 525){
+        if (window.innerWidth < 525) {
             setIsMobile(true)
         }
     }, [window.innerWidth])
@@ -236,35 +250,35 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
 
     return (
         <>
-                {
-                    !tableData.length
-                        ?   <div className="pt-10 flex justify-center items-center">
-                                <Loader />
-                            </div>
-                        : <div className=" "> {/* max-w-fit mx-auto */}
+            {
+                !tableData.length
+                    ? <div className="pt-10 flex justify-center items-center">
+                        <Loader/>
+                    </div>
+                    : <div className=" "> {/* max-w-fit mx-auto */}
 
-                            <Table
-                                data={tableData}
-                                columns={ isMobile ? columns_mobile : columns}
-								title={"Mint Alerts Automated - Stats"}
-								description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
-								actions={[
-                                    {
-                                        icon: () => <IonIcon icon={notifications}/>,
-                                        tooltip: 'Alerts for new links',
-                                        onClick: () => history.push('/alerts#ma'),
-                                        isFreeAction: true,
-                                    },
-									{
-										icon : hideComments ? () => <IonIcon icon={eye}/> :  () => <IonIcon icon={eyeOff}/>,
-										tooltip : hideComments ? "Show Comments" : "Hide comments",
-										onClick : () => setHideComments(!hideComments),
-										isFreeAction : true
-									}
-								]}
-                            />
-                        </div>
-                }
+                        <Table
+                            data={tableData}
+                            columns={isMobile ? columns_mobile : columns}
+                            title={"Mint Alerts Automated - Stats"}
+                            description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
+                            actions={[
+                                {
+                                    icon: () => <IonIcon icon={notifications}/>,
+                                    tooltip: 'Alerts for new links',
+                                    onClick: () => history.push('/alerts#ma'),
+                                    isFreeAction: true,
+                                },
+                                {
+                                    icon: hideComments ? () => <IonIcon icon={eye}/> : () => <IonIcon icon={eyeOff}/>,
+                                    tooltip: hideComments ? "Show Comments" : "Hide comments",
+                                    onClick: () => setHideComments(!hideComments),
+                                    isFreeAction: true
+                                }
+                            ]}
+                        />
+                    </div>
+            }
 
 
             {/*<div hidden={true}*/}
@@ -320,5 +334,6 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
         </>
     );
 }
+
 export default NftPriceTable;
 
