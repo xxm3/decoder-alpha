@@ -90,9 +90,8 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
             title: 'Name',
             render: (record) => (
                 <>
-                    {/*TODO*/}
-                    {/*<img className={`avatarImg ${!record?.image ? 'hiddenImg' : ''}`} key={record?.image}*/}
-                    {/*     src={record?.image}/>*/}
+                    <img className={`avatarImg ${!record?.image ? 'hiddenImg' : ''}`} key={record?.image}
+                         src={record?.image}/>
                     <span>
                     {record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())}
                 </span>
