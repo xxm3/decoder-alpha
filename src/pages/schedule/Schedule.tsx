@@ -9,6 +9,7 @@ import { Column } from '@material-table/core';
 import Table from '../../components/Table';
 import { logoDiscord, logoTwitter, link } from 'ionicons/icons';
 import {useHistory} from "react-router";
+import usePersistentState from '../../hooks/usePersistentState';
 
 interface Mint {
     image: string;
@@ -47,7 +48,11 @@ const Schedule = () => {
     const [splitCollectionName, setSplitCollectionName] = useState([])
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const [isMobile,setIsMobile] = useState(false)
+    const [isMobile,setIsMobile] = useState(false);
+    const [isPaging, setIsPaging] = useState(false);
+
+    const [mode] = usePersistentState("mode", "dark");
+
 
 
     let dataSource = mints
@@ -67,6 +72,13 @@ const Schedule = () => {
     }
 
 
+    useEffect(() => {
+     if(mints.length <= 10){
+     setIsPaging(false)
+     }else{
+     setIsPaging(true)
+      }
+    }, [mints])
 
     useEffect(() => {
         dataSource.length && addMintExpiresAt();
@@ -312,7 +324,7 @@ const Schedule = () => {
                     __html: record.wlPrice ? `
                     ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
                 }}></span></>,
-            // width: "80px"
+            width: "100px",
         },
         {
             title: 'Supply',
@@ -389,12 +401,14 @@ const Schedule = () => {
                         title={`Mint Schedule - ${date}`}
                         options={{
                             rowStyle:( rowData:any) =>  ({
-                                fontWeight: timeCount (rowData?.time) ? '900' : ""
-                                // backgroundColor : timeCount (rowData?.time) ? '#981C1E80' : "",
+                                fontWeight: timeCount (rowData?.time) ? '900' : "",
+                                backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
+                                color: mode === 'dark' ? "" : '#4B5563',
+                                borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
                             }),
+                            paging: isPaging,
 							columnsButton: true
-
-                        }}
+                       }}
                         description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
 							\n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.
 							The Fox logo in the price is the official Token price that comes from the Fox Token Market.

@@ -13,6 +13,7 @@ import Table from '../components/Table';
 import moment from 'moment';
 import {eye, eyeOff, eyeOffOutline, eyeOutline, notifications} from "ionicons/icons";
 import {useHistory} from "react-router";
+import usePersistentState from '../hooks/usePersistentState';
 
 interface NftPriceTableProps {
     foo?: string;
@@ -46,6 +47,8 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
     const [hideComments, setHideComments] = useState(true);
     const [width, setWidth] = useState(window.innerWidth);
     const [isMobile,setIsMobile] = useState(false)
+    const [mode] = usePersistentState("mode", "dark");
+
 
     const smallWidthpx = 768;
 
@@ -246,6 +249,13 @@ function NftPriceTable({ foo, onSubmit }: NftPriceTableProps) {
                             <Table
                                 data={tableData}
                                 columns={ isMobile ? columns_mobile : columns}
+                                options={{
+                                    rowStyle:( rowData:any) =>  ({
+                                        backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
+                                        color: mode === 'dark' ? "" : '#4B5563',
+                                        borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
+                                    }),
+                                }}
 								title={"Mint Alerts Automated - Stats"}
 								description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
 								actions={[

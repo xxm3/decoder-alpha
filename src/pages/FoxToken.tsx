@@ -252,8 +252,8 @@ function FoxToken({contentRef}: FoxToken) {
     const [viewAbuse, setViewAbuse] = useState(false);
     const [isMobile,setIsMobile] = useState(false)
 
-
-
+    const [mode] = usePersistentState("mode", "dark");
+    const cookies = useMemo(() => new Cookies(), []);
 
 	const {
 		chartDateSelected,
@@ -1073,15 +1073,16 @@ function FoxToken({contentRef}: FoxToken) {
                         <Loader />
                     </div>
                 ) : (
-                    <div
-                        css={css`
-                            @media (max-width: 576px) {
-                                .MuiToolbar-root > .MuiTextField-root {
-                                    display: none;
-                                }
-                            }
-                        `}
-                    >
+
+                    <div css={css`
+                    /* show search in mobile */
+						/* @media (max-width: 576px){
+							.MuiToolbar-root > .MuiTextField-root {
+								display : none;
+							}
+						} */
+					`}>
+
                         {/*<IonItem style={{"width": "250px"}}>*/}
                         {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                         {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
@@ -1089,13 +1090,9 @@ function FoxToken({contentRef}: FoxToken) {
                         <Table
                             // id="fox-table-id"
                             data={tableData}
-<<<<<<< src/pages/FoxToken.tsx
-                            columns={isMobile ? columns_mobile : columns}
-                            title="Fox WL Token Market"
-=======
+
                             columns={ isMobile ? columns_mobile :columns }
                             title="Fox Token Market"
->>>>>>> src/pages/FoxToken.tsx
                             description="
                             👪 are community added names.
                             'Not Listed' means it is not listed for sale anymore, and shown for historical purposes.
@@ -1107,12 +1104,7 @@ function FoxToken({contentRef}: FoxToken) {
                             url="https://famousfoxes.com/tokenmarket"
                             actions={[
                                 {
-                                    icon: () => (
-                                        <IonIcon
-                                            icon={wallet}
-                                            className="text-red-600 text-4xl"
-                                        />
-                                    ),
+                                    icon: () => <IonIcon icon={wallet} className="text-red-600 text-3xl" />,
                                     tooltip: viewMyTokensClicked
                                         ? 'View All Tokens'
                                         : 'View My Tokens',
@@ -1145,9 +1137,19 @@ function FoxToken({contentRef}: FoxToken) {
                                     isFreeAction: true,
                                 },
                             ]}
+                            
                             options={{
                                 detailPanelType: 'single',
                                 search: true,
+                                searchFieldStyle:{
+                                    marginLeft:-30,
+                                    width:150
+                                },
+                                rowStyle:( rowData:any) =>  ({
+                                    backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
+                                    color: mode === 'dark' ? "" : '#4B5563',
+                                    borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
+                                }),
                                 columnsButton: true,
                             }}
                             // BUG-92-commented-out-4

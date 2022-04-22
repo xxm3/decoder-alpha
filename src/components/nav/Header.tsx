@@ -24,7 +24,7 @@ import usePersistentState from "../../hooks/usePersistentState";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { auth } from "../../firebase";
-import { signInAnonymously } from "firebase/auth";
+// import { signInAnonymously } from "firebase/auth";
 
 
 const HeaderContainer = () => {
@@ -106,7 +106,7 @@ const HeaderContainer = () => {
                 `}
             >
                 <IonToolbar>
-                    <div className="justify-between space-x-8 flex items-center">
+                    <div className="justify-between space-x-4 flex items-center">
                         {/*pt-3*/}
                         {!showMobileSearch && (
                             <div className="flex items-center space-x-4">
@@ -126,7 +126,7 @@ const HeaderContainer = () => {
                                     routerLink="/"
                                     color="text"
                                 >
-                                    <div className="flex items-center space-x-3">
+                                    <div className="flex items-center space-x-2">
                                         <img
                                             className="logo-height"
                                             src="/assets/site-logos/logo-transparent.png"
@@ -135,7 +135,9 @@ const HeaderContainer = () => {
                                         <span className="headerName logo">
                                             SOL Decoder
                                         </span>
-										<IonBadge color="primary" hidden={!isDemo} className="relative hidden sm:flex space-x-1 hover:opacity-90 py-2 px-3 items-center" onClick={(e) => {
+
+
+                                        {isDemo ?<IonBadge color="primary" hidden={!isDemo} className="relative hidden sm:flex space-x-1 hover:opacity-90 py-2 px-3 items-center" onClick={(e) => {
 											e.preventDefault()
 											e.stopPropagation();
 											auth.signOut()
@@ -143,7 +145,8 @@ const HeaderContainer = () => {
 											<p>demo</p>
 											<IonIcon icon={close} />
 											<IonRippleEffect />
-										</IonBadge>
+										</IonBadge> : null}
+										
                                     </div>
                                 </IonRouterLink>
                             </div>
@@ -152,7 +155,7 @@ const HeaderContainer = () => {
                         <div
                             className={`flex-grow flex items-center ${
                                 showMobileSearch
-                                    ? 'space-x-8'
+                                    ? 'space-x-4'
                                     : 'lg:max-w-xl justify-end lg:justify-start'
                             }`}
                         >
@@ -194,10 +197,7 @@ const HeaderContainer = () => {
                             )}
                         </div>
 
-                        <div
-                            className="flex space-x-4 items-center"
-                            hidden={showMobileSearch}
-                        >
+                        <div className="flex space-x-4 items-center" hidden={showMobileSearch}>
                             <IonButton
                                 className="ml-auto"
                                 onClick={() => {
@@ -213,16 +213,12 @@ const HeaderContainer = () => {
                                     --padding-end: var(--padding-horizontal);
                                     --padding-top: var(--padding-vertical);
                                     --padding-bottom: var(--padding-vertical);
-
                                     --dimensions: 48px;
                                     height: var(--dimensions);
                                     width: var(--dimensions);
                                 `}
                             >
-                                <IonIcon
-                                    icon={mode === 'dark' ? sunny : moon}
-                                    className="h-7 w-7"
-                                />
+                                <IonIcon icon={mode === 'dark' ? sunny : moon} className="h-7 w-7" />
                             </IonButton>
                             <div className="hidden md:flex items-center">
                                 <WalletButton />
