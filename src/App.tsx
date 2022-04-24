@@ -58,6 +58,7 @@ import { css } from "@emotion/react";
 import Alerts from "./pages/Alerts";
 import { useDispatch } from "react-redux"
 import { setDemo } from "./redux/slices/demoSlice";
+import PrivacyPolicy from './pages/home/PrivacyPolicy';
 
 
 const App = () => {
@@ -171,6 +172,11 @@ const App = () => {
 	                                                                    <AppRoute
 	                                                                        exact path="/login" component={ Login}
 	                                                                    />
+                                                                        {/* privacy policy */}
+                                                                        <AppRoute
+                                                                            exact path="/privacy" component={ PrivacyPolicy }
+                                                                        />
+
 	                                                                </IonRouterOutlet>
 	                                                            </IonContent>
 	                                                        </IonSplitPane>
