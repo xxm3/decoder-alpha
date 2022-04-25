@@ -1,13 +1,6 @@
 import {
-    IonButton,
-    IonList,
-    IonLabel,
-    IonItem,
-    IonInput,
-    IonModal,
-    IonContent,
-    IonHeader,
-    IonToolbar, IonTitle, useIonToast, IonIcon, IonSearchbar, IonPopover, IonRadioGroup, IonRadio, IonRippleEffect,
+    IonButton,IonList,IonLabel,IonItem,IonInput,IonModal,IonContent,IonHeader,
+    IonToolbar, IonTitle, useIonToast, IonIcon, IonRippleEffect,IonRefresher, IonRefresherContent
 } from '@ionic/react';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import Loader from "../components/Loader";
@@ -47,6 +40,8 @@ import {useLocation} from 'react-router-dom';
 import { useMutation, useQuery as useReactQuery } from "react-query"
 import { AxiosResponse } from 'axios';
 import { queryClient } from '../queryClient';
+import { RefresherEventDetail } from '@ionic/core';
+import { Virtuoso } from 'react-virtuoso';
 
 const columns: Column<FoxTokenData>[] = [
     {
@@ -460,6 +455,14 @@ function FoxToken({contentRef}: FoxToken) {
     /**
      * Functions
      */
+    // Pull to refresh function
+     function doRefresh(event: CustomEvent<RefresherEventDetail>) {
+        setTimeout(() => {
+            fetchTableData()
+          event.detail.complete();
+        }, 1000);
+      }
+
 
     // load table data!
     const fetchTableData = async () => {
@@ -1080,16 +1083,23 @@ function FoxToken({contentRef}: FoxToken) {
 								display : none;
 							}
 						} */
+                        
 					`}>
 
                         {/*<IonItem style={{"width": "250px"}}>*/}
                         {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                         {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                         {/*</IonItem>*/}
-                        <Table
+                        <IonContent  className='h-screen' scroll-y='false'>
+                        {isMobile ?  <IonRefresher slot="fixed" onIonRefresh={doRefresh} pullFactor={0.5} pullMin={100} pullMax={200}  >
+                            <IonRefresherContent />
+                        </IonRefresher> : '' }
+
+                        <Virtuoso  className='h-20'
+                        totalCount={1}
+                        itemContent ={()=> <>  <Table
                             // id="fox-table-id"
                             data={tableData}
-
                             columns={ isMobile ? columns_mobile :columns }
                             title="Fox Token Market"
                             description="
@@ -1136,7 +1146,6 @@ function FoxToken({contentRef}: FoxToken) {
                                     isFreeAction: true,
                                 },
                             ]}
-
                             options={{
                                 detailPanelType: 'single',
                                 search: true,
@@ -1272,16 +1281,15 @@ function FoxToken({contentRef}: FoxToken) {
                                 },
                             ]}
                         />
+                         {/*recent FF tokens*/}
+                         <FfNamed /> 
+                         <ReactTooltip />
+                         </>}/>
+                        </IonContent>
                         {/*-{foxLineData.labels}-*/}
                     </div>
                 )}
             </div>
-
-            {/*recent FF tokens*/}
-            <FfNamed />
-
-            <ReactTooltip />
-
             <br />
         </>
     );
