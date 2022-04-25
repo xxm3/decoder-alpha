@@ -1,4 +1,4 @@
-import {IonButton, IonCard, isPlatform } from '@ionic/react';
+import {IonButton, IonCard, IonRouterLink, isPlatform} from '@ionic/react';
 import {useEffect, useMemo, useState} from 'react';
 import {Redirect} from 'react-router';
 import {instance} from '../axios';
@@ -13,6 +13,7 @@ import "./Login.css"
 import { InAppBrowser }  from "@awesome-cordova-plugins/in-app-browser"
 import { useDispatch } from "react-redux"
 import { setDemo } from '../redux/slices/demoSlice';
+import NavLink from '../components/nav/NavLink';
 
 /**
  * The "Login" page to which all unauthenticated users are redirected to
@@ -102,7 +103,8 @@ function Login() {
         <>
             {!loading ? (
                 <>
-
+                    {/*text-center*/}
+                    <div className="">
                     <IonButton
                         onClick={() => {
                             const params = new URLSearchParams();
@@ -152,8 +154,7 @@ function Login() {
                                     Use of the site / apps is locked to holders of one of our NFTs, <a href="https://magiceden.io/marketplace/soldecoder" className="underline" target="_blank">which you can purchase here</a>.
                                     <br/>
                                     After purchasing one,
-                                    please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a> &nbsp;
-                                    and verify with Matrica to get a role which allows access to the site.
+                                    please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a> and verify with Matrica to get a role which allows access to the site.
                                 </li>
                             </ul>
                         </div>
@@ -164,11 +165,12 @@ function Login() {
                             <ul>
                                 <li>Follow us <a href="https://twitter.com/SOL_Decoder" target="_blank" className="underline">on Twitter</a></li>
                                 <li>Read our <a href="https://docs.soldecoder.app" target="_blank" className="underline">docs here</a> </li>
+                                <li>
+                                    Read our <IonRouterLink href="/privacy" className="pr-7 underline text-inherit">Privacy Policy</IonRouterLink>
+                                </li>
                             </ul>
 
                             <br/>
-
-                            {/*TODO: buy the NFT here */}
 
                             <hr/>
                             <br/>
@@ -196,7 +198,7 @@ function Login() {
 
                     </div>
 
-
+                    </div>
                 </>
 
             ) : (
