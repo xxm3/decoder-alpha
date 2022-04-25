@@ -411,7 +411,7 @@ const Schedule = () => {
             ) : (
                 <>
               
-                    <IonContent  className='h-4/5' >
+                    <IonContent  className='h-screen' >
                         <IonRefresher slot="fixed" onIonRefresh={doRefresh}   >
                             <IonRefresherContent />
                         </IonRefresher>
