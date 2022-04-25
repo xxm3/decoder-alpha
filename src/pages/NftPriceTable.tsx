@@ -1,8 +1,4 @@
-import {
-    IonButton,
-    IonList,
-    IonLabel, IonItem, IonCheckbox, IonInput, IonIcon, useIonToast
-} from '@ionic/react';
+import {IonLabel,IonContent, IonIcon, useIonToast,IonRefresher, IonRefresherContent} from '@ionic/react';
 import React, {useEffect, useState} from 'react';
 import Loader from "../components/Loader";
 import {instance} from "../axios";
@@ -14,6 +10,8 @@ import moment from 'moment';
 import {eye, eyeOff, eyeOffOutline, eyeOutline, notifications} from "ionicons/icons";
 import {useHistory} from "react-router";
 import usePersistentState from '../hooks/usePersistentState';
+import { RefresherEventDetail } from '@ionic/core';
+import { Virtuoso } from 'react-virtuoso';
 
 interface NftPriceTableProps {
     foo?: string;
@@ -193,36 +191,6 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
      * Use Effects
      */
     useEffect(() => {
-        const fetchTableData = async () => {
-
-            setTableData([]);
-
-            instance
-                .get(environment.backendApi + '/mintAlertsAutomatedStats')
-                .then((res) => {
-                    setTableData(res.data);
-                })
-                .catch((error) => {
-                    console.error("error when getting mint alerts automated: " + error);
-
-                    let msg = '';
-                    if (error && error.response) {
-                        msg = String(error.response.data.body);
-                    } else {
-                        msg = 'Unable to connect. Please try again later';
-                    }
-
-                    present({
-                        message: msg,
-                        color: 'danger',
-                        duration: 5000,
-                        buttons: [{text: 'X', handler: () => dismiss()}],
-                    });
-                    // if(msg.includes('logging in again')){
-                    //     history.push("/login");
-                    // }
-                });
-        }
         fetchTableData();
     }, []);
 
@@ -245,6 +213,44 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
     /**
      * Functions
      */
+// Pull to refresh function
+     function doRefresh(event: CustomEvent<RefresherEventDetail>) {
+        setTimeout(() => {
+            fetchTableData()
+          event.detail.complete();
+        }, 1000);
+      }
+
+      const fetchTableData = async () => {
+
+        setTableData([]);
+
+        instance
+            .get(environment.backendApi + '/mintAlertsAutomatedStats')
+            .then((res) => {
+                setTableData(res.data);
+            })
+            .catch((error) => {
+                console.error("error when getting mint alerts automated: " + error);
+
+                let msg = '';
+                if (error && error.response) {
+                    msg = String(error.response.data.body);
+                } else {
+                    msg = 'Unable to connect. Please try again later';
+                }
+
+                present({
+                    message: msg,
+                    color: 'danger',
+                    duration: 5000,
+                    buttons: [{text: 'X', handler: () => dismiss()}],
+                });
+                // if(msg.includes('logging in again')){
+                //     history.push("/login");
+                // }
+            });
+    }
 
     /**
      * Renders
@@ -289,34 +295,41 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
                                 <Loader />
                             </div>
                         : <div className=" "> {/* max-w-fit mx-auto */}
+                        <IonContent  className='h-screen' scroll-y='false'>
+                        {isMobile ?  <IonRefresher slot="fixed" onIonRefresh={doRefresh} pullFactor={0.5} pullMin={100} pullMax={200} >
+                            <IonRefresherContent />
+                        </IonRefresher> : '' }
 
-                            <Table
-                                data={tableData}
-                                columns={ isMobile ? columns_mobile : columns}
-                                options={{
-                                    rowStyle:( rowData:any) =>  ({
-                                        backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
-                                        color: mode === 'dark' ? "" : '#4B5563',
-                                        borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
-                                    }),
-                                }}
-								title={"Mint Alerts Automated - Stats"}
-								description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
-								actions={[
-                                    {
-                                        icon: () => <IonIcon icon={notifications}/>,
-                                        tooltip: 'Alerts for new links',
-                                        onClick: () => history.push('/alerts#ma'),
-                                        isFreeAction: true,
-                                    },
-									{
-										icon : hideComments ? () => <IonIcon icon={eye}/> :  () => <IonIcon icon={eyeOff}/>,
-										tooltip : hideComments ? "Show Comments" : "Hide comments",
-										onClick : () => setHideComments(!hideComments),
-										isFreeAction : true
-									}
-								]}
-                            />
+                        <Virtuoso  className='h-full'
+                        totalCount={1}
+                        itemContent ={()=>  <Table
+                            data={tableData}
+                            columns={ isMobile ? columns_mobile : columns}
+                            options={{
+                                rowStyle:( rowData:any) =>  ({
+                                    backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
+                                    color: mode === 'dark' ? "" : '#4B5563',
+                                    borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
+                                }),
+                            }}
+                            title={"Mint Alerts Automated - Stats"}
+                            description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
+                            actions={[
+                                {
+                                    icon: () => <IonIcon icon={notifications}/>,
+                                    tooltip: 'Alerts for new links',
+                                    onClick: () => history.push('/alerts#ma'),
+                                    isFreeAction: true,
+                                },
+                                {
+                                    icon : hideComments ? () => <IonIcon icon={eye}/> :  () => <IonIcon icon={eyeOff}/>,
+                                    tooltip : hideComments ? "Show Comments" : "Hide comments",
+                                    onClick : () => setHideComments(!hideComments),
+                                    isFreeAction : true
+                                }
+                            ]}
+                        />}/>
+                        </IonContent>
                         </div>
                 }
 
