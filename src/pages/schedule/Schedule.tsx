@@ -3,13 +3,15 @@ import moment from 'moment';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
-import {IonButton, IonContent, IonIcon, IonModal, IonRippleEffect, useIonToast} from '@ionic/react';
+import {IonButton, IonContent, IonIcon, IonModal, IonRippleEffect, useIonToast, IonRefresher, IonRefresherContent,IonList} from '@ionic/react';
 import './Schedule.css'
 import { Column } from '@material-table/core';
 import Table from '../../components/Table';
 import { logoDiscord, logoTwitter, link } from 'ionicons/icons';
 import {useHistory} from "react-router";
 import usePersistentState from '../../hooks/usePersistentState';
+import { RefresherEventDetail } from '@ionic/core';
+import { chevronDownCircleOutline } from 'ionicons/icons';
 
 interface Mint {
     image: string;
@@ -35,6 +37,8 @@ interface Mint {
         reactions: number;
     }
 }
+
+
 const Schedule = () => {
 
     /**
@@ -132,6 +136,16 @@ const Schedule = () => {
 
             })
     }
+
+    function doRefresh(event: CustomEvent<RefresherEventDetail>) {
+        console.log('Begin async operation');
+      
+        setTimeout(() => {
+          console.log('Async operation has ended');
+          fetchMintsData()
+          event.detail.complete();
+        }, 1000);
+      }
 
     useEffect(() => {
         fetchMintsData();
@@ -296,7 +310,8 @@ const Schedule = () => {
         },
         {
             title: 'Time (UTC)',
-            customSort: (a, b) => +new Date(a.time) - +new Date(b.time),
+            // customSort: (a, b) => +new Date(a.time) - +new Date(b.time), 
+            customSort: (a, b) => a.time.localeCompare(b.time), // sorting with time
             render: (record) => (
                 <span>
                     {record.time.replace('UTC', '')}
@@ -394,8 +409,14 @@ const Schedule = () => {
                     <Loader />
                 </div>
             ) : (
-                <div>
-                    <Table
+                <>
+              
+                    <IonContent  className='h-4/5' >
+                        <IonRefresher slot="fixed" onIonRefresh={doRefresh}   >
+                            <IonRefresherContent />
+                        </IonRefresher>
+                        <div>
+                        <Table
                         data={dataSource}
                         columns={ isMobile ? columns_mobile : columns}
                         title={`Mint Schedule - ${date}`}
@@ -415,6 +436,30 @@ const Schedule = () => {
 							Rows in bold mean the mint comes out in two hours or less.
 							`}
                     />
+                        </div>
+                    </IonContent>
+                
+               
+                    {/* <Table
+                        data={dataSource}
+                        columns={ isMobile ? columns_mobile : columns}
+                        title={`Mint Schedule - ${date}`}
+                        options={{
+                            rowStyle:( rowData:any) =>  ({
+                                fontWeight: timeCount (rowData?.time) ? '900' : "",
+                                backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
+                                color: mode === 'dark' ? "" : '#4B5563',
+                                borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
+                            }),
+                            paging: isPaging,
+							columnsButton: true
+                       }}
+                        description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
+							\n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.
+							The Fox logo in the price is the official Token price that comes from the Fox Token Market.
+							Rows in bold mean the mint comes out in two hours or less.
+							`}
+                    /> */}
 
                     {/* <IonModal isOpen={isOpen}  onDidDismiss={onClose as any} >
                           <IonContent>
@@ -428,7 +473,8 @@ const Schedule = () => {
                             }
                           </IonContent>
                         </IonModal> */}
-                </div>
+              
+                </>
             )}
         </>
     );
