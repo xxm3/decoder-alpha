@@ -83,7 +83,6 @@ const HeaderContainer = () => {
     // does the search functionality
     function handleSearch(val: string) {
         val = val.trim();
-
         if (val.length === 0) return;
         const queryKey = ["messages", id];
         queryClient.resetQueries(queryKey);
@@ -135,8 +134,6 @@ const HeaderContainer = () => {
                                         <span className="headerName logo">
                                             SOL Decoder
                                         </span>
-
-
                                         {isDemo ?<IonBadge color="primary" hidden={!isDemo} className="relative hidden sm:flex space-x-1 hover:opacity-90 py-2 px-3 items-center" onClick={(e) => {
 											e.preventDefault()
 											e.stopPropagation();
@@ -168,7 +165,7 @@ const HeaderContainer = () => {
                                 />
                             )}
                             <div
-                                className={`flex-grow flex items-baseline space-x-2 c-header-search ${
+                                className={`flex-grow flex space-x-2 c-header-search items-center ${
                                     showMobileSearch
                                         ? 'max-w-[50rem] px-3'
                                         : 'hidden lg:flex'

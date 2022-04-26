@@ -1,7 +1,7 @@
 import { IonToggle } from "@ionic/react";
 import {useEffect, useMemo, useState} from 'react';
 import MessageListItem from "./MessageListItem";
-import React from "react";
+import React,{useRef} from "react";
 import {Chart} from 'react-chartjs-2';
 import Cookies from 'universal-cookie';
 import {constants} from "../../util/constants";
@@ -58,6 +58,9 @@ const DisplayGraph:React.FC<{
     const completelyHideChart = false; // useMemo(() => word.indexOf(" ") !== -1 ? true : false, [word]);
     const [mode] = usePersistentState("mode", "dark");
 
+    const chartsRef = useRef<HTMLDivElement | null>(null);
+
+
     /**
      * Use Effects
      */
@@ -70,7 +73,7 @@ const DisplayGraph:React.FC<{
      */
   return (
     <div>
-        <div className="gap-4 mb-4 grid grid-cols-12">
+        <div className="gap-4 mb-4 grid grid-cols-12 ">
 
             {/*search header*/}
             {totalCount && (
@@ -105,8 +108,12 @@ const DisplayGraph:React.FC<{
         chartDataPerSource &&
         !completelyHideChart &&
         (
-            <div className="gap-4 grid grid-cols-12" >
-                <div className="chart chart-col6">
+            <div className="gap-4 grid grid-cols-12 default-chart-theme rounded-lg"
+            css={css`
+            background-color: var(--ion-color-step-50);
+        `}
+        ref={chartsRef} >
+                <div className="chart chart-col6  ">
                     <Chart
                         type="bar"
                         data={chartDataDailyCount}
@@ -119,19 +126,19 @@ const DisplayGraph:React.FC<{
                                 title: {
                                     display: true,
                                     text: '# of messages per day (from several Discords)',
-                                    color: mode === 'dark' ? 'white' : 'black'
+                                    // color: mode === 'dark' ? 'white' : 'black'
                                 },
                             },
                             scales: {
                                 y: {
                                     suggestedMin: 0,
                                     ticks: {
-                                        color: mode === 'dark' ? 'white' : 'black'
+                                        // color: mode === 'dark' ? 'white' : 'black'
                                     },
                                 },
                                 x: {
                                     ticks: {
-                                        color: mode === 'dark' ? 'white' : 'black'
+                                        // color: mode === 'dark' ? 'white' : 'black'
                                     },
                                 },
                             },
@@ -155,18 +162,18 @@ const DisplayGraph:React.FC<{
                                 title: {
                                     display: true,
                                     text: '# of messages per Discord (last 10 days)',
-                                    color: mode === 'dark' ? 'white' : 'black'
+                                    // color: mode === 'dark' ? 'white' : 'black'
                                 },
                             },
                             scales: {
                                 y: {
                                     ticks: {
-                                        color: mode === 'dark' ? 'white' : 'black'
+                                        // color: mode === 'dark' ? 'white' : 'black'
                                     },
                                 },
                                 x: {
                                     ticks: {
-                                        color: mode === 'dark' ? 'white' : 'black'
+                                        // color: mode === 'dark' ? 'white' : 'black'
                                     },
                                 },
                             },
