@@ -14,4 +14,4 @@ export const environment = {
 };
 
 
-export const VERSION_CODE = '3.0.1';
+export const VERSION_CODE = '3.0.2';

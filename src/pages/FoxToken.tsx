@@ -96,7 +96,6 @@ const columns: Column<FoxTokenData>[] = [
     },
     {
         title: 'Price',
-        width: "100px",
         customSort: (a, b) => a.floorPrice - b.floorPrice,
         render: (record) => <div className='break-all whitespace-normal w-40'>{record.floorPrice} ◎</div>,
     },
@@ -1155,9 +1154,9 @@ function FoxToken({contentRef}: FoxToken) {
                                     width:150
                                 },
                                 rowStyle:( rowData:any) =>  ({
-                                    backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
-                                    color: mode === 'dark' ? "" : '#4B5563',
-                                    borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
+                                    backgroundColor : mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
+                                    color: mode === 'dark' ? "" : '#202124',
+                                    borderTop: mode === 'dark' ? "" : '1px solid rgba(220,220,220,0.8)',
                                 }),
                                 columnsButton: true,
                             }}

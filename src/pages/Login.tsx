@@ -147,7 +147,7 @@ function Login() {
 
                     <div className="p-4">
                         <div id="welcome">
-                            <p className="font-bold">Welcome to SOL Decoder Hello</p>
+                            <p className="font-bold">Welcome to SOL Decoder</p>
 
                             <ul className="">
                                 <li>
