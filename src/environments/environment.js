@@ -13,3 +13,5 @@ export const environment = {
 	ionicAppUrl : isDev ? "http://localhost:8100" : "https://soldecoder.app"
 };
 
+
+export const VERSION_CODE = '0.0.1';

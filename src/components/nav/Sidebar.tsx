@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import {IonButton, IonIcon, IonList, IonMenuToggle } from "@ionic/react"
+import {IonButton, IonIcon, IonList, IonMenuToggle, IonContent } from "@ionic/react"
 import {
     bookOutline,
     calendarClearOutline,
@@ -15,19 +15,26 @@ import WalletButton from '../WalletButton';
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { auth } from "../../firebase";
+import { VERSION_CODE } from '../../environments/environment'
+import { useState,useEffect } from "react";
 
 function Sidebar() {
 	const isDemo = useSelector<RootState>(state => state.demo.demo);
+    const [isMobile,setIsMobile] = useState(false)
 
-    const versionCode = process.env.VERSION_CODE
-
-    console.log('----------------',versionCode)
+    useEffect(() => {
+        if (window.innerWidth < 525){
+            setIsMobile(true)
+        }
+    }, [window.innerWidth])
 
     return (
         <>
+        <IonContent>
+            <div className={`px-2 ${isMobile ? '' :'h-full'}`}>
             <IonList
                 lines="none"
-                className={`px-2 h-full border-r md:max-w-max lg:max-w-none`}
+                className={`px-2 h-full ${isMobile ? '' : 'border-r'} md:max-w-max lg:max-w-none`}
                 css={css`
                     border-color: var(--ion-color-step-150);
                 `}
@@ -97,8 +104,11 @@ function Sidebar() {
                 <div className="xl:hidden lg:hidden md:hidden">
                     <WalletButton />
                 </div>
-                <div>Version 0.0.1</div>
+               <div className="text-center mt-4 text-white-500">Version <b>{VERSION_CODE}</b></div> 
+                
             </IonList>
+            </div>
+            </IonContent>
         </>
     );
 }
