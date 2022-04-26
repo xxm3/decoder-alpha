@@ -98,7 +98,7 @@ const columns: Column<FoxTokenData>[] = [
         title: 'Price',
         width: "100px",
         customSort: (a, b) => a.floorPrice - b.floorPrice,
-        render: (record) => <span className='flex-wrap'>{record.floorPrice} sdfsdfsdfsdfsdfsdfsf ◎</span>,
+        render: (record) => <div className='break-all whitespace-normal w-40'>{record.floorPrice} ◎</div>,
     },
     {
         title: 'Listings',
