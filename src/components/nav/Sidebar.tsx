@@ -19,6 +19,10 @@ import { auth } from "../../firebase";
 function Sidebar() {
 	const isDemo = useSelector<RootState>(state => state.demo.demo);
 
+    const versionCode = process.env.VERSION_CODE
+
+    console.log('----------------',versionCode)
+
     return (
         <>
             <IonList
@@ -93,6 +97,7 @@ function Sidebar() {
                 <div className="xl:hidden lg:hidden md:hidden">
                     <WalletButton />
                 </div>
+                <div>Version 0.0.1</div>
             </IonList>
         </>
     );
