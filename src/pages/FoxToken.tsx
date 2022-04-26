@@ -7,18 +7,7 @@ import Loader from "../components/Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import * as solanaWeb3 from '@solana/web3.js';
-import {
-    add,
-    albums,
-    chevronDown,
-    chevronUp,
-    close,
-    notifications,
-    notificationsOutline,
-    wallet,
-    cog,
-    logoDiscord, logoTwitter
-} from "ionicons/icons";
+import {add,albums,chevronDown,chevronUp,close,notifications,notificationsOutline,wallet,cog,logoDiscord, logoTwitter} from "ionicons/icons";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
@@ -97,7 +86,7 @@ const columns: Column<FoxTokenData>[] = [
     {
         title: 'Price',
         customSort: (a, b) => a.floorPrice - b.floorPrice,
-        render: (record) => <span>{record.floorPrice} ◎</span>,
+        render: (record) => <div className='break-all whitespace-normal w-40'>{record.floorPrice} ◎</div>,
     },
     {
         title: 'Listings',
@@ -106,9 +95,9 @@ const columns: Column<FoxTokenData>[] = [
     },
     // REMOVING-FF-FOR-NOW
     {
-        title: 'Last Sale',
+        title: 'Last Sale', 
         customSort: (a, b) => new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
-        render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : null}</span>,
+        render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : '-'}</span>,
     },
     {
         title: '# Owned',
@@ -869,10 +858,7 @@ function FoxToken({contentRef}: FoxToken) {
                         </div>
                     </div>
 
-                    <div
-                        hidden={!multWallet}
-                        className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl"
-                    >
+                    <div hidden={!multWallet} className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                         <div className="font-medium">
                             {' '}
                             {/* text-lg   */}
@@ -891,9 +877,7 @@ function FoxToken({contentRef}: FoxToken) {
                                 SOL Wallet Address
                             </IonLabel>
                             <IonInput
-                                onIonChange={(e) =>
-                                    setFormWalletMult(e.detail.value!)
-                                }
+                                onIonChange={(e) => setFormWalletMult(e.detail.value!)}
                                 value={formWalletMult}
                                 placeholder="ex. 91q2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU"
                             ></IonInput>
@@ -1154,9 +1138,9 @@ function FoxToken({contentRef}: FoxToken) {
                                     width:150
                                 },
                                 rowStyle:( rowData:any) =>  ({
-                                    backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
-                                    color: mode === 'dark' ? "" : '#4B5563',
-                                    borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
+                                    backgroundColor : mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
+                                    color: mode === 'dark' ? "" : '#202124',
+                                    borderTop: mode === 'dark' ? "" : '1px solid rgba(220,220,220,0.8)',
                                 }),
                                 columnsButton: true,
                             }}

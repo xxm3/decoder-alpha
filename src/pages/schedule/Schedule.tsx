@@ -331,12 +331,11 @@ const Schedule = () => {
             title: 'Price',
             customSort: (a, b) =>
                 +a.price.split(' ')[0] - +b.price.split(' ')[0],
-                render: (record) =>  <><span dangerouslySetInnerHTML=
+                render: (record) =>  <><div className='break-all whitespace-normal w-40' dangerouslySetInnerHTML=
                 {{
                     __html: record.wlPrice ? `
                     ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
-                }}></span></>,
-            width: "100px",
+                }}></div></>,
         },
         {
             title: 'Supply',
@@ -421,9 +420,9 @@ const Schedule = () => {
                             options={{
                                 rowStyle:( rowData:any) =>  ({
                                     fontWeight: timeCount (rowData?.time) ? '900' : "",
-                                    backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
-                                    color: mode === 'dark' ? "" : '#4B5563',
-                                    borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
+                                    backgroundColor : mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
+                                    color: mode === 'dark' ? "" : '#202124',
+                                    borderTop: mode === 'dark' ? "" : '1px solid rgba(220,220,220,0.8)',
                                 }),
                                 paging: isPaging,
 							    columnsButton: true
