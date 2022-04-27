@@ -7,7 +7,7 @@ import meLogo from '../images/me.png';
 import {Column} from '@material-table/core';
 import Table from '../components/Table';
 import moment from 'moment';
-import {eye, eyeOff, eyeOffOutline, eyeOutline, notifications} from "ionicons/icons";
+import {chatbubbleEllipsesOutline, eye, eyeOff, eyeOffOutline, eyeOutline, notifications} from "ionicons/icons";
 import {useHistory} from "react-router";
 import usePersistentState from '../hooks/usePersistentState';
 import { RefresherEventDetail } from '@ionic/core';
@@ -322,7 +322,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
                                     isFreeAction: true,
                                 },
                                 {
-                                    icon : hideComments ? () => <IonIcon icon={eye}/> :  () => <IonIcon icon={eyeOff}/>,
+                                    icon : hideComments ? () => <IonIcon icon={chatbubbleEllipsesOutline}/> :  () => <IonIcon icon={chatbubbleEllipsesOutline}/>,
                                     tooltip : hideComments ? "Show Comments" : "Hide comments",
                                     onClick : () => setHideComments(!hideComments),
                                     isFreeAction : true

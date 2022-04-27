@@ -160,6 +160,8 @@ function Login() {
                         </div>
                         <br/>
 
+                        {/*TODO: learn more here and here .... twitter / zoom etc... */}
+
                         <div id="security">
                             <p className="font-bold">Other links:</p>
                             <ul>
