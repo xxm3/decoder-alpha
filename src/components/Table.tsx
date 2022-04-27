@@ -3,7 +3,7 @@ import { IonIcon } from '@ionic/react';
 import MaterialTable, { MaterialTableProps, MTableFilterRow } from '@material-table/core'
 import { createTheme,  MuiThemeProvider } from '@material-ui/core';
 import { eye } from 'ionicons/icons';
-import { RefAttributes, useMemo } from 'react';
+import { RefAttributes, useEffect, useMemo, useState } from 'react';
 import usePersistentState from '../hooks/usePersistentState';
 import { colorsByName } from '../theme/Theme';
 import Help from './Help';
@@ -33,7 +33,7 @@ function Table<RowData extends object>(
         `hiddenColumns${props.title}`,
         ''
     );
-
+  
 
 	const isDarkMode = mode === "dark";
 	const textColor = isDarkMode ? colorsByName["primary"].contrast : "#161616"
@@ -179,7 +179,7 @@ function Table<RowData extends object>(
 						...options,
 	                }}
 					icons={{
-						ViewColumn : (() => <IonIcon className="text-3xl" icon={eye} /> ) as any
+						ViewColumn : (() =>  <IonIcon className="text-3xl" icon={eye} /> ) as any
 					}}
 					onRowsPerPageChange={(pageSize) => {
                         setRowsPerPage(pageSize);

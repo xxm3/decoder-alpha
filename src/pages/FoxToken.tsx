@@ -36,7 +36,7 @@ const columns: Column<FoxTokenData>[] = [
     {
         title: 'Token',
         render: (record) => (
-            <span className="">
+            <div className="w-44">
 
                 <span className="relative top-2 pr-3 w-24" >
                     {/*ff link*/}
@@ -71,7 +71,7 @@ const columns: Column<FoxTokenData>[] = [
                 <br className="xl:hidden lg:hidden" />
 
                 {shortenedWallet(record.token)}
-            </span>
+            </div>
         ),
         width: "300px",
         customSort: (a, b) => a.token.localeCompare(b.token),
@@ -203,7 +203,6 @@ const columns_mobile: Column<FoxTokenData>[] = [
                 {record?.row_obj?.whichMyWallets && <><br/><span><b>Wallet : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[1] : ''}</span></>}
             </span>
         ),
-        width: "300px",
         customSort: (a, b) => a.token.localeCompare(b.token),
 		customFilterAndSearch: (term, rowData) => rowData.token?.toLowerCase().includes(term.toLowerCase()),
     },
@@ -682,10 +681,9 @@ function FoxToken({contentRef}: FoxToken) {
     // Viewing MY tokens - filter the table
     const viewMyTokens = async (wantViewTokens: boolean) => {
         // setPopoverOpened(null);
-
+console.log('hello')
         // user wants to see MY tokens
         if (wantViewTokens) {
-
             // set the fact they viewed their token
             instance.get(environment.backendApi + '/receiver/userViewedMyToken');
 
@@ -694,7 +692,8 @@ function FoxToken({contentRef}: FoxToken) {
                 await getUserSpls();
             }
 
-            if (!multWallet && !walletAddress) {
+            if (!multWallet && !walletAddress ) {
+                console.log('hello 4')
                 present({
                     message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add one (or three!) manually. Then you can filter this table to only the tokens in your wallet.',
                     color: 'danger',
@@ -706,6 +705,7 @@ function FoxToken({contentRef}: FoxToken) {
 
             // make sure they have tokens
             if (mySplTokens.length === 0) {
+                console.log('hello 5')
 
                 // show toast
                 present({
@@ -717,7 +717,6 @@ function FoxToken({contentRef}: FoxToken) {
                 return;
 
             } else {
-
                 setViewMyTokensClicked(true);
                 // setTableData([]);
 
@@ -1142,7 +1141,8 @@ function FoxToken({contentRef}: FoxToken) {
                                     color: mode === 'dark' ? "" : '#202124',
                                     borderTop: mode === 'dark' ? "" : '1px solid rgba(220,220,220,0.8)',
                                 }),
-                                columnsButton: true,
+                                // hide eye icon on mobile
+                                columnsButton: isMobile ? false : true,
                             }}
                             // BUG-92-commented-out-4
                             // {
