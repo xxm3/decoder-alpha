@@ -417,7 +417,15 @@ const Schedule = () => {
                             columns={ isMobile ? columns_mobile : columns}
                             title={`Mint Schedule - ${date}`}
                             style={{overflow:'auto'}}
+                            
                             options={{
+                                searchFieldStyle:{
+                                    marginLeft:'-24%',
+                                    marginTop:'2%',
+                                    paddingLeft:"4%",
+                                    borderRadius:30,
+                                    borderWidth: isMobile ?  1 :0
+                                },
                                 rowStyle:( rowData:any) =>  ({
                                     fontWeight: timeCount (rowData?.time) ? '900' : "",
                                     backgroundColor : mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
@@ -425,7 +433,7 @@ const Schedule = () => {
                                     borderTop: mode === 'dark' ? "" : '1px solid rgba(220,220,220,0.8)',
                                 }),
                                 paging: isPaging,
-							    columnsButton: true
+                                columnsButton: isMobile ? false : true,
                             }}
                             description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
 							    \n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.

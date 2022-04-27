@@ -23,6 +23,13 @@ function Table<RowData extends object>(
 	const { options } = props;
 
 	const [mode] = usePersistentState("mode", "dark");
+	const [isMobile,setIsMobile] = useState(false)
+
+	useEffect(() => {
+        if (window.innerWidth < 525){
+            setIsMobile(true)
+        }
+    }, [window.innerWidth])
 
 	const [rowsPerPage, setRowsPerPage] = usePersistentState<number>(
         `rowsPerPage${props.title}`,
@@ -57,6 +64,7 @@ function Table<RowData extends object>(
 		}
 	})
 	const title = (
+		
         <div className="space-x-2 flex">
             <span
                 className="text-xl font-medium text-ellipsis"
@@ -144,8 +152,13 @@ function Table<RowData extends object>(
 						}
 
 						.MuiToolbar-root {
-							justify-content: space-between;
+							justify-content: isMobile ?  space-between : "" ;
 							width: 100%;
+							flex-wrap: isMobile ? wrap !important : "";
+							align-item: isMobile ? center : "";
+							display:flex;
+							justify-content: isMobile ? center : "";
+}
 						}
 			`}>
 				<div className='sm:hidden'>{title}</div>

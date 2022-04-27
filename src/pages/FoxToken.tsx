@@ -31,6 +31,7 @@ import { AxiosResponse } from 'axios';
 import { queryClient } from '../queryClient';
 import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
+import './FoxToken.scss'
 
 const columns: Column<FoxTokenData>[] = [
     {
@@ -96,7 +97,7 @@ const columns: Column<FoxTokenData>[] = [
     // REMOVING-FF-FOR-NOW
     {
         title: 'Last Sale', 
-        customSort: (a, b) => new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
+        customSort: (a, b) =>  new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
         render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : '-'}</span>,
     },
     {
@@ -681,7 +682,7 @@ function FoxToken({contentRef}: FoxToken) {
     // Viewing MY tokens - filter the table
     const viewMyTokens = async (wantViewTokens: boolean) => {
         // setPopoverOpened(null);
-console.log('hello')
+
         // user wants to see MY tokens
         if (wantViewTokens) {
             // set the fact they viewed their token
@@ -705,8 +706,6 @@ console.log('hello')
 
             // make sure they have tokens
             if (mySplTokens.length === 0) {
-                console.log('hello 5')
-
                 // show toast
                 present({
                     message: 'No tokens found on your wallet(s) :( Tokens must be in your wallet, and have an active listing on Fox Token Market',
@@ -1133,8 +1132,11 @@ console.log('hello')
                                 detailPanelType: 'single',
                                 search: true,
                                 searchFieldStyle:{
-                                    marginLeft:-30,
-                                    width:150
+                                    marginLeft:'-24%',
+                                    marginTop:'2%',
+                                    paddingLeft:"4%",
+                                    borderRadius:30,
+                                    borderWidth: isMobile ?  1 :0
                                 },
                                 rowStyle:( rowData:any) =>  ({
                                     backgroundColor : mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
