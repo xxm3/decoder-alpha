@@ -230,6 +230,7 @@ const Schedule = () => {
 
                     <span className="" onClick={() => handleProjectClick(record)}>
                         {record?.project && <span><b>Name : </b>{record.project}</span>}
+                        // TODO: sumit
                         {record?.mintExpiresAt && <span><br /><b>Time (UTC) :</b>{record.mintExpiresAt}</span>}
                         {record?.price && <><br /><b>Price : </b><span dangerouslySetInnerHTML={{ __html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎` }} /></>}
                         {record?.count && <span><br /><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
@@ -431,7 +432,7 @@ const Schedule = () => {
                                         marginTop:'2%',
                                         paddingLeft:"4%",
                                         borderRadius:30,
-                                        borderWidth: isMobile ?  1 :0
+                                        borderWidth: 1 
                                     },
                                     rowStyle: (rowData: any) => ({
                                         fontWeight: timeCount(rowData?.time) ? '900' : "",

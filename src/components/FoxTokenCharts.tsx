@@ -50,7 +50,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
     // const [viewMyTokensClicked, setViewMyTokensClicked] = useState(false);
     // const smallWidthpx = 768;
 
-    const defaultGraph: ChartData<any, string> = {
+    const defaultGraph: ChartData <any, string> = {
         labels: [],
         datasets: [],
     };
@@ -158,6 +158,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                     {
                         type: 'line' as const,
                         label: 'Listings',
+                        borderColor: '#9945FF' ,
                         yAxisID: 'y0',
                         borderColor: lineColorSelected,
                         fill: {

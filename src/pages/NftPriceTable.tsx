@@ -311,7 +311,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
                                     marginTop:'2%',
                                     paddingLeft:"4%",
                                     borderRadius:30,
-                                    borderWidth: isMobile ?  1 :0
+                                    borderWidth: 1
                                 },
                                 rowStyle:( rowData:any) =>  ({
                                     backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
