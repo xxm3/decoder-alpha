@@ -1151,7 +1151,7 @@ function FoxToken({contentRef}: FoxToken) {
                                     marginTop:'2%',
                                     paddingLeft:"4%",
                                     borderRadius:30,
-                                    borderWidth: isMobile ?  1 : 0
+                                    borderWidth: 1
                                 },
                                 rowStyle:( rowData:any) =>  ({
                                     backgroundColor : mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',

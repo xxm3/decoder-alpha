@@ -7,12 +7,11 @@ import { IonContent, IonIcon, IonRippleEffect, useIonToast, IonRefresher, IonRef
 import './Schedule.css'
 import { Column } from '@material-table/core';
 import Table from '../../components/Table';
-import { logoDiscord, logoTwitter, link, navigate } from 'ionicons/icons';
+import { logoDiscord, logoTwitter, link } from 'ionicons/icons';
 import { useHistory } from "react-router";
 import usePersistentState from '../../hooks/usePersistentState';
 import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
-
 
 interface Mint {
     image: string;
@@ -227,7 +226,7 @@ const Schedule = () => {
 
                     <span className="" onClick={() => handleProjectClick(record)}>
                         {record?.project && <span><b>Name : </b>{record.project}</span>}
-                        {record?.mintExpiresAt && <span><br /><b>Time (UTC) :</b>{record.mintExpiresAt}</span>}
+                        {record?.mintExpiresAt && <span><br /><b>Time :</b>{record.mintExpiresAt}</span>}
                         {record?.price && <><br /><b>Price : </b><span dangerouslySetInnerHTML={{ __html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎` }} /></>}
                         {record?.count && <span><br /><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                         {record?.numbersOfDiscordMembers && <span><br /><b>Discord (all) : </b>{record.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
@@ -331,13 +330,13 @@ const Schedule = () => {
         },
         {
             title: 'Price',
-            customSort: (a, b) => +a.price.split(' ')[0] - +b.price.split(' ')[0],
-            // send price in parmas and redirect to fox token page 
-            render: (record) => <div onClick={(e) => history.push( { pathname: '/foxtoken',search: record.wlPrice? record.wlPrice : record.price.replace(' SOL', "")})} className='break-normal whitespace-normal w-40 flex flex-row cursor-pointer' dangerouslySetInnerHTML=
+            customSort: (a, b) =>
+                +a.price.split(' ')[0] - +b.price.split(' ')[0],
+            render: (record) => <><div className='break-all whitespace-normal w-40' dangerouslySetInnerHTML=
                 {{
                     __html: record.wlPrice ? `
                     ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
-                }}></div>,
+                }}></div></>,
         },
         {
             title: 'Supply',
@@ -425,7 +424,7 @@ const Schedule = () => {
                                         marginTop:'2%',
                                         paddingLeft:"4%",
                                         borderRadius:30,
-                                        borderWidth: isMobile ?  1 :0
+                                        borderWidth: 1 
                                     },
                                     rowStyle: (rowData: any) => ({
                                         fontWeight: timeCount(rowData?.time) ? '900' : "",
