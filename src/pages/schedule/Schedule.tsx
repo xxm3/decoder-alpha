@@ -70,7 +70,9 @@ const Schedule = () => {
     const addMintExpiresAt = () => {
         for (let i = 0; i < dataSource.length; i++) {
             if (dataSource[i].time !== "")
-                dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")";
+                // TODO: sumit - bugged for some people
+                // dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")";
+                dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";
         }
         setMints([...dataSource]);
     }
@@ -90,7 +92,9 @@ const Schedule = () => {
         const interval = setInterval(() => {
             for (let i = 0; i < dataSource.length; i++) {
                 if (dataSource[i].time !== "")
-                    dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")"
+                    // TODO: sumit - bugged for some people
+                    // dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")"
+                    dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")"
             }
 
             setMints([...dataSource])
@@ -308,8 +312,11 @@ const Schedule = () => {
                 rowData.project.toLowerCase().includes(term.toLowerCase()),
         },
         {
-            title: 'Time',
-            // customSort: (a, b) => +new Date(a.time) - +new Date(b.time), 
+            // TODO: sumit - bugged for some people
+            // title: 'Time',
+            title: 'Time (UTC)',
+
+            // customSort: (a, b) => +new Date(a.time) - +new Date(b.time),
             customSort: (a, b) => a.time.localeCompare(b.time), // sorting with time
             render: (record) => (
                 <span>
