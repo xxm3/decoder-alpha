@@ -22,7 +22,7 @@ import { FoxTokenData } from '../types/FoxTokenTypes';
 import useFoxTokenChartCookies from '../components/useFoxTokenChartCookies';
 import { css } from '@emotion/react';
 import moment from 'moment';
-import {useHistory} from "react-router";
+import { useHistory, Route, useParams } from 'react-router';
 import FfNamed from "./home/FfNamed";
 import usePersistentState from "../hooks/usePersistentState"
 import {useLocation} from 'react-router-dom';
@@ -33,7 +33,7 @@ import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
 import './FoxToken.scss'
 
-const columns: Column<FoxTokenData>[] = [
+const columns: Column<FoxTokenData> [] = [
     {
         title: 'Token',
         render: (record) => (
@@ -88,6 +88,8 @@ const columns: Column<FoxTokenData>[] = [
         title: 'Price',
         customSort: (a, b) => a.floorPrice - b.floorPrice,
         render: (record) => <div className='break-all whitespace-normal w-40'>{record.floorPrice} ◎</div>,
+        // customFilterAndSearch: ( rowData) => rowData.floorPrice,
+        customFilterAndSearch: (term, rowData,) =>   JSON.stringify(rowData.floorPrice)?.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Listings',
@@ -97,7 +99,7 @@ const columns: Column<FoxTokenData>[] = [
     // REMOVING-FF-FOR-NOW
     {
         title: 'Last Sale', 
-        customSort: (a, b) =>  new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
+        customSort: (a, b) =>  new Date(a.lastSaleDate ? a.lastSaleDate : 0 ) as any - (new Date(b.lastSaleDate ? b.lastSaleDate : 0) as any),
         render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : '-'}</span>,
     },
     {
@@ -222,6 +224,17 @@ function FoxToken({contentRef}: FoxToken) {
     const useQuery = () => new URLSearchParams(useLocation().search);
     const query = useQuery();
     const viewmytoken = query.get('viewmytoken');
+
+    // search value from today's mint
+    
+    const [searchValue,setSearchValue] = useState<string>()
+    const location = useLocation();
+    useEffect(() => {
+        console.log('hello',location)
+        setSearchValue(location.search)
+        fetchTableData()
+    }, [location])
+
 
     /**
      * Adding multiple wallets
@@ -1131,12 +1144,14 @@ function FoxToken({contentRef}: FoxToken) {
                             options={{
                                 detailPanelType: 'single',
                                 search: true,
+                                searchAutoFocus:true,
+                                searchText: searchValue ? searchValue.replace('?', "") : '' ,
                                 searchFieldStyle:{
                                     marginLeft:'-24%',
                                     marginTop:'2%',
                                     paddingLeft:"4%",
                                     borderRadius:30,
-                                    borderWidth: isMobile ?  1 :0
+                                    borderWidth: isMobile ?  1 : 0
                                 },
                                 rowStyle:( rowData:any) =>  ({
                                     backgroundColor : mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
