@@ -3,7 +3,7 @@ import { IonIcon } from '@ionic/react';
 import MaterialTable, { MaterialTableProps, MTableFilterRow } from '@material-table/core'
 import { createTheme,  MuiThemeProvider } from '@material-ui/core';
 import { eye } from 'ionicons/icons';
-import { RefAttributes, useMemo } from 'react';
+import { RefAttributes, useEffect, useMemo, useState } from 'react';
 import usePersistentState from '../hooks/usePersistentState';
 import { colorsByName } from '../theme/Theme';
 import Help from './Help';
@@ -23,6 +23,13 @@ function Table<RowData extends object>(
 	const { options } = props;
 
 	const [mode] = usePersistentState("mode", "dark");
+	const [isMobile,setIsMobile] = useState(false)
+
+	useEffect(() => {
+        if (window.innerWidth < 525){
+            setIsMobile(true)
+        }
+    }, [window.innerWidth])
 
 	const [rowsPerPage, setRowsPerPage] = usePersistentState<number>(
         `rowsPerPage${props.title}`,
@@ -33,7 +40,7 @@ function Table<RowData extends object>(
         `hiddenColumns${props.title}`,
         ''
     );
-
+  
 
 	const isDarkMode = mode === "dark";
 	const textColor = isDarkMode ? colorsByName["primary"].contrast : "#161616"
@@ -57,6 +64,7 @@ function Table<RowData extends object>(
 		}
 	})
 	const title = (
+		
         <div className="space-x-2 flex">
             <span
                 className="text-xl font-medium text-ellipsis"
@@ -144,8 +152,13 @@ function Table<RowData extends object>(
 						}
 
 						.MuiToolbar-root {
-							justify-content: space-between;
+							justify-content: isMobile ?  space-between : "" ;
 							width: 100%;
+							flex-wrap: isMobile ? wrap !important : "";
+							align-item: isMobile ? center : "";
+							display:flex;
+							justify-content: isMobile ? center : "";
+}
 						}
 			`}>
 				<div className='sm:hidden'>{title}</div>
@@ -179,7 +192,7 @@ function Table<RowData extends object>(
 						...options,
 	                }}
 					icons={{
-						ViewColumn : (() => <IonIcon className="text-3xl" icon={eye} /> ) as any
+						ViewColumn : (() =>  <IonIcon className="text-3xl" icon={eye} /> ) as any
 					}}
 					onRowsPerPageChange={(pageSize) => {
                         setRowsPerPage(pageSize);

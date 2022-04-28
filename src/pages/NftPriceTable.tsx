@@ -306,6 +306,13 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
                             data={tableData}
                             columns={ isMobile ? columns_mobile : columns}
                             options={{
+                                searchFieldStyle:{
+                                    marginLeft:'-24%',
+                                    marginTop:'2%',
+                                    paddingLeft:"4%",
+                                    borderRadius:30,
+                                    borderWidth: isMobile ?  1 :0
+                                },
                                 rowStyle:( rowData:any) =>  ({
                                     backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
                                     color: mode === 'dark' ? "" : '#4B5563',
