@@ -3,7 +3,7 @@ import { IonReactRouter } from "@ionic/react-router";
 // import { useEffect, useState } from "react";
 // import Search from "./pages/Search";
 // import Login from "./pages/Login";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { auth } from "./firebase";
 import { IUser } from "./types/User";
 import { Route } from "react-router";
@@ -56,6 +56,10 @@ import NftPriceTable from "./pages/NftPriceTable";
 import StackedSearch from "./pages/StackedSearch";
 import { css } from "@emotion/react";
 import Alerts from "./pages/Alerts";
+import { useDispatch } from "react-redux"
+import { setDemo } from "./redux/slices/demoSlice";
+import PrivacyPolicy from './pages/home/PrivacyPolicy';
+
 
 const App = () => {
 
@@ -67,8 +71,11 @@ const App = () => {
 	*/
 	const [user, setUser] = useState<IUser | null | undefined>(undefined);
 
+
 	// const [walletAddress, setWalletAdress] = useState(null);
 
+	const isAnonymous = useRef<boolean | null>(null);
+	const dispatch = useDispatch()
 	useEffect(() => {
         // first redirect if on old URL
         // if (window.location.hostname.indexOf('localhost') === -1 && window.location.hostname.indexOf('soldecoder.app') === -1) {
@@ -76,10 +83,18 @@ const App = () => {
         // }
 
         // code that is supposed to update the authorization header whenever the token changes
-		return auth.onAuthStateChanged(user => {
-			if (user) {
-                setUser({ id: user.uid });
+		return auth.onAuthStateChanged(context => {
+			if (context) {
+                setUser({ id: context.uid });
+				isAnonymous.current = context.isAnonymous;
+				if(context.isAnonymous){
+					dispatch(setDemo(true));
+				}
             } else {
+				if(isAnonymous.current){
+					dispatch(setDemo(false))
+				}
+				isAnonymous.current = null;
                 setUser(null);
             }
 		})
@@ -157,6 +172,11 @@ const App = () => {
 	                                                                    <AppRoute
 	                                                                        exact path="/login" component={ Login}
 	                                                                    />
+                                                                        {/* privacy policy */}
+                                                                        <AppRoute
+                                                                            exact path="/privacy" component={ PrivacyPolicy }
+                                                                        />
+
 	                                                                </IonRouterOutlet>
 	                                                            </IonContent>
 	                                                        </IonSplitPane>

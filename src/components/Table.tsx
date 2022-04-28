@@ -1,6 +1,9 @@
 import { css } from '@emotion/react';
+import { IonIcon } from '@ionic/react';
 import MaterialTable, { MaterialTableProps, MTableFilterRow } from '@material-table/core'
 import { createTheme,  MuiThemeProvider } from '@material-ui/core';
+import { eye } from 'ionicons/icons';
+import { RefAttributes, useEffect, useMemo, useState } from 'react';
 import usePersistentState from '../hooks/usePersistentState';
 import { colorsByName } from '../theme/Theme';
 import Help from './Help';
@@ -20,6 +23,24 @@ function Table<RowData extends object>(
 	const { options } = props;
 
 	const [mode] = usePersistentState("mode", "dark");
+	const [isMobile,setIsMobile] = useState(false)
+
+	useEffect(() => {
+        if (window.innerWidth < 525){
+            setIsMobile(true)
+        }
+    }, [window.innerWidth])
+
+	const [rowsPerPage, setRowsPerPage] = usePersistentState<number>(
+        `rowsPerPage${props.title}`,
+        10
+    );
+
+    const [hiddenColumns, setHiddenColumns] = usePersistentState<string>(
+        `hiddenColumns${props.title}`,
+        ''
+    );
+  
 
 	const isDarkMode = mode === "dark";
 	const textColor = isDarkMode ? colorsByName["primary"].contrast : "#161616"
@@ -43,6 +64,7 @@ function Table<RowData extends object>(
 		}
 	})
 	const title = (
+		
         <div className="space-x-2 flex">
             <span
                 className="text-xl font-medium text-ellipsis"
@@ -130,8 +152,13 @@ function Table<RowData extends object>(
 						}
 
 						.MuiToolbar-root {
-							justify-content: space-between;
+							justify-content: isMobile ?  space-between : "" ;
 							width: 100%;
+							flex-wrap: isMobile ? wrap !important : "";
+							align-item: isMobile ? center : "";
+							display:flex;
+							justify-content: isMobile ? center : "";
+}
 						}
 			`}>
 				<div className='sm:hidden'>{title}</div>
@@ -143,6 +170,7 @@ function Table<RowData extends object>(
 	                        whiteSpace: 'nowrap',
 	                        borderBottom: 'none',
 	                    },
+						hidden: column.title ? hiddenColumns.split(',').includes(column.title as string) : false
 	                }))}
 	                title={
 	                   <div className='hidden sm:block'>
@@ -157,11 +185,29 @@ function Table<RowData extends object>(
 							paddingBottom : 25,
 							...options?.headerStyle,
 	                    },
-	                    pageSize: 10, // default rows per page
+						pageSize: rowsPerPage, // default rows per page
 	                    emptyRowsWhenPaging: false,   // To avoid of having empty rows
 	                    pageSizeOptions: [10, 20, 50, 100],    // rows selection options
+						paging : props.data.length > 10,
 						...options,
 	                }}
+					icons={{
+						ViewColumn : (() =>  <IonIcon className="text-3xl" icon={eye} /> ) as any
+					}}
+					onRowsPerPageChange={(pageSize) => {
+                        setRowsPerPage(pageSize);
+                    }}
+                    onChangeColumnHidden={(column, hidden) => {
+                        if (hidden) {
+                            setHiddenColumns((hiddenColumns) => hiddenColumns ? hiddenColumns + "," + column.title : hiddenColumns + column.title);
+                        } else {
+                            setHiddenColumns((hiddenColumns) =>
+                                hiddenColumns.split(",").filter(
+                                    (hiddenColumn) => hiddenColumn !== column.title
+                                ).join(",")
+                            );
+                        }
+                    }}
 	            />
             </div>
         </MuiThemeProvider>

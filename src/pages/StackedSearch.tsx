@@ -159,7 +159,8 @@ function StackedSearch({ foo, onSubmit }: any) {
             present({
                 message: msg,
                 color: 'danger',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
             // if(msg.includes('logging in again')){
             //     history.push("/login");
@@ -217,7 +218,7 @@ function StackedSearch({ foo, onSubmit }: any) {
                     ) : (
                         // graph itself
                         <div
-                            className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg"
+                            className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg default-chart-theme"
                             hidden={
                                 graphStackedLoading ||
                                 stackedLineData.labels?.length === 1

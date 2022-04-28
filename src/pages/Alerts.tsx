@@ -66,11 +66,12 @@ function StackedSearch({foo, onSubmit}: any) {
         // Should remove if unsubscribing
     const modifyAlertWalletSubmit = (shouldRemove: boolean) => {
 
-            if ((!formAddalertWalletAddress || formAddalertWalletAddress.length !== 44) && !shouldRemove) {
+            if ((!formAddalertWalletAddress || (formAddalertWalletAddress.length !== 43 && formAddalertWalletAddress.length !== 44)) && !shouldRemove) {
                 present({
                     message: 'Error - please enter a single, valid SOL wallet address',
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'hide', handler: () => dismiss() }],
                 });
                 return;
             }
@@ -92,7 +93,8 @@ function StackedSearch({foo, onSubmit}: any) {
                     present({
                         message: `Successfully ${actionVerb} the alert wallet address`,
                         color: 'success',
-                        duration: 5000
+                        duration: 5000,
+                        buttons: [{ text: 'hide', handler: () => dismiss() }],
                     });
                     setDiscordDms(false);
                     setFirebaseAlerts(false);
@@ -104,7 +106,8 @@ function StackedSearch({foo, onSubmit}: any) {
                 present({
                     message: err.msg,
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'hide', handler: () => dismiss() }],
                 });
             }).finally(() => setFormLoadingAddalertWalletAddress(false));
 
@@ -150,14 +153,14 @@ function StackedSearch({foo, onSubmit}: any) {
             {/* hidden={true}   */}
             <div hidden={!devMode} className="secondary-bg-forced m-1 p-4 rounded-xl">
                 <h4 className={`font-medium ${window.location.href.includes('fnt') ? 'text-red-600 font-medium' : ''}`}>
-                    Alerts on New WL Tokens to your Wallet
+                    Alerts on New Tokens to your Wallet
                 </h4>
 
                 <div
                     className="ml-3 mr-3 mb-2 relative mt-2 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                     <div className="font-medium">
                         <p>
-                            This alerts you when any WL Token (that is also listed on Fox Token Market) gets added to
+                            This alerts you when any Token (that is also listed on Fox Token Market) gets added to
                             your wallet.
                             Add a single SOL wallet address below.
                             The alert will be sent to you via a Discord DM by our bot.
@@ -237,11 +240,11 @@ function StackedSearch({foo, onSubmit}: any) {
             <div className="secondary-bg-forced m-1 p-4 rounded-xl">
                 {/*bg-yellow-800*/}
                 <h4 className={`font-medium ${window.location.href.includes('fnn') ? 'text-red-600 font-medium' : ''}`}>
-                    New Fox WL Token Market Names
+                    New Fox Token Market Names
                 </h4>
                 The <a href="https://discord.com/channels/925207817923743794/951513272132182066" target="_blank"
                        className="underline">#analytics-etc</a> channel in Discord
-                and the home page of the site shows when WL tokens get official names by the Famous Fox team,
+                and the home page of the site shows when Tokens get official names by the Famous Fox team,
                 or when a user of SOL Decoder adds a custom name to one.
                 <br/>
                 Visit <a href="https://discord.com/channels/925207817923743794/938996145529712651 target=_blank"

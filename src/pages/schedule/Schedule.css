@@ -24,3 +24,7 @@
     width: 23px;
     display: inherit;
 }
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none;
+}

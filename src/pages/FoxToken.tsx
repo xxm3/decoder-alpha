@@ -1,31 +1,13 @@
 import {
-    IonButton,
-    IonList,
-    IonLabel,
-    IonItem,
-    IonInput,
-    IonModal,
-    IonContent,
-    IonHeader,
-    IonToolbar, IonTitle, useIonToast, IonIcon, IonSearchbar, IonPopover, IonRadioGroup, IonRadio, IonRippleEffect,
+    IonButton,IonList,IonLabel,IonItem,IonInput,IonModal,IonContent,IonHeader,
+    IonToolbar, IonTitle, useIonToast, IonIcon, IonRippleEffect,IonRefresher, IonRefresherContent
 } from '@ionic/react';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import Loader from "../components/Loader";
 import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import * as solanaWeb3 from '@solana/web3.js';
-import {
-    add,
-    albums,
-    chevronDown,
-    chevronUp,
-    close,
-    notifications,
-    notificationsOutline,
-    wallet,
-    cog,
-    logoDiscord, logoTwitter
-} from "ionicons/icons";
+import {add,albums,chevronDown,chevronUp,close,notifications,notificationsOutline,wallet,cog,logoDiscord, logoTwitter} from "ionicons/icons";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
@@ -44,12 +26,18 @@ import {useHistory} from "react-router";
 import FfNamed from "./home/FfNamed";
 import usePersistentState from "../hooks/usePersistentState"
 import {useLocation} from 'react-router-dom';
+import { useMutation, useQuery as useReactQuery } from "react-query"
+import { AxiosResponse } from 'axios';
+import { queryClient } from '../queryClient';
+import { RefresherEventDetail } from '@ionic/core';
+import { Virtuoso } from 'react-virtuoso';
+import './FoxToken.scss'
 
 const columns: Column<FoxTokenData>[] = [
     {
         title: 'Token',
         render: (record) => (
-            <span className="">
+            <div className="w-44">
 
                 <span className="relative top-2 pr-3 w-24" >
                     {/*ff link*/}
@@ -84,7 +72,7 @@ const columns: Column<FoxTokenData>[] = [
                 <br className="xl:hidden lg:hidden" />
 
                 {shortenedWallet(record.token)}
-            </span>
+            </div>
         ),
         width: "300px",
         customSort: (a, b) => a.token.localeCompare(b.token),
@@ -92,14 +80,14 @@ const columns: Column<FoxTokenData>[] = [
     },
     {
         title: 'Name',
-        customSort: (a, b) => a.name.localeCompare(b.name),
+        customSort: (a, b) => a?.name?.localeCompare(b?.name),
         render: (record) => <span>{record.name}</span>,
 		customFilterAndSearch: (term, rowData) => rowData.name?.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Price',
         customSort: (a, b) => a.floorPrice - b.floorPrice,
-        render: (record) => <span>{record.floorPrice}</span>,
+        render: (record) => <div className='break-all whitespace-normal w-40'>{record.floorPrice} ◎</div>,
     },
     {
         title: 'Listings',
@@ -107,11 +95,11 @@ const columns: Column<FoxTokenData>[] = [
         render: (record) => <span>{record.totalTokenListings}</span>,
     },
     // REMOVING-FF-FOR-NOW
-    // {
-    //     title: 'Last Sale',
-    //     customSort: (a, b) => new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
-    //     render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : null}</span>,
-    // },
+    {
+        title: 'Last Sale', 
+        customSort: (a, b) =>  new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
+        render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : '-'}</span>,
+    },
     {
         title: '# Owned',
         render: (record) => <span>{record.whichMyWallets ? record.whichMyWallets.split('-')[0] : '' }</span>,
@@ -166,7 +154,7 @@ const columns_mobile: Column<FoxTokenData>[] = [
                     <IonIcon icon={logoTwitter} className="big-emoji " />
                     <IonRippleEffect />
                 </a> : null }
-                
+
                 {/*discord*/}
                 { record.discord ? <> <a
                     href={'https://discord.gg/' + record.discord}
@@ -209,13 +197,13 @@ const columns_mobile: Column<FoxTokenData>[] = [
                 <br className="xl:hidden lg:hidden" />
                 {record?.row_obj?.token && <><span> <b>Token : </b>{shortenedWallet(record.row_obj.token)}</span></>}
                 {record?.row_obj?.name && <><br/><span ><b>Name : </b>{record.row_obj.name}</span></>}
-                {record?.row_obj?.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice}</span></>}
-                {record?.row_obj?.totalTokenListings && <><br/><span><b>Listing : </b>{record.row_obj.totalTokenListings}</span></>}
+                {record?.row_obj?.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice} ◎</span></>}
+                {record?.row_obj?.totalTokenListings && <><br/><span><b>Listings : </b>{record.row_obj.totalTokenListings}</span></>}
+                {record?.row_obj?.lastSaleDate && <><br/><span><b>Last Sale Date : </b>{moment(record.row_obj.lastSaleDate).fromNow()}</span></>}
                 {record?.row_obj?.whichMyWallets &&<><br/><span><b>Owned : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[0] : ''}</span></>}
                 {record?.row_obj?.whichMyWallets && <><br/><span><b>Wallet : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[1] : ''}</span></>}
             </span>
         ),
-        width: "300px",
         customSort: (a, b) => a.token.localeCompare(b.token),
 		customFilterAndSearch: (term, rowData) => rowData.token?.toLowerCase().includes(term.toLowerCase()),
     },
@@ -240,7 +228,6 @@ function FoxToken({contentRef}: FoxToken) {
      */
     const [addMultWallModalOpen, setAddMultWallModalOpen] = useState(false); // model open or not
     const [formWalletMult, setFormWalletMult] = useState(''); // single wallet in the form
-    const [formLoadingMultWallet, setFormLoadingMultWallet] = useState(false); // form loading
 
     const local_host_str = 'localhost';
     const firstUpdate = useRef(true);
@@ -249,7 +236,7 @@ function FoxToken({contentRef}: FoxToken) {
     const [viewAbuse, setViewAbuse] = useState(false);
     const [isMobile,setIsMobile] = useState(false)
 
-
+    const [mode] = usePersistentState("mode", "dark");
     const cookies = useMemo(() => new Cookies(), []);
 
 	const {
@@ -266,7 +253,31 @@ function FoxToken({contentRef}: FoxToken) {
         setHidHelpTop(true);
     }
 
-    const [multWalletAryFromCookie, setMultWalletAryFromCookie] = useState(cookies.get('multWalletsAry')); // mult. wallets you have from cookies
+
+	const { data : multWallet, isLoading : multWalletLoading} = useReactQuery(["multWallet"], async () => {
+		try {
+			const { data : { body : multWallet }} = await instance.get("/getMultWallet");
+			return multWallet as string[];
+		} catch (e) {
+			console.error('try/catch in FoxToken.tsx: ', e);
+            const error = e as Error & { response?: AxiosResponse };
+
+            let msg = '';
+            if (error && error.response) {
+                msg = String(error.response.data.body);
+            } else {
+                msg = 'Unable to connect. Please try again later';
+            }
+
+            present({
+                message: msg,
+                color: 'danger',
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
+            });
+		}
+
+	})
     // clicked link to add multiple wallets
     const clickedMultWall = (val: boolean) => {
         setAddMultWallModalOpen(val);
@@ -278,70 +289,121 @@ function FoxToken({contentRef}: FoxToken) {
             setIsMobile(true)
         }
     }, [window.innerWidth])
+
+	const addMultWallet = useMutation(async (multWallet : string) => {
+		try {
+			await instance.post('/addMultWallet', {
+				multWallet
+			})
+			return multWallet
+		} catch (e) {
+			console.error('try/catch in FoxToken.tsx: ', e);
+			const error = e as Error & { response?: AxiosResponse };
+
+			let msg = '';
+			if (error && error.response) {
+				msg = String(error.response.data.body);
+			} else {
+				msg = 'Unable to connect. Please try again later';
+			}
+
+			throw new Error(msg);
+		}
+
+	}, {
+		onError : (error : Error) => {
+			present({
+				message: error.message,
+				color: 'danger',
+				duration: 5000,
+				buttons: [{ text: 'X', handler: () => dismiss() }],
+			});
+		},
+		onSuccess : (multWallet : string) => {
+			queryClient.setQueryData('multWallet', old => [...(old as string[]), multWallet]);
+			present({
+                message: 'Successfully added the wallet',
+                color: 'success',
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
+            });
+		}
+	})
+
+	const formLoadingMultWallet = addMultWallet.isLoading;
+
     // in the modal for multiple wallets - submit button clicked
     const addMultWalletsSubmit = () => {
-
-        if (multWalletAryFromCookie && multWalletAryFromCookie.split(",").length == 3) {
+        if (multWallet && multWallet.length == 3) {
             present({
                 message: 'Error - you may only track a maximum of 3 wallets',
                 color: 'danger',
-                duration: 8000
+                duration: 8000,
+                buttons: [{ text: 'hide', handler: () => dismiss() }],
             });
             return;
         }
 
-        if (!formWalletMult || formWalletMult.length !== 44) {
+        if (
+            !formWalletMult ||
+            (formWalletMult.length !== 43 && formWalletMult.length !== 44)
+        ) {
             present({
-                message: 'Error - please enter a single, valid SOL wallet address',
+                message:
+                    'Error - please enter a single, valid SOL wallet address',
                 color: 'danger',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
             return;
         }
 
-        setFormLoadingMultWallet(true);
+        addMultWallet.mutate(formWalletMult);
+        setFormWalletMult(''); // clear the form
+    };
 
-        try {
-            // let existingMultWalletsAry = cookies.get('multWalletsAry');
-            // didn't set any yet
-            if (!multWalletAryFromCookie) {
-                cookies.set("multWalletsAry", formWalletMult);
-                setMultWalletAryFromCookie(formWalletMult);
-                // update cookie
-            } else {
-                const newVal = multWalletAryFromCookie + ',' + formWalletMult;
-                cookies.set("multWalletsAry", newVal.toString());
-                setMultWalletAryFromCookie(newVal);
-            }
 
-            // setFormErrMsg('');
+	const resetMultWallet = useMutation(async () => {
+		try {
+			await instance.delete('/resetMultWallet');
 
-            setFormLoadingMultWallet(false); // loading false
-            setFormWalletMult(''); // clear the form
-            setMultWalletAryFromCookie(cookies.get('multWalletsAry')); // set array to show user on frontend
+		} catch (e) {
+			console.error('try/catch in FoxToken.tsx: ', e);
+			const error = e as Error & { response?: AxiosResponse };
 
-            present({
-                message: 'Successfully added the wallet',
+			let msg = '';
+			if (error && error.response) {
+				msg = String(error.response.data.body);
+			} else {
+				msg = 'Unable to connect. Please try again later';
+			}
+
+			throw new Error(msg);
+		}
+
+	}, {
+		onError : (error : Error) => {
+			present({
+				message: error.message,
+				color: 'danger',
+				duration: 5000,
+				buttons: [{ text: 'X', handler: () => dismiss() }],
+			});
+		},
+		onSuccess : () => {
+			queryClient.setQueryData('multWallet', []);
+			present({
+                message: 'Successfully reset mult wallet',
                 color: 'success',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
-
-        } catch (err) {
-            console.error(err);
-            setFormLoadingMultWallet(false); // loading false
-
-            present({
-                message: 'An error occurred when adding your Wallet',
-                color: 'danger',
-                duration: 5000
-            });
-        }
-    }
+		}
+	})
 
     // user clicked button to delete their multiple wallets
-    const resetMultWallets = () => {
+    const resetMultWalletsSubmit = () => {
 
-        // @ts-ignore
         present({
             cssClass: '',
             header: 'Delete Wallets?',
@@ -349,19 +411,10 @@ function FoxToken({contentRef}: FoxToken) {
             buttons: [
                 'Cancel',
                 {
-                    text: 'Ok', handler: () => {
-
-                        cookies.remove("multWalletsAry");
-
-                        present({
-                            message: 'Successfully removed all wallets.',
-                            color: 'success',
-                            duration: 5000
-                        });
-
-                        setMultWalletAryFromCookie(null);
-
-                    }
+                    text: 'Ok',
+					handler: () => {
+                        resetMultWallet.mutate();
+					}
                 },
             ],
         });
@@ -391,6 +444,14 @@ function FoxToken({contentRef}: FoxToken) {
     /**
      * Functions
      */
+    // Pull to refresh function
+     function doRefresh(event: CustomEvent<RefresherEventDetail>) {
+        setTimeout(() => {
+            fetchTableData()
+          event.detail.complete();
+        }, 1000);
+      }
+
 
     // load table data!
     const fetchTableData = async () => {
@@ -403,7 +464,8 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'We had trouble loading all tokens. Refresh to load all tokens',
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
             }
 
@@ -414,7 +476,8 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'Unable to load data. Refresh and try again.',
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
             }
         }
@@ -467,7 +530,8 @@ function FoxToken({contentRef}: FoxToken) {
             present({
                 message: 'Error when getting your Whitelist tokens from your wallet',
                 color: 'danger',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
 
             return [];
@@ -493,9 +557,9 @@ function FoxToken({contentRef}: FoxToken) {
         }
 
         // now go through the wallets in cookies
-        if (multWalletAryFromCookie) {
-            for (let i in multWalletAryFromCookie.split(",")) {
-                const tempWall = multWalletAryFromCookie.split(",")[i];
+        if (multWallet) {
+            for (let i in multWallet) {
+                const tempWall = multWallet[i];
                 // make sure it's length of a sol wallet ... and that its not the connected wallet
                 if (tempWall.length === 44 && tempWall !== walletAddress) {
                     mySplTokensTemporary = mySplTokensTemporary.concat(await getSplFromWallet(tempWall));
@@ -538,16 +602,18 @@ function FoxToken({contentRef}: FoxToken) {
 
     // call on load, when cookie array set
     useEffect(() => {
+		if(!multWalletLoading){
+			// however DON'T do this in local host (will do this elsewhere ... since get RPC blocked)
+			if (window.location.href.indexOf(local_host_str) === -1) {
+				getUserSpls();
+			} else {
+				fetchTableData();
+			}
+		}
 
-        // however DON'T do this in local host (will do this elsewhere ... since get RPC blocked)
-        if (window.location.href.indexOf(local_host_str) === -1) {
-            getUserSpls();
-        } else {
-            fetchTableData();
-        }
 
 
-    }, [multWalletAryFromCookie]);
+    }, [multWallet, multWalletLoading]);
     // also call when new wallet is connected to
     useEffect(() => {
         if (window.location.href.indexOf(local_host_str) === -1 && walletAddress) {
@@ -600,7 +666,8 @@ function FoxToken({contentRef}: FoxToken) {
                 present({
                     message: 'Successfully added the name. Refresh to see it',
                     color: 'success',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
             }
 
@@ -618,7 +685,6 @@ function FoxToken({contentRef}: FoxToken) {
 
         // user wants to see MY tokens
         if (wantViewTokens) {
-
             // set the fact they viewed their token
             instance.get(environment.backendApi + '/receiver/userViewedMyToken');
 
@@ -627,28 +693,29 @@ function FoxToken({contentRef}: FoxToken) {
                 await getUserSpls();
             }
 
-            if (!multWalletAryFromCookie && !walletAddress) {
+            if (!multWallet && !walletAddress ) {
+                console.log('hello 4')
                 present({
                     message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add one (or three!) manually. Then you can filter this table to only the tokens in your wallet.',
                     color: 'danger',
-                    duration: 10000
+                    duration: 10000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
                 return;
             }
 
             // make sure they have tokens
             if (mySplTokens.length === 0) {
-
                 // show toast
                 present({
                     message: 'No tokens found on your wallet(s) :( Tokens must be in your wallet, and have an active listing on Fox Token Market',
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
                 return;
 
             } else {
-
                 setViewMyTokensClicked(true);
                 // setTableData([]);
 
@@ -680,7 +747,8 @@ function FoxToken({contentRef}: FoxToken) {
                     present({
                         message: 'None of your tokens are also listed on FF Token Market :(',
                         color: 'danger',
-                        duration: 5000
+                        duration: 5000,
+                        buttons: [{ text: 'X', handler: () => dismiss() }],
                     });
                     return;
                 }
@@ -690,22 +758,22 @@ function FoxToken({contentRef}: FoxToken) {
 
                 // REMOVING-FF-FOR-NOW
                 // but then we need to go out and get their latest sales data... takes about 1.5 sec per token
-                // instance
-                //     .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
-                //     .then((res) => {
-                //         const sales = res?.data?.data.salesData;
-                //         if(sales){
-                //             sales.forEach((sale: {token: string, lastSaleDate: string}) => {
-                //                 const row = newTableData.find((d: any) => d.token === sale.token);
-                //                 row.lastSaleDate = sale.lastSaleDate;
-                //             });
-                //
-                //             // once we get the data, then we can set it yet again...
-                //             setTableData(newTableData);
-                //         }
-                //     }).finally(() => {
-                //
-                //     });
+                instance
+                    .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
+                    .then((res) => {
+                        const sales = res?.data?.data.salesData;
+                        if(sales){
+                            sales.forEach((sale: {token: string, lastSaleDate: string}) => {
+                                const row = newTableData.find((d: any) => d.token === sale.token);
+                                row.lastSaleDate = sale.lastSaleDate;
+                            });
+
+                            // once we get the data, then we can set it yet again...
+                            setTableData(newTableData);
+                        }
+                    // }).finally(() => {
+
+                    });
 
             }
 
@@ -723,12 +791,29 @@ function FoxToken({contentRef}: FoxToken) {
 
     return (
         <>
-
-            <div hidden={!viewmytoken} className="m-3 relative bg-red-100 p-4 rounded-xl">
+            <div
+                hidden={!viewmytoken}
+                className="m-3 relative bg-red-100 p-4 rounded-xl"
+            >
                 <p className="text-lg text-red-700 font-medium">
                     <ul>
-                        <li>- Click the red button <IonIcon icon={wallet} className="text-red-600 text-2xl" /> on the top right of the table to check off this step</li>
-                        <li>- Note you did NOT have to connect your wallet, click the third button <IonIcon icon={albums} className="text-2xl text-gray-500" /> to manually add a wallet</li>
+                        <li>
+                            - Click the red button{' '}
+                            <IonIcon
+                                icon={wallet}
+                                className="text-red-600 text-2xl"
+                            />{' '}
+                            on the top right of the table to check off this step
+                        </li>
+                        <li>
+                            - Note you do NOT have to connect your wallet, click
+                            the third button{' '}
+                            <IonIcon
+                                icon={albums}
+                                className="text-2xl text-gray-500"
+                            />{' '}
+                            to manually add a wallet
+                        </li>
                     </ul>
                 </p>
                 <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
@@ -751,62 +836,46 @@ function FoxToken({contentRef}: FoxToken) {
                                 className="float-right text-base underline cursor-pointer"
                                 onClick={() => clickedMultWall(false)}
                             >
-                                <IonIcon icon={close} className="h-6 w-6"/>
+                                <IonIcon icon={close} className="h-6 w-6" />
                             </a>
                         </IonTitle>
                     </IonToolbar>
                 </IonHeader>
 
                 <IonContent className="">
-                    <div
-                        className="ml-3 mr-3 mb-2 relative mt-2 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
+                    <div className="ml-3 mr-3 mb-2 relative mt-2 bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                         <div className="font-medium">
                             {' '}
                             {/* text-lg   */}
                             <p>
-                                Used with "View My Tokens" (where you can
-                                filter the table to show only tokens in your
-                                wallet). Use this to filter the table to
-                                tokens that are on multiple wallets. Data is
-                                saved per browser, within your cookies.
+                                Used with "View My Tokens" (where you can filter
+                                the table to show only tokens in your wallet).
+                                Use this to filter the table to tokens that are
+                                on multiple wallets. Data is saved cross-platform.
                             </p>
                         </div>
                     </div>
 
-                    <div
-                        hidden={!multWalletAryFromCookie}
-                        className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl"
-                    >
+                    <div hidden={!multWallet} className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                         <div className="font-medium">
                             {' '}
                             {/* text-lg   */}
-                            <span className="font-bold">
-                                    Wallets Added:
-                                </span>
+                            <span className="font-bold">Wallets Added:</span>
                             <ul>
-                                {multWalletAryFromCookie
-                                    ? multWalletAryFromCookie
-                                        .split(',')
-                                        .map(function (wallet: any) {
-                                            return <li key={wallet}>- {wallet}</li>;
-                                        })
-                                    : ''}
+                                {multWallet && multWallet.map(function (wallet: any) {
+                                    return <li key={wallet}>- {wallet}</li>;
+                                })}
                             </ul>
                         </div>
                     </div>
 
                     <div className="ml-3 mr-3">
                         <IonItem>
-                            <IonLabel
-                                position="stacked"
-                                className="font-bold"
-                            >
+                            <IonLabel position="stacked" className="font-bold">
                                 SOL Wallet Address
                             </IonLabel>
                             <IonInput
-                                onIonChange={(e) =>
-                                    setFormWalletMult(e.detail.value!)
-                                }
+                                onIonChange={(e) => setFormWalletMult(e.detail.value!)}
                                 value={formWalletMult}
                                 placeholder="ex. 91q2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU"
                             ></IonInput>
@@ -821,10 +890,10 @@ function FoxToken({contentRef}: FoxToken) {
                             Submit
                         </IonButton>
                         <IonButton
-                            hidden={!multWalletAryFromCookie}
+                            hidden={!multWallet}
                             color="danger"
                             className="mt-5"
-                            onClick={() => resetMultWallets()}
+                            onClick={() => resetMultWalletsSubmit()}
                         >
                             Reset Stored Wallets
                         </IonButton>
@@ -847,35 +916,34 @@ function FoxToken({contentRef}: FoxToken) {
                                 className="float-right text-base underline cursor-pointer"
                                 onClick={() => clickedAddName(false)}
                             >
-                                <IonIcon icon={close} className="h-6 w-6"/>
+                                <IonIcon icon={close} className="h-6 w-6" />
                             </a>
                         </IonTitle>
                     </IonToolbar>
                 </IonHeader>
 
                 <IonContent className="">
-                    <div
-                        className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
+                    <div className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                         <div className="font-medium">
                             <p>
-                                Use this if a token on the Fox WL Token Market doesn't have an
-                                official name yet, and you know for certain
-                                what the name of the token is
+                                Use this if a token on the Fox Token Market
+                                doesn't have an official name yet, and you know
+                                for certain what the name of the token is
                             </p>
 
                             <span
                                 className="underline cursor-pointer"
                                 onClick={() => setViewAbuse(!viewAbuse)}
                             >
-                                    View Abuse Policy
-                                </span>
+                                View Abuse Policy
+                            </span>
                             <p className="mt-3" hidden={!viewAbuse}>
                                 Your discord name will be recorded when
-                                submitting the form. Those abusing the
-                                service will receive such punishments as
-                                having your account banned from entering
-                                data, with severe violations being
-                                permanently muted in the Discord
+                                submitting the form. Those abusing the service
+                                will receive such punishments as having your
+                                account banned from entering data, with severe
+                                violations being permanently muted in the
+                                Discord
                             </p>
                         </div>
                     </div>
@@ -883,10 +951,7 @@ function FoxToken({contentRef}: FoxToken) {
                     {/*bg-gradient-to-b from-bg-primary to-bg-secondary"*/}
                     <div className="ml-3 mr-3">
                         <IonItem>
-                            <IonLabel
-                                position="stacked"
-                                className="font-bold"
-                            >
+                            <IonLabel position="stacked" className="font-bold">
                                 Token
                             </IonLabel>
                             <IonInput
@@ -898,10 +963,7 @@ function FoxToken({contentRef}: FoxToken) {
                         </IonItem>
 
                         <IonItem>
-                            <IonLabel
-                                position="stacked"
-                                className="font-bold"
-                            >
+                            <IonLabel position="stacked" className="font-bold">
                                 Name
                             </IonLabel>
                             <IonInput
@@ -928,43 +990,58 @@ function FoxToken({contentRef}: FoxToken) {
                             hidden={!formErrMsg}
                         >
                             <p className="text-lg text-red-700 font-medium">
-                                {typeof formErrMsg === "string" ? formErrMsg : 'An error occurred, please try again later'}
+                                {typeof formErrMsg === 'string'
+                                    ? formErrMsg
+                                    : 'An error occurred, please try again later'}
                                 {/*<b>An error occurred, please try again later</b>*/}
                             </p>
-                            <span
-                                className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                                    !
-                                </span>
+                            <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                                !
+                            </span>
                         </div>
                     </div>
                 </IonContent>
             </IonModal>
 
             {/* please don't remove this... we need this to teach the user... */}
-            <div className="m-3 relative bg-primary p-4 rounded-xl" hidden={hidHelpTop}>
+            <div
+                className="m-3 relative bg-primary p-4 rounded-xl"
+                hidden={hidHelpTop}
+            >
                 <p className="text-medium text-white font-medium">
                     <b>
-                        - Want to see which tokens in your wallet are actually worth something? Click this <IonIcon icon={wallet} className="text-red-600 text-2xl" /> to show ONLY the tokens that are in your wallet and their respective FP
+                        - Want to see which tokens in your wallet are actually
+                        worth something? Click this{' '}
+                        <IonIcon
+                            icon={wallet}
+                            className="text-red-600 text-2xl"
+                        />{' '}
+                        to show ONLY the tokens that are in your wallet and
+                        their respective FP
                         {/*Click this on the top right of the table, to filter the table to only the whitelist tokens in your wallet. You may either connect your wallet in the top right of the site, or add 1-3 wallets with the "+" button discussed below*/}
-                        <br/>
-
-                        - If you want to add a wallet manually, click this <IonIcon icon={albums} className="text-2xl" />  to add the wallet of your choosing
+                        <br />
+                        - If you want to add a wallet manually, click this{' '}
+                        <IonIcon icon={albums} className="text-2xl" /> to add
+                        the wallet of your choosing
                         {/*Used with the above "View My Tokens", use this to filter the table to tokens that are on multiple wallets. You may add up to three wallets to watch*/}
-                        <br/>
-
-                        - Know what the name of a token is? Click <IonIcon icon={add} className="text-2xl" /> and share the knowledge
-                        {/*Use this if a token on the Fox WL Token Market doesn't have an official name yet, and you know for certain what the name of the token is*/}
-                        <br/>
-
-                        <div className="pt-1">- Click 📈 to show a Price / Listing chart for that token</div>
-
-
+                        <br />
+                        - Know what the name of a token is? Click{' '}
+                        <IonIcon icon={add} className="text-2xl" /> and share
+                        the knowledge
+                        {/*Use this if a token on the Fox Token Market doesn't have an official name yet, and you know for certain what the name of the token is*/}
+                        <br />
+                        <div className="pt-1">
+                            - Click 📈 to show a Price / Listing chart for that
+                            token
+                        </div>
                     </b>
-                    <br/>
+                    <br />
                     <IonButton
                         color="secondary"
                         className="text-sm space-x-1"
-                        onClick={() => { clickedSetHidHelpTop() }}
+                        onClick={() => {
+                            clickedSetHidHelpTop();
+                        }}
                     >
                         Got it!
                     </IonButton>
@@ -980,32 +1057,45 @@ function FoxToken({contentRef}: FoxToken) {
                         <Loader />
                     </div>
                 ) : (
+
                     <div css={css`
-						@media (max-width: 576px){
+                    /* show search in mobile */
+						/* @media (max-width: 576px){
 							.MuiToolbar-root > .MuiTextField-root {
 								display : none;
 							}
-						}
+						} */
+                        
 					`}>
+
                         {/*<IonItem style={{"width": "250px"}}>*/}
                         {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                         {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                         {/*</IonItem>*/}
-                         <Table 
+                        <IonContent  className='h-screen' scroll-y='false'>
+                        {isMobile ?  <IonRefresher slot="fixed" onIonRefresh={doRefresh} pullFactor={0.5} pullMin={100} pullMax={200}  >
+                            <IonRefresherContent />
+                        </IonRefresher> : '' }
+
+                        <Virtuoso  className='h-20'
+                        totalCount={1}
+                        itemContent ={()=> <>  <Table
                             // id="fox-table-id"
                             data={tableData}
                             columns={ isMobile ? columns_mobile :columns }
-                            title="Fox WL Token Market"
+                            title="Fox Token Market"
                             description="
                             👪 are community added names.
                             'Not Listed' means it is not listed for sale anymore, and shown for historical purposes.
+                            The Last Sale column is only updated when viewing the chart or your own tokens (which updates it for others as well).
                             "
                             // REMOVING-FF-FOR-NOW
-                            // The Last Sale column is only updated when viewing the chart or your own tokens (which updates it for others as well).
+                            // ^^
+
                             url="https://famousfoxes.com/tokenmarket"
                             actions={[
                                 {
-                                    icon: () => <IonIcon icon={wallet} className="text-red-600 text-4xl" />,
+                                    icon: () => <IonIcon icon={wallet} className="text-red-600 text-3xl" />,
                                     tooltip: viewMyTokensClicked
                                         ? 'View All Tokens'
                                         : 'View My Tokens',
@@ -1014,163 +1104,179 @@ function FoxToken({contentRef}: FoxToken) {
                                     isFreeAction: true,
                                 },
                                 {
-                                    icon: () => <IonIcon icon={notifications} className="" />,
-                                    tooltip: 'Alert on new Tokens to your Wallet',
+                                    icon: () => (
+                                        <IonIcon
+                                            icon={notifications}
+                                            className=""
+                                        />
+                                    ),
+                                    tooltip:
+                                        'Alert on new Tokens to your Wallet',
                                     onClick: () => history.push('/alerts#fnt'),
                                     isFreeAction: true,
                                 },
                                 {
-                                    icon: () => <IonIcon icon={albums}/>,
+                                    icon: () => <IonIcon icon={albums} />,
                                     tooltip: 'Track Multiple wallets',
                                     onClick: () => clickedMultWall(true),
                                     isFreeAction: true,
                                 },
-								{
-									icon: () => <IonIcon icon={add}/>,
+                                {
+                                    icon: () => <IonIcon icon={add} />,
                                     tooltip: 'Add Custom Token Name',
                                     onClick: () => clickedAddName(true),
                                     isFreeAction: true,
-								},
-                                
+                                },
                             ]}
                             options={{
-                                detailPanelType: "single",
+                                detailPanelType: 'single',
                                 search: true,
+                                searchFieldStyle:{
+                                    marginLeft:'-24%',
+                                    marginTop:'2%',
+                                    paddingLeft:"4%",
+                                    borderRadius:30,
+                                    borderWidth: isMobile ?  1 :0
+                                },
+                                rowStyle:( rowData:any) =>  ({
+                                    backgroundColor : mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
+                                    color: mode === 'dark' ? "" : '#202124',
+                                    borderTop: mode === 'dark' ? "" : '1px solid rgba(220,220,220,0.8)',
+                                }),
+                                // hide eye icon on mobile
+                                columnsButton: isMobile ? false : true,
                             }}
-                              // BUG-92-commented-out-4
-								// {
-                                //     icon: () => (
-                                //         <>
-                                //             <IonIcon
-                                //                 icon={cog}
-                                //             />
-                                //             <IonPopover
-                                //                 isOpen={!!popoverOpened}
-                                //                 onDidDismiss={() =>
-                                //                     setPopoverOpened(false)
-                                //                 }
-                                //             >
-                                //                 <IonContent>
-                                //                     <div className="p-2">
-                                //                         <h3 className="font-bold pb-1 w-full pt-5">
-                                //                             Date Format
-                                //                         </h3>
-                                //
-                                //                         <IonList>
-                                //                             <IonRadioGroup
-                                //                                 value={
-                                //                                     chartDateSelected
-                                //                                 }
-                                //                                 onIonChange={(
-                                //                                     e
-                                //                                 ) =>
-                                //                                     setChartDateSelected(
-                                //                                         e.detail
-                                //                                             .value
-                                //                                     )
-                                //                                 }
-                                //                             >
-                                //                                 <IonItem>
-                                //                                     <IonLabel>
-                                //                                         "2 hours
-                                //                                         ago"
-                                //                                     </IonLabel>
-                                //                                     <IonRadio value="fromNow" />
-                                //                                 </IonItem>
-                                //
-                                //                                 <IonItem>
-                                //                                     <IonLabel>
-                                //                                         "2022-01-01
-                                //                                         12:00"
-                                //                                     </IonLabel>
-                                //                                     <IonRadio value="yyyyMmDd" />
-                                //                                 </IonItem>
-                                //                             </IonRadioGroup>
-                                //                         </IonList>
-                                //
-                                //                         <h3 className="font-bold pb-1 w-full pt-5">
-                                //                             Chart Colors
-                                //                         </h3>
-                                //
-                                //                         <IonItem>
-                                //                             <IonLabel
-                                //                                 position="stacked"
-                                //                                 className="font-bold"
-                                //                             >
-                                //                                 Line Color
-                                //                             </IonLabel>
-                                //                             <IonInput
-                                //                                 onIonChange={(
-                                //                                     e
-                                //                                 ) =>
-                                //                                     setLineColorSelected(
-                                //                                         e.detail
-                                //                                             .value!
-                                //                                     )
-                                //                                 }
-                                //                                 value={
-                                //                                     lineColorSelected
-                                //                                 }
-                                //                                 placeholder="red, #c6ac95, rgb(255, 0, 0)"
-                                //                             ></IonInput>
-                                //                         </IonItem>
-                                //                         <IonItem>
-                                //                             <IonLabel
-                                //                                 position="stacked"
-                                //                                 className="font-bold"
-                                //                             >
-                                //                                 Shaded Area
-                                //                                 Color
-                                //                             </IonLabel>
-                                //                             <IonInput
-                                //                                 onIonChange={(
-                                //                                     e
-                                //                                 ) =>
-                                //                                     setShadedAreaColorSelected(
-                                //                                         e.detail
-                                //                                             .value!
-                                //                                     )
-                                //                                 }
-                                //                                 value={
-                                //                                     shadedAreaColorSelected
-                                //                                 }
-                                //                                 placeholder="red, #c6ac95, rgb(255, 0, 0)"
-                                //                             ></IonInput>
-                                //                         </IonItem>
-                                //                     </div>
-                                //                 </IonContent>
-                                //             </IonPopover>
-                                //
-                                //             {/*--{token}-{name}-*/}
-                                //         </>
-                                //     ),
-                                //     tooltip: 'Customise',
-                                //     isFreeAction: true,
-								// 	onClick: () => setPopoverOpened(true)
-                                // },
+                            // BUG-92-commented-out-4
+                            // {
+                            //     icon: () => (
+                            //         <>
+                            //             <IonIcon
+                            //                 icon={cog}
+                            //             />
+                            //             <IonPopover
+                            //                 isOpen={!!popoverOpened}
+                            //                 onDidDismiss={() =>
+                            //                     setPopoverOpened(false)
+                            //                 }
+                            //             >
+                            //                 <IonContent>
+                            //                     <div className="p-2">
+                            //                         <h3 className="font-bold pb-1 w-full pt-5">
+                            //                             Date Format
+                            //                         </h3>
+                            //
+                            //                         <IonList>
+                            //                             <IonRadioGroup
+                            //                                 value={
+                            //                                     chartDateSelected
+                            //                                 }
+                            //                                 onIonChange={(
+                            //                                     e
+                            //                                 ) =>
+                            //                                     setChartDateSelected(
+                            //                                         e.detail
+                            //                                             .value
+                            //                                     )
+                            //                                 }
+                            //                             >
+                            //                                 <IonItem>
+                            //                                     <IonLabel>
+                            //                                         "2 hours
+                            //                                         ago"
+                            //                                     </IonLabel>
+                            //                                     <IonRadio value="fromNow" />
+                            //                                 </IonItem>
+                            //
+                            //                                 <IonItem>
+                            //                                     <IonLabel>
+                            //                                         "2022-01-01
+                            //                                         12:00"
+                            //                                     </IonLabel>
+                            //                                     <IonRadio value="yyyyMmDd" />
+                            //                                 </IonItem>
+                            //                             </IonRadioGroup>
+                            //                         </IonList>
+                            //
+                            //                         <h3 className="font-bold pb-1 w-full pt-5">
+                            //                             Chart Colors
+                            //                         </h3>
+                            //
+                            //                         <IonItem>
+                            //                             <IonLabel
+                            //                                 position="stacked"
+                            //                                 className="font-bold"
+                            //                             >
+                            //                                 Line Color
+                            //                             </IonLabel>
+                            //                             <IonInput
+                            //                                 onIonChange={(
+                            //                                     e
+                            //                                 ) =>
+                            //                                     setLineColorSelected(
+                            //                                         e.detail
+                            //                                             .value!
+                            //                                     )
+                            //                                 }
+                            //                                 value={
+                            //                                     lineColorSelected
+                            //                                 }
+                            //                                 placeholder="red, #c6ac95, rgb(255, 0, 0)"
+                            //                             ></IonInput>
+                            //                         </IonItem>
+                            //                         <IonItem>
+                            //                             <IonLabel
+                            //                                 position="stacked"
+                            //                                 className="font-bold"
+                            //                             >
+                            //                                 Shaded Area
+                            //                                 Color
+                            //                             </IonLabel>
+                            //                             <IonInput
+                            //                                 onIonChange={(
+                            //                                     e
+                            //                                 ) =>
+                            //                                     setShadedAreaColorSelected(
+                            //                                         e.detail
+                            //                                             .value!
+                            //                                     )
+                            //                                 }
+                            //                                 value={
+                            //                                     shadedAreaColorSelected
+                            //                                 }
+                            //                                 placeholder="red, #c6ac95, rgb(255, 0, 0)"
+                            //                             ></IonInput>
+                            //                         </IonItem>
+                            //                     </div>
+                            //                 </IonContent>
+                            //             </IonPopover>
+                            //
+                            //             {/*--{token}-{name}-*/}
+                            //         </>
+                            //     ),
+                            //     tooltip: 'Customise',
+                            //     isFreeAction: true,
+                            // 	onClick: () => setPopoverOpened(true)
+                            // },
                             detailPanel={[
                                 {
-                                    icon: "📈",
-                                    tooltip: "View Chart",
+                                    icon: '📈',
+                                    tooltip: 'View Chart',
                                     render: (record) => (
-                                        <FoxTokenCharts {...record.rowData}/>
+                                        <FoxTokenCharts {...record.rowData} />
                                     ),
-                                }
+                                },
                             ]}
-
                         />
+                         {/*recent FF tokens*/}
+                         <FfNamed /> 
+                         <ReactTooltip />
+                         </>}/>
+                        </IonContent>
                         {/*-{foxLineData.labels}-*/}
                     </div>
                 )}
             </div>
-
-            {/*recent FF tokens*/}
-            <FfNamed/>
-
-            <ReactTooltip/>
-
-
-            <br/>
+            <br />
         </>
     );
 }

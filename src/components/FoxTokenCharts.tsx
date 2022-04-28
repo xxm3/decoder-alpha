@@ -187,48 +187,49 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                         'Error - unable to load chart data. Please refresh and try again',
                     color: 'danger',
                     duration: 8000,
+                    buttons: [{ text: 'hide', handler: () => dismiss() }],
                 });
             });
 
         // REMOVING-FF-FOR-NOW
         // also get the sales history for that token, from FF
-        // instance
-        //     .post(environment.backendApi + '/receiver/foxSales', {token: token})
-        //     .then((res) => {
-        //
-        //         // now graph it!
-        //         setFoxSalesData({
-        //             labels: res.data.labels,
-        //             datasets: [
-        //                 {
-        //                     type: 'line' as const,
-        //                     label: 'Price',
-        //                     yAxisID: 'y0',
-        //                     borderColor: lineColorSelected,
-        //                     // tension: 0.1,
-        //                     data: res.data.data,
-        //                     showLine: false
-        //                 },
-        //             ]
-        //         });
-        //
-        //         if(res.data.data.length === 0){
-        //             present({
-        //                 message: 'No sales data found!',
-        //                 color: 'danger',
-        //                 duration: 5000
-        //             });
-        //         }
-        //
-        //     });
-        //
-        //     // and then get the latest sale for that token
-        //     instance
-        //         .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: [token] })
-        //         .then((res) => {
-        //             // (nice to have) Update table data with the last listing date
-        //             // sales = res.data.data.sales
-        //         });
+        instance
+            .post(environment.backendApi + '/receiver/foxSales', {token: token})
+            .then((res) => {
+
+                // now graph it!
+                setFoxSalesData({
+                    labels: res.data.labels,
+                    datasets: [
+                        {
+                            type: 'line' as const,
+                            label: 'Price',
+                            yAxisID: 'y0',
+                            borderColor: lineColorSelected,
+                            // tension: 0.1,
+                            data: res.data.data,
+                            showLine: false
+                        },
+                    ]
+                });
+
+                if(res.data.data.length === 0){
+                    present({
+                        message: 'No sales data found!',
+                        color: 'danger',
+                        duration: 5000
+                    });
+                }
+
+            });
+
+            // and then get the latest sale for that token
+            instance
+                .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: [token] })
+                .then((res) => {
+                    // (nice to have) Update table data with the last listing date
+                    // sales = res.data.data.sales
+                });
     };
 
     // need to call it duh...
@@ -362,38 +363,38 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
 
                     {/*// REMOVING-FF-FOR-NOW*/}
                     {/*sales data*/}
-                    {/*<Chart*/}
-                    {/*    hidden={foxSalesData?.labels?.length === 0}*/}
-                    {/*    type="line"*/}
-                    {/*    data={foxSalesData}*/}
-                    {/*    height={tableHeight / 1.5}*/}
-                    {/*    options={{*/}
-                    {/*        responsive: true,*/}
-                    {/*        maintainAspectRatio: true,*/}
-                    {/*        plugins: {*/}
-                    {/*            legend: {*/}
-                    {/*                display: false,*/}
-                    {/*            },*/}
-                    {/*            title: {*/}
-                    {/*                display: true,*/}
-                    {/*                text: 'Sales (note the Sales & Price graph do NOT start at the same time)',*/}
-                    {/*            },*/}
-                    {/*        },*/}
-                    {/*        scales: {*/}
-                    {/*            x: {*/}
-                    {/*                ticks: {*/}
-                    {/*                    autoSkip: true,*/}
-                    {/*                    maxTicksLimit: 8,*/}
-                    {/*                },*/}
-                    {/*            },*/}
-                    {/*        },*/}
-                    {/*        elements: {*/}
-                    {/*            point:{*/}
-                    {/*                radius: 3*/}
-                    {/*            }*/}
-                    {/*        }*/}
-                    {/*    }}*/}
-                    {/*/>*/}
+                    <Chart
+                        hidden={foxSalesData?.labels?.length === 0}
+                        type="line"
+                        data={foxSalesData}
+                        height={tableHeight / 1.5}
+                        options={{
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Sales (note the Sales & Price graph do NOT start at the same time)',
+                                },
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        autoSkip: true,
+                                        maxTicksLimit: 8,
+                                    },
+                                },
+                            },
+                            elements: {
+                                point:{
+                                    radius: 3
+                                }
+                            }
+                        }}
+                    />
                 </div>
             </div>
         </>

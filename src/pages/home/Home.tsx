@@ -17,7 +17,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
      * States & Variables
      */
         // const [alerts, setAlerts] = useState([]);
-    const [isMobile, setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(false);
 
     // const useQuery = () => new URLSearchParams(useLocation().search);
     // const query = useQuery();
@@ -50,12 +50,17 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
         <>
             {isMobile ?
                 <>
-                    <Whitelist/>
+                    {/*FOR MOBILE*/}
+                    {/*<Whitelist/>*/}
+
                     <FfNamed/>
-                    <RecentAlerts/>
+
+                    {/*TODO: FIX ME CMON */}
+                    {/*<RecentAlerts/>*/}
                 </> : <>
 
-                    <Whitelist />
+                    {/*FOR DESKTOP*/}
+                    {/*<Whitelist />*/}
 
                     <div className='flex flex-row w-full'>
                         <div className='w-1/2 '>
@@ -63,8 +68,9 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                             <FfNamed/>
                         </div>
                         <div className='w-1/2'>
+                            {/*TODO: FIX ME CMON */}
                             {/* recent alerts */}
-                            <RecentAlerts/>
+                            {/*<RecentAlerts/>*/}
                         </div>
                     </div>
 

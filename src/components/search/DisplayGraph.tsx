@@ -1,7 +1,7 @@
 import { IonToggle } from "@ionic/react";
 import {useEffect, useMemo, useState} from 'react';
 import MessageListItem from "./MessageListItem";
-import React from "react";
+import React,{useRef} from "react";
 import {Chart} from 'react-chartjs-2';
 import Cookies from 'universal-cookie';
 import {constants} from "../../util/constants";
@@ -24,6 +24,7 @@ import MessageThread from "./MessageThread";
 import {useParams} from "react-router";
 import Loader from "../Loader";
 import { css } from "@emotion/react";
+import usePersistentState from "../../hooks/usePersistentState";
 
 ChartJS.register(...registerables);
 ChartJS.register(
@@ -54,8 +55,11 @@ const DisplayGraph:React.FC<{
     const cookies = useMemo(() => new Cookies(), []);
     const [showChart, setShowChart] = useState(String(cookies.get('showChart')) === 'false' ? false : true);
     const {id: word} = useParams<{ id: string; }>();
-
     const completelyHideChart = false; // useMemo(() => word.indexOf(" ") !== -1 ? true : false, [word]);
+    const [mode] = usePersistentState("mode", "dark");
+
+    const chartsRef = useRef<HTMLDivElement | null>(null);
+
 
     /**
      * Use Effects
@@ -69,11 +73,11 @@ const DisplayGraph:React.FC<{
      */
   return (
     <div>
-        <div className="gap-4 mb-4 grid grid-cols-12">
+        <div className="gap-4 mb-4 grid grid-cols-12 ">
 
             {/*search header*/}
             {totalCount && (
-                <> 
+                <>
                     <p className={`font-bold ${completelyHideChart ? "col-span-12" : window.innerWidth <= 360 ? "col-span-12 text-center" : "col-span-6"} sm:text-center`}>
                         Searched on "{decodeURIComponent(word)}" ({totalCount} results last 10 days)
                     </p>
@@ -82,14 +86,14 @@ const DisplayGraph:React.FC<{
                         <p>Toggle Chart</p>
                         <IonToggle
 							css={css`
-								
+
 								--background-checked : var(--ion-color-step-250);
 								--handle-background-checked: var(--ion-color-primary-tint);
 							`}
                             checked={showChart}
                             onClick={() => setShowChart(!showChart)}
                         />
-                
+
                     </div>
                 </>
             )}
@@ -104,8 +108,12 @@ const DisplayGraph:React.FC<{
         chartDataPerSource &&
         !completelyHideChart &&
         (
-            <div className="gap-4 grid grid-cols-12" >
-                <div className="chart chart-col6">
+            <div className="gap-4 grid grid-cols-12 default-chart-theme rounded-lg"
+            css={css`
+            background-color: var(--ion-color-step-50);
+        `}
+        ref={chartsRef} >
+                <div className="chart chart-col6  ">
                     <Chart
                         type="bar"
                         data={chartDataDailyCount}
@@ -118,12 +126,21 @@ const DisplayGraph:React.FC<{
                                 title: {
                                     display: true,
                                     text: '# of messages per day (from several Discords)',
+                                    // color: mode === 'dark' ? 'white' : 'black'
                                 },
                             },
                             scales: {
                                 y: {
                                     suggestedMin: 0,
-                                }
+                                    ticks: {
+                                        // color: mode === 'dark' ? 'white' : 'black'
+                                    },
+                                },
+                                x: {
+                                    ticks: {
+                                        // color: mode === 'dark' ? 'white' : 'black'
+                                    },
+                                },
                             },
                             responsive: true,
                             maintainAspectRatio: true,
@@ -144,7 +161,20 @@ const DisplayGraph:React.FC<{
                                 },
                                 title: {
                                     display: true,
-                                    text: '# of messages per Discord',
+                                    text: '# of messages per Discord (last 10 days)',
+                                    // color: mode === 'dark' ? 'white' : 'black'
+                                },
+                            },
+                            scales: {
+                                y: {
+                                    ticks: {
+                                        // color: mode === 'dark' ? 'white' : 'black'
+                                    },
+                                },
+                                x: {
+                                    ticks: {
+                                        // color: mode === 'dark' ? 'white' : 'black'
+                                    },
                                 },
                             },
                             responsive: true,

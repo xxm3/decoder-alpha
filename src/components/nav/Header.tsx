@@ -5,11 +5,13 @@ import {
     IonToolbar,
     IonMenuButton,
 	IonButton,
+	IonBadge,
+	IonRippleEffect,
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from 'react-router';
 import {
-    arrowBack, moon, search, sunny,
+    arrowBack, close, moon, search, sunny,
 } from 'ionicons/icons';
 import { queryClient } from "../../queryClient";
 import SearchBar from "../SearchBar";
@@ -19,6 +21,10 @@ import Help from "../Help";
 import { css } from "@emotion/react";
 import "./Header.scss"
 import usePersistentState from "../../hooks/usePersistentState";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { auth } from "../../firebase";
+// import { signInAnonymously } from "firebase/auth";
 
 
 const HeaderContainer = () => {
@@ -32,6 +38,7 @@ const HeaderContainer = () => {
 
     const [headerPlaceholder, setHeaderPlaceholder] = useState('');
 
+	const isDemo = useSelector<RootState>(state => state.demo.demo);
 
 	const [mode, setMode] = usePersistentState<"dark" | "light">("mode", "dark");
 
@@ -76,7 +83,6 @@ const HeaderContainer = () => {
     // does the search functionality
     function handleSearch(val: string) {
         val = val.trim();
-
         if (val.length === 0) return;
         const queryKey = ["messages", id];
         queryClient.resetQueries(queryKey);
@@ -99,7 +105,7 @@ const HeaderContainer = () => {
                 `}
             >
                 <IonToolbar>
-                    <div className="justify-between space-x-8 flex items-center">
+                    <div className="justify-between space-x-4 flex items-center">
                         {/*pt-3*/}
                         {!showMobileSearch && (
                             <div className="flex items-center space-x-4">
@@ -115,19 +121,29 @@ const HeaderContainer = () => {
 
                                 {/*site logo & home*/}
                                 <IonRouterLink
-                                    className="text-2xl logo"
+                                    className="text-2xl"
                                     routerLink="/"
                                     color="text"
                                 >
-                                    <div className="flex items-center space-x-3">
+                                    <div className="flex items-center space-x-2">
                                         <img
                                             className="logo-height"
                                             src="/assets/site-logos/logo-transparent.png"
                                             alt="logo"
                                         />
-                                        <p className="headerName">
+                                        <span className="headerName logo">
                                             SOL Decoder
-                                        </p>
+                                        </span>
+                                        {isDemo ?<IonBadge color="primary" hidden={!isDemo} className="relative hidden sm:flex space-x-1 hover:opacity-90 py-2 px-3 items-center" onClick={(e) => {
+											e.preventDefault()
+											e.stopPropagation();
+											auth.signOut()
+										}}>
+											<p>demo</p>
+											<IonIcon icon={close} />
+											<IonRippleEffect />
+										</IonBadge> : null}
+										
                                     </div>
                                 </IonRouterLink>
                             </div>
@@ -136,7 +152,7 @@ const HeaderContainer = () => {
                         <div
                             className={`flex-grow flex items-center ${
                                 showMobileSearch
-                                    ? 'space-x-8'
+                                    ? 'space-x-4'
                                     : 'lg:max-w-xl justify-end lg:justify-start'
                             }`}
                         >
@@ -149,7 +165,7 @@ const HeaderContainer = () => {
                                 />
                             )}
                             <div
-                                className={`flex-grow flex items-baseline space-x-2 c-header-search ${
+                                className={`flex-grow flex space-x-2 c-header-search items-center ${
                                     showMobileSearch
                                         ? 'max-w-[50rem] px-3'
                                         : 'hidden lg:flex'
@@ -178,10 +194,7 @@ const HeaderContainer = () => {
                             )}
                         </div>
 
-                        <div
-                            className="flex space-x-4 items-center"
-                            hidden={showMobileSearch}
-                        >
+                        <div className="flex space-x-4 items-center" hidden={showMobileSearch}>
                             <IonButton
                                 className="ml-auto"
                                 onClick={() => {
@@ -197,16 +210,12 @@ const HeaderContainer = () => {
                                     --padding-end: var(--padding-horizontal);
                                     --padding-top: var(--padding-vertical);
                                     --padding-bottom: var(--padding-vertical);
-
                                     --dimensions: 48px;
                                     height: var(--dimensions);
                                     width: var(--dimensions);
                                 `}
                             >
-                                <IonIcon
-                                    icon={mode === 'dark' ? sunny : moon}
-                                    className="h-7 w-7"
-                                />
+                                <IonIcon icon={mode === 'dark' ? sunny : moon} className="h-7 w-7" />
                             </IonButton>
                             <div className="hidden md:flex items-center">
                                 <WalletButton />
