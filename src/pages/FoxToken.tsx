@@ -230,7 +230,7 @@ function FoxToken({contentRef}: FoxToken) {
     const [searchValue,setSearchValue] = useState<string>()
     const location = useLocation();
     useEffect(() => {
-        console.log('hello',location)
+        // console.log('hello',location)
         setSearchValue(location.search)
         fetchTableData()
     }, [location])
