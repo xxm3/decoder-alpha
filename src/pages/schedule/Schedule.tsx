@@ -226,7 +226,8 @@ const Schedule = () => {
 
                     <span className="" onClick={() => handleProjectClick(record)}>
                         {record?.project && <span><b>Name : </b>{record.project}</span>}
-                        {record?.mintExpiresAt && <span><br /><b>Time :</b>{record.mintExpiresAt}</span>}
+                        // TODO: sumit
+                        {record?.mintExpiresAt && <span><br /><b>Time (UTC) :</b>{record.mintExpiresAt}</span>}
                         {record?.price && <><br /><b>Price : </b><span dangerouslySetInnerHTML={{ __html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎` }} /></>}
                         {record?.count && <span><br /><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                         {record?.numbersOfDiscordMembers && <span><br /><b>Discord (all) : </b>{record.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
