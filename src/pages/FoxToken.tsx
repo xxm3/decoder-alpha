@@ -98,7 +98,7 @@ const columns: Column<FoxTokenData> [] = [
     },
     // REMOVING-FF-FOR-NOW
     {
-        title: 'Last Sale', 
+        title: 'Last Sale',
         customSort: (a, b) =>  new Date(a.lastSaleDate ? a.lastSaleDate : 0 ) as any - (new Date(b.lastSaleDate ? b.lastSaleDate : 0) as any),
         render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : '-'}</span>,
     },
@@ -226,7 +226,7 @@ function FoxToken({contentRef}: FoxToken) {
     const viewmytoken = query.get('viewmytoken');
 
     // search value from today's mint
-    
+
     const [searchValue,setSearchValue] = useState<string>()
     const location = useLocation();
     useEffect(() => {
@@ -1078,7 +1078,7 @@ function FoxToken({contentRef}: FoxToken) {
 								display : none;
 							}
 						} */
-                        
+
 					`}>
 
                         {/*<IonItem style={{"width": "250px"}}>*/}
@@ -1283,7 +1283,7 @@ function FoxToken({contentRef}: FoxToken) {
                             ]}
                         />
                          {/*recent FF tokens*/}
-                         <FfNamed /> 
+                         <FfNamed />
                          <ReactTooltip />
                          </>}/>
                         </IonContent>

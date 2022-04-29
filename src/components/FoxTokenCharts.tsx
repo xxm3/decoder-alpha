@@ -158,7 +158,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                     {
                         type: 'line' as const,
                         label: 'Listings',
-                        borderColor: '#9945FF' ,
+                        // borderColor: '#9945FF',
                         yAxisID: 'y0',
                         borderColor: lineColorSelected,
                         fill: {

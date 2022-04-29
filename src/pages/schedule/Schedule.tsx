@@ -340,7 +340,8 @@ const Schedule = () => {
             title: 'Price',
             customSort: (a, b) =>
                 +a.price.split(' ')[0] - +b.price.split(' ')[0],
-            render: (record) => <><div className='break-all whitespace-normal w-40' dangerouslySetInnerHTML=
+            // reak-all whitespace-normal bw-40 --- TODO: freelance
+            render: (record) => <><div className='' dangerouslySetInnerHTML=
                 {{
                     __html: record.wlPrice ? `
                     ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
@@ -432,7 +433,7 @@ const Schedule = () => {
                                         marginTop:'2%',
                                         paddingLeft:"4%",
                                         borderRadius:30,
-                                        borderWidth: 1 
+                                        borderWidth: 1
                                     },
                                     rowStyle: (rowData: any) => ({
                                         fontWeight: timeCount(rowData?.time) ? '900' : "",

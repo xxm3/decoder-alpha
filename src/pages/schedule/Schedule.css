@@ -22,8 +22,9 @@
 
 .foxImg{
     width: 23px;
-    display: inherit;
+    /*display: inherit;*/
 }
+
 ::-webkit-scrollbar,
 *::-webkit-scrollbar {
   display: none;
