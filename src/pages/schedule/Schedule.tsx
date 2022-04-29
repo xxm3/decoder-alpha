@@ -7,11 +7,12 @@ import { IonContent, IonIcon, IonRippleEffect, useIonToast, IonRefresher, IonRef
 import './Schedule.css'
 import { Column } from '@material-table/core';
 import Table from '../../components/Table';
-import { logoDiscord, logoTwitter, link } from 'ionicons/icons';
+import { logoDiscord, logoTwitter, link, navigate } from 'ionicons/icons';
 import { useHistory } from "react-router";
 import usePersistentState from '../../hooks/usePersistentState';
 import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
+
 
 interface Mint {
     image: string;
@@ -70,10 +71,8 @@ const Schedule = () => {
     const addMintExpiresAt = () => {
         for (let i = 0; i < dataSource.length; i++) {
             if (dataSource[i].time !== "")
-                // TODO: sumit - bugged for some people
-                // dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")";
-                dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";
-        }
+              //  dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")";
+dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";        }
         setMints([...dataSource]);
     }
 
@@ -92,10 +91,8 @@ const Schedule = () => {
         const interval = setInterval(() => {
             for (let i = 0; i < dataSource.length; i++) {
                 if (dataSource[i].time !== "")
-                    // TODO: sumit - bugged for some people
-                    // dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")"
-                    dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")"
-            }
+                  //  dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")"
+dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";            }
 
             setMints([...dataSource])
         }, 60000)
@@ -230,7 +227,6 @@ const Schedule = () => {
 
                     <span className="" onClick={() => handleProjectClick(record)}>
                         {record?.project && <span><b>Name : </b>{record.project}</span>}
-                        // TODO: sumit
                         {record?.mintExpiresAt && <span><br /><b>Time (UTC) :</b>{record.mintExpiresAt}</span>}
                         {record?.price && <><br /><b>Price : </b><span dangerouslySetInnerHTML={{ __html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎` }} /></>}
                         {record?.count && <span><br /><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
@@ -312,11 +308,8 @@ const Schedule = () => {
                 rowData.project.toLowerCase().includes(term.toLowerCase()),
         },
         {
-            // TODO: sumit - bugged for some people
-            // title: 'Time',
-            title: 'Time (UTC)',
-
-            // customSort: (a, b) => +new Date(a.time) - +new Date(b.time),
+            title: 'Time',
+            // customSort: (a, b) => +new Date(a.time) - +new Date(b.time), 
             customSort: (a, b) => a.time.localeCompare(b.time), // sorting with time
             render: (record) => (
                 <span>
@@ -338,14 +331,13 @@ const Schedule = () => {
         },
         {
             title: 'Price',
-            customSort: (a, b) =>
-                +a.price.split(' ')[0] - +b.price.split(' ')[0],
-            // reak-all whitespace-normal bw-40 --- TODO: freelance
-            render: (record) => <><div className='' dangerouslySetInnerHTML=
+            customSort: (a, b) => +a.price.split(' ')[0] - +b.price.split(' ')[0],
+            // send price in parmas and redirect to fox token page 
+            render: (record) => <div onClick={(e) => history.push( { pathname: '/foxtoken',search: record.wlPrice? record.wlPrice : record.price.replace(' SOL', "")})} className='break-normal whitespace-normal w-40 flex flex-row cursor-pointer' dangerouslySetInnerHTML=
                 {{
                     __html: record.wlPrice ? `
                     ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
-                }}></div></>,
+                }}></div>,
         },
         {
             title: 'Supply',
@@ -433,7 +425,7 @@ const Schedule = () => {
                                         marginTop:'2%',
                                         paddingLeft:"4%",
                                         borderRadius:30,
-                                        borderWidth: 1
+                                        borderWidth: isMobile ?  1 :0
                                     },
                                     rowStyle: (rowData: any) => ({
                                         fontWeight: timeCount(rowData?.time) ? '900' : "",
