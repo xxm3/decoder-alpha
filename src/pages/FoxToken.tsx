@@ -453,21 +453,16 @@ function FoxToken({contentRef}: FoxToken) {
         (state: RootState) => state.wallet.walletAddress
     );
 
-    useEffect(() => {
-        if(walletAddress){
-            getSplFromWallet(walletAddress);
-        }      
-    }, [walletAddress])
+    // ....bugs site...???
+    // useEffect(() => {
+    //     if(walletAddress){
+    //         getSplFromWallet(walletAddress);
+    //     }
+    // }, [walletAddress])
+
     /**
      * Use Effects
      */
-
-    // const [sortModel, setSortModel] = React.useState([
-    //     {
-    //         field: 'lastSaleDate',
-    //         sort: 'desc',
-    //     },
-    // ]);
 
     /**
      * Functions
@@ -484,7 +479,10 @@ function FoxToken({contentRef}: FoxToken) {
     // load table data!
     const fetchTableData = async () => {
             setTableData([]);
-            getUserSpls();
+
+            // ....bugs site...
+            // getUserSpls();
+
             const data: any = await getLiveFoxTokenData(mySplTokens);
 
             // sometimes only gets named ones...
@@ -571,7 +569,7 @@ function FoxToken({contentRef}: FoxToken) {
     const getSplFromWallet = async (wallet: string) => {
 
         try {
-            
+
             let splTokens: any = await (await instance.get(environment.backendApi + '/getSplFromWallet', { params: { wallet: wallet} })).data;
             // debugger
 
@@ -754,7 +752,7 @@ function FoxToken({contentRef}: FoxToken) {
             }
 
             if (!multWallet?.length && !walletAddress ) {
-               
+
                 present({
                     message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add one (or three!) manually. Then you can filter this table to only the tokens in your wallet.',
                     color: 'danger',
