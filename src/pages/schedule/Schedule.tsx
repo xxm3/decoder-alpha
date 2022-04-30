@@ -428,6 +428,7 @@ const Schedule = () => {
                                 title={`Mint Schedule - ${date}`}
                                 style={{ overflow: 'auto' }}
                                 options={{
+                                    pageSize: 20,
                                     searchFieldStyle:{
                                         marginLeft:'-24%',
                                         marginTop:'2%',

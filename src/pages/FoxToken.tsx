@@ -99,7 +99,7 @@ const columns: Column<FoxTokenData> [] = [
     // REMOVING-FF-FOR-NOW
     {
         title: 'Last Sale',
-        customSort: (a, b) =>  new Date(a.lastSaleDate ? a.lastSaleDate : 0 ) as any - (new Date(b.lastSaleDate ? b.lastSaleDate : 0) as any),
+        customSort: (a, b) => new Date(a.lastSaleDate ? a.lastSaleDate : 0 ) as any - (new Date(b.lastSaleDate ? b.lastSaleDate : 0) as any),
         render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : '-'}</span>,
     },
     {
@@ -453,6 +453,13 @@ function FoxToken({contentRef}: FoxToken) {
     /**
      * Use Effects
      */
+
+    // const [sortModel, setSortModel] = React.useState([
+    //     {
+    //         field: 'lastSaleDate',
+    //         sort: 'desc',
+    //     },
+    // ]);
 
     /**
      * Functions
@@ -1145,6 +1152,7 @@ function FoxToken({contentRef}: FoxToken) {
                                 detailPanelType: 'single',
                                 search: true,
                                 searchAutoFocus:true,
+                                // sortModel={sortModel},
                                 searchText: searchValue ? searchValue.replace('?', "") : '' ,
                                 searchFieldStyle:{
                                     marginLeft:'-24%',
