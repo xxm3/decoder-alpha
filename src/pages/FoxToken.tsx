@@ -510,77 +510,13 @@ function FoxToken({contentRef}: FoxToken) {
 
 
     // give a wallet ... return all spl tokens in it
-    // * OLD Code
-    // const getSplFromWallet = async (wallet: string) => {
-
-    //     try {
-    //         console.log("going out to " + wallet);
-
-    //         // https://docs.solana.com/developing/clients/javascript-reference
-    //         let base58publicKey = new solanaWeb3.PublicKey(wallet.toString());
-
-    //         const connection = new solanaWeb3.Connection(
-    //             solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed',
-    //         );
-
-    //         // let account = await connection.getAccountInfo(base58publicKey);
-    //         // console.log(account?.data);
-    //         // https://github.com/solana-labs/solana/blob/master/web3.js/examples/get_account_info.js
-    //         let balance = await connection.getBalance(base58publicKey); // SOL balance
-    //         balance = balance / 1000000000;
-    //         // @ts-ignore
-    //         setMySolBalance(balance);
-
-    //         // https://github.com/michaelhly/solana-py/issues/48
-    //         let tokenAccounts = await connection.getParsedTokenAccountsByOwner(
-    //             base58publicKey,
-    //             {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
-    //         );
-
-
-    //         let mySplTokensTemporaryAgainAgain: any = [];
-
-    //         for (let i in tokenAccounts.value) {
-    //             if (tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0) {
-    //                 // console.log(tokenAccounts.value[i]);
-    //                 mySplTokensTemporaryAgainAgain.push({
-    //                     token: tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint,
-    //                     amount: tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount,
-    //                     myWallet: wallet
-    //                 });
-    //             }
-    //         }
-
-    //         return mySplTokensTemporaryAgainAgain;
-
-    //     } catch (err) {
-    //         present({
-    //             message: 'Error when getting your Whitelist tokens from your wallet',
-    //             color: 'danger',
-    //             duration: 5000,
-    //             buttons: [{ text: 'X', handler: () => dismiss() }],
-    //         });
-
-    //         return [];
-    //     }
-
-    // }
-    // * New code
     const getSplFromWallet = async (wallet: string) => {
-
         try {
-
-            let splTokens: any = await (await instance.get(environment.backendApi + '/getSplFromWallet', { params: { wallet: wallet} })).data;
-            // debugger
-
-            if(splTokens) {
+            const { data: splTokens } = await instance.get(`${environment.backendApi}/getSplFromWallet`, { params: { wallet } });
+            if (splTokens) {
                 setMySolBalance(splTokens.balance);
-
                 return splTokens.data;
-            }else {
-                return [];
-            }
-
+            } else return [];
         } catch (err) {
             present({
                 message: 'Error when getting your Whitelist tokens from your wallet',
@@ -588,12 +524,9 @@ function FoxToken({contentRef}: FoxToken) {
                 duration: 5000,
                 buttons: [{ text: 'X', handler: () => dismiss() }],
             });
-
             return [];
         }
-
     }
-
 
     // https://github.com/solana-labs/solana-program-library/blob/master/token/js/examples/create_mint_and_transfer_tokens.ts
     // https://docs.solana.com/es/developing/clients/jsonrpc-api#gettokenaccountsbyowner
