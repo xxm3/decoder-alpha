@@ -722,9 +722,9 @@ function FoxToken({contentRef}: FoxToken) {
                             if (window.location.href.indexOf(local_host_str) !== -1) {
                                 // then ADD data
                                 if (!tableData[i].whichMyWallets) {
-                                    tableData[i].whichMyWallets = shortenedWallet(mySplTokens[y].myWallet);
+                                    tableData[i].whichMyWallets = shortenedWallet(mySplTokens[y].wallet);
                                 } else {
-                                    tableData[i].whichMyWallets += ", " + shortenedWallet(mySplTokens[y].myWallet);
+                                    tableData[i].whichMyWallets += ", " + shortenedWallet(mySplTokens[y].wallet);
                                 }
                             }
 
