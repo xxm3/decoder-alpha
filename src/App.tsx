@@ -1,5 +1,6 @@
 import { IonApp, IonCol, IonContent, IonGrid, IonMenu, IonPage, IonRouterOutlet, IonRow, IonSplitPane } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
+import { Network } from '@capacitor/network';
 // import { useEffect, useState } from "react";
 // import Search from "./pages/Search";
 // import Login from "./pages/Login";
@@ -59,10 +60,34 @@ import Alerts from "./pages/Alerts";
 import { useDispatch } from "react-redux"
 import { setDemo } from "./redux/slices/demoSlice";
 import PrivacyPolicy from './pages/home/PrivacyPolicy';
+import { getPlatforms, isPlatform, getConfig } from '@ionic/react';
 
 
 const App = () => {
 
+const [networkState, setNetworkState] = useState(true);
+
+//offline Online
+	useEffect(() => {
+		statusCheck()
+		const loadEvent = () => {
+			window.addEventListener('online', ()=>{
+				setNetworkState(true)
+			});
+			window.addEventListener('offline', ()=>{
+				setNetworkState(false)
+			});
+		}
+		window.addEventListener('load', loadEvent);
+		
+	}, [])
+
+
+	const statusCheck = async () => {
+		const status = await Network.getStatus();
+		setNetworkState(status.connected)
+	}
+	
 	/*
 		state which stores the user. It has 3 states:
 		1. undefined : User data is still loading
@@ -101,7 +126,8 @@ const App = () => {
 	}, []);
 
 	return (
-        <IonApp>
+<>
+			{networkState ?        <IonApp>
             <Theme>
                 <QueryClientProvider client={queryClient}>
                     <UserContext.Provider value={user}>
@@ -208,7 +234,14 @@ const App = () => {
                 </QueryClientProvider>
             </Theme>
         </IonApp>
-    );
+:
+				<>
+				
+					<div className=" flex items-center justify-center align-middle	h-full " > <div className="text-3xl text-slate-400">Network is not found. Please check your internet connection.</div></div>
+				</>
+
+			}
+		</>    );
 };
 
 export default App;

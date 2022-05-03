@@ -1,4 +1,4 @@
-import {IonButton, IonCard, IonRouterLink, isPlatform} from '@ionic/react';
+import {IonButton, IonCard, IonCol, IonRouterLink, IonRow, isPlatform} from '@ionic/react';
 import {useEffect, useMemo, useState} from 'react';
 import {Redirect} from 'react-router';
 import {instance} from '../axios';
@@ -14,6 +14,8 @@ import { InAppBrowser }  from "@awesome-cordova-plugins/in-app-browser"
 import { useDispatch } from "react-redux"
 import { setDemo } from '../redux/slices/demoSlice';
 import NavLink from '../components/nav/NavLink';
+import IosLogo from '../images/app-store.png'
+import AndroidLogo from '../images/playstore.png'
 
 /**
  * The "Login" page to which all unauthenticated users are redirected to
@@ -59,6 +61,9 @@ function Login() {
     // loading state which stores whether an access token is being issued or not
     const [loading, setLoading] = useState(!!code);
 
+    //check open in mobile-web or Browser
+    const DeviceCheck = isPlatform('mobileweb');
+   
 
     const isMobileDevice = useMemo(() => isPlatform("mobile"), []);
 
@@ -103,6 +108,28 @@ function Login() {
         <>
             {!loading ? (
                 <>
+                 {DeviceCheck ?
+                        <>
+                            <IonRow>
+                                <IonCol size='6' >
+                                    <IonButton href="#"  className='iosButton ionTextRight' fill='clear' 
+                                        onClick={() =>{
+                                           window.open( `https://apps.apple.com/in/app/sol-decoder/id1619922481`);
+                                        }} >
+                                            <img src={IosLogo} />
+                                    </IonButton>
+                                </IonCol>
+                                <IonCol size='6'  >
+                                    <IonButton href="#" className='androidButton ionTextLeft' fill='clear'
+                                        onClick={() =>{
+                                            window.open( `https://play.google.com/store/apps/details?id=com.soldecoder.app`);
+                                        }} >
+                                        <img src={AndroidLogo} />
+                                    </IonButton>
+                                </IonCol>
+                            </IonRow>
+                        </>
+                        : ''}
                     {/*text-center*/}
                     <div className="">
                     <IonButton

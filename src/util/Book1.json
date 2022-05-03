@@ -1,0 +1,719 @@
+[
+    {
+        "name": "UTC-11",
+        "abbrev": "U",
+        "offset": -11,
+        "label": "(UTC-11:00) Coordinated Universal Time-11",
+        "value": "Pacific/Midway"
+    },
+    {
+        "name": "Hawaiian Standard Time",
+        "abbrev": "HST",
+        "offset": -10,
+        "label": "(UTC-10:00) Hawaii",
+        "value": "Pacific/Honolulu"
+    },
+    {
+        "name": "Alaskan Standard Time",
+        "abbrev": "AKDT",
+        "offset": -8,
+        "label": "(UTC-09:00) Alaska",
+        "value": "America/Anchorage"
+    },
+    {
+        "name": "Pacific Standard Time (Mexico)",
+        "abbrev": "PDT",
+        "offset": -7,
+        "label": "(UTC-08:00) Baja California",
+        "value": "America/Santa_Isabel"
+    },
+    {
+        "name": "Pacific Daylight Time",
+        "abbrev": "PDT",
+        "offset": -7,
+        "label": "(UTC-07:00) Pacific Daylight Time (US & Canada)",
+        "value": "America/Los_Angeles"
+    },
+    {
+        "name": "Pacific Standard Time",
+        "abbrev": "PST",
+        "offset": -8,
+        "label": "(UTC-08:00) Pacific Standard Time (US & Canada)",
+        "value": "America/Los_Angeles"
+    },
+    {
+        "name": "US Mountain Standard Time",
+        "abbrev": "UMST",
+        "offset": -7,
+        "label": "(UTC-07:00) Arizona",
+        "value": "America/Creston"
+    },
+    {
+        "name": "Mountain Standard Time (Mexico)",
+        "abbrev": "MDT",
+        "offset": -6,
+        "label": "(UTC-07:00) Chihuahua, La Paz, Mazatlan",
+        "value": "America/Chihuahua"
+    },
+    {
+        "name": "Mountain Standard Time",
+        "abbrev": "MDT",
+        "offset": -6,
+        "label": "(UTC-07:00) Mountain Time (US & Canada)",
+        "value": "America/Boise"
+    },
+
+    {
+        "name": "Central Standard Time",
+        "abbrev": "CDT",
+        "offset": -5,
+        "label": "(UTC-06:00) Central Time (US & Canada)",
+        "value": "America/Chicago"
+    },
+    {
+        "name": "Central Standard Time (Mexico)",
+        "abbrev": "CDT",
+        "offset": -5,
+        "label": "(UTC-06:00) Guadalajara, Mexico City, Monterrey",
+        "value": "America/Bahia_Banderas"
+    },
+    {
+        "name": "Canada Central Standard Time",
+        "abbrev": "CCST",
+        "offset": -6,
+        "label": "(UTC-06:00) Saskatchewan",
+        "value": "America/Regina"
+    },
+    {
+        "name": "SA Pacific Standard Time",
+        "abbrev": "SPST",
+        "offset": -5,
+        "label": "(UTC-05:00) Bogota, Lima, Quito",
+        "value": "America/Bogota"
+    },
+    {
+        "name": "Eastern Standard Time",
+        "abbrev": "EST",
+        "offset": -5,
+        "label": "(UTC-05:00) Eastern Time (US & Canada)",
+        "value": "America/Detroit"
+    },
+    {
+        "name": "Eastern Daylight Time",
+        "abbrev": "EDT",
+        "offset": -4,
+        "label": "(UTC-04:00) Eastern Daylight Time (US & Canada)",
+        "value": "America/Detroit"
+    },
+    {
+        "name": "US Eastern Standard Time",
+        "abbrev": "UEDT",
+        "offset": -5,
+        "label": "(UTC-05:00) Indiana (East)",
+        "value": "America/Indiana/Marengo"
+    },
+    {
+        "name": "Venezuela Standard Time",
+        "abbrev": "VST",
+        "offset": -4.5,
+        "label": "(UTC-04:30) Caracas",
+        "value": "America/Caracas"
+    },
+    {
+        "name": "Paraguay Standard Time",
+        "abbrev": "PYT",
+        "offset": -4,
+        "label": "(UTC-04:00) Asuncion",
+        "value": "America/Asuncion"
+    },
+    {
+        "name": "Atlantic Standard Time",
+        "abbrev": "ADT",
+        "offset": -3,
+        "label": "(UTC-04:00) Atlantic Time (Canada)",
+        "value": "America/Glace_Bay"
+    },
+    {
+        "name": "Central Brazilian Standard Time",
+        "abbrev": "CBST",
+        "offset": -4,
+        "label": "(UTC-04:00) Cuiaba",
+        "value": "America/Campo_Grande"
+    },
+    {
+        "name": "SA Western Standard Time",
+        "abbrev": "SWST",
+        "offset": -4,
+        "label": "(UTC-04:00) Georgetown, La Paz, Manaus, San Juan",
+        "value": "America/Aruba"
+    },
+    {
+        "name": "Pacific SA Standard Time",
+        "abbrev": "PSST",
+        "offset": -4,
+        "label": "(UTC-04:00) Santiago",
+        "value": "America/Santiago"
+    },
+    {
+        "name": "Newfoundland Standard Time",
+        "abbrev": "NDT",
+        "offset": -2.5,
+        "label": "(UTC-03:30) Newfoundland",
+        "value": "America/St_Johns"
+    },
+    {
+        "name": "E. South America Standard Time",
+        "abbrev": "ESAST",
+        "offset": -3,
+        "label": "(UTC-03:00) Brasilia",
+        "value": "America/Sao_Paulo"
+    },
+    {
+        "name": "Argentina Standard Time",
+        "abbrev": "AST",
+        "offset": -3,
+        "label": "(UTC-03:00) Buenos Aires",
+        "value": "America/Argentina/La_Rioja"
+    },
+    {
+        "name": "SA Eastern Standard Time",
+        "abbrev": "SEST",
+        "offset": -3,
+        "label": "(UTC-03:00) Cayenne, Fortaleza",
+        "value": "America/Araguaina"
+    },
+    {
+        "name": "Greenland Standard Time",
+        "abbrev": "GDT",
+        "offset": -3,
+        "label": "(UTC-03:00) Greenland",
+        "value": "America/Godthab"
+    },
+    {
+        "name": "Montevideo Standard Time",
+        "abbrev": "MST",
+        "offset": -3,
+        "label": "(UTC-03:00) Montevideo",
+        "value": "America/Montevideo"
+    },
+    {
+        "name": "Bahia Standard Time",
+        "abbrev": "BST",
+        "offset": -3,
+        "label": "(UTC-03:00) Salvador",
+        "value": "America/Bahia"
+    },
+    {
+        "name": "UTC-02",
+        "abbrev": "U",
+        "offset": -2,
+        "label": "(UTC-02:00) Coordinated Universal Time-02",
+        "value": "America/Noronha"
+    },
+
+    {
+        "name": "Azores Standard Time",
+        "abbrev": "ADT",
+        "offset": 0,
+        "label": "(UTC-01:00) Azores",
+        "value": "America/Scoresbysund"
+    },
+    {
+        "name": "Cape Verde Standard Time",
+        "abbrev": "CVST",
+        "offset": -1,
+        "label": "(UTC-01:00) Cape Verde Is.",
+        "value": "Atlantic/Cape_Verde"
+    },
+    {
+        "name": "Morocco Standard Time",
+        "abbrev": "MDT",
+        "offset": 1,
+        "label": "(UTC) Casablanca",
+        "value": "Africa/Casablanca"
+    },
+    {
+        "name": "UTC",
+        "abbrev": "UTC",
+        "offset": 0,
+        "label": "(UTC) Coordinated Universal Time",
+        "value": "America/Danmarkshavn"
+    },
+    {
+        "name": "GMT Standard Time",
+        "abbrev": "GMT",
+        "offset": 0,
+        "label": "(UTC) Edinburgh, London",
+        "value": "Europe/Isle_of_Man"
+    },
+    {
+        "name": "British Summer Time",
+        "abbrev": "BST",
+        "offset": 1,
+        "label": "(UTC+01:00) Edinburgh, London",
+        "value": "Europe/Isle_of_Man"
+    },
+    {
+        "name": "GMT Standard Time",
+        "abbrev": "GDT",
+        "offset": 1,
+        "label": "(UTC) Dublin, Lisbon",
+        "value": "Atlantic/Canary"
+    },
+    {
+        "name": "Greenwich Standard Time",
+        "abbrev": "GST",
+        "offset": 0,
+        "label": "(UTC) Monrovia, Reykjavik",
+        "value": "Africa/Abidjan"
+    },
+    {
+        "name": "W. Europe Standard Time",
+        "abbrev": "WEDT",
+        "offset": 2,
+        "label": "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna",
+        "value": "Arctic/Longyearbyen"
+    },
+    {
+        "name": "Central Europe Standard Time",
+        "abbrev": "CEDT",
+        "offset": 2,
+        "label": "(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague",
+        "value": "Europe/Belgrade"
+    },
+    {
+        "name": "Romance Standard Time",
+        "abbrev": "RDT",
+        "offset": 2,
+        "label": "(UTC+01:00) Brussels, Copenhagen, Madrid, Paris",
+        "value": "Africa/Ceuta"
+    },
+    {
+        "name": "Central European Standard Time",
+        "abbrev": "CEDT",
+        "offset": 2,
+        "label": "(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb",
+        "value": "Europe/Sarajevo"
+    },
+    {
+        "name": "W. Central Africa Standard Time",
+        "abbrev": "WCAST",
+        "offset": 1,
+        "label": "(UTC+01:00) West Central Africa",
+        "value": "Africa/Algiers"
+    },
+    {
+        "name": "Namibia Standard Time",
+        "abbrev": "NST",
+        "offset": 1,
+        "label": "(UTC+01:00) Windhoek",
+        "value": "Africa/Windhoek"
+    },
+    {
+        "name": "GTB Standard Time",
+        "abbrev": "GDT",
+        "offset": 3,
+        "label": "(UTC+02:00) Athens, Bucharest",
+        "value": "Asia/Nicosia"
+    },
+    {
+        "name": "Middle East Standard Time",
+        "abbrev": "MEDT",
+        "offset": 3,
+        "label": "(UTC+02:00) Beirut",
+        "value": "Asia/Beirut"
+    },
+    {
+        "name": "Egypt Standard Time",
+        "abbrev": "EST",
+        "offset": 2,
+        "label": "(UTC+02:00) Cairo",
+        "value": "Africa/Cairo"
+    },
+    {
+        "name": "Syria Standard Time",
+        "abbrev": "SDT",
+        "offset": 3,
+        "label": "(UTC+02:00) Damascus",
+        "value": "Asia/Damascus"
+    },
+    {
+        "name": "E. Europe Standard Time",
+        "abbrev": "EEDT",
+        "offset": 3,
+        "label": "(UTC+02:00) E. Europe",
+        "value": "Asia/Nicosia"
+    },
+    {
+        "name": "South Africa Standard Time",
+        "abbrev": "SAST",
+        "offset": 2,
+        "label": "(UTC+02:00) Harare, Pretoria",
+        "value": "Africa/Blantyre"
+    },
+    {
+        "name": "FLE Standard Time",
+        "abbrev": "FDT",
+        "offset": 3,
+        "label": "(UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius",
+        "value": "Europe/Helsinki"
+    },
+    {
+        "name": "Turkey Standard Time",
+        "abbrev": "TDT",
+        "offset": 3,
+        "label": "(UTC+03:00) Istanbul",
+        "value": "Europe/Istanbul"
+    },
+    {
+        "name": "Israel Standard Time",
+        "abbrev": "JDT",
+        "offset": 3,
+        "label": "(UTC+02:00) Jerusalem",
+        "value": "Asia/Jerusalem"
+    },
+    {
+        "name": "Libya Standard Time",
+        "abbrev": "LST",
+        "offset": 2,
+        "label": "(UTC+02:00) Tripoli",
+        "value": "Africa/Tripoli"
+    },
+    {
+        "name": "Jordan Standard Time",
+        "abbrev": "JST",
+        "offset": 3,
+        "label": "(UTC+03:00) Amman",
+        "value": "Asia/Amman"
+    },
+    {
+        "name": "Arabic Standard Time",
+        "abbrev": "AST",
+        "offset": 3,
+        "label": "(UTC+03:00) Baghdad",
+        "value": "Asia/Baghdad"
+    },
+    {
+        "name": "Kaliningrad Standard Time",
+        "abbrev": "KST",
+        "offset": 3,
+        "label": "(UTC+02:00) Kaliningrad",
+        "value": "Europe/Kaliningrad"
+    },
+    {
+        "name": "Arab Standard Time",
+        "abbrev": "AST",
+        "offset": 3,
+        "label": "(UTC+03:00) Kuwait, Riyadh",
+        "value": "Asia/Aden"
+    },
+    {
+        "name": "E. Africa Standard Time",
+        "abbrev": "EAST",
+        "offset": 3,
+        "label": "(UTC+03:00) Nairobi",
+        "value": "Africa/Addis_Ababa"
+    },
+    {
+        "name": "Moscow Standard Time",
+        "abbrev": "MSK",
+        "offset": 3,
+        "label": "(UTC+03:00) Moscow, St. Petersburg, Volgograd, Minsk",
+        "value": "Europe/Kirov"
+    },
+    {
+        "name": "Samara Time",
+        "abbrev": "SAMT",
+        "offset": 4,
+        "label": "(UTC+04:00) Samara, Ulyanovsk, Saratov",
+        "value": "Europe/Astrakhan"
+    },
+    {
+        "name": "Iran Standard Time",
+        "abbrev": "IDT",
+        "offset": 4.5,
+        "label": "(UTC+03:30) Tehran",
+        "value": "Asia/Tehran"
+    },
+    {
+        "name": "Arabian Standard Time",
+        "abbrev": "AST",
+        "offset": 4,
+        "label": "(UTC+04:00) Abu Dhabi, Muscat",
+        "value": "Asia/Dubai"
+    },
+    {
+        "name": "Azerbaijan Standard Time",
+        "abbrev": "ADT",
+        "offset": 5,
+        "label": "(UTC+04:00) Baku",
+        "value": "Asia/Baku"
+    },
+    {
+        "name": "Mauritius Standard Time",
+        "abbrev": "MST",
+        "offset": 4,
+        "label": "(UTC+04:00) Port Louis",
+        "value": "Indian/Mahe"
+    },
+    {
+        "name": "Georgian Standard Time",
+        "abbrev": "GET",
+        "offset": 4,
+        "label": "(UTC+04:00) Tbilisi",
+        "value": "Asia/Tbilisi"
+    },
+    {
+        "name": "Caucasus Standard Time",
+        "abbrev": "CST",
+        "offset": 4,
+        "label": "(UTC+04:00) Yerevan",
+        "value": "Asia/Yerevan"
+    },
+    {
+        "name": "Afghanistan Standard Time",
+        "abbrev": "AST",
+        "offset": 4.5,
+        "label": "(UTC+04:30) Kabul",
+        "value": "Asia/Kabul"
+    },
+    {
+        "name": "West Asia Standard Time",
+        "abbrev": "WAST",
+        "offset": 5,
+        "label": "(UTC+05:00) Ashgabat, Tashkent",
+        "value": "Antarctica/Mawson"
+    },
+    {
+        "name": "Yekaterinburg Time",
+        "abbrev": "YEKT",
+        "offset": 5,
+        "label": "(UTC+05:00) Yekaterinburg",
+        "value": "Asia/Yekaterinburg"
+    },
+    {
+        "name": "Pakistan Standard Time",
+        "abbrev": "PKT",
+        "offset": 5,
+        "label": "(UTC+05:00) Islamabad, Karachi",
+        "value": "Asia/Karachi"
+    },
+    {
+        "name": "India Standard Time",
+        "abbrev": "IST",
+        "offset": 5.5,
+        "label": "(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi",
+        "value": "Asia/Calcutta"
+    },
+    {
+        "name": "Sri Lanka Standard Time",
+        "abbrev": "SLST",
+        "offset": 5.5,
+        "label": "(UTC+05:30) Sri Jayawardenepura",
+        "value": "Asia/Colombo"
+    },
+    {
+        "name": "Nepal Standard Time",
+        "abbrev": "NST",
+        "offset": 5.75,
+        "label": "(UTC+05:45) Kathmandu",
+        "value": "Asia/Kathmandu"
+    },
+    {
+        "name": "Central Asia Standard Time",
+        "abbrev": "CAST",
+        "offset": 6,
+        "label": "(UTC+06:00) Nur-Sultan (Astana)",
+        "value": "Antarctica/Vostok"
+    },
+    {
+        "name": "Bangladesh Standard Time",
+        "abbrev": "BST",
+        "offset": 6,
+        "label": "(UTC+06:00) Dhaka",
+        "value": "Asia/Dhaka"
+    },
+    {
+        "name": "Myanmar Standard Time",
+        "abbrev": "MST",
+        "offset": 6.5,
+        "label": "(UTC+06:30) Yangon (Rangoon)",
+        "value": "Asia/Rangoon"
+    },
+    {
+        "name": "SE Asia Standard Time",
+        "abbrev": "SAST",
+        "offset": 7,
+        "label": "(UTC+07:00) Bangkok, Hanoi, Jakarta",
+        "value": "Antarctica/Davis"
+    },
+    {
+        "name": "N. Central Asia Standard Time",
+        "abbrev": "NCAST",
+        "offset": 7,
+        "label": "(UTC+07:00) Novosibirsk",
+        "value": "Asia/Novokuznetsk"
+    },
+    {
+        "name": "China Standard Time",
+        "abbrev": "CST",
+        "offset": 8,
+        "label": "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi",
+        "value": "Asia/Hong_Kong"
+    },
+    {
+        "name": "North Asia Standard Time",
+        "abbrev": "NAST",
+        "offset": 8,
+        "label": "(UTC+08:00) Krasnoyarsk",
+        "value": "Asia/Krasnoyarsk"
+    },
+    {
+        "name": "Singapore Standard Time",
+        "abbrev": "MPST",
+        "offset": 8,
+        "label": "(UTC+08:00) Kuala Lumpur, Singapore",
+        "value": "Asia/Brunei"
+    },
+    {
+        "name": "W. Australia Standard Time",
+        "abbrev": "WAST",
+        "offset": 8,
+        "label": "(UTC+08:00) Perth",
+        "value": "Antarctica/Casey"
+    },
+    {
+        "name": "Taipei Standard Time",
+        "abbrev": "TST",
+        "offset": 8,
+        "label": "(UTC+08:00) Taipei",
+        "value": "Asia/Taipei"
+    },
+    {
+        "name": "Ulaanbaatar Standard Time",
+        "abbrev": "UST",
+        "offset": 8,
+        "label": "(UTC+08:00) Ulaanbaatar",
+        "value": "Asia/Choibalsan"
+    },
+    {
+        "name": "North Asia East Standard Time",
+        "abbrev": "NAEST",
+        "offset": 8,
+        "label": "(UTC+08:00) Irkutsk",
+        "value": "Asia/Irkutsk"
+    },
+    {
+        "name": "Japan Standard Time",
+        "abbrev": "JST",
+        "offset": 9,
+        "label": "(UTC+09:00) Osaka, Sapporo, Tokyo",
+        "value": "Asia/Dili"
+    },
+    {
+        "name": "Korea Standard Time",
+        "abbrev": "KST",
+        "offset": 9,
+        "label": "(UTC+09:00) Seoul",
+        "value": "Asia/Pyongyang"
+    },
+    {
+        "name": "Cen. Australia Standard Time",
+        "abbrev": "CAST",
+        "offset": 9.5,
+        "label": "(UTC+09:30) Adelaide",
+        "value": "Australia/Adelaide"
+    },
+    {
+        "name": "AUS Central Standard Time",
+        "abbrev": "ACST",
+        "offset": 9.5,
+        "label": "(UTC+09:30) Darwin",
+        "value": "Australia/Darwin"
+    },
+    {
+        "name": "E. Australia Standard Time",
+        "abbrev": "EAST",
+        "offset": 10,
+        "label": "(UTC+10:00) Brisbane",
+        "value": "Australia/Brisbane"
+    },
+    {
+        "name": "AUS Eastern Standard Time",
+        "abbrev": "AEST",
+        "offset": 10,
+        "label": "(UTC+10:00) Canberra, Melbourne, Sydney",
+        "value": "Australia/Melbourne"
+    },
+    {
+        "name": "West Pacific Standard Time",
+        "abbrev": "WPST",
+        "offset": 10,
+        "label": "(UTC+10:00) Guam, Port Moresby",
+        "value": "Antarctica/DumontDUrville"
+    },
+    {
+        "name": "Tasmania Standard Time",
+        "abbrev": "TST",
+        "offset": 10,
+        "label": "(UTC+10:00) Hobart",
+        "value": "Australia/Currie"
+    },
+    {
+        "name": "Yakutsk Standard Time",
+        "abbrev": "YST",
+        "offset": 9,
+        "label": "(UTC+09:00) Yakutsk",
+        "value": "Asia/Chita"
+    },
+    {
+        "name": "Central Pacific Standard Time",
+        "abbrev": "CPST",
+        "offset": 11,
+        "label": "(UTC+11:00) Solomon Is., New Caledonia",
+        "value": "Antarctica/Macquarie"
+    },
+    {
+        "name": "Vladivostok Standard Time",
+        "abbrev": "VST",
+        "offset": 11,
+        "label": "(UTC+11:00) Vladivostok",
+        "value": "Asia/Sakhalin"
+    },
+    {
+        "name": "New Zealand Standard Time",
+        "abbrev": "NZST",
+        "offset": 12,
+        "label": "(UTC+12:00) Auckland, Wellington",
+        "value": "Antarctica/McMurdo"
+    },
+    {
+        "name": "Fiji Standard Time",
+        "abbrev": "FST",
+        "offset": 12,
+        "label": "(UTC+12:00) Fiji",
+        "value": "Pacific/Fiji"
+    },
+    {
+        "name": "Magadan Standard Time",
+        "abbrev": "MST",
+        "offset": 12,
+        "label": "(UTC+12:00) Magadan",
+        "value": "Asia/Anadyr"
+    },
+    {
+        "name": "Kamchatka Standard Time",
+        "abbrev": "KDT",
+        "offset": 13,
+        "label": "(UTC+12:00) Petropavlovsk-Kamchatsky - Old",
+        "value": "Asia/Kamchatka"
+    },
+
+    {
+        "name": "Samoa Standard Time",
+        "abbrev": "SST",
+        "offset": 13,
+        "label": "(UTC+13:00) Samoa",
+        "value": "Pacific/Apia"
+    }
+]

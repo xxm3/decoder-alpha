@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import moment from 'moment';
+import 'moment-timezone';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
@@ -12,7 +13,6 @@ import { useHistory } from "react-router";
 import usePersistentState from '../../hooks/usePersistentState';
 import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
-
 
 interface Mint {
     image: string;
@@ -58,8 +58,7 @@ const Schedule = () => {
     const [isPaging, setIsPaging] = useState(false);
 
     const [mode] = usePersistentState("mode", "dark");
-
-
+    const [selectedTimezone, setSelectedTimezone] = useState<any>({})
 
     let dataSource = mints
 
@@ -70,13 +69,64 @@ const Schedule = () => {
      * this will keep updating the time of when the mint will expire
      */
     const addMintExpiresAt = () => {
+     
         for (let i = 0; i < dataSource.length; i++) {
-            if (dataSource[i].time !== "")
+            if (dataSource[i].time !== ""){
               //  dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")";
-dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";        }
+                // dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";   
+                dataSource[i].mintExpiresAt = " (" + moment(dataSource[i].time, 'hh:mm:ss',).fromNow() + ")";   
+            }
+
+        }
         setMints([...dataSource]);
     }
+    // console.log('no time zone', moment.tz.names())
+    useEffect(() => {
+        if(dataSource && Object.keys(selectedTimezone).length !== 0){
+            for (let i = 0; i < dataSource.length; i++) {
+                if (dataSource[i].time.includes('UTC')){
+                    let time = moment(dataSource[i].time, 'HH:mm').format("HH:mm");
+                    const HrsMin = time.split(":")
+                    let hrs = Number(HrsMin[0])
+                    let min = Number(HrsMin[1])
+                    let timezone = moment.utc().set("hour", hrs).set("minute", min).format("HH:mm:ss");
+                    const curentTime = moment.tz(selectedTimezone.value).format('HH:mm')
+                    const CurrentHrsMin = curentTime.split(":")
+                    let CurrentHrs = Number(CurrentHrsMin[0])
+                    let CurrentMin = Number(CurrentHrsMin[1])
+                    let currentTimezone = moment.utc().tz(selectedTimezone.value).set("hour", CurrentHrs).set("minute", CurrentMin).format("HH:mm:ss");
+                    const diff = moment.utc(moment(currentTimezone, "HH:mm:ss").diff(moment(timezone, "HH:mm:ss"))).format("HH:mm:ss")
+                    const diffDuration = moment.duration(diff);
+                    let getCurrentOffset = moment.utc().tz(selectedTimezone.value).format('Z');
+                    const OffsetTimeSec = Math.abs(moment.duration(getCurrentOffset).asSeconds());
+                    const diffDurationinSec = moment.duration(diff).asSeconds();
+                    const DurationSec = moment.duration(dataSource[i].time).asSeconds();
+                    const OffsetTotalHrs = diffDurationinSec + OffsetTimeSec
+                    const subtractSelectHrs = OffsetTotalHrs - DurationSec
+                    let Hours = diffDuration.hours()
+                    let Days = diffDuration.days()
+                    let Minutes = diffDuration.minutes()
 
+                    if (Hours === 0 && Minutes > 0) {
+                        dataSource[i].mintExpiresAt = `(${Minutes} minute ago)`
+                    } else if (Hours === 0 && Minutes < 0) {
+                        dataSource[i].mintExpiresAt = `(in ${Math.abs(Minutes)} minute)`
+                    } else if (Hours < 0) {
+                        dataSource[i].mintExpiresAt = `(in ${Math.abs(Hours)} hours)`
+                    } else if (Hours > 0 && subtractSelectHrs > 0) {
+                        dataSource[i].mintExpiresAt = `(${Hours} hour ago)`
+                    } else if (Hours > 0 && subtractSelectHrs < 0) {
+                        dataSource[i].mintExpiresAt = `(in ${Hours} hours)`
+                    } else {
+                        dataSource[i].mintExpiresAt = `(few second ago)`
+                    }
+                }
+                }
+                setMints([...dataSource]);
+            }
+      
+       
+      }, [selectedTimezone])
 
     useEffect(() => {
         if (mints.length <= 10) {
@@ -86,21 +136,36 @@ dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').
         }
     }, [mints])
 
-    useEffect(() => {
-        dataSource.length && addMintExpiresAt();
-
-        const interval = setInterval(() => {
+    let intrvalCalling = () =>{
+        let selectTimeZone:any={}
+        setSelectedTimezone((prevTime:any) => {
+            selectTimeZone=prevTime
+            return prevTime
+        });
+        if(dataSource && Object.keys(selectTimeZone).length !== 0){
+            setSelectedTimezone((prevTime:any) => {
+                selectTimeZone=prevTime
+                return prevTime
+            });
+        }else{
             for (let i = 0; i < dataSource.length; i++) {
-                if (dataSource[i].time !== "")
-                  //  dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")"
-dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";            }
-
+            if (dataSource[i].time !== "")
+                dataSource[i].mintExpiresAt = " (" + moment(dataSource[i].time, 'hh:mm:ss',).fromNow() + ")";   
+            }
             setMints([...dataSource])
+        }
+    }
+
+    useEffect(() => {
+        dataSource && addMintExpiresAt();
+        const interval = setInterval(() => {
+            intrvalCalling()
         }, 60000)
 
         return () => clearInterval(interval);
     }, [dataSource.length]);
 
+    // for get is mobile flag
     useEffect(() => {
         if (window.innerWidth < 525) {
             setIsMobile(true)
@@ -114,12 +179,14 @@ dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').
             .get(environment.backendApi + '/getTodaysMints')
             .then((res) => {
                 setMints(res.data.data.mints);
+                // console.log('00000000000000',res.data.data.mints)
                 setDate(res.data.data.date);
                 setIsLoading(false);
+                let update = 0
+                SetDefaultTimeZone(update)
             })
             .catch((error) => {
                 setIsLoading(false);
-                console.error("error when getting mints: " + error);
                 let msg = '';
                 if (error && error.response) {
                     msg = String(error.response.data.body);
@@ -149,11 +216,33 @@ dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').
 
     useEffect(() => {
         fetchMintsData();
+        
     }, []);
 
+    const SetDefaultTimeZone = (update:any) => {
+        let timeZone = moment.tz.guess()
+      
+            setSelectedTimezone({value:selectedTimezone.value ? selectedTimezone.value : timeZone})
+
+        }
+
     const timeCount = (time: any) => {
-        const hours: number = -1 * moment.duration(moment(new Date()).diff(+ moment(time, 'h:mm:ss'))).asHours();
-        return hours >= 0 && hours <= 2;
+        if(Object.keys(selectedTimezone).length !== 0){
+           let Newtime = moment(time, 'HH:mm').format("HH:mm");
+           const HrsMin =  Newtime.split(":")
+           let hrs = Number(HrsMin[0])
+           let min =  Number(HrsMin[1])
+           let timezone = moment().tz(selectedTimezone.value).format()
+           let timezone1 = moment(timezone).tz(selectedTimezone.value).set("hour", hrs).set("minute", min).format();
+           const diff = moment(timezone1).diff(timezone);
+           const diffDuration = moment.duration(diff);
+           let Hours:number = diffDuration.hours()
+           return Hours >= 0 && Hours <= 2
+        } else {
+            const hours: number = -1 * moment.duration(moment(new Date()).diff(+ moment(time, 'HH:mm'))).asHours();
+            return hours >= 0 && hours <= 2;
+        }
+
     }
 
     // This will call the mintExpiresAt function every minute to update tillTheMint's time
@@ -334,7 +423,8 @@ dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').
             title: 'Price',
             customSort: (a, b) => +a.price.split(' ')[0] - +b.price.split(' ')[0],
             // send price in parmas and redirect to fox token page
-            render: (record) => <div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-40 flex flex-row ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML=
+            // render: (record) => <div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-40 flex flex-row ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML=
+            render: (record) => <div onClick={(e) => history.push( { pathname: '/foxtoken',search: record.wlPrice? record.wlPrice : record.price.replace(' SOL', "")})} className='break-normal whitespace-normal w-40 flex flex-row cursor-pointer' dangerouslySetInnerHTML=
                 {{
                     __html: record.wlPrice ? `
                     ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
@@ -421,13 +511,14 @@ dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').
                                 title={`Mint Schedule - ${date}`}
                                 style={{ overflow: 'auto' }}
                                 options={{
-                                    pageSize: 20,
+                                    // pageSize: 20,
                                     searchFieldStyle:{
-                                        marginLeft:'-24%',
+                                        marginLeft:'-20%',
                                         marginTop:'2%',
                                         paddingLeft:"4%",
                                         borderRadius:30,
-                                        borderWidth: isMobile ?  1 :0
+                                        borderWidth: 1,
+                                        border : mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.876) !important' : '1px solid rgba(10,10,10,0.8) !important'
                                     },
                                     rowStyle: (rowData: any) => ({
                                         fontWeight: timeCount(rowData?.time) ? '900' : "",
@@ -443,6 +534,9 @@ dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').
 						    	The Fox logo in the price is the official Token price that comes from the Fox Token Market.
 							    Rows in bold mean the mint comes out in two hours or less.
 							    `}
+                                showTimezoneSelect={true}
+                                selectedTimezone={selectedTimezone}
+                                setSelectedTimezone={setSelectedTimezone}
                             />} >
                         </Virtuoso>
                     </IonContent>
