@@ -233,7 +233,9 @@ function FoxToken({contentRef}: FoxToken) {
     useEffect(() => {
         // console.log('hello',location)
         setSearchValue(location.search)
-        fetchTableData()
+        if(location.search){
+            fetchTableData()
+        }
     }, [location])
 
 
