@@ -2,3 +2,17 @@
 #welcome ul li, #security ul li{
     padding: 5px 0;
 }
+.iosButton {
+    height: 54px;
+}
+
+.iosButton img{
+    height: 54px;
+}
+
+.androidButton {
+    height: 54px;
+}
+.androidButton img{
+    height: 54px;
+}
