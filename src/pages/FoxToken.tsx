@@ -1126,11 +1126,12 @@ function FoxToken({contentRef}: FoxToken) {
                                 // sortModel={sortModel},
                                 searchText: searchValue ? searchValue.replace('?', "") : '' ,
                                 searchFieldStyle:{
-                                    marginLeft:'-24%',
-                                    marginTop:'2%',
-                                    paddingLeft:"4%",
-                                    borderRadius:30,
-                                    borderWidth: 1
+                                    marginLeft:'-20%',
+                                        marginTop:'2%',
+                                        paddingLeft:"4%",
+                                        borderRadius:30,
+                                        borderWidth: 1,
+                                        border : mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.876) !important' : '1px solid rgba(10,10,10,0.8) !important'
                                 },
                                 rowStyle:( rowData:any) =>  ({
                                     backgroundColor : mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',

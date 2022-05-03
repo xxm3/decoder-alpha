@@ -330,11 +330,12 @@ dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').
                 </span>
             ),
         },
-        {
+       {
             title: 'Price',
             customSort: (a, b) => +a.price.split(' ')[0] - +b.price.split(' ')[0],
             // send price in parmas and redirect to fox token page
-            render: (record) => <div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-40 flex flex-row ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML=
+            // render: (record) => <div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-40 flex flex-row ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML=
+            render: (record) => <div onClick={(e) => history.push( { pathname: '/foxtoken',search: record.wlPrice? record.wlPrice : record.price.replace(' SOL', "")})} className='break-normal whitespace-normal w-40 flex flex-row cursor-pointer' dangerouslySetInnerHTML=
                 {{
                     __html: record.wlPrice ? `
                     ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
@@ -423,11 +424,12 @@ dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').
                                 options={{
                                     pageSize: 20,
                                     searchFieldStyle:{
-                                        marginLeft:'-24%',
+                                        marginLeft:'-20%',
                                         marginTop:'2%',
                                         paddingLeft:"4%",
                                         borderRadius:30,
-                                        borderWidth: isMobile ?  1 :0
+                                        borderWidth: 1,
+                                        border : mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.876) !important' : '1px solid rgba(10,10,10,0.8) !important'
                                     },
                                     rowStyle: (rowData: any) => ({
                                         fontWeight: timeCount(rowData?.time) ? '900' : "",
