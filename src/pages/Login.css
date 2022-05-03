@@ -2,17 +2,16 @@
 #welcome ul li, #security ul li{
     padding: 5px 0;
 }
-.iosButton {
+.iosButton,.androidButton {
     height: 54px;
 }
 
-.iosButton img{
-    height: 54px;
-}
 
-.androidButton {
-    height: 54px;
-}
-.androidButton img{
-    height: 54px;
+@media screen and (min-width: 440px) {
+    .iosButton,.androidButton {
+        height: 66px;
+    }
+    .iosButton img,.androidButton img{
+        height: 100%;
+    }
 }

@@ -12,6 +12,7 @@ import { useHistory } from "react-router";
 import usePersistentState from '../../hooks/usePersistentState';
 import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
+import'../FoxToken.scss'
 
 
 interface Mint {
@@ -251,7 +252,6 @@ dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').
             title: '',
             render: (record) => (
                 <div className="flex space-x-3">
-
                     {/*discord*/}
                     <a
                         href={record.discordLink}
@@ -264,27 +264,22 @@ dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').
                         <IonIcon icon={logoDiscord} className="big-emoji" />
                         <IonRippleEffect />
                     </a>
-
                     {/*twitter*/}
                     <a
                         href={record.twitterLink}
                         className="schedule-link"
                         target="_blank"
-
                     >
                         <IonIcon icon={logoTwitter} className="big-emoji" />
                         <IonRippleEffect />
-
                     </a>
                     <a
                         href={record.projectLink}
                         className={(record.projectLink && record.projectLink) ? "schedule-link" : "schedule-link-disabled"}
                         target="_blank"
-
                     >
                         <IonIcon icon={link} className="big-emoji" />
                         <IonRippleEffect />
-
                     </a>
                 </div>
             ),
