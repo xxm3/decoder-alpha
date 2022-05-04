@@ -227,7 +227,7 @@ function Table<RowData extends object>(
                     columns={props.columns.map((column) => ({
                         ...column,
                         cellStyle: {
-                            whiteSpace: 'nowrap',
+                            whiteSpace: 'break-spaces',
                             borderBottom: 'none',
                         },
                         hidden: column.title
@@ -315,7 +315,7 @@ function Table<RowData extends object>(
                     options={{
                         headerStyle: {
                             fontSize: '16px',
-                            whiteSpace: 'nowrap',
+                            whiteSpace: 'break-spaces',
                             borderBottom: 'none',
                             paddingBottom: 25,
                             ...options?.headerStyle,
