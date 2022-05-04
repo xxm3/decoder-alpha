@@ -63,7 +63,7 @@ function Login() {
 
     //check open in mobile-web or Browser
     const DeviceCheck = isPlatform('mobileweb');
-   
+
 
     const isMobileDevice = useMemo(() => isPlatform("mobile"), []);
 
@@ -112,7 +112,7 @@ function Login() {
                         <>
                             <IonRow>
                                 <IonCol size='6' >
-                                    <IonButton href="#"  className='iosButton ionTextRight' fill='clear' 
+                                    <IonButton href="#"  className='iosButton ionTextRight' fill='clear'
                                         onClick={() =>{
                                            window.open( `https://apps.apple.com/in/app/sol-decoder/id1619922481`);
                                         }} >
@@ -193,7 +193,7 @@ function Login() {
                                 <li>Follow us <a href="https://twitter.com/SOL_Decoder" target="_blank" className="underline">on Twitter</a></li>
                                 <li>Read our <a href="https://docs.soldecoder.app" target="_blank" className="underline">docs here</a> </li>
                                 <li>Read a Twitter thread of what we do <a href="https://twitter.com/SOL_Decoder/status/1516759793884712965 " target="_blank" className="underline">here</a> </li>
-                                <li>View our official YouTube channel to view videos about our website / Discord <a href="https://www.youtube.com/channel/UCKC4je1AHML5lmIhwMj_kjQ " target="_blank" className="underline">here</a></li>
+                                <li>View our official YouTube channel to view videos about our website / Discord <a href="https://www.youtube.com/playlist?list=PLeuijfzk0WfuZeCCH_KKXKkSBD9iCsM7R" target="_blank" className="underline">here</a></li>
                                 <li>
                                     Read our <IonRouterLink href="/privacy" className="pr-7 underline text-inherit">Privacy Policy</IonRouterLink>
                                 </li>

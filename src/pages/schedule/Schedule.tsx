@@ -277,22 +277,15 @@ const Schedule = () => {
     const columns: Column<Mint>[] = [
         {
             title: 'Powered by SOL Decoder',
-            // cellStyle: {
-            //     minWidth: 100,
-            //     maxWidth: 100
-            // },
-            // headerStyle: {width: "100px"},
             cellStyle: {
-                width: 100,
-                maxWidth: 100,
-                // overflowWrap: 'break-word',
-                // wordBreak: 'break-all'
+                width: 145,
+                minWidth: 145,
+                maxWidth: 145,
             },
             headerStyle: {
-                width:100,
-                maxWidth: 100,
-                // overflowWrap: 'break-word',
-                // wordBreak: 'break-all'
+                width: 145,
+                minWidth: 145,
+                maxWidth: 145,
             },
             render: (record) => (
                 <div className="flex space-x-3">
@@ -482,7 +475,7 @@ const Schedule = () => {
                                                                     fontWeight: timeCount(rowData?.time) ? '' : "",
                                                                     backgroundColor: mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
                                                                     color: mode === 'dark' ? "" : '#202124',
-                                                                    borderTop: mode === 'dark' ? "" : '1px solid rgba(220,220,220,0.8)',
+                                                                    borderTop: mode === 'dark' ? "" : '1px solid rgba(260,260,260,0.8)',
                                                                 }),
                                                                 paging: isPaging,
                                                                 columnsButton: isMobile ? false : true,

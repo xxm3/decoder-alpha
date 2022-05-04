@@ -163,12 +163,13 @@ function Table<RowData extends object>(
 
 						th {
 						  font-weight: bold;
-						  height: 200px;
+						  //height: 200px;
 						}
 						thead th:first-child, thead th:first-child div, thead th:first-child div span{
 						  //word-break: break-all;
-						  word-wrap: break-word;
-						  //background-color: red
+						  //word-wrap: break-word;
+						  //whiteSpace: 'break-spaces !important',
+                          color: #9945FF
 						}
 
 						table {
@@ -227,7 +228,8 @@ function Table<RowData extends object>(
                     columns={props.columns.map((column) => ({
                         ...column,
                         cellStyle: {
-                            whiteSpace: 'break-spaces',
+                            // whiteSpace: 'break-spaces',
+                            whiteSpace: 'nowrap',
                             borderBottom: 'none',
                         },
                         hidden: column.title
@@ -316,6 +318,7 @@ function Table<RowData extends object>(
                         headerStyle: {
                             fontSize: '16px',
                             whiteSpace: 'break-spaces',
+                            // whiteSpace: 'nowrap',
                             borderBottom: 'none',
                             paddingBottom: 25,
                             ...options?.headerStyle,
