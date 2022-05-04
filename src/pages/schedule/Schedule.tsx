@@ -256,7 +256,7 @@ const Schedule = () => {
 
                     <div className="" onClick={() => handleProjectClick(record)}>
                         {record?.project && <span><b>Name : </b>{record.project}</span>}
-                        {record?.mintExpiresAt && <span><br /><b>Time : </b>{record.time.replace('UTC', '')}<span hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}>{record.mintExpiresAt}</span></span>}
+                        {record?.mintExpiresAt && <span><br /><b>Time : </b> <span>{record.updateTime || record.time.replace('UTC', '')}<span hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}>{record.mintExpiresAt}</span></span></span>}
                         {record?.price && <div className='flex flex-row'><b>Price : </b><div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-40 flex flex-row ml-1 ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}></div></div>}
                         {record?.count && <span><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                         {record?.numbersOfDiscordMembers && <span><br /><b>Discord (all) : </b>{record.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
@@ -274,7 +274,7 @@ const Schedule = () => {
 
     ];
 
-    const columns: Column<Mint>[] = [
+    const columns: Column<Mint>[] = [ 
         {
             title: '',
             render: (record) => (
