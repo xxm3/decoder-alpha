@@ -89,8 +89,7 @@ const columns: Column<FoxTokenData> [] = [
         title: 'Price',
         customSort: (a, b) => a.floorPrice - b.floorPrice,
         render: (record) => <div className='break-all whitespace-normal w-40'>{record.floorPrice} ◎</div>,
-        // customFilterAndSearch: ( rowData) => rowData.floorPrice,
-        customFilterAndSearch: (term, rowData,) =>   JSON.stringify(rowData.floorPrice)?.toLowerCase().includes(term.toLowerCase()),
+        // customFilterAndSearch: ( rowData) => rowData.floorPrice,        customFilterAndSearch: (term, rowData,) =>   JSON.stringify(rowData.floorPrice)?.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Listings',
@@ -227,17 +226,8 @@ function FoxToken({contentRef}: FoxToken) {
     const viewmytoken = query.get('viewmytoken');
 
     // search value from today's mint
-
     const [searchValue,setSearchValue] = useState<string>()
     const location = useLocation();
-    useEffect(() => {
-        // console.log('hello',location)
-        setSearchValue(location.search)
-        if(location.search){
-            fetchTableData()
-        }
-    }, [location])
-
 
     /**
      * Adding multiple wallets
@@ -581,11 +571,11 @@ function FoxToken({contentRef}: FoxToken) {
     // load table data, after we load in user tokens
     // isn't called on local host, see below useEffect
     useEffect(() => {
+        
         if (firstUpdate.current) {
             firstUpdate.current = false;
             return;
         }
-
         // only fetch data when NOT on local host ... after spl tokens is updated
         if (window.location.href.indexOf(local_host_str) === -1) {
             fetchTableData();
@@ -595,18 +585,25 @@ function FoxToken({contentRef}: FoxToken) {
 
     // call on load, when cookie array set
     useEffect(() => {
+        setSearchValue(location?.search)
+
 		if(!multWalletLoading){
 			// however DON'T do this in local host (will do this elsewhere ... since get RPC blocked)
 			if (window.location.href.indexOf(local_host_str) === -1) {
 				getUserSpls();
 			} else {
-				fetchTableData();
+                if(location.search){
+                    fetchTableData()
+                }else{
+                    if(location.pathname === '/foxtoken'){
+                        fetchTableData();
+                    }
+                }
 			}
 		}
 
+    }, [multWallet, multWalletLoading,location]);
 
-
-    }, [multWallet, multWalletLoading]);
     // also call when new wallet is connected to
     useEffect(() => {
         if (window.location.href.indexOf(local_host_str) === -1 && walletAddress) {
