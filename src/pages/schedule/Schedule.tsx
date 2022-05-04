@@ -89,8 +89,8 @@ const Schedule = () => {
             }
                 setMints([...dataSource]);
         }
-      
-       
+
+
       }, [selectedTimezone])
 
     useEffect(() => {
@@ -105,14 +105,14 @@ const Schedule = () => {
         dataSource.length && addMintExpiresAt();
 
         const interval = setInterval(() => {
-        let selectTime:any 
+        let selectTime:any
         setSelectedTimezone((old:any)=>{
             selectTime=old
             return old
         })
             for (let i = 0; i < dataSource.length; i++) {
                 if (dataSource[i].time !== ""){
-                    // dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";            
+                    // dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";
                     let utcZoneTime =  moment.utc(dataSource[i].time,'HH:mm').tz(selectTime.value).format('HH:mm')
                     dataSource[i].updateTime=utcZoneTime
                 }
@@ -274,9 +274,26 @@ const Schedule = () => {
 
     ];
 
-    const columns: Column<Mint>[] = [ 
+    const columns: Column<Mint>[] = [
         {
-            title: '',
+            title: 'Powered by SOL Decoder',
+            // cellStyle: {
+            //     minWidth: 100,
+            //     maxWidth: 100
+            // },
+            // headerStyle: {width: "100px"},
+            cellStyle: {
+                width: 100,
+                maxWidth: 100,
+                // overflowWrap: 'break-word',
+                // wordBreak: 'break-all'
+            },
+            headerStyle: {
+                width:100,
+                maxWidth: 100,
+                // overflowWrap: 'break-word',
+                // wordBreak: 'break-all'
+            },
             render: (record) => (
                 <div className="flex space-x-3">
 
@@ -447,7 +464,11 @@ const Schedule = () => {
                                   itemContent={() => <Table data={dataSource}
                                                             columns={isMobile ? columns_mobile : columns}
                                                             title={`Mint Schedule - ${date}`}
-                                                            style={{ overflow: 'auto' }}
+                                                            style={{ overflow: 'auto', overflowWrap: 'break-word' }}
+                                                            // headerStyle:{{backgroundColor:'red'}}
+                                                            // rowStyle: {
+                                                            //     overflowWrap: 'break-word'
+                                                            // }
                                                             options={{
                                                                 pageSize: 20,
                                                                 searchFieldStyle:{
