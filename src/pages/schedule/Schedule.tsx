@@ -39,6 +39,7 @@ interface Mint {
         comments: number;
         reactions: number;
     }
+    updateTime?:string
 }
 
 
@@ -82,56 +83,12 @@ const Schedule = () => {
         if(dataSource && Object.keys(selectedTimezone).length !== 0){
             for (let i = 0; i < dataSource.length; i++) {
                 if (dataSource[i].time.includes('UTC')){
-                    let time = moment(dataSource[i].time, 'HH:mm').format("HH:mm");
-                    const HrsMin = time.split(":")
-                    let hrs = Number(HrsMin[0])
-                    let min = Number(HrsMin[1])
-
-                    // console.log('time UTC 00--',time)
-
-                    let timezone = moment.utc().set("hour", hrs).set("minute", min).format("HH:mm:ss");
-                    const curentTime = moment.tz(selectedTimezone.value).format('HH:mm')
-
-                    // console.log('new time from drop down ',curentTime)
-
-                    const CurrentHrsMin = curentTime.split(":")
-                    let CurrentHrs = Number(CurrentHrsMin[0])
-                    let CurrentMin = Number(CurrentHrsMin[1])
-                    let currentTimezone = moment.utc().tz(selectedTimezone.value).set("hour", CurrentHrs).set("minute", CurrentMin).format("HH:mm:ss");
-                    const diff = moment.utc(moment(currentTimezone, "HH:mm:ss").diff(moment(timezone, "HH:mm:ss"))).format("HH:mm:ss")
-                    const diffDuration = moment.duration(diff);
-                    let getCurrentOffset = moment.utc().tz(selectedTimezone.value).format('Z');
-                    const OffsetTimeSec = Math.abs(moment.duration(getCurrentOffset).asSeconds());
-                    const diffDurationinSec = moment.duration(diff).asSeconds();
-                    const DurationSec = moment.duration(dataSource[i].time).asSeconds();
-                    const OffsetTotalHrs = diffDurationinSec + OffsetTimeSec
-                    const subtractSelectHrs = OffsetTotalHrs - DurationSec
-                    let Hours = diffDuration.hours()
-                    let Days = diffDuration.days()
-                    let Minutes = diffDuration.minutes()
-                    // console.log('>>>>>>>>>>>',dataSource[i].time)
-
-                    const newTimeDiff = moment.utc(moment(curentTime,"HH:mm:ss").diff(moment(dataSource[i].time,"HH:mm:ss"))).format("HH:mm:ss")
-                    console.log("88888888888888",newTimeDiff)
-              
-                    
-                    if (Hours === 0 && Minutes > 0) {
-                        dataSource[i].mintExpiresAt = `(${Minutes} minute ago)`
-                    } else if (Hours === 0 && Minutes < 0) {
-                        dataSource[i].mintExpiresAt = `(in ${Math.abs(Minutes)} minute)`
-                    } else if (Hours < 0) {
-                        dataSource[i].mintExpiresAt = `(in ${Math.abs(Hours)} hours)`
-                    } else if (Hours > 0 && subtractSelectHrs > 0) {
-                        dataSource[i].mintExpiresAt = `(${Hours} hour ago)`
-                    } else if (Hours > 0 && subtractSelectHrs < 0) {
-                        dataSource[i].mintExpiresAt = `(in ${Hours} hours)`
-                    } else {
-                        dataSource[i].mintExpiresAt = `(few second ago)`
-                    }
+                    let utcZoneTime =  moment.utc(dataSource[i].time,'HH:mm').tz(selectedTimezone.value).format('HH:mm')
+                    dataSource[i].updateTime=utcZoneTime
                 }
-                }
-                setMints([...dataSource]);
             }
+                setMints([...dataSource]);
+        }
       
        
       }, [selectedTimezone])
@@ -148,11 +105,18 @@ const Schedule = () => {
         dataSource.length && addMintExpiresAt();
 
         const interval = setInterval(() => {
+        let selectTime:any 
+        setSelectedTimezone((old:any)=>{
+            selectTime=old
+            return old
+        })
             for (let i = 0; i < dataSource.length; i++) {
-                if (dataSource[i].time !== "")
-                    //  dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")"
-                    dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";            }
-
+                if (dataSource[i].time !== ""){
+                    // dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";            
+                    let utcZoneTime =  moment.utc(dataSource[i].time,'HH:mm').tz(selectTime.value).format('HH:mm')
+                    dataSource[i].updateTime=utcZoneTime
+                }
+               }
             setMints([...dataSource])
         }, 60000)
 
@@ -378,7 +342,7 @@ const Schedule = () => {
             customSort: (a, b) => a.time.localeCompare(b.time), // sorting with time
             render: (record) => (
                 <span>
-                    {record.time.replace('UTC', '')}
+                    {record.updateTime || record.time.replace('UTC', '')}
                     <span
                         hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}
                     >
@@ -494,7 +458,7 @@ const Schedule = () => {
                                                                     border : mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.876) !important' : '1px solid rgba(10,10,10,0.8) !important'
                                                                 },
                                                                 rowStyle: (rowData: any) => ({
-                                                                    fontWeight: timeCount(rowData?.time) ? '900' : "",
+                                                                    fontWeight: timeCount(rowData?.time) ? '' : "",
                                                                     backgroundColor: mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
                                                                     color: mode === 'dark' ? "" : '#202124',
                                                                     borderTop: mode === 'dark' ? "" : '1px solid rgba(220,220,220,0.8)',
