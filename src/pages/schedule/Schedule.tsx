@@ -362,7 +362,7 @@ const Schedule = () => {
             title: 'Price',
             customSort: (a, b) => +a.price.split(' ')[0] - +b.price.split(' ')[0],
             // send price in parmas and redirect to fox token page
-            render: (record) => <div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-40 flex flex-row ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML=
+            render: (record) => <div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-48 flex flex-row ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML=
                 {{
                     __html: record.wlPrice ? `
                     ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
