@@ -146,57 +146,41 @@ const columns_mobile: Column<FoxTokenData>[] = [
         title: 'Details',
         render: (record:any) => (
             <span className="">
-            {/*twitter*/}
-                {record.twitter ? <a
-                    href={'https://twitter.com/' + record.twitter}
-                    className="hover:opacity-80"
-                    target="_blank"
-                    hidden={!record.twitter}
-                >
-                    <IonIcon icon={logoTwitter} className="big-emoji " />
-                    <IonRippleEffect />
-                </a> : null }
-
-                {/*discord*/}
-                { record.discord ? <> <a
-                    href={'https://discord.gg/' + record.discord}
-                    target="_blank"
-                    className={"hover:opacity-80 pr-1"}
-                    hidden={!record.discord}
-                >
-                    <IonIcon icon={logoDiscord} className="big-emoji "/>
-                    <IonRippleEffect />
-                </a> <br/> </> : null }
-
-                <span className="relative top-2 pr-3 w-24" >
-                    {/*ff link*/}
-                    <a
-                        href={`https://famousfoxes.com/tokenmarket/${record.token}`}
+                <div>
+                    {/*twitter*/}
+                    {record.twitter ? <a
+                        href={'https://twitter.com/' + record.twitter}
+                        className="hover:opacity-80"
                         target="_blank"
-                        className="hover:opacity-80 "
-                        >
-                        <img
-                            src="/assets/icons/FoxTokenLogo.svg"
-                            css={css`color: var(--ion-text-color);`}
-                            className="h-5 pr-1 inline mb-4"
-                        />
+                        hidden={!record.twitter}
+                    >
+                        <IonIcon icon={logoTwitter} className="big-emoji " />
+                        <IonRippleEffect />
+                    </a> : null }
+
+                    {/*discord*/}
+                    { record.discord ? <> <a
+                        href={'https://discord.gg/' + record.discord}
+                        target="_blank"
+                        className={"hover:opacity-80 ml-1"}
+                        hidden={!record.discord}
+                    >
+                        <IonIcon icon={logoDiscord} className="big-emoji "/>
+                        <IonRippleEffect />
+                    </a> </> : null }
+
+                    {/*ff link*/}
+                    <a href={`https://famousfoxes.com/tokenmarket/${record.token}`} target="_blank" className="hover:opacity-80 ml-1 ">
+                        <img src="/assets/icons/FoxTokenLogo.svg" css={css`color: var(--ion-text-color);`} className="h-5 pr-1 inline mb-4"/>
                     </a>
 
                     {/*solscan*/}
-                    <a
-                        href={`https://solscan.io/token/${record.token}`}
-                        target="_blank"
-                        className="hover:opacity-80"
-                    >
-                        <img
-                            src="/assets/icons/solscan.png"
-                            className="h-5 pr-1 inline mb-4"
-                        />
+                    <a href={`https://solscan.io/token/${record.token}`} target="_blank" className="hover:opacity-80">
+                            <img src="/assets/icons/solscan.png" className="h-5 ml-1 inline mb-4" />
                     </a>
+                </div>
 
-                </span>
-
-                <br className="xl:hidden lg:hidden" />
+                {/* <br className="xl:hidden lg:hidden" /> */}
                 {record?.row_obj?.token && <><span> <b>Token : </b>{shortenedWallet(record.row_obj.token)}</span></>}
                 {record?.row_obj?.name && <><br/><span ><b>Name : </b>{record.row_obj.name}</span></>}
                 {record?.row_obj?.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice} ◎</span></>}
@@ -1121,7 +1105,6 @@ function FoxToken({contentRef}: FoxToken) {
                             options={{
                                 detailPanelType: 'single',
                                 search: true,
-                                searchAutoFocus:true,
                                 // sortModel={sortModel},
                                 searchText: searchValue ? searchValue.replace('?', "") : '' ,
                                 searchFieldStyle:{
