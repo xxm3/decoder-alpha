@@ -10,6 +10,12 @@
     border-radius: 30px ;
     border: 2px solid rgba(171, 171, 171, 0.876) ;
 }
+.MuiInput-underline {
+    transition-duration: 0.001s ;
+    line-height: 31px ;
+    border-radius: 30px ;
+    border: 2px solid rgba(171, 171, 171, 0.876) ;
+}
 .MuiInput-underline:after {
     border-bottom: 0 !important;
 }

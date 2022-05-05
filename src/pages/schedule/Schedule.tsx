@@ -14,6 +14,7 @@ import usePersistentState from '../../hooks/usePersistentState';
 import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
 
+
 interface Mint {
     image: string;
     project: string;
@@ -38,6 +39,7 @@ interface Mint {
         comments: number;
         reactions: number;
     }
+    updateTime?:string
 }
 
 
@@ -56,9 +58,10 @@ const Schedule = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [isPaging, setIsPaging] = useState(false);
-
-    const [mode] = usePersistentState("mode", "dark");
     const [selectedTimezone, setSelectedTimezone] = useState<any>({})
+    const [mode] = usePersistentState("mode", "dark");
+
+
 
     let dataSource = mints
 
@@ -69,15 +72,10 @@ const Schedule = () => {
      * this will keep updating the time of when the mint will expire
      */
     const addMintExpiresAt = () => {
-     
         for (let i = 0; i < dataSource.length; i++) {
-            if (dataSource[i].time !== ""){
-              //  dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")";
-                // dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";   
-                dataSource[i].mintExpiresAt = " (" + moment(dataSource[i].time, 'hh:mm:ss',).fromNow() + ")";   
-            }
-
-        }
+            if (dataSource[i].time !== "")
+                //  dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")";
+                dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";        }
         setMints([...dataSource]);
     }
     // console.log('no time zone', moment.tz.names())
@@ -85,47 +83,14 @@ const Schedule = () => {
         if(dataSource && Object.keys(selectedTimezone).length !== 0){
             for (let i = 0; i < dataSource.length; i++) {
                 if (dataSource[i].time.includes('UTC')){
-                    let time = moment(dataSource[i].time, 'HH:mm').format("HH:mm");
-                    const HrsMin = time.split(":")
-                    let hrs = Number(HrsMin[0])
-                    let min = Number(HrsMin[1])
-                    let timezone = moment.utc().set("hour", hrs).set("minute", min).format("HH:mm:ss");
-                    const curentTime = moment.tz(selectedTimezone.value).format('HH:mm')
-                    const CurrentHrsMin = curentTime.split(":")
-                    let CurrentHrs = Number(CurrentHrsMin[0])
-                    let CurrentMin = Number(CurrentHrsMin[1])
-                    let currentTimezone = moment.utc().tz(selectedTimezone.value).set("hour", CurrentHrs).set("minute", CurrentMin).format("HH:mm:ss");
-                    const diff = moment.utc(moment(currentTimezone, "HH:mm:ss").diff(moment(timezone, "HH:mm:ss"))).format("HH:mm:ss")
-                    const diffDuration = moment.duration(diff);
-                    let getCurrentOffset = moment.utc().tz(selectedTimezone.value).format('Z');
-                    const OffsetTimeSec = Math.abs(moment.duration(getCurrentOffset).asSeconds());
-                    const diffDurationinSec = moment.duration(diff).asSeconds();
-                    const DurationSec = moment.duration(dataSource[i].time).asSeconds();
-                    const OffsetTotalHrs = diffDurationinSec + OffsetTimeSec
-                    const subtractSelectHrs = OffsetTotalHrs - DurationSec
-                    let Hours = diffDuration.hours()
-                    let Days = diffDuration.days()
-                    let Minutes = diffDuration.minutes()
-
-                    if (Hours === 0 && Minutes > 0) {
-                        dataSource[i].mintExpiresAt = `(${Minutes} minute ago)`
-                    } else if (Hours === 0 && Minutes < 0) {
-                        dataSource[i].mintExpiresAt = `(in ${Math.abs(Minutes)} minute)`
-                    } else if (Hours < 0) {
-                        dataSource[i].mintExpiresAt = `(in ${Math.abs(Hours)} hours)`
-                    } else if (Hours > 0 && subtractSelectHrs > 0) {
-                        dataSource[i].mintExpiresAt = `(${Hours} hour ago)`
-                    } else if (Hours > 0 && subtractSelectHrs < 0) {
-                        dataSource[i].mintExpiresAt = `(in ${Hours} hours)`
-                    } else {
-                        dataSource[i].mintExpiresAt = `(few second ago)`
-                    }
+                    let utcZoneTime =  moment.utc(dataSource[i].time,'HH:mm').tz(selectedTimezone.value).format('HH:mm')
+                    dataSource[i].updateTime=utcZoneTime
                 }
-                }
-                setMints([...dataSource]);
             }
-      
-       
+                setMints([...dataSource]);
+        }
+
+
       }, [selectedTimezone])
 
     useEffect(() => {
@@ -136,36 +101,28 @@ const Schedule = () => {
         }
     }, [mints])
 
-    let intrvalCalling = () =>{
-        let selectTimeZone:any={}
-        setSelectedTimezone((prevTime:any) => {
-            selectTimeZone=prevTime
-            return prevTime
-        });
-        if(dataSource && Object.keys(selectTimeZone).length !== 0){
-            setSelectedTimezone((prevTime:any) => {
-                selectTimeZone=prevTime
-                return prevTime
-            });
-        }else{
-            for (let i = 0; i < dataSource.length; i++) {
-            if (dataSource[i].time !== "")
-                dataSource[i].mintExpiresAt = " (" + moment(dataSource[i].time, 'hh:mm:ss',).fromNow() + ")";   
-            }
-            setMints([...dataSource])
-        }
-    }
-
     useEffect(() => {
-        dataSource && addMintExpiresAt();
+        dataSource.length && addMintExpiresAt();
+
         const interval = setInterval(() => {
-            intrvalCalling()
+        let selectTime:any
+        setSelectedTimezone((old:any)=>{
+            selectTime=old
+            return old
+        })
+            for (let i = 0; i < dataSource.length; i++) {
+                if (dataSource[i].time !== ""){
+                    // dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";
+                    let utcZoneTime =  moment.utc(dataSource[i].time,'HH:mm').tz(selectTime.value).format('HH:mm')
+                    dataSource[i].updateTime=utcZoneTime
+                }
+               }
+            setMints([...dataSource])
         }, 60000)
 
         return () => clearInterval(interval);
     }, [dataSource.length]);
 
-    // for get is mobile flag
     useEffect(() => {
         if (window.innerWidth < 525) {
             setIsMobile(true)
@@ -179,14 +136,13 @@ const Schedule = () => {
             .get(environment.backendApi + '/getTodaysMints')
             .then((res) => {
                 setMints(res.data.data.mints);
-                // console.log('00000000000000',res.data.data.mints)
                 setDate(res.data.data.date);
                 setIsLoading(false);
-                let update = 0
-                SetDefaultTimeZone(update)
+                SetDefaultTimeZone()
             })
             .catch((error) => {
                 setIsLoading(false);
+                SetDefaultTimeZone()
                 let msg = '';
                 if (error && error.response) {
                     msg = String(error.response.data.body);
@@ -216,33 +172,16 @@ const Schedule = () => {
 
     useEffect(() => {
         fetchMintsData();
-        
     }, []);
 
-    const SetDefaultTimeZone = (update:any) => {
-        let timeZone = moment.tz.guess()
-      
-            setSelectedTimezone({value:selectedTimezone.value ? selectedTimezone.value : timeZone})
-
-        }
+    // set default time zone UTC 00:00
+    const SetDefaultTimeZone = () => {
+        setSelectedTimezone({value:selectedTimezone.value ? selectedTimezone.value : 'Africa/Casablanca'})
+    }
 
     const timeCount = (time: any) => {
-        if(Object.keys(selectedTimezone).length !== 0){
-           let Newtime = moment(time, 'HH:mm').format("HH:mm");
-           const HrsMin =  Newtime.split(":")
-           let hrs = Number(HrsMin[0])
-           let min =  Number(HrsMin[1])
-           let timezone = moment().tz(selectedTimezone.value).format()
-           let timezone1 = moment(timezone).tz(selectedTimezone.value).set("hour", hrs).set("minute", min).format();
-           const diff = moment(timezone1).diff(timezone);
-           const diffDuration = moment.duration(diff);
-           let Hours:number = diffDuration.hours()
-           return Hours >= 0 && Hours <= 2
-        } else {
-            const hours: number = -1 * moment.duration(moment(new Date()).diff(+ moment(time, 'HH:mm'))).asHours();
-            return hours >= 0 && hours <= 2;
-        }
-
+        const hours: number = -1 * moment.duration(moment(new Date()).diff(+ moment(time, 'h:mm:ss'))).asHours();
+        return hours >= 0 && hours <= 2;
     }
 
     // This will call the mintExpiresAt function every minute to update tillTheMint's time
@@ -260,36 +199,36 @@ const Schedule = () => {
      * @param {[]} mints array
      * @return {} update the mints array objects values => tillTheMint to new values
      */
-    // const mintExpiresAt = (arr: any) => {
-    //   for(let i = 0; i < arr.length; i++) {
-    //     if(arr[i].mintExpiresAt || arr[i].mintExpiresAt?.length !== 0) {
-    //       const timeNow = moment()
-    //       const timeExpiresAt = moment(arr[i].mintExpiresAt)
-    //
-    //       const diff = (timeExpiresAt.diff(timeNow))
-    //
-    //       let minutes = Math.floor((diff / (1000 * 60)) % 60)
-    //       let hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
-    //
-    //       let splitArr = arr[i].tillTheMint.split(" ") // ['6', 'hours', '23', 'minutes']
-    //
-    //       splitArr[0] = hours
-    //       splitArr[2] = minutes
-    //
-    //       arr[i].tillTheMint = splitArr.join(" ")
-    //     }
-    //   }
-    // }
+        // const mintExpiresAt = (arr: any) => {
+        //   for(let i = 0; i < arr.length; i++) {
+        //     if(arr[i].mintExpiresAt || arr[i].mintExpiresAt?.length !== 0) {
+        //       const timeNow = moment()
+        //       const timeExpiresAt = moment(arr[i].mintExpiresAt)
+        //
+        //       const diff = (timeExpiresAt.diff(timeNow))
+        //
+        //       let minutes = Math.floor((diff / (1000 * 60)) % 60)
+        //       let hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
+        //
+        //       let splitArr = arr[i].tillTheMint.split(" ") // ['6', 'hours', '23', 'minutes']
+        //
+        //       splitArr[0] = hours
+        //       splitArr[2] = minutes
+        //
+        //       arr[i].tillTheMint = splitArr.join(" ")
+        //     }
+        //   }
+        // }
 
     const handleProjectClick = (project: any) => {
-        setIsOpen(!isOpen);
-        setIsLoading(true);
+            setIsOpen(!isOpen);
+            setIsLoading(true);
 
-        // Temporarily set this condition below since old collection has 10DaySearchResults field
-        // which is conflicting with new renamed field tenDaySearchResults
-        setSplitCollectionName(!project.tenDaySearchResults ? project['10DaySearchResults'] : project.tenDaySearchResults);
-        setIsLoading(false);
-    }
+            // Temporarily set this condition below since old collection has 10DaySearchResults field
+            // which is conflicting with new renamed field tenDaySearchResults
+            setSplitCollectionName(!project.tenDaySearchResults ? project['10DaySearchResults'] : project.tenDaySearchResults);
+            setIsLoading(false);
+        }
 
     // @ts-ignore
     const columns_mobile: Column<Mint>[] = [
@@ -315,16 +254,16 @@ const Schedule = () => {
                         </a>
                     </div>
 
-                    <span className="" onClick={() => handleProjectClick(record)}>
+                    <div className="" onClick={() => handleProjectClick(record)}>
                         {record?.project && <span><b>Name : </b>{record.project}</span>}
-                        {record?.mintExpiresAt && <span><br /><b>Time (UTC) :</b>{record.mintExpiresAt}</span>}
-                        {record?.price && <><br /><b>Price : </b><span dangerouslySetInnerHTML={{ __html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎` }} /></>}
-                        {record?.count && <span><br /><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {record?.mintExpiresAt && <span><br /><b>Time : </b> <span>{record.updateTime || record.time.replace('UTC', '')}<span hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}>{record.mintExpiresAt}</span></span></span>}
+                        {record?.price && <div className='flex flex-row'><b>Price : </b><div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-40 flex flex-row ml-1 ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}></div></div>}
+                        {record?.count && <span><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                         {record?.numbersOfDiscordMembers && <span><br /><b>Discord (all) : </b>{record.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                         {record?.DiscordOnlineMembers && <span><br /><b>Discord (online) : </b>{record.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                         {record?.numbersOfTwitterFollowers && <span><br /><b>Twitter : </b>{record.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                         {record?.tweetInteraction?.total && <span><br /><b>Twitter Interaction : </b>{record.tweetInteraction.total}</span>}
-                    </span>
+                    </div>
 
                 </div>
             ),
@@ -337,7 +276,17 @@ const Schedule = () => {
 
     const columns: Column<Mint>[] = [
         {
-            title: '',
+            title: 'Powered by SOL Decoder',
+            cellStyle: {
+                width: 145,
+                minWidth: 145,
+                maxWidth: 145,
+            },
+            headerStyle: {
+                width: 145,
+                minWidth: 145,
+                maxWidth: 145,
+            },
             render: (record) => (
                 <div className="flex space-x-3">
 
@@ -403,7 +352,7 @@ const Schedule = () => {
             customSort: (a, b) => a.time.localeCompare(b.time), // sorting with time
             render: (record) => (
                 <span>
-                    {record.time.replace('UTC', '')}
+                    {record.updateTime || record.time.replace('UTC', '')}
                     <span
                         hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}
                     >
@@ -423,8 +372,7 @@ const Schedule = () => {
             title: 'Price',
             customSort: (a, b) => +a.price.split(' ')[0] - +b.price.split(' ')[0],
             // send price in parmas and redirect to fox token page
-            // render: (record) => <div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-40 flex flex-row ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML=
-            render: (record) => <div onClick={(e) => history.push( { pathname: '/foxtoken',search: record.wlPrice? record.wlPrice : record.price.replace(' SOL', "")})} className='break-normal whitespace-normal w-40 flex flex-row cursor-pointer' dangerouslySetInnerHTML=
+            render: (record) => <div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-48 flex flex-row ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML=
                 {{
                     __html: record.wlPrice ? `
                     ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
@@ -505,39 +453,42 @@ const Schedule = () => {
                         </IonRefresher> : ''}
 
                         <Virtuoso className='h-full'
-                            totalCount={1}
-                            itemContent={() => <Table data={dataSource}
-                                columns={isMobile ? columns_mobile : columns}
-                                title={`Mint Schedule - ${date}`}
-                                style={{ overflow: 'auto' }}
-                                options={{
-                                    // pageSize: 20,
-                                    searchFieldStyle:{
-                                        marginLeft:'-20%',
-                                        marginTop:'2%',
-                                        paddingLeft:"4%",
-                                        borderRadius:30,
-                                        borderWidth: 1,
-                                        border : mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.876) !important' : '1px solid rgba(10,10,10,0.8) !important'
-                                    },
-                                    rowStyle: (rowData: any) => ({
-                                        fontWeight: timeCount(rowData?.time) ? '900' : "",
-                                        backgroundColor: mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
-                                        color: mode === 'dark' ? "" : '#202124',
-                                        borderTop: mode === 'dark' ? "" : '1px solid rgba(220,220,220,0.8)',
-                                    }),
-                                    paging: isPaging,
-                                    columnsButton: isMobile ? false : true,
-                                }}
-                                description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
+                                  totalCount={1}
+                                  itemContent={() => <Table data={dataSource}
+                                                            columns={isMobile ? columns_mobile : columns}
+                                                            title={`Mint Schedule - ${date}`}
+                                                            style={{ overflow: 'auto', overflowWrap: 'break-word' }}
+                                                            // headerStyle:{{backgroundColor:'red'}}
+                                                            // rowStyle: {
+                                                            //     overflowWrap: 'break-word'
+                                                            // }
+                                                            options={{
+                                                                pageSize: 20,
+                                                                searchFieldStyle:{
+                                                                    // marginLeft:'0%',
+                                                                    marginTop:'2%',
+                                                                    paddingLeft:"4%",
+                                                                    borderRadius:30,
+                                                                    border : mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.876) !important' : '1px solid rgba(10,10,10,0.8) !important'
+                                                                },
+                                                                rowStyle: (rowData: any) => ({
+                                                                    fontWeight: timeCount(rowData?.time) ? '' : "",
+                                                                    backgroundColor: mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
+                                                                    color: mode === 'dark' ? "" : '#202124',
+                                                                    borderTop: mode === 'dark' ? "" : '1px solid rgba(260,260,260,0.8)',
+                                                                }),
+                                                                paging: isPaging,
+                                                                columnsButton: isMobile ? false : true,
+                                                            }}
+                                                            showTimezoneSelect={true}
+                                                            selectedTimezone={selectedTimezone}
+                                                            setSelectedTimezone={setSelectedTimezone}
+                                                            description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
 							    \n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.
 						    	The Fox logo in the price is the official Token price that comes from the Fox Token Market.
 							    Rows in bold mean the mint comes out in two hours or less.
 							    `}
-                                showTimezoneSelect={true}
-                                selectedTimezone={selectedTimezone}
-                                setSelectedTimezone={setSelectedTimezone}
-                            />} >
+                                  />} >
                         </Virtuoso>
                     </IonContent>
 

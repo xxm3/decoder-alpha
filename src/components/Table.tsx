@@ -28,7 +28,7 @@ const customStyles = {
 	//   color: state.selectProps.menuColor,
 	//   padding: 20,
 	// }),
-  
+
 	valueContainer: (provided:any, state:any) => ({
 		...provided,
 	}),
@@ -39,8 +39,8 @@ const customStyles = {
 		borderBottom: '1px dotted pink',
 		backgroundColor:'#0052ff',
 		padding: 20,
-		
-		
+
+
 	}),
 	option:(provided:any, state:any) => ({
 		...provided,
@@ -57,16 +57,16 @@ const customStyles = {
 function Table<RowData extends object>(
     props: MaterialTableProps<RowData> & {
         columns: MaterialTableProps<RowData>['columns'];
-    } & { description?: string; url?: string;showTimezoneSelect?:boolean;selectedTimezone?:any;setSelectedTimezone?:any } 
+    } & { description?: string; url?: string;showTimezoneSelect?:boolean;selectedTimezone?:any;setSelectedTimezone?:any }
 ) {
     const { options } = props;
 
     const [mode] = usePersistentState('mode', 'dark');
     const [isMobile, setIsMobile] = useState(false);
-    
+
 
     useEffect(() => {
-        
+
         if (window.innerWidth < 525) {
             setIsMobile(true);
         }
@@ -161,6 +161,17 @@ function Table<RowData extends object>(
 							border-bottom : none !important;
 						}
 
+						th {
+						  font-weight: bold;
+						  //height: 200px;
+						}
+						thead th:first-child, thead th:first-child div, thead th:first-child div span{
+						  //word-break: break-all;
+						  //word-wrap: break-word;
+						  //whiteSpace: 'break-spaces !important',
+                          color: #9945FF
+						}
+
 						table {
 							--tr-border-radius : 10px;
 							--tr-padding-horizontal : 20px;
@@ -217,6 +228,7 @@ function Table<RowData extends object>(
                     columns={props.columns.map((column) => ({
                         ...column,
                         cellStyle: {
+                            // whiteSpace: 'break-spaces',
                             whiteSpace: 'nowrap',
                             borderBottom: 'none',
                         },
@@ -229,11 +241,11 @@ function Table<RowData extends object>(
                     components={{
                         Toolbar: (Toolbarprops) => {
                             const propsCopy = { ...Toolbarprops };
-							
-							
+
+
 							if(props.showTimezoneSelect){
 								if (isMobile) {
-									propsCopy.showTitle = true;    
+									propsCopy.showTitle = true;
 								} else {
 									propsCopy.showTitle = false;
 								}
@@ -274,10 +286,10 @@ function Table<RowData extends object>(
 													  return (<MenuItem key={index} value={item?.value}>{item?.label}</MenuItem>)
 												  }
                                                   )}
-    								
+
   											</Select>
-{/* 
-                                            <TimezoneSelect 
+{/*
+                                            <TimezoneSelect
                                             // options={TimezoneData}
                                                 value={props.selectedTimezone}
                                                 onChange={(selected: any) => {
@@ -296,16 +308,17 @@ function Table<RowData extends object>(
 							}
 
 							</>
-                            ) 
-                                
-                            
+                            )
+
+
                         },
                     }}
                     title={<div className="hidden sm:block">{title}</div>}
                     options={{
                         headerStyle: {
                             fontSize: '16px',
-                            whiteSpace: 'nowrap',
+                            whiteSpace: 'break-spaces',
+                            // whiteSpace: 'nowrap',
                             borderBottom: 'none',
                             paddingBottom: 25,
                             ...options?.headerStyle,
