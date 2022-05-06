@@ -226,7 +226,7 @@ function FoxToken({contentRef}: FoxToken) {
     const viewmytoken = query.get('viewmytoken');
 
     // search value from today's mint
-    const [searchValue,setSearchValue] = useState<string>()
+    const [searchValue,setSearchValue] = useState<string>();
     const location = useLocation();
 
     /**
@@ -538,7 +538,7 @@ function FoxToken({contentRef}: FoxToken) {
         }
 
         // now go through the wallets in cookies
-        if (multWallet) {
+        if (multWallet && multWallet.length > 0) {
             for (let i in multWallet) {
                 const tempWall = multWallet[i];
                 // make sure it's length of a sol wallet ... and that its not the connected wallet
@@ -547,6 +547,9 @@ function FoxToken({contentRef}: FoxToken) {
                 }
 
             }
+        // if didn't have any wallets ... then just load table...
+        }else{
+            fetchTableData();
         }
 
         // @ts-ignore
@@ -571,7 +574,7 @@ function FoxToken({contentRef}: FoxToken) {
     // load table data, after we load in user tokens
     // isn't called on local host, see below useEffect
     useEffect(() => {
-        
+
         if (firstUpdate.current) {
             firstUpdate.current = false;
             return;
@@ -585,7 +588,7 @@ function FoxToken({contentRef}: FoxToken) {
 
     // call on load, when cookie array set
     useEffect(() => {
-        setSearchValue(location?.search)
+        setSearchValue(location?.search);
 
 		if(!multWalletLoading){
 			// however DON'T do this in local host (will do this elsewhere ... since get RPC blocked)
@@ -593,7 +596,7 @@ function FoxToken({contentRef}: FoxToken) {
 				getUserSpls();
 			} else {
                 if(location.search){
-                    fetchTableData()
+                    fetchTableData();
                 }else{
                     if(location.pathname === '/foxtoken'){
                         fetchTableData();
@@ -846,7 +849,7 @@ function FoxToken({contentRef}: FoxToken) {
                         </div>
                     </div>
 
-                    <div hidden={!multWallet} className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
+                    <div hidden={!multWallet || multWallet.length == 0} className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                         <div className="font-medium">
                             {' '}
                             {/* text-lg   */}
@@ -1093,18 +1096,18 @@ function FoxToken({contentRef}: FoxToken) {
                                         viewMyTokens(!viewMyTokensClicked),
                                     isFreeAction: true,
                                 },
-                                {
-                                    icon: () => (
-                                        <IonIcon
-                                            icon={notifications}
-                                            className=""
-                                        />
-                                    ),
-                                    tooltip:
-                                        'Alert on new Tokens to your Wallet',
-                                    onClick: () => history.push('/alerts#fnt'),
-                                    isFreeAction: true,
-                                },
+                                // {
+                                //     icon: () => (
+                                //         <IonIcon
+                                //             icon={notifications}
+                                //             className=""
+                                //         />
+                                //     ),
+                                //     tooltip:
+                                //         'Alert on new Tokens to your Wallet',
+                                //     onClick: () => history.push('/alerts#fnt'),
+                                //     isFreeAction: true,
+                                // },
                                 {
                                     icon: () => <IonIcon icon={albums} />,
                                     tooltip: 'Track Multiple wallets',
