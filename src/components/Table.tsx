@@ -166,9 +166,6 @@ function Table<RowData extends object>(
 						  //height: 200px;
 						}
 						thead th:first-child, thead th:first-child div, thead th:first-child div span{
-						  //word-break: break-all;
-						  //word-wrap: break-word;
-						  //whiteSpace: 'break-spaces !important',
                           color: #9945FF
 						}
 

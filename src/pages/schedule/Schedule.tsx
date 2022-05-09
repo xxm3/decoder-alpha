@@ -471,7 +471,7 @@ const Schedule = () => {
                 </div>
             ) : (
                 <>
-                    <IonContent className='h-screen' scroll-y='false'>
+                    <IonContent className='h-screen scheduleTable' scroll-y='false'>
                         {isMobile ? <IonRefresher slot="fixed" onIonRefresh={doRefresh} pullFactor={0.5} pullMin={100} pullMax={200} >
                             <IonRefresherContent />
                         </IonRefresher> : ''}

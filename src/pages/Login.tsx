@@ -91,7 +91,7 @@ function Login() {
                 .catch((e) => {
                     console.log(e);
                     if (e.response?.status === 403)
-                        setError("You need a proper role in Discord before accessing the site. Buy the NFT then go to the 'matrica-verify'channel");
+                        setError("You need a proper role in Discord before accessing the site. Buy the NFT then go to the 'matrica-verify' channel");
                     else setError('Something went wrong. Please try again, and try using a VPN program, not a VPN in your browser (ie. people in Russia currently banned by Google)');
                 })
                 .finally(() => {
