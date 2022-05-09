@@ -4,7 +4,7 @@
   <string name="title_activity_main">SOL Decoder</string>
   <string name="package_name">com.soldecoder.app</string>
   <string name="custom_url_scheme">com.soldecoder.app</string>
-  <string name="ionic_app_id">f4d513e1</string>
+  <string name="ionic_app_id">bc1dd5e2</string>
   <string name="ionic_channel_name">Production</string>
   <string name="ionic_update_method">background</string>
   <string name="ionic_max_versions">2</string>
