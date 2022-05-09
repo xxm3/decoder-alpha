@@ -50,7 +50,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
     // const [viewMyTokensClicked, setViewMyTokensClicked] = useState(false);
     // const smallWidthpx = 768;
 
-    const defaultGraph: ChartData<any, string> = {
+    const defaultGraph: ChartData <any, string> = {
         labels: [],
         datasets: [],
     };
@@ -152,18 +152,19 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                         type: 'line' as const,
                         yAxisID: 'y1',
                         label: 'Price',
-                        borderColor: '#9945FF',
-                        data: lineData,
-                    },
-                    {
-                        type: 'line' as const,
-                        label: 'Listings',
-                        yAxisID: 'y0',
                         borderColor: lineColorSelected,
+                        data: lineData,
                         fill: {
                             target: 'origin',
                             above: shadedAreaColorSelected,
                         },
+                    },
+                    {
+                        type: 'line' as const,
+                        label: 'Listings',
+                        // borderColor: '#9945FF',
+                        yAxisID: 'y0',
+                        borderColor: '#9945FF',
                         data: listingsData,
                     },
                 ];

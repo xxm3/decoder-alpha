@@ -8,7 +8,7 @@ import {instance} from "../axios";
 import {environment} from "../environments/environment";
 import * as solanaWeb3 from '@solana/web3.js';
 import {add,albums,chevronDown,chevronUp,close,notifications,notificationsOutline,wallet,cog,logoDiscord, logoTwitter} from "ionicons/icons";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 import ReactTooltip from "react-tooltip";
 import Cookies from "universal-cookie";
@@ -22,7 +22,7 @@ import { FoxTokenData } from '../types/FoxTokenTypes';
 import useFoxTokenChartCookies from '../components/useFoxTokenChartCookies';
 import { css } from '@emotion/react';
 import moment from 'moment';
-import {useHistory} from "react-router";
+import { useHistory, Route, useParams } from 'react-router';
 import FfNamed from "./home/FfNamed";
 import usePersistentState from "../hooks/usePersistentState"
 import {useLocation} from 'react-router-dom';
@@ -32,8 +32,9 @@ import { queryClient } from '../queryClient';
 import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
 import './FoxToken.scss'
+import { setWallet } from '../redux/slices/walletSlice';
 
-const columns: Column<FoxTokenData>[] = [
+const columns: Column<FoxTokenData> [] = [
     {
         title: 'Token',
         render: (record) => (
@@ -88,6 +89,7 @@ const columns: Column<FoxTokenData>[] = [
         title: 'Price',
         customSort: (a, b) => a.floorPrice - b.floorPrice,
         render: (record) => <div className='break-all whitespace-normal w-40'>{record.floorPrice} ◎</div>,
+        // customFilterAndSearch: ( rowData) => rowData.floorPrice,        customFilterAndSearch: (term, rowData,) =>   JSON.stringify(rowData.floorPrice)?.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Listings',
@@ -96,8 +98,8 @@ const columns: Column<FoxTokenData>[] = [
     },
     // REMOVING-FF-FOR-NOW
     {
-        title: 'Last Sale', 
-        customSort: (a, b) =>  new Date(a.lastSaleDate) as any - (new Date(b.lastSaleDate) as any),
+        title: 'Last Sale',
+        customSort: (a, b) => new Date(a.lastSaleDate ? a.lastSaleDate : 0 ) as any - (new Date(b.lastSaleDate ? b.lastSaleDate : 0) as any),
         render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : '-'}</span>,
     },
     {
@@ -144,57 +146,41 @@ const columns_mobile: Column<FoxTokenData>[] = [
         title: 'Details',
         render: (record:any) => (
             <span className="">
-            {/*twitter*/}
-                {record.twitter ? <a
-                    href={'https://twitter.com/' + record.twitter}
-                    className="hover:opacity-80"
-                    target="_blank"
-                    hidden={!record.twitter}
-                >
-                    <IonIcon icon={logoTwitter} className="big-emoji " />
-                    <IonRippleEffect />
-                </a> : null }
-
-                {/*discord*/}
-                { record.discord ? <> <a
-                    href={'https://discord.gg/' + record.discord}
-                    target="_blank"
-                    className={"hover:opacity-80 pr-1"}
-                    hidden={!record.discord}
-                >
-                    <IonIcon icon={logoDiscord} className="big-emoji "/>
-                    <IonRippleEffect />
-                </a> <br/> </> : null }
-
-                <span className="relative top-2 pr-3 w-24" >
-                    {/*ff link*/}
-                    <a
-                        href={`https://famousfoxes.com/tokenmarket/${record.token}`}
+                <div>
+                    {/*twitter*/}
+                    {record.twitter ? <a
+                        href={'https://twitter.com/' + record.twitter}
+                        className="hover:opacity-80"
                         target="_blank"
-                        className="hover:opacity-80 "
-                        >
-                        <img
-                            src="/assets/icons/FoxTokenLogo.svg"
-                            css={css`color: var(--ion-text-color);`}
-                            className="h-5 pr-1 inline mb-4"
-                        />
+                        hidden={!record.twitter}
+                    >
+                        <IonIcon icon={logoTwitter} className="big-emoji " />
+                        <IonRippleEffect />
+                    </a> : null }
+
+                    {/*discord*/}
+                    { record.discord ? <> <a
+                        href={'https://discord.gg/' + record.discord}
+                        target="_blank"
+                        className={"hover:opacity-80 ml-1"}
+                        hidden={!record.discord}
+                    >
+                        <IonIcon icon={logoDiscord} className="big-emoji "/>
+                        <IonRippleEffect />
+                    </a> </> : null }
+
+                    {/*ff link*/}
+                    <a href={`https://famousfoxes.com/tokenmarket/${record.token}`} target="_blank" className="hover:opacity-80 ml-1 ">
+                        <img src="/assets/icons/FoxTokenLogo.svg" css={css`color: var(--ion-text-color);`} className="h-5 pr-1 inline mb-4"/>
                     </a>
 
                     {/*solscan*/}
-                    <a
-                        href={`https://solscan.io/token/${record.token}`}
-                        target="_blank"
-                        className="hover:opacity-80"
-                    >
-                        <img
-                            src="/assets/icons/solscan.png"
-                            className="h-5 pr-1 inline mb-4"
-                        />
+                    <a href={`https://solscan.io/token/${record.token}`} target="_blank" className="hover:opacity-80">
+                            <img src="/assets/icons/solscan.png" className="h-5 ml-1 inline mb-4" />
                     </a>
+                </div>
 
-                </span>
-
-                <br className="xl:hidden lg:hidden" />
+                {/* <br className="xl:hidden lg:hidden" /> */}
                 {record?.row_obj?.token && <><span> <b>Token : </b>{shortenedWallet(record.row_obj.token)}</span></>}
                 {record?.row_obj?.name && <><br/><span ><b>Name : </b>{record.row_obj.name}</span></>}
                 {record?.row_obj?.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice} ◎</span></>}
@@ -222,6 +208,10 @@ function FoxToken({contentRef}: FoxToken) {
     const useQuery = () => new URLSearchParams(useLocation().search);
     const query = useQuery();
     const viewmytoken = query.get('viewmytoken');
+
+    // search value from today's mint
+    const [searchValue,setSearchValue] = useState<string>();
+    const location = useLocation();
 
     /**
      * Adding multiple wallets
@@ -331,9 +321,10 @@ function FoxToken({contentRef}: FoxToken) {
 	})
 
 	const formLoadingMultWallet = addMultWallet.isLoading;
-
+    const dispatch = useDispatch();
     // in the modal for multiple wallets - submit button clicked
     const addMultWalletsSubmit = () => {
+        dispatch(setWallet(formWalletMult));
         if (multWallet && multWallet.length == 3) {
             present({
                 message: 'Error - you may only track a maximum of 3 wallets',
@@ -414,6 +405,7 @@ function FoxToken({contentRef}: FoxToken) {
                     text: 'Ok',
 					handler: () => {
                         resetMultWallet.mutate();
+                        dispatch(setWallet(null));
 					}
                 },
             ],
@@ -437,6 +429,13 @@ function FoxToken({contentRef}: FoxToken) {
         (state: RootState) => state.wallet.walletAddress
     );
 
+    // ....bugs site...???
+    // useEffect(() => {
+    //     if(walletAddress){
+    //         getSplFromWallet(walletAddress);
+    //     }
+    // }, [walletAddress])
+
     /**
      * Use Effects
      */
@@ -456,6 +455,9 @@ function FoxToken({contentRef}: FoxToken) {
     // load table data!
     const fetchTableData = async () => {
             setTableData([]);
+
+            // ....bugs site...
+            // getUserSpls();
 
             const data: any = await getLiveFoxTokenData(mySplTokens);
 
@@ -485,47 +487,12 @@ function FoxToken({contentRef}: FoxToken) {
 
     // give a wallet ... return all spl tokens in it
     const getSplFromWallet = async (wallet: string) => {
-
         try {
-            console.log("going out to " + wallet);
-
-            // https://docs.solana.com/developing/clients/javascript-reference
-            let base58publicKey = new solanaWeb3.PublicKey(wallet.toString());
-
-            const connection = new solanaWeb3.Connection(
-                solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed',
-            );
-
-            // let account = await connection.getAccountInfo(base58publicKey);
-            // console.log(account?.data);
-            // https://github.com/solana-labs/solana/blob/master/web3.js/examples/get_account_info.js
-            let balance = await connection.getBalance(base58publicKey); // SOL balance
-            balance = balance / 1000000000;
-            // @ts-ignore
-            setMySolBalance(balance);
-
-            // https://github.com/michaelhly/solana-py/issues/48
-            let tokenAccounts = await connection.getParsedTokenAccountsByOwner(
-                base58publicKey,
-                {programId: new solanaWeb3.PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")},
-            );
-
-
-            let mySplTokensTemporaryAgainAgain: any = [];
-
-            for (let i in tokenAccounts.value) {
-                if (tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount !== 0) {
-                    // console.log(tokenAccounts.value[i]);
-                    mySplTokensTemporaryAgainAgain.push({
-                        token: tokenAccounts.value[i]?.account?.data?.parsed?.info?.mint,
-                        amount: tokenAccounts.value[i]?.account?.data?.parsed?.info?.tokenAmount.uiAmount,
-                        myWallet: wallet
-                    });
-                }
-            }
-
-            return mySplTokensTemporaryAgainAgain;
-
+            const { data: splTokens } = await instance.get(`${environment.backendApi}/getSplFromWallet`, { params: { wallet } });
+            if (splTokens) {
+                setMySolBalance(splTokens.balance);
+                return splTokens.data;
+            } else return [];
         } catch (err) {
             present({
                 message: 'Error when getting your Whitelist tokens from your wallet',
@@ -533,10 +500,8 @@ function FoxToken({contentRef}: FoxToken) {
                 duration: 5000,
                 buttons: [{ text: 'X', handler: () => dismiss() }],
             });
-
             return [];
         }
-
     }
 
     // https://github.com/solana-labs/solana-program-library/blob/master/token/js/examples/create_mint_and_transfer_tokens.ts
@@ -557,7 +522,7 @@ function FoxToken({contentRef}: FoxToken) {
         }
 
         // now go through the wallets in cookies
-        if (multWallet) {
+        if (multWallet && multWallet.length > 0) {
             for (let i in multWallet) {
                 const tempWall = multWallet[i];
                 // make sure it's length of a sol wallet ... and that its not the connected wallet
@@ -566,10 +531,15 @@ function FoxToken({contentRef}: FoxToken) {
                 }
 
             }
+        // if didn't have any wallets ... then just load table...
+        }else{
+            fetchTableData();
         }
 
         // @ts-ignore
-        setMySplTokens(mySplTokensTemporary);
+         if(mySplTokensTemporary && mySplTokensTemporary.length > 0) {
+            setMySplTokens(mySplTokensTemporary);
+        }
 
         // console.log(mySplTokensTemporary);
     }
@@ -588,11 +558,11 @@ function FoxToken({contentRef}: FoxToken) {
     // load table data, after we load in user tokens
     // isn't called on local host, see below useEffect
     useEffect(() => {
+
         if (firstUpdate.current) {
             firstUpdate.current = false;
             return;
         }
-
         // only fetch data when NOT on local host ... after spl tokens is updated
         if (window.location.href.indexOf(local_host_str) === -1) {
             fetchTableData();
@@ -602,18 +572,25 @@ function FoxToken({contentRef}: FoxToken) {
 
     // call on load, when cookie array set
     useEffect(() => {
+        setSearchValue(location?.search);
+
 		if(!multWalletLoading){
 			// however DON'T do this in local host (will do this elsewhere ... since get RPC blocked)
 			if (window.location.href.indexOf(local_host_str) === -1) {
 				getUserSpls();
 			} else {
-				fetchTableData();
+                if(location.search){
+                    fetchTableData();
+                }else{
+                    if(location.pathname === '/foxtoken'){
+                        fetchTableData();
+                    }
+                }
 			}
 		}
 
+    }, [multWallet, multWalletLoading,location]);
 
-
-    }, [multWallet, multWalletLoading]);
     // also call when new wallet is connected to
     useEffect(() => {
         if (window.location.href.indexOf(local_host_str) === -1 && walletAddress) {
@@ -693,8 +670,8 @@ function FoxToken({contentRef}: FoxToken) {
                 await getUserSpls();
             }
 
-            if (!multWallet && !walletAddress ) {
-                console.log('hello 4')
+            if (!multWallet?.length && !walletAddress ) {
+
                 present({
                     message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add one (or three!) manually. Then you can filter this table to only the tokens in your wallet.',
                     color: 'danger',
@@ -731,9 +708,9 @@ function FoxToken({contentRef}: FoxToken) {
                             if (window.location.href.indexOf(local_host_str) !== -1) {
                                 // then ADD data
                                 if (!tableData[i].whichMyWallets) {
-                                    tableData[i].whichMyWallets = shortenedWallet(mySplTokens[y].myWallet);
+                                    tableData[i].whichMyWallets = shortenedWallet(mySplTokens[y].wallet);
                                 } else {
-                                    tableData[i].whichMyWallets += ", " + shortenedWallet(mySplTokens[y].myWallet);
+                                    tableData[i].whichMyWallets += ", " + shortenedWallet(mySplTokens[y].wallet);
                                 }
                             }
 
@@ -856,7 +833,7 @@ function FoxToken({contentRef}: FoxToken) {
                         </div>
                     </div>
 
-                    <div hidden={!multWallet} className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
+                    <div hidden={!multWallet || multWallet.length == 0} className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
                         <div className="font-medium">
                             {' '}
                             {/* text-lg   */}
@@ -1065,7 +1042,7 @@ function FoxToken({contentRef}: FoxToken) {
 								display : none;
 							}
 						} */
-                        
+
 					`}>
 
                         {/*<IonItem style={{"width": "250px"}}>*/}
@@ -1103,18 +1080,18 @@ function FoxToken({contentRef}: FoxToken) {
                                         viewMyTokens(!viewMyTokensClicked),
                                     isFreeAction: true,
                                 },
-                                {
-                                    icon: () => (
-                                        <IonIcon
-                                            icon={notifications}
-                                            className=""
-                                        />
-                                    ),
-                                    tooltip:
-                                        'Alert on new Tokens to your Wallet',
-                                    onClick: () => history.push('/alerts#fnt'),
-                                    isFreeAction: true,
-                                },
+                                // {
+                                //     icon: () => (
+                                //         <IonIcon
+                                //             icon={notifications}
+                                //             className=""
+                                //         />
+                                //     ),
+                                //     tooltip:
+                                //         'Alert on new Tokens to your Wallet',
+                                //     onClick: () => history.push('/alerts#fnt'),
+                                //     isFreeAction: true,
+                                // },
                                 {
                                     icon: () => <IonIcon icon={albums} />,
                                     tooltip: 'Track Multiple wallets',
@@ -1131,12 +1108,15 @@ function FoxToken({contentRef}: FoxToken) {
                             options={{
                                 detailPanelType: 'single',
                                 search: true,
+                                // sortModel={sortModel},
+                                searchText: searchValue ? searchValue.replace('?', "") : '' ,
                                 searchFieldStyle:{
-                                    marginLeft:'-24%',
-                                    marginTop:'2%',
-                                    paddingLeft:"4%",
-                                    borderRadius:30,
-                                    borderWidth: isMobile ?  1 :0
+                                    marginLeft:'-20%',
+                                        marginTop:'2%',
+                                        paddingLeft:"4%",
+                                        borderRadius:30,
+                                        borderWidth: 1,
+                                        border : mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.876) !important' : '1px solid rgba(10,10,10,0.8) !important'
                                 },
                                 rowStyle:( rowData:any) =>  ({
                                     backgroundColor : mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
@@ -1268,7 +1248,7 @@ function FoxToken({contentRef}: FoxToken) {
                             ]}
                         />
                          {/*recent FF tokens*/}
-                         <FfNamed /> 
+                         <FfNamed />
                          <ReactTooltip />
                          </>}/>
                         </IonContent>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import moment from 'moment';
+import 'moment-timezone';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
@@ -7,11 +8,12 @@ import { IonContent, IonIcon, IonRippleEffect, useIonToast, IonRefresher, IonRef
 import './Schedule.css'
 import { Column } from '@material-table/core';
 import Table from '../../components/Table';
-import { logoDiscord, logoTwitter, link } from 'ionicons/icons';
+import { logoDiscord, logoTwitter, link, navigate } from 'ionicons/icons';
 import { useHistory } from "react-router";
 import usePersistentState from '../../hooks/usePersistentState';
 import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
+
 
 interface Mint {
     image: string;
@@ -24,6 +26,7 @@ interface Mint {
     count: string;
     price: string;
     wlPrice: string;
+    wlTokenAddress: string;
     extras: string;
     tenDaySearchResults: string[];
     mintExpiresAt: string;
@@ -36,6 +39,7 @@ interface Mint {
         comments: number;
         reactions: number;
     }
+    updateTime?:string
 }
 
 
@@ -54,12 +58,13 @@ const Schedule = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [isPaging, setIsPaging] = useState(false);
-
+    const [selectedTimezone, setSelectedTimezone] = useState<any>({})
     const [mode] = usePersistentState("mode", "dark");
 
 
 
     let dataSource = mints
+    let userTimezone:string
 
     /**
      * This will call the every minute to update the mints array and assign mintExpiresAt field
@@ -70,11 +75,45 @@ const Schedule = () => {
     const addMintExpiresAt = () => {
         for (let i = 0; i < dataSource.length; i++) {
             if (dataSource[i].time !== "")
-                dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")";
-        }
+                //  dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")";
+                dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";        }
         setMints([...dataSource]);
     }
 
+    // set user time zone in user data
+
+    const SetUserTimeZone = async () =>{
+        let param = {timezone:selectedTimezone.value}
+        await instance.post(environment.backendApi + '/setUserTimeZone',param)
+            .then((res) => {
+                GetUserTimeZone()
+            });
+    }
+
+    // get user time zone from user data
+
+    const GetUserTimeZone = async() => {
+        await instance.get(`${environment.backendApi}/currentUser`)
+        .then((res: any) =>  userTimezone = res.data.user.timezone)
+    }
+
+    // console.log('no time zone', moment.tz.names())
+
+    useEffect(() => {
+        if(userTimezone !== selectedTimezone.value){
+            SetUserTimeZone();
+        }
+        
+        if(dataSource && Object.keys(selectedTimezone).length !== 0){
+            for (let i = 0; i < dataSource.length; i++) {
+                if (dataSource[i].time.includes('UTC')){
+                    let utcZoneTime =  moment.utc(dataSource[i].time,'HH:mm').tz(selectedTimezone.value).format('HH:mm')
+                    dataSource[i].updateTime=utcZoneTime
+                }
+            }
+                setMints([...dataSource]);
+        }
+      }, [selectedTimezone])
 
     useEffect(() => {
         if (mints.length <= 10) {
@@ -88,11 +127,18 @@ const Schedule = () => {
         dataSource.length && addMintExpiresAt();
 
         const interval = setInterval(() => {
+        let selectTime:any
+        setSelectedTimezone((old:any)=>{
+            selectTime=old
+            return old
+        })
             for (let i = 0; i < dataSource.length; i++) {
-                if (dataSource[i].time !== "")
-                    dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")"
-            }
-
+                if (dataSource[i].time !== ""){
+                    // dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";
+                    let utcZoneTime =  moment.utc(dataSource[i].time,'HH:mm').tz(selectTime.value).format('HH:mm')
+                    dataSource[i].updateTime=utcZoneTime
+                }
+               }
             setMints([...dataSource])
         }, 60000)
 
@@ -110,14 +156,16 @@ const Schedule = () => {
 
         instance
             .get(environment.backendApi + '/getTodaysMints')
-            .then((res) => {
+            .then(async (res) => {
                 setMints(res.data.data.mints);
                 setDate(res.data.data.date);
                 setIsLoading(false);
+               await GetUserTimeZone()
+                SetDefaultTimeZone()
             })
             .catch((error) => {
                 setIsLoading(false);
-                console.error("error when getting mints: " + error);
+                SetDefaultTimeZone()
                 let msg = '';
                 if (error && error.response) {
                     msg = String(error.response.data.body);
@@ -149,6 +197,11 @@ const Schedule = () => {
         fetchMintsData();
     }, []);
 
+    // set default time zone UTC 00:00
+    const SetDefaultTimeZone = () => {
+        setSelectedTimezone({value:userTimezone ? userTimezone : 'Africa/Casablanca'})
+    }
+
     const timeCount = (time: any) => {
         const hours: number = -1 * moment.duration(moment(new Date()).diff(+ moment(time, 'h:mm:ss'))).asHours();
         return hours >= 0 && hours <= 2;
@@ -169,36 +222,36 @@ const Schedule = () => {
      * @param {[]} mints array
      * @return {} update the mints array objects values => tillTheMint to new values
      */
-    // const mintExpiresAt = (arr: any) => {
-    //   for(let i = 0; i < arr.length; i++) {
-    //     if(arr[i].mintExpiresAt || arr[i].mintExpiresAt?.length !== 0) {
-    //       const timeNow = moment()
-    //       const timeExpiresAt = moment(arr[i].mintExpiresAt)
-    //
-    //       const diff = (timeExpiresAt.diff(timeNow))
-    //
-    //       let minutes = Math.floor((diff / (1000 * 60)) % 60)
-    //       let hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
-    //
-    //       let splitArr = arr[i].tillTheMint.split(" ") // ['6', 'hours', '23', 'minutes']
-    //
-    //       splitArr[0] = hours
-    //       splitArr[2] = minutes
-    //
-    //       arr[i].tillTheMint = splitArr.join(" ")
-    //     }
-    //   }
-    // }
+        // const mintExpiresAt = (arr: any) => {
+        //   for(let i = 0; i < arr.length; i++) {
+        //     if(arr[i].mintExpiresAt || arr[i].mintExpiresAt?.length !== 0) {
+        //       const timeNow = moment()
+        //       const timeExpiresAt = moment(arr[i].mintExpiresAt)
+        //
+        //       const diff = (timeExpiresAt.diff(timeNow))
+        //
+        //       let minutes = Math.floor((diff / (1000 * 60)) % 60)
+        //       let hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
+        //
+        //       let splitArr = arr[i].tillTheMint.split(" ") // ['6', 'hours', '23', 'minutes']
+        //
+        //       splitArr[0] = hours
+        //       splitArr[2] = minutes
+        //
+        //       arr[i].tillTheMint = splitArr.join(" ")
+        //     }
+        //   }
+        // }
 
     const handleProjectClick = (project: any) => {
-        setIsOpen(!isOpen);
-        setIsLoading(true);
+            setIsOpen(!isOpen);
+            setIsLoading(true);
 
-        // Temporarily set this condition below since old collection has 10DaySearchResults field
-        // which is conflicting with new renamed field tenDaySearchResults
-        setSplitCollectionName(!project.tenDaySearchResults ? project['10DaySearchResults'] : project.tenDaySearchResults);
-        setIsLoading(false);
-    }
+            // Temporarily set this condition below since old collection has 10DaySearchResults field
+            // which is conflicting with new renamed field tenDaySearchResults
+            setSplitCollectionName(!project.tenDaySearchResults ? project['10DaySearchResults'] : project.tenDaySearchResults);
+            setIsLoading(false);
+        }
 
     // @ts-ignore
     const columns_mobile: Column<Mint>[] = [
@@ -224,16 +277,16 @@ const Schedule = () => {
                         </a>
                     </div>
 
-                    <span className="" onClick={() => handleProjectClick(record)}>
+                    <div className="" onClick={() => handleProjectClick(record)}>
                         {record?.project && <span><b>Name : </b>{record.project}</span>}
-                        {record?.mintExpiresAt && <span><br /><b>Time (UTC) :</b>{record.mintExpiresAt}</span>}
-                        {record?.price && <><br /><b>Price : </b><span dangerouslySetInnerHTML={{ __html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎` }} /></>}
-                        {record?.count && <span><br /><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {record?.mintExpiresAt && <span><br /><b>Time : </b> <span>{record.updateTime || record.time.replace('UTC', '')}<span hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}>{record.mintExpiresAt}</span></span></span>}
+                        {record?.price && <div className='flex flex-row'><b>Price : </b><div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'flex flex-row ml-1 ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}></div></div>}
+                        {record?.count && <span><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                         {record?.numbersOfDiscordMembers && <span><br /><b>Discord (all) : </b>{record.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                         {record?.DiscordOnlineMembers && <span><br /><b>Discord (online) : </b>{record.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                         {record?.numbersOfTwitterFollowers && <span><br /><b>Twitter : </b>{record.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                         {record?.tweetInteraction?.total && <span><br /><b>Twitter Interaction : </b>{record.tweetInteraction.total}</span>}
-                    </span>
+                    </div>
 
                 </div>
             ),
@@ -246,7 +299,17 @@ const Schedule = () => {
 
     const columns: Column<Mint>[] = [
         {
-            title: '',
+            title: 'Powered by SOL Decoder',
+            cellStyle: {
+                width: 145,
+                minWidth: 145,
+                maxWidth: 145,
+            },
+            headerStyle: {
+                width: 145,
+                minWidth: 145,
+                maxWidth: 145,
+            },
             render: (record) => (
                 <div className="flex space-x-3">
 
@@ -286,7 +349,8 @@ const Schedule = () => {
                     </a>
                 </div>
             ),
-            hiddenByColumnsButton: true
+            hiddenByColumnsButton: true,
+            
         },
         {
             title: 'Name',
@@ -308,11 +372,11 @@ const Schedule = () => {
         },
         {
             title: 'Time',
-            // customSort: (a, b) => +new Date(a.time) - +new Date(b.time), 
+            // customSort: (a, b) => +new Date(a.time) - +new Date(b.time),
             customSort: (a, b) => a.time.localeCompare(b.time), // sorting with time
             render: (record) => (
                 <span>
-                    {record.time.replace('UTC', '')}
+                    {record.updateTime || record.time.replace('UTC', '')}
                     <span
                         hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}
                     >
@@ -330,13 +394,13 @@ const Schedule = () => {
         },
         {
             title: 'Price',
-            customSort: (a, b) =>
-                +a.price.split(' ')[0] - +b.price.split(' ')[0],
-            render: (record) => <><div className='break-all whitespace-normal w-40' dangerouslySetInnerHTML=
+            customSort: (a, b) => +a.price.split(' ')[0] - +b.price.split(' ')[0],
+            // send price in parmas and redirect to fox token page
+            render: (record) => <div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-48 flex flex-row ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML=
                 {{
                     __html: record.wlPrice ? `
                     ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
-                }}></div></>,
+                }}></div>,
         },
         {
             title: 'Supply',
@@ -407,40 +471,48 @@ const Schedule = () => {
                 </div>
             ) : (
                 <>
-                    <IonContent className='h-screen' scroll-y='false'>
+                    <IonContent className='h-screen scheduleTable' scroll-y='false'>
                         {isMobile ? <IonRefresher slot="fixed" onIonRefresh={doRefresh} pullFactor={0.5} pullMin={100} pullMax={200} >
                             <IonRefresherContent />
                         </IonRefresher> : ''}
 
                         <Virtuoso className='h-full'
-                            totalCount={1}
-                            itemContent={() => <Table data={dataSource}
-                                columns={isMobile ? columns_mobile : columns}
-                                title={`Mint Schedule - ${date}`}
-                                style={{ overflow: 'auto' }}
-                                options={{
-                                    searchFieldStyle:{
-                                        marginLeft:'-24%',
-                                        marginTop:'2%',
-                                        paddingLeft:"4%",
-                                        borderRadius:30,
-                                        borderWidth: isMobile ?  1 :0
-                                    },
-                                    rowStyle: (rowData: any) => ({
-                                        fontWeight: timeCount(rowData?.time) ? '900' : "",
-                                        backgroundColor: mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
-                                        color: mode === 'dark' ? "" : '#202124',
-                                        borderTop: mode === 'dark' ? "" : '1px solid rgba(220,220,220,0.8)',
-                                    }),
-                                    paging: isPaging,
-                                    columnsButton: isMobile ? false : true,
-                                }}
-                                description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
+                                  totalCount={1}
+                                  itemContent={() => <Table data={dataSource}
+                                                            columns={isMobile ? columns_mobile : columns}
+                                                            title={`Mint Schedule - ${date}`}
+                                                            style={{ overflow: 'auto', overflowWrap: 'break-word' }}
+                                                            // headerStyle:{{backgroundColor:'red'}}
+                                                            // rowStyle: {
+                                                            //     overflowWrap: 'break-word'
+                                                            // }
+                                                            options={{
+                                                                pageSize: 20,
+                                                                searchFieldStyle:{
+                                                                    // marginLeft:'0%',
+                                                                    marginTop:'2%',
+                                                                    paddingLeft:"4%",
+                                                                    borderRadius:30,
+                                                                    border : mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.876) !important' : '1px solid rgba(10,10,10,0.8) !important'
+                                                                },
+                                                                rowStyle: (rowData: any) => ({
+                                                                    fontWeight: timeCount(rowData?.time) ? '' : "",
+                                                                    backgroundColor: mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
+                                                                    color: mode === 'dark' ? "" : '#202124',
+                                                                    borderTop: mode === 'dark' ? "" : '1px solid rgba(260,260,260,0.8)',
+                                                                }),
+                                                                paging: isPaging,
+                                                                columnsButton: isMobile ? false : true,
+                                                            }}
+                                                            showTimezoneSelect={true}
+                                                            selectedTimezone={selectedTimezone}
+                                                            setSelectedTimezone={setSelectedTimezone}
+                                                            description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
 							    \n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.
 						    	The Fox logo in the price is the official Token price that comes from the Fox Token Market.
 							    Rows in bold mean the mint comes out in two hours or less.
 							    `}
-                            />} >
+                                  />} >
                         </Virtuoso>
                     </IonContent>
 

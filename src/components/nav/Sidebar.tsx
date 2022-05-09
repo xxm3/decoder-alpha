@@ -8,7 +8,8 @@ import {
     logoTwitter,
     notificationsOutline,
     searchOutline,
-    statsChartOutline
+    statsChartOutline,
+    skullOutline, earthOutline
 } from "ionicons/icons"
 import NavLink from "./NavLink"
 import WalletButton from '../WalletButton';
@@ -88,6 +89,15 @@ function Sidebar() {
                     icon={notificationsOutline}
                     to="/alerts"
                 />
+
+                {/* commented out until feature is done ... you can go to http://localhost:3000/bots manually in meantime */}
+                {/* bot page hide for now do not remove */}
+                {/*<NavLink*/}
+                {/*    title="Bots"*/}
+                {/*    icon={earthOutline}*/}
+                {/*    to="/bots"*/}
+                {/*/>*/}
+
                 <NavLink
                     title="Docs"
                     icon={bookOutline}
@@ -104,8 +114,8 @@ function Sidebar() {
                 <div className="xl:hidden lg:hidden md:hidden">
                     <WalletButton />
                 </div>
-               <div className="text-center mt-4 text-white-500">Version <b>{VERSION_CODE}</b></div> 
-                
+               <div className="text-center mt-4 text-white-500">Version <b>{VERSION_CODE}</b></div>
+
             </IonList>
             </div>
             </IonContent>

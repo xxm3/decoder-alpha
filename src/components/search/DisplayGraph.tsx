@@ -83,16 +83,19 @@ const DisplayGraph:React.FC<{
                     </p>
 
                     <div className= {window.innerWidth <= 360 ?  "flex items-center justify-center col-span-12" : "flex items-center justify-center col-span-6"}  hidden={completelyHideChart}>
-                        <p>Toggle Chart</p>
-                        <IonToggle
-							css={css`
 
-								--background-checked : var(--ion-color-step-250);
-								--handle-background-checked: var(--ion-color-primary-tint);
-							`}
-                            checked={showChart}
-                            onClick={() => setShowChart(!showChart)}
-                        />
+                        <p className="font-bold" style={{'color': '#9945FF'}}>Powered by SOL Decoder</p>
+
+                        {/*<p>Toggle Chart</p>*/}
+                        {/*<IonToggle*/}
+						{/*	css={css`*/}
+
+						{/*		--background-checked : var(--ion-color-step-250);*/}
+						{/*		--handle-background-checked: var(--ion-color-primary-tint);*/}
+						{/*	`}*/}
+                        {/*    checked={showChart}*/}
+                        {/*    onClick={() => setShowChart(!showChart)}*/}
+                        {/*/>*/}
 
                     </div>
                 </>
@@ -161,7 +164,9 @@ const DisplayGraph:React.FC<{
                                 },
                                 title: {
                                     display: true,
+                                    // text: '# of messages per Discord (powered by SOL Decoder)',
                                     text: '# of messages per Discord (last 10 days)',
+                                    // color: '#14F195'
                                     // color: mode === 'dark' ? 'white' : 'black'
                                 },
                             },

@@ -1,37 +1,78 @@
 import { css } from '@emotion/react';
 import { IonIcon } from '@ionic/react';
-import MaterialTable, { MaterialTableProps, MTableFilterRow } from '@material-table/core'
-import { createTheme,  MuiThemeProvider } from '@material-ui/core';
+import MaterialTable, {
+    MaterialTableProps,
+    MTableFilterRow,
+    MTableToolbar,
+} from '@material-table/core';
+import { createTheme, Grid, MenuItem, MuiThemeProvider, Select } from '@material-ui/core';
 import { eye } from 'ionicons/icons';
 import { RefAttributes, useEffect, useMemo, useState } from 'react';
 import usePersistentState from '../hooks/usePersistentState';
 import { colorsByName } from '../theme/Theme';
 import Help from './Help';
+import './select-timezone.scss';
+import TimezoneData from '../util/Book1.json'
+import moment from 'moment';
+
+const blue = '#0000FF';
+const red = '#FF0000';
+const green = '#00FF00';
 
 
-const blue = "#0000FF";
-const red= "#FF0000";
-const green = "#00FF00";
+const customStyles = {
+	// menu: (provided:any, state:any) => ({
+	//   ...provided,
+	//   width: state.selectProps.width,
+	//   borderBottom: '1px dotted pink',
+	//   color: state.selectProps.menuColor,
+	//   padding: 20,
+	// }),
+
+	valueContainer: (provided:any, state:any) => ({
+		...provided,
+	}),
+	menu: (provided:any, state:any) => ({
+		...provided,
+		color:'#fff',
+		width: state.selectProps.width,
+		borderBottom: '1px dotted pink',
+		backgroundColor:'#0052ff',
+		padding: 20,
+
+
+	}),
+	option:(provided:any, state:any) => ({
+		...provided,
+		"&:hover": {
+			backgroundColor:  "#01021a"
+		  }
+	})
+
+  }
+
 
 
 
 function Table<RowData extends object>(
     props: MaterialTableProps<RowData> & {
         columns: MaterialTableProps<RowData>['columns'];
-    } & { description ?: string; url ?: string;}
+    } & { description?: string; url?: string;showTimezoneSelect?:boolean;selectedTimezone?:any;setSelectedTimezone?:any }
 ) {
-	const { options } = props;
+    const { options } = props;
 
-	const [mode] = usePersistentState("mode", "dark");
-	const [isMobile,setIsMobile] = useState(false)
+    const [mode] = usePersistentState('mode', 'dark');
+    const [isMobile, setIsMobile] = useState(false);
 
-	useEffect(() => {
-        if (window.innerWidth < 525){
-            setIsMobile(true)
+
+    useEffect(() => {
+
+        if (window.innerWidth < 525) {
+            setIsMobile(true);
         }
-    }, [window.innerWidth])
+    }, [window.innerWidth]);
 
-	const [rowsPerPage, setRowsPerPage] = usePersistentState<number>(
+    const [rowsPerPage, setRowsPerPage] = usePersistentState<number>(
         `rowsPerPage${props.title}`,
         10
     );
@@ -40,31 +81,29 @@ function Table<RowData extends object>(
         `hiddenColumns${props.title}`,
         ''
     );
-  
 
-	const isDarkMode = mode === "dark";
-	const textColor = isDarkMode ? colorsByName["primary"].contrast : "#161616"
-	const theme = createTheme({
-		palette: {
-			background : {
-				paper : isDarkMode ? "#01021A" : "#f5f5f5", // background color of table
-			},
-			text : {
-				primary : textColor, // color of all normal text in the table
-				secondary: isDarkMode ? "#d4d3d5" : "#434343", // the hover color of the column headers and the color of the text which shows which page the user is on
-				 // the hover color of the column headers and the color of the text which shows which page the user is on
-			},
-			action: {
-				active: textColor, // color of action buttons such as next page, previous page, first oage, last page, cancel search
-				disabled: isDarkMode ? "#afaeb4" : "#595959", // color of disabled action buttons
-				selected:  isDarkMode ? "#1a1b30" : "#dfdfdf", // selected list item in dropdown
-				hover: isDarkMode ? "#26273b" : "#d4d4d4", // hover color of list items in dropdown
-				hoverOpacity: 0.1
-			},
-		}
-	})
-	const title = (
-		
+    const isDarkMode = mode === 'dark';
+    const textColor = isDarkMode ? colorsByName['primary'].contrast : '#161616';
+    const theme = createTheme({
+        palette: {
+            background: {
+                paper: isDarkMode ? '#01021A' : '#f5f5f5', // background color of table
+            },
+            text: {
+                primary: textColor, // color of all normal text in the table
+                secondary: isDarkMode ? '#d4d3d5' : '#434343', // the hover color of the column headers and the color of the text which shows which page the user is on
+                // the hover color of the column headers and the color of the text which shows which page the user is on
+            },
+            action: {
+                active: textColor, // color of action buttons such as next page, previous page, first oage, last page, cancel search
+                disabled: isDarkMode ? '#afaeb4' : '#595959', // color of disabled action buttons
+                selected: isDarkMode ? '#1a1b30' : '#dfdfdf', // selected list item in dropdown
+                hover: isDarkMode ? '#26273b' : '#d4d4d4', // hover color of list items in dropdown
+                hoverOpacity: 0.1,
+            },
+        },
+    });
+    const title = (
         <div className="space-x-2 flex">
             <span
                 className="text-xl font-medium text-ellipsis"
@@ -78,9 +117,18 @@ function Table<RowData extends object>(
             {props.description && <Help description={props.description} />}
         </div>
     );
+
+	// input type select for timezone select
+// 	let dropdown = $('#timezone-dropdown');
+
+// dropdown.empty();
+
+// dropdown.append('<option selected="true" disabled>Choose State/Province</option>');
+// dropdown.prop('selectedIndex', 0);
     return (
         <MuiThemeProvider theme={theme}>
-            <div css={css`
+            <div
+                css={css`
 						td.MuiTableCell-footer {
 							border-bottom: none;
 						}
@@ -111,6 +159,14 @@ function Table<RowData extends object>(
 
 						tr, td {
 							border-bottom : none !important;
+						}
+
+						th {
+						  font-weight: bold;
+						  //height: 200px;
+						}
+						thead th:first-child, thead th:first-child div, thead th:first-child div span{
+                          color: #9945FF
 						}
 
 						table {
@@ -160,58 +216,147 @@ function Table<RowData extends object>(
 							justify-content: isMobile ? center : "";
 }
 						}
-			`}>
-				<div className='sm:hidden'>{title}</div>
-            	<MaterialTable
-	                {...props}
-	                columns={props.columns.map((column) => ({
-	                    ...column,
-	                    cellStyle: {
-	                        whiteSpace: 'nowrap',
-	                        borderBottom: 'none',
-	                    },
-						hidden: column.title ? hiddenColumns.split(',').includes(column.title as string) : false
-	                }))}
-	                title={
-	                   <div className='hidden sm:block'>
-						   {title}
-					   </div>
-	                }
-	                options={{
-						headerStyle: {
-							fontSize: '16px',
-	                        whiteSpace: 'nowrap',
-	                        borderBottom: 'none',
-							paddingBottom : 25,
-							...options?.headerStyle,
-	                    },
-						pageSize: rowsPerPage, // default rows per page
-	                    emptyRowsWhenPaging: false,   // To avoid of having empty rows
-	                    pageSizeOptions: [10, 20, 50, 100],    // rows selection options
-						paging : props.data.length > 10,
-						...options,
-	                }}
-					icons={{
-						ViewColumn : (() =>  <IonIcon className="text-3xl" icon={eye} /> ) as any
-					}}
-					onRowsPerPageChange={(pageSize) => {
+			`}
+            >
+                <div className="sm:hidden">{title}</div>
+
+                <MaterialTable
+                    {...props}
+                    columns={props.columns.map((column) => ({
+                        ...column,
+                        cellStyle: {
+                            // whiteSpace: 'break-spaces',
+                            whiteSpace: 'nowrap',
+                            borderBottom: 'none',
+                        },
+                        hidden: column.title
+                            ? hiddenColumns
+                                  .split(',')
+                                  .includes(column.title as string)
+                            : false,
+                    }))}
+                    components={{
+                        Toolbar: (Toolbarprops) => {
+                            const propsCopy = { ...Toolbarprops };
+
+
+							if(props.showTimezoneSelect){
+								if (isMobile) {
+									propsCopy.showTitle = true;
+								} else {
+									propsCopy.showTitle = false;
+								}
+							}
+                            return (
+								<>
+								{!props?.showTimezoneSelect ?<MTableToolbar {...propsCopy} /> :
+                                <Grid container direction="row">
+                                    <Grid
+                                        container
+                                        item
+                                        sm={8}
+                                        style={{ alignItems: 'center' }}
+                                    >
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                width: '100%',
+                                            }}
+                                        >
+                                            <div className="hidden sm:block"
+                                            style={{ width:'100%'}}>
+                                                {title}
+                                            </div>
+											<Select
+    										labelId="demo-simple-select-label"
+    										id="demo-simple-select"
+    										value={props.selectedTimezone.value}
+    										placeholder='select time zone'
+                                            style={{ width:'100%', lineHeight:1.2,border: `1px solid rgba(171, 171, 171, 0.876)`,borderRadius:'20px',paddingLeft:'10px'}}
+    										onChange={(selected: any) => {
+												props.setSelectedTimezone({...selected.target})
+											}}
+  											>
+												  {
+                                                  TimezoneData.map((item:any,index:number)=>{
+													  return (<MenuItem key={index} value={item?.value}>{item?.label}</MenuItem>)
+												  }
+                                                  )}
+
+  											</Select>
+{/*
+                                            <TimezoneSelect
+                                            // options={TimezoneData}
+                                                value={props.selectedTimezone}
+                                                onChange={(selected: any) => {
+													console.log("selected",selected)
+													props.setSelectedTimezone(selected)
+
+                                                }}
+												styles={customStyles}
+                                            /> */}
+                                        </div>
+                                    </Grid>
+                                    <Grid item sm={4}>
+                                        <MTableToolbar {...propsCopy} />
+                                    </Grid>
+                                </Grid>
+							}
+
+							</>
+                            )
+
+
+                        },
+                    }}
+                    title={<div className="hidden sm:block">{title}</div>}
+                    options={{
+                        headerStyle: {
+                            fontSize: '16px',
+                            whiteSpace: 'break-spaces',
+                            // whiteSpace: 'nowrap',
+                            borderBottom: 'none',
+                            paddingBottom: 25,
+                            ...options?.headerStyle,
+                        },
+                        pageSize: rowsPerPage, // default rows per page
+                        emptyRowsWhenPaging: false, // To avoid of having empty rows
+                        pageSizeOptions: [10, 20, 50, 100], // rows selection options
+                        paging: props.data.length > 10,
+                        ...options,
+                    }}
+                    icons={{
+                        ViewColumn: (() => (
+                            <IonIcon className="text-3xl" icon={eye} />
+                        )) as any,
+                    }}
+                    onRowsPerPageChange={(pageSize) => {
                         setRowsPerPage(pageSize);
                     }}
                     onChangeColumnHidden={(column, hidden) => {
                         if (hidden) {
-                            setHiddenColumns((hiddenColumns) => hiddenColumns ? hiddenColumns + "," + column.title : hiddenColumns + column.title);
+                            setHiddenColumns((hiddenColumns) =>
+                                hiddenColumns
+                                    ? hiddenColumns + ',' + column.title
+                                    : hiddenColumns + column.title
+                            );
                         } else {
                             setHiddenColumns((hiddenColumns) =>
-                                hiddenColumns.split(",").filter(
-                                    (hiddenColumn) => hiddenColumn !== column.title
-                                ).join(",")
+                                hiddenColumns
+                                    .split(',')
+                                    .filter(
+                                        (hiddenColumn) =>
+                                            hiddenColumn !== column.title
+                                    )
+                                    .join(',')
                             );
                         }
                     }}
-	            />
+                />
             </div>
         </MuiThemeProvider>
     );
 }
 
-export default Table
+export default Table;

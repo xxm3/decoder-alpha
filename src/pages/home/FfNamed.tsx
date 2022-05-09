@@ -82,7 +82,7 @@ const FfNamed = () => {
 
             {ffNamedQuery?.isFetching ?
                 <div className="flex justify-center items-center">
-                    {/*<Loader/>*/}
+                    <Loader/>
                     {/*Loading. . .*/}
                 </div>
                 :
