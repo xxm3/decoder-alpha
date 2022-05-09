@@ -6,7 +6,7 @@
   - D) click "next" and "scroll to top"
 - E) search a multiple word with results (sol nft)
 
-### 2) Todays mints page
+### 2) Today's mints page
 - A) make sure filled out with data, and for the right day (UTC time)
 
 ### 3) Testing Fox Token page:

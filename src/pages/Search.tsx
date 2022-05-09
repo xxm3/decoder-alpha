@@ -289,6 +289,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                         </>
                     )}
 
+                    <br />
                     <div className="m-3 relative bg-blue-100 p-4 rounded-xl">
                         <p className="text-lg text-blue-700 font-medium">
                             <b>Search results are based off 14+ private Discords worth 300+ SOL. Discord & user names are randomized for privacy</b>
