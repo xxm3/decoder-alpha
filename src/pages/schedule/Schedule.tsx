@@ -64,6 +64,7 @@ const Schedule = () => {
 
 
     let dataSource = mints
+    let userTimezone:string
 
     /**
      * This will call the every minute to update the mints array and assign mintExpiresAt field
@@ -78,8 +79,31 @@ const Schedule = () => {
                 dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";        }
         setMints([...dataSource]);
     }
+
+    // set user time zone in user data
+
+    const SetUserTimeZone = async () =>{
+        let param = {timezone:selectedTimezone.value}
+        await instance.post(environment.backendApi + '/setUserTimeZone',param)
+            .then((res) => {
+                GetUserTimeZone()
+            });
+    }
+
+    // get user time zone from user data
+
+    const GetUserTimeZone = async() => {
+        await instance.get(`${environment.backendApi}/currentUser`)
+        .then((res: any) =>  userTimezone = res.data.user.timezone)
+    }
+
     // console.log('no time zone', moment.tz.names())
+
     useEffect(() => {
+        if(userTimezone !== selectedTimezone.value){
+            SetUserTimeZone();
+        }
+        
         if(dataSource && Object.keys(selectedTimezone).length !== 0){
             for (let i = 0; i < dataSource.length; i++) {
                 if (dataSource[i].time.includes('UTC')){
@@ -89,8 +113,6 @@ const Schedule = () => {
             }
                 setMints([...dataSource]);
         }
-
-
       }, [selectedTimezone])
 
     useEffect(() => {
@@ -134,10 +156,11 @@ const Schedule = () => {
 
         instance
             .get(environment.backendApi + '/getTodaysMints')
-            .then((res) => {
+            .then(async (res) => {
                 setMints(res.data.data.mints);
                 setDate(res.data.data.date);
                 setIsLoading(false);
+               await GetUserTimeZone()
                 SetDefaultTimeZone()
             })
             .catch((error) => {
@@ -176,7 +199,7 @@ const Schedule = () => {
 
     // set default time zone UTC 00:00
     const SetDefaultTimeZone = () => {
-        setSelectedTimezone({value:selectedTimezone.value ? selectedTimezone.value : 'Africa/Casablanca'})
+        setSelectedTimezone({value:userTimezone ? userTimezone : 'Africa/Casablanca'})
     }
 
     const timeCount = (time: any) => {
@@ -257,7 +280,7 @@ const Schedule = () => {
                     <div className="" onClick={() => handleProjectClick(record)}>
                         {record?.project && <span><b>Name : </b>{record.project}</span>}
                         {record?.mintExpiresAt && <span><br /><b>Time : </b> <span>{record.updateTime || record.time.replace('UTC', '')}<span hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}>{record.mintExpiresAt}</span></span></span>}
-                        {record?.price && <div className='flex flex-row'><b>Price : </b><div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-40 flex flex-row ml-1 ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}></div></div>}
+                        {record?.price && <div className='flex flex-row'><b>Price : </b><div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'flex flex-row ml-1 ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}></div></div>}
                         {record?.count && <span><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                         {record?.numbersOfDiscordMembers && <span><br /><b>Discord (all) : </b>{record.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                         {record?.DiscordOnlineMembers && <span><br /><b>Discord (online) : </b>{record.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
@@ -326,7 +349,8 @@ const Schedule = () => {
                     </a>
                 </div>
             ),
-            hiddenByColumnsButton: true
+            hiddenByColumnsButton: true,
+            
         },
         {
             title: 'Name',

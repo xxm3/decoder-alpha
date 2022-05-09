@@ -37,6 +37,7 @@ import Home from "./pages/home/Home";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Schedule from "./pages/schedule/Schedule";
+import Bots from "./pages/bots/Bots";
 
 // // https://javascript.plainenglish.io/how-to-setup-and-add-google-analytics-to-your-react-app-fd361f47ac7b
 // const TRACKING_ID = "G-Z3GDFZ53DN";
@@ -96,7 +97,6 @@ const [networkState, setNetworkState] = useState(true);
 	*/
 	const [user, setUser] = useState<IUser | null | undefined>(undefined);
 
-
 	// const [walletAddress, setWalletAdress] = useState(null);
 
 	const isAnonymous = useRef<boolean | null>(null);
@@ -110,6 +110,7 @@ const [networkState, setNetworkState] = useState(true);
         // code that is supposed to update the authorization header whenever the token changes
 		return auth.onAuthStateChanged(context => {
 			if (context) {
+				
                 setUser({ id: context.uid });
 				isAnonymous.current = context.isAnonymous;
 				if(context.isAnonymous){
@@ -192,6 +193,11 @@ const [networkState, setNetworkState] = useState(true);
                                                                         {/* Alerts */}
                                                                         <ProtectedRoute
                                                                             exact path="/alerts" component={Alerts}
+                                                                        />
+
+																		{/* bots */}
+                                                                        <ProtectedRoute
+                                                                            exact path="/bots" component={Bots}
                                                                         />
 
                                                                         {/*login button etc...*/}

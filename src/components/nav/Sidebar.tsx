@@ -8,7 +8,8 @@ import {
     logoTwitter,
     notificationsOutline,
     searchOutline,
-    statsChartOutline
+    statsChartOutline,
+    skullOutline
 } from "ionicons/icons"
 import NavLink from "./NavLink"
 import WalletButton from '../WalletButton';
@@ -87,6 +88,12 @@ function Sidebar() {
                     title="Alerts"
                     icon={notificationsOutline}
                     to="/alerts"
+                />
+                {/* bot page hide for now do not remove */}
+                <NavLink
+                    title="Bots"
+                    icon={skullOutline}
+                    to="/bots"
                 />
                 <NavLink
                     title="Docs"
