@@ -51,3 +51,17 @@
 .default-chart-theme{
     background-color: #0D0E25 !important;
 }
+
+.foxtoken-table{
+    .css-1auzxtt-Table tbody tr td:first-of-type{
+        padding: 0px !important;
+        
+        div{
+            button{
+                padding:0px 8px
+            }
+            // margin: 0px 10px;
+            // width: 100% !important;
+        }
+    }
+}

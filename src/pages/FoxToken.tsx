@@ -1055,7 +1055,7 @@ function FoxToken({contentRef}: FoxToken) {
                             <IonRefresherContent />
                         </IonRefresher> : '' }
 
-                        <Virtuoso  className='h-20'
+                        <Virtuoso  className='h-20 foxtoken-table'
                         totalCount={1}
                         itemContent ={()=> <>  <Table
                             // id="fox-table-id"
@@ -1243,7 +1243,14 @@ function FoxToken({contentRef}: FoxToken) {
                                     icon: '📈',
                                     tooltip: 'View Chart',
                                     render: (record:any) => (
-                                        // <FoxTokenCharts {...record.rowData} />
+                                        <FoxTokenCharts {...record.rowData} />
+                                    ),
+                                },
+                                // 🗠
+                                {
+                                    icon: '📉',
+                                    tooltip: 'View Chart',
+                                    render: (record:any) => (
                                         <TVChartContainer symbol={record?.rowData?.id || 'token'}  />
                                     ),
                                 },
