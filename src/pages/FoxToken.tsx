@@ -1247,13 +1247,13 @@ function FoxToken({contentRef}: FoxToken) {
                                     ),
                                 },
                                 // 🗠
-                                {
-                                    icon: '📉',
-                                    tooltip: 'View Chart',
-                                    render: (record:any) => (
-                                        <TVChartContainer symbol={record?.rowData?.id || 'token'}  />
-                                    ),
-                                },
+                                // {
+                                //     icon: '📉',
+                                //     tooltip: 'View Chart',
+                                //     render: (record:any) => (
+                                //         <TVChartContainer symbol={record?.rowData?.id || 'token'}  />
+                                //     ),
+                                // },
                             ]}
                         />
                          {/*recent FF tokens*/}
