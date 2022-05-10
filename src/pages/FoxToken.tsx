@@ -33,6 +33,7 @@ import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
 import './FoxToken.scss'
 import { setWallet } from '../redux/slices/walletSlice';
+import  TVChartContainer  from '../components/ChartContainer'
 
 const columns: Column<FoxTokenData> [] = [
     {
@@ -1054,7 +1055,7 @@ function FoxToken({contentRef}: FoxToken) {
                             <IonRefresherContent />
                         </IonRefresher> : '' }
 
-                        <Virtuoso  className='h-20'
+                        <Virtuoso  className='h-20 foxtoken-table'
                         totalCount={1}
                         itemContent ={()=> <>  <Table
                             // id="fox-table-id"
@@ -1241,10 +1242,18 @@ function FoxToken({contentRef}: FoxToken) {
                                 {
                                     icon: '📈',
                                     tooltip: 'View Chart',
-                                    render: (record) => (
+                                    render: (record:any) => (
                                         <FoxTokenCharts {...record.rowData} />
                                     ),
                                 },
+                                // 🗠
+                                // {
+                                //     icon: '📉',
+                                //     tooltip: 'View Chart',
+                                //     render: (record:any) => (
+                                //         <TVChartContainer symbol={record?.rowData?.id || 'token'}  />
+                                //     ),
+                                // },
                             ]}
                         />
                          {/*recent FF tokens*/}
