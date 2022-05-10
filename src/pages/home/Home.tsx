@@ -55,7 +55,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
                     <FfNamed/>
 
-                    {/*TODO: FIX ME CMON */}
+                    {/*TODO-aries: FIX ALERTS (then enable below...) */}
                     {/*<RecentAlerts/>*/}
                 </> : <>
 
@@ -70,8 +70,6 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
                         </div>
                         <div className='w-1/2'>
-
-                            {/*TODO: FIX ME CMON */}
 
                             {/* recent alerts */}
                             {/*<RecentAlerts/>*/}
