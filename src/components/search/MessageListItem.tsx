@@ -40,6 +40,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                     } else return ` <${url.trim()}>`;
                 },
             ).replaceAll(new RegExp(word, 'gi'), `**${word}**`)
+            .replaceAll('\n', '  \n'); // Two spaces before \n adds a new line in the markdown
 
            if (source !== 'Twitter') {
                formattedMessage = formattedMessage
