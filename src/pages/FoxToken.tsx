@@ -33,6 +33,7 @@ import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
 import './FoxToken.scss'
 import { setWallet } from '../redux/slices/walletSlice';
+import  TVChartContainer  from '../components/ChartContainer'
 
 const columns: Column<FoxTokenData> [] = [
     {
@@ -1241,8 +1242,9 @@ function FoxToken({contentRef}: FoxToken) {
                                 {
                                     icon: '📈',
                                     tooltip: 'View Chart',
-                                    render: (record) => (
-                                        <FoxTokenCharts {...record.rowData} />
+                                    render: (record:any) => (
+                                        // <FoxTokenCharts {...record.rowData} />
+                                        <TVChartContainer symbol={record?.rowData?.id || 'token'}  />
                                     ),
                                 },
                             ]}

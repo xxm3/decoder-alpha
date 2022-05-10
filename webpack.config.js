@@ -1,7 +1,7 @@
 const config = {
     mode: 'production', // "production" | "development" | "none"
     resolve: {
-        extensions: ['*', '.mjs', '.js', '.json']
+        extensions: ['*', '.mjs', '.js', '.json', '.html']
     },
     module: {
         rules: [
