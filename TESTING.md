@@ -45,7 +45,7 @@
 ### 9) Discord bots - automated - discord-parser-receiver and our python code (which parses links from discord chat)
 (1) if wanting to use the Test RDS, make sure it is running, then update .runtimeconfig.json (search for mydb_test here for creds) (change back after done...)
 (2) switch the firebase.json's (to get firestore running locally if needed) (change back after done...)
-(3) then run `NODE_ENV=debug ENABLE_DISCORD=true TEST_VEHN_DOJO=true npm start (in discord-bots project)`,
+(3) then run `NODE_ENV=debug TEST_VEHN_DOJO=true npm start (in discord-bots project)`,
 (4) go to python directory and run `python3 run_vehn.py debug=True`, this reads from 'vehn dojo - regular-chat-test' (you will need the discord token for this)
 (5) type a link in that channel, that you now has a mint on it
 (6) see the output in terminal, and see the chat message go to discord-combined-test, and to "me-nft-alerts-and-raw-mint-feed-test" if a mint was found
