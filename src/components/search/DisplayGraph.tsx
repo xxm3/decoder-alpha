@@ -79,7 +79,9 @@ const DisplayGraph:React.FC<{
             {totalCount && (
                 <>
                     <p className={`font-bold ${completelyHideChart ? "col-span-12" : window.innerWidth <= 360 ? "col-span-12 text-center" : "col-span-6"} sm:text-center`}>
-                        Searched on "{decodeURIComponent(word)}" ({totalCount} results last 10 days)
+                        Searched on "{decodeURIComponent(word)}"
+                        {/*TODO: Bugged*/}
+                        ({totalCount} results last 10 days)
                     </p>
 
                     <div className= {window.innerWidth <= 360 ?  "flex items-center justify-center col-span-12" : "flex items-center justify-center col-span-6"}  hidden={completelyHideChart}>
