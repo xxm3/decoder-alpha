@@ -6,14 +6,15 @@ import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
 import { IonContent, IonIcon, IonRippleEffect, useIonToast, IonRefresher, IonRefresherContent } from '@ionic/react';
 import './Schedule.css'
-import { Column } from '@material-table/core';
+import { Column, MTableToolbar } from '@material-table/core';
 import Table from '../../components/Table';
 import { logoDiscord, logoTwitter, link, navigate } from 'ionicons/icons';
 import { useHistory } from "react-router";
 import usePersistentState from '../../hooks/usePersistentState';
 import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
-
+import { Grid, MenuItem, Select } from '@material-ui/core';
+import TimezoneData from '../../util/Book1.json'
 
 interface Mint {
     image: string;
@@ -60,6 +61,7 @@ const Schedule = () => {
     const [isPaging, setIsPaging] = useState(false);
     const [selectedTimezone, setSelectedTimezone] = useState<any>({})
     const [mode] = usePersistentState("mode", "dark");
+    const [searchFocus, setSearchFocus] = useState<boolean>(false)
 
 
 
@@ -504,9 +506,70 @@ const Schedule = () => {
                                                                 paging: isPaging,
                                                                 columnsButton: isMobile ? false : true,
                                                             }}
-                                                            showTimezoneSelect={true}
-                                                            selectedTimezone={selectedTimezone}
-                                                            setSelectedTimezone={setSelectedTimezone}
+
+                                                            components={{
+                                                                Toolbar: (Toolbarprops) => {
+                                                                    const propsCopy = { ...Toolbarprops };
+                                                                        if (isMobile) {
+                                                                            propsCopy.showTitle = true;
+                                                                        } else {
+                                                                            propsCopy.showTitle = false;
+                                                                        }
+                                                                    
+                                                                    return (
+                                                                        <>
+                                                                       
+                                                                        <Grid container direction="row">
+                                                                            <Grid
+                                                                                container
+                                                                                item
+                                                                                sm={8}
+                                                                                style={{ alignItems: 'center' }}
+                                                                            >
+                                                                                <div
+                                                                                    style={{
+                                                                                        display: 'flex',
+                                                                                        justifyContent: 'space-between',
+                                                                                        width: '100%',
+                                                                                    }}
+                                                                                >
+                                                                                    <div className="hidden sm:block"
+                                                                                    style={{ width:'100%'}}>
+                                                                                       {`Mint Schedule - ${date}`}
+                                                                                    </div>
+                                                                                    <Select
+                                                                                    labelId="demo-simple-select-label"
+                                                                                    id="demo-simple-select"
+                                                                                    value={selectedTimezone.value}
+                                                                                    placeholder='select time zone'
+                                                                                    style={{ width:'100%', lineHeight:1.2,border: `1px solid rgba(171, 171, 171, 0.876)`,borderRadius:'20px',paddingLeft:'10px'}}
+                                                                                    onChange={(selected: any) => {
+                                                                                        setSelectedTimezone({...selected.target})
+                                                                                    }}
+                                                                                    >
+                                                                                        {
+                                                                                        TimezoneData.map((item:any,index:number)=>{
+                                                                                            return (<MenuItem key={index} value={item?.value}>{item?.label}</MenuItem>)
+                                                                                        }
+                                                                                        )}
+
+                                                                                    </Select>
+                                                                                </div>
+                                                                            </Grid>
+                                                                            <Grid item sm={4}>
+                                                                                <MTableToolbar {...propsCopy} 
+                                                                                    searchAutoFocus={searchFocus} 
+                                                                                    onSearchChanged={(text:string)=>{
+                                                                                        propsCopy.onSearchChanged(text);
+                                                                                        setSearchFocus(true)
+                                                                                    }}
+                                                                                />
+                                                                            </Grid>
+                                                                        </Grid>
+                                                                    </>
+                                                                    )
+                                                                },
+                                                             }}
                                                             description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
 							    \n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.
 						    	The Fox logo in the price is the official Token price that comes from the Fox Token Market.
