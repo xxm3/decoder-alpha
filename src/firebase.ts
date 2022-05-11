@@ -1,7 +1,12 @@
-import firebase from 'firebase';
-import { isDev } from './environments/environment';
+import { instance } from './axios';
+import { notifications } from 'ionicons/icons';
+import { initializeApp } from "firebase/app";
+import { environment, isDev } from './environments/environment';
+import { getMessaging, onMessage } from "firebase/messaging";
+import { getAuth, connectAuthEmulator,initializeAuth,indexedDBLocalPersistence } from "firebase/auth";
+import { Capacitor } from '@capacitor/core';
 
-const app = firebase.initializeApp({
+export const app = initializeApp({
     apiKey: "AIzaSyAMQYGpOBTeY2fOQYnW-pxZggPfsUXb6bs",
     authDomain: "nft-discord-relay.firebaseapp.com",
     projectId: "nft-discord-relay",
@@ -11,6 +16,30 @@ const app = firebase.initializeApp({
     measurementId: "G-533CCS7B8D"
 });
 
-export const auth = app.auth();
+let auth1;
+if (Capacitor.isNativePlatform()) {
+    auth1 =initializeAuth(app, {
+        persistence: indexedDBLocalPersistence
+      })
+  } else {
+    auth1 = getAuth(app)
+  }
+  export const auth = auth1;
 
-if (isDev) auth.useEmulator('http://localhost:9099');
+if (isDev) connectAuthEmulator(auth1, 'http://localhost:9099');
+
+if (!Capacitor.isNativePlatform()) {
+ const messaging = getMessaging(app);
+// https://firebase.google.com/docs/cloud-messaging/js/client
+
+onMessage(messaging, (payload) => {
+    if (!payload?.notification) return;
+    const { title, body } = payload.notification;
+    // Create new browser notification
+    new Notification(title as string, {
+        body,
+        icon: '/assets/site-logos/logo-transparent.png',
+        image: '/assets/site-logos/logo-transparent.png',
+    });
+});
+}

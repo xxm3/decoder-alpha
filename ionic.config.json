@@ -1,5 +1,7 @@
 {
-  "name": "NukeGame",
-  "integrations": {},
+  "name": "SOL Decoder",
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "react"
 }

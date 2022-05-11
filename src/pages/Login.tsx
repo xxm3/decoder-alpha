@@ -1,36 +1,78 @@
-import {IonButton, IonCard } from '@ionic/react';
+import {IonButton, IonCard, IonCol, IonRouterLink, IonRow, isPlatform} from '@ionic/react';
 import {useEffect, useMemo, useState} from 'react';
 import {Redirect} from 'react-router';
 import {instance} from '../axios';
 import Loader from '../components/Loader';
 import {useUser} from '../context/UserContext';
 import {environment} from '../environments/environment';
-import {auth} from '../firebase';
-import "./Login.css"
 
-// The "Login" page to which all unauthenticated users are redirected to
+import {auth} from '../firebase';
+import {  signInAnonymously, signInWithCustomToken ,browserSessionPersistence} from "firebase/auth";
+
+import "./Login.css"
+import { InAppBrowser }  from "@awesome-cordova-plugins/in-app-browser"
+import { useDispatch } from "react-redux"
+import { setDemo } from '../redux/slices/demoSlice';
+import NavLink from '../components/nav/NavLink';
+import IosLogo from '../images/app-store.png'
+import AndroidLogo from '../images/playstore.png'
+
+/**
+ * The "Login" page to which all unauthenticated users are redirected to
+ *
+ * Frontend Workflow:
+ * - user hits the site, and hits "ProtectedRoute.tsx" (which ignores localhost)
+ * - ProctedRoute.tsx brings them to Login.tsx
+ * - Login.tsx sends them to discord_auth.js, to get a token from discord
+ * - discord_auth.js goes to discord and gets a token, returns it to login.tsx
+ * - Login.tsx signs them in
+ *
+ * - also axios.ts is used for getting new tokens
+ * - also environment.js sets isDev (OVERRIDES FOR LOCAL), also read from ProtectedRoute.tsx to protect our routes or not
+ *
+ * Backend
+ * - middleware is in from verify.js
+ *   - has some (OVERRIDES FOR LOCAL) to skip logging in via localhost
+ */
+
 function Login() {
+
+	const dispatch = useDispatch();
     const user = useUser();
-    const { next, code, discordError } = useMemo(() => {
+    const { nextUrl, urlCode, discordError } = useMemo(() => {
         const params = new URLSearchParams(window.location.search);
         // the login page also works as the redirect page for discord oauth
 
         // authorization code returned by discord in the search query after user authorises the site
-        const code = params.get('code');
+        const urlCode = params.get('code');
 
         // the url to redirect to after user succesfully logs in
-        const next = params.get('next') || params.get('state') || '/';
+        const nextUrl = params.get('next') || params.get('state') || '/';
         // the error , if any, returned by discord
         const discordError = params.get('error_description');
-        return { code, next, discordError };
+        return { urlCode, nextUrl, discordError };
     }, []);
 
     const [error, setError] = useState(discordError);
+
+    const [code,setCode] = useState(urlCode);
+    const [next,setNext] = useState(nextUrl);
+
     // loading state which stores whether an access token is being issued or not
     const [loading, setLoading] = useState(!!code);
+
+    //check open in mobile-web or Browser
+    const DeviceCheck = isPlatform('mobileweb');
+
+
+    const isMobileDevice = useMemo(() => isPlatform("mobile"), []);
+
     useEffect(() => {
         if (code && !error && !user) {
             // exchange authorization code given by discord for an access token which we can sign in with using firebase
+            // this is defined on discord_auth.js
+
+            // console.log(code)
             instance
                 .post(
                     '/getToken',
@@ -43,13 +85,14 @@ function Login() {
                 )
                 .then(({ data }) => {
                     // console.log(data);
-                    return auth.signInWithCustomToken(data.body);
+					// auth.setPersistence(browserLocalPersistence)
+                    return signInWithCustomToken(auth, data.body);
                 })
                 .catch((e) => {
-                    // console.log(e);
+                    console.log(e);
                     if (e.response?.status === 403)
-                        setError("You need a proper role in Discord before accessing the site");
-                    else setError('Something went wrong. Please try again');
+                        setError("You need a proper role in Discord before accessing the site. Buy the NFT then go to the 'matrica-verify' channel");
+                    else setError('Something went wrong. Please try again, and try using a VPN program, not a VPN in your browser (ie. people in Russia currently banned by Google)');
                 })
                 .finally(() => {
                     setLoading(false);
@@ -63,65 +106,135 @@ function Login() {
         <Redirect to={next} />
     ) : (
         <>
-                <div className="w-screen min-h-screen flex flex-col  justify-center items-center">
-                    {!loading ? (
+            {!loading ? (
+                <>
+                 {DeviceCheck ?
                         <>
-
-                            <IonButton
-                                onClick={() => {
-                                    const params = new URLSearchParams();
-                                    params.set(
-                                        'redirect_uri',
-                                        `${window.location.origin}/login`
-                                    );
-                                    params.set('state', next);
-                                    window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${
-                                        environment.clientId
-                                    }&response_type=code&scope=identify&${params.toString()}`;
-                                }}
-                            >
-                                Login with Discord
-                            </IonButton>
-
-                            <p className="text-red-500 my-4 text-xl">
-                                {error}
-                            </p>
-
-
-                            <IonCard className="p-4">
-                                <div id="welcome">
-                                    <p className="font-bold">Welcome to SOL Decoder</p>
-
-                                    <ul className="">
-                                        <li>Please join <a href="https://discord.gg/tEa8ZTWv" style={{"textDecoration": "underline"}}>our Discord</a> to get access to the site</li>
-                                        <li>In the future the site will be locked behind ownership of the NFT. Until the NFT releases, you can get access by being whitelisted</li>
-                                        <li>View whitelisting requirements in the #whitelist-faq channel</li>
-                                    </ul>
-                                </div>
-                                <br/>
-
-                                <div id="security">
-                                    <p className="font-bold">A note on Discord integration</p>
-                                    <ul>
-                                        <li>We require you to login with Discord, so that we can verify you have the proper role(s)</li>
-                                        <li>Note the permissions, seen when you click the Login button:</li>
-                                        <li style={{paddingLeft: "8px"}}>(1) Access your username, avatar, and banner</li>
-                                        <li style={{paddingLeft: "8px"}}>(2) This application cannot read your messages or send messages as you.</li>
-                                        <li>The site can never read any of your Discord messages, and asks for the most limited amount of permissions.</li>
-                                    </ul>
-                                </div>
-
-                            </IonCard>
-
-
+                            <IonRow>
+                                <IonCol size='6' >
+                                    <IonButton href="#"  className='iosButton ionTextRight' fill='clear'
+                                        onClick={() =>{
+                                           window.open( `https://apps.apple.com/in/app/sol-decoder/id1619922481`);
+                                        }} >
+                                            <img src={IosLogo} />
+                                    </IonButton>
+                                </IonCol>
+                                <IonCol size='6'  >
+                                    <IonButton href="#" className='androidButton ionTextLeft' fill='clear'
+                                        onClick={() =>{
+                                            window.open( `https://play.google.com/store/apps/details?id=com.soldecoder.app`);
+                                        }} >
+                                        <img src={AndroidLogo} />
+                                    </IonButton>
+                                </IonCol>
+                            </IonRow>
                         </>
+                        : ''}
+                    {/*text-center*/}
+                    <div className="">
+                    <IonButton
+                        onClick={() => {
+                            const params = new URLSearchParams();
+                            params.set(
+                                'redirect_uri',
+                                `${!isMobileDevice ? window.location.origin : environment.ionicAppUrl}/login`
+                            );
+                            params.set('state', next);
+                            const urlToRedirect = `https://discord.com/api/oauth2/authorize?client_id=${
+                                environment.clientId
+                            }&response_type=code&scope=identify&${params.toString()}`;
+                            setError("")
+                            if(isMobileDevice){
+                                const browser = InAppBrowser.create(urlToRedirect, '_blank', 'location=yes');
+                                browser.on("beforeload")
+                                browser.on('loadstart').subscribe(event => {
+                                    const eventUrl = new URL(event.url)
+                                    if(eventUrl.origin === environment.ionicAppUrl && eventUrl.pathname === '/login'){
+                                        const code = eventUrl.searchParams.get('code');
+                                        if(code){
+                                            setCode(code)
+                                            setLoading(true)
+                                        };
+                                        setNext(eventUrl.searchParams.get("next") || eventUrl.searchParams.get('state') || "/");
+                                        browser.close();
+                                    }
+                                })
+                            }
+                            else{
+                                window.location.href = urlToRedirect;
+                            }
+                        }}
+                    >
+                        Login with Discord
+                    </IonButton>
 
-                    ) : (
-                        <div className="h-48 w-48">
-                            <Loader />
+                    <p className="text-red-500 my-4 text-xl">
+                        {error}
+                    </p>
+
+                    <div className="p-4">
+                        <div id="welcome">
+                            <p className="font-bold">Welcome to SOL Decoder</p>
+
+                            <ul className="">
+                                <li>
+                                    Use of the site / apps is locked to holders of one of our NFTs, <a href="https://magiceden.io/marketplace/soldecoder" className="underline" target="_blank">which you can purchase here</a>.
+                                    <br/>
+                                    After purchasing one,
+                                    please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a> and verify with Matrica to get a role which allows access to the site.
+                                </li>
+                            </ul>
                         </div>
-                    )}
+                        <br/>
+
+                        <div id="security">
+                            <p className="font-bold">Other links:</p>
+                            <ul>
+                                <li>Follow us <a href="https://twitter.com/SOL_Decoder" target="_blank" className="underline">on Twitter</a></li>
+                                <li>Read our <a href="https://docs.soldecoder.app" target="_blank" className="underline">docs here</a> </li>
+                                <li>Read a Twitter thread of what we do <a href="https://twitter.com/SOL_Decoder/status/1516759793884712965 " target="_blank" className="underline">here</a> </li>
+                                <li>View our official YouTube channel to view videos about our website / Discord <a href="https://www.youtube.com/playlist?list=PLeuijfzk0WfuZeCCH_KKXKkSBD9iCsM7R" target="_blank" className="underline">here</a></li>
+                                <li>
+                                    Read our <IonRouterLink href="/privacy" className="pr-7 underline text-inherit">Privacy Policy</IonRouterLink>
+                                </li>
+                            </ul>
+
+                            <br/>
+
+                            <hr/>
+                            <br/>
+
+                            <p className="font-bold">Want to try a demo?</p>
+
+                            <p>Full access to SOL Decoder is only available to those holding one of our NFTs. If you still want to click around the site to
+                            see what we offer, then try out the demo below. Note that you will only see old data, and some features are disabled.</p>
+                            <br/>
+
+                            <IonButton onClick={() => {
+                                // auth.setPersistence(browserSessionPersistence)
+                                signInAnonymously(auth)
+                            }}>Try the demo</IonButton>
+
+                            {/*<p className="font-bold">A note on Discord integration</p>*/}
+                            {/*<ul>*/}
+                            {/*    <li>We require you to login with Discord, so that we can verify you have the proper role(s)</li>*/}
+                            {/*    <li>Note the permissions, seen when you click the Login button:</li>*/}
+                            {/*    <li style={{paddingLeft: "8px"}}>(1) Access your username, avatar, and banner</li>*/}
+                            {/*    <li style={{paddingLeft: "8px"}}>(2) This application cannot read your messages or send messages as you.</li>*/}
+                            {/*    <li>The site can never read any of your Discord messages, and asks for the most limited amount of permissions.</li>*/}
+                            {/*</ul>*/}
+                        </div>
+
+                    </div>
+
+                    </div>
+                </>
+
+            ) : (
+                <div className="h-48 w-48">
+                    <Loader />
                 </div>
+            )}
         </>
     );
 }

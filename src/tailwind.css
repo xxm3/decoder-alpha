@@ -6,3 +6,7 @@
 	white-space: wrap;
 	word-break: break-word;
 }
+
+*, ::before, ::after {
+	border-color: var(--ion-border-color);
+}

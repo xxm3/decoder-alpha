@@ -1,146 +1,175 @@
-import React, { useMemo, useRef } from 'react';
+import React, {useCallback, useMemo, useRef} from 'react';
 import Display from '../components/search/Display';
-import { useState, useEffect } from 'react';
+import {useState, useEffect} from 'react';
 import {
-    IonButton,
+    IonButton, IonContent, IonPage, useIonToast,
 } from '@ionic/react';
 import './Search.css';
-import { useParams } from 'react-router';
-import { instance } from '../axios';
-import { useQueries } from 'react-query';
-import { AxiosResponse } from 'axios';
-import { SearchResponse } from '../types/SearchResponse';
-import { dispLabelsDailyCount, getDailyCountData } from '../util/charts';
+import {useHistory, useParams} from 'react-router';
+import {instance} from '../axios';
+import {useQuery} from 'react-query';
+import {AxiosResponse} from 'axios';
+import {SearchResponse} from '../types/SearchResponse';
+import {dispLabelsDailyCount, getDailyCountData} from '../util/charts';
+import DisplayGraph from '../components/search/DisplayGraph';
+import Loader from '../components/Loader';
+import SearchSkeleton from '../components/search/SearchSkeleton';
+import {AppComponentProps} from '../components/Route';
 
-const Search: React.FC = () => {
+const Search: React.FC<AppComponentProps> = ({contentRef}) => {
 
     /**
      * States & Variables
      */
+    const [present, dismiss] = useIonToast();
+    const history = useHistory();
+
     const [width, setWidth] = useState(window.innerWidth);
-    const [pageCount, setPageCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
-    const [chartDailyCount, setChartDailyCount] = useState({});
-    const [chartSource, setChartSource] = useState({});
-    const [isError, setIsError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("")
-    const [isLoading, setIsLoading] = useState(false)
-    let error: any;
+    // const [searchText, setSearchText] = useState(useParams<{id: string}>());
 
-    const { id : searchText} = useParams<{
-        id : string;
+
+    const {id: searchText} = useParams<{
+        id: string;
     }>();
-
-    const results = useQueries([
-        {
-            queryKey: ['messages', searchText,currentPage],
-            queryFn: async () => {
-                try {
-                    const { data } = await instance.post<SearchResponse>(
-                        '/searchMessages/',
-                        {
-                            word: searchText,
-                            pageNumber: currentPage
-                        },
-                        {
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                        }
-                    );
-                    return data;
-                } catch (e) {
-                    console.error('try/catch in Search.tsx: ', e);
-                    const error = e as Error & { response?: AxiosResponse };
-
-                    if (error && error.response) {
-                        throw new Error(String(error.response.data.body));
-                    } else {
-                        throw new Error('Unable to connect. Please try again later');
-                    }
-                }
-            }
-        },
-        {
-            queryKey: ['messages', searchText],
-            queryFn: async () => {
-                try {
-                    const { data } = await instance.post<SearchResponse>(
-                        '/search/',
-                        {
-                            word: searchText,
-                        },
-                        {
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                        }
-                    );
-                    return data;
-                } catch (e) {
-                    console.error('try/catch in Search.tsx: ', e);
-                    const error = e as Error & { response?: AxiosResponse };
-
-                    if (error && error.response) {
-                        throw new Error(String(error.response.data.body));
-                    } else {
-                        throw new Error('Unable to connect. Please try again later');
-                    }
-                }
-            }
-        }
-    ])
 
     /**
      * Use Effects
      */
-    // for setting height of chart, depending on what width browser is
+        // for setting height of chart, depending on what width browser is
     const chartHeight = useMemo(() => {
-        if(width > 1536) return 75;
-        if(width > 1280) return 90;
-        if(width > 1024) return 110;
-        if(width > 768) return 155;
-        if(width > 640) return 200;
-        return 140;
-    }, [width]);
+            if (width > 1536) return 100;
+            if (width > 1280) return 115;
+            if (width > 1024) return 135;
+            if (width > 768) return 180;
+            if (width > 640) return 225;
+            return 140;
+        }, [width]);
 
     // resize window
     useEffect(() => {
+
         function resizeWidth() {
             setWidth(window.innerWidth);
         }
+
         window.addEventListener('resize', resizeWidth);
         return () => window.removeEventListener('resize', resizeWidth);
     }, []);
 
+    // Whenever new word searched current page will set to its default value i.e. 0
     useEffect(() => {
-        if(results.length) {
+        setCurrentPage(0);
+    }, [searchText])
 
-            if (results[0].data) {
-                if (results[0].data.totalCount) {
-                    const totalPages = Math.floor(results[0].data.totalCount / 100);
-                    setPageCount(totalPages)
-                    setIsError(false);
-                } else {
-                    setIsError(true)
-                    setErrorMessage("No data found")
+
+    /**
+     * Functions
+     */
+
+    const useMountEffect = (fun: any) => useEffect(fun, []);
+
+    useMountEffect(() => contentRef?.scrollToTop());
+
+    const handlePage = (type: string) => {
+        contentRef?.scrollToTop(800)
+        if (type === 'next' && (!messageQuery?.isPreviousData && messageQuery?.data?.hasMore)) setCurrentPage(currentPage + 1)
+        else setCurrentPage(currentPage - 1)
+    }
+
+    const fetchGraph = async () => {
+        try {
+            const {data} = await instance.post<SearchResponse>(
+                '/search/',
+                {
+                    word: searchText,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 }
+            );
+            return data;
+        } catch (e) {
+            console.error('try/catch in Search.tsx: ', e);
+            const error = e as Error & { response?: AxiosResponse };
+
+            if (error && error.response) {
+                throw new Error(String(error.response.data.body));
+            } else {
+                throw new Error('Unable to connect. Please try again later');
             }
         }
-    }, [results[0]?.data?.totalCount])
+    }
 
+    const fetchSearchMessages = async () => {
+        try {
+            const {data} = await instance.post<SearchResponse>(
+                '/searchMessages/',
+                {
+                    word: searchText,
+                    pageNumber: currentPage,
+                    // not sure why you would want to pss their username...commenting this out
+                    // discordUsername: '... ...';    // <- Took from the API response "/users/@me" from the postman. Need to change,
+                    pageSize: 100 // doing 10 from backend (discord) - search.js ... 100 from frontend (website) - search.tsx
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            return data;
+        } catch (e) {
+            console.error('try/catch in Search.tsx: ', e);
+            const error = e as Error & { response?: AxiosResponse };
 
-    useEffect(() => {
-        if(results.length) {
+            // if (error && error.response) {
+            //     throw new Error(String(error.response.data.body));
+            // } else {
+            //     throw new Error('Unable to connect. Please try again later');
+            // }
 
-            if(results[1].data) {
+            let msg = '';
+            if (error && error.response) {
+                msg = String(error.response.data.body);
+            } else {
+                msg = 'Unable to connect. Please try again later';
+            }
 
-                setIsError(false);
+            present({
+                message: msg,
+                color: 'danger',
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
+            });
+            // if(msg.includes('logging in again')){
+            //     history.push("/login");
+            // }
+        }
+    }
 
-                const datasetForChartDailyCount = getDailyCountData(results[1].data);
+    const graphQuery = useQuery(['messages', searchText], fetchGraph,
+        {
+            initialData: {
+                messages: [...Array(20).keys()].map(() => undefined),
+                totalCount: 20,
+                word: searchText,
+                ten_day_count: [],
+                source: []
+            },
+            select: (data: any) => {
+
+                // in case couldn't search on this
+                if (data.error && data.body) {
+                    throw new Error(String(data.body));
+                }
+
+                const datasetForChartDailyCount = getDailyCountData(data);
 
                 const chartDataDailyCount = {
-                    labels: dispLabelsDailyCount(results[1].data.ten_day_count, true),
+                    labels: dispLabelsDailyCount(data?.ten_day_count, true),
                     datasets: [
                         {
                             type: 'line' as const,
@@ -151,14 +180,14 @@ const Search: React.FC = () => {
                         }
                     ],
                 }
-                const sourceToAry = results[1].data.source;
+                const sourceToAry = data.source;
                 let labelsPerSource = [];
                 let dataPerSource: any = [];
-                for(let i in sourceToAry){
+                for (let i in sourceToAry) {
                     labelsPerSource.push(sourceToAry[i][0]);
                     dataPerSource.push(sourceToAry[i][1]);
                 }
-               const chartDataPerSource = ({
+                const chartDataPerSource = ({
                     labels: labelsPerSource,
                     datasets: [
                         {
@@ -170,31 +199,31 @@ const Search: React.FC = () => {
                         }
                     ],
                 });
-                setChartDailyCount(chartDataDailyCount);
-                setChartSource(chartDataPerSource)
+                return {
+                    ...data,
+                    chartDataDailyCount,
+                    chartDataPerSource
+                }
+            },
+            retry: false
+        })
+    const messageQuery = useQuery([searchText, currentPage], fetchSearchMessages, {
+        keepPreviousData: true,
+        select: (data: any) => {
+            // in case couldn't search on this
+
+            if (data?.error && data.body) {
+                throw new Error(String(data.body));
             }
-
-        }
-
-    }, [results[1]?.data])
-
-    // useEffect(() => {
-    // },[chartDailyCount, chartSource])
-
-    // for scrolling to top
-    const contentRef = useRef<HTMLIonContentElement | null>(null);
-
-    /**
-     * Functions
-     */
-    const scrollToTop = () => {
-        contentRef.current && contentRef.current.scrollToTop();
-    };
-
-    const handlePage = (type: string) => {
-        if(type === 'next' && (currentPage < pageCount)) setCurrentPage(currentPage+1)
-        else setCurrentPage(currentPage - 1)
-    }
+            if (data?.totalCount > 100) {
+                data.hasMore = true;
+            }
+            return {
+                ...data,
+            }
+        },
+        retry: false
+    })
 
     /**
      * Renders
@@ -202,73 +231,76 @@ const Search: React.FC = () => {
 
     return (
         <React.Fragment>
-                        {/*min-h-screen*/}
 
-                        {/* The bit darker Gray Container */}
-                        <div className={` ${width <= 640 ? 'w-full' : 'container'}
-                            bg-satin-3 rounded-lg pt-3 pb-6 md:px-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>
+            {/* ERROR bar */}
+            {graphQuery.isError || messageQuery.isError || messageQuery?.data?.error || graphQuery?.data?.error ? (
+                <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
+                    <p className="text-lg text-red-700 font-medium">
 
-                            {/* ERROR bar */}
-                            {isError ? (
-                                <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
-                                    <p className="text-lg text-red-700 font-medium">
-                                        <b>{errorMessage || 'Unable to connect, please try again later'}</b>
-                                    </p>
-                                    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                                        !
-                                    </span>
-                                </div>
+                        {/* No results found */}
+                        <b>{(messageQuery?.error as Error)?.message ||
+                            (graphQuery?.error as Error)?.message || 'Unable to connect, please try again later'}</b>
+                    </p>
+                    <span
+                        className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                                            !
+                                        </span>
+                </div>
 
-                            // actual content
-                            ) : (
-                                <>
-                                {results.length ?
-                                    results[0].data?.messages == undefined ? (
-                                        // TODO-rakesh: why do we have this whole section below (that ive since commented out) - when we have most of this above?
-                                            //  maybe we need it, maybe we don't, but it was ALWAYS showing "no results found" instead of some loading bar... so i commented it out
-                                        <></>
-                                        // <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
-                                        //     <p className="text-lg text-red-700 font-medium">
-                                        //         <b>{"No results found" ||'Unable to connect, please try again later'}</b>
-                                        //     </p>
-                                        //     <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                                        //         !
-                                        //     </span>
-                                        // </div>
+                // actual content
+            ) : (
+                <>
+                    {graphQuery?.isFetching ? <div className=" m-16 flex justify-center items-center"><Loader/></div> :
+                        graphQuery?.isError ? <p className="text-lg text-red-700 font-medium">
+                                <b>{"Error while loading message"}</b>
+                            </p> :
+                            <DisplayGraph {...{
+                                chartDataDailyCount: graphQuery?.data.chartDataDailyCount,
+                                chartDataPerSource: graphQuery?.data.chartDataPerSource,
+                                chartHeight,
+                                isLoadingChart: graphQuery?.isLoading,
+                                totalCount: messageQuery?.data?.totalCount
+                            }} />}
+                    {/* Displaying the custom skeleton loader while fetching */}
+                    {messageQuery?.isFetching ?
+                        new Array(10).fill(0).map((_, i) => <SearchSkeleton key={i}/>) :
+                        messageQuery?.isError ? <p className="text-lg text-red-700 font-medium">
+                                <b>{"Error while loading message"}</b>
+                            </p> :
+                            <Display {...{
+                                messages: messageQuery?.data?.messages ?? [],
+                                totalCount: messageQuery?.data?.totalCount
+                            }}/>}
 
-                                    // actual content
-                                    ) :
-                                  (<>
-                                    <Display {...{
-                                        chartDataDailyCount : chartDailyCount ? chartDailyCount: {},
-                                        chartDataPerSource : chartSource ? chartSource : {},
-                                        chartHeight,
-                                        messages : results[0].data?.messages ?? [],
-                                        totalCount: results[0].data?.totalCount,
-                                        isLoadingChart: results[1].isLoading,
-                                        isLoadingMessages: results[0].isLoading
-                                    }}/>
-                                    {(results[0].data?.totalCount ?? 0) > 5 && (
-                                        <>
-                                        {(currentPage != 0) && <IonButton onClick={()=> handlePage('previous')}>Previous</IonButton>}
+                    {(messageQuery?.data?.totalCount ?? 0) > 5 && (
+                        <>
+                            {(currentPage != 0 && !messageQuery?.isFetching) &&
+                                <IonButton onClick={() => handlePage('previous')}>Previous</IonButton>}
+                            {(!messageQuery?.isPreviousData && messageQuery?.data?.hasMore && !messageQuery?.isFetching) &&
+                                <IonButton onClick={() => handlePage('next')} className="ml-4">Next</IonButton>}
 
-                                        {/*TODO-rakesh: this next isn't working when its multiple words :( search for "Starry Insiders"*/}
-                                        {(currentPage < pageCount) && <IonButton onClick={()=> handlePage('next')}  className="ml-4">Next</IonButton>}
-                                            {/* && results[0].data?.totalCount > 100*/}
-                                        <IonButton
-                                            onClick={() => scrollToTop()}
-                                            className="float-right"
-                                        >
-                                            {/*TODO-rakesh: this doens't work anymore*/}
-                                            Scroll to Top
-                                        </IonButton>
-                                        </>
-                                    )}
-                                    </> )
-                                    : <></>}
-                                </>
-                              )}
-                        </div>
+                            {!messageQuery?.isFetching &&
+                                <IonButton
+                                    onClick={() => contentRef?.scrollToTop(800)}
+                                    className="float-right"
+                                >
+                                    Scroll to Top
+                                </IonButton>}
+                        </>
+                    )}
+
+                    <br />
+                    <div className="m-3 relative bg-blue-100 p-4 rounded-xl">
+                        <p className="text-lg text-blue-700 font-medium">
+                            <b>Search results are based off 14+ private Discords worth 300+ SOL. Discord & user names are randomized for privacy</b>
+                        </p>
+                        <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                            !
+                        </span>
+                    </div>
+
+                </>
+            )}
         </React.Fragment>
     );
 };
