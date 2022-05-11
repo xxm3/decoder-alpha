@@ -23,9 +23,9 @@ export async function getLiveFoxTokenData(mySplTokens: any) {
         if (!token) continue;
         // then ADD data
         if (!token.whichMyWallets)
-            token.whichMyWallets = `${splToken.amount} - ${shortenedWallet(splToken.myWallet)}`;
+            token.whichMyWallets = `${splToken.amount} - ${shortenedWallet(splToken.wallet)}`;
         else
-            token.whichMyWallets += `, ${shortenedWallet(splToken.myWallet)}`;
+            token.whichMyWallets += `, ${shortenedWallet(splToken.wallet)}`;
     }
 
     return results;
@@ -64,11 +64,11 @@ export function shortenedWallet(wallet: string) {
 //                     // then ADD data
 //                     // @ts-ignore
 //                     if (!data[i].whichMyWallets) {
-//                         data[i].whichMyWallets = shortenedWallet(splToken.myWallet);
+//                         data[i].whichMyWallets = shortenedWallet(splToken.wallet);
 //                     }
 //                     // @ts-ignore
 //                     else {
-//                         data[i].whichMyWallets += ", " + shortenedWallet(splToken.myWallet);
+//                         data[i].whichMyWallets += ", " + shortenedWallet(splToken.wallet);
 //                     }
 //
 //                     break;

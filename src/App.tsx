@@ -1,5 +1,6 @@
 import { IonApp, IonCol, IonContent, IonGrid, IonMenu, IonPage, IonRouterOutlet, IonRow, IonSplitPane } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
+import { Network } from '@capacitor/network';
 // import { useEffect, useState } from "react";
 // import Search from "./pages/Search";
 // import Login from "./pages/Login";
@@ -36,6 +37,7 @@ import Home from "./pages/home/Home";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Schedule from "./pages/schedule/Schedule";
+import Bots from "./pages/bots/Bots";
 
 // // https://javascript.plainenglish.io/how-to-setup-and-add-google-analytics-to-your-react-app-fd361f47ac7b
 // const TRACKING_ID = "G-Z3GDFZ53DN";
@@ -58,10 +60,35 @@ import { css } from "@emotion/react";
 import Alerts from "./pages/Alerts";
 import { useDispatch } from "react-redux"
 import { setDemo } from "./redux/slices/demoSlice";
+import PrivacyPolicy from './pages/home/PrivacyPolicy';
+import { getPlatforms, isPlatform, getConfig } from '@ionic/react';
 
 
 const App = () => {
 
+const [networkState, setNetworkState] = useState(true);
+
+//offline Online
+	useEffect(() => {
+		statusCheck()
+		const loadEvent = () => {
+			window.addEventListener('online', ()=>{
+				setNetworkState(true)
+			});
+			window.addEventListener('offline', ()=>{
+				setNetworkState(false)
+			});
+		}
+		window.addEventListener('load', loadEvent);
+		
+	}, [])
+
+
+	const statusCheck = async () => {
+		const status = await Network.getStatus();
+		setNetworkState(status.connected)
+	}
+	
 	/*
 		state which stores the user. It has 3 states:
 		1. undefined : User data is still loading
@@ -69,7 +96,6 @@ const App = () => {
 		3. { id : "USERS_ID"} : user is authenticated
 	*/
 	const [user, setUser] = useState<IUser | null | undefined>(undefined);
-
 
 	// const [walletAddress, setWalletAdress] = useState(null);
 
@@ -84,6 +110,7 @@ const App = () => {
         // code that is supposed to update the authorization header whenever the token changes
 		return auth.onAuthStateChanged(context => {
 			if (context) {
+				
                 setUser({ id: context.uid });
 				isAnonymous.current = context.isAnonymous;
 				if(context.isAnonymous){
@@ -100,7 +127,8 @@ const App = () => {
 	}, []);
 
 	return (
-        <IonApp>
+<>
+			{networkState ?        <IonApp>
             <Theme>
                 <QueryClientProvider client={queryClient}>
                     <UserContext.Provider value={user}>
@@ -167,10 +195,20 @@ const App = () => {
                                                                             exact path="/alerts" component={Alerts}
                                                                         />
 
+																		{/* bots */}
+                                                                        <ProtectedRoute
+                                                                            exact path="/bots" component={Bots}
+                                                                        />
+
                                                                         {/*login button etc...*/}
 	                                                                    <AppRoute
 	                                                                        exact path="/login" component={ Login}
 	                                                                    />
+                                                                        {/* privacy policy */}
+                                                                        <AppRoute
+                                                                            exact path="/privacy" component={ PrivacyPolicy }
+                                                                        />
+
 	                                                                </IonRouterOutlet>
 	                                                            </IonContent>
 	                                                        </IonSplitPane>
@@ -202,7 +240,14 @@ const App = () => {
                 </QueryClientProvider>
             </Theme>
         </IonApp>
-    );
+:
+				<>
+				
+					<div className=" flex items-center justify-center align-middle	h-full " > <div className="text-3xl text-slate-400">Network is not found. Please check your internet connection.</div></div>
+				</>
+
+			}
+		</>    );
 };
 
 export default App;

@@ -141,7 +141,8 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
             present({
                 message: msg,
                 color: 'danger',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
             // if(msg.includes('logging in again')){
             //     history.push("/login");
@@ -287,6 +288,16 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                                 </IonButton>}
                         </>
                     )}
+
+                    <br />
+                    <div className="m-3 relative bg-blue-100 p-4 rounded-xl">
+                        <p className="text-lg text-blue-700 font-medium">
+                            <b>Search results are based off 14+ private Discords worth 300+ SOL. Discord & user names are randomized for privacy</b>
+                        </p>
+                        <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                            !
+                        </span>
+                    </div>
 
                 </>
             )}

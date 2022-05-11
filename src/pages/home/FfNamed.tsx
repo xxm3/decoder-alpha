@@ -43,7 +43,8 @@ const FfNamed = () => {
             present({
                 message: msg,
                 color: 'danger',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
 
             // if(msg.includes('logging in again')){
@@ -81,14 +82,14 @@ const FfNamed = () => {
 
             {ffNamedQuery?.isFetching ?
                 <div className="flex justify-center items-center">
-                    {/*<Loader/>*/}
+                    <Loader/>
                     {/*Loading. . .*/}
                 </div>
                 :
                 <>
                     <div className='secondary-bg-forced m-1 p-4 rounded-xl'>
                         <div className={`font-bold pb-1`}>
-                            New Fox WL Token Market Names
+                            New Fox Token Market Names
                             <Tooltip
                                     trigger="mouseenter" position="bottom"
                                      html={<IonItem lines="none" className='max-w-[320px] rounded help-tooltip whitespace-pre-line'>

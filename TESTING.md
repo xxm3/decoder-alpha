@@ -6,7 +6,7 @@
   - D) click "next" and "scroll to top"
 - E) search a multiple word with results (sol nft)
 
-### 2) Todays mints page
+### 2) Today's mints page
 - A) make sure filled out with data, and for the right day (UTC time)
 
 ### 3) Testing Fox Token page:
@@ -15,6 +15,7 @@
 - C) test 'add custom token name' (make sure discord alert sent)
 - D) test 'track multiple wallets'
 - E) expand a chart, make sure both charts fill out
+- F) make sure links to FF, Solscan, Twitter and Discord work
 
 ### 4) Testing Fox token - doing more advanced testing with wallets (tiny bit optional)
 - A) be logged out of wallet and "view my tokens"
@@ -24,6 +25,8 @@
 
 ### 5) Mint stats
 - A) Make sure filled out
+- B) Make sure preview icons are showing (if appliccable)
+- C) Make sure ME and Mint URLs are correct and work
 
 ### 6) Stacked line search
 - A) search "portals suites" - make sure filled out
@@ -33,7 +36,7 @@
 - NOTE: make sure any Discord bot you tested above has `* DISCORD BOT` in a multi line comment explaining it
 
 ### 7) Discord bots - user entry
-- A) test all the bots listed in deploy-commands.js
+- A) test all the bots listed in discord-bots deploy-commands.js
 
 ### 8) Discord bots - automated - some of them
 - A) enter a new Fox custom name, make sure shows up in Discord (talked more about in 4.B.)
@@ -42,7 +45,7 @@
 ### 9) Discord bots - automated - discord-parser-receiver and our python code (which parses links from discord chat)
 (1) if wanting to use the Test RDS, make sure it is running, then update .runtimeconfig.json (search for mydb_test here for creds) (change back after done...)
 (2) switch the firebase.json's (to get firestore running locally if needed) (change back after done...)
-(3) then run `NODE_ENV=debug ENABLE_DISCORD=true TEST_VEHN_DOJO=true firebase emulators:start --inspect-functions`,
+(3) then run `NODE_ENV=debug ENABLE_DISCORD=true TEST_VEHN_DOJO=true npm start (in discord-bots project)`,
 (4) go to python directory and run `python3 run_vehn.py debug=True`, this reads from 'vehn dojo - regular-chat-test' (you will need the discord token for this)
 (5) type a link in that channel, that you now has a mint on it
 (6) see the output in terminal, and see the chat message go to discord-combined-test, and to "me-nft-alerts-and-raw-mint-feed-test" if a mint was found

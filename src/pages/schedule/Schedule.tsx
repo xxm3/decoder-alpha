@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import moment from 'moment';
+import 'moment-timezone';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
-import {IonButton, IonContent, IonIcon, IonModal, IonRippleEffect, useIonToast} from '@ionic/react';
+import { IonContent, IonIcon, IonRippleEffect, useIonToast, IonRefresher, IonRefresherContent } from '@ionic/react';
 import './Schedule.css'
 import { Column } from '@material-table/core';
 import Table from '../../components/Table';
-import { logoDiscord, logoTwitter, link } from 'ionicons/icons';
-import {useHistory} from "react-router";
+import { logoDiscord, logoTwitter, link, navigate } from 'ionicons/icons';
+import { useHistory } from "react-router";
+import usePersistentState from '../../hooks/usePersistentState';
+import { RefresherEventDetail } from '@ionic/core';
+import { Virtuoso } from 'react-virtuoso';
+
 
 interface Mint {
     image: string;
@@ -21,19 +26,23 @@ interface Mint {
     count: string;
     price: string;
     wlPrice: string;
+    wlTokenAddress: string;
     extras: string;
     tenDaySearchResults: string[];
     mintExpiresAt: string;
     numbersOfDiscordMembers: string;
     DiscordOnlineMembers: string;
-    numbersOfTwitterFollowers : number;
-    tweetInteraction : {
-        total : number;
+    numbersOfTwitterFollowers: number;
+    tweetInteraction: {
+        total: number;
         likes: number;
         comments: number;
         reactions: number;
     }
+    updateTime?:string
 }
+
+
 const Schedule = () => {
 
     /**
@@ -47,10 +56,15 @@ const Schedule = () => {
     const [splitCollectionName, setSplitCollectionName] = useState([])
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const [isMobile,setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(false);
+    const [isPaging, setIsPaging] = useState(false);
+    const [selectedTimezone, setSelectedTimezone] = useState<any>({})
+    const [mode] = usePersistentState("mode", "dark");
+
 
 
     let dataSource = mints
+    let userTimezone:string
 
     /**
      * This will call the every minute to update the mints array and assign mintExpiresAt field
@@ -59,23 +73,72 @@ const Schedule = () => {
      * this will keep updating the time of when the mint will expire
      */
     const addMintExpiresAt = () => {
-        for(let i = 0; i < dataSource.length; i++) {
-            if(dataSource[i].time !== "")
-                dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";
-        }
+        for (let i = 0; i < dataSource.length; i++) {
+            if (dataSource[i].time !== "")
+                //  dataSource[i].mintExpiresAt = " (" + moment(moment.utc(dataSource[i].time, 'HH:mm:ss a').format('HH:mm:ss a'), 'HH:mm:ss a').fromNow() + ")";
+                dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";        }
         setMints([...dataSource]);
     }
 
+    // set user time zone in user data
 
+    const SetUserTimeZone = async () =>{
+        let param = {timezone:selectedTimezone.value}
+        await instance.post(environment.backendApi + '/setUserTimeZone',param)
+            .then((res) => {
+                GetUserTimeZone()
+            });
+    }
+
+    // get user time zone from user data
+
+    const GetUserTimeZone = async() => {
+        await instance.get(`${environment.backendApi}/currentUser`)
+        .then((res: any) =>  userTimezone = res.data.user.timezone)
+    }
+
+    // console.log('no time zone', moment.tz.names())
+
+    useEffect(() => {
+        if(userTimezone !== selectedTimezone.value){
+            SetUserTimeZone();
+        }
+        
+        if(dataSource && Object.keys(selectedTimezone).length !== 0){
+            for (let i = 0; i < dataSource.length; i++) {
+                if (dataSource[i].time.includes('UTC')){
+                    let utcZoneTime =  moment.utc(dataSource[i].time,'HH:mm').tz(selectedTimezone.value).format('HH:mm')
+                    dataSource[i].updateTime=utcZoneTime
+                }
+            }
+                setMints([...dataSource]);
+        }
+      }, [selectedTimezone])
+
+    useEffect(() => {
+        if (mints.length <= 10) {
+            setIsPaging(false)
+        } else {
+            setIsPaging(true)
+        }
+    }, [mints])
 
     useEffect(() => {
         dataSource.length && addMintExpiresAt();
 
         const interval = setInterval(() => {
-            for(let i = 0; i < dataSource.length; i++) {
-                if(dataSource[i].time !== "")
-                    dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")"
-            }
+        let selectTime:any
+        setSelectedTimezone((old:any)=>{
+            selectTime=old
+            return old
+        })
+            for (let i = 0; i < dataSource.length; i++) {
+                if (dataSource[i].time !== ""){
+                    // dataSource[i].mintExpiresAt = " (" + moment.utc(dataSource[i].time, 'hh:mm:ss').fromNow() + ")";
+                    let utcZoneTime =  moment.utc(dataSource[i].time,'HH:mm').tz(selectTime.value).format('HH:mm')
+                    dataSource[i].updateTime=utcZoneTime
+                }
+               }
             setMints([...dataSource])
         }, 60000)
 
@@ -83,7 +146,7 @@ const Schedule = () => {
     }, [dataSource.length]);
 
     useEffect(() => {
-        if (window.innerWidth < 525){
+        if (window.innerWidth < 525) {
             setIsMobile(true)
         }
     }, [window.innerWidth])
@@ -93,14 +156,16 @@ const Schedule = () => {
 
         instance
             .get(environment.backendApi + '/getTodaysMints')
-            .then((res) => {
+            .then(async (res) => {
                 setMints(res.data.data.mints);
                 setDate(res.data.data.date);
                 setIsLoading(false);
+               await GetUserTimeZone()
+                SetDefaultTimeZone()
             })
             .catch((error) => {
                 setIsLoading(false);
-                console.error("error when getting mints: " + error);
+                SetDefaultTimeZone()
                 let msg = '';
                 if (error && error.response) {
                     msg = String(error.response.data.body);
@@ -111,7 +176,8 @@ const Schedule = () => {
                 present({
                     message: msg,
                     color: 'danger',
-                    duration: 5000
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
                 // if(msg.includes('logging in again')){
                 //     history.push("/login");
@@ -119,13 +185,25 @@ const Schedule = () => {
 
             })
     }
+    // Pull to refresh function
+    function doRefresh(event: CustomEvent<RefresherEventDetail>) {
+        setTimeout(() => {
+            fetchMintsData()
+            event.detail.complete();
+        }, 1000);
+    }
 
     useEffect(() => {
         fetchMintsData();
     }, []);
 
-    const timeCount = (time:any) => {
-        const hours:number = -1 * moment.duration(moment(new Date()).diff(+ moment.utc(time,'h:mm:ss'))).asHours();
+    // set default time zone UTC 00:00
+    const SetDefaultTimeZone = () => {
+        setSelectedTimezone({value:userTimezone ? userTimezone : 'Africa/Casablanca'})
+    }
+
+    const timeCount = (time: any) => {
+        const hours: number = -1 * moment.duration(moment(new Date()).diff(+ moment(time, 'h:mm:ss'))).asHours();
         return hours >= 0 && hours <= 2;
     }
 
@@ -180,45 +258,58 @@ const Schedule = () => {
         {
             title: 'Details',
             render: (record) => (
-                <div >
+                <div>
                     <div className="flex space-x-3">
-                    {/*discord*/}
-                    <a href={record.discordLink} target="_blank" style={{ pointerEvents : (record.discordLink && record.numbersOfDiscordMembers) ? "initial" : "none"}}className={(record.discordLink && record.numbersOfDiscordMembers) ? "schedule-link" : "schedule-link-disabled"}>
-                        <IonIcon icon={logoDiscord} className="big-emoji"/>
-                        <IonRippleEffect />
-                    </a>
-                    {/*twitter*/}
-                    <a href={record.twitterLink} className="schedule-link" target="_blank">
-                        <IonIcon icon={logoTwitter} className="big-emoji" />
-                        <IonRippleEffect />
-                    </a>
-                    {/* Link */}
-                    <a href={record.projectLink} className={(record.projectLink && record.projectLink) ? "schedule-link" : "schedule-link-disabled"} target="_blank">
-                        <IonIcon icon={link} className="big-emoji" />
-                        <IonRippleEffect />
-                    </a>
+                        {/*discord*/}
+                        <a href={record.discordLink} target="_blank" style={{ pointerEvents: (record.discordLink && record.numbersOfDiscordMembers) ? "initial" : "none" }} className={(record.discordLink && record.numbersOfDiscordMembers) ? "schedule-link" : "schedule-link-disabled"}>
+                            <IonIcon icon={logoDiscord} className="big-emoji" />
+                            <IonRippleEffect />
+                        </a>
+                        {/*twitter*/}
+                        <a href={record.twitterLink} className="schedule-link" target="_blank">
+                            <IonIcon icon={logoTwitter} className="big-emoji" />
+                            <IonRippleEffect />
+                        </a>
+                        {/* Link */}
+                        <a href={record.projectLink} className={(record.projectLink && record.projectLink) ? "schedule-link" : "schedule-link-disabled"} target="_blank">
+                            <IonIcon icon={link} className="big-emoji" />
+                            <IonRippleEffect />
+                        </a>
                     </div>
 
-                    <span className="" onClick={() => handleProjectClick(record)}>
-                    {record?.project && <span><b>Name : </b>{record.project}</span> }
-                    {record?.mintExpiresAt && <span><br/><b>Time (UTC) :</b>{record.mintExpiresAt}</span>}
-                    {record?.price && <><br/><b>Price : </b><span dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}/></>}
-                    {record?.count &&  <span><br/><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span> }
-                    {record?.numbersOfDiscordMembers && <span><br/><b>Discord (all) : </b>{record.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                    {record?.DiscordOnlineMembers && <span><br/><b>Discord (online) : </b>{record.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                    {record?.numbersOfTwitterFollowers && <span><br/><b>Twitter : </b>{record.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                    {record?.tweetInteraction?.total && <span><br/><b>Twitter Interaction : </b>{record.tweetInteraction.total}</span>}
-                    </span>
+                    <div className="" onClick={() => handleProjectClick(record)}>
+                        {record?.project && <span><b>Name : </b>{record.project}</span>}
+                        {record?.mintExpiresAt && <span><br /><b>Time : </b> <span>{record.updateTime || record.time.replace('UTC', '')}<span hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}>{record.mintExpiresAt}</span></span></span>}
+                        {record?.price && <div className='flex flex-row'><b>Price : </b><div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'flex flex-row ml-1 ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}></div></div>}
+                        {record?.count && <span><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {record?.numbersOfDiscordMembers && <span><br /><b>Discord (all) : </b>{record.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {record?.DiscordOnlineMembers && <span><br /><b>Discord (online) : </b>{record.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {record?.numbersOfTwitterFollowers && <span><br /><b>Twitter : </b>{record.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {record?.tweetInteraction?.total && <span><br /><b>Twitter Interaction : </b>{record.tweetInteraction.total}</span>}
+                    </div>
 
                 </div>
             ),
+            customSort: (a, b) => a.project.localeCompare(b.project),
+            customFilterAndSearch: (term, rowData) =>
+                rowData.project.toLowerCase().includes(term.toLowerCase()),
         },
 
     ];
 
     const columns: Column<Mint>[] = [
         {
-            title: '',
+            title: 'Powered by SOL Decoder',
+            cellStyle: {
+                width: 145,
+                minWidth: 145,
+                maxWidth: 145,
+            },
+            headerStyle: {
+                width: 145,
+                minWidth: 145,
+                maxWidth: 145,
+            },
             render: (record) => (
                 <div className="flex space-x-3">
 
@@ -227,11 +318,11 @@ const Schedule = () => {
                         href={record.discordLink}
                         target="_blank"
                         style={{
-                            pointerEvents : (record.discordLink && record.numbersOfDiscordMembers) ? "initial" : "none"
+                            pointerEvents: (record.discordLink && record.numbersOfDiscordMembers) ? "initial" : "none"
                         }}
                         className={(record.discordLink && record.numbersOfDiscordMembers) ? "schedule-link" : "schedule-link-disabled"}
                     >
-                        <IonIcon icon={logoDiscord} className="big-emoji"/>
+                        <IonIcon icon={logoDiscord} className="big-emoji" />
                         <IonRippleEffect />
                     </a>
 
@@ -258,19 +349,21 @@ const Schedule = () => {
                     </a>
                 </div>
             ),
+            hiddenByColumnsButton: true,
+            
         },
         {
             title: 'Name',
             render: (record) => (
                 <>
-                    <img  className ={`avatarImg ${!record?.image?'hiddenImg': ''}`} key={record?.image} src={record?.image} />
+                    <img className={`avatarImg ${!record?.image ? 'hiddenImg' : ''}`} key={record?.image} src={record?.image} />
                     <span
                         // cursor-pointer
                         className=""
                         onClick={() => handleProjectClick(record)}
                     >
-                    {record.project}
-                </span>
+                        {record.project}
+                    </span>
                 </>
             ),
             customSort: (a, b) => a.project.localeCompare(b.project),
@@ -278,11 +371,12 @@ const Schedule = () => {
                 rowData.project.toLowerCase().includes(term.toLowerCase()),
         },
         {
-            title: 'Time (UTC)',
-            customSort: (a, b) => +new Date(a.time) - +new Date(b.time),
+            title: 'Time',
+            // customSort: (a, b) => +new Date(a.time) - +new Date(b.time),
+            customSort: (a, b) => a.time.localeCompare(b.time), // sorting with time
             render: (record) => (
                 <span>
-                    {record.time.replace('UTC', '')}
+                    {record.updateTime || record.time.replace('UTC', '')}
                     <span
                         hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}
                     >
@@ -300,14 +394,13 @@ const Schedule = () => {
         },
         {
             title: 'Price',
-            customSort: (a, b) =>
-                +a.price.split(' ')[0] - +b.price.split(' ')[0],
-                render: (record) =>  <><span dangerouslySetInnerHTML=
+            customSort: (a, b) => +a.price.split(' ')[0] - +b.price.split(' ')[0],
+            // send price in parmas and redirect to fox token page
+            render: (record) => <div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-48 flex flex-row ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML=
                 {{
                     __html: record.wlPrice ? `
                     ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
-                }}></span></>,
-            // width: "80px"
+                }}></div>,
         },
         {
             title: 'Supply',
@@ -377,23 +470,72 @@ const Schedule = () => {
                     <Loader />
                 </div>
             ) : (
-                <div>
-                    <Table
+                <>
+                    <IonContent className='h-screen scheduleTable' scroll-y='false'>
+                        {isMobile ? <IonRefresher slot="fixed" onIonRefresh={doRefresh} pullFactor={0.5} pullMin={100} pullMax={200} >
+                            <IonRefresherContent />
+                        </IonRefresher> : ''}
+
+                        <Virtuoso className='h-full'
+                                  totalCount={1}
+                                  itemContent={() => <Table data={dataSource}
+                                                            columns={isMobile ? columns_mobile : columns}
+                                                            title={`Mint Schedule - ${date}`}
+                                                            style={{ overflow: 'auto', overflowWrap: 'break-word' }}
+                                                            // headerStyle:{{backgroundColor:'red'}}
+                                                            // rowStyle: {
+                                                            //     overflowWrap: 'break-word'
+                                                            // }
+                                                            options={{
+                                                                pageSize: 20,
+                                                                searchFieldStyle:{
+                                                                    // marginLeft:'0%',
+                                                                    marginTop:'2%',
+                                                                    paddingLeft:"4%",
+                                                                    borderRadius:30,
+                                                                    border : mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.876) !important' : '1px solid rgba(10,10,10,0.8) !important'
+                                                                },
+                                                                rowStyle: (rowData: any) => ({
+                                                                    fontWeight: timeCount(rowData?.time) ? '' : "",
+                                                                    backgroundColor: mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
+                                                                    color: mode === 'dark' ? "" : '#202124',
+                                                                    borderTop: mode === 'dark' ? "" : '1px solid rgba(260,260,260,0.8)',
+                                                                }),
+                                                                paging: isPaging,
+                                                                columnsButton: isMobile ? false : true,
+                                                            }}
+                                                            showTimezoneSelect={true}
+                                                            selectedTimezone={selectedTimezone}
+                                                            setSelectedTimezone={setSelectedTimezone}
+                                                            description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
+							    \n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.
+						    	The Fox logo in the price is the official Token price that comes from the Fox Token Market.
+							    Rows in bold mean the mint comes out in two hours or less.
+							    `}
+                                  />} >
+                        </Virtuoso>
+                    </IonContent>
+
+                    {/* <Table
                         data={dataSource}
                         columns={ isMobile ? columns_mobile : columns}
                         title={`Mint Schedule - ${date}`}
                         options={{
                             rowStyle:( rowData:any) =>  ({
-                                fontWeight: timeCount (rowData?.time) ? '900' : ""
-                                // backgroundColor : timeCount (rowData?.time) ? '#981C1E80' : "",
-                            })
-                        }}
+                                fontWeight: timeCount (rowData?.time) ? '900' : "",
+                                backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
+                                color: mode === 'dark' ? "" : '#4B5563',
+                                borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
+                            }),
+                            paging: isPaging,
+							columnsButton: true
+                       }}
                         description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
 							\n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.
-							The Fox logo in the price is the official WL Token price that comes from the Fox Token Market.
+							The Fox logo in the price is the official Token price that comes from the Fox Token Market.
 							Rows in bold mean the mint comes out in two hours or less.
 							`}
-                    />
+                    /> */}
 
                     {/* <IonModal isOpen={isOpen}  onDidDismiss={onClose as any} >
                           <IonContent>
@@ -407,7 +549,8 @@ const Schedule = () => {
                             }
                           </IonContent>
                         </IonModal> */}
-                </div>
+
+                </>
             )}
         </>
     );

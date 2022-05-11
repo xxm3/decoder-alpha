@@ -10,7 +10,7 @@ import {useState} from 'react';
 
 const Whitelist = () => {
 
-    const [present] = useIonToast();
+    const [present,dismiss] = useIonToast();
 
     const [didAllSteps, setDidAllSteps] = useState(false);
 
@@ -43,7 +43,8 @@ const Whitelist = () => {
             present({
                 message: msg,
                 color: 'danger',
-                duration: 5000
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
             });
         }
     }
@@ -88,9 +89,9 @@ const Whitelist = () => {
             case 'viewedTodaysMints':
                 return 'View the "Today\'s Mints page" (which returns a schedule of the day\'s mints)';
             case 'viewedFoxTokenPage':
-                return 'View the "Fox WL Token" page (which shows a table of whitelist tokens you can buy/sell)';
+                return 'View the "Fox Token" page (which shows a table of whitelist tokens you can buy/sell)';
             case 'viewedMyToken':
-                return 'On the "Fox WL Token" page, click the "View My Tokens" button (which is A BIG BUTTON IN RED on the top right of the table - CLICK IT) to filter the table. Note your wallet must be connected, or you can click the "Add Multiple Wallets" button to manually add 1-3 wallets';
+                return 'On the "Fox Token" page, click the "View My Tokens" button (which is A BIG BUTTON IN RED on the top right of the table - CLICK IT) to filter the table. Note your wallet must be connected, or you can click the "Add Multiple Wallets" button to manually add 1-3 wallets';
             case 'viewedMintStats':
                 return 'View the "Mint Stats" page (which shows statistics on the mints we automatically parsed from discord)';
             case 'didStackedSearch':

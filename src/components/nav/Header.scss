@@ -2,6 +2,7 @@
     white-space: 'nowrap';
     overflow: 'hidden';
     text-overflow: 'ellipsis';
+    width: 150px;
     font-size: 20px;
 }
 .logo-height {
@@ -25,6 +26,11 @@
 @media screen and (max-width: 425px) {
     .pr-10 {
         padding-right: 0px !important;
+    }
+}
+@media screen and (max-width: 360px) {
+    .logo-height {
+        height: 1.5rem;
     }
 }
 
