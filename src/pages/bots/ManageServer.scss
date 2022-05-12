@@ -1,0 +1,35 @@
+.server-profile-bg{
+    display: flex;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    
+}
+.bg-image-wrapper{
+    width: 100wv;
+    height: 250px;
+    --background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: #1F2129;
+    border-radius: 10px;
+}
+
+.server-logo-wrapper{
+    height: 100px;
+    width: 100px;
+    border-radius: 50px;
+    background-color: beige; 
+    display: flex;
+    align-items: center;
+    justify-content:center ;
+    overflow: hidden;
+    border: 2px solid #ffffff;
+}
+.server-profile-img{
+    height: 100%;
+    width: 100%;
+}
