@@ -1,6 +1,6 @@
 import {IonButton, IonCard, IonCol, IonRouterLink, IonRow, isPlatform} from '@ionic/react';
 import {useEffect, useMemo, useState} from 'react';
-import {Redirect} from 'react-router';
+import {Redirect, useHistory} from 'react-router';
 import {instance} from '../axios';
 import Loader from '../components/Loader';
 import {useUser} from '../context/UserContext';
@@ -36,7 +36,7 @@ import AndroidLogo from '../images/playstore.png'
  */
 
 function Login() {
-
+    const history = useHistory()
 	const dispatch = useDispatch();
     const user = useUser();
     const { nextUrl, urlCode, discordError } = useMemo(() => {
@@ -86,6 +86,7 @@ function Login() {
                 .then(({ data }) => {
                     // console.log(data);
 					// auth.setPersistence(browserLocalPersistence)
+                    localStorage.setItem('servers',JSON.stringify(data.servers))
                     return signInWithCustomToken(auth, data.body);
                 })
                 .catch((e) => {
@@ -103,6 +104,7 @@ function Login() {
 
     // if user is authenticated, redirect user to previous page
     return user ? (
+        // null
         <Redirect to={next} />
     ) : (
         <>
@@ -142,7 +144,7 @@ function Login() {
                             params.set('state', next);
                             const urlToRedirect = `https://discord.com/api/oauth2/authorize?client_id=${
                                 environment.clientId
-                            }&response_type=code&scope=identify&${params.toString()}`;
+                            }&response_type=code&scope=identify+guilds&${params.toString()}`;
                             setError("")
                             if(isMobileDevice){
                                 const browser = InAppBrowser.create(urlToRedirect, '_blank', 'location=yes');

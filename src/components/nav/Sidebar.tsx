@@ -9,7 +9,8 @@ import {
     notificationsOutline,
     searchOutline,
     statsChartOutline,
-    skullOutline, earthOutline
+    skullOutline, earthOutline,
+    serverOutline
 } from "ionicons/icons"
 import NavLink from "./NavLink"
 import WalletButton from '../WalletButton';
@@ -109,6 +110,11 @@ function Sidebar() {
                     icon={logoTwitter}
                     to="#"
                     external={'https://twitter.com/SOL_Decoder'}
+                />
+                <NavLink
+                    title="Manage Server"
+                    icon={serverOutline}
+                    to="/manageserver"
                 />
 
                 <div className="xl:hidden lg:hidden md:hidden">
