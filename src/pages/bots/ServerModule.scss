@@ -1,0 +1,46 @@
+.server-module-bg{
+    width: 100wv;
+    height: 180px;
+    --background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: var(--ion-color-step-100);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    
+    
+}
+.bg-image-wrapper{
+    width: 100wv;
+    height: 250px;
+    --background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: var(--ion-color-step-100);
+    border-radius: 10px;
+}
+
+.module-icon-wrapper{
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content:center ;
+    overflow: hidden;
+  
+}
+.module-icon{
+    // height: 20%;
+    // width: 20%;
+}
+
+ion-toggle {
+    height: 26px;
+    width: 46px;
+    --handle-height: 100%;
+    --handle-width:26px;
+    --background-checked: #63F58C;
+    --handle-background-checked: rgb(255, 255, 255);
+    
+  }
