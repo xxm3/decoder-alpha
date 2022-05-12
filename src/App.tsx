@@ -39,6 +39,7 @@ import Login from "./pages/Login";
 import Schedule from "./pages/schedule/Schedule";
 import Bots from "./pages/bots/Bots";
 import ManageServer from "./pages/bots/ManageServer";
+import ServerModule from "./pages/bots/ServerModule";
 // // https://javascript.plainenglish.io/how-to-setup-and-add-google-analytics-to-your-react-app-fd361f47ac7b
 // const TRACKING_ID = "G-Z3GDFZ53DN";
 // ReactGA.initialize(TRACKING_ID);
@@ -199,9 +200,15 @@ const [networkState, setNetworkState] = useState(true);
                                                                         <ProtectedRoute
                                                                             exact path="/bots" component={Bots}
                                                                         />
-																			{/* manage server */}
-																			<ProtectedRoute
+																		
+																		{/* manage server */}
+																		<ProtectedRoute
                                                                             exact path="/manageserver" component={ManageServer}
+                                                                        />
+
+																		{/* Server module */}
+																		<ProtectedRoute
+                                                                            exact path="/servermodule" component={ServerModule}
                                                                         />
 
                                                                         {/*login button etc...*/}
