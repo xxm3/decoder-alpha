@@ -542,7 +542,9 @@ function FoxToken({contentRef}: FoxToken) {
         // @ts-ignore
          if(mySplTokensTemporary && mySplTokensTemporary.length > 0) {
             setMySplTokens(mySplTokensTemporary);
-        }
+        }else{
+             fetchTableData();
+         }
 
         // console.log(mySplTokensTemporary);
     }
