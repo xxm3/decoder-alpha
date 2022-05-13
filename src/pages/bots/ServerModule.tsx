@@ -4,7 +4,7 @@ import { AppComponentProps } from '../../components/Route';
 import {  IonLabel,  useIonToast } from '@ionic/react';
 import { Backdrop,CircularProgress,Grid, Switch, } from '@material-ui/core';
 import './ServerModule.scss';
-import { useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import Loader from '../../components/Loader';
 
 interface LocationParams {
@@ -26,6 +26,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     /**
      * States & Variables
      */
+     let history = useHistory();
     const location: LocationParams = useLocation();
     const [isMobile, setIsMobile] = useState(false);
     const [checked, setChecked] = useState<{
@@ -48,14 +49,24 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [backdrop, setBackdrop] = useState(false);
     const [present, dismiss] = useIonToast();
 
+    const [role, setRole] = useState<any>(null)
+
     /**
      * Use Effects
      */
     useEffect(() => {
+        if(!localStorage.getItem('role')){
+            history.push('/')
+            return
+        }else{
+            setRole(localStorage.getItem('role'))
+        }
         if (window.innerWidth < 525) {
             setIsMobile(true);
         }
     }, [window.innerWidth]);
+
+    
     // get guilds
     useEffect(() => {
         if (location) {
@@ -105,6 +116,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         }
     }, [location]);
 
+    
+
     // update guilds modules
     let enableModule = (obj: { module: string; enabled: boolean }) => {
         if (server) {
@@ -119,7 +132,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     setChecked({ ...checked, [obj.module]: obj.enabled });
                 })
                 .catch((error:any) => {
-                    console.log('error', error);
+                    
                     let msg = '';
                     if (error && error.response) {
                         msg = String(error.response.data.body);
@@ -157,7 +170,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     });
                 })
                 .catch((error:any) => {
-                    console.log('error', error);
+                    
                     let msg = '';
                     if (error && error.response) {
                         msg = String(error.response.data.body);
@@ -188,6 +201,28 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         });
     };
 
+    let disableButton = (btnType:any) =>{
+        if(role==='No Roles'){
+            return true
+        }else if(role==='3NFT'){
+            if(checked.mintInfoModule || checked.tokenModule){
+                if(btnType === 'mintInfoModule' &&checked.mintInfoModule){
+                    return false
+                }else if(btnType === 'tokenModule' &&checked.tokenModule){
+                    return false
+                }else{
+                    return true
+                }
+            }else{
+                return false
+            }
+        }else if(role==='4NFT'){
+            return false
+        }else{
+            return true
+        }
+    }
+
     if (isLoading) {
         return (
             <div className="pt-10 flex justify-center items-center">
@@ -217,7 +252,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 </div>
                                 <Switch checked={checked.mintInfoModule} onChange={( e: React.ChangeEvent<HTMLInputElement> ) => {
                                         enableModule({ module: 'mintInfoModule', enabled: e.target.checked, });
-                                    }} />
+                                    }}
+                                  disabled={disableButton('mintInfoModule')}
+                                />
                             </div>
                             <div className="flex flex-col mt-4">
                                 <IonLabel className="ml-3 text-xl">
@@ -246,6 +283,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             enabled: e.target.checked,
                                         });
                                     }}
+                                    disabled={disableButton('tokenModule')}
                                 />
                             </div>
                             <div className="flex flex-col mt-4">

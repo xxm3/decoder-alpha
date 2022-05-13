@@ -8,6 +8,7 @@ import {
     IonRouterOutlet,
     IonRow,
     IonSplitPane,
+	useIonToast,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Network } from '@capacitor/network';
@@ -68,13 +69,16 @@ import StackedSearch from './pages/StackedSearch';
 import { css } from '@emotion/react';
 import Alerts from './pages/Alerts';
 import { useDispatch } from 'react-redux';
-import { setDemo } from './redux/slices/demoSlice';
+import { setDemo, setRole } from './redux/slices/demoSlice';
 import PrivacyPolicy from './pages/home/PrivacyPolicy';
 import { getPlatforms, isPlatform, getConfig } from '@ionic/react';
 import { AppVersion } from '@awesome-cordova-plugins/app-version';
+import { async } from '@firebase/util';
 
 const App = () => {
     const [networkState, setNetworkState] = useState(true);
+	const [present, dismiss] = useIonToast();
+	// const [role, setRole] = useState('')
 
     //offline Online
     useEffect(() => {
@@ -101,14 +105,14 @@ const App = () => {
             window.removeEventListener('online', () => {
                 console.log('remove online event');
             });
+			localStorage.removeItem('role')
         };
     }, []);
 
+	// get Current App version 
     let getCurrentVersion = async () => {
         let getVersionCode = await AppVersion.getVersionCode();
         let getVersionNumber = await AppVersion.getVersionNumber();
-        
-		
         console.clear();
         console.log("**********")
         console.log('getVersionCode', getVersionCode);
@@ -117,10 +121,64 @@ const App = () => {
         console.log("**********")
     };
 
+	// internet connection check
     const statusCheck = async () => {
         const status = await Network.getStatus();
         setNetworkState(status.connected);
     };
+
+// 'check localstoraj roles ex:['973441499935158272'] 
+	useEffect(() => {
+		console.log("localStorage.getItem('roleList')",localStorage.getItem('roleList'))
+		if(localStorage.getItem('roleList')){
+			let roleList:any = localStorage.getItem('roleList')
+			getRoleType(JSON.parse(roleList))
+		}
+	}, [localStorage.getItem('roleList')])
+	// get role type
+	let getRoleType = async(roleList:any) => {
+		console.log("roleList",roleList)
+		instance
+            .post(
+                `getRoleType`,
+                {roles:roleList},
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
+            .then(({ data }) => {
+				localStorage.setItem('role',data.roleType)
+				 // localStorage.setItem('role','3NFT')
+				 dispatch(setRole(data.roleType));
+				
+            })
+            .catch((error:any) => {
+                console.log('error', error);
+                    let msg = '';
+                    if (error && error.response) {
+                        msg = String(error.response.data.body);
+                    } else {
+                        msg = 'Unable to connect. Please try again later';
+                    }
+                    present({
+                        message: msg,
+                        color: 'danger',
+                        duration: 5000,
+                        buttons: [{ text: 'X', handler: () => dismiss() }],
+                    });
+            })
+            .finally(() => {
+                console.log("finsish")
+            });
+
+	}
+
+
+
+
+
 
     /*
 		state which stores the user. It has 3 states:
@@ -157,6 +215,12 @@ const App = () => {
             }
         });
     }, []);
+
+
+	
+
+	
+	
 
     return (
         <>

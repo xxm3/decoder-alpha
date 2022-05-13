@@ -87,6 +87,7 @@ function Login() {
                     // console.log(data);
 					// auth.setPersistence(browserLocalPersistence)
                     localStorage.setItem('servers',JSON.stringify(data.servers))
+                    localStorage.setItem('roleList',JSON.stringify(data.roles))
                     return signInWithCustomToken(auth, data.body);
                 })
                 .catch((e) => {

@@ -22,6 +22,7 @@ import { useState,useEffect } from "react";
 
 function Sidebar() {
 	const isDemo = useSelector<RootState>(state => state.demo.demo);
+	const role:any = useSelector<RootState>(state => state.demo.role);
     const [isMobile,setIsMobile] = useState(false)
 
     useEffect(() => {
@@ -111,12 +112,19 @@ function Sidebar() {
                     to="#"
                     external={'https://twitter.com/SOL_Decoder'}
                 />
-                {/* <NavLink
-                    title="Manage Server"
-                    icon={serverOutline}
-                    to="/manageserver"
-                /> */}
-
+                {
+                    role!=='' || role==='No Roles' ?
+                    // localStorage.getItem('role')!=='' || localStorage.getItem('role') === 'No Roles' ?
+                    <>
+                        <NavLink
+                        title="Manage Server"
+                        icon={serverOutline}
+                        to="/manageserver"
+                        />
+                    </>
+                     :null
+                }
+                {/*  */}
                 <div className="xl:hidden lg:hidden md:hidden">
                     <WalletButton />
                 </div>
