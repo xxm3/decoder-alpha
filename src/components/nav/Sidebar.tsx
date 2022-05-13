@@ -111,11 +111,11 @@ function Sidebar() {
                     to="#"
                     external={'https://twitter.com/SOL_Decoder'}
                 />
-                <NavLink
+                {/* <NavLink
                     title="Manage Server"
                     icon={serverOutline}
                     to="/manageserver"
-                />
+                /> */}
 
                 <div className="xl:hidden lg:hidden md:hidden">
                     <WalletButton />
