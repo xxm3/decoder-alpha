@@ -192,7 +192,9 @@ const columns_mobile: Column<FoxTokenData>[] = [
             </span>
         ),
         customSort: (a, b) => a.token.localeCompare(b.token),
-		customFilterAndSearch: (term, rowData) => rowData.token?.toLowerCase().includes(term.toLowerCase()),
+		customFilterAndSearch: (term, rowData) => {
+            return rowData.token?.toLowerCase().includes(term.toLowerCase()) || rowData.name?.toLowerCase().includes(term.toLowerCase())
+        },
     },
 
 ];
