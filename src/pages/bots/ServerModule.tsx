@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
-import { environment } from '../../environments/environment';
-import { IonBackdrop, IonContent, IonLabel, IonToggle, useIonToast } from '@ionic/react';
-import {
-    Backdrop,
-    CircularProgress,
-    Grid,
-    MenuItem,
-    Select,
-    Switch,
-} from '@material-ui/core';
+import {  IonLabel,  useIonToast } from '@ionic/react';
+import { Backdrop,CircularProgress,Grid, Switch, } from '@material-ui/core';
 import './ServerModule.scss';
 import { useLocation } from 'react-router';
 import Loader from '../../components/Loader';
@@ -206,16 +198,13 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     return (
         <>
             <Backdrop
-                style={{
-                    color: '#fff',
-                    zIndex: 1000,
-                }}
+                style={{color: '#fff', zIndex: 1000, }}
                 open={backdrop}
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
             <IonLabel className="text-xl font-semibold  flex">
-                Server Mangament
+                Server Management
             </IonLabel>
             <div className="flex flex-row justify-center w-full mt-6">
                 <Grid container spacing={4}>
@@ -226,17 +215,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 <div className="module-icon-wrapper ml-3">
                                     <img src={require('../../images/me.png')} />
                                 </div>
-                                <Switch
-                                    checked={checked.mintInfoModule}
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        enableModule({
-                                            module: 'mintInfoModule',
-                                            enabled: e.target.checked,
-                                        });
-                                    }}
-                                />
+                                <Switch checked={checked.mintInfoModule} onChange={( e: React.ChangeEvent<HTMLInputElement> ) => {
+                                        enableModule({ module: 'mintInfoModule', enabled: e.target.checked, });
+                                    }} />
                             </div>
                             <div className="flex flex-col mt-4">
                                 <IonLabel className="ml-3 text-xl">
@@ -292,18 +273,14 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 Daily Mints WebHook
                             </IonLabel>
                             <div className="flex flex-row justify-between ">
-                                <select
-                                    value={
-                                        dropdownValue.dailyMintsWebhookChannel
-                                    }
+                                <select value={ dropdownValue.dailyMintsWebhookChannel }
                                     className="server-channel-dropdown"
                                     onChange={(event: any) => {
                                         updateWebHooks({
                                             webhook: 'dailyMintsWebhookChannel',
                                             channel: event.target.value,
                                         });
-                                    }}
-                                >
+                                    }} >
                                     <option value="">
                                         Please Select DailyMintsWebhookChannel
                                     </option>
