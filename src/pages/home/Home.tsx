@@ -64,7 +64,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                                     New app version available 
                                 </IonLabel>
                                 <IonLabel className="ml-4 mt-4 mr-4">
-                                    Please, update app to new version to continue reposting.
+                                    Please update your app to the new version
                                 </IonLabel>
                                 <div className='flex flex-row justify-end mr-6 mt-7'>
                                     {/* <IonLabel onClick={()=> setIsHardUpdateOpen(false)} className='text-sky-500 font-semibold tracking-wide'>NO, THANKS</IonLabel> */}
