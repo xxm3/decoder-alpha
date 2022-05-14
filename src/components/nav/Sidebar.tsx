@@ -100,31 +100,36 @@ function Sidebar() {
                 {/*    to="/bots"*/}
                 {/*/>*/}
 
+                {/*TODO: test this later . . .*/}
+                {/*{*/}
+                {/*    role!=='' || role==='No Roles' ?*/}
+
+                {/*    // commented out code*/}
+                {/*    // localStorage.getItem('role')!=='' || localStorage.getItem('role') === 'No Roles' ?*/}
+                {/*    <>*/}
+                {/*        <NavLink*/}
+                {/*            title="Add Bots"*/}
+                {/*            icon={serverOutline}*/}
+                {/*            to="/manageserver"*/}
+                {/*        />*/}
+                {/*    </>*/}
+                {/*    :null*/}
+                {/*}*/}
+
                 <NavLink
                     title="Docs"
                     icon={bookOutline}
                     to="#"
                     external={'https://docs.soldecoder.app'}
                 />
+
                 <NavLink
                     title="Twitter"
                     icon={logoTwitter}
                     to="#"
                     external={'https://twitter.com/SOL_Decoder'}
                 />
-                {
-                    role!=='' || role==='No Roles' ?
-                    // localStorage.getItem('role')!=='' || localStorage.getItem('role') === 'No Roles' ?
-                    <>
-                        <NavLink
-                        title="Manage Server"
-                        icon={serverOutline}
-                        to="/manageserver"
-                        />
-                    </>
-                     :null
-                }
-                {/*  */}
+
                 <div className="xl:hidden lg:hidden md:hidden">
                     <WalletButton />
                 </div>

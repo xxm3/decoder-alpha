@@ -292,7 +292,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                     <br />
                     <div className="m-3 relative bg-blue-100 p-4 rounded-xl">
                         <p className="text-lg text-blue-700 font-medium">
-                            <b>Search results are based off 18+ private Discords worth 740+ SOL. Discord & user names are randomized for privacy</b>
+                            <b>Search results are based off 18+ private Discords worth 740+ SOL. Discord & user names are randomized for privacy. This means that your search results are coming from Blue Chip DAOs, and all of the messages they type in their main alpha chat are being shown above.</b>
                         </p>
                         <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                             !
