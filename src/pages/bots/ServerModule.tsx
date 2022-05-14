@@ -66,7 +66,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         }
     }, [window.innerWidth]);
 
-    
+
     // get guilds
     useEffect(() => {
         if (location) {
@@ -116,7 +116,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         }
     }, [location]);
 
-    
+
 
     // update guilds modules
     let enableModule = (obj: { module: string; enabled: boolean }) => {
@@ -132,7 +132,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     setChecked({ ...checked, [obj.module]: obj.enabled });
                 })
                 .catch((error:any) => {
-                    
+
                     let msg = '';
                     if (error && error.response) {
                         msg = String(error.response.data.body);
@@ -145,7 +145,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         duration: 5000,
                         buttons: [{ text: 'X', handler: () => dismiss() }],
                     });
-                    
+
                 })
                 .finally(() => {
                     setIsLoading(false);
@@ -170,7 +170,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     });
                 })
                 .catch((error:any) => {
-                    
+
                     let msg = '';
                     if (error && error.response) {
                         msg = String(error.response.data.body);
@@ -258,10 +258,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                             </div>
                             <div className="flex flex-col mt-4">
                                 <IonLabel className="ml-3 text-xl">
-                                    MintInfo Module
+                                    Mint Info Module
                                 </IonLabel>
                                 <IonLabel className="ml-3 text-sm opacity-60 mt-2">
-                                    Reactopn Roll detail
+                                    {/* TODO: show more details */}
                                 </IonLabel>
                             </div>
                         </div>
@@ -288,10 +288,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                             </div>
                             <div className="flex flex-col mt-4">
                                 <IonLabel className="ml-3 text-xl">
-                                    Token Module
+                                    Fox Token Module
                                 </IonLabel>
                                 <IonLabel className="ml-3 text-sm opacity-60 mt-2">
-                                    Reactopn Roll detail
+                                    {/* TODO: show more details */}
                                 </IonLabel>
                             </div>
                         </div>
@@ -308,6 +308,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={6} xl={6}>
                             <IonLabel className="text-base">
+                                {/*TODO: */}
                                 Daily Mints WebHook
                             </IonLabel>
                             <div className="flex flex-row justify-between ">
@@ -320,6 +321,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         });
                                     }} >
                                     <option value="">
+                                        {/*TODO: */}
                                         Please Select DailyMintsWebhookChannel
                                     </option>
                                     {getOption()}
@@ -328,7 +330,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         </Grid>
                         <Grid item xs={12} md={6} xl={6}>
                             <IonLabel className="text-base">
-                                OneHour MintInfo WebHook
+                                {/*TODO: */}
+                                One Hour Mint Info WebHook
                             </IonLabel>
                             <div className="flex flex-row justify-between">
                                 <select
@@ -345,8 +348,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     }}
                                 >
                                     <option value="">
+                                        {/*TODO: */}
                                         Please Select
-                                        OneHourMintInfoWebhookChannel
+                                        One Hour Mint Info WebhookChannel
                                     </option>
                                     {getOption()}
                                 </select>
@@ -381,6 +385,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     }}
                                 >
                                     <option value="">
+                                        {/*TODO: */}
                                         Please Select AnalyticsWebhookChannel
                                     </option>
                                     {getOption()}

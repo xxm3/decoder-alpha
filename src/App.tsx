@@ -97,28 +97,28 @@ const App = () => {
 
         return () => {
             window.removeEventListener('load', () => {
-                console.log('remove load event');
+                // console.log('remove load event');
             });
             window.removeEventListener('offline', () => {
-                console.log('remove offline event');
+                // console.log('remove offline event');
             });
             window.removeEventListener('online', () => {
-                console.log('remove online event');
+                // console.log('remove online event');
             });
 			localStorage.removeItem('role')
         };
     }, []);
 
-	// get Current App version 
+	// get Current App version
     let getCurrentVersion = async () => {
         let getVersionCode = await AppVersion.getVersionCode();
         let getVersionNumber = await AppVersion.getVersionNumber();
         console.clear();
-        console.log("**********")
-        console.log('getVersionCode', getVersionCode);
-		console.log("**********")
-        console.log('getVersionNumber', getVersionNumber);
-        console.log("**********")
+        // console.log("**********")
+        // console.log('getVersionCode', getVersionCode);
+		// console.log("**********")
+        // console.log('getVersionNumber', getVersionNumber);
+        // console.log("**********")
     };
 
 	// internet connection check
@@ -127,17 +127,18 @@ const App = () => {
         setNetworkState(status.connected);
     };
 
-// 'check localstoraj roles ex:['973441499935158272'] 
+    // 'check localstorage roles ex:['973441499935158272']
 	useEffect(() => {
-		console.log("localStorage.getItem('roleList')",localStorage.getItem('roleList'))
+		// console.log("localStorage.getItem('roleList')",localStorage.getItem('roleList'))
 		if(localStorage.getItem('roleList')){
 			let roleList:any = localStorage.getItem('roleList')
 			getRoleType(JSON.parse(roleList))
 		}
-	}, [localStorage.getItem('roleList')])
+	}, [localStorage.getItem('roleList')]);
+
 	// get role type
 	let getRoleType = async(roleList:any) => {
-		console.log("roleList",roleList)
+		// console.log("roleList",roleList)
 		instance
             .post(
                 `getRoleType`,
@@ -152,10 +153,10 @@ const App = () => {
 				localStorage.setItem('role',data.roleType)
 				 // localStorage.setItem('role','3NFT')
 				 dispatch(setRole(data.roleType));
-				
+
             })
             .catch((error:any) => {
-                console.log('error', error);
+                // console.log('error', error);
                     let msg = '';
                     if (error && error.response) {
                         msg = String(error.response.data.body);
@@ -170,14 +171,9 @@ const App = () => {
                     });
             })
             .finally(() => {
-                console.log("finsish")
+                // console.log("done")
             });
-
 	}
-
-
-
-
 
 
     /*
@@ -216,11 +212,6 @@ const App = () => {
         });
     }, []);
 
-
-	
-
-	
-	
 
     return (
         <>
@@ -332,13 +323,13 @@ const App = () => {
                                                                                 />
 
                                                                                 {/* bots */}
-                                                                                <ProtectedRoute
-                                                                                    exact
-                                                                                    path="/bots"
-                                                                                    component={
-                                                                                        Bots
-                                                                                    }
-                                                                                />
+                                                                                {/*<ProtectedRoute*/}
+                                                                                {/*    exact*/}
+                                                                                {/*    path="/bots"*/}
+                                                                                {/*    component={*/}
+                                                                                {/*        Bots*/}
+                                                                                {/*    }*/}
+                                                                                {/*/>*/}
 
                                                                                 {/* manage server */}
                                                                                 <ProtectedRoute
