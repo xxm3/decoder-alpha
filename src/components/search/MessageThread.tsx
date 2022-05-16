@@ -17,7 +17,7 @@ interface MessageThreadProps {
 
 type MessageThreadQueryKey = readonly ['messageThread', string];
 type PageParam =
-    | { priorLimit: number; postLimit: number; messageId: string }
+    | { priorLimit: number; postLimit: number; messageId: string; message: any }
     | undefined;
 
 interface MessageThreadData {
@@ -30,8 +30,10 @@ const MessageThread: React.FC<MessageThreadProps> = ({
     message: { id },
     onClose,
 }) => {
+    // TODO? bugged demo...
     const defaultPageParam: PageParam = {
         messageId: message.id,
+        message: message,
         priorLimit: 5,
         postLimit: 100,
         // #s REPEATED on MessageThread.tsx & priorAndSubsequent.js
@@ -48,26 +50,30 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             // data.priorMsg = data.priorMsg.map(message => ({
             //     ...message,
             //     // @ts-expect-error
-            //     time : message.createdAt
+            //     time : message.createdAt ? message.createdAt : message.time_stamp
             // }))
             data.subsequentMsg = data.subsequentMsg.map(message => ({
                 ...message,
                 // @ts-expect-error
-                time : message.createdAt
+                time : message.createdAt ? message.createdAt : message.time_stamp
             }))
             if (pageParam === defaultPageParam)
                 // return [...data.priorMsg, message, ...data.subsequentMsg];
                 return [message, ...data.subsequentMsg];
             // return [...data.priorMsg, ...data.subsequentMsg];
             return [...data.subsequentMsg];
+
         } catch (e) {
             console.error('try/catch in MessageThread.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
-            if (error && error.response) {
-                throw new Error(String(error.response.data.body));
-            } else {
-                throw new Error('Unable to connect. Please try again later');
-            }
+
+            // if (error && error.response) {
+            //     throw new Error(String(error.response.data.body));
+            // } else {
+            //     throw new Error('Unable to connect. Please try again later');
+            // }
+
+            return [];
         }
     }
 
@@ -83,6 +89,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             return lastMessageId
                 ? {
                       messageId: lastMessageId,
+                      message: null, // TODO...
                       postLimit: 10,
                       priorLimit: 0,
                   }
@@ -120,8 +127,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             <IonModal
                 isOpen = {isModalOpen}
                 onDidDismiss={onClose as any}
-       
-                
                 // onDidPresent={() => {
                 //     if (mainMessageRef.current) {
                 //         mainMessageRef.current.scrollIntoView({
@@ -130,7 +135,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                 //         });
                 //     }
                 // }}
-				
             >
                 <div
                     ref={containerRef}
@@ -140,29 +144,35 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                         <HighlightOffIcon className='text-2xl'/>
                     </div>
                     <div className='overflow-y-scroll h-full w-full mx-auto p-5'>
-                    {data.pages
-                        .map((page) =>
-                            page.map((message, i) =>
-                                message ? (
-                                    <div className="my-1.5" key={i}>
-                                    	<MessageListItem
-	                                        message={message}
-                                            isFromMsgThread={true}
-	                                        key={message.id}
-	                                        ref={
-	                                            message.id === id
-	                                                ? mainMessageRef
-	                                                : null
-	                                        }
-	                                    />
-                                    </div>
-                                ) : (
-                                    <SearchSkeleton key={i}/>
+
+                        {/*<div hidden={data}>*/}
+                        {/*    Down!*/}
+                        {/*</div>*/}
+
+                        {data.pages
+                            .map((page) =>
+                                page.map((message, i) =>
+                                    message ? (
+                                        <div className="my-1.5" key={i}>
+                                            <MessageListItem
+                                                message={message}
+                                                isFromMsgThread={true}
+                                                key={message.id}
+                                                ref={
+                                                    message.id === id
+                                                        ? mainMessageRef
+                                                        : null
+                                                }
+                                            />
+                                        </div>
+                                    ) : (
+                                        <SearchSkeleton key={i}/>
+                                    )
                                 )
                             )
-                        )
-                        .flat(1)}
-                        </div>
+                            .flat(1)
+                        }
+                    </div>
                 </div>
 
                 <ReactTooltip />

@@ -102,7 +102,7 @@ function Sidebar() {
 
                 {/*TODO: test this later . . .*/}
                 {/*{*/}
-                {/*    role!=='' || role==='No Roles' ?*/}
+                {/*    // role!=='' || role==='No Roles' ?*/}
 
                 {/*    // commented out code*/}
                 {/*    // localStorage.getItem('role')!=='' || localStorage.getItem('role') === 'No Roles' ?*/}
@@ -113,7 +113,7 @@ function Sidebar() {
                 {/*            to="/manageserver"*/}
                 {/*        />*/}
                 {/*    </>*/}
-                {/*    :null*/}
+                {/*    // :null*/}
                 {/*}*/}
 
                 <NavLink

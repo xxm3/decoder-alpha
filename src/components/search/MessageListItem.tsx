@@ -23,7 +23,11 @@ const getDateAgo = function (time: moment.MomentInput) {
 
 const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
     (
-        { onClick, isFromMsgThread,message: { message, time, source, author, id } = {} },
+        {
+            onClick,
+            isFromMsgThread,
+            message: { message, time, source, author, id } = {}
+        },
         ref
     ) => {
         const { id: word } = useParams<{ id: string }>();
@@ -70,7 +74,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                 ref={ref}
             >
 
-                {/*hide this on mobile*/}
+                {/* hide this on mobile */}
                 <img
                     className="image hidden sm:block"
                     alt={source === 'Twitter' ? 'Twitter' : 'Discord'}
@@ -96,14 +100,13 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         </p>
                         {/*time*/}
                         {(
-
                             <div
                                 className="text-xs text-gray-400 c-res-time-text flex justify-between items-center" // underline cursor-pointer
                                 data-tip={new Date(
                                     time as string
                                 ).toLocaleString()}
                             >
-                                <div className='whitespace-nowrap'>
+                                <div className='whitespace-nowrap' hidden={!time}>
                                     {getDateAgo(time)}
                                 </div>
                                 <div>

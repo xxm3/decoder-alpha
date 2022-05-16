@@ -131,14 +131,17 @@ const App = () => {
 	useEffect(() => {
 		// console.log("localStorage.getItem('roleList')",localStorage.getItem('roleList'))
 		if(localStorage.getItem('roleList')){
-			let roleList:any = localStorage.getItem('roleList')
-			getRoleType(JSON.parse(roleList))
+			let roleList:any = localStorage.getItem('roleList');
+
+            // TODO: commenting out until auth can be added...
+			// getRoleType(JSON.parse(roleList));
 		}
 	}, [localStorage.getItem('roleList')]);
 
 	// get role type
 	let getRoleType = async(roleList:any) => {
-		// console.log("roleList",roleList)
+		// console.log("roleList",roleList);
+
 		instance
             .post(
                 `getRoleType`,
