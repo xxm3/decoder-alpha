@@ -1,5 +1,5 @@
 import {IonButton, IonCard, IonCol, IonIcon, IonLabel, IonRouterLink, IonRow, isPlatform} from '@ionic/react';
-import {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Redirect, useHistory} from 'react-router';
 import {instance} from '../axios';
 import Loader from '../components/Loader';
@@ -17,6 +17,7 @@ import AndroidLogo from '../images/playstore.png'
 import { Grid } from '@material-ui/core';
 import {logoDiscord, logoTwitter,logoYoutube} from "ionicons/icons";
 import usePersistentState from '../hooks/usePersistentState';
+import meLogo from '../images/me.png';
 
 
 
@@ -173,7 +174,7 @@ function Login() {
                                                         }
                                                     })
                                                 }
-                                                else { window.location.href = urlToRedirect; } 
+                                                else { window.location.href = urlToRedirect; }
                                         }} >
                                             { <IonIcon icon={logoDiscord} className="big-emoji mr-3"/>} Login with Discord
                                     </IonButton>
@@ -181,40 +182,50 @@ function Login() {
                                         <div className='login-btn-devider'/> OR <div className='login-btn-devider'/>
                                     </div>
                                     <IonButton className='buy-nft-btn mt-4 h-11'color='medium' onClick={()=> window.open('https://magiceden.io/marketplace/soldecoder', "_blank")}>
-                                        Buy NFT to gain access
+                                        <img src={meLogo} className="me-logo mr-2"/>
+                                        Buy 1 NFT to gain access
                                     </IonButton>
                                     <IonButton className='buy-nft-btn mt-3 h-11' color='medium' onClick={()=> window.open('https://discord.gg/sol-decoder', "_blank")}>
-                                        Verify ownership on discord
+                                        { <IonIcon icon={logoDiscord} className="big-emoji mr-2"/>}
+                                        Join the Discord
                                     </IonButton>
                                 </div>
                             </div>
-                     
+
                             <div className={`login-right-side-wrapper w-full justify-center flex flex-col rounded-md ${isMobileDevice ? 'pl-4 mt-4' : 'pl-10' }`} style={{height:isMobileDevice ? '75vh'  : '84vh' }}>
                                 <div className="title-text text-4xl font-bold flex">
-                                    New to<br/>SolDecoder ?
+                                    New to<br/>SOL Decoder ?
                                 </div>
                                 <div className={`title-text flex flex-col mt-4`}>
-                                    <span>Use of the site / apps is locked to holders of one of our NFTs, which you can purchase here.</span>
-                                    <span>After purchasing one, please join our Discord and verify with Matrica to get a role which allows access to the site.</span>
+                                    <span>Use of the site / apps is locked to holders of one of our NFTs, which you can purchase on the left.</span>
+                                    <br/>
 
-                                    <span>Follow us <a href="https://twitter.com/SOL_Decoder" target="_blank" className="underline">on Twitter</a></span>
-                                    <div>Read a Twitter thread of what we do <a href="https://twitter.com/SOL_Decoder/status/1516759793884712965 " target="_blank" className="underline">here <IonIcon icon={logoTwitter} className="big-emoji"/></a> </div>
+                                    <span>After purchasing one, please join our Discord and verify to get a role which allows access to the site / apps.</span>
+                                    <br/>
+
+                                    <span>
+                                        Follow us <a href="https://twitter.com/SOL_Decoder" target="_blank" className="underline">on Twitter</a>.
+                                        Read a Twitter thread of what we do <a href="https://twitter.com/SOL_Decoder/status/1516759793884712965 " target="_blank" className="underline">here <IonIcon icon={logoTwitter} className="big-emoji"/></a>
+                                    </span>
+
                                     <div >View our official YouTube channel to view videos about our website / Discord <a href="https://www.youtube.com/playlist?list=PLeuijfzk0Wfv3rgrurWKo26l7rNy4lJE_" target="_blank" className="underline">here <IonIcon icon={logoYoutube} className="big-emoji mr-3"/></a></div>
                                     <span>
                                         Read our <IonRouterLink href="/privacy" className="pr-7 underline text-inherit">Privacy Policy</IonRouterLink>
                                     </span>
+                                    <br/>
+
+                                    <hr/>
 
                                     <br/><span>Full access to SOL Decoder is only available to those holding one of our NFTs. If you still want to click around the site to see what we offer, then try out the demo below. Note that you will only see old data, and some features are disabled.</span>
-                                   
-                                
-                          
+
                                     <div className={`mt-4 flex ${isMobileDevice ? 'self-center flex-col' : ' flex-row'}`}>
                                         <IonButton className='h-11 w-48' color="dark" onClick={() => {signInAnonymously(auth)}}>
                                             Try our demo
                                         </IonButton>
-                                        <IonButton className={`buy-nft-btn h-11 w-48 ${isMobileDevice ? '' : 'ml-4'}`} color='medium' onClick={()=> window.open('https://docs.soldecoder.app', "_blank")}>
-                                            Documentation
-                                        </IonButton>
+
+                                        {/*<IonButton className={`buy-nft-btn h-11 w-48 ${isMobileDevice ? '' : 'ml-4'}`} color='medium' onClick={()=> window.open('https://docs.soldecoder.app', "_blank")}>*/}
+                                        {/*    Documentation*/}
+                                        {/*</IonButton>*/}
                                     </div>
                                 </div>
                             </div>
