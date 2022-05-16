@@ -62,6 +62,8 @@ const Schedule = () => {
     const [selectedTimezone, setSelectedTimezone] = useState<any>({})
     const [mode] = usePersistentState("mode", "dark");
     const [searchFocus, setSearchFocus] = useState<boolean>(false)
+    const [showTopLink, setShowTopLink] = useState<boolean>(false)
+    const [searchText, setSearchText] = useState<string>()
 
 
 
@@ -96,7 +98,7 @@ const Schedule = () => {
 
     const GetUserTimeZone = async() => {
         await instance.get(`${environment.backendApi}/currentUser`)
-        .then((res: any) =>  userTimezone = res.data.user.timezone)
+        .then((res: any) =>  userTimezone = res?.data?.user?.timezone)
     }
 
     // console.log('no time zone', moment.tz.names())
@@ -526,40 +528,31 @@ const Schedule = () => {
                                                                                 sm={8}
                                                                                 style={{ alignItems: 'center' }}
                                                                             >
-                                                                                <div
-                                                                                    style={{
-                                                                                        display: 'flex',
-                                                                                        justifyContent: 'space-between',
-                                                                                        width: '100%',
-                                                                                    }}
-                                                                                >
-                                                                                    <div className="hidden sm:block"
-                                                                                    style={{ width:'100%'}}>
+                                                                                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', }} >
+                                                                                    <div className="hidden sm:block" style={{ width:'100%'}}>
                                                                                        {`Mint Schedule - ${date}`}
                                                                                     </div>
-                                                                                    <Select
-                                                                                    labelId="demo-simple-select-label"
-                                                                                    id="demo-simple-select"
-                                                                                    value={selectedTimezone.value}
-                                                                                    placeholder='select time zone'
-                                                                                    style={{ width:'100%', lineHeight:1.2,border: `1px solid rgba(171, 171, 171, 0.876)`,borderRadius:'20px',paddingLeft:'10px'}}
-                                                                                    onChange={(selected: any) => {
-                                                                                        setSelectedTimezone({...selected.target})
-                                                                                    }}
-                                                                                    >
-                                                                                        {
-                                                                                        TimezoneData.map((item:any,index:number)=>{
-                                                                                            return (<MenuItem key={index} value={item?.value}>{item?.label}</MenuItem>)
-                                                                                        }
-                                                                                        )}
-
-                                                                                    </Select>
+                                                                                        <Select
+                                                                                        labelId="demo-simple-select-label"
+                                                                                        id="demo-simple-select"
+                                                                                        value={selectedTimezone.value}
+                                                                                        placeholder='select time zone'
+                                                                                        style={{ width:'100%', lineHeight:1.2,border: `1px solid rgba(171, 171, 171, 0.876)`,borderRadius:'20px',paddingLeft:'10px'}}
+                                                                                        onChange={(selected: any) => { setSelectedTimezone({...selected.target}) }} >
+                                                                                            { TimezoneData.map((item:any,index:number)=>{ return (<MenuItem key={index} value={item?.value}>{item?.label}</MenuItem>)} )}
+                                                                                        </Select>
                                                                                 </div>
                                                                             </Grid>
                                                                             <Grid item sm={4}>
                                                                                 <MTableToolbar {...propsCopy} 
                                                                                     searchAutoFocus={searchFocus} 
                                                                                     onSearchChanged={(text:string)=>{
+                                                                                        setSearchText(text)
+                                                                                        if(text.length > 43){
+                                                                                            setShowTopLink(true)
+                                                                                        }else{
+                                                                                            setShowTopLink(false)
+                                                                                        }
                                                                                         propsCopy.onSearchChanged(text);
                                                                                         setSearchFocus(true)
                                                                                     }}
