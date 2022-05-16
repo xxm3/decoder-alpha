@@ -129,7 +129,22 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     },
                 })
                 .then(({ data }) => {
-                    setChecked({ ...checked, [obj.module]: obj.enabled });
+                    if(data.success){
+                        setChecked({ ...checked, [obj.module]: obj.enabled });
+                    }else{
+                        let msg = '';
+                        if (data && data.message) {
+                            msg = String(data.message);
+                        } else {
+                            msg = 'Unable to connect. Please try again later';
+                        }
+                        present({
+                            message: msg,
+                            color: 'danger',
+                            duration: 5000,
+                            buttons: [{ text: 'X', handler: () => dismiss() }],
+                        });
+                    }
                 })
                 .catch((error:any) => {
 

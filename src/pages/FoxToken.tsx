@@ -544,6 +544,8 @@ function FoxToken({contentRef}: FoxToken) {
         // @ts-ignore
          if(mySplTokensTemporary && mySplTokensTemporary.length > 0) {
             setMySplTokens(mySplTokensTemporary);
+            return mySplTokensTemporary
+            
         }else{
              fetchTableData();
          }
@@ -665,6 +667,8 @@ function FoxToken({contentRef}: FoxToken) {
 
     // Viewing MY tokens - filter the table
     const viewMyTokens = async (wantViewTokens: boolean) => {
+        let SplTokens:any
+        
         // setPopoverOpened(null);
 
         // user wants to see MY tokens
@@ -674,7 +678,7 @@ function FoxToken({contentRef}: FoxToken) {
 
             // see other local host on here to see why
             if (window.location.href.indexOf(local_host_str) !== -1) {
-                await getUserSpls();
+                SplTokens = await getUserSpls();
             }
 
             if (!multWallet?.length && !walletAddress ) {
@@ -689,7 +693,7 @@ function FoxToken({contentRef}: FoxToken) {
             }
 
             // make sure they have tokens
-            if (mySplTokens.length === 0) {
+           if (mySplTokens.length === 0 && (!SplTokens || SplTokens?.length===0) ) {
                 // show toast
                 present({
                     message: 'No tokens found on your wallet(s) :( Tokens must be in your wallet, and have an active listing on Fox Token Market',
@@ -709,20 +713,37 @@ function FoxToken({contentRef}: FoxToken) {
                 // loop through table data (all fox tokens)
                 for (let i in tableData) {
                     // if match, then push
-                    for (let y in mySplTokens) {
-                        if (mySplTokens[y].token === tableData[i].token) {
-
-                            if (window.location.href.indexOf(local_host_str) !== -1) {
-                                // then ADD data
-                                if (!tableData[i].whichMyWallets) {
-                                    tableData[i].whichMyWallets = shortenedWallet(mySplTokens[y].wallet);
-                                } else {
-                                    tableData[i].whichMyWallets += ", " + shortenedWallet(mySplTokens[y].wallet);
+                    if(mySplTokens.length > 0){
+                        for (let y in mySplTokens) {
+                            if (mySplTokens[y].token === tableData[i].token) {
+    
+                                if (window.location.href.indexOf(local_host_str) !== -1) {
+                                    // then ADD data
+                                    if (!tableData[i].whichMyWallets) {
+                                        tableData[i].whichMyWallets = shortenedWallet(mySplTokens[y].wallet);
+                                    } else {
+                                        tableData[i].whichMyWallets += ", " + shortenedWallet(mySplTokens[y].wallet);
+                                    }
                                 }
+                               newTableData.push(tableData[i]);
+                                break;
                             }
-
-                            newTableData.push(tableData[i]);
-                            break;
+                        }
+                    }else{
+                        for (let y in SplTokens) {
+                            if (SplTokens[y].token === tableData[i].token) {
+    
+                                if (window.location.href.indexOf(local_host_str) !== -1) {
+                                    // then ADD data
+                                    if (!tableData[i].whichMyWallets) {
+                                        tableData[i].whichMyWallets = shortenedWallet(SplTokens[y].wallet);
+                                    } else {
+                                        tableData[i].whichMyWallets += ", " + shortenedWallet(SplTokens[y].wallet);
+                                    }
+                                }
+                                newTableData.push(tableData[i]);
+                                break;
+                            }
                         }
                     }
                 }

@@ -1,14 +1,12 @@
-import {IonButton, IonCard, IonCol, IonRouterLink, IonRow, isPlatform} from '@ionic/react';
+import {IonButton, IonCard, IonCol, IonIcon, IonLabel, IonRouterLink, IonRow, isPlatform} from '@ionic/react';
 import {useEffect, useMemo, useState} from 'react';
 import {Redirect, useHistory} from 'react-router';
 import {instance} from '../axios';
 import Loader from '../components/Loader';
 import {useUser} from '../context/UserContext';
 import {environment} from '../environments/environment';
-
 import {auth} from '../firebase';
 import {  signInAnonymously, signInWithCustomToken ,browserSessionPersistence} from "firebase/auth";
-
 import "./Login.css"
 import { InAppBrowser }  from "@awesome-cordova-plugins/in-app-browser"
 import { useDispatch } from "react-redux"
@@ -16,6 +14,12 @@ import { setDemo } from '../redux/slices/demoSlice';
 import NavLink from '../components/nav/NavLink';
 import IosLogo from '../images/app-store.png'
 import AndroidLogo from '../images/playstore.png'
+import { Grid } from '@material-ui/core';
+import {logoDiscord, logoTwitter,logoYoutube} from "ionicons/icons";
+import usePersistentState from '../hooks/usePersistentState';
+
+
+
 
 /**
  * The "Login" page to which all unauthenticated users are redirected to
@@ -63,6 +67,8 @@ function Login() {
 
     //check open in mobile-web or Browser
     const DeviceCheck = isPlatform('mobileweb');
+    const [mode] = usePersistentState("mode", "dark");
+
 
 
     const isMobileDevice = useMemo(() => isPlatform("mobile"), []);
@@ -134,102 +140,84 @@ function Login() {
                         </>
                         : ''}
                     {/*text-center*/}
-                    <div className="">
-                    <IonButton
-                        onClick={() => {
-                            const params = new URLSearchParams();
-                            params.set(
-                                'redirect_uri',
-                                `${!isMobileDevice ? window.location.origin : environment.ionicAppUrl}/login`
-                            );
-                            params.set('state', next);
-                            const urlToRedirect = `https://discord.com/api/oauth2/authorize?client_id=${
-                                environment.clientId
-                            }&response_type=code&scope=identify+guilds&${params.toString()}`;
-                            setError("")
-                            if(isMobileDevice){
-                                const browser = InAppBrowser.create(urlToRedirect, '_blank', 'location=yes');
-                                browser.on("beforeload")
-                                browser.on('loadstart').subscribe(event => {
-                                    const eventUrl = new URL(event.url)
-                                    if(eventUrl.origin === environment.ionicAppUrl && eventUrl.pathname === '/login'){
-                                        const code = eventUrl.searchParams.get('code');
-                                        if(code){
-                                            setCode(code)
-                                            setLoading(true)
-                                        };
-                                        setNext(eventUrl.searchParams.get("next") || eventUrl.searchParams.get('state') || "/");
-                                        browser.close();
-                                    }
-                                })
-                            }
-                            else{
-                                window.location.href = urlToRedirect;
-                            }
-                        }}
-                    >
-                        Login with Discord
-                    </IonButton>
+                    <div className= {`flex ${isMobileDevice ? 'flex-col': 'flex-row'}`}>
+                            <div className={` ${isMobileDevice ? 'w-full mt-4' : 'w-1/3 mt-10' }`}>
+                                <div className={`${isMobileDevice ? "text-center" : ""}`}>
+                                    <IonLabel className={`text-4xl font-bold`}>
+                                        Sign In
+                                    </IonLabel>
+                                </div>
+                                <div className={`flex flex-col mr-2 ${isMobileDevice ? "mt-6" : 'mt-10'}`}>
+                                    <IonButton className='mb-4 h-11' color={ mode === 'dark' ? '' : "dark"}
+                                        onClick={() => {
+                                            const params = new URLSearchParams();
+                                            params.set(
+                                                'redirect_uri',
+                                                `${!isMobileDevice ? window.location.origin : environment.ionicAppUrl}/login`
+                                            );
+                                            params.set('state', next);
+                                                const urlToRedirect = `https://discord.com/api/oauth2/authorize?client_id=${
+                                                environment.clientId
+                                                }&response_type=code&scope=identify+guilds&${params.toString()}`;
+                                                setError("")
+                                                if(isMobileDevice){
+                                                    const browser = InAppBrowser.create(urlToRedirect, '_blank', 'location=yes');
+                                                    browser.on("beforeload")
+                                                    browser.on('loadstart').subscribe(event => {
+                                                        const eventUrl = new URL(event.url)
+                                                        if(eventUrl.origin === environment.ionicAppUrl && eventUrl.pathname === '/login'){
+                                                            const code = eventUrl.searchParams.get('code');
+                                                            if(code){ setCode(code); setLoading(true) };
+                                                            setNext(eventUrl.searchParams.get("next") || eventUrl.searchParams.get('state') || "/");
+                                                            browser.close();
+                                                        }
+                                                    })
+                                                }
+                                                else { window.location.href = urlToRedirect; } 
+                                        }} >
+                                            { <IonIcon icon={logoDiscord} className="big-emoji mr-3"/>} Login with Discord
+                                    </IonButton>
+                                    <div className='flex flex-row items-center justify-between ml-1 mr-1'>
+                                        <div className='login-btn-devider'/> OR <div className='login-btn-devider'/>
+                                    </div>
+                                    <IonButton className='buy-nft-btn mt-4 h-11'color='medium' onClick={()=> window.open('https://magiceden.io/marketplace/soldecoder', "_blank")}>
+                                        Buy NFT to gain access
+                                    </IonButton>
+                                    <IonButton className='buy-nft-btn mt-3 h-11' color='medium' onClick={()=> window.open('https://discord.gg/sol-decoder', "_blank")}>
+                                        Verify ownership on discord
+                                    </IonButton>
+                                </div>
+                            </div>
+                     
+                            <div className={`login-right-side-wrapper w-full justify-center flex flex-col rounded-md ${isMobileDevice ? 'pl-4 mt-4' : 'pl-10' }`} style={{height:isMobileDevice ? '75vh'  : '84vh' }}>
+                                <div className="title-text text-4xl font-bold flex">
+                                    New to<br/>SolDecoder ?
+                                </div>
+                                <div className={`title-text flex flex-col mt-4`}>
+                                    <span>Use of the site / apps is locked to holders of one of our NFTs, which you can purchase here.</span>
+                                    <span>After purchasing one, please join our Discord and verify with Matrica to get a role which allows access to the site.</span>
 
-                    <p className="text-red-500 my-4 text-xl">
-                        {error}
-                    </p>
+                                    <span>Follow us <a href="https://twitter.com/SOL_Decoder" target="_blank" className="underline">on Twitter</a></span>
+                                    <div>Read a Twitter thread of what we do <a href="https://twitter.com/SOL_Decoder/status/1516759793884712965 " target="_blank" className="underline">here <IonIcon icon={logoTwitter} className="big-emoji"/></a> </div>
+                                    <div >View our official YouTube channel to view videos about our website / Discord <a href="https://www.youtube.com/playlist?list=PLeuijfzk0Wfv3rgrurWKo26l7rNy4lJE_" target="_blank" className="underline">here <IonIcon icon={logoYoutube} className="big-emoji mr-3"/></a></div>
+                                    <span>
+                                        Read our <IonRouterLink href="/privacy" className="pr-7 underline text-inherit">Privacy Policy</IonRouterLink>
+                                    </span>
 
-                    <div className="p-4">
-                        <div id="welcome">
-                            <p className="font-bold">Welcome to SOL Decoder</p>
-
-                            <ul className="">
-                                <li>
-                                    Use of the site / apps is locked to holders of one of our NFTs, <a href="https://magiceden.io/marketplace/soldecoder" className="underline" target="_blank">which you can purchase here</a>.
-                                    <br/>
-                                    After purchasing one,
-                                    please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a> and verify with Matrica to get a role which allows access to the site.
-                                </li>
-                            </ul>
-                        </div>
-                        <br/>
-
-                        <div id="security">
-                            <p className="font-bold">Other links:</p>
-                            <ul>
-                                <li>Follow us <a href="https://twitter.com/SOL_Decoder" target="_blank" className="underline">on Twitter</a></li>
-                                <li>Read our <a href="https://docs.soldecoder.app" target="_blank" className="underline">docs here</a> </li>
-                                <li>Read a Twitter thread of what we do <a href="https://twitter.com/SOL_Decoder/status/1516759793884712965 " target="_blank" className="underline">here</a> </li>
-                                <li>View our official YouTube channel to view videos about our website / Discord <a href="https://www.youtube.com/playlist?list=PLeuijfzk0Wfv3rgrurWKo26l7rNy4lJE_" target="_blank" className="underline">here</a></li>
-                                <li>
-                                    Read our <IonRouterLink href="/privacy" className="pr-7 underline text-inherit">Privacy Policy</IonRouterLink>
-                                </li>
-                            </ul>
-
-                            <br/>
-
-                            <hr/>
-                            <br/>
-
-                            <p className="font-bold">Want to try a demo?</p>
-
-                            <p>Full access to SOL Decoder is only available to those holding one of our NFTs. If you still want to click around the site to
-                            see what we offer, then try out the demo below. Note that you will only see old data, and some features are disabled.</p>
-                            <br/>
-
-                            <IonButton onClick={() => {
-                                // auth.setPersistence(browserSessionPersistence)
-                                signInAnonymously(auth)
-                            }}>Try the demo</IonButton>
-
-                            {/*<p className="font-bold">A note on Discord integration</p>*/}
-                            {/*<ul>*/}
-                            {/*    <li>We require you to login with Discord, so that we can verify you have the proper role(s)</li>*/}
-                            {/*    <li>Note the permissions, seen when you click the Login button:</li>*/}
-                            {/*    <li style={{paddingLeft: "8px"}}>(1) Access your username, avatar, and banner</li>*/}
-                            {/*    <li style={{paddingLeft: "8px"}}>(2) This application cannot read your messages or send messages as you.</li>*/}
-                            {/*    <li>The site can never read any of your Discord messages, and asks for the most limited amount of permissions.</li>*/}
-                            {/*</ul>*/}
-                        </div>
-
-                    </div>
-
+                                    <br/><span>Full access to SOL Decoder is only available to those holding one of our NFTs. If you still want to click around the site to see what we offer, then try out the demo below. Note that you will only see old data, and some features are disabled.</span>
+                                   
+                                
+                          
+                                    <div className={`mt-4 flex ${isMobileDevice ? 'self-center flex-col' : ' flex-row'}`}>
+                                        <IonButton className='h-11 w-48' color="dark" onClick={() => {signInAnonymously(auth)}}>
+                                            Try our demo
+                                        </IonButton>
+                                        <IonButton className={`buy-nft-btn h-11 w-48 ${isMobileDevice ? '' : 'ml-4'}`} color='medium' onClick={()=> window.open('https://docs.soldecoder.app', "_blank")}>
+                                            Documentation
+                                        </IonButton>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                 </>
 

@@ -93,7 +93,7 @@ const App = () => {
         };
 
         window.addEventListener('load', loadEvent);
-        getCurrentVersion();
+        // getCurrentVersion();
 
         return () => {
             window.removeEventListener('load', () => {
@@ -110,16 +110,16 @@ const App = () => {
     }, []);
 
 	// get Current App version
-    let getCurrentVersion = async () => {
-        let getVersionCode = await AppVersion.getVersionCode();
-        let getVersionNumber = await AppVersion.getVersionNumber();
-        console.clear();
-        // console.log("**********")
-        // console.log('getVersionCode', getVersionCode);
-		// console.log("**********")
-        // console.log('getVersionNumber', getVersionNumber);
-        // console.log("**********")
-    };
+    // let getCurrentVersion = async () => {
+    //     let getVersionCode = await AppVersion.getVersionCode();
+    //     let getVersionNumber = await AppVersion.getVersionNumber();
+    //     console.clear();
+    //     // console.log("**********")
+    //     // console.log('getVersionCode', getVersionCode);
+	// 	// console.log("**********")
+    //     // console.log('getVersionNumber', getVersionNumber);
+    //     // console.log("**********")
+    // };
 
 	// internet connection check
     const statusCheck = async () => {
