@@ -549,7 +549,7 @@ const Schedule = () => {
                                                                                     onSearchChanged={(text:string)=>{
                                                                                         setSearchText(text)
                                                                                         if(text.length > 43){
-                                                                                            setShowTopLink(true)
+                                                                                            // setShowTopLink(true)
                                                                                         }else{
                                                                                             setShowTopLink(false)
                                                                                         }
