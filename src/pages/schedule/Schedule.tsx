@@ -551,7 +551,7 @@ const Schedule = () => {
                                                                                         if(text.length > 43){
                                                                                             // setShowTopLink(true)
                                                                                         }else{
-                                                                                            setShowTopLink(false)
+                                                                                            // setShowTopLink(false)
                                                                                         }
                                                                                         propsCopy.onSearchChanged(text);
                                                                                         setSearchFocus(true)
