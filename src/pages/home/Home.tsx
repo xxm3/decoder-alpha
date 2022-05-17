@@ -10,7 +10,8 @@ import {useLocation} from 'react-router-dom';
 import {instance} from '../../axios';
 import {environment} from '../../environments/environment';
 import { IonContent, IonLabel, IonModal } from '@ionic/react';
-
+import WordsCount from './WordsCount';
+import TopSearchWords from './TopSearchWords';
 
 const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
@@ -105,10 +106,20 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
             {/* for user to get used-the-site- role */}
             {/*<div hidden={!devMode}>*/}
 
-            {/* Recent Community Searches */}
-            {/*<div hidden={window.location.hostname !== 'localhost'}>*/}
-            {/*    <SearchedWords/>*/}
-            {/*</div>*/}
+
+           {/* Word count of yesterday, last 3 days, last 5 days */}
+            <WordsCount/>
+
+            {/* Top search words of past dat */}
+            <TopSearchWords/>
+
+
+             {/* Recent Community Searches  */}
+            {/* <div hidden={window.location.hostname !== 'localhost'}>
+               <SearchedWords/>
+            </div> */}
+
+           
 
 
             {/* if need to tell the user of errors */}

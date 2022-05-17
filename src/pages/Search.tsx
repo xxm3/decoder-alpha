@@ -26,13 +26,13 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
 
     const [width, setWidth] = useState(window.innerWidth);
     const [currentPage, setCurrentPage] = useState(0);
+    const [showFoxTokenLink, setShowFoxTokenLink] = useState<boolean>(false)
     // const [searchText, setSearchText] = useState(useParams<{id: string}>());
 
 
     const {id: searchText} = useParams<{
         id: string;
     }>();
-
     /**
      * Use Effects
      */
@@ -62,6 +62,14 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
         setCurrentPage(0);
     }, [searchText])
 
+    useEffect(() => {
+      if(searchText.length >= 43 && searchText.length <= 44){
+        setShowFoxTokenLink(true)
+      }else{
+        setShowFoxTokenLink(false)
+      }
+    }, [searchText])
+    
 
     /**
      * Functions
@@ -234,6 +242,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
 
             {/* ERROR bar */}
             {graphQuery.isError || messageQuery.isError || messageQuery?.data?.error || graphQuery?.data?.error ? (
+                <>
                 <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                     <p className="text-lg text-red-700 font-medium">
 
@@ -246,7 +255,10 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                                             !
                                         </span>
                 </div>
-
+                {
+                    showFoxTokenLink ? <div className='text-center text-lg cursor-pointer text-blue-500 mt-4' onClick={() => history.push( { pathname: '/foxtoken',search: searchText })}>Searching for token ? click here to search on this in the fox token page</div> : ''
+                }
+                </>
                 // actual content
             ) : (
                 <>

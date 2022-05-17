@@ -51,6 +51,8 @@ import Schedule from './pages/schedule/Schedule';
 import Bots from './pages/bots/Bots';
 import ManageServer from './pages/bots/ManageServer';
 import ServerModule from './pages/bots/ServerModule';
+import ScheduleCalendar from './pages/schedule/Calendar';
+
 // // https://javascript.plainenglish.io/how-to-setup-and-add-google-analytics-to-your-react-app-fd361f47ac7b
 // const TRACKING_ID = "G-Z3GDFZ53DN";
 // ReactGA.initialize(TRACKING_ID);
@@ -334,6 +336,12 @@ const App = () => {
                                                                                 {/*    }*/}
                                                                                 {/*/>*/}
 
+                                                                                {/* Calendar page */}
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/schedulecalendar"
+                                                                                    component={ ScheduleCalendar }
+                                                                                />
                                                                                 {/* manage server */}
                                                                                 <ProtectedRoute
                                                                                     exact

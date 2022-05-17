@@ -197,25 +197,20 @@ function Login() {
                                     New to<br/>SOL Decoder ?
                                 </div>
                                 <div className={`title-text flex flex-col mt-4`}>
-                                    <span>Use of the site / apps is locked to holders of one of our NFTs, which you can purchase on the left.</span>
+                                    <span>Use of the site / apps is locked to holders of one of our NFTs, <a href="https://magiceden.io/marketplace/soldecoder" className="underline" target="_blank">which you can purchase on the left.</a> </span>
+                                    <br/>
+                                    <span>After purchasing one, please join <a href="https://discord.gg/sol-decoder" target="_blank" style={{"textDecoration": "underline"}}>our Discord</a> and verify to get a role which allows access to the site / apps.</span>
                                     <br/>
 
-                                    <span>After purchasing one, please join our Discord and verify to get a role which allows access to the site / apps.</span>
+                                    <span>  Follow us <a href="https://twitter.com/SOL_Decoder" target="_blank" className="underline">on Twitter<IonIcon icon={logoTwitter} className="big-emoji ml-1"/></a></span>
+                                    <span>Read a Twitter thread of what we do <a href="https://twitter.com/SOL_Decoder/status/1516759793884712965 " target="_blank" className="underline">here</a></span>
+
+                                    <span>Read our <a href="https://docs.soldecoder.app" target="_blank" className="underline">docs here</a> </span>
+
+                                    <div >View our official YouTube channel to view videos about our website / Discord <a href="https://www.youtube.com/playlist?list=PLeuijfzk0Wfv3rgrurWKo26l7rNy4lJE_" target="_blank" className="underline">here <IonIcon icon={logoYoutube} className="big-emoji ml-1"/></a></div>
+                                    <span> Read our <IonRouterLink href="/privacy" className="pr-7 underline text-inherit">Privacy Policy</IonRouterLink> </span>
                                     <br/>
-
-                                    <span>
-                                        Follow us <a href="https://twitter.com/SOL_Decoder" target="_blank" className="underline">on Twitter</a>.
-                                        Read a Twitter thread of what we do <a href="https://twitter.com/SOL_Decoder/status/1516759793884712965 " target="_blank" className="underline">here <IonIcon icon={logoTwitter} className="big-emoji"/></a>
-                                    </span>
-
-                                    <div >View our official YouTube channel to view videos about our website / Discord <a href="https://www.youtube.com/playlist?list=PLeuijfzk0Wfv3rgrurWKo26l7rNy4lJE_" target="_blank" className="underline">here <IonIcon icon={logoYoutube} className="big-emoji mr-3"/></a></div>
-                                    <span>
-                                        Read our <IonRouterLink href="/privacy" className="pr-7 underline text-inherit">Privacy Policy</IonRouterLink>
-                                    </span>
-                                    <br/>
-
                                     <hr/>
-
                                     <br/><span>Full access to SOL Decoder is only available to those holding one of our NFTs. If you still want to click around the site to see what we offer, then try out the demo below. Note that you will only see old data, and some features are disabled.</span>
 
                                     <div className={`mt-4 flex ${isMobileDevice ? 'self-center flex-col' : ' flex-row'}`}>
