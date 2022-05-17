@@ -258,12 +258,15 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 Configure Bot Packages
             </IonLabel>
 
-            <div className="flex flex-row justify-center w-full mt-6">
+            <div className="flex flex-row justify-center w-full">
+                {/*mt-6*/}
                 <Grid container spacing={4}>
                     {/*mintInfoModule  */}
+
                     <Grid item xs={12} md={6} xl={4}>
                         <div className="server-module-bg ">
-                            <div className="flex flex-row justify-between w-full mt-6">
+                            <div className="flex flex-row justify-between w-full">
+                                {/*mt-6*/}
                                 <div className="module-icon-wrapper ml-3">
                                     <img src={require('../../images/me.png')} />
                                 </div>
@@ -292,7 +295,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     {/* tokenModule */}
                     <Grid item xs={12} md={6} xl={4}>
                         <div className="server-module-bg ">
-                            <div className="flex flex-row justify-between w-full mt-6">
+                            <div className="flex flex-row justify-between w-full">
+                                {/*mt-6*/}
                                 <div className="module-icon-wrapper ml-3">
                                     <img src={require('../../images/me.png')} />
                                 </div>
@@ -419,18 +423,24 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 </>
             )}
 
-            <div className="m-3 relative bg-gray-100 p-4 rounded-xl">
-                <p className="text-lg text-gray-700 font-medium">
+            {/*TODO: make it work for capt & daki*/}
+
+            <br/>
+            <div className="flex flex-row justify-center w-full">
+                {/*mt-6*/}
+                <div className="server-module-bg ">
+
                     <b>General Instructions</b>
                     <ul>
-                        <li>- Make a new private channel - name it "daily-mints" or whatever you want. Optionally make "1h-mint-info" if you want that as well. Or if doing the Fox token package, make a channel for the fox token names, and another channel for where users can put the bot commands</li>
-                        <li>- Add the bot to the above channels</li>
+                        <li>- Make a new private channel in your Discord. If doing the "Mints" package, name the channel "daily-mints" or whatever you want. Optionally make "1h-mint-info" if you want that as well. Or if you are doing the "Fox token" package, make a channel for the fox token names, and another channel for where users can enter their own Bot commands</li>
+                        <li>- Add the bot to the above channels (by going to the channel settings within Discord)</li>
                         <li>- Refresh this page</li>
                         <li>- Enable the "Mints" package (or "Fox token" package)</li>
                         <li>- It should ask you about the channels - pick your new channels</li>
-                        <li>-  Wait for it to be populated with data before showing it to the public (8am est for daily-mints, varying times for other channels)</li>
+                        <li>- Wait for the channels to be populated with data before showing it to the public (8am EST is when daily-mints is populated, varying times for other channels). You may also test out the bot commands if doing the "Fox token" package, but remember to let us know so we can enable it</li>
                     </ul>
-                </p>
+
+                </div>
             </div>
 
         </>

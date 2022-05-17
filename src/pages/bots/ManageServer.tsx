@@ -93,7 +93,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             });
     };
 
-    // TODO: need explanation of all this...
+    // TODO: need explanation of all this... 3 vs 4 nfts etc... what it gives vs what it doesnt?
 
     return (
         <>
@@ -185,7 +185,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                 </Grid>
                             );
                         }
-                    }) : 'Unable to find any servers you are the owner of. For now this will only work for server owners - later you may use your NFTs to set this up for a server owner. If you are a server owner - then reset your cookies and when you login to Discord, make sure the "Know what servers you\'re in" option is shown at the login screen' }
+                    }) : 'Unable to find any servers you are the owner of. For now this will only work for server owners - later you may use your NFTs to set this up for some other server owner. If you are a server owner - then reset your cookies and try logging in again' }
                 </Grid>
             </div>
         </>
