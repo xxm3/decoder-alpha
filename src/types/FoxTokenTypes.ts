@@ -10,4 +10,5 @@ export interface FoxTokenData {
     lastSaleDate: string;
     twitter: string;
     discord: string;
+	createdAt:string
 }
