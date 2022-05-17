@@ -10,7 +10,7 @@ import useFoxTokenChartCookies from '../../components/useFoxTokenChartCookies';
 import { environment } from '../../environments/environment';
 
 
-function MintChart({ token, name, floorPrice, totalTokenListings, }: any) {
+function MintChart({ token, name, floorPrice, totalTokenListings, selectedEvent}: any) {
     /**
      * States & Variables
      */
@@ -36,32 +36,40 @@ function MintChart({ token, name, floorPrice, totalTokenListings, }: any) {
         return 200;
     }, [width]);
 
-    
+    // console.log('selectedEvent-----------',selectedEvent)
     // viewing the chart for a token
     const viewChart = () => {
         setFoxLineData(defaultGraph);
 
         instance
-            .get( environment.backendApi + '/receiver/foxTokenHistory?token=' + token )
+            .get( environment.backendApi + '//mintInfo?mintId=' + selectedEvent?.id )
             .then((res) => {
-                const labels = res.data.map((el: { createdAt: any }) => {
+                console.log('res---------',res.data.data)
+                const labels = res.data.data.map((el: { date: Date }) => {
                     // user can set this in the chart
-                    if (chartDateSelected === 'fromNow') {
-                        return moment(el.createdAt).fromNow()
-                    } else {
-                        return moment(el.createdAt).format('MM-DD HH:MM');
-                    }
+                  
+                        return moment(el.date,'DD MM YYYY').format('l');
+                    
                 });
-                const lineData = res.data.map((el: { floorPrice: any }) => {
-                    return parseFloat(el.floorPrice);
-                });
+                console.log('labels',labels)
 
-                const listingsData = res.data.map(
-                    (el: { totalTokenListings: any }) =>
-                        parseInt(el.totalTokenListings)
+                const discordAllData = res.data.data.map((el: { discord_all: any }) => {
+                    return parseFloat(el.discord_all);
+                });
+                console.log('discordAllData',discordAllData)
+
+                const tweetInteractionsData = res.data.data.map((el: { tweetInteractions: any }) =>
+                        parseInt(el.tweetInteractions)
                 );
 
-                if (lineData.length === 0 && listingsData.length === 0) {
+                console.log('tweetInteractionsData',tweetInteractionsData)
+                const discordOnlineData = res.data.data.map((el: { discord_online: any }) =>
+                        parseInt(el.discord_online)
+                );
+
+                console.log('discordOnlineData',discordOnlineData)
+
+                if (discordAllData.length === 0 && tweetInteractionsData.length === 0 && discordOnlineData.length ===0) {
                     present({
                         message: 'Unable to get price & listings data on this!',
                         color: 'danger',
@@ -70,14 +78,14 @@ function MintChart({ token, name, floorPrice, totalTokenListings, }: any) {
                 }
 
                 // graph latest point...
-                for (let t in tableData) {
-                    if (tableData[t].token === token && tableData[t].floorPrice) {
-                        labels.push('a few seconds ago');
-                        lineData.push(tableData[t].floorPrice);
-                        listingsData.push(tableData[t].totalTokenListings);
-                        break;
-                    }
-                }
+                // for (let t in tableData) {
+                //     if (tableData[t].token === token && tableData[t].floorPrice) {
+                //         labels.push('a few seconds ago');
+                //         lineData.push(tableData[t].floorPrice);
+                //         listingsData.push(tableData[t].totalTokenListings);
+                //         break;
+                //     }
+                // }
                 let datasetsAry = [
                     {
                         type: 'line' as const,

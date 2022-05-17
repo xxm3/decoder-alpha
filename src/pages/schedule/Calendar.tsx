@@ -242,13 +242,14 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
 
                     <IonContent  >
                         <div className='ml-4 mt-4'>
-                            <MintChart {...{
+                            {/* <MintChart {...{
                                 chartDataDailyCount: '',
                                 // chartDataPerSource: '',
                                 chartHeight,
                                 // isLoadingChart: '',
                                 totalCount: 5
-                            }}/>
+                            }}/> */}
+                            <MintChart selectedEvent = {selectedEvent}/>
                         </div>
                     
                     </IonContent>
