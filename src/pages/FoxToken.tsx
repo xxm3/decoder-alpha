@@ -287,7 +287,7 @@ function FoxToken({contentRef}: FoxToken) {
 
 	const addMultWallet = useMutation(async (multWallet : string) => {
 		try {
-			await instance.post('/addMultWallet', {
+			await instance.post('/addaMultWallet', {
 				multWallet
 			})
 			return multWallet
@@ -545,7 +545,7 @@ function FoxToken({contentRef}: FoxToken) {
          if(mySplTokensTemporary && mySplTokensTemporary.length > 0) {
             setMySplTokens(mySplTokensTemporary);
             return mySplTokensTemporary
-            
+
         }else{
              fetchTableData();
          }
@@ -668,7 +668,7 @@ function FoxToken({contentRef}: FoxToken) {
     // Viewing MY tokens - filter the table
     const viewMyTokens = async (wantViewTokens: boolean) => {
         let SplTokens:any
-        
+
         // setPopoverOpened(null);
 
         // user wants to see MY tokens
@@ -716,7 +716,7 @@ function FoxToken({contentRef}: FoxToken) {
                     if(mySplTokens.length > 0){
                         for (let y in mySplTokens) {
                             if (mySplTokens[y].token === tableData[i].token) {
-    
+
                                 if (window.location.href.indexOf(local_host_str) !== -1) {
                                     // then ADD data
                                     if (!tableData[i].whichMyWallets) {
@@ -732,7 +732,7 @@ function FoxToken({contentRef}: FoxToken) {
                     }else{
                         for (let y in SplTokens) {
                             if (SplTokens[y].token === tableData[i].token) {
-    
+
                                 if (window.location.href.indexOf(local_host_str) !== -1) {
                                     // then ADD data
                                     if (!tableData[i].whichMyWallets) {

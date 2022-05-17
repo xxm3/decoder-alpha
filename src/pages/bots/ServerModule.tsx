@@ -98,7 +98,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     .catch((error: any) => {
                         let msg = '';
                         if (error && error.response) {
-                            msg = String(error.response.data.body);
+                            msg = String(error.response.data.message);
                         } else {
                             msg = 'Unable to connect. Please try again later';
                         }
@@ -150,7 +150,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                     let msg = '';
                     if (error && error.response) {
-                        msg = String(error.response.data.body);
+                        msg = String(error.response.data.message);
                     } else {
                         msg = 'Unable to connect. Please try again later';
                     }
@@ -188,7 +188,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                     let msg = '';
                     if (error && error.response) {
-                        msg = String(error.response.data.body);
+                        msg = String(error.response.data.message);
                     } else {
                         msg = 'Unable to connect. Please try again later';
                     }
@@ -253,9 +253,11 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
-            <IonLabel className="text-xl font-semibold  flex">
-                Server Management
+
+            <IonLabel className="text-xl font-semibold flex">
+                Configure Bot Packages
             </IonLabel>
+
             <div className="flex flex-row justify-center w-full mt-6">
                 <Grid container spacing={4}>
                     {/*mintInfoModule  */}
@@ -273,14 +275,20 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                             </div>
                             <div className="flex flex-col mt-4">
                                 <IonLabel className="ml-3 text-xl">
-                                    Mint Info Module
+                                    "Mints" package
+                                    {/*TODO: if disabled... need to tell why... */}
                                 </IonLabel>
                                 <IonLabel className="ml-3 text-sm opacity-60 mt-2">
-                                    {/* TODO: show more details */}
+                                    <ul>
+                                        <li>- Your server can have the "daily-mints" and "1h-mint-info" feed, and soon "tomorrows-mints". Enable this to learn more about each</li>
+                                        <li>- Hold and you get lifetime access, and get free upgrades to existing packages such as getting daily summaries of NFTs coming out in a few weeks, when they they get a bump in their twitter / discord numbers</li>
+                                    </ul>
+
                                 </IonLabel>
                             </div>
                         </div>
                     </Grid>
+
                     {/* tokenModule */}
                     <Grid item xs={12} md={6} xl={4}>
                         <div className="server-module-bg ">
@@ -303,10 +311,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                             </div>
                             <div className="flex flex-col mt-4">
                                 <IonLabel className="ml-3 text-xl">
-                                    Fox Token Module
+                                    "Fox Token" package
+                                    {/*TODO: if disabled... need to tell why... */}
                                 </IonLabel>
                                 <IonLabel className="ml-3 text-sm opacity-60 mt-2">
-                                    {/* TODO: show more details */}
+                                    <ul>
+                                        <li>- Your server can have our "analytics" feed (where we show when tokens get new names from the Fox Token team), and users can use our bot's slash commands of /token_name and /token and /wallet_tokens </li>
+                                        <li>- Hold and you get lifetime access, and get free upgrades to existing packages such as getting alerts for Fox Token price/listings data (ie. alerted when any fox token with a name & greater than 1 sol price & greater than 10 listings is out)
+                                        </li>
+                                        <li>- Note: after enabling this, you will need to tell us before you can start using the bot commands (/token, /token_name, /wallet_tokens) in your server</li>
+                                    </ul>
                                 </IonLabel>
                             </div>
                         </div>
@@ -318,13 +332,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             {checked.mintInfoModule && (
                 <>
                     <IonLabel className="text-xl font-semibold flex mt-8 mb-8">
-                        MintInfo Module
+                        "Mints" package
                     </IonLabel>
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={6} xl={6}>
                             <IonLabel className="text-base">
-                                {/*TODO: */}
-                                Daily Mints WebHook
+                                "Daily Mints" Channel (Automated posts about today's mints, along with Twitter/Discord stats)
                             </IonLabel>
                             <div className="flex flex-row justify-between ">
                                 <select value={ dropdownValue.dailyMintsWebhookChannel }
@@ -336,8 +349,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         });
                                     }} >
                                     <option value="">
-                                        {/*TODO: */}
-                                        Please Select DailyMintsWebhookChannel
+                                        Please Select the Daily Mints Channel
                                     </option>
                                     {getOption()}
                                 </select>
@@ -345,8 +357,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         </Grid>
                         <Grid item xs={12} md={6} xl={6}>
                             <IonLabel className="text-base">
-                                {/*TODO: */}
-                                One Hour Mint Info WebHook
+                                "One Hour Mint Info" Channel (An hour before one of the daily mints comes out, this will show the mint info, recent searches from the Discords we parse, and last two official tweets from their team)
                             </IonLabel>
                             <div className="flex flex-row justify-between">
                                 <select
@@ -363,9 +374,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     }}
                                 >
                                     <option value="">
-                                        {/*TODO: */}
-                                        Please Select
-                                        One Hour Mint Info WebhookChannel
+                                        Please Select the One Hour Mint Info Channel
                                     </option>
                                     {getOption()}
                                 </select>
@@ -379,12 +388,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             {checked.tokenModule && (
                 <>
                     <IonLabel className="text-xl font-semibold flex mt-8 mb-8">
-                        Token Module
+                        "Fox Token" channel (Shows when names are added to WL tokens in Fox Token market, along with charts)
                     </IonLabel>
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={6} xl={6}>
                             <IonLabel className="text-base">
-                                Analytics WebHook{' '}
+                                Analytics Channel {' '}
                             </IonLabel>
                             <div className="flex flex-row justify-between ">
                                 <select
@@ -400,8 +409,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     }}
                                 >
                                     <option value="">
-                                        {/*TODO: */}
-                                        Please Select AnalyticsWebhookChannel
+                                        Please Select the Fox Token channel
                                     </option>
                                     {getOption()}
                                 </select>
@@ -410,6 +418,21 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </Grid>
                 </>
             )}
+
+            <div className="m-3 relative bg-gray-100 p-4 rounded-xl">
+                <p className="text-lg text-gray-700 font-medium">
+                    <b>General Instructions</b>
+                    <ul>
+                        <li>- Make a new private channel - name it "daily-mints" or whatever you want. Optionally make "1h-mint-info" if you want that as well. Or if doing the Fox token package, make a channel for the fox token names, and another channel for where users can put the bot commands</li>
+                        <li>- Add the bot to the above channels</li>
+                        <li>- Refresh this page</li>
+                        <li>- Enable the "Mints" package (or "Fox token" package)</li>
+                        <li>- It should ask you about the channels - pick your new channels</li>
+                        <li>-  Wait for it to be populated with data before showing it to the public (8am est for daily-mints, varying times for other channels)</li>
+                    </ul>
+                </p>
+            </div>
+
         </>
     );
 };

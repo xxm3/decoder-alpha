@@ -133,8 +133,7 @@ const App = () => {
 		if(localStorage.getItem('roleList')){
 			let roleList:any = localStorage.getItem('roleList');
 
-            // TODO: commenting out until auth can be added...
-			// getRoleType(JSON.parse(roleList));
+			getRoleType(JSON.parse(roleList));
 		}
 	}, [localStorage.getItem('roleList')]);
 
@@ -159,19 +158,20 @@ const App = () => {
 
             })
             .catch((error:any) => {
-                // console.log('error', error);
-                    let msg = '';
-                    if (error && error.response) {
-                        msg = String(error.response.data.body);
-                    } else {
-                        msg = 'Unable to connect. Please try again later';
-                    }
-                    present({
-                        message: msg,
-                        color: 'danger',
-                        duration: 5000,
-                        buttons: [{ text: 'X', handler: () => dismiss() }],
-                    });
+                console.error('error', error);
+
+                // let msg = '';
+                // if (error && error.response) {
+                //     msg = String(error.response.data.body);
+                // } else {
+                //     msg = 'Unable to connect. Please try again later';
+                // }
+                // present({
+                //     message: msg,
+                //     color: 'danger',
+                //     duration: 5000,
+                //     buttons: [{ text: 'X', handler: () => dismiss() }],
+                // });
             })
             .finally(() => {
                 // console.log("done")
