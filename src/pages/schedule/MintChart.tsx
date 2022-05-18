@@ -81,19 +81,45 @@ function MintChart({ token, name, floorPrice, totalTokenListings, selectedEvent}
                 // for (let t in tableData) {
                 //     if (tableData[t].token === token && tableData[t].floorPrice) {
                 //         labels.push('a few seconds ago');
-                //         lineData.push(tableData[t].floorPrice);
-                //         listingsData.push(tableData[t].totalTokenListings);
+                //         discordAllData.push(tableData[t].floorPrice);
+                //         tweetInteractionsData.push(tableData[t].totalTokenListings);
+                //         discordOnlineData.push(tableData[t].totalTokenListings);
                 //         break;
                 //     }
                 // }
                 let datasetsAry = [
                     {
                         type: 'line' as const,
-                        yAxisID: 'y1',
-                        label: 'Price',
+                        yAxisID: 'y0',
+                        label: 'Discord All',
                         borderColor: lineColorSelected,
-                        // data:lineData,
-                        data: [44,20,45,14,70,10,35,48,32,54,7,5,4],
+                        data:discordAllData,
+                        // data: [44,20,45,14,70,10,35,48,32,54,7,5,4],
+                        fill: {
+                            target: 'origin',
+                            above: shadedAreaColorSelected,
+                        },
+                    },
+                    {
+                        type: 'line' as const,
+                        yAxisID: 'y1',
+                        label: 'Discord Online',
+                        borderColor: '#9052F8' ,
+                        
+                        data:discordOnlineData,
+                        // data: [44,20,45,14,70,10,35,48,32,54,7,5,4],
+                        fill: {
+                            target: 'origin',
+                            above: shadedAreaColorSelected,
+                        },
+                    },
+                    {
+                        type: 'line' as const,
+                        yAxisID: 'y2',
+                        label: 'Tweet Interactions',
+                        borderColor:'#0052FF',
+                        data:tweetInteractionsData,
+                        // data: [44,20,45,14,70,10,35,48,32,54,7,5,4],
                         fill: {
                             target: 'origin',
                             above: shadedAreaColorSelected,
@@ -101,8 +127,8 @@ function MintChart({ token, name, floorPrice, totalTokenListings, selectedEvent}
                     },
                 ];
                 setFoxLineData({
-                    // labels: labels,
-                    labels: [0,1,2,3,4,5,6,7,8,9,8,78,],
+                    labels: labels,
+                    // labels: [0,1,2,3,4,5,6,7,8,9,8,78,],
                     datasets: datasetsAry,
                 });
             })
@@ -143,16 +169,34 @@ function MintChart({ token, name, floorPrice, totalTokenListings, selectedEvent}
                                 intersect: true
                             },
                             plugins: {
-                                legend: { display: false},
+                                legend: { display: true},
                                 tooltip: { mode: 'index', intersect: false, },
                             },
                             scales: {
-                                y1: {
+                                y0: {
                                     stacked: true,
                                     type: 'linear',
                                     position: 'right',
                                     grid: {
                                         color: '#b3b3ff',
+                                    },
+                                    suggestedMin: 0,
+                                },
+                                y1: {
+                                    stacked: true,
+                                    type: 'linear',
+                                    position: 'right',
+                                    grid: {
+                                        color: '#9052F8',
+                                    },
+                                    suggestedMin: 0,
+                                },
+                                y2: {
+                                    stacked: true,
+                                    type: 'linear',
+                                    position: 'right',
+                                    grid: {
+                                        color: '#C74AE3',
                                     },
                                     suggestedMin: 0,
                                 },

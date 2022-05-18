@@ -113,13 +113,13 @@ const WordsCount = () => {
                     {/*'top 5 new words created yesterday  */}
                     <Grid item xs={12} md={6} xl={4}>
                         <div className="secondary-bg-forced p-4 rounded-xl">
-                            <div className="flex flex-col mt-4">
+                            <div className="flex flex-col">
                                 <IonLabel className="ml-3 text-xl">
                                 Top 5 new words created yesterday
                                 </IonLabel>
                                 <div className='flex flex-col'>
                                     {wordList?.yesterday.map((text:any,index:number)=>{
-                                        return <Link to={'search/' + text.word} className="ml-3 text-sm opacity-60 mt-2" key={index}> {text.word} </Link>
+                                        return <Link to={'search/' + text.word} className="ml-5 text-sm mt-2 underline underline-offset-2" key={index}> {text.word} </Link>
                                     })}
                                 </div>
                             </div>
@@ -128,13 +128,13 @@ const WordsCount = () => {
                     {/* top 5 new words that were created 3 days ago */}
                     <Grid item xs={12} md={6} xl={4}>
                         <div className="secondary-bg-forced p-4 rounded-xl">
-                            <div className="flex flex-col mt-4">
+                            <div className="flex flex-col">
                                 <IonLabel className="ml-3 text-xl">
                                 Top 5 new words that were created 3 days ago
                                 </IonLabel>
                                 <div className='flex flex-col'>
                                 {wordList&&wordList['3days'].map((text:any,index:number)=>{
-                                        return <Link to={'search/' + text.word} className="ml-3 text-sm opacity-60 mt-2" key={index}> {text.word} </Link>
+                                        return <Link to={'search/' + text.word} className="ml-5 text-sm underline underline-offset-2 mt-2" key={index}> {text.word} </Link>
                                     })}
                                 </div>
                             </div>
@@ -143,13 +143,13 @@ const WordsCount = () => {
                     {/* top 5 new words that were created 5 days ago */}
                     <Grid item xs={12} md={6} xl={4}>
                         <div className="secondary-bg-forced p-4 rounded-xl">
-                            <div className="flex flex-col mt-4">
+                            <div className="flex flex-col">
                                 <IonLabel className="ml-3 text-xl">
                                 Top 5 new words that were created 5 days ago
                                 </IonLabel>
                                 <div className='flex flex-col'>
                                 {wordList&&wordList['5days'].map((text:any,index:number)=>{
-                                        return <Link to={'search/' + text.word} className="ml-3 text-sm opacity-60 mt-2" key={index}> {text.word} </Link>
+                                        return <Link to={'search/' + text.word} className="ml-5 text-sm underline underline-offset-2 mt-2" key={index}> {text.word} </Link>
                                     })}
                                 </div>
                                 
