@@ -1,6 +1,7 @@
 .server-module-bg{
     width: 100wv;
-    height: 180px;
+    //height: 180px;
+    padding: 10px;
     --background-size: auto;
     background-repeat: no-repeat;
     background-position: center center;
@@ -8,8 +9,8 @@
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    
-    
+
+
 }
 .bg-image-wrapper{
     width: 100wv;
@@ -28,7 +29,7 @@
     align-items: center;
     justify-content:center ;
     overflow: hidden;
-  
+
 }
 .module-icon{
     // height: 20%;
@@ -42,7 +43,7 @@ ion-toggle {
     --handle-width:26px;
     --background-checked: #63F58C;
     --handle-background-checked: rgb(255, 255, 255);
-    
+
   }
 
   .server-channel-dropdown{
