@@ -67,3 +67,15 @@ https://developer.chrome.com/docs/devtools/remote-debugging/
 https://prowe214.medium.com/tip-how-to-view-localhost-web-apps-on-your-phone-ad6b2c883a7c#:~:text=On%20your%20mobile%20device's%20browser,don't%20leave%20it%20off.
 - https://www.whatismyip.com
 - http://24.88.49.<ip>:3000/
+
+
+### 11) Testing 30 days insertion of data, tomorrow mints
+
+(1) First coming to tomorrow mints if you want to test tomorrow mints, you can use the route http://localhost:5001/nft-discord-relay/us-central1/api/todayRefactor?testWebhook=1&doScrape=1&tomorrow=1
+(2) To Test it out these are the query params that we are giving in order to recieve a live response, if we don't provide doScrape we'll just get todays_mints from redis and that wont be the tomorrow mints.
+(3) Hit the api and see at discord if you're recieving everything, some fields could be missing or broken will be updating them shortly through the database.
+(4) To test out the thirty days data insertion if its working fine we can use the route http://localhost:5001/nft-discord-relay/us-central1/api/testThirty
+(5) What this route does it basically fetches everything from todays date ie (18 May - 18 June) of mints and stores all of the data in the db
+(6) You can hit the api a couple of times to see if data is the same and it should be since the date has not changed
+(7) If you want to check if the date is working fine then you need to change the current date maybe give it of 5 days ahead and see if you get any new mints from changing the date (can be done through backend code or if you know of other possible ways to change your date).
+(8) This need more refactors and needs to be integrated with todays mint after approval and final testing oncee its integrated with todays mints things like discord online members, twitter followers, tweet interactions will be inserted accurately.
