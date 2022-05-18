@@ -423,7 +423,24 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 </>
             )}
 
-            {/*TODO: make it work for capt & daki*/}
+            {/*
+            TODO- BUGS:
+
+            all:
+            - go to the site, says "you are not the owner" -- i think tied to no channels
+
+            damjan
+            daki
+            - says no 3 NFT
+
+            vehn
+            - registered the server but don't see /search
+
+            capt
+            - npm run deploy can't see his server, reinvited a few times
+            - can't see channels
+
+            */}
 
             <br/>
             <div className="flex flex-row justify-center w-full">

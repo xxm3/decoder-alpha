@@ -167,8 +167,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                                 {server.name}
                                             </span>
                                             <span className="mt-2 text-slate-500">
-                                                {/*TODO*/}
-                                                {/*user role*/}
+
                                             </span>
                                         </div>
                                         <div>
