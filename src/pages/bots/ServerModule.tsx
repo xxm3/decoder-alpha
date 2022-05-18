@@ -279,7 +279,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                             <div className="flex flex-col mt-4">
                                 <IonLabel className="ml-3 text-xl">
                                     "Mints" package
-                                    {/*TODO: if disabled... need to tell why... */}
                                 </IonLabel>
                                 <IonLabel className="ml-3 text-sm opacity-60 mt-2">
                                     <ul>
@@ -316,7 +315,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                             <div className="flex flex-col mt-4">
                                 <IonLabel className="ml-3 text-xl">
                                     "Fox Token" package
-                                    {/*TODO: if disabled... need to tell why... */}
                                 </IonLabel>
                                 <IonLabel className="ml-3 text-sm opacity-60 mt-2">
                                     <ul>
@@ -426,20 +424,15 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             {/*
             TODO- BUGS:
 
-            all:
-            - go to the site, says "you are not the owner" -- i think tied to no channels
+            if a radio button is disabled (because they dont have the NFTs) - then we need to explain that in the UI
 
-            damjan
-            daki
-            - says no 3 NFT
+            When you go to the site, itsays "you are not the owner". You then see no channels after you enable one of the radio buttons
 
-            vehn
-            - registered the server but don't see /search
+            Certain users (like damjan & daki & another user in the discord) says the website says they don't have 3 NFTs
 
-            capt
-            - npm run deploy can't see his server, reinvited a few times
-            - can't see channels
+            A user (captain) added the server, but when I ran "npm run deploy" I can't update his server, it says access denied
 
+            I registered the server for my discord, but don't see /search in the discord bot
             */}
 
             <br/>
