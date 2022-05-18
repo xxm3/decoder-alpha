@@ -192,7 +192,7 @@ function Login() {
                                 </div>
                             </div>
 
-                            <div className={`login-right-side-wrapper w-full justify-center flex flex-col rounded-md ${isMobileDevice ? 'pl-4 mt-4' : 'pl-10' }`} style={{height:isMobileDevice ? '75vh'  : '84vh' }}>
+                            <div className={`login-right-side-wrapper w-full justify-center flex flex-col rounded-md ${isMobileDevice ? 'pl-4 mt-4 pb-4 pt-4 pr-2' : 'pl-10 pr-4' }`} style={{height:isMobileDevice ? 'auto'  : '84vh' }}>
                                 <div className="title-text text-4xl font-bold flex">
                                     New to<br/>SOL Decoder ?
                                 </div>

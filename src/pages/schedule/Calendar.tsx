@@ -11,6 +11,7 @@ import moment from 'moment';
 import { IonButton, IonContent, IonHeader, IonIcon, IonModal, IonPopover,  IonToolbar, useIonToast } from '@ionic/react';
 import { useHistory} from "react-router";
 import MintChart from './MintChart';
+import Loader from '../../components/Loader';
 
 
 
@@ -78,22 +79,22 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
      * Functions
      */ 
     const fetchMintsData = () => {
-        // setIsLoading(true);
+        setIsLoading(true);
 
         instance
             .get(environment.backendApi + '/getAllMints')
             .then(async (res) => {
                 setMints(res.data.data);
+                setIsLoading(false);
             })
             .catch((error) => {
-                // setIsLoading(false);
+                setIsLoading(false);
                 let msg = '';
                 if (error && error.response) {
                     msg = String(error.response.data.body);
                 } else {
                     msg = 'Unable to connect. Please try again later';
                 }
-
                 present({
                     message: msg,
                     color: 'danger',
@@ -176,12 +177,12 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
    const ShowMorePopup = (events: any[], date: Date) => {
        
        return(
-           <div>
-        <IonButton id="trigger-button">Click to open popover</IonButton>
-        <IonPopover  isOpen={true}>
-          <IonContent>Popover Content</IonContent>
-        </IonPopover>
-        </div>
+            <div>
+                <IonButton id="trigger-button">Click to open popover</IonButton>
+                <IonPopover  isOpen={true}>
+                <IonContent>Popover Content</IonContent>
+                </IonPopover>
+            </div>
        )
 
    }
@@ -196,100 +197,62 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
 
     return (
             <>
-                <div className= {`${isMobile ? "text-center" : 'text-left' } text-2xl `}>
-                    Mint Calendar
-                    <a className="float-right text-base underline cursor-pointer "onClick= {() => history.push( { pathname: '/schedule'})}>
-                        <IonIcon icon={close} className="text-3xl " />
-                    </a>
-                </div>
-                <div className="ml-3 mr-3">
-                    <Calendar
-                            defaultDate={ moment().add(-1, "days").toDate()}
-                            views={['month']}
-                            events={myEvents}
-                            components = {{
-                                toolbar : CustomCalenderToolbar,
-                                // dateCellWrapper: ColoredDateCellWrapper,
-                            }}
-                            localizer={localizer}
-                            onSelectEvent={handleSelectEvent}
-                            onSelectSlot={(e: any)=>{handleSlotSelect(e)}}
-                            selectable
-                            onNavigate = {(action: Date)=> onNavigate(action)}
-                            style={{ height: isMobile ? 420 : 700 }}
-                            startAccessor='start'
-                            endAccessor='end'
-                            date={selectDate}
-                            popup={showMorePopup}
-                            onShowMore={(events: any[], date: Date) => ShowMorePopup(events, date)}
-                            // eventPropGetter={eventPropGetter}
+            {isLoading ? 
+                <div className='flex justify-center items-center mt-4'><Loader/></div>
+                 : 
+                 <>
+                    <div className= {`${isMobile ? "text-center" : 'text-left' } text-2xl `}>
+                        Mint Calendar
+                        <a className="float-right text-base underline cursor-pointer "onClick= {() => history.push( { pathname: '/schedule'})}>
+                            <IonIcon icon={close} className="text-3xl " />
+                        </a>
+                    </div>
+                    <div className="ml-3 mr-3">
+                        <Calendar
+                                defaultDate={ moment().add(-1, "days").toDate()}
+                                views={['month']}
+                                events={myEvents}
+                                components = {{
+                                    toolbar : CustomCalenderToolbar,
+                                    // dateCellWrapper: ColoredDateCellWrapper,
+                                }}
+                                localizer={localizer}
+                                onSelectEvent={handleSelectEvent}
+                                onSelectSlot={(e: any)=>{handleSlotSelect(e)}}
+                                selectable
+                                onNavigate = {(action: Date)=> onNavigate(action)}
+                                style={{ height: isMobile ? 420 : 700 }}
+                                startAccessor='start'
+                                endAccessor='end'
+                                date={selectDate}
+                                popup={showMorePopup}
+                                onShowMore={(events: any[], date: Date) => ShowMorePopup(events, date)}
+                                // eventPropGetter={eventPropGetter}
                         />
-                </div>
-                
-                <IonModal isOpen={openEventModal} onDidDismiss={() => {setOpenEventModal(false); setShowMorePopup(true)}} cssClass={isMobile ? 'calender-modal-mobile' :'calender-modal-web'} >
-                    <IonHeader>
-                        <IonToolbar className='flex items-center justify-between'>
-                            <div className='float-left ml-3 font-bold'>
-                                {selectedEvent?.title}
-                            </div>
-                            <div>
-                                <a className="float-right text-base cursor-pointer mr-3" onClick={() => {setOpenEventModal(false); setShowMorePopup(true)}}>
-                                    <IonIcon icon={close} className="h-6 w-6" />
-                                </a>
-                            </div>
-                        </IonToolbar>
-                    </IonHeader>
+                    </div>
+                    <IonModal isOpen={openEventModal} onDidDismiss={() => {setOpenEventModal(false); setShowMorePopup(true)}} cssClass={isMobile ? 'calender-modal-mobile' :'calender-modal-web'} >
+                        <IonHeader>
+                            <IonToolbar className='flex items-center justify-between'>
+                                <div className='float-left ml-3 font-bold'>
+                                    {selectedEvent?.title}
+                                </div>
+                                <div>
+                                    <a className="float-right text-base cursor-pointer mr-3" onClick={() => {setOpenEventModal(false); setShowMorePopup(true)}}>
+                                        <IonIcon icon={close} className="h-6 w-6" />
+                                    </a>
+                                </div>
+                            </IonToolbar>
+                        </IonHeader>
 
-                    <IonContent  >
-                        <div className='ml-4 mt-4'>
-                            {/* <MintChart {...{
-                                chartDataDailyCount: '',
-                                // chartDataPerSource: '',
-                                chartHeight,
-                                // isLoadingChart: '',
-                                totalCount: 5
-                            }}/> */}
-                            <MintChart selectedEvent = {selectedEvent}/>
-                        </div>
-                    
-                    </IonContent>
-                </IonModal>
-                
-           
+                        <IonContent  >
+                            <div className='ml-4 mt-4'>
+                                <MintChart selectedEvent = {selectedEvent}/>
+                            </div>
+                        </IonContent>
+                    </IonModal>
+                </> }
             </>
     );
 };
 
 export default ScheduleCalendar;
-
-
-                        {/* <div className='ml-4 mt-4' > */}
-                        {/* <div className="flex space-x-3 "> */}
-                            {/*discord*/}
-                            {/* <a href={mints[index]?.discordLink} target="_blank" style={{ pointerEvents: (mints[index]?.discordLink && mints[index]?.numbersOfDiscordMembers) ? "initial" : "none" }} className={(mints[index]?.discordLink && mints[index]?.numbersOfDiscordMembers) ? "schedule-link" : "schedule-link-disabled"}>
-                                <IonIcon icon={logoDiscord} className="big-emoji" />
-                                <IonRippleEffect />
-                            </a> */}
-                            {/*twitter*/}
-                            {/* <a href={mints[index]?.twitterLink} className="schedule-link" target="_blank">
-                                <IonIcon icon={logoTwitter} className="big-emoji" />
-                                <IonRippleEffect />
-                            </a> */}
-                            {/* Link */}
-                            {/* <a href={mints[index]?.projectLink} className={(mints[index]?.projectLink && mints[index]?.projectLink) ? "schedule-link" : "schedule-link-disabled"} target="_blank">
-                                <IonIcon icon={link} className="big-emoji" />
-                                <IonRippleEffect />
-                            </a> */}
-                        {/* </div> */}
-
-                        {/* <div className="mt-1" >
-                            {mints[index]?.project && <span><b>Name : </b>{mints[index].project}</span>}
-                            {mints[index]?.mintExpiresAt && <span><br /><b>Time : </b> <span>{mints[index].updateTime || mints[index].time.replace('UTC', '')}<span hidden={mints[index].mintExpiresAt.indexOf('Invalid') !== -1}>{mints[index]?.mintExpiresAt}</span></span></span>}
-                            {mints[index]?.price && <div className='flex flex-row'><b>Price : </b><div onClick={(e) => mints[index]?.wlPrice ? history.push( { pathname: '/foxtoken',search: mints[index]?.wlTokenAddress }) : '' } className={'flex flex-row ml-1 ' + (mints[index]?.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML={{__html: mints[index]?.wlPrice ? `${mints[index]?.price.replace(/public/gi, "public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${mints[index]?.wlPrice}) ◎` : `${mints[index]?.price.replace(/public/gi, "public").replace('SOL', '')} ◎`}}></div></div>}
-                            {mints[index]?.count && <span> {mints[index]?.price ? '' : <br/> }<b>Supply : </b>{mints[index].count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                            {mints[index]?.numbersOfDiscordMembers && <span><br /><b>Discord (all) : </b>{mints[index].numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                            {mints[index]?.DiscordOnlineMembers && <span><br /><b>Discord (online) : </b>{mints[index].DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                            {mints[index]?.numbersOfTwitterFollowers && <span><br /><b>Twitter : </b>{mints[index].numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                            {mints[index]?.tweetInteraction?.total && <span><br /><b>Twitter Interaction : </b>{mints[index].tweetInteraction.total}</span>}
-                        </div> */}
-                    {/* </div> */}
