@@ -8,11 +8,48 @@ import {Link, useLocation} from "react-router-dom";
 import {IonCard, IonLabel, useIonToast} from "@ionic/react";
 import {useHistory} from "react-router";
 import { Grid } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 
 const WordsCount = () => {
 
-    const [present, dismiss] = useIonToast();
     const history = useHistory();
+    const [present, dismiss] = useIonToast();
+    const [wordList, setWordList] = useState<any>(null)
+
+    useEffect(() => {
+        getWordCountByDuration()
+    }, [])
+
+    let getWordCountByDuration = async() =>{
+        instance
+                .get(
+                    '/getWordCountByDuration'
+                )
+                .then((response) => {
+                    let data = response.data.data
+                    console.log(data)
+                    setWordList(data)
+                })
+                .catch((error) => {
+                    let msg = '';
+                        if (error && error.response) {
+                            msg = String(error.response.data.body);
+                        } else {
+                            msg = 'Unable to connect. Please try again later';
+                        }
+                        present({
+                            message: msg,
+                            color: 'danger',
+                            duration: 5000,
+                            buttons: [{ text: 'X', handler: () => dismiss() }],
+                        });
+                })
+                .finally(() => {
+                    console.log("finally")
+                });
+
+    }
+    
 
     /**
      * Functions
@@ -81,11 +118,9 @@ const WordsCount = () => {
                                 Top 5 new words created yesterday
                                 </IonLabel>
                                 <div className='flex flex-col'>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 1 </IonLabel>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 2 </IonLabel>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 3 </IonLabel>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 4 </IonLabel>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 5 </IonLabel>
+                                    {wordList?.yesterday.map((text:any,index:number)=>{
+                                        return <Link to={'search/' + text.word} className="ml-3 text-sm opacity-60 mt-2" key={index}> {text.word} </Link>
+                                    })}
                                 </div>
                             </div>
                         </div>
@@ -98,11 +133,9 @@ const WordsCount = () => {
                                 Top 5 new words that were created 3 days ago
                                 </IonLabel>
                                 <div className='flex flex-col'>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 1 </IonLabel>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 2 </IonLabel>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 3 </IonLabel>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 4 </IonLabel>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 5 </IonLabel>
+                                {wordList&&wordList['3days'].map((text:any,index:number)=>{
+                                        return <Link to={'search/' + text.word} className="ml-3 text-sm opacity-60 mt-2" key={index}> {text.word} </Link>
+                                    })}
                                 </div>
                             </div>
                         </div>
@@ -115,11 +148,9 @@ const WordsCount = () => {
                                 Top 5 new words that were created 5 days ago
                                 </IonLabel>
                                 <div className='flex flex-col'>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 1 </IonLabel>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 2 </IonLabel>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 3 </IonLabel>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 4 </IonLabel>
-                                <IonLabel className="ml-3 text-sm opacity-60 mt-2"> Word 5 </IonLabel>
+                                {wordList&&wordList['5days'].map((text:any,index:number)=>{
+                                        return <Link to={'search/' + text.word} className="ml-3 text-sm opacity-60 mt-2" key={index}> {text.word} </Link>
+                                    })}
                                 </div>
                                 
                             </div>
