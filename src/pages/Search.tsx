@@ -256,7 +256,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                                         </span>
                 </div>
                 {
-                    showFoxTokenLink ? <div className='text-center text-lg cursor-pointer text-blue-500 mt-4' onClick={() => history.push( { pathname: '/foxtoken',search: searchText })}>Searching for token ? click here to search on this in the fox token page</div> : ''
+                    showFoxTokenLink ? <div className='text-center text-lg cursor-pointer text-blue-500 mt-4' onClick={() => history.push( { pathname: '/foxtoken',search: searchText })}>Searching for a token? Click here to search on this in the Fox Token page</div> : ''
                 }
                 </>
                 // actual content
