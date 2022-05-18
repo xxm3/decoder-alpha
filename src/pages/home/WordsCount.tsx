@@ -110,12 +110,12 @@ const WordsCount = () => {
     return (
         <div className="flex flex-row justify-center w-full mt-6">
                 <Grid container spacing={3}>
-                    {/*'top 5 new words created yesterday  */}
+                    {/*'top 5 new words created in the last day  */}
                     <Grid item xs={12} md={6} xl={4}>
                         <div className="secondary-bg-forced p-4 rounded-xl">
                             <div className="flex flex-col">
                                 <IonLabel className="ml-3 text-xl">
-                                Top 5 new words created yesterday
+                                Top 5 new words created in the last day
                                 </IonLabel>
                                 <div className='flex flex-col'>
                                     {wordList?.yesterday.map((text:any,index:number)=>{
@@ -125,12 +125,12 @@ const WordsCount = () => {
                             </div>
                         </div>
                     </Grid>
-                    {/* top 5 new words that were created 3 days ago */}
+                    {/* top 5 new words that were created in last 3 days */}
                     <Grid item xs={12} md={6} xl={4}>
                         <div className="secondary-bg-forced p-4 rounded-xl">
                             <div className="flex flex-col">
                                 <IonLabel className="ml-3 text-xl">
-                                Top 5 new words that were created 3 days ago
+                                Top 5 new words that were created in last 3 days
                                 </IonLabel>
                                 <div className='flex flex-col'>
                                 {wordList&&wordList['3days'].map((text:any,index:number)=>{
@@ -140,12 +140,12 @@ const WordsCount = () => {
                             </div>
                         </div>
                     </Grid>
-                    {/* top 5 new words that were created 5 days ago */}
+                    {/* top 5 new words that were created in the last 5 days */}
                     <Grid item xs={12} md={6} xl={4}>
                         <div className="secondary-bg-forced p-4 rounded-xl">
                             <div className="flex flex-col">
                                 <IonLabel className="ml-3 text-xl">
-                                Top 5 new words that were created 5 days ago
+                                Top 5 new words that were created in the last 5 days
                                 </IonLabel>
                                 <div className='flex flex-col'>
                                 {wordList&&wordList['5days'].map((text:any,index:number)=>{

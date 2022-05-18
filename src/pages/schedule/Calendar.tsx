@@ -103,33 +103,19 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                 });
             })
     }
-//  add new event in calendar 
-//    const handleSelectSlot = useCallback(
-//      ({ start, end }) => {
-//        const title = window.prompt('New Event Name')
-//        if (title) {
-//          setEvents((prev: any) => [...prev, { start, end, title }])
-//        }
-//      },
-//      [setEvents]
-//    )
+
  
     const handleSlotSelect = (slotInfo: SlotInfo) => {
         onNavigate(moment(slotInfo.slots[0]).toDate());
      };
 
+     // select event handler
     const handleSelectEvent = useCallback((event) => {
          setOpenEventModal(true)
          setSelectedEvent(event)
          setShowMorePopup(false)
     },[])
 
-    // change event color function 
-    // const  eventPropGetter = (event: any) => {
-    //     const backgroundColor = event.id ===1 ? 'green' :'blue' ;
-    //     return { style: { backgroundColor } }
-    // }
-    
 
     // next previous day and month
 
@@ -174,27 +160,6 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
          );
    }
 
-   const ShowMorePopup = (events: any[], date: Date) => {
-       
-       return(
-            <div>
-                <IonButton id="trigger-button">Click to open popover</IonButton>
-                <IonPopover  isOpen={true}>
-                <IonContent>Popover Content</IonContent>
-                </IonPopover>
-            </div>
-       )
-
-   }
-
-//    change event date colot channge
-    // const ColoredDateCellWrapper = (props: any) => React.cloneElement(Children.only(props.children), {
-    //     style: {
-    //         ...props.children.style,
-    //         backgroundColor: props.value < selectDate && props.value !== selectDate  ?  'green' : 'red',
-    //     },
-    // });
-
     return (
             <>
             {isLoading ? 
@@ -226,7 +191,6 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                 endAccessor='end'
                                 date={selectDate}
                                 popup={showMorePopup}
-                                onShowMore={(events: any[], date: Date) => ShowMorePopup(events, date)}
                                 // eventPropGetter={eventPropGetter}
                         />
                     </div>
@@ -245,7 +209,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                         </IonHeader>
 
                         <IonContent  >
-                            <div className='ml-4 mt-4'>
+                            <div className='ml-4 mt-4 mr-4'>
                                 <MintChart selectedEvent = {selectedEvent}/>
                             </div>
                         </IonContent>
