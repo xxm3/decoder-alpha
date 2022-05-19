@@ -93,7 +93,13 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             });
     };
 
-    // TODO: need explanation of all this... 3 vs 4 nfts etc... what it gives vs what it doesnt?
+    {/*
+        TODO- BUGS:
+
+         test daily/1h/analytics
+
+         need to switch vehn dojo with production...so it gets updates...
+    */}
 
     return (
         <>
@@ -113,7 +119,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
 
             <div className="m-3 relative bg-red-100 p-4 rounded-xl">
                 <span className="text-lg text-red-700 font-medium">
-                    <b>Note this page is only for server owners, for the time being. Also your server will need to first have our Discord Bot invited to it. Click one of the below links, then in the "Add to Server" on the bottom, select your server. Then click "Continue", then "Authorize"</b>
+                    <b>Note this page is only for server owners and those with "Administrator" permission. Also your server will need to first have our Discord Bot invited to it. Click one of the below links, then in the "Add to Server" on the bottom, select your server. Then click "Continue", then "Authorize"</b>
                     <br/>
 
                     <p>
@@ -184,9 +190,34 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                 </Grid>
                             );
                         }
-                    }) : 'Unable to find any servers you are the owner of. For now this will only work for server owners - later you may use your NFTs to set this up for some other server owner. If you are a server owner - then reset your cookies and try logging in again' }
+                    }) : 'Unable to find any servers you are the owner/admin of. If you are one, then reset your cookies and try logging in again' }
                 </Grid>
             </div>
+
+            <br/>
+            <div className="flex flex-row justify-center w-full">
+                <div className="server-module-bg ">
+
+                    <b>Introduction</b>
+                    <ul>
+                        <li>- This page allows you to setup some of the SOL Decoder bots on your own Discord server</li>
+                        <li>- Pricing: Hold 3 NFTs (which unlocks all of our existing 3 NFT benefits - <a href="https://docs.soldecoder.app/books/intro/page/discord-overview" target="_blank" className="underline cursor-pointer">read more here</a>) - and you can unlock one of our bot packages. Hold 4 NFTs to unlock a second bot package</li>
+                        <li>- Bot package #1 - Mints package - Your server can have our "daily-mints" feed and "1h-mint-info" and soon "tomorrows-mints"</li>
+                        <li>- Bot package #2 - Fox token package - Your server can have our "analytics" feed, and users can use our bot's slash commands of /token_name and /token (which shows Fox Token Market info from a token address or name) and /wallet_tokens (Get Fox Token Market info for all tokens in an address)</li>
+                        <li>- Hold and you get lifetime access, and get free upgrades to existing packages such as: (1) Mints package:  get daily summaries of NFTs coming out in a few weeks, when they they get a bump in their twitter / discord numbers, and (2) Fox token package: getting alerts for Fox Token price/listings data (ie. alerted when any fox token with a name & greater 1 sol price & greater 10 listings is out)</li>
+                    <ul>
+
+                    <br/>
+                    <b>Other packages will be released in the future such as:</b>
+                    </ul>
+                        <li>- "Magic Eden" package: (1) perform the command "/me bohemia" and you'll get the price chart of Bohemia, and (2) you can customize a single alert for your server, to get alerted when any NFT above a certain price goes up X % within Y minutes</li>
+                        <li>- "Sales listing" package: Get alerted whenever a sale for your NFT occurs</li>
+                        <li>- Other unannounced packages</li>
+                    </ul>
+
+                </div>
+            </div>
+
         </>
     );
 };

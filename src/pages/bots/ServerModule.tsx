@@ -216,25 +216,26 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         });
     };
 
+    // when to disable the module radio button...
     let disableButton = (btnType:any) =>{
         if(role==='No Roles'){
-            return true
+            return true;
         }else if(role==='3NFT'){
             if(checked.mintInfoModule || checked.tokenModule){
                 if(btnType === 'mintInfoModule' &&checked.mintInfoModule){
-                    return false
+                    return false;
                 }else if(btnType === 'tokenModule' &&checked.tokenModule){
-                    return false
+                    return false;
                 }else{
-                    return true
+                    return true;
                 }
             }else{
-                return false
+                return false;
             }
         }else if(role==='4NFT'){
-            return false
+            return false;
         }else{
-            return true
+            return true;
         }
     }
 
@@ -321,8 +322,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         <li>- Your server can have our "analytics" feed (where we show when tokens get new names from the Fox Token team), and users can use our bot's slash commands of /token_name and /token and /wallet_tokens </li>
                                         <li>- Hold and you get lifetime access, and get free upgrades to existing packages such as getting alerts for Fox Token price/listings data (ie. alerted when any fox token with a name & greater than 1 sol price & greater than 10 listings is out)
                                         </li>
-                                        <li>- Note: after enabling this, you will need to tell us before you can start using the bot commands (/token, /token_name, /wallet_tokens) in your server</li>
                                     </ul>
+
+                                    {/*TODO: all staff to test it*/}
+
+                                    {/*TODO*/}
+                                    <b className="text-red-500">Note: we're currently fixing a bug where tokens created in the last day or two don't work with the /token commands</b>
                                 </IonLabel>
                             </div>
                         </div>
@@ -330,124 +335,123 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 </Grid>
             </div>
 
-            {/*  */}
             {checked.mintInfoModule && (
                 <>
-                    <IonLabel className="text-xl font-semibold flex mt-8 mb-8">
-                        "Mints" package
-                    </IonLabel>
-                    <Grid container spacing={4}>
-                        <Grid item xs={12} md={6} xl={6}>
-                            <IonLabel className="text-base">
-                                "Daily Mints" Channel (Automated posts about today's mints, along with Twitter/Discord stats)
+                    <br/>
+                    <div className="flex flex-row justify-center w-full">
+                        <div className="server-module-bg ">
+                            <IonLabel className="text-xl font-semibold flex mt-8 mb-8">
+                                "Mints" package
                             </IonLabel>
-                            <div className="flex flex-row justify-between ">
-                                <select value={ dropdownValue.dailyMintsWebhookChannel }
-                                    className="server-channel-dropdown"
-                                    onChange={(event: any) => {
-                                        updateWebHooks({
-                                            webhook: 'dailyMintsWebhookChannel',
-                                            channel: event.target.value,
-                                        });
-                                    }} >
-                                    <option value="">
-                                        Please Select the Daily Mints Channel
-                                    </option>
-                                    {getOption()}
-                                </select>
-                            </div>
-                        </Grid>
-                        <Grid item xs={12} md={6} xl={6}>
-                            <IonLabel className="text-base">
-                                "One Hour Mint Info" Channel (An hour before one of the daily mints comes out, this will show the mint info, recent searches from the Discords we parse, and last two official tweets from their team)
-                            </IonLabel>
-                            <div className="flex flex-row justify-between">
-                                <select
-                                    value={
-                                        dropdownValue.oneHourMintInfoWebhookChannel
-                                    }
-                                    className="server-channel-dropdown"
-                                    onChange={(event: any) => {
-                                        updateWebHooks({
-                                            webhook:
-                                                'oneHourMintInfoWebhookChannel',
-                                            channel: event.target.value,
-                                        });
-                                    }}
-                                >
-                                    <option value="">
-                                        Please Select the One Hour Mint Info Channel
-                                    </option>
-                                    {getOption()}
-                                </select>
-                            </div>
-                        </Grid>
-                    </Grid>
+                            <Grid container spacing={4}>
+                                <Grid item xs={12} md={6} xl={6}>
+                                    <IonLabel className="text-base">
+                                        "Daily Mints" Channel (Automated posts about today's mints, along with Twitter/Discord stats)
+                                    </IonLabel>
+                                    <div className="flex flex-row justify-between ">
+                                        <select value={ dropdownValue.dailyMintsWebhookChannel }
+                                            className="server-channel-dropdown"
+                                            onChange={(event: any) => {
+                                                updateWebHooks({
+                                                    webhook: 'dailyMintsWebhookChannel',
+                                                    channel: event.target.value,
+                                                });
+                                            }} >
+                                            <option value="">
+                                                Please Select the Daily Mints Channel
+                                            </option>
+                                            {getOption()}
+                                        </select>
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12} md={6} xl={6}>
+                                    <IonLabel className="text-base">
+                                        "One Hour Mint Info" Channel (An hour before one of the top 7 daily mints comes out, this will show the mint info, recent searches from the Discords we parse, and last two official tweets from their team)
+
+                                        {/*TODO*/}
+                                        <br/>
+                                        <b className="text-red-500">Note: we're currently fixing a bug where mints don't alway show up in this feed</b>
+                                    </IonLabel>
+                                    <div className="flex flex-row justify-between">
+                                        <select
+                                            value={
+                                                dropdownValue.oneHourMintInfoWebhookChannel
+                                            }
+                                            className="server-channel-dropdown"
+                                            onChange={(event: any) => {
+                                                updateWebHooks({
+                                                    webhook:
+                                                        'oneHourMintInfoWebhookChannel',
+                                                    channel: event.target.value,
+                                                });
+                                            }}
+                                        >
+                                            <option value="">
+                                                Please Select the One Hour Mint Info Channel
+                                            </option>
+                                            {getOption()}
+                                        </select>
+                                    </div>
+                                </Grid>
+                            </Grid>
+                        </div>
+                    </div>
                 </>
             )}
-            {/*  */}
+
 
             {checked.tokenModule && (
                 <>
-                    <IonLabel className="text-xl font-semibold flex mt-8 mb-8">
-                        "Fox Token" channel (Shows when names are added to WL tokens in Fox Token market, along with charts)
-                    </IonLabel>
-                    <Grid container spacing={4}>
-                        <Grid item xs={12} md={6} xl={6}>
-                            <IonLabel className="text-base">
-                                Analytics Channel {' '}
+                    <br/>
+                    <div className="flex flex-row justify-center w-full">
+                        <div className="server-module-bg ">
+                            <IonLabel className="text-xl font-semibold flex mt-8 mb-8">
+                                "Fox Token" channel (Shows when names are added to WL tokens in Fox Token market, along with charts)
                             </IonLabel>
-                            <div className="flex flex-row justify-between ">
-                                <select
-                                    value={
-                                        dropdownValue.analyticsWebhookChannel
-                                    }
-                                    className="server-channel-dropdown"
-                                    onChange={(event: any) => {
-                                        updateWebHooks({
-                                            webhook: 'analyticsWebhookChannel',
-                                            channel: event.target.value,
-                                        });
-                                    }}
-                                >
-                                    <option value="">
-                                        Please Select the Fox Token channel
-                                    </option>
-                                    {getOption()}
-                                </select>
-                            </div>
-                        </Grid>
-                    </Grid>
+                            <Grid container spacing={4}>
+                                <Grid item xs={12} md={6} xl={6}>
+                                    <IonLabel className="text-base">
+                                        Analytics Channel {' '}
+                                    </IonLabel>
+                                    <div className="flex flex-row justify-between ">
+                                        <select
+                                            value={
+                                                dropdownValue.analyticsWebhookChannel
+                                            }
+                                            className="server-channel-dropdown"
+                                            onChange={(event: any) => {
+                                                updateWebHooks({
+                                                    webhook: 'analyticsWebhookChannel',
+                                                    channel: event.target.value,
+                                                });
+                                            }}
+                                        >
+                                            <option value="">
+                                                Please Select the Fox Token channel
+                                            </option>
+                                            {getOption()}
+                                        </select>
+                                    </div>
+                                </Grid>
+                            </Grid>
+                        </div>
+                    </div>
                 </>
             )}
 
-            {/*
-            TODO- BUGS:
-
-            if a radio button is disabled (because they dont have the NFTs) - then we need to explain that in the UI
-
-            When you go to the site, itsays "you are not the owner". You then see no channels after you enable one of the radio buttons
-
-            Certain users (like damjan & daki & another user in the discord) says the website says they don't have 3 NFTs
-
-            A user (captain) added the server, but when I ran "npm run deploy" I can't update his server, it says access denied
-
-            I registered the server for my discord, but don't see /search in the discord bot
-            */}
-
             <br/>
             <div className="flex flex-row justify-center w-full">
-                {/*mt-6*/}
                 <div className="server-module-bg ">
 
                     <b>General Instructions</b>
                     <ul>
-                        <li>- Make a new private channel in your Discord. If doing the "Mints" package, name the channel "daily-mints" or whatever you want. Optionally make "1h-mint-info" if you want that as well. Or if you are doing the "Fox token" package, make a channel for the fox token names, and another channel for where users can enter their own Bot commands</li>
+                        <li>- Make a new private channel in your Discord. If doing the "Mints" package, name the channel "daily-mints" or whatever you want. Optionally make "1h-mint-info" if you want that as well. Or if you are doing the "Fox token" package, make a channel for the fox token names, and another channel for where users can enter their own bot commands</li>
                         <li>- Add the bot to the above channels (by going to the channel settings within Discord)</li>
                         <li>- Refresh this page</li>
                         <li>- Enable the "Mints" package (or "Fox token" package)</li>
                         <li>- It should ask you about the channels - pick your new channels</li>
-                        <li>- Wait for the channels to be populated with data before showing it to the public (8am EST is when daily-mints is populated, varying times for other channels). You may also test out the bot commands if doing the "Fox token" package, but remember to let us know so we can enable it</li>
+                        <li>- Wait for the channels to be populated with data before showing it to the public (8am EST is when daily-mints is populated, varying times for other channels)</li>
+                        <li>If doing the "Fox token" package, you need to first tell us before you can start using the bot commands (/token, /token_name, /wallet_tokens) in your server. You also need to add permission for any user in that channel to "Use Application Commands"</li>
                     </ul>
 
                 </div>
