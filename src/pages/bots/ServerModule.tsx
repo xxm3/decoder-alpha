@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
-import {  IonLabel,  useIonToast } from '@ionic/react';
+import {  IonButton, IonLabel,  useIonToast } from '@ionic/react';
 import { Backdrop,CircularProgress,Grid, Switch, } from '@material-ui/core';
 import './ServerModule.scss';
 import { useHistory, useLocation } from 'react-router';
@@ -238,6 +238,25 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         }
     }
 
+    const sendTestWebhook = (moduleName: string) => {
+        if (!server) return;
+        instance.post(`/guilds/${server.id}/${moduleName}`, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(() => present({
+            message: 'Message sent successfully',
+            color: 'success',
+            duration: 3000,
+            buttons: [{ text: 'X', handler: () => dismiss() }],
+        })).catch(() => present({
+            message: 'An error occurred',
+            color: 'danger',
+            duration: 3000,
+            buttons: [{ text: 'X', handler: () => dismiss() }],
+        }));
+    }
+
     if (isLoading) {
         return (
             <div className="pt-10 flex justify-center items-center">
@@ -356,6 +375,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     {getOption()}
                                 </select>
                             </div>
+                            <IonButton onClick={() => sendTestWebhook('sendDailyMints')}>Send a test message </IonButton>
                         </Grid>
                         <Grid item xs={12} md={6} xl={6}>
                             <IonLabel className="text-base">
@@ -381,6 +401,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     {getOption()}
                                 </select>
                             </div>
+                            <IonButton onClick={() => sendTestWebhook('sendOneHourMints')}>Send a test message </IonButton>
                         </Grid>
                     </Grid>
                 </>
@@ -416,6 +437,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     {getOption()}
                                 </select>
                             </div>
+                            <IonButton onClick={() => sendTestWebhook('sendAnalytics')}>Send a test message </IonButton>
                         </Grid>
                     </Grid>
                 </>
