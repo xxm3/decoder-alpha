@@ -207,6 +207,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     };
 
     let getOption = () => {
+        // TODO: all dropdowns need to be ordered alphabeticlly
         return channel?.map((obj: any, index: number) => {
             return (
                 <option value={obj.id} key={index}>
@@ -382,6 +383,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             {getOption()}
                                         </select>
                                     </div>
+
+                                    Choose a channel above, then click the button below to make sure it worked
+                                    <br/>
+                                    <IonButton onClick={() => sendTestWebhook('sendDailyMints')}>Send a test message</IonButton>
                                 </Grid>
                                 <Grid item xs={12} md={6} xl={6}>
                                     <IonLabel className="text-base">
@@ -411,7 +416,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             {getOption()}
                                         </select>
                                     </div>
-                                    <IonButton onClick={() => sendTestWebhook('sendOneHourMints')}>Send a test message </IonButton>
+
+                                    Choose a channel above, then click the button below to make sure it worked
+                                    <br/>
+                                    <IonButton onClick={() => sendTestWebhook('sendOneHourMints')}>Send a test message</IonButton>
                                 </Grid>
                             </Grid>
                         </div>
@@ -453,7 +461,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             {getOption()}
                                         </select>
                                     </div>
-                                    <IonButton onClick={() => sendTestWebhook('sendAnalytics')}>Send a test message </IonButton>
+
+                                    Choose a channel above, then click the button below to make sure it worked
+                                    <br/>
+                                    <IonButton onClick={() => sendTestWebhook('sendAnalytics')}>Send a test message</IonButton>
                                 </Grid>
                             </Grid>
                         </div>
