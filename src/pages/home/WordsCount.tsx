@@ -15,22 +15,21 @@ const WordsCount = () => {
     const history = useHistory();
     const [present, dismiss] = useIonToast();
     const [wordList, setWordList] = useState<any>(null)
+    const [wordError, setWordError] = useState<boolean>(false)
 
     useEffect(() => {
         getWordCountByDuration()
     }, [])
 
     let getWordCountByDuration = async() =>{
-        instance
-                .get(
-                    '/getWordCountByDuration'
-                )
+        instance.get( '/getWordCountByDuration' )
                 .then((response) => {
                     let data = response.data.data
-                    console.log(data)
                     setWordList(data)
+                    setWordError(false)
                 })
                 .catch((error) => {
+                    setWordError(true)
                     let msg = '';
                         if (error && error.response) {
                             msg = String(error.response.data.body);
@@ -44,10 +43,6 @@ const WordsCount = () => {
                             buttons: [{ text: 'X', handler: () => dismiss() }],
                         });
                 })
-                .finally(() => {
-                    console.log("finally")
-                });
-
     }
     
 
@@ -88,21 +83,6 @@ const WordsCount = () => {
         }
     }
 
-    const wordsCountQuery = useQuery(['wordsCount'], getSearchedWords, {
-        select: (data: any) => {
-
-            // Error handling
-            if (data?.error && data.message) {
-                throw new Error(String(data.message));
-            }
-            return {
-                ...data,
-            }
-        },
-        // refetchOnWindowFocus: true,
-        retry: false
-    })
-
     /**
      * Use Effects
      */
@@ -114,14 +94,27 @@ const WordsCount = () => {
                     <Grid item xs={12} md={6} xl={4}>
                         <div className="secondary-bg-forced p-4 rounded-xl">
                             <div className="flex flex-col">
-                                <IonLabel className="ml-3 text-xl">
-                                Top 5 new words created in the last day
-                                </IonLabel>
-                                <div className='flex flex-col'>
-                                    {wordList?.yesterday.map((text:any,index:number)=>{
-                                        return <Link to={'search/' + text.word} className="ml-5 text-sm mt-2 underline underline-offset-2" key={index}> {text.word} </Link>
-                                    })}
-                                </div>
+                                { wordList?.yesterday ? 
+                                    
+                                    <>
+                                        <IonLabel className="ml-3 text-xl">
+                                        Top 5 new words created in the last day
+                                        </IonLabel>
+                                        <div className='flex flex-col'>
+                                            {wordList?.yesterday.map((text:any,index:number)=>{
+                                                return <Link to={'search/' + text.word} className="ml-5 text-sm mt-2 underline underline-offset-2" key={index}> {text.word} </Link>
+                                            })}
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                    {
+                                        wordError ? <div className='text-center'>Somthing went wrong</div> : <div className='text-center'>Loading...</div>
+                                    }
+                                    </> 
+                                    
+                                }
+                                
                             </div>
                         </div>
                     </Grid>
@@ -129,14 +122,24 @@ const WordsCount = () => {
                     <Grid item xs={12} md={6} xl={4}>
                         <div className="secondary-bg-forced p-4 rounded-xl">
                             <div className="flex flex-col">
-                                <IonLabel className="ml-3 text-xl">
-                                Top 5 new words that were created in last 3 days
-                                </IonLabel>
-                                <div className='flex flex-col'>
-                                {wordList&&wordList['3days'].map((text:any,index:number)=>{
-                                        return <Link to={'search/' + text.word} className="ml-5 text-sm underline underline-offset-2 mt-2" key={index}> {text.word} </Link>
-                                    })}
-                                </div>
+                                { wordList ?
+                                 <>
+                                    <IonLabel className="ml-3 text-xl">
+                                    Top 5 new words that were created in last 3 days
+                                    </IonLabel>
+                                    <div className='flex flex-col'>
+                                        {wordList && wordList['3days'].map((text:any,index:number)=>{
+                                            return <Link to={'search/' + text.word} className="ml-5 text-sm underline underline-offset-2 mt-2" key={index}> {text.word} </Link>
+                                        })}
+                                    </div>
+                                </>
+                                :
+                                <>
+                                    {
+                                        wordError ? <div className='text-center'>Somthing went wrong</div> : <div className='text-center'>Loading...</div>
+                                    }
+                                </> 
+                              }
                             </div>
                         </div>
                     </Grid>
@@ -144,15 +147,24 @@ const WordsCount = () => {
                     <Grid item xs={12} md={6} xl={4}>
                         <div className="secondary-bg-forced p-4 rounded-xl">
                             <div className="flex flex-col">
-                                <IonLabel className="ml-3 text-xl">
-                                Top 5 new words that were created in the last 5 days
-                                </IonLabel>
-                                <div className='flex flex-col'>
-                                {wordList&&wordList['5days'].map((text:any,index:number)=>{
-                                        return <Link to={'search/' + text.word} className="ml-5 text-sm underline underline-offset-2 mt-2" key={index}> {text.word} </Link>
-                                    })}
-                                </div>
-                                
+                                {wordList ?
+                                    <>
+                                        <IonLabel className="ml-3 text-xl">
+                                        Top 5 new words that were created in the last 5 days
+                                        </IonLabel>
+                                        <div className='flex flex-col'>
+                                            {wordList && wordList['5days'].map((text:any,index:number)=>{
+                                                return <Link to={'search/' + text.word} className="ml-5 text-sm underline underline-offset-2 mt-2" key={index}> {text.word} </Link>
+                                            })}
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                    {
+                                        wordError ? <div className='text-center'>Somthing went wrong</div> : <div className='text-center'>Loading...</div>
+                                    }
+                                    </> 
+                                }
                             </div>
                         </div>
                     </Grid>

@@ -509,13 +509,13 @@ const Schedule = () => {
                                                                 columnsButton: isMobile ? false : true,
                                                             }}
                                                             // calendar icon for show calendar do not remove
-                                                            // actions={[
-                                                            //     {
-                                                            //         icon: () => <IonIcon icon={calendarOutline} className="text-3xl " />,
-                                                            //         onClick: () => history.push( { pathname: '/schedulecalendar',state:mints}),
-                                                            //         isFreeAction: true,
-                                                            //     },
-                                                            // ]}
+                                                            actions={[
+                                                                {
+                                                                    icon: () => <IonIcon icon={calendarOutline} className="text-3xl " />,
+                                                                    onClick: () => history.push( { pathname: '/schedulecalendar',state:mints}),
+                                                                    isFreeAction: true,
+                                                                },
+                                                            ]}
 
                                                             components={{
                                                                 Toolbar: (Toolbarprops) => {

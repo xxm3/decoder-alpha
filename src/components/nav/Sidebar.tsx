@@ -129,10 +129,10 @@ function Sidebar() {
                     to="#"
                     external={'https://twitter.com/SOL_Decoder'}
                 />
-
-                <div className="xl:hidden lg:hidden md:hidden">
+                {/* hide wallet button in mobile so don't comment out */}
+                {/* <div className="xl:hidden lg:hidden md:hidden">
                     <WalletButton />
-                </div>
+                </div> */}
                <div className="text-center mt-4 text-white-500">Version <b>{VERSION_CODE}</b></div>
 
             </IonList>

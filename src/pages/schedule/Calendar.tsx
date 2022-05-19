@@ -186,7 +186,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                 onSelectSlot={(e: any)=>{handleSlotSelect(e)}}
                                 selectable
                                 onNavigate = {(action: Date)=> onNavigate(action)}
-                                style={{ height: isMobile ? 420 : 700 }}
+                                style={{ height: isMobile ? 500 : 700 }}
                                 startAccessor='start'
                                 endAccessor='end'
                                 date={selectDate}

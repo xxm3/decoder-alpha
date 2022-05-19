@@ -20,7 +20,7 @@ function MintChart({selectedEvent}: any) {
     };
     // resize window
     const [width, setWidth] = useState(window.innerWidth);
-    const [foxLineData, setFoxLineData] = useState(defaultGraph);
+    const [mintLineData, setmintLineData] = useState(defaultGraph);
     const chartsRef = useRef<HTMLDivElement | null>(null);
    
     // for setting height of chart, depending on what width browser is
@@ -35,11 +35,13 @@ function MintChart({selectedEvent}: any) {
 
     // viewing the chart for a calendar
     const viewChart = () => {
-        setFoxLineData(defaultGraph);
+        setmintLineData(defaultGraph);
 
         instance
             .get( environment.backendApi + '/mintInfo?mintId=' + selectedEvent?.id )
             .then((res) => {
+               
+
                 const labels = res.data.data.map((el: { date: Date }) => {
                     return moment(el.date,'DD MM YYYY').format('l');
                 });
@@ -47,7 +49,6 @@ function MintChart({selectedEvent}: any) {
                 const discordAllData = res.data.data.map((el: { discord_all: any }) => {
                     return parseInt(el.discord_all);
                 });
-
                 const tweetInteractionsData = res.data.data.map((el: { tweetInteractions: any }) =>
                         parseInt(el.tweetInteractions)
                 );
@@ -55,6 +56,7 @@ function MintChart({selectedEvent}: any) {
                 const discordOnlineData = res.data.data.map((el: { discord_online: any }) =>
                         parseInt(el.discord_online)
                 );
+
 
                 if (discordAllData.length === 0 && tweetInteractionsData.length === 0 && discordOnlineData.length ===0) {
                     present({
@@ -67,7 +69,7 @@ function MintChart({selectedEvent}: any) {
                 let datasetsAry = [
                     {
                         type: 'line' as const,
-                        yAxisID: 'y',
+                        yAxisID: 'y0',
                         label: 'Discord All',
                         borderColor: '#14F195',
                         data:discordAllData,
@@ -78,7 +80,7 @@ function MintChart({selectedEvent}: any) {
                     },
                     {
                         type: 'line' as const,
-                        yAxisID: 'y1',
+                        yAxisID: 'y0',
                         label: 'Discord Online',
                         borderColor: '#9052F8' ,
                         data:discordOnlineData,
@@ -89,7 +91,7 @@ function MintChart({selectedEvent}: any) {
                     },
                     {
                         type: 'line' as const,
-                        yAxisID: 'y2',
+                        yAxisID: 'y0',
                         label: 'Tweet Interactions',
                         borderColor:'#0052FF',
                         data:tweetInteractionsData,
@@ -98,8 +100,9 @@ function MintChart({selectedEvent}: any) {
                             above: '#0052FF05',
                         },
                     },
+                    
                 ];
-                setFoxLineData({
+                setmintLineData({
                     labels: labels,
                     datasets: datasetsAry,
                 });
@@ -130,9 +133,9 @@ function MintChart({selectedEvent}: any) {
 
     return (
         <>
-            <div className="calendarCharts px-5  default-chart-theme " css={css` background-color: var(--ion-color-step-50); `} ref={chartsRef} >
+            <div className="calendarCharts px-5 default-chart-theme " css={css` background-color: var(--ion-color-step-50); `} ref={chartsRef} >
                 <div className="chart">
-                    <Chart type="line" data={foxLineData} height={tableHeight}
+                    <Chart type="line" data={mintLineData} height={tableHeight}
                         options={{
                             responsive: true,
                             maintainAspectRatio: true,
@@ -141,45 +144,16 @@ function MintChart({selectedEvent}: any) {
                                 intersect: true
                             },
                             plugins: {
-                                legend: { display: true},
+                                legend: { display: false},
                                 tooltip: { mode: 'index', intersect: false, },
                             },
                             scales: {
-                                y: { 
-                                    stacked: true,
-                                    type: 'linear',
-                                    position: 'left',
-                                    grid: {
-                                        color: '#b3b3ff',
-                                    },
-                                    suggestedMin: 0,
-                                },
-                                y1: {
-                                    stacked: true,
-                                    type: 'linear',
-                                    position: 'right',
-                                    grid: {
-                                        color: '#9052F8',
-                                    },
-                                    suggestedMin: 0,
-                                },
-                                y2: {
-                                    stacked: true,
-                                    type: 'linear',
-                                    position: 'none',
-                                    grid: {
-                                        color: '#C74AE3',
-                                    },
-                                    suggestedMin: 0,
-                                },
                                 x: {
                                     ticks: {
-                                        autoSkip: true,
-                                        maxTicksLimit: 8,
+                                        precision: 0
                                     },
-                                },
-                            },
-                            // get rid of points on graph
+                                  },
+                              },
                             elements: {
                                 point: {
                                     radius: 0,
