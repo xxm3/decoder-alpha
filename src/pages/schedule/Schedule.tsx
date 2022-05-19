@@ -8,7 +8,7 @@ import { IonContent, IonIcon, IonRippleEffect, useIonToast, IonRefresher, IonRef
 import './Schedule.css'
 import { Column, MTableToolbar } from '@material-table/core';
 import Table from '../../components/Table';
-import { logoDiscord, logoTwitter, link, navigate } from 'ionicons/icons';
+import { logoDiscord, logoTwitter, link, navigate,calendarOutline } from 'ionicons/icons';
 import { useHistory } from "react-router";
 import usePersistentState from '../../hooks/usePersistentState';
 import { RefresherEventDetail } from '@ionic/core';
@@ -508,6 +508,14 @@ const Schedule = () => {
                                                                 paging: isPaging,
                                                                 columnsButton: isMobile ? false : true,
                                                             }}
+                                                            // calendar icon for show calendar do not remove
+                                                            actions={[
+                                                                {
+                                                                    icon: () => <IonIcon icon={calendarOutline} className="text-3xl " />,
+                                                                    onClick: () => history.push( { pathname: '/schedulecalendar',state:mints}),
+                                                                    isFreeAction: true,
+                                                                },
+                                                            ]}
 
                                                             components={{
                                                                 Toolbar: (Toolbarprops) => {

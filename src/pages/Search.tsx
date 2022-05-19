@@ -1,9 +1,7 @@
 import React, {useCallback, useMemo, useRef} from 'react';
 import Display from '../components/search/Display';
 import {useState, useEffect} from 'react';
-import {
-    IonButton, IonContent, IonPage, useIonToast,
-} from '@ionic/react';
+import { IonButton, IonContent, IonPage, IonRefresher, IonRefresherContent, useIonToast, } from '@ionic/react';
 import './Search.css';
 import {useHistory, useParams} from 'react-router';
 import {instance} from '../axios';
@@ -15,6 +13,8 @@ import DisplayGraph from '../components/search/DisplayGraph';
 import Loader from '../components/Loader';
 import SearchSkeleton from '../components/search/SearchSkeleton';
 import {AppComponentProps} from '../components/Route';
+import { RefresherEventDetail } from '@ionic/core';
+
 
 const Search: React.FC<AppComponentProps> = ({contentRef}) => {
 
@@ -26,13 +26,15 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
 
     const [width, setWidth] = useState(window.innerWidth);
     const [currentPage, setCurrentPage] = useState(0);
+    const [showFoxTokenLink, setShowFoxTokenLink] = useState<boolean>(false)
+    const [isMobile, setIsMobile] = useState(false);
+
     // const [searchText, setSearchText] = useState(useParams<{id: string}>());
 
 
     const {id: searchText} = useParams<{
         id: string;
     }>();
-
     /**
      * Use Effects
      */
@@ -57,15 +59,38 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
         return () => window.removeEventListener('resize', resizeWidth);
     }, []);
 
+    useEffect(() => {
+        if (window.innerWidth < 525) {
+            setIsMobile(true)
+        }
+    }, [window.innerWidth])
+
     // Whenever new word searched current page will set to its default value i.e. 0
     useEffect(() => {
         setCurrentPage(0);
     }, [searchText])
 
+    useEffect(() => {
+      if(searchText.length >= 43 && searchText.length <= 44){
+        setShowFoxTokenLink(true)
+      }else{
+        setShowFoxTokenLink(false)
+      }
+    }, [searchText])
+    
 
     /**
      * Functions
      */
+
+    // Pull to refresh function
+    function doRefresh(event: CustomEvent<RefresherEventDetail>) {
+        setTimeout(() => {
+            fetchSearchMessages();
+            fetchGraph();
+            event.detail.complete();
+        }, 1000);
+    }
 
     const useMountEffect = (fun: any) => useEffect(fun, []);
 
@@ -234,6 +259,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
 
             {/* ERROR bar */}
             {graphQuery.isError || messageQuery.isError || messageQuery?.data?.error || graphQuery?.data?.error ? (
+                <>
                 <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                     <p className="text-lg text-red-700 font-medium">
 
@@ -241,15 +267,20 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                         <b>{(messageQuery?.error as Error)?.message ||
                             (graphQuery?.error as Error)?.message || 'Unable to connect, please try again later'}</b>
                     </p>
-                    <span
-                        className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                                            !
-                                        </span>
+                    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                        !
+                    </span>
                 </div>
-
+                {
+                    showFoxTokenLink ? <div className='text-center text-lg cursor-pointer text-blue-500 mt-4' onClick={() => history.push( { pathname: '/foxtoken',search: searchText })}>Searching for a token? Click here to search on this in the Fox Token page</div> : ''
+                }
+                </>
                 // actual content
             ) : (
                 <>
+                {isMobile ? <IonRefresher slot="fixed" onIonRefresh={doRefresh} pullFactor={0.5} pullMin={100} pullMax={200} >
+                                <IonRefresherContent/>
+                            </IonRefresher> : ''}
                     {graphQuery?.isFetching ? <div className=" m-16 flex justify-center items-center"><Loader/></div> :
                         graphQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                 <b>{"Error while loading message"}</b>
@@ -270,7 +301,8 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                             <Display {...{
                                 messages: messageQuery?.data?.messages ?? [],
                                 totalCount: messageQuery?.data?.totalCount
-                            }}/>}
+                            }}/>
+                    }
 
                     {(messageQuery?.data?.totalCount ?? 0) > 5 && (
                         <>

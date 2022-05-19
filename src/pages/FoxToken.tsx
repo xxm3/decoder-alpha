@@ -1,6 +1,6 @@
 import {
     IonButton,IonList,IonLabel,IonItem,IonInput,IonModal,IonContent,IonHeader,
-    IonToolbar, IonTitle, useIonToast, IonIcon, IonRippleEffect,IonRefresher, IonRefresherContent
+    IonToolbar, IonTitle, useIonToast, IonIcon, IonRippleEffect,IonRefresher, IonRefresherContent, IonGrid
 } from '@ionic/react';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import Loader from "../components/Loader";
@@ -114,6 +114,12 @@ const columns: Column<FoxTokenData> [] = [
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
     },
     {
+        title: 'createdAt',
+        render: (record) => <span>{moment(record.createdAt).format('DD-MM-YYYY')}</span>,
+        customSort: (a, b) => new Date(a.createdAt) as any - (new Date(b.createdAt) as any),
+          
+    },
+    {
         title: '',
         render: (record) =>
             <>
@@ -189,6 +195,7 @@ const columns_mobile: Column<FoxTokenData>[] = [
                 {record?.row_obj?.lastSaleDate && <><br/><span><b>Last Sale Date : </b>{moment(record.row_obj.lastSaleDate).fromNow()}</span></>}
                 {record?.row_obj?.whichMyWallets &&<><br/><span><b>Owned : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[0] : ''}</span></>}
                 {record?.row_obj?.whichMyWallets && <><br/><span><b>Wallet : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[1] : ''}</span></>}
+                {record?.row_obj?.createdAt && <><br/><span><b>createdAt : </b>{record.row_obj.createdAt ? moment(record.row_obj.createdAt).format('DD-MM-YYYY'): ''}</span></>}
             </span>
         ),
         customSort: (a, b) => a.token.localeCompare(b.token),
@@ -1136,6 +1143,7 @@ function FoxToken({contentRef}: FoxToken) {
                                 },
                             ]}
                             options={{
+                                thirdSortClick: false,
                                 detailPanelType: 'single',
                                 search: true,
                                 // sortModel={sortModel},

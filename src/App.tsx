@@ -18,7 +18,7 @@ import { Network } from '@capacitor/network';
 import { useEffect, useRef, useState } from 'react';
 import { auth } from './firebase';
 import { IUser } from './types/User';
-import { Route } from 'react-router';
+import { Route, Switch } from 'react-router';
 import './App.css';
 import Loader from './components/Loader';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -51,6 +51,10 @@ import Schedule from './pages/schedule/Schedule';
 import Bots from './pages/bots/Bots';
 import ManageServer from './pages/bots/ManageServer';
 import ServerModule from './pages/bots/ServerModule';
+import ScheduleCalendar from './pages/schedule/Calendar';
+import Staking from './pages/staking/Staking';
+import MarketPlace from './pages/marketplace/MarketPlace';
+
 // // https://javascript.plainenglish.io/how-to-setup-and-add-google-analytics-to-your-react-app-fd361f47ac7b
 // const TRACKING_ID = "G-Z3GDFZ53DN";
 // ReactGA.initialize(TRACKING_ID);
@@ -74,6 +78,8 @@ import PrivacyPolicy from './pages/home/PrivacyPolicy';
 import { getPlatforms, isPlatform, getConfig } from '@ionic/react';
 import { AppVersion } from '@awesome-cordova-plugins/app-version';
 import { async } from '@firebase/util';
+
+
 
 const App = () => {
     const [networkState, setNetworkState] = useState(true);
@@ -227,7 +233,23 @@ const App = () => {
                                     <>
                                         <IonReactRouter>
                                             <IonRouterOutlet id="router">
-                                                <Route>
+                                            <Switch>
+                                                <AppRoute
+                                                exact
+                                                path="/staking"
+                                                component={
+                                                    Staking
+                                                }
+                                                />
+                                                <AppRoute
+                                                exact
+                                                path="/marketplace"
+                                                component={
+                                                    MarketPlace
+                                                }
+                                                />
+                                                {/*  */}
+                                                <Route path="/*">
                                                     <IonPage>
                                                         <IonGrid className="w-screen h-screen flex flex-col relative">
                                                             <IonRow>
@@ -334,6 +356,12 @@ const App = () => {
                                                                                 {/*    }*/}
                                                                                 {/*/>*/}
 
+                                                                                {/* Calendar page */}
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/schedulecalendar"
+                                                                                    component={ ScheduleCalendar }
+                                                                                />
                                                                                 {/* manage server */}
                                                                                 <ProtectedRoute
                                                                                     exact
@@ -376,6 +404,7 @@ const App = () => {
                                                         </IonGrid>
                                                     </IonPage>
                                                 </Route>
+                                            </Switch>
                                             </IonRouterOutlet>
                                         </IonReactRouter>
                                     </>

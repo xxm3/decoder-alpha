@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
-import {  IonButton, IonLabel,  useIonToast } from '@ionic/react';
+import {  IonItem, IonButton, IonLabel,  useIonToast } from '@ionic/react';
 import { Backdrop,CircularProgress,Grid, Switch, } from '@material-ui/core';
+import {Tooltip} from "react-tippy";
 import './ServerModule.scss';
 import { useHistory, useLocation } from 'react-router';
 import Loader from '../../components/Loader';
+import Help from '../../components/Help';
+
 
 interface LocationParams {
     pathname: string;
@@ -26,7 +29,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     /**
      * States & Variables
      */
-     let history = useHistory();
+    let history = useHistory();
     const location: LocationParams = useLocation();
     const [isMobile, setIsMobile] = useState(false);
     const [checked, setChecked] = useState<{
@@ -50,6 +53,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [present, dismiss] = useIonToast();
 
     const [role, setRole] = useState<any>(null)
+    
 
     /**
      * Use Effects
@@ -78,11 +82,14 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     .get(`/guilds/${serverObj.id}`)
                     .then((response) => {
                         let data = response.data.data;
-                        setChecked({
-                            ...checked,
-                            mintInfoModule: data.mintInfoModule,
-                            tokenModule: data.tokenModule,
-                        });
+                        if(role ==='3NFT' || role ==='4NFT'){
+                            setChecked({
+                                ...checked,
+                                mintInfoModule: data.mintInfoModule,
+                                tokenModule: data.tokenModule,
+                            });
+                        }
+                        
 
                         setDropdownValue({
                             ...dropdownValue,
@@ -217,10 +224,19 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         });
     };
 
-    // when to disable the module radio button...
+  let showDisableBtnMesage = (message:string) => {
+    present({
+        message: message,
+        color: 'danger',
+        duration: 5000,
+        buttons: [{ text: 'X', handler: () => dismiss() }],
+    });
+  }
+    
     let disableButton = (btnType:any) =>{
         if(role==='No Roles'){
-            return true;
+            showDisableBtnMesage('You are not the owner')
+            return true
         }else if(role==='3NFT'){
             if(checked.mintInfoModule || checked.tokenModule){
                 if(btnType === 'mintInfoModule' &&checked.mintInfoModule){
@@ -228,7 +244,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 }else if(btnType === 'tokenModule' &&checked.tokenModule){
                     return false;
                 }else{
-                    return true;
+                    showDisableBtnMesage('You are Authorized to edit only 1 module')
+                    return true
                 }
             }else{
                 return false;
@@ -236,7 +253,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         }else if(role==='4NFT'){
             return false;
         }else{
-            return true;
+            showDisableBtnMesage('You are not the owner')
+            return true
         }
     }
 
@@ -291,11 +309,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 <div className="module-icon-wrapper ml-3">
                                     <img src={require('../../images/me.png')} />
                                 </div>
-                                <Switch checked={checked.mintInfoModule} onChange={( e: React.ChangeEvent<HTMLInputElement> ) => {
+                                <Switch 
+                                checked={checked.mintInfoModule} 
+                                onChange={( e: React.ChangeEvent<HTMLInputElement> ) => {
+                                    if(disableButton('mintInfoModule')){
+                                        return
+                                    }
                                         enableModule({ module: 'mintInfoModule', enabled: e.target.checked, });
                                     }}
-                                  disabled={disableButton('mintInfoModule')}
                                 />
+                                
                             </div>
                             <div className="flex flex-col mt-4">
                                 <IonLabel className="ml-3 text-xl">
@@ -325,12 +348,15 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     onChange={(
                                         e: React.ChangeEvent<HTMLInputElement>
                                     ) => {
+                                        if(disableButton('tokenModule')){
+                                            return
+                                        }
                                         enableModule({
                                             module: 'tokenModule',
                                             enabled: e.target.checked,
                                         });
                                     }}
-                                    disabled={disableButton('tokenModule')}
+                                    // disabled={disableButton('tokenModule')}
                                 />
                             </div>
                             <div className="flex flex-col mt-4">
