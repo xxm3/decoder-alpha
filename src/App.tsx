@@ -249,7 +249,7 @@ const App = () => {
                                                 }
                                                 />
                                                 {/*  */}
-                                                <Route path="/" exact>
+                                                <Route path="/*">
                                                     <IonPage>
                                                         <IonGrid className="w-screen h-screen flex flex-col relative">
                                                             <IonRow>
