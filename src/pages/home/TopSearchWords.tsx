@@ -49,7 +49,7 @@ const TopSearchWords = () => {
         select: (data: any) => {
 
             // Error handling
-            if (data?.error && data.message) {
+            if (data.error && data.message) {
                 throw new Error(String(data.message));
             }
             return {
@@ -67,7 +67,7 @@ const TopSearchWords = () => {
     return (
         // bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4
         <div className="secondary-bg-forced m-1 p-4 rounded-xl mt-7">
-            {topSearchWordsQuery?.isFetching ?
+            {topSearchWordsQuery.isFetching ?
                 <div className="flex justify-center items-center">
                     {/*<Loader/>*/}
                     Loading . . .

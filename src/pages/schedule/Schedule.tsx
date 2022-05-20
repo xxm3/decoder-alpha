@@ -98,7 +98,7 @@ const Schedule = () => {
 
     const GetUserTimeZone = async() => {
         await instance.get(`${environment.backendApi}/currentUser`)
-        .then((res: any) =>  userTimezone = res?.data?.user?.timezone)
+        .then((res: any) =>  userTimezone = res.data.user.timezone)
     }
 
     // console.log('no time zone', moment.tz.names())
@@ -228,7 +228,7 @@ const Schedule = () => {
      */
         // const mintExpiresAt = (arr: any) => {
         //   for(let i = 0; i < arr.length; i++) {
-        //     if(arr[i].mintExpiresAt || arr[i].mintExpiresAt?.length !== 0) {
+        //     if(arr[i].mintExpiresAt || arr[i].mintExpiresAt.length !== 0) {
         //       const timeNow = moment()
         //       const timeExpiresAt = moment(arr[i].mintExpiresAt)
         //
@@ -282,14 +282,14 @@ const Schedule = () => {
                     </div>
 
                     <div className="" onClick={() => handleProjectClick(record)}>
-                        {record?.project && <span><b>Name : </b>{record.project}</span>}
-                        {record?.mintExpiresAt && <span><br /><b>Time : </b> <span>{record.updateTime || record.time.replace('UTC', '')}<span hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}>{record.mintExpiresAt}</span></span></span>}
-                        {record?.price && <div className='flex flex-row'><b>Price : </b><div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'flex flex-row ml-1 ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}></div></div>}
-                        {record?.count && <span><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {record?.numbersOfDiscordMembers && <span><br /><b>Discord (all) : </b>{record.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {record?.DiscordOnlineMembers && <span><br /><b>Discord (online) : </b>{record.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {record?.numbersOfTwitterFollowers && <span><br /><b>Twitter : </b>{record.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {record?.tweetInteraction?.total && <span><br /><b>Twitter Interaction : </b>{record.tweetInteraction.total}</span>}
+                        {record.project && <span><b>Name : </b>{record.project}</span>}
+                        {record.mintExpiresAt && <span><br /><b>Time : </b> <span>{record.updateTime || record.time.replace('UTC', '')}<span hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}>{record.mintExpiresAt}</span></span></span>}
+                        {record.price && <div className='flex flex-row'><b>Price : </b><div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'flex flex-row ml-1 ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}></div></div>}
+                        {record.count && <span><b>Supply : </b>{record.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {record.numbersOfDiscordMembers && <span><br /><b>Discord (all) : </b>{record.numbersOfDiscordMembers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {record.DiscordOnlineMembers && <span><br /><b>Discord (online) : </b>{record.DiscordOnlineMembers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {record.numbersOfTwitterFollowers && <span><br /><b>Twitter : </b>{record.numbersOfTwitterFollowers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {record.tweetInteraction.total && <span><br /><b>Twitter Interaction : </b>{record.tweetInteraction.total}</span>}
                     </div>
 
                 </div>
@@ -360,7 +360,7 @@ const Schedule = () => {
             title: 'Name',
             render: (record) => (
                 <>
-                    <img className={`avatarImg ${!record?.image ? 'hiddenImg' : ''}`} key={record?.image} src={record?.image} />
+                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image} src={record.image} />
                     <span
                         // cursor-pointer
                         className=""
@@ -409,14 +409,14 @@ const Schedule = () => {
         {
             title: 'Supply',
             customSort: (a, b) => + a.count.replace(',', '') - + b.count.replace(',', ''),
-            render: (record) => <span>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>,
+            render: (record) => <span>{record.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>,
         },
         {
             title: 'Discord (all)',
             render: (record) => (
                 <>
                     {record.numbersOfDiscordMembers
-                        ?.toString()
+                        .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 </>
             ),
@@ -428,7 +428,7 @@ const Schedule = () => {
             render: (record) => (
                 <>
                     {record.DiscordOnlineMembers
-                        ?.toString()
+                        .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 </>
             ),
@@ -440,7 +440,7 @@ const Schedule = () => {
             render: (record) => (
                 <>
                     {record.numbersOfTwitterFollowers
-                        ?.toString()
+                        .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 </>
             ),
@@ -455,9 +455,9 @@ const Schedule = () => {
                 <>
                     <span>
                         {record.tweetInteraction.total}
-                        {/*likes: {record.tweetInteraction?.likes} <br />*/}
-                        {/*comments: {record.tweetInteraction?.comments} <br />*/}
-                        {/*retweets: {record.tweetInteraction?.retweets}*/}
+                        {/*likes: {record.tweetInteraction.likes} <br />*/}
+                        {/*comments: {record.tweetInteraction.comments} <br />*/}
+                        {/*retweets: {record.tweetInteraction.retweets}*/}
                     </span>
                 </>
             ),
@@ -500,7 +500,7 @@ const Schedule = () => {
                                                                     border : mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.876) !important' : '1px solid rgba(10,10,10,0.8) !important'
                                                                 },
                                                                 rowStyle: (rowData: any) => ({
-                                                                    fontWeight: timeCount(rowData?.time) ? '' : "",
+                                                                    fontWeight: timeCount(rowData.time) ? '' : "",
                                                                     backgroundColor: mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
                                                                     color: mode === 'dark' ? "" : '#202124',
                                                                     borderTop: mode === 'dark' ? "" : '1px solid rgba(260,260,260,0.8)',
@@ -547,7 +547,7 @@ const Schedule = () => {
                                                                                         placeholder='select time zone'
                                                                                         style={{ width:'100%', lineHeight:1.2,border: `1px solid rgba(171, 171, 171, 0.876)`,borderRadius:'20px',paddingLeft:'10px'}}
                                                                                         onChange={(selected: any) => { setSelectedTimezone({...selected.target}) }} >
-                                                                                            { TimezoneData.map((item:any,index:number)=>{ return (<MenuItem key={index} value={item?.value}>{item?.label}</MenuItem>)} )}
+                                                                                            {TimezoneData && TimezoneData.map((item:any,index:number)=>{ return (<MenuItem key={index} value={item.value}>{item.label}</MenuItem>)} )}
                                                                                         </Select>
                                                                                 </div>
                                                                             </Grid>
@@ -586,7 +586,7 @@ const Schedule = () => {
                         title={`Mint Schedule - ${date}`}
                         options={{
                             rowStyle:( rowData:any) =>  ({
-                                fontWeight: timeCount (rowData?.time) ? '900' : "",
+                                fontWeight: timeCount (rowData.time) ? '900' : "",
                                 backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
                                 color: mode === 'dark' ? "" : '#4B5563',
                                 borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
@@ -605,7 +605,7 @@ const Schedule = () => {
                           <IonContent>
                             {
                               splitCollectionName.length
-                              && splitCollectionName?.map(name => (
+                              && splitCollectionName.map(name => (
                                   <div key={name} className='text-center'>
                                     <span style={{color: 'white'}}>{name}</span> <br />
                                   </div>

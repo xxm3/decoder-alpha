@@ -124,7 +124,7 @@ function StackedSearch({ foo, onSubmit }: any) {
                 });
             }
 
-            const labels = dispLabelsDailyCount(rawFetchedData[0]?.ten_day_count, true);
+            const labels = dispLabelsDailyCount( rawFetchedData && rawFetchedData[0].ten_day_count, true);
 
             // console.log(labels);
             // console.log(datasetsAry);
@@ -217,7 +217,7 @@ function StackedSearch({ foo, onSubmit }: any) {
                     ) : (
                         // graph itself
                         <>
-                            {stackedLineData.labels?.length === 0 ? (
+                            { stackedLineData.labels && stackedLineData.labels.length === 0 ? (
                                 <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                                     <p className="text-lg text-red-700 font-medium">
                                         <b> No data available </b>
@@ -225,7 +225,7 @@ function StackedSearch({ foo, onSubmit }: any) {
                                     <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2"> ! </span>
                                 </div>
                                 ) : (
-                                <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg default-chart-theme" hidden={ graphStackedLoading || stackedLineData.labels?.length === 1 } >
+                                <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg default-chart-theme" hidden={ graphStackedLoading ||  stackedLineData.labels && stackedLineData.labels.length === 1 } >
                                     <Chart
                                         type="line"
                                         data={stackedLineData}

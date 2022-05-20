@@ -52,7 +52,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             //     // @ts-expect-error
             //     time : message.createdAt ? message.createdAt : message.time_stamp
             // }))
-            data.subsequentMsg = data.subsequentMsg.map(message => ({
+            data.subsequentMsg = data && data.subsequentMsg.map(message => ({
                 ...message,
                 // @ts-expect-error
                 time : message.createdAt ? message.createdAt : message.time_stamp
@@ -64,7 +64,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             return [...data.subsequentMsg];
 
         } catch (e) {
-            console.error('try/catch in MessageThread.tsx: ', e);
+            // console.error('try/catch in MessageThread.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
 
             // if (error && error.response) {
@@ -85,7 +85,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         fetchPreviousPage,
     } = useInfiniteQuery(['messageThread', message.id], fetchContext, {
         getNextPageParam: (lastPage): PageParam => {
-            const lastMessageId = lastPage?.slice(-1)[0]?.id;
+            const lastMessageId =  lastPage?.slice(-1)[0]?.id;
             return lastMessageId
                 ? {
                       messageId: lastMessageId,
@@ -96,7 +96,10 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                 : undefined;
         },
         getPreviousPageParam: (firstPage) => {
-            const firstMessageId = firstPage[0]?.id;
+            let firstMessageId 
+            if(firstPage[0]){
+                firstMessageId = firstPage[0].id;
+            }
             return firstMessageId
                 ? {
                       messageId: firstMessageId,

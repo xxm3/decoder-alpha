@@ -74,7 +74,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     // get guilds
     useEffect(() => {
         if (location) {
-            if (location?.state?.server) {
+            if (location.state.server) {
                 setIsLoading(true);
                 let serverObj = location.state.server;
                 setServer(serverObj);
@@ -215,7 +215,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     let getOption = () => {
         // TODO: all dropdowns need to be ordered alphabeticlly
-        return channel?.map((obj: any, index: number) => {
+        return channel && channel.map((obj: any, index: number) => {
             return (
                 <option value={obj.id} key={index}>
                     {obj.name}

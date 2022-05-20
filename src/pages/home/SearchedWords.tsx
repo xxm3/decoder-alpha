@@ -54,7 +54,7 @@ const SearchedWords = () => {
         select: (data: any) => {
 
             // Error handling
-            if (data?.error && data.message) {
+            if (data.error && data.message) {
                 throw new Error(String(data.message));
             }
             return {
@@ -72,7 +72,7 @@ const SearchedWords = () => {
     return (
         // bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4
         <div className="secondary-bg-forced m-1 p-4 rounded-xl">
-            {searchWordsQuery?.isFetching ?
+            {searchWordsQuery.isFetching ?
                 <div className="flex justify-center items-center">
                     {/*<Loader/>*/}
                     Loading . . .
@@ -83,7 +83,7 @@ const SearchedWords = () => {
                     <div>
                         <ul style={{listStyle: 'disc'}}>
                             {
-                                searchWordsQuery?.data?.data?.map((word: any) => (
+                                searchWordsQuery && searchWordsQuery.data.data.map((word: any) => (
                                     <li key={word.createdAt} className="ml-3">
                                         <Link to={'search/' + word.searchterm} className="underline">
                                             {word.searchterm.length > 20 ?
@@ -110,10 +110,10 @@ const SearchedWords = () => {
 //         <div className="flex flex-col h-auto w-full flex-auto">
 //             <div className='grid grid-cols-2 2xl:gap-5 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-8 gap-10 py-0 w-full'>
 //                 {
-//                     searchWordsQuery?.data?.data?.map((word: any) => (
+//                     searchWordsQuery.data.data.map((word: any) => (
 //                         <div key={word.createdAt} className="flex justify-center items-center border border-primary shadow-lg w-full rounded h-40 cursor-pointer text-center ">
 //                             <Link to={'search/' + word.searchterm} className="bg-primary text-white font-bold py-2 px-4 rounded">
-//                                 {word?.searchterm?.length > 20 ?
+//                                 {word.searchterm.length > 20 ?
 //                                     word.searchterm.substring(0, 20) + "..." :
 //                                     word.searchterm}
 //                                 {/*&nbsp; ({moment(word.createdAt).fromNow()})*/}

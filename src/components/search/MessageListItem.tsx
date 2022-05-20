@@ -124,18 +124,26 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         {<ReactMarkdown
 								components={{
 									strong({ children, ...props  }){
-										const strongWord = children[0]?.toString()
-										return <b {...props} className={strongWord?.toString().toLowerCase() === word.toLowerCase() ? "searched_word" : ""}>{children}</b>
+                                        let strongWord
+                                        if(children[0]){
+                                            strongWord = children[0].toString()
+                                        }
+										return <b {...props} className={strongWord && strongWord.toString().toLowerCase() === word.toLowerCase() ? "searched_word" : ""}>{children}</b>
 									},
 									a({ href, ...props }){
 										return <a href={href} onClick={e => e.stopPropagation()} {...props} className="text-blue-300 dark:text-blue-600" target="_blank" />
 									},
 									code({node, inline, className, children, ...props}) {
-										const codeWord = children[0]?.toString()
+                                        let codeWord
+                                        if(children[0]){
+                                           codeWord = children[0].toString()
+                                        }
 										let isMention = false;
-										if(codeWord?.startsWith("@") || codeWord?.startsWith("#")){
-											isMention = true
-										}
+                                        if(codeWord){
+                                            if(codeWord.startsWith("@") || codeWord.startsWith("#")){
+                                                isMention = true
+                                            }
+                                        }
 										return isMention && inline ? (
                                             <span
                                                 {...props}

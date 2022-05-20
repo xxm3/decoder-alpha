@@ -94,11 +94,11 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
 
     const useMountEffect = (fun: any) => useEffect(fun, []);
 
-    useMountEffect(() => contentRef?.scrollToTop());
+    useMountEffect(() => contentRef && contentRef.scrollToTop());
 
     const handlePage = (type: string) => {
-        contentRef?.scrollToTop(800)
-        if (type === 'next' && (!messageQuery?.isPreviousData && messageQuery?.data?.hasMore)) setCurrentPage(currentPage + 1)
+        contentRef && contentRef.scrollToTop(800)
+        if (type === 'next' && (!messageQuery.isPreviousData && messageQuery.data.hasMore)) setCurrentPage(currentPage + 1)
         else setCurrentPage(currentPage - 1)
     }
 
@@ -194,7 +194,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                 const datasetForChartDailyCount = getDailyCountData(data);
 
                 const chartDataDailyCount = {
-                    labels: dispLabelsDailyCount(data?.ten_day_count, true),
+                    labels: dispLabelsDailyCount(data && data.ten_day_count, true),
                     datasets: [
                         {
                             type: 'line' as const,
@@ -237,10 +237,10 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
         select: (data: any) => {
             // in case couldn't search on this
 
-            if (data?.error && data.body) {
+            if (data.error && data.body) {
                 throw new Error(String(data.body));
             }
-            if (data?.totalCount > 100) {
+            if (data.totalCount > 100) {
                 data.hasMore = true;
             }
             return {
@@ -258,14 +258,14 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
         <React.Fragment>
 
             {/* ERROR bar */}
-            {graphQuery.isError || messageQuery.isError || messageQuery?.data?.error || graphQuery?.data?.error ? (
+            {graphQuery.isError || messageQuery.isError || messageQuery.data.error || graphQuery.data.error ? (
                 <>
                 <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                     <p className="text-lg text-red-700 font-medium">
 
                         {/* No results found */}
-                        <b>{(messageQuery?.error as Error)?.message ||
-                            (graphQuery?.error as Error)?.message || 'Unable to connect, please try again later'}</b>
+                        <b>{(messageQuery.error as Error).message ||
+                            (graphQuery.error as Error).message || 'Unable to connect, please try again later'}</b>
                     </p>
                     <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                         !
@@ -281,39 +281,39 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                 {isMobile ? <IonRefresher slot="fixed" onIonRefresh={doRefresh} pullFactor={0.5} pullMin={100} pullMax={200} >
                                 <IonRefresherContent/>
                             </IonRefresher> : ''}
-                    {graphQuery?.isFetching ? <div className=" m-16 flex justify-center items-center"><Loader/></div> :
-                        graphQuery?.isError ? <p className="text-lg text-red-700 font-medium">
+                    {graphQuery.isFetching ? <div className=" m-16 flex justify-center items-center"><Loader/></div> :
+                        graphQuery.isError ? <p className="text-lg text-red-700 font-medium">
                                 <b>{"Error while loading message"}</b>
                             </p> :
                             <DisplayGraph {...{
-                                chartDataDailyCount: graphQuery?.data.chartDataDailyCount,
-                                chartDataPerSource: graphQuery?.data.chartDataPerSource,
+                                chartDataDailyCount: graphQuery && graphQuery.data.chartDataDailyCount,
+                                chartDataPerSource: graphQuery && graphQuery.data.chartDataPerSource,
                                 chartHeight,
-                                isLoadingChart: graphQuery?.isLoading,
-                                totalCount: messageQuery?.data?.totalCount
+                                isLoadingChart: graphQuery && graphQuery.isLoading,
+                                totalCount: graphQuery && messageQuery.data.totalCount
                             }} />}
                     {/* Displaying the custom skeleton loader while fetching */}
-                    {messageQuery?.isFetching ?
+                    {messageQuery.isFetching ?
                         new Array(10).fill(0).map((_, i) => <SearchSkeleton key={i}/>) :
-                        messageQuery?.isError ? <p className="text-lg text-red-700 font-medium">
+                        messageQuery.isError ? <p className="text-lg text-red-700 font-medium">
                                 <b>{"Error while loading message"}</b>
                             </p> :
                             <Display {...{
-                                messages: messageQuery?.data?.messages ?? [],
-                                totalCount: messageQuery?.data?.totalCount
+                                messages: messageQuery.data.messages ?? [],
+                                totalCount: messageQuery && messageQuery.data.totalCount
                             }}/>
                     }
 
-                    {(messageQuery?.data?.totalCount ?? 0) > 5 && (
+                    {(messageQuery.data.totalCount ?? 0) > 5 && (
                         <>
-                            {(currentPage != 0 && !messageQuery?.isFetching) &&
+                            {(currentPage != 0 && !messageQuery.isFetching) &&
                                 <IonButton onClick={() => handlePage('previous')}>Previous</IonButton>}
-                            {(!messageQuery?.isPreviousData && messageQuery?.data?.hasMore && !messageQuery?.isFetching) &&
+                            {(!messageQuery.isPreviousData && messageQuery.data.hasMore && !messageQuery.isFetching) &&
                                 <IonButton onClick={() => handlePage('next')} className="ml-4">Next</IonButton>}
 
-                            {!messageQuery?.isFetching &&
+                            {!messageQuery.isFetching &&
                                 <IonButton
-                                    onClick={() => contentRef?.scrollToTop(800)}
+                                    onClick={() => contentRef && contentRef.scrollToTop(800)}
                                     className="float-right"
                                 >
                                     Scroll to Top

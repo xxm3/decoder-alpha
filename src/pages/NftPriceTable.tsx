@@ -57,9 +57,9 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
             title: 'Details',
             render: (record) => (
                 <>
-                    <b>Name : </b>{record?.image ?
-                    <img className={`avatarImg ${!record?.image ? 'hiddenImg' : ''}`} key={record?.image}
-                         src={record?.image}/> : null}
+                    <b>Name : </b>{record.image ?
+                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image}
+                         src={record.image}/> : null}
                     <span>{record.name ? record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()) : '-'}</span>
                     <span><br/><b>Mint Date : </b>{record.createdAt ? moment(record.createdAt).fromNow() : "-"}</span>
                     <span><br/><b>Mint Price : </b>{record.mintPrice ? `${record.mintPrice} ◎` : '-'}</span>
@@ -91,8 +91,8 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
             title: 'Name',
             render: (record) => (
                 <>
-                    <img className={`avatarImg ${!record?.image ? 'hiddenImg' : ''}`} key={record?.image}
-                         src={record?.image}/>
+                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image}
+                         src={record.image}/>
                     <span>
                     {record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())}
                 </span>

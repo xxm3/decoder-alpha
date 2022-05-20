@@ -59,7 +59,7 @@ const FfNamed = () => {
         select: (data: any) => {
 
             // Error handling
-            if (data?.error && data.message) {
+            if (data.error && data.message) {
                 throw new Error(String(data.message));
             }
             return {
@@ -80,7 +80,7 @@ const FfNamed = () => {
     return (
         <>
 
-            {ffNamedQuery?.isFetching ?
+            {ffNamedQuery.isFetching ?
                 <div className="flex justify-center items-center">
                     <Loader/>
                     {/*Loading. . .*/}
@@ -104,7 +104,7 @@ const FfNamed = () => {
                         <div>
                             <ul style={{listStyle: 'disc'}}>
                                 {
-                                    ffNamedQuery?.data?.data?.map((obj: any) => (
+                                     ffNamedQuery?.data?.data?.map((obj: any) => (
                                         <li key={obj.createdAt} className="ml-3  ">
                                             {/*<Link to={'search/' + obj.msg} className="underline">*/}
                                             <div className="ml-1 flex justify-between p-1">

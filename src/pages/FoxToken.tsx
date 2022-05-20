@@ -79,19 +79,19 @@ const columns: Column<FoxTokenData> [] = [
         ),
         width: "300px",
         customSort: (a, b) => a.token.localeCompare(b.token),
-		customFilterAndSearch: (term, rowData) => rowData.token?.toLowerCase().includes(term.toLowerCase()),
+		customFilterAndSearch: (term, rowData) => rowData.token.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Name',
-        customSort: (a, b) => a?.name?.localeCompare(b?.name),
+        customSort: (a, b) => a.name.localeCompare(b.name),
         render: (record) => <span>{record.name}</span>,
-		customFilterAndSearch: (term, rowData) => rowData.name?.toLowerCase().includes(term.toLowerCase()),
+		customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Price',
         customSort: (a, b) => a.floorPrice - b.floorPrice,
         render: (record) => <div className='break-all whitespace-normal w-40'>{record.floorPrice} ◎</div>,
-        // customFilterAndSearch: ( rowData) => rowData.floorPrice,        customFilterAndSearch: (term, rowData,) =>   JSON.stringify(rowData.floorPrice)?.toLowerCase().includes(term.toLowerCase()),
+        // customFilterAndSearch: ( rowData) => rowData.floorPrice,        customFilterAndSearch: (term, rowData,) =>   JSON.stringify(rowData.floorPrice).toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Listings',
@@ -192,19 +192,19 @@ const columns_mobile: Column<FoxTokenData>[] = [
                 </div>
 
                 {/* <br className="xl:hidden lg:hidden" /> */}
-                {record?.row_obj?.token && <><span> <b>Token : </b>{shortenedWallet(record.row_obj.token)}</span></>}
-                {record?.row_obj?.name && <><br/><span ><b>Name : </b>{record.row_obj.name}</span></>}
-                {record?.row_obj?.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice} ◎</span></>}
-                {record?.row_obj?.totalTokenListings && <><br/><span><b>Listings : </b>{record.row_obj.totalTokenListings}</span></>}
-                {record?.row_obj?.lastSaleDate && <><br/><span><b>Last Sale Date : </b>{moment(record.row_obj.lastSaleDate).fromNow()}</span></>}
-                {record?.row_obj?.whichMyWallets &&<><br/><span><b>Owned : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[0] : ''}</span></>}
-                {record?.row_obj?.whichMyWallets && <><br/><span><b>Wallet : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[1] : ''}</span></>}
-                {record?.row_obj?.createdAt && <><br/><span><b>createdAt : </b>{record.row_obj.createdAt ? moment(record.row_obj.createdAt).format('DD-MM-YYYY'): ''}</span></>}
+                {record.row_obj.token && <><span> <b>Token : </b>{shortenedWallet(record.row_obj.token)}</span></>}
+                {record.row_obj.name && <><br/><span ><b>Name : </b>{record.row_obj.name}</span></>}
+                {record.row_obj.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice} ◎</span></>}
+                {record.row_obj.totalTokenListings && <><br/><span><b>Listings : </b>{record.row_obj.totalTokenListings}</span></>}
+                {record.row_obj.lastSaleDate && <><br/><span><b>Last Sale Date : </b>{moment(record.row_obj.lastSaleDate).fromNow()}</span></>}
+                {record.row_obj.whichMyWallets &&<><br/><span><b>Owned : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[0] : ''}</span></>}
+                {record.row_obj.whichMyWallets && <><br/><span><b>Wallet : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[1] : ''}</span></>}
+                {record.row_obj.createdAt && <><br/><span><b>createdAt : </b>{record.row_obj.createdAt ? moment(record.row_obj.createdAt).format('DD-MM-YYYY'): ''}</span></>}
             </span>
         ),
         customSort: (a, b) => a.token.localeCompare(b.token),
 		customFilterAndSearch: (term, rowData) => {
-            return rowData.token?.toLowerCase().includes(term.toLowerCase()) || rowData.name?.toLowerCase().includes(term.toLowerCase())
+            return rowData.token.toLowerCase().includes(term.toLowerCase()) || rowData.name.toLowerCase().includes(term.toLowerCase())
         },
     },
 
@@ -592,7 +592,7 @@ function FoxToken({contentRef}: FoxToken) {
 
     // call on load, when cookie array set
     useEffect(() => {
-        setSearchValue(location?.search);
+        setSearchValue(location.search);
 
 		if(!multWalletLoading){
 			// however DON'T do this in local host (will do this elsewhere ... since get RPC blocked)
@@ -691,7 +691,6 @@ function FoxToken({contentRef}: FoxToken) {
             if (window.location.href.indexOf(local_host_str) !== -1) {
                 SplTokens = await getUserSpls();
             }
-
             if (!multWallet?.length && !walletAddress ) {
 
                 present({
@@ -704,7 +703,7 @@ function FoxToken({contentRef}: FoxToken) {
             }
 
             // make sure they have tokens
-           if (mySplTokens.length === 0 && (!SplTokens || SplTokens?.length===0) ) {
+           if (mySplTokens.length === 0 && (!SplTokens || SplTokens.length===0) ) {
                 // show toast
                 present({
                     message: 'No tokens found on your wallet(s) :( Tokens must be in your wallet, and have an active listing on Fox Token Market',
@@ -777,7 +776,7 @@ function FoxToken({contentRef}: FoxToken) {
                 instance
                     .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
                     .then((res) => {
-                        const sales = res?.data?.data.salesData;
+                        const sales = res.data.data.salesData;
                         if(sales){
                             sales.forEach((sale: {token: string, lastSaleDate: string}) => {
                                 const row = newTableData.find((d: any) => d.token === sale.token);
@@ -1292,7 +1291,7 @@ function FoxToken({contentRef}: FoxToken) {
                                 //     icon: '📉',
                                 //     tooltip: 'View Chart',
                                 //     render: (record:any) => (
-                                //         <TVChartContainer symbol={record?.rowData?.id || 'token'}  />
+                                //         <TVChartContainer symbol={record.rowData.id || 'token'}  />
                                 //     ),
                                 // },
                             ]}
