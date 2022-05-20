@@ -1,7 +1,7 @@
 .bg-sections-bslgray {
     min-width: 275px;
     --tw-bg-opacity: 1;
-    background-color: rgba(10, 12, 46, var(--tw-bg-opacity));
+    background-color: rgba(255, 255, 255, 0.1);
     .bsl-red-gradient {
         background: linear-gradient(93.82deg, #ff7f23 15.86%, #e974b1 59%, #ff2a0d 126.3%);
         -webkit-background-clip: text;
@@ -19,17 +19,25 @@
         -webkit-text-fill-color: transparent;
         background-clip: text;
     }
-   
 }
 
 .tab-btn {
-        border-radius: 5px;
-        cursor: pointer;
-        background-color: #8932e8;
-    }
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #8932e8;
+}
 
 .tab-btn-second {
-        border-radius: 5px;
-        cursor: pointer;
-        background-color: #ea490f;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ea490f;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.1);
+    .image-wrapper {
+        width: 100%;
+        max-height: 300px;
+        overflow: hidden;
     }
+}
