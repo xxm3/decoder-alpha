@@ -31,14 +31,14 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
      * Use Effects
      */
     useEffect(() => {
-        
+
         if (window.innerWidth < 525) {
             setIsMobile(true)
         }
     }, [window.innerWidth])
 
 
-   
+
     // useEffect(() => {
     //     instance
     //         .get(`${environment.backendApi}/recentAlerts`)
@@ -62,7 +62,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                         <IonContent >
                             <div className='flex flex-col mt-5'>
                                 <IonLabel className="ml-4 text-xl font-semibold">
-                                    New app version available 
+                                    New app version available
                                 </IonLabel>
                                 <IonLabel className="ml-4 mt-4 mr-4">
                                     Please update your app to the new version
@@ -107,8 +107,9 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
             {/*<div hidden={!devMode}>*/}
 
 
+            {/*TODO wait for sumit */}
            {/* Word count of yesterday, last 3 days, last 5 days */}
-            <WordsCount/>
+           {/* <WordsCount/>*/}
 
             {/* Top search words of past dat */}
             {/* <TopSearchWords/> */}
@@ -119,7 +120,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                <SearchedWords/>
             </div> */}
 
-           
+
 
 
             {/* if need to tell the user of errors */}

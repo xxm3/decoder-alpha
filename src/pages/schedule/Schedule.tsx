@@ -107,7 +107,7 @@ const Schedule = () => {
         if(userTimezone !== selectedTimezone.value){
             SetUserTimeZone();
         }
-        
+
         if(dataSource && Object.keys(selectedTimezone).length !== 0){
             for (let i = 0; i < dataSource.length; i++) {
                 if (dataSource[i].time.includes('UTC')){
@@ -354,7 +354,7 @@ const Schedule = () => {
                 </div>
             ),
             hiddenByColumnsButton: true,
-            
+
         },
         {
             title: 'Name',
@@ -506,7 +506,7 @@ const Schedule = () => {
                                                                     borderTop: mode === 'dark' ? "" : '1px solid rgba(260,260,260,0.8)',
                                                                 }),
                                                                 paging: isPaging,
-                                                                columnsButton: isMobile ? false : true,
+                                                                columnsButton: false // isMobile ? false : true,
                                                             }}
                                                             // calendar icon for show calendar do not remove
                                                             actions={[
@@ -525,10 +525,10 @@ const Schedule = () => {
                                                                         } else {
                                                                             propsCopy.showTitle = false;
                                                                         }
-                                                                    
+
                                                                     return (
                                                                         <>
-                                                                       
+
                                                                         <Grid container direction="row">
                                                                             <Grid
                                                                                 container
@@ -552,8 +552,8 @@ const Schedule = () => {
                                                                                 </div>
                                                                             </Grid>
                                                                             <Grid item sm={4}>
-                                                                                <MTableToolbar {...propsCopy} 
-                                                                                    searchAutoFocus={searchFocus} 
+                                                                                <MTableToolbar {...propsCopy}
+                                                                                    searchAutoFocus={searchFocus}
                                                                                     onSearchChanged={(text:string)=>{
                                                                                         setSearchText(text)
                                                                                         if(text.length > 43){

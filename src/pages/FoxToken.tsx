@@ -35,6 +35,7 @@ import './FoxToken.scss'
 import { setWallet } from '../redux/slices/walletSlice';
 import  TVChartContainer  from '../components/ChartContainer'
 
+// @ts-ignore
 const columns: Column<FoxTokenData> [] = [
     {
         title: 'Token',
@@ -113,12 +114,15 @@ const columns: Column<FoxTokenData> [] = [
         render: (record) => <span>{record.whichMyWallets ? record.whichMyWallets.split('-')[1] : ''}</span>,
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
     },
-    {
-        title: 'createdAt',
-        render: (record) => <span>{moment(record.createdAt).format('DD-MM-YYYY')}</span>,
-        customSort: (a, b) => new Date(a.createdAt) as any - (new Date(b.createdAt) as any),
-          
-    },
+    // TODO !!!: show after a day??? hide 19th???
+    // {
+    //     title: 'Created',
+    //     // @ts-ignore
+    //     render: (record) => <span>{moment(record.createdAt).format('MM-DD-YYYY')}</span>,
+    //     // @ts-ignore
+    //     customSort: (a, b) => new Date(a.createdAt) as any - (new Date(b.createdAt) as any),
+    //
+    // },
     {
         title: '',
         render: (record) =>
