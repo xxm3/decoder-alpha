@@ -119,13 +119,13 @@ const ManageServer: React.FC<AppComponentProps> = () => {
 
             <div className="m-3 relative bg-red-100 p-4 rounded-xl">
                 <span className="text-lg text-red-700 font-medium">
-                    <b>Note this page is only for server owners and those with "Administrator" permission. Also your server will need to first have our Discord Bot invited to it. Click one of the below links, then in the "Add to Server" on the bottom, select your server. Then click "Continue", then "Authorize"</b>
+                    <b>Note this page is only for server owners (for the time being). Also your server will need to first have our Discord Bot invited to it. Click one of the below links, then in the "Add to Server" on the bottom, select your server. Then click "Continue", then "Authorize"</b>
                     <br/>
 
                     <p>
-                        - If using just the "Daily Mints" bots, <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20guilds.members.read%20bot">click here</a> to add the Discord Bot to your server
+                        - If using JUST the "Daily Mints" bots, <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20guilds.members.read%20bot">click here</a> to add the Discord Bot to your server
                         <br/>
-                        - Or if using the "Fox Token" bots (where users can type /token), this needs additional permissions so <a className="underline cursor-pointer" href="https://discord.com/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20applications.commands%20bot%20guilds.members.read">click here</a> to add the Discord Bot to your server
+                        - Or if using the "Fox Token" bots (where users can type /token) ... or if using BOTH bots, this needs additional permissions so <a className="underline cursor-pointer" href="https://discord.com/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20applications.commands%20bot%20guilds.members.read">click here</a> to add the Discord Bot to your server
                     </p>
 
                 </span>
@@ -190,7 +190,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                 </Grid>
                             );
                         }
-                    }) : 'Unable to find any servers you are the owner/admin of. If you are one, then reset your cookies and try logging in again' }
+                    }) : 'Unable to find any servers you are the owner of. If you are one, then reset your cookies and try logging in again' }
                 </Grid>
             </div>
 
@@ -221,6 +221,13 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                         <li>- "Magic Eden" package: (1) perform the command "/me bohemia" and you'll get the price chart of Bohemia, and (2) you can customize a single alert for your server, to get alerted when any NFT above a certain price goes up X % within Y minutes</li>
                         <li>- "Sales listing" package: Get alerted whenever a sale for your NFT occurs</li>
                         <li>- Other unannounced packages</li>
+                    </ul>
+
+                    <br/><br/>
+                    <b>Instructions:</b>
+                    <ul>
+                    <li>- Add the Bot to our server using one of the two links above</li>
+                    <li>- Click "Go" on the server you want to add, and follow the steps on the next page</li>
                     </ul>
 
                 </div>
