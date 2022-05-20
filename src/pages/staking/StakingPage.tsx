@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import './staking.scss';
+import React, { useState } from 'react'
+import { useHistory } from 'react-router';
 
-function Staking() {
+function StakingPage() {
+    const history = useHistory()
     const [model, setModel] = useState(false)
     return (
         <>
@@ -29,7 +30,7 @@ function Staking() {
                                     <button
                                         className="w-max mx-auto mt-2 sm:mt-5 text-base items-center px-5 py-2 font-medium tracking-wide shadow-lg text-white capitalize hover:opacity-75 focus:outline-none focus:bg-gray-900 transition duration-300 transform active:scale-95 ease-in-out connect-wallet"
                                         onClick={()=>{
-                                            setModel(true)
+                                            history.push('/connect-wallet')
                                         }}
                                     >
                                         Connect Wallet
@@ -231,4 +232,4 @@ function Staking() {
     );
 }
 
-export default Staking;
+export default StakingPage
