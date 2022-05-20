@@ -20,7 +20,7 @@ function StakingPage() {
                                 </span>
                                 <div className="forge-text-animation font-geomanist-monospace">
                                     {' '}
-                                    $DECODER
+                                    $DECODE
                                 </div>
 
                                 <div>
@@ -155,7 +155,7 @@ function StakingPage() {
                                         src="./assets/site-logos/logo-transparent.png"
                                     />
                                     <div className="text-4xl bsl-red-gradient mt-20">
-                                        $14,880,072
+                                        $1,420,069
                                     </div>
                                     <div className="text-xl mt-28 text-white">
                                         Minimum Value Locked
@@ -169,7 +169,7 @@ function StakingPage() {
                                         src="./assets/site-logos/logo-transparent.png"
                                     />
                                     <div className="text-4xl bsl-blue-gradient mt-20">
-                                        4246
+                                        3,917
                                     </div>
                                     <div className="text-xl mt-28 text-white">
                                         Total SOL Decoder Staked

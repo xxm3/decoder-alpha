@@ -12,25 +12,25 @@ function CreateWalletPage() {
             </div>
 
             <div className="max-w-sm h-30 rounded-lg mx-auto mb-10 p-4 bg-sections-bslgray relative text-center ">
-              <div className="text-lg">SOL decoder stacked</div>
+              <div className="text-lg">SOL Decoders staked</div>
               <div className="text-2xl bsl-blue-gradient mt-2">1</div>
             </div>
 
             <div className="max-w-sm h-30 rounded-lg mx-auto mb-10 p-4 bg-sections-bslgray relative text-center ">
               <div className="text-lg">Estimated Rewards</div>
-              <div className="text-2xl bsl-red-gradient mt-2">9.9736 $FORGE</div>
+              <div className="text-2xl bsl-red-gradient mt-2">20 $DECODE</div>
             </div>
 
             <div className="max-w-sm h-30 rounded-lg mx-auto mb-10 p-4 bg-sections-bslgray relative text-center ">
               <div className="text-lg">Reward Date</div>
-              <div className="text-2xl bsl-blue-gradient mt-2">10 $FORGE/day</div>
+              <div className="text-2xl bsl-blue-gradient mt-2">20 $DECODE/day</div>
             </div>
           </div>
           <div className='basis-1/2'>
 
             <div className="max-w-sm h-30 rounded-lg mx-auto p-4 bg-sections-bslgray relative text-center ">
               <div className="pt-2 text-xl">Your Wallet</div>
-              <div className="mt-4 text-md">You have no SOL decoder in your wallet</div>
+              <div className="mt-4 text-md">You have no SOL Decoders in your wallet</div>
             </div>
 
             <div className='mx-aut0 my-5 flex justify-center'>
@@ -38,18 +38,18 @@ function CreateWalletPage() {
                 UNSTAKE ALL
               </button>
               <button className="mx-2 text-base px-5 py-2 font-medium tracking-wide shadow-lg text-white capitalize hover:opacity-75 focus:outline-none focus:bg-gray-900 transition duration-300 transform active:scale-95 ease-in-out tab-btn">
-                CLAIM $FORGE
+                CLAIM $DECODE
               </button>
             </div>
 
 
 
 
-            <div className='w-full text-center my-3 text-xl'>Stacked SOL decoder</div>
+            <div className='w-full text-center my-3 text-xl'>Staked SOL Decoders</div>
 
             <div className="w-72 card pb-4 rounded-2xl mx-auto">
               <div className='image-wrapper rounded-tl-2xl rounded-tr-2xl'>
-                <img src="./assets/market-place/image1.webp" alt="" />
+                <img src="./assets/market-place/nft.png" alt="" />
               </div>
 
 
