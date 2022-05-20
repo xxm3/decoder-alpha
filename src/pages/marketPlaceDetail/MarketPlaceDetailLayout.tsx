@@ -1,93 +1,54 @@
-import { css } from '@emotion/react';
+import { css } from '@emotion/react'
 import {
-    IonCol,
-    IonContent,
-    IonGrid,
-    IonMenu,
-    IonMenuButton,
-    IonPage,
-    IonRow,
-    IonSplitPane,
-    IonToolbar,
-} from '@ionic/react';
-import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/nav/Sidebar';
-import HeaderContainer from '../../components/nav/Header';
-import MarketPlaceDetailPage from './MarketPlaceDetailPage';
-import './MarketPlaceDetail.scss';
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonMenu,
+  IonPage,
+  IonRow,
+  IonSplitPane,
+} from '@ionic/react'
+import Sidebar from '../../components/nav/Sidebar'
+import MarketPlaceDetailPage from './MarketPlaceDetailPage'
+import LogoHeader from '../../components/nav/LogoHeader'
+import './MarketPlaceDetail.scss'
 
 function MarketPlaceDetailLayout() {
-    const [showMobileMenu, setShowMobileMenu] = useState(false);
-    const smallHeaderWidth = 1024; // w
-
-    useEffect(() => {
-        // resize window stuff
-
-        window.addEventListener(
-            'resize',
-            () => {
-                if (window.innerWidth < 768) {
-                    setShowMobileMenu(true);
-                } else {
-                    setShowMobileMenu(false);
+  return (
+    <IonPage>
+      <IonGrid className="w-screen h-screen flex flex-col relative">
+        {/* header */}
+        <IonRow>
+          <IonCol size="12">
+            <LogoHeader />
+          </IonCol>
+        </IonRow>
+        {/*  */}
+        <IonRow className="flex-grow">
+          <IonCol size="12" className="flex h-full">
+            <IonSplitPane
+              when="md"
+              contentId="main"
+              css={css`
+                @media only screen and (min-width: 768px) and (max-width: 992px) {
+                  --side-min-width: none;
                 }
-            },
-            true
-        );
-        return () => {
-            window.removeEventListener('resize', (event) => {
-                setShowMobileMenu(false);
-            });
-        };
-    }, []);
-
-    return (
-        <IonPage>
-            <IonGrid className="w-screen h-screen flex flex-col relative">
-                {/* header */}
-                {showMobileMenu && (
-                    <IonToolbar>
-                        <div className="justify-between space-x-4 flex items-center">
-                            <div className="flex items-center space-x-4">
-                                <IonMenuButton
-                                    color="white"
-                                    menu="sidebar"
-                                    className="md:hidden ion-no-padding"
-                                    css={css`
-                                        font-size: 32px;
-                                    `}
-                                />
-                            </div>
-                        </div>
-                    </IonToolbar>
-                )}
-
-                {/*  */}
-                <IonRow className="flex-grow">
-                    <IonCol size="12" className="flex h-full">
-                        <IonSplitPane
-                            when="md"
-                            contentId="main"
-                            css={css`
-                                @media only screen and (min-width: 768px) and (max-width: 992px) {
-                                    --side-min-width: none;
-                                }
-                            `}
-                        >
-                            {/* SIDEBAR */}
-                            <IonMenu menuId="sidebar" contentId="main">
-                                <Sidebar />
-                            </IonMenu>
-                            {/* CONTENT */}
-                            <IonContent className="h-full" id="main">
-                                <MarketPlaceDetailPage />
-                            </IonContent>
-                        </IonSplitPane>
-                    </IonCol>
-                </IonRow>
-            </IonGrid>
-        </IonPage>
-    );
+              `}
+            >
+              {/* SIDEBAR */}
+              <IonMenu menuId="sidebar" contentId="main">
+                <Sidebar />
+              </IonMenu>
+              {/* CONTENT */}
+              <IonContent className="h-full" id="main">
+                <MarketPlaceDetailPage />
+              </IonContent>
+            </IonSplitPane>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
+    </IonPage>
+  )
 }
 
-export default MarketPlaceDetailLayout;
+export default MarketPlaceDetailLayout
