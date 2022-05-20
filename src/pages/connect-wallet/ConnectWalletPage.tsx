@@ -1,26 +1,25 @@
 import React from 'react';
 import { useHistory } from 'react-router';
-import staking from '../../images/staking.png';
+import staking from '../../images/logo-transparent.png';
 function ConnectWalletPage() {
   const history = useHistory();
   return (
     <>
-      <div>ConnectWalletPage</div>
-      <br />
-      <button
+     
+      {/* <button
         onClick={() => {
           history.push('/create-wallet-account');
         }}
       >
         Create Account
-      </button>
+      </button> */}
 
       <div className="mb-auto staking-wrapper">
         <div className="p-2 sm:p-10 flex flex-col items-center">
           <div className="flex justify-center m-14">
             <div className="justify-center w-full flex flex-col">
               <div className="w-60 rounded-lg m-5 bg-sections-bslgray relative text-center mb-10 p-4 ">
-                <img className="w-20 mx-auto -mt-8 rounded-lg" src={staking} />
+                <img className="w-20 mx-auto -m-14 rounded-lg" src={staking} />
                 <div className="text-4xl bsl-green-gradient mt-20">
                   You need a stacking
                 </div>
