@@ -168,7 +168,7 @@ function StakingPage() {
                                 <div className="w-60 h-80 rounded-lg m-5 bg-sections-bslgray relative text-center mb-10">
                                     <img
                                         className="w-14 mx-auto -mt-8"
-                                        src="./assets/stack-image/bslred.1b260e07.png"
+                                        src="./assets/site-logos/logo-transparent.png"
                                         
                                     />
                                     <div
@@ -188,7 +188,7 @@ function StakingPage() {
                                 <div className="w-60 h-80 rounded-lg m-5 bg-sections-bslgray relative text-center mb-10">
                                     <img
                                         className="w-14 mx-auto -mt-8"
-                                        src="./assets/stack-image/bslblue.0f0e5b1c.png"
+                                        src="./assets/site-logos/logo-transparent.png"
                                         
                                     />
                                     <div
@@ -200,14 +200,14 @@ function StakingPage() {
                                     <div
                                         className="text-xl mt-28 text-white"
                                     >
-                                        Total Smiths Staked
+                                        Total SOL Decoder Staked
                                     </div>
                                 </div>
                                 {/* 3 */}
                                 <div className="w-60 h-80 rounded-lg m-5 bg-sections-bslgray relative text-center mb-10">
                                     <img
                                         className="w-14 mx-auto -mt-8"
-                                        src="./assets/stack-image/bslgreen.afdfee18.png"
+                                        src="./assets/site-logos/logo-transparent.png"
                                         
                                     />
                                     <div
@@ -219,7 +219,7 @@ function StakingPage() {
                                     <div
                                         className="text-xl mt-28 text-white"
                                     >
-                                        % of Smiths Staked
+                                        % of SOL Decoder Staked
                                     </div>
                                 </div>
                                 {/*  */}
