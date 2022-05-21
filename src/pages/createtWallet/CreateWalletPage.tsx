@@ -31,6 +31,11 @@ function CreateWalletPage() {
             <div className="max-w-sm h-30 rounded-lg mx-auto p-4 bg-sections-bslgray relative text-center ">
               <div className="pt-2 text-xl">Your Wallet</div>
               <div className="mt-4 text-md">You have no SOL Decoders in your wallet</div>
+
+                <button className="mx-2 text-base px-5 py-2 font-medium tracking-wide shadow-lg text-white capitalize hover:opacity-75 focus:outline-none focus:bg-gray-900 transition duration-300 transform active:scale-95 ease-in-out tab-btn-second">
+                    STAKE ALL
+                </button>
+
             </div>
 
             <div className='mx-aut0 my-5 flex justify-center'>
