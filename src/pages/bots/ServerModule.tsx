@@ -372,8 +372,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                                     {/*TODO: all staff to test it*/}
 
-                                    {/*TODO*/}
-                                    <b className="text-red-500">Note: we're currently fixing a bug where tokens created in the last day or two don't work with the /token commands</b>
+                                    {/*<b className="text-red-500">Note: we're currently fixing a bug where tokens created in the last day or two don't work with the /token commands</b>*/}
                                 </IonLabel>
                             </div>
                         </div>
@@ -412,6 +411,13 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                                     Choose a channel above, then click the button below to make sure it worked
                                     <br/>
+
+                                    {/*TODO: What happens if someone goes from 4 nft to 3 nft... Does it only disable one of their bot...*/}
+
+                                    {/*TODO: If user not owner...show Nothing on main page */}
+
+
+                                    {/*TODO: hide until selected... x3 */}
                                     <IonButton onClick={() => sendTestWebhook('sendDailyMints')}>Send a test message</IonButton>
                                 </Grid>
                                 <Grid item xs={12} md={6} xl={6}>
@@ -501,6 +507,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             <br/>
             <div className="flex flex-row justify-center w-full">
                 <div className="server-module-bg ">
+
+                    {/*TODO: when you refresh the page - everything shows disabled */}
 
                     <b>General Instructions</b>
                     <ul>
