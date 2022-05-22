@@ -416,6 +416,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                                     {/*TODO: If user not owner...show Nothing on main page */}
 
+                                    {/*TODO: tshow user what each of the output of channel should look like .... tell user analytics needs embeds*/}
+
 
                                     {/*TODO: hide until selected... x3 */}
                                     <IonButton onClick={() => sendTestWebhook('sendDailyMints')}>Send a test message</IonButton>
