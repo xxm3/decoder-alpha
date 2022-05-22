@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo, useRef} from 'react';
 import Display from '../components/search/Display';
 import {useState, useEffect} from 'react';
-import { IonButton, IonContent, IonPage, IonRefresher, IonRefresherContent, useIonToast, } from '@ionic/react';
+import { IonButton, IonContent, IonIcon, IonPage, IonRefresher, IonRefresherContent, useIonToast, } from '@ionic/react';
 import './Search.css';
 import {useHistory, useParams} from 'react-router';
 import {instance} from '../axios';
@@ -14,6 +14,8 @@ import Loader from '../components/Loader';
 import SearchSkeleton from '../components/search/SearchSkeleton';
 import {AppComponentProps} from '../components/Route';
 import { RefresherEventDetail } from '@ionic/core';
+import { filterCircleOutline } from 'ionicons/icons';
+import Filters from '../components/search/Filters';
 
 
 const Search: React.FC<AppComponentProps> = ({contentRef}) => {
@@ -30,6 +32,19 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
     const [isMobile, setIsMobile] = useState(false);
 
     // const [searchText, setSearchText] = useState(useParams<{id: string}>());
+
+	// For open and close filters
+    const [toggleFilters, setToggleFilters] = useState(false);
+    // Sources from the response
+    const [sources, setSources] = useState<string[]>([]);
+    // Selected sources from filters
+    const [selectedSources, setSelectedSources] = useState<any[]>([]);
+    // Change when Apply button from filter clicked
+    const [sourceChange, setSourceChange] = useState(false);
+    // Filters start date
+    const [startDate, setStartDate] = useState('');
+    // filters end date
+    const [endDate, setEndDate] = useState('');
 
 
     const {id: searchText} = useParams<{
@@ -137,7 +152,14 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                     pageNumber: currentPage,
                     // not sure why you would want to pss their username...commenting this out
                     // discordUsername: '... ...';    // <- Took from the API response "/users/@me" from the postman. Need to change,
-                    pageSize: 100 // doing 10 from backend (discord) - search.js ... 100 from frontend (website) - search.tsx
+                    pageSize: 100, // doing 10 from backend (discord) - search.js ... 100 from frontend (website) - search.tsx
+					source: selectedSources,
+                    fromDate: startDate
+                        ? new Date(startDate).toISOString()
+                        : undefined,
+                    toDate: endDate
+                        ? new Date(endDate).toISOString()
+                        : undefined,
                 },
                 {
                     headers: {
@@ -145,6 +167,16 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                     },
                 }
             );
+			if (data?.messages && data.messages.length > 0) {
+                const arr: string[] = [];
+                data.messages.forEach((msg) => {
+                    if (msg && !arr.includes(msg.source)) {
+                        arr.push(msg.source);
+                    }
+                });
+
+                setSources(arr);
+            }
             return data;
         } catch (e) {
             console.error('try/catch in Search.tsx: ', e);
@@ -232,7 +264,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
             },
             retry: false
         })
-    const messageQuery = useQuery([searchText, currentPage], fetchSearchMessages, {
+    const messageQuery = useQuery([searchText, currentPage, sourceChange], fetchSearchMessages, {
         keepPreviousData: true,
         select: (data: any) => {
             // in case couldn't search on this
@@ -298,10 +330,47 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                         messageQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                 <b>{"Error while loading message"}</b>
                             </p> :
-                            <Display {...{
-                                messages: messageQuery?.data?.messages ?? [],
-                                totalCount: messageQuery?.data?.totalCount
-                            }}/>
+                            (<div className="relative">
+                            <div className="absolute right-0">
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setToggleFilters(!toggleFilters);
+                                    }}
+                                    id="filter"
+                                    className="my-2 mr-2 h-full z-50"
+                                >
+                                    <IonIcon
+                                        icon={filterCircleOutline}
+                                        className="w-10 h-10 z-40"
+                                    />
+                                </button>
+                                 {/* Filter implemented for filter date and source wise */}
+                                {toggleFilters && (
+                                    <div className='absolute right-8 top-10 z-50'>
+                                        <Filters
+                                            startDate={startDate}
+                                            endDate={endDate}
+                                            setStartDate={setStartDate}
+                                            setEndDate={setEndDate}
+                                            sources={sources}
+                                            selectedSources={selectedSources}
+                                            setSelectedSources={setSelectedSources}
+                                            setSourceChange={setSourceChange}
+                                            setToggleFilters={setToggleFilters}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                            <Display
+                                {...{
+                                    messages:
+                                        messageQuery?.data?.messages ?? [],
+                                    totalCount: messageQuery?.data?.totalCount,
+                                }}
+                            />
+                        </div>)
                     }
 
                     {(messageQuery?.data?.totalCount ?? 0) > 5 && (
