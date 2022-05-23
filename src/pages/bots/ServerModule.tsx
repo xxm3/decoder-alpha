@@ -53,7 +53,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [present, dismiss] = useIonToast();
 
     const [role, setRole] = useState<any>(null)
-    
+
 
     /**
      * Use Effects
@@ -89,7 +89,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 tokenModule: data.tokenModule,
                             });
                         }
-                        
+
 
                         setDropdownValue({
                             ...dropdownValue,
@@ -232,7 +232,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         buttons: [{ text: 'X', handler: () => dismiss() }],
     });
   }
-    
+
     let disableButton = (btnType:any) =>{
         if(role==='No Roles'){
             showDisableBtnMesage('You are not the owner')
@@ -309,8 +309,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 <div className="module-icon-wrapper ml-3">
                                     <img src={require('../../images/me.png')} />
                                 </div>
-                                <Switch 
-                                checked={checked.mintInfoModule} 
+                                <Switch
+                                checked={checked.mintInfoModule}
                                 onChange={( e: React.ChangeEvent<HTMLInputElement> ) => {
                                     if(disableButton('mintInfoModule')){
                                         return
@@ -318,7 +318,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         enableModule({ module: 'mintInfoModule', enabled: e.target.checked, });
                                     }}
                                 />
-                                
+
                             </div>
                             <div className="flex flex-col mt-4">
                                 <IonLabel className="ml-3 text-xl">
@@ -372,8 +372,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                                     {/*TODO: all staff to test it*/}
 
-                                    {/*TODO*/}
-                                    <b className="text-red-500">Note: we're currently fixing a bug where tokens created in the last day or two don't work with the /token commands</b>
+                                    {/*<b className="text-red-500">Note: we're currently fixing a bug where tokens created in the last day or two don't work with the /token commands</b>*/}
                                 </IonLabel>
                             </div>
                         </div>
@@ -412,6 +411,15 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                                     Choose a channel above, then click the button below to make sure it worked
                                     <br/>
+
+                                    {/*TODO: What happens if someone goes from 4 nft to 3 nft... Does it only disable one of their bot...*/}
+
+                                    {/*TODO: If user not owner...show Nothing on main page */}
+
+                                    {/*TODO: tshow user what each of the output of channel should look like .... tell user analytics needs embeds*/}
+
+
+                                    {/*TODO: hide until selected... x3 */}
                                     <IonButton onClick={() => sendTestWebhook('sendDailyMints')}>Send a test message</IonButton>
                                 </Grid>
                                 <Grid item xs={12} md={6} xl={6}>
@@ -460,13 +468,13 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     <div className="flex flex-row justify-center w-full">
                         <div className="server-module-bg ">
                             <IonLabel className="text-xl font-semibold flex mt-8 mb-8">
-                                "Fox Token" channel (Shows when names are added to WL tokens in Fox Token market, along with charts)
+                                "Fox Token" package
                             </IonLabel>
 
                             <Grid container spacing={4}>
                                 <Grid item xs={12} md={6} xl={6}>
                                     <IonLabel className="text-base">
-                                        Analytics Channel {' '}
+                                        "Fox Token" channel (Shows when names are added to WL tokens in Fox Token market, along with charts) {' '}
                                     </IonLabel>
                                     <div className="flex flex-row justify-between ">
                                         <select
@@ -502,13 +510,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             <div className="flex flex-row justify-center w-full">
                 <div className="server-module-bg ">
 
+                    {/*TODO: when you refresh the page - everything shows disabled */}
+
                     <b>General Instructions</b>
                     <ul>
                         <li>- Make a new private channel in your Discord. If doing the "Mints" package, name the channel "daily-mints" or whatever you want. Optionally make "1h-mint-info" if you want that as well. Or if you are doing the "Fox token" package, make a channel for the fox token names, and another channel for where users can enter their own bot commands</li>
                         <li>- Add the bot to the above channels (by going to the channel settings within Discord)</li>
                         <li>- Refresh this page</li>
                         <li>- Enable the "Mints" package (or "Fox token" package)</li>
-                        <li>- It should ask you about the channels - pick your new channels</li>
+                        <li>- It should ask you about the channels - pick your new channels. Click the test button. If it doesn't work, make sure the SOL Decoder bot is in that channel, and has permission to "Send Messages" (done within the channel settings in Discord)
+                        </li>
                         <li>- Wait for the channels to be populated with data before showing it to the public (8am EST is when daily-mints is populated, varying times for other channels)</li>
                         <li>If doing the "Fox token" package, you need to first tell us before you can start using the bot commands (/token, /token_name, /wallet_tokens) in your server. You also need to add permission for any user in that channel to "Use Application Commands"</li>
                     </ul>

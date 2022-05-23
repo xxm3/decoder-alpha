@@ -510,11 +510,18 @@ const Schedule = () => {
                                                             }}
                                                             // calendar icon for show calendar do not remove
                                                             actions={[
-                                                                {
-                                                                    icon: () => <IonIcon icon={calendarOutline} className="text-3xl " />,
-                                                                    onClick: () => history.push( { pathname: '/schedulecalendar',state:mints}),
-                                                                    isFreeAction: true,
-                                                                },
+                                                                /**
+                                                                 * TODO !!!! : disabled until its less shit
+                                                                 *
+                                                                 * - need a "click here view calendar" on top...
+                                                                 *
+                                                                 * - need a "graph coming soon..."
+                                                                 */
+                                                                // {
+                                                                //     icon: () => <IonIcon icon={calendarOutline} className="text-3xl " />,
+                                                                //     onClick: () => history.push( { pathname: '/schedulecalendar',state:mints}),
+                                                                //     isFreeAction: true,
+                                                                // },
                                                             ]}
 
                                                             components={{

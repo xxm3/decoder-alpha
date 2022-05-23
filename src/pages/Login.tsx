@@ -192,7 +192,14 @@ function Login() {
                                 </div>
                             </div>
 
-                            <div className={`login-right-side-wrapper w-full justify-center flex flex-col rounded-md ${isMobileDevice ? 'pl-4 mt-4 pb-4 pt-4 pr-2' : 'pl-10 pr-4 mt-4' }`} style={{height:isMobileDevice ? 'auto'  : '750px' }}>
+
+                            <div className={`login-right-side-wrapper w-full justify-center flex flex-col rounded-md ${isMobileDevice ? 'pl-4 mt-4 pb-4 pt-4 pr-2' : 'pl-10 pr-4' }`} style={{height:isMobileDevice ? 'auto'  : '84vh' }}>
+
+                                {/*this is the error msg at top! no delete!*/}
+                                <p className="text-red-500 my-4 text-xl">
+                                    {error}
+                                </p>
+
                                 <div className="title-text text-4xl font-bold flex">
                                     New to<br/>SOL Decoder ?
                                 </div>
