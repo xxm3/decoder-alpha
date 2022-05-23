@@ -8,6 +8,7 @@ const Filters: React.FC<{
     setEndDate: React.Dispatch<React.SetStateAction<string>>;
     sources: string[];
     selectedSources: any[];
+    onReset: Function;
     setSelectedSources: React.Dispatch<React.SetStateAction<any[]>>;
     setSourceChange: React.Dispatch<React.SetStateAction<boolean>>;
     setToggleFilters: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,6 +19,7 @@ const Filters: React.FC<{
     setEndDate,
     sources,
     selectedSources,
+    onReset,
     setSelectedSources,
     setSourceChange,
     setToggleFilters
@@ -104,9 +106,21 @@ const Filters: React.FC<{
                         setSourceChange((prev)=> !prev);
                         setToggleFilters(false)
                     }}
-                    className="py-1 px-2 border bg-primary rounded-md"
+                    className="py-1 mx-1 px-2 border bg-primary rounded-md"
                 >
                     Apply
+                </button>
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setSourceChange((prev)=> !prev);
+                        setToggleFilters(false)
+                        onReset();
+                    }}
+                    className="py-1 mx-1 px-2 border bg-primary rounded-md"
+                >
+                    Reset
                 </button>
             </div>
         </div>

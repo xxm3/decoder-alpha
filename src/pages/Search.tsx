@@ -63,6 +63,15 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
             return 140;
         }, [width]);
 
+    const reset =() => {
+        setSources([]);
+        setSelectedSources([]);
+        setStartDate('');
+        setEndDate('');
+        setSourceChange(false);
+    }
+
+
     // resize window
     useEffect(() => {
 
@@ -92,7 +101,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
         setShowFoxTokenLink(false)
       }
     }, [searchText])
-    
+
 
     /**
      * Functions
@@ -174,7 +183,8 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                         arr.push(msg.source);
                     }
                 });
-
+                //To sort it for showing in the dropdown alphabetically
+                arr.sort();
                 setSources(arr);
             }
             return data;
@@ -331,48 +341,50 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                                 <b>{"Error while loading message"}</b>
                             </p> :
                             (<div className="relative">
-                            <div className="absolute right-0">
-                                <button
-                                    type="button"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setToggleFilters(!toggleFilters);
-                                    }}
-                                    id="filter"
-                                    className="my-2 mr-2 h-full z-50"
-                                >
-                                    <IonIcon
-                                        icon={filterCircleOutline}
-                                        className="w-10 h-10 z-40"
-                                    />
-                                </button>
-                                 {/* Filter implemented for filter date and source wise */}
-                                {toggleFilters && (
-                                    <div className='absolute right-8 top-10 z-50'>
-                                        <Filters
-                                            startDate={startDate}
-                                            endDate={endDate}
-                                            setStartDate={setStartDate}
-                                            setEndDate={setEndDate}
-                                            sources={sources}
-                                            selectedSources={selectedSources}
-                                            setSelectedSources={setSelectedSources}
-                                            setSourceChange={setSourceChange}
-                                            setToggleFilters={setToggleFilters}
+                                <div className="absolute right-0">
+                                    {/*The button used to open the filter menu*/}
+                                    <button
+                                        type="button"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setToggleFilters(!toggleFilters);
+                                        }}
+                                        id="filter"
+                                        className="my-2 mr-2 h-full z-50"
+                                    >
+                                        <IonIcon
+                                            icon={filterCircleOutline}
+                                            className="w-10 h-10 z-40"
                                         />
-                                    </div>
-                                )}
-                            </div>
-                            <Display
-                                {...{
-                                    messages:
-                                        messageQuery?.data?.messages ?? [],
-                                    totalCount: messageQuery?.data?.totalCount,
-                                }}
-                            />
+                                    </button>
+                                     {/* Filter implemented for filter date and source wise */}
+                                    {toggleFilters && (
+                                        <div className='absolute right-8 top-10 z-50'>
+                                            <Filters
+                                                startDate={startDate}
+                                                endDate={endDate}
+                                                setStartDate={setStartDate}
+                                                setEndDate={setEndDate}
+                                                sources={sources}
+                                                selectedSources={selectedSources}
+                                                onReset={reset}
+                                                setSelectedSources={setSelectedSources}
+                                                setSourceChange={setSourceChange}
+                                                setToggleFilters={setToggleFilters}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                                <Display
+                                    {...{
+                                        messages:
+                                            messageQuery?.data?.messages ?? [],
+                                        totalCount: messageQuery?.data?.totalCount,
+                                    }}
+                                />
                         </div>)
                     }
-
+                    {/*The footer stuff (scroll to top)*/}
                     {(messageQuery?.data?.totalCount ?? 0) > 5 && (
                         <>
                             {(currentPage != 0 && !messageQuery?.isFetching) &&
