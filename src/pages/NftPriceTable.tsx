@@ -57,32 +57,22 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
             title: 'Details',
             render: (record) => (
                 <>
-                    <b>Name : </b>{record.image ?
-                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image}
-                         src={record.image}/> : null}
-                    <span>{record.name ? record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()) : '-'}</span>
-                    <span><br/><b>Mint Date : </b>{record.createdAt ? moment(record.createdAt).fromNow() : "-"}</span>
-                    <span><br/><b>Mint Price : </b>{record.mintPrice ? `${record.mintPrice} ◎` : '-'}</span>
-                    <span><br/><b>High Price : </b>{record.highestPrice ? `${record.highestPrice} ◎` : "-"}</span>
-                    <span><br/><b>% Change : </b>{record.pctChange ?
-                        <span className={record.pctChange > 0 ? 'greenPctChange' : 'redPctChange'}
-                              hidden={!record.pctChange}>{record.pctChange ? record.pctChange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''}%</span> : '-'}</span>
-                    <span><br/><b>Meta : </b>{record.meta ? record.meta : '-'}</span>
-                    <span className='flex flex-row items-center'><br/><b>ME URL : </b> {record.meUrl ?
-                        <a href={record.meUrl} target="_blank" className="big-emoji"
-                           hidden={!record.meUrl || record.meUrl.length < 5}><img src={meLogo}
-                                                                                  className="me-logo ml-2"/></a> : '-'}</span>
-                    <span><b>Mint URL : </b>{record.mintUrl ?
-                        <a href={record.mintUrl} target="_blank" className="big-emoji"
-                           hidden={record.mintUrl.length < 5}> 🌐 </a> : "-"}</span>
-                    <span><br/><b>Comments : </b>{record.comments ?
-                        <span hidden={hideComments}>{record.comments}</span> : "-"}</span>
-
+                    <b>Name : </b>{record?.image ?
+                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image} src={record.image}/> : null}
+                    <span>{record ? record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()) : '-'}</span>
+                    <span><br/><b>Mint Date : </b>{record ? moment(record.createdAt).fromNow() : "-"}</span>
+                    <span><br/><b>Mint Price : </b>{record ? `${record.mintPrice} ◎` : '-'}</span>
+                    <span><br/><b>High Price : </b>{record ? `${record.highestPrice} ◎` : "-"}</span>
+                    <span><br/><b>% Change : </b>{record ? <span className={record.pctChange > 0 ? 'greenPctChange' : 'redPctChange'} hidden={!record.pctChange}>{record ? record.pctChange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''}%</span> : '-'}</span>
+                    <span><br/><b>Meta : </b>{record ? record.meta : '-'}</span>
+                    <span className='flex flex-row items-center'><br/><b>ME URL : </b> {record ? <a href={record.meUrl} target="_blank" className="big-emoji" hidden={!record.meUrl || record.meUrl.length < 5}><img src={meLogo} className="me-logo ml-2"/></a> : '-'}</span>
+                    <span><b>Mint URL : </b>{record ? <a href={record?.mintUrl} target="_blank" className="big-emoji" hidden={record.mintUrl.length < 5}> 🌐 </a> : "-"}</span>
+                    <span><br/><b>Comments : </b>{record ? <span hidden={hideComments}>{record.comments}</span> : "-"}</span>
                 </>
             ),
             customSort: (a, b) => a.name.localeCompare(b.name),
             searchable: true,
-            customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().includes(term.toLowerCase()),
+            customFilterAndSearch: (term, rowData) => rowData?.name.toLowerCase().includes(term.toLowerCase()),
         },
 
     ];
@@ -91,72 +81,45 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
             title: 'Name',
             render: (record) => (
                 <>
-                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image}
-                         src={record.image}/>
-                    <span>
-                    {record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())}
-                </span>
+                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image} src={record.image}/>
+                    <span> {record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())} </span>
                 </>
             ),
             customSort: (a, b) => a.name.localeCompare(b.name),
             searchable: true,
-            customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().includes(term.toLowerCase()),
+            customFilterAndSearch: (term, rowData) =>rowData?.name.toLowerCase().includes(term.toLowerCase()),
         },
         {
             title: 'Mint Date',
-            render: (record) => (
-                <span>
-                    {moment(record.createdAt).fromNow()}
-                </span>
-            ),
-            customSort: (a, b) =>
-                +new Date(a.createdAt) - +new Date(b.createdAt),
+            render: (record) => ( <span> {moment(record?.createdAt).fromNow()} </span> ),
+            customSort: (a, b) => +new Date(a.createdAt) - +new Date(b.createdAt),
         },
         {
             title: 'Mint Price',
             customSort: (a, b) => +a.mintPrice - +b.mintPrice,
-            render: (record) => <span>{record.mintPrice} ◎</span>,
+            render: (record) => <span>{record?.mintPrice} ◎</span>,
 
         },
         {
             title: 'High Price',
             customSort: (a, b) => +a.highestPrice - +b.highestPrice,
-            render: (record) => <span>{record.highestPrice ? `${record.highestPrice} ◎` : "-"}</span>,
+            render: (record) => <span>{record ? `${record.highestPrice} ◎` : "-"}</span>,
 
         },
         {
             title: '% change',
             customSort: (a, b) => a.pctChange - b.pctChange,
-            render: (record) => (
-                <span
-                    className={
-                        record.pctChange > 0 ? 'greenPctChange' : 'redPctChange'
-                    }
-                    hidden={!record.pctChange}
-                >
-                    {record.pctChange
-                        ? record.pctChange
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                        : ''}
-                    %
-                </span>
-            ),
+            render: (record) => ( <span className={ record?.pctChange > 0 ? 'greenPctChange' : 'redPctChange' } hidden={!record.pctChange}> {record ? record?.pctChange?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''} % </span> ),
         },
         {
             title: 'Meta',
             sorting: false,
-            render: (record) => <span>{record.meta}</span>,
+            render: (record) => <span>{record?.meta}</span>,
         },
         {
             title: 'ME URL',
             render: (record) => (
-                <a
-                    href={record.meUrl}
-                    target="_blank"
-                    className="big-emoji"
-                    hidden={!record.meUrl || record.meUrl.length < 5}
-                >
+                <a href={record?.meUrl} target="_blank" className="big-emoji" hidden={!record.meUrl || record.meUrl.length < 5} >
                     <img src={meLogo} className="me-logo"/>
                 </a>
             ),
@@ -165,12 +128,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
         {
             title: 'Mint URL',
             render: (record) => (
-                <a
-                    href={record.mintUrl}
-                    target="_blank"
-                    className="big-emoji"
-                    hidden={record.mintUrl.length < 5}
-                >
+                <a href={record?.mintUrl} target="_blank" className="big-emoji" hidden={record.mintUrl.length < 5} >
                     🌐
                 </a>
             ),
@@ -180,7 +138,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
             title: 'Comments',
             render: (record) => (
                 // <span>{(record.comments.length > 90) ? record.comments.substr(0, 90 - 1) + '...' : record.comments}</span>
-                <span hidden={hideComments}>{record.comments}</span>
+                <span hidden={hideComments}>{record?.comments}</span>
             ),
             sorting: false
         },
@@ -234,7 +192,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
                 console.error("error when getting mint alerts automated: " + error);
 
                 let msg = '';
-                if (error && error.response) {
+                if ( error?.response) {
                     msg = String(error.response.data.body);
                 } else {
                     msg = 'Unable to connect. Please try again later';

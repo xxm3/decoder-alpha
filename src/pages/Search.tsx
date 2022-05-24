@@ -109,10 +109,10 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
 
     const useMountEffect = (fun: any) => useEffect(fun, []);
 
-    useMountEffect(() => contentRef && contentRef.scrollToTop());
+    useMountEffect(() => contentRef?.scrollToTop());
 
     const handlePage = (type: string) => {
-        contentRef && contentRef.scrollToTop(800)
+        contentRef?.scrollToTop(800)
         if (type === 'next' && (!messageQuery.isPreviousData && messageQuery.data.hasMore)) setCurrentPage(currentPage + 1)
         else setCurrentPage(currentPage - 1)
     }
@@ -135,7 +135,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
             console.error('try/catch in Search.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
 
-            if (error && error.response) {
+            if (error?.response) {
                 throw new Error(String(error.response.data.body));
             } else {
                 throw new Error('Unable to connect. Please try again later');
@@ -167,7 +167,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                     },
                 }
             );
-			if (data?.messages && data.messages.length > 0) {
+			if (data?.messages?.length > 0) {
                 const arr: string[] = [];
                 data.messages.forEach((msg) => {
                     if (msg && !arr.includes(msg.source)) {
@@ -189,7 +189,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
             // }
 
             let msg = '';
-            if (error && error.response) {
+            if (error?.response) {
                 msg = String(error.response.data.body);
             } else {
                 msg = 'Unable to connect. Please try again later';
@@ -219,7 +219,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
             select: (data: any) => {
 
                 // in case couldn't search on this
-                if (data.error && data.body) {
+                if (data?.error && data.body) {
                     throw new Error(String(data.body));
                 }
 
@@ -269,10 +269,10 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
         select: (data: any) => {
             // in case couldn't search on this
 
-            if (data.error && data.body) {
+            if (data?.error && data.body) {
                 throw new Error(String(data.body));
             }
-            if (data.totalCount > 100) {
+            if (data?.totalCount > 100) {
                 data.hasMore = true;
             }
             return {
@@ -290,7 +290,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
         <React.Fragment>
 
             {/* ERROR bar */}
-            {graphQuery.isError || messageQuery.isError || messageQuery.data.error || graphQuery.data.error ? (
+            {graphQuery.isError || messageQuery.isError || messageQuery?.data?.error || graphQuery?.data?.error ? (
                 <>
                 <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                     <p className="text-lg text-red-700 font-medium">
@@ -313,21 +313,21 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                 {isMobile ? <IonRefresher slot="fixed" onIonRefresh={doRefresh} pullFactor={0.5} pullMin={100} pullMax={200} >
                                 <IonRefresherContent/>
                             </IonRefresher> : ''}
-                    {graphQuery.isFetching ? <div className=" m-16 flex justify-center items-center"><Loader/></div> :
-                        graphQuery.isError ? <p className="text-lg text-red-700 font-medium">
+                    {graphQuery?.isFetching ? <div className=" m-16 flex justify-center items-center"><Loader/></div> :
+                        graphQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                 <b>{"Error while loading message"}</b>
                             </p> :
                             <DisplayGraph {...{
-                                chartDataDailyCount: graphQuery && graphQuery.data.chartDataDailyCount,
-                                chartDataPerSource: graphQuery && graphQuery.data.chartDataPerSource,
+                                chartDataDailyCount:  graphQuery?.data.chartDataDailyCount,
+                                chartDataPerSource:  graphQuery?.data.chartDataPerSource,
                                 chartHeight,
-                                isLoadingChart: graphQuery && graphQuery.isLoading,
-                                totalCount: graphQuery && messageQuery.data.totalCount
+                                isLoadingChart: graphQuery?.isLoading,
+                                totalCount:  messageQuery?.data?.totalCount
                             }} />}
                     {/* Displaying the custom skeleton loader while fetching */}
-                    {messageQuery.isFetching ?
+                    {messageQuery?.isFetching ?
                         new Array(10).fill(0).map((_, i) => <SearchSkeleton key={i}/>) :
-                        messageQuery.isError ? <p className="text-lg text-red-700 font-medium">
+                         messageQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                 <b>{"Error while loading message"}</b>
                             </p> :
                             (<div className="relative">
@@ -373,7 +373,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                         </div>)
                     }
 
-                    {(messageQuery.data.totalCount ?? 0) > 5 && (
+                    {(messageQuery.data?.totalCount ?? 0) > 5 && (
                         <>
                             {(currentPage != 0 && !messageQuery.isFetching) &&
                                 <IonButton onClick={() => handlePage('previous')}>Previous</IonButton>}
@@ -381,10 +381,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                                 <IonButton onClick={() => handlePage('next')} className="ml-4">Next</IonButton>}
 
                             {!messageQuery.isFetching &&
-                                <IonButton
-                                    onClick={() => contentRef && contentRef.scrollToTop(800)}
-                                    className="float-right"
-                                >
+                                <IonButton onClick={() => contentRef && contentRef.scrollToTop(800)} className="float-right" >
                                     Scroll to Top
                                 </IonButton>}
                         </>

@@ -83,7 +83,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
             .catch((error) => {
                 setIsLoading(false);
                 let msg = '';
-                if (error && error.response) {
+                if (error?.response) {
                     msg = String(error.response.data.body);
                 } else {
                     msg = 'Unable to connect. Please try again later';
@@ -125,7 +125,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
 
  
     const handleSlotSelect = (slotInfo: SlotInfo) => {
-        onNavigate(moment(slotInfo.slots[0]).toDate());
+        onNavigate(moment(slotInfo?.slots[0]).toDate());
      };
 
      // select event handler
@@ -229,7 +229,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
 
                         <IonContent  >
                             <div className='ml-4 mt-4 mr-4'>
-                                {showGraph ? <MintChart eventGraphData = {eventGraphData}/> : <div className='text-center opacity-40 h-10 bg-slate-500 items-center flex justify-center'> Not enough data</div>}
+                                {showGraph ? <MintChart eventGraphData = {eventGraphData}/> : <div className='text-center opacity-40 h-10 bg-slate-500 items-center flex justify-center'> No chart history available</div>}
                                 
                             </div>
                             

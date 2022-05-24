@@ -64,8 +64,6 @@ function StackedSearch({ foo, onSubmit }: any) {
     const [graphStackedLoading, setGraphStackedLoading] = useState(false);
     const [stackedLineData, setStackedLineData] = useState(defaultGraph);
 
-    console.log('errorSearchStacked-----',graphStackedLoading)
-
     // load search data from backend, for stacked line graph
     const doSearch = async (query : string) => {
         query = query.trim();
@@ -124,7 +122,7 @@ function StackedSearch({ foo, onSubmit }: any) {
                 });
             }
 
-            const labels = dispLabelsDailyCount( rawFetchedData && rawFetchedData[0].ten_day_count, true);
+            const labels = dispLabelsDailyCount( rawFetchedData[0]?.ten_day_count, true);
 
             // console.log(labels);
             // console.log(datasetsAry);
@@ -149,7 +147,7 @@ function StackedSearch({ foo, onSubmit }: any) {
             // }
 
             let msg = '';
-            if (error && error.response) {
+            if (error?.response) {
                 msg = String(error.response.data.body);
             } else {
                 msg = 'Unable to connect. Please try again later';
@@ -217,7 +215,7 @@ function StackedSearch({ foo, onSubmit }: any) {
                     ) : (
                         // graph itself
                         <>
-                            { stackedLineData.labels && stackedLineData.labels.length === 0 ? (
+                            { stackedLineData?.labels?.length === 0 ? (
                                 <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                                     <p className="text-lg text-red-700 font-medium">
                                         <b> No data available </b>

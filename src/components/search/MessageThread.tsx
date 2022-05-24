@@ -52,19 +52,21 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             //     // @ts-expect-error
             //     time : message.createdAt ? message.createdAt : message.time_stamp
             // }))
-            data.subsequentMsg = data && data.subsequentMsg.map(message => ({
-                ...message,
-                // @ts-expect-error
-                time : message.createdAt ? message.createdAt : message.time_stamp
-            }))
+            
+                data.subsequentMsg = data?.subsequentMsg?.map(message => ({
+                    ...message,
+                    // @ts-expect-error
+                    time : message ? message.createdAt : message.time_stamp
+                }))
+            
             if (pageParam === defaultPageParam)
                 // return [...data.priorMsg, message, ...data.subsequentMsg];
                 return [message, ...data.subsequentMsg];
             // return [...data.priorMsg, ...data.subsequentMsg];
             return [...data.subsequentMsg];
-
+            
         } catch (e) {
-            // console.error('try/catch in MessageThread.tsx: ', e);
+            console.error('try/catch in MessageThread.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
 
             // if (error && error.response) {

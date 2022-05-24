@@ -51,7 +51,6 @@ const Schedule = () => {
      */
     const [present, dismiss] = useIonToast();
     const history = useHistory();
-
     const [date, setDate] = useState('')
     const [mints, setMints] = useState<Mint[]>([])
     const [splitCollectionName, setSplitCollectionName] = useState([])
@@ -62,8 +61,6 @@ const Schedule = () => {
     const [selectedTimezone, setSelectedTimezone] = useState<any>({})
     const [mode] = usePersistentState("mode", "dark");
     const [searchFocus, setSearchFocus] = useState<boolean>(false)
-    const [showTopLink, setShowTopLink] = useState<boolean>(false)
-    const [searchText, setSearchText] = useState<string>()
 
 
 
@@ -98,7 +95,9 @@ const Schedule = () => {
 
     const GetUserTimeZone = async() => {
         await instance.get(`${environment.backendApi}/currentUser`)
-        .then((res: any) =>  userTimezone = res.data.user.timezone)
+        .then((res: any) => { 
+            userTimezone = res?.data.user.timezone
+        })
     }
 
     // console.log('no time zone', moment.tz.names())
@@ -171,7 +170,7 @@ const Schedule = () => {
                 setIsLoading(false);
                 SetDefaultTimeZone()
                 let msg = '';
-                if (error && error.response) {
+                if (error?.response) {
                     msg = String(error.response.data.body);
                 } else {
                     msg = 'Unable to connect. Please try again later';
@@ -282,22 +281,20 @@ const Schedule = () => {
                     </div>
 
                     <div className="" onClick={() => handleProjectClick(record)}>
-                        {record.project && <span><b>Name : </b>{record.project}</span>}
-                        {record.mintExpiresAt && <span><br /><b>Time : </b> <span>{record.updateTime || record.time.replace('UTC', '')}<span hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}>{record.mintExpiresAt}</span></span></span>}
-                        {record.price && <div className='flex flex-row'><b>Price : </b><div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'flex flex-row ml-1 ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}></div></div>}
-                        {record.count && <span><b>Supply : </b>{record.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {record.numbersOfDiscordMembers && <span><br /><b>Discord (all) : </b>{record.numbersOfDiscordMembers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {record.DiscordOnlineMembers && <span><br /><b>Discord (online) : </b>{record.DiscordOnlineMembers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {record.numbersOfTwitterFollowers && <span><br /><b>Twitter : </b>{record.numbersOfTwitterFollowers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {record.tweetInteraction.total && <span><br /><b>Twitter Interaction : </b>{record.tweetInteraction.total}</span>}
+                        {<span><b>Name : </b>{record?.project}</span>}
+                        {<span><br /><b>Time : </b> <span>{record?.updateTime || record?.time.replace('UTC', '')}<span hidden={record?.mintExpiresAt.indexOf('Invalid') !== -1}>{record?.mintExpiresAt}</span></span></span>}
+                        {<div className='flex flex-row'><b>Price : </b><div onClick={(e) => record?.wlPrice ? history.push( { pathname: '/foxtoken',search: record?.wlTokenAddress }) : '' } className={'flex flex-row ml-1 ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML={{__html: record?.wlPrice ? `${record?.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record?.wlPrice}) ◎` : `${record?.price?.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}></div></div>}
+                        {<span><b>Supply : </b>{record?.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {<span><br /><b>Discord (all) : </b>{record?.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {<span><br /><b>Discord (online) : </b>{record?.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {<span><br /><b>Twitter : </b>{record?.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {<span><br /><b>Twitter Interaction : </b>{record?.tweetInteraction?.total}</span>}
                     </div>
 
                 </div>
             ),
             customSort: (a, b) => a.project.localeCompare(b.project),
-            customFilterAndSearch: (term, rowData) =>
-                rowData.project.toLowerCase().includes(term.toLowerCase()),
-        },
+            customFilterAndSearch: (term, rowData) => rowData?.project.toLowerCase().includes(term.toLowerCase()), },
 
     ];
 
@@ -343,7 +340,7 @@ const Schedule = () => {
                     </a>
                     <a
                         href={record.projectLink}
-                        className={(record.projectLink && record.projectLink) ? "schedule-link" : "schedule-link-disabled"}
+                        className={(record?.projectLink) ? "schedule-link" : "schedule-link-disabled"}
                         target="_blank"
 
                     >
@@ -361,18 +358,11 @@ const Schedule = () => {
             render: (record) => (
                 <>
                     <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image} src={record.image} />
-                    <span
-                        // cursor-pointer
-                        className=""
-                        onClick={() => handleProjectClick(record)}
-                    >
-                        {record.project}
-                    </span>
+                    <span className="" onClick={() => handleProjectClick(record)} > {record?.project} </span>
                 </>
             ),
             customSort: (a, b) => a.project.localeCompare(b.project),
-            customFilterAndSearch: (term, rowData) =>
-                rowData.project.toLowerCase().includes(term.toLowerCase()),
+            customFilterAndSearch: (term, rowData) =>rowData?.project?.toLowerCase().includes(term.toLowerCase()),
         },
         {
             title: 'Time',
@@ -380,11 +370,9 @@ const Schedule = () => {
             customSort: (a, b) => a.time.localeCompare(b.time), // sorting with time
             render: (record) => (
                 <span>
-                    {record.updateTime || record.time.replace('UTC', '')}
-                    <span
-                        hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}
-                    >
-                        {record.mintExpiresAt}
+                    {record?.updateTime || record?.time.replace('UTC', '')}
+                    <span hidden={record.mintExpiresAt.indexOf('Invalid') !== -1} >
+                        {record?.mintExpiresAt}
                     </span>
                     {/* {record.time !== "" && " (" + moment.utc(record.time, 'hh:mm:ss').fromNow() + ")"} */}
                     {
@@ -400,24 +388,22 @@ const Schedule = () => {
             title: 'Price',
             customSort: (a, b) => +a.price.split(' ')[0] - +b.price.split(' ')[0],
             // send price in parmas and redirect to fox token page
-            render: (record) => <div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-48 flex flex-row ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML=
+            render: (record) => <div onClick={(e) => record?.wlPrice ? history.push( { pathname: '/foxtoken',search: record?.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-48 flex flex-row ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML=
                 {{
                     __html: record.wlPrice ? `
-                    ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
+                    ${record?.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record?.wlPrice}) ◎` : `${record?.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
                 }}></div>,
         },
         {
             title: 'Supply',
             customSort: (a, b) => + a.count.replace(',', '') - + b.count.replace(',', ''),
-            render: (record) => <span>{record.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>,
+            render: (record) => <span>{record?.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>,
         },
         {
             title: 'Discord (all)',
             render: (record) => (
                 <>
-                    {record.numbersOfDiscordMembers
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    {record?.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 </>
             ),
             // @ts-ignore
@@ -427,9 +413,7 @@ const Schedule = () => {
             title: 'Discord (online)',
             render: (record) => (
                 <>
-                    {record.DiscordOnlineMembers
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    {record?.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 </>
             ),
             // @ts-ignore
@@ -439,22 +423,18 @@ const Schedule = () => {
             title: 'Twitter',
             render: (record) => (
                 <>
-                    {record.numbersOfTwitterFollowers
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    {record?.numbersOfTwitterFollowers?.toString() .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 </>
             ),
-            customSort: (a, b) =>
-                a.numbersOfTwitterFollowers - b.numbersOfTwitterFollowers,
+            customSort: (a, b) => a.numbersOfTwitterFollowers - b.numbersOfTwitterFollowers,
         },
         {
             title: 'Tweet Interactions',
-            customSort: (a, b) =>
-                a.tweetInteraction.total - b.tweetInteraction.total,
+            customSort: (a, b) => a.tweetInteraction.total - b.tweetInteraction.total,
             render: (record) => (
                 <>
                     <span>
-                        {record.tweetInteraction.total}
+                        {record?.tweetInteraction?.total}
                         {/*likes: {record.tweetInteraction.likes} <br />*/}
                         {/*comments: {record.tweetInteraction.comments} <br />*/}
                         {/*retweets: {record.tweetInteraction.retweets}*/}
@@ -562,12 +542,6 @@ const Schedule = () => {
                                                                                 <MTableToolbar {...propsCopy}
                                                                                     searchAutoFocus={searchFocus}
                                                                                     onSearchChanged={(text:string)=>{
-                                                                                        setSearchText(text)
-                                                                                        if(text.length > 43){
-                                                                                            // setShowTopLink(true)
-                                                                                        }else{
-                                                                                            // setShowTopLink(false)
-                                                                                        }
                                                                                         propsCopy.onSearchChanged(text);
                                                                                         setSearchFocus(true)
                                                                                     }}

@@ -79,39 +79,39 @@ const columns: Column<FoxTokenData> [] = [
         ),
         width: "300px",
         customSort: (a, b) => a.token.localeCompare(b.token),
-		customFilterAndSearch: (term, rowData) => rowData.token.toLowerCase().includes(term.toLowerCase()),
+		customFilterAndSearch: (term, rowData) =>rowData?.token.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Name',
         customSort: (a, b) => a.name.localeCompare(b.name),
-        render: (record) => <span>{record.name}</span>,
-		customFilterAndSearch: (term, rowData) => rowData.name.toLowerCase().includes(term.toLowerCase()),
+        render: (record) => <span>{record?.name}</span>,
+		customFilterAndSearch: (term, rowData) =>  rowData?.name.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Price',
         customSort: (a, b) => a.floorPrice - b.floorPrice,
-        render: (record) => <div className='break-all whitespace-normal w-40'>{record.floorPrice} ◎</div>,
+        render: (record) => <div className='break-all whitespace-normal w-40'>{record?.floorPrice} ◎</div>,
         // customFilterAndSearch: ( rowData) => rowData.floorPrice,        customFilterAndSearch: (term, rowData,) =>   JSON.stringify(rowData.floorPrice).toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Listings',
         customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
-        render: (record) => <span>{record.totalTokenListings}</span>,
+        render: (record) => <span>{ record?.totalTokenListings }</span>,
     },
     // REMOVING-FF-FOR-NOW
     {
         title: 'Last Sale',
         customSort: (a, b) => new Date(a.lastSaleDate ? a.lastSaleDate : 0 ) as any - (new Date(b.lastSaleDate ? b.lastSaleDate : 0) as any),
-        render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : '-'}</span>,
+        render: (record) => <span>{record ? moment(record.lastSaleDate).fromNow() : '-'}</span>,
     },
     {
         title: '# Owned',
-        render: (record) => <span>{record.whichMyWallets ? record.whichMyWallets.split('-')[0] : '' }</span>,
+        render: (record) => <span>{record?.whichMyWallets?.split('-')[0]}</span>,
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
     },
     {
         title: 'Wallet',
-        render: (record) => <span>{record.whichMyWallets ? record.whichMyWallets.split('-')[1] : ''}</span>,
+        render: (record) => <span>{record?.whichMyWallets?.split('-')[1]}</span>,
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
     },
     // TODO !!!: show after a day??? hide 19th???
@@ -192,20 +192,20 @@ const columns_mobile: Column<FoxTokenData>[] = [
                 </div>
 
                 {/* <br className="xl:hidden lg:hidden" /> */}
-                {record.row_obj.token && <><span> <b>Token : </b>{shortenedWallet(record.row_obj.token)}</span></>}
-                {record.row_obj.name && <><br/><span ><b>Name : </b>{record.row_obj.name}</span></>}
-                {record.row_obj.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice} ◎</span></>}
-                {record.row_obj.totalTokenListings && <><br/><span><b>Listings : </b>{record.row_obj.totalTokenListings}</span></>}
-                {record.row_obj.lastSaleDate && <><br/><span><b>Last Sale Date : </b>{moment(record.row_obj.lastSaleDate).fromNow()}</span></>}
-                {record.row_obj.whichMyWallets &&<><br/><span><b>Owned : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[0] : ''}</span></>}
-                {record.row_obj.whichMyWallets && <><br/><span><b>Wallet : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[1] : ''}</span></>}
-                {record.row_obj.createdAt && <><br/><span><b>createdAt : </b>{record.row_obj.createdAt ? moment(record.row_obj.createdAt).format('DD-MM-YYYY'): ''}</span></>}
+                {<><span> <b>Token : </b>{shortenedWallet(record?.row_obj?.token)}</span></>}
+                {<><br/><span ><b>Name : </b>{record?.row_obj?.name}</span></>}
+                {<><br/><span><b>Price : </b>{record?.row_obj?.floorPrice} ◎</span></>}
+                {<><br/><span><b>Listings : </b>{record?.row_obj?.totalTokenListings}</span></>}
+                {<><br/><span><b>Last Sale Date : </b>{moment(record?.row_obj?.lastSaleDate).fromNow()}</span></>}
+                {<><br/><span><b>Owned : </b>{record?.row_obj?.whichMyWallets?.split('-')[0]}</span></>}
+                {<><br/><span><b>Wallet : </b>{record?.row_obj?.whichMyWallets?.split('-')[1]}</span></>}
+                {<><br/><span><b>createdAt : </b>{moment(record?.row_obj?.createdAt).format('DD-MM-YYYY')}</span></>}
             </span>
-        ),
-        customSort: (a, b) => a.token.localeCompare(b.token),
-		customFilterAndSearch: (term, rowData) => {
-            return rowData.token.toLowerCase().includes(term.toLowerCase()) || rowData.name.toLowerCase().includes(term.toLowerCase())
-        },
+            ),
+            customSort: (a, b) => a.token.localeCompare(b.token),
+            customFilterAndSearch: (term, rowData) => {
+                return rowData?.token?.toLowerCase().includes(term.toLowerCase()) || rowData?.name?.toLowerCase().includes(term.toLowerCase())
+            },
     },
 
 ];
@@ -216,7 +216,7 @@ interface FoxToken {
 
 function FoxToken({contentRef}: FoxToken) {
 
-	const isDemo = useSelector<RootState, boolean>((state : RootState) => state.demo.demo);
+	const isDemo = useSelector<RootState, boolean>((state : RootState) => state?.demo.demo);
 
     const [present, dismiss] = useIonToast();
     const history = useHistory();
@@ -269,7 +269,7 @@ function FoxToken({contentRef}: FoxToken) {
             const error = e as Error & { response?: AxiosResponse };
 
             let msg = '';
-            if (error && error.response) {
+            if (error?.response) {
                 msg = String(error.response.data.body);
             } else {
                 msg = 'Unable to connect. Please try again later';
@@ -341,7 +341,7 @@ function FoxToken({contentRef}: FoxToken) {
     // in the modal for multiple wallets - submit button clicked
     const addMultWalletsSubmit = () => {
         dispatch(setWallet(formWalletMult));
-        if (multWallet && multWallet.length == 3) {
+        if (multWallet?.length == 3) {
             present({
                 message: 'Error - you may only track a maximum of 3 wallets',
                 color: 'danger',
@@ -379,7 +379,7 @@ function FoxToken({contentRef}: FoxToken) {
 			const error = e as Error & { response?: AxiosResponse };
 
 			let msg = '';
-			if (error && error.response) {
+			if (error?.response) {
 				msg = String(error.response.data.body);
 			} else {
 				msg = 'Unable to connect. Please try again later';
@@ -538,7 +538,7 @@ function FoxToken({contentRef}: FoxToken) {
         }
 
         // now go through the wallets in cookies
-        if (multWallet && multWallet.length > 0) {
+        if (multWallet && multWallet?.length > 0) {
             for (let i in multWallet) {
                 const tempWall = multWallet[i];
                 // make sure it's length of a sol wallet ... and that its not the connected wallet
