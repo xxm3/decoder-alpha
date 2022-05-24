@@ -1,25 +1,30 @@
 import { IonLabel } from '@ionic/react';
 import { Grid, Tab, Tabs } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 
+
+
 function MarketPlacePage() {
+     const [showlive, setShowlive] = useState(true);
     return (
         <div className="market-wrapper">
             <div className="flex justify-center mt-6">
                 <IonLabel className="text-4xl font-bold">$DECODE Marketplace</IonLabel>
             </div>
             <div className="flex justify-center mt-6 flex-row ">
-                <button className="w-32 mr-2 mt-2 sm:mt-5 text-base  px-5 py-2 font-medium tracking-wide shadow-lg text-white capitalize focus:outline-none transition duration-300 transform active:scale-95 ease-in-out tab-btn flex justify-center items-center">
+                <button className="w-32 mr-2 mt-2 sm:mt-5 text-base  px-5 py-2 font-medium tracking-wide shadow-lg text-white capitalize focus:outline-none transition duration-300 transform active:scale-95 ease-in-out tab-btn flex justify-center items-center"
+                  onClick={() => setShowlive(true)}>
                     Live
                     <div className="c-badge px-2 pt-0.5 rounded-full ml-2 text-sm">
                        2
                     </div>
                 </button>
-                <button className="w-32 ml-2 mt-2 sm:mt-5 text-base px-5 py-2 font-medium tracking-wide shadow-lg text-white capitalize focus:outline-none transition duration-300 transform active:scale-95 ease-in-out tab-btn flex justify-center items-center">
+                <button className="w-32 ml-2 mt-2 sm:mt-5 text-base px-5 py-2 font-medium tracking-wide shadow-lg text-white capitalize focus:outline-none transition duration-300 transform active:scale-95 ease-in-out tab-btn flex justify-center items-center"
+                  onClick={() => setShowlive(false)}>
                     Ended
                     <div className="c-badge px-2 pt-0.5 rounded-full ml-2 text-sm">
-                        43
+                       3
                     </div>
                 </button>
             </div>
@@ -31,8 +36,10 @@ function MarketPlacePage() {
                             spacing={4}
                             className="flex justify-self-center"
                         >
-                            <Card />
-                            <Card />
+                            {showlive ? <> <Card />
+                            <Card /></>:<><Card1 /><Card1 /><Card1 /></> }
+                            {/* <Card />
+                            <Card /> */}
                             {/*<Card1 />*/}
                             {/*<Card1 />*/}
                             {/*<Card />*/}
@@ -75,16 +82,18 @@ const Card = () => {
                             <div className="absolute top-0 right-0 flex">
                                 <div className="w-7 h-7 flex items-center justify-center mr-2 bg-slate-50/25 rounded-full">
                                     <img
+                                    onClick={()=> window.open('https://twitter.com/SOL_Decoder', "_blank")}
                                         src="./assets/icons/twitter.png"
-                                        className="w-5"
+                                        className="w-5 cursor-pointer"
                                         alt=""
                                     />
                                 </div>
 
                                 <div className="w-7 h-7 flex items-center justify-center bg-slate-50/25 rounded-full">
                                     <img
+                                      onClick={()=> window.open('https://discord.com', "_blank")}
                                         src="./assets/icons/discord.png"
-                                        className="w-5"
+                                        className="w-5 cursor-pointer"
                                         alt=""
                                     />
                                 </div>
@@ -166,19 +175,20 @@ const Card1 = () => {
                                 className="bg-img"
                             />
                             <div className="absolute top-0 right-0 flex">
-                                <div className="w-7 h-7 flex items-center justify-center mr-2 bg-slate-50/25 rounded-full">
+                               <div className="w-7 h-7 flex items-center justify-center mr-2 bg-slate-50/25 rounded-full">
                                     <img
-
+                                    onClick={()=> window.open('https://twitter.com/SOL_Decoder', "_blank")}
                                         src="./assets/icons/twitter.png"
-                                        className="w-5"
+                                        className="w-5 cursor-pointer"
                                         alt=""
                                     />
                                 </div>
 
                                 <div className="w-7 h-7 flex items-center justify-center bg-slate-50/25 rounded-full">
                                     <img
+                                      onClick={()=> window.open('https://discord.com', "_blank")}
                                         src="./assets/icons/discord.png"
-                                        className="w-5"
+                                        className="w-5 cursor-pointer"
                                         alt=""
                                     />
                                 </div>
