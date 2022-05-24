@@ -39,8 +39,8 @@ const ManageServer: React.FC<AppComponentProps> = () => {
         }
         if (window.innerWidth < 525) {
             setIsMobile(true);
-            
-        } 
+
+        }
     }, [window.innerWidth]);
 
     useEffect(() => {
@@ -109,7 +109,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                 <CircularProgress color="inherit" />
             </Backdrop>
             {/*  */}
-            {noServers ? <div className='text-xl text-center'>Unable to find any servers... </div> : 
+            {noServers ? <div className='text-xl text-center'>Unable to find any servers... </div> :
             <>
                 <IonLabel className="text-4xl font-semibold mb-3">
                     Select a Server
@@ -183,10 +183,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                 {/*TODO: need to tell user how many modules they are authorized for... on top right of page*/}
 
                 {/*TODO: need some troubleshooting steps or explanations for users that dont have enough NFTs ... but want to manage servers ...*/}
-
-                {/*and/or need way for reg users to see manageservers page... - perhasp everyone can see but noting shows up but explanations? */}
-
-                {/*TODO: someone messed up login errors on home page...*/}
+                    {/*and/or need way for reg users to see manageservers page... - perhasp everyone can see but noting shows up but explanations? */}
 
                 <br />
                 <div className="flex flex-row justify-center w-full">

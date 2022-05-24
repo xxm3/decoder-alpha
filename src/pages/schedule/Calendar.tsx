@@ -50,8 +50,8 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                         tempArray.push({
                             id: mints[index].mints[i].id,
                             title: mints[index].mints[i].name,
-                            start: moment (mints[index].date,'DD MM YYYY').toDate(),
-                            end: moment(mints[index].date,'DD MM YYYY' ).toDate()
+                            start: moment (mints[index].date,'MM DD YYYY').toDate(),
+                            end: moment(mints[index].date,'MM DD YYYY' ).toDate()
                         })
                     }
                 }
@@ -60,7 +60,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
         setEvents(tempArray)
     }, [mints])
 
-    
+
     useEffect(() => {
         if (window.innerWidth < 525) {
             setIsMobile(true);
@@ -70,7 +70,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
 
    /**
      * Functions
-     */ 
+     */
     const fetchMintsData = () => {
         setIsLoading(true);
 
@@ -123,7 +123,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
 
     };
 
- 
+
     const handleSlotSelect = (slotInfo: SlotInfo) => {
         onNavigate(moment(slotInfo?.slots[0]).toDate());
      };
@@ -182,10 +182,26 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
 
     return (
             <>
-            {isLoading ? 
+            {isLoading ?
                 <div className='flex justify-center items-center mt-4'><Loader/></div>
-                 : 
+                 :
                  <>
+                     <div className="m-3 relative bg-gray-100 p-4 rounded-xl">
+                         <p className="text-lg text-gray-700 font-medium">
+                             {/*TODO*/}
+                             <b>Note this is the first version of our Calendar. Future improvements coming soon:</b>
+                             <ul>
+                                 <li>- Showing more of Today's mints, as it is missing some</li>
+                                 <li>- Showing all the upcoming Magic Eden Launchpad mints</li>
+                                 <li>- Graphing the discord & twitter stats over time (will slowly fill in)</li>
+                                 <li>- Showing what Discords & Twitters were the top gainers from the past day and week</li>
+                             </ul>
+                         </p>
+                         <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                             !
+                         </span>
+                     </div>
+
                     <div className= {`${isMobile ? "text-center" : 'text-left' } text-2xl `}>
                         Mint Calendar
                         <a className="float-right text-base underline cursor-pointer "onClick= {() => history.push( { pathname: '/schedule'})}>
@@ -227,13 +243,9 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                             </IonToolbar>
                         </IonHeader>
 
-                        <IonContent  >
-                            <div className='ml-4 mt-4 mr-4'>
-                                {showGraph ? <MintChart eventGraphData = {eventGraphData}/> : <div className='text-center opacity-40 h-10 bg-slate-500 items-center flex justify-center'> No chart history available</div>}
-                                
-                            </div>
-                            
-                            <div className='mt-5 ml-4 mb-2'>
+                        <IonContent>
+
+                            <div className='mt-1 ml-4 mb-2'>
                                 <div className="flex space-x-3">
                                     {/*discord*/}
                                     <a href={eventGraphData?.data?.data?.discordLink} target="_blank" style={{ pointerEvents: eventGraphData?.data?.data?.discordLink  ? "initial" : "none" }} className={eventGraphData?.data?.data?.discordLink ? "schedule-link" : "schedule-link-disabled"}>
@@ -247,18 +259,21 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                     </a>
                                 </div>
 
-                                    {eventGraphData?.data?.data[0]?.mintName && <span><b>Name : </b>{eventGraphData?.data?.data[0]?.mintName}</span>}
-                                    {eventGraphData?.data?.data[0]?.price && <div className='flex flex-row'><b>Price : </b>{eventGraphData?.data?.data[0]?.price}</div>}
-                                    {eventGraphData?.data?.data[0]?.discord_all && <span><b>Discord (all) : </b>{eventGraphData?.data?.data[0]?.discord_all.toString()}</span>}
-                                    {eventGraphData?.data?.data[0]?.discord_online && <span><br /><b>Discord (online) : </b>{eventGraphData?.data?.data[0]?.discord_online.toString()}</span>}
-                                    {eventGraphData?.data?.data[0]?.tweetInteractions && <span><br /><b>Twitter : </b>{eventGraphData?.data?.data[0]?.tweetInteractions.toString()}</span>}
-                                
-                            </div> 
-                            
-                    
+                                {/*DATA REPEATED ON SCHEDULE.TSX AND CALENDAR.TSX*/}
+                                {eventGraphData?.data?.data[0]?.mintName && <div><b>Name : </b>{eventGraphData?.data?.data[0]?.mintName}</div>}
+                                {eventGraphData?.data?.data[0]?.price && <div><b>Price : </b>{eventGraphData?.data?.data[0]?.price}</div>}
+                                {eventGraphData?.data?.data[0]?.discord_all && <div><b>Discord (all) : </b>{eventGraphData?.data?.data[0]?.discord_all.toString()}</div>}
+                                {eventGraphData?.data?.data[0]?.discord_online && <div><b>Discord (online) : </b>{eventGraphData?.data?.data[0]?.discord_online.toString()}</div>}
+                                {eventGraphData?.data?.data[0]?.tweetInteractions && <div><b>Twitter : </b>{eventGraphData?.data?.data[0]?.tweetInteractions.toString()}</div>}
+                            </div>
+
+                            <div className='ml-4 mt-4 mr-4'>
+                                {showGraph ? <MintChart eventGraphData = {eventGraphData}/> : <div className='text-center opacity-40 h-10 bg-slate-500 items-center flex justify-center'> No chart history available</div>}
+                            </div>
+
                         </IonContent>
                     </IonModal>
-                </> 
+                </>
             }
             </>
     );
