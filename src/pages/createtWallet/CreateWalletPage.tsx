@@ -101,7 +101,7 @@ function CreateWalletPage() {
           <div className='basis-3/6'>
             <div className='left-stake-header flex justify-between items-center mb-5'>
               <div className='md:text-2xl text-lg text-white font-semibold'>Unstaked SOL Decoders</div>
-              <div className='grad-border-blue-green whitespace-nowrap'>
+              <div className='grad-border-blue-green whitespace-nowrap cursor-pointer'>
                 Stake all
               </div>
             </div>
@@ -144,7 +144,7 @@ function CreateWalletPage() {
           <div className='basis-3/6'>
             <div className='left-stake-header flex justify-between items-center mb-5'>
               <div className='md:text-2xl text-lg text-white font-semibold'>Staked SOL Decoders</div>
-              <div className='grad-border-blue-green whitespace-nowrap'>
+              <div className='grad-border-blue-green whitespace-nowrap cursor-pointer'>
                 Unstake all
               </div>
             </div>
