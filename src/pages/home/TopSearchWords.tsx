@@ -29,7 +29,7 @@ const TopSearchWords = () => {
             const error = e as Error & { response?: AxiosResponse };
 
             let msg = '';
-            if (error && error.response) {
+            if (error?.response) {
                 msg = String(error.response.data.body);
             } else {
                 msg = 'Unable to connect. Please try again later';
