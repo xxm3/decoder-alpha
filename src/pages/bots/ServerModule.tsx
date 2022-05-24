@@ -41,9 +41,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [server, setServer] = useState<Server | null>(null);
-    const [showInstruction, setShowInstruction] = useState<boolean>(false)
-    const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(false)
-    const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] = useState<boolean>(false)
+    const [showInstruction, setShowInstruction] = useState<boolean>(true)
+    const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(true)
+    const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] = useState<boolean>(true)
     
 
     const [dropdownValue, setDropdownValue] = useState({
@@ -297,9 +297,14 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 <CircularProgress color="inherit" />
             </Backdrop>
 
+            <div className={isMobile ? 'flex-col items-center flex items-center':'flex justify-between flex-row items-center'}>
             <IonLabel className="md:text-4xl text-2xl font-semibold">
                 Configure Bot Packages
             </IonLabel>
+            <IonLabel className={`text-base flex ${isMobile ? 'mt-2' :''}`}>
+                You are authorized moduls
+            </IonLabel>
+            </div>
 
             <div className="flex flex-row justify-center w-full mt-9">
                 <div className="server-module-bg p-4 px-6 w-full">
@@ -359,7 +364,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 </div>
 
                     {/* Hide show channale list of mint module */}
-                                {checked.mintInfoModule && (
+                                {!checked.mintInfoModule && (
                                     <>
                                         <div className="flex flex-row justify-center w-full">
                                             <div className="server-module-bg p-2 mt-2">
@@ -487,7 +492,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 </div>
 
                     {/* Hide show channale list of fox token module */}
-                                {checked.tokenModule && (
+                                {!checked.tokenModule && (
                                     <>
                                         <div className="flex w-full">
                                             <div className="server-module-bg p-2 mt-2 w-full">
