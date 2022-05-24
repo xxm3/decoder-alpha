@@ -511,7 +511,7 @@ const Schedule = () => {
                                                             // calendar icon for show calendar do not remove
                                                             actions={[
                                                                 /**
-                                                                 * TODO !!!! : disabled until its less shit
+                                                                 * TODO !!!! : disabled calendar until backend fixed
                                                                  *
                                                                  * - need a "click here view calendar" on top...
                                                                  *

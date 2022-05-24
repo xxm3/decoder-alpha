@@ -98,7 +98,14 @@ const columns: Column<FoxTokenData> [] = [
         customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
         render: (record) => <span>{record.totalTokenListings}</span>,
     },
-    // REMOVING-FF-FOR-NOW
+    {
+        title: 'Created',
+        // @ts-ignore
+        render: (record) => <span>{moment(record.createdAt).format('MM-DD-YYYY')}</span>,
+        // @ts-ignore
+        customSort: (a, b) => new Date(a.createdAt) as any - (new Date(b.createdAt) as any),
+
+    },
     {
         title: 'Last Sale',
         customSort: (a, b) => new Date(a.lastSaleDate ? a.lastSaleDate : 0 ) as any - (new Date(b.lastSaleDate ? b.lastSaleDate : 0) as any),
@@ -114,15 +121,6 @@ const columns: Column<FoxTokenData> [] = [
         render: (record) => <span>{record.whichMyWallets ? record.whichMyWallets.split('-')[1] : ''}</span>,
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
     },
-    // TODO !!!: show after a day??? hide 19th???
-    // {
-    //     title: 'Created',
-    //     // @ts-ignore
-    //     render: (record) => <span>{moment(record.createdAt).format('MM-DD-YYYY')}</span>,
-    //     // @ts-ignore
-    //     customSort: (a, b) => new Date(a.createdAt) as any - (new Date(b.createdAt) as any),
-    //
-    // },
     {
         title: '',
         render: (record) =>
@@ -196,10 +194,10 @@ const columns_mobile: Column<FoxTokenData>[] = [
                 {record?.row_obj?.name && <><br/><span ><b>Name : </b>{record.row_obj.name}</span></>}
                 {record?.row_obj?.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice} ◎</span></>}
                 {record?.row_obj?.totalTokenListings && <><br/><span><b>Listings : </b>{record.row_obj.totalTokenListings}</span></>}
+                {record?.row_obj?.createdAt && <><br/><span><b>Created : </b>{moment(record.createdAt).format('MM-DD-YYYY')}</span></>}
                 {record?.row_obj?.lastSaleDate && <><br/><span><b>Last Sale Date : </b>{moment(record.row_obj.lastSaleDate).fromNow()}</span></>}
                 {record?.row_obj?.whichMyWallets &&<><br/><span><b>Owned : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[0] : ''}</span></>}
                 {record?.row_obj?.whichMyWallets && <><br/><span><b>Wallet : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[1] : ''}</span></>}
-                {record?.row_obj?.createdAt && <><br/><span><b>createdAt : </b>{record.row_obj.createdAt ? moment(record.row_obj.createdAt).format('DD-MM-YYYY'): ''}</span></>}
             </span>
         ),
         customSort: (a, b) => a.token.localeCompare(b.token),
