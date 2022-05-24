@@ -79,13 +79,13 @@ const columns: Column<FoxTokenData> [] = [
         ),
         width: "300px",
         customSort: (a, b) => a.token.localeCompare(b.token),
-		customFilterAndSearch: (term, rowData) =>rowData?.token.toLowerCase().includes(term.toLowerCase()),
+		customFilterAndSearch: (term, rowData) =>rowData?.token?.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Name',
-        customSort: (a, b) => a.name.localeCompare(b.name),
+        customSort: (a, b) => a.name?.localeCompare(b.name),
         render: (record) => <span>{record?.name}</span>,
-		customFilterAndSearch: (term, rowData) =>  rowData?.name.toLowerCase().includes(term.toLowerCase()),
+		customFilterAndSearch: (term, rowData) =>  rowData?.name?.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Price',
@@ -109,7 +109,7 @@ const columns: Column<FoxTokenData> [] = [
     {
         title: 'Last Sale',
         customSort: (a, b) => new Date(a.lastSaleDate ? a.lastSaleDate : 0 ) as any - (new Date(b.lastSaleDate ? b.lastSaleDate : 0) as any),
-        render: (record) => <span>{record ? moment(record.lastSaleDate).fromNow() : '-'}</span>,
+        render: (record) => <span>{record && record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : '-'}</span>,
     },
     {
         title: '# Owned',
@@ -1072,15 +1072,8 @@ function FoxToken({contentRef}: FoxToken) {
                     </div>
                 ) : (
 
-                    <div css={css`
-                    /* show search in mobile */
-						/* @media (max-width: 576px){
-							.MuiToolbar-root > .MuiTextField-root {
-								display : none;
-							}
-						} */
-
-					`}>
+                    // css={css``}
+                    <div>
 
                         {/*<IonItem style={{"width": "250px"}}>*/}
                         {/*    <IonLabel>Show Verified Only</IonLabel>*/}
@@ -1103,8 +1096,6 @@ function FoxToken({contentRef}: FoxToken) {
                             'Not Listed' means it is not listed for sale anymore, and shown for historical purposes.
                             The Last Sale column is only updated when viewing the chart or your own tokens (which updates it for others as well).
                             "
-                            // REMOVING-FF-FOR-NOW
-                            // ^^
 
                             url="https://famousfoxes.com/tokenmarket"
                             actions={[
@@ -1166,117 +1157,6 @@ function FoxToken({contentRef}: FoxToken) {
                                 // hide eye icon on mobile
                                 columnsButton: isMobile ? false : true,
                             }}
-                            // BUG-92-commented-out-4
-                            // {
-                            //     icon: () => (
-                            //         <>
-                            //             <IonIcon
-                            //                 icon={cog}
-                            //             />
-                            //             <IonPopover
-                            //                 isOpen={!!popoverOpened}
-                            //                 onDidDismiss={() =>
-                            //                     setPopoverOpened(false)
-                            //                 }
-                            //             >
-                            //                 <IonContent>
-                            //                     <div className="p-2">
-                            //                         <h3 className="font-bold pb-1 w-full pt-5">
-                            //                             Date Format
-                            //                         </h3>
-                            //
-                            //                         <IonList>
-                            //                             <IonRadioGroup
-                            //                                 value={
-                            //                                     chartDateSelected
-                            //                                 }
-                            //                                 onIonChange={(
-                            //                                     e
-                            //                                 ) =>
-                            //                                     setChartDateSelected(
-                            //                                         e.detail
-                            //                                             .value
-                            //                                     )
-                            //                                 }
-                            //                             >
-                            //                                 <IonItem>
-                            //                                     <IonLabel>
-                            //                                         "2 hours
-                            //                                         ago"
-                            //                                     </IonLabel>
-                            //                                     <IonRadio value="fromNow" />
-                            //                                 </IonItem>
-                            //
-                            //                                 <IonItem>
-                            //                                     <IonLabel>
-                            //                                         "2022-01-01
-                            //                                         12:00"
-                            //                                     </IonLabel>
-                            //                                     <IonRadio value="yyyyMmDd" />
-                            //                                 </IonItem>
-                            //                             </IonRadioGroup>
-                            //                         </IonList>
-                            //
-                            //                         <h3 className="font-bold pb-1 w-full pt-5">
-                            //                             Chart Colors
-                            //                         </h3>
-                            //
-                            //                         <IonItem>
-                            //                             <IonLabel
-                            //                                 position="stacked"
-                            //                                 className="font-bold"
-                            //                             >
-                            //                                 Line Color
-                            //                             </IonLabel>
-                            //                             <IonInput
-                            //                                 onIonChange={(
-                            //                                     e
-                            //                                 ) =>
-                            //                                     setLineColorSelected(
-                            //                                         e.detail
-                            //                                             .value!
-                            //                                     )
-                            //                                 }
-                            //                                 value={
-                            //                                     lineColorSelected
-                            //                                 }
-                            //                                 placeholder="red, #c6ac95, rgb(255, 0, 0)"
-                            //                             ></IonInput>
-                            //                         </IonItem>
-                            //                         <IonItem>
-                            //                             <IonLabel
-                            //                                 position="stacked"
-                            //                                 className="font-bold"
-                            //                             >
-                            //                                 Shaded Area
-                            //                                 Color
-                            //                             </IonLabel>
-                            //                             <IonInput
-                            //                                 onIonChange={(
-                            //                                     e
-                            //                                 ) =>
-                            //                                     setShadedAreaColorSelected(
-                            //                                         e.detail
-                            //                                             .value!
-                            //                                     )
-                            //                                 }
-                            //                                 value={
-                            //                                     shadedAreaColorSelected
-                            //                                 }
-                            //                                 placeholder="red, #c6ac95, rgb(255, 0, 0)"
-                            //                             ></IonInput>
-                            //                         </IonItem>
-                            //                     </div>
-                            //                 </IonContent>
-                            //             </IonPopover>
-                            //
-                            //             {/*--{token}-{name}-*/}
-                            //         </>
-                            //     ),
-                            //     tooltip: 'Customise',
-                            //     isFreeAction: true,
-                            // 	onClick: () => setPopoverOpened(true)
-                            // },
                             detailPanel={[
                                 {
                                     icon: '📈',
@@ -1285,14 +1165,6 @@ function FoxToken({contentRef}: FoxToken) {
                                         <FoxTokenCharts {...record.rowData} />
                                     ),
                                 },
-                                // 🗠
-                                // {
-                                //     icon: '📉',
-                                //     tooltip: 'View Chart',
-                                //     render: (record:any) => (
-                                //         <TVChartContainer symbol={record.rowData.id || 'token'}  />
-                                //     ),
-                                // },
                             ]}
                         />
                          {/*recent FF tokens*/}

@@ -1,4 +1,4 @@
-import {IonLabel,IonContent, IonIcon, useIonToast,IonRefresher, IonRefresherContent} from '@ionic/react';
+import {IonLabel, IonContent, IonIcon, useIonToast, IonRefresher, IonRefresherContent} from '@ionic/react';
 import React, {useEffect, useState} from 'react';
 import Loader from "../components/Loader";
 import {instance} from "../axios";
@@ -10,8 +10,8 @@ import moment from 'moment';
 import {chatbubbleEllipsesOutline, eye, eyeOff, eyeOffOutline, eyeOutline, notifications} from "ionicons/icons";
 import {useHistory} from "react-router";
 import usePersistentState from '../hooks/usePersistentState';
-import { RefresherEventDetail } from '@ionic/core';
-import { Virtuoso } from 'react-virtuoso';
+import {RefresherEventDetail} from '@ionic/core';
+import {Virtuoso} from 'react-virtuoso';
 
 interface NftPriceTableProps {
     foo?: string;
@@ -47,7 +47,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
     const [hideComments, setHideComments] = useState(true);
     const [width, setWidth] = useState(window.innerWidth);
 
-    const [isMobile,setIsMobile] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
     const [mode] = usePersistentState("mode", "dark");
 
     const smallWidthpx = 768;
@@ -58,16 +58,24 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
             render: (record) => (
                 <>
                     <b>Name : </b>{record?.image ?
-                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image} src={record.image}/> : null}
+                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image}
+                         src={record.image}/> : null}
                     <span>{record ? record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()) : '-'}</span>
                     <span><br/><b>Mint Date : </b>{record ? moment(record.createdAt).fromNow() : "-"}</span>
                     <span><br/><b>Mint Price : </b>{record ? `${record.mintPrice} ◎` : '-'}</span>
                     <span><br/><b>High Price : </b>{record ? `${record.highestPrice} ◎` : "-"}</span>
-                    <span><br/><b>% Change : </b>{record ? <span className={record.pctChange > 0 ? 'greenPctChange' : 'redPctChange'} hidden={!record.pctChange}>{record ? record.pctChange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''}%</span> : '-'}</span>
+                    <span><br/><b>% Change : </b>{record ?
+                        <span className={record.pctChange > 0 ? 'greenPctChange' : 'redPctChange'}
+                              hidden={!record.pctChange}>{record ? record.pctChange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''}%</span> : '-'}</span>
                     <span><br/><b>Meta : </b>{record ? record.meta : '-'}</span>
-                    <span className='flex flex-row items-center'><br/><b>ME URL : </b> {record ? <a href={record.meUrl} target="_blank" className="big-emoji" hidden={!record.meUrl || record.meUrl.length < 5}><img src={meLogo} className="me-logo ml-2"/></a> : '-'}</span>
-                    <span><b>Mint URL : </b>{record ? <a href={record?.mintUrl} target="_blank" className="big-emoji" hidden={record.mintUrl.length < 5}> 🌐 </a> : "-"}</span>
-                    <span><br/><b>Comments : </b>{record ? <span hidden={hideComments}>{record.comments}</span> : "-"}</span>
+                    <span className='flex flex-row items-center'><br/><b>ME URL : </b> {record ?
+                        <a href={record.meUrl} target="_blank" className="big-emoji"
+                           hidden={!record.meUrl || record.meUrl.length < 5}><img src={meLogo}
+                                                                                  className="me-logo ml-2"/></a> : '-'}</span>
+                    <span><b>Mint URL : </b>{record ? <a href={record?.mintUrl} target="_blank" className="big-emoji"
+                                                         hidden={record.mintUrl.length < 5}> 🌐 </a> : "-"}</span>
+                    <span><br/><b>Comments : </b>{record ?
+                        <span hidden={hideComments}>{record.comments}</span> : "-"}</span>
                 </>
             ),
             customSort: (a, b) => a.name.localeCompare(b.name),
@@ -81,17 +89,18 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
             title: 'Name',
             render: (record) => (
                 <>
-                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image} src={record.image}/>
+                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image}
+                         src={record.image}/>
                     <span> {record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())} </span>
                 </>
             ),
             customSort: (a, b) => a.name.localeCompare(b.name),
             searchable: true,
-            customFilterAndSearch: (term, rowData) =>rowData?.name.toLowerCase().includes(term.toLowerCase()),
+            customFilterAndSearch: (term, rowData) => rowData?.name.toLowerCase().includes(term.toLowerCase()),
         },
         {
             title: 'Mint Date',
-            render: (record) => ( <span> {moment(record?.createdAt).fromNow()} </span> ),
+            render: (record) => (<span> {moment(record?.createdAt).fromNow()} </span>),
             customSort: (a, b) => +new Date(a.createdAt) - +new Date(b.createdAt),
         },
         {
@@ -109,7 +118,8 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
         {
             title: '% change',
             customSort: (a, b) => a.pctChange - b.pctChange,
-            render: (record) => ( <span className={ record?.pctChange > 0 ? 'greenPctChange' : 'redPctChange' } hidden={!record.pctChange}> {record ? record?.pctChange?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''} % </span> ),
+            render: (record) => (<span className={record?.pctChange > 0 ? 'greenPctChange' : 'redPctChange'}
+                                       hidden={!record.pctChange}> {record ? record?.pctChange?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''} % </span>),
         },
         {
             title: 'Meta',
@@ -119,7 +129,8 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
         {
             title: 'ME URL',
             render: (record) => (
-                <a href={record?.meUrl} target="_blank" className="big-emoji" hidden={!record.meUrl || record.meUrl.length < 5} >
+                <a href={record?.meUrl} target="_blank" className="big-emoji"
+                   hidden={!record.meUrl || record.meUrl.length < 5}>
                     <img src={meLogo} className="me-logo"/>
                 </a>
             ),
@@ -128,7 +139,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
         {
             title: 'Mint URL',
             render: (record) => (
-                <a href={record?.mintUrl} target="_blank" className="big-emoji" hidden={record.mintUrl.length < 5} >
+                <a href={record?.mintUrl} target="_blank" className="big-emoji" hidden={record.mintUrl.length < 5}>
                     🌐
                 </a>
             ),
@@ -172,14 +183,14 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
      * Functions
      */
 // Pull to refresh function
-     function doRefresh(event: CustomEvent<RefresherEventDetail>) {
+    function doRefresh(event: CustomEvent<RefresherEventDetail>) {
         setTimeout(() => {
             fetchTableData()
-          event.detail.complete();
+            event.detail.complete();
         }, 1000);
-      }
+    }
 
-      const fetchTableData = async () => {
+    const fetchTableData = async () => {
 
         setTableData([]);
 
@@ -192,7 +203,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
                 console.error("error when getting mint alerts automated: " + error);
 
                 let msg = '';
-                if ( error?.response) {
+                if (error?.response) {
                     msg = String(error.response.data.body);
                 } else {
                     msg = 'Unable to connect. Please try again later';
@@ -247,56 +258,59 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
             {/*        </div>*/}
             {/*}*/}
 
-                {
-                    !tableData.length
-                        ?   <div className="pt-10 flex justify-center items-center">
-                                <Loader />
-                            </div>
-                        : <div className=" "> {/* max-w-fit mx-auto */}
-                        <IonContent  className='h-screen' scroll-y='false'>
-                        {isMobile ?  <IonRefresher slot="fixed" onIonRefresh={doRefresh} pullFactor={0.5} pullMin={100} pullMax={200} >
-                            <IonRefresherContent />
-                        </IonRefresher> : '' }
+            {
+                !tableData.length
+                    ? <div className="pt-10 flex justify-center items-center">
+                        <Loader/>
+                    </div>
+                    : <div className=" "> {/* max-w-fit mx-auto */}
+                        <IonContent className='h-screen' scroll-y='false'>
+                            {isMobile ? <IonRefresher slot="fixed" onIonRefresh={doRefresh} pullFactor={0.5} pullMin={100}
+                                                      pullMax={200}>
+                                <IonRefresherContent/>
+                            </IonRefresher> : ''}
 
-                        <Virtuoso  className='h-full'
-                        totalCount={1}
-                        itemContent ={()=>  <Table
-                            data={tableData}
-                            columns={ isMobile ? columns_mobile : columns}
-                            options={{
-                                searchFieldStyle:{
-                                    marginLeft:'-24%',
-                                    marginTop:'2%',
-                                    paddingLeft:"4%",
-                                    borderRadius:30,
-                                    borderWidth: 1
-                                },
-                                rowStyle:( rowData:any) =>  ({
-                                    backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
-                                    color: mode === 'dark' ? "" : '#4B5563',
-                                    borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
-                                }),
-                            }}
-                            title={"Mint Alerts Automated - Stats"}
-                            description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
-                            actions={[
-                                {
-                                    icon: () => <IonIcon icon={notifications}/>,
-                                    tooltip: 'Alerts for new links',
-                                    onClick: () => history.push('/alerts#ma'),
-                                    isFreeAction: true,
-                                },
-                                {
-                                    icon : hideComments ? () => <IonIcon icon={chatbubbleEllipsesOutline}/> :  () => <IonIcon icon={chatbubbleEllipsesOutline}/>,
-                                    tooltip : hideComments ? "Show Comments" : "Hide comments",
-                                    onClick : () => setHideComments(!hideComments),
-                                    isFreeAction : true
-                                }
-                            ]}
-                        />}/>
+                            <Virtuoso className='h-full'
+                                      totalCount={1}
+                                      itemContent={() => <Table
+                                          data={tableData}
+                                          columns={isMobile ? columns_mobile : columns}
+                                          options={{
+                                              searchFieldStyle: {
+                                                  marginLeft: '-24%',
+                                                  marginTop: '2%',
+                                                  paddingLeft: "4%",
+                                                  borderRadius: 30,
+                                                  borderWidth: 1
+                                              },
+                                              rowStyle: (rowData: any) => ({
+                                                  backgroundColor: mode === 'dark' ? '' : '#F5F7F7',
+                                                  color: mode === 'dark' ? "" : '#4B5563',
+                                                  borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
+                                              }),
+                                          }}
+                                          title={"Mint Alerts Automated - Stats"}
+                                          description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
+                                          actions={[
+                                              {
+                                                  icon: () => <IonIcon icon={notifications}/>,
+                                                  tooltip: 'Alerts for new links',
+                                                  onClick: () => history.push('/alerts#ma'),
+                                                  isFreeAction: true,
+                                              },
+                                              {
+                                                  icon: hideComments ? () => <IonIcon
+                                                      icon={chatbubbleEllipsesOutline}/> : () => <IonIcon
+                                                      icon={chatbubbleEllipsesOutline}/>,
+                                                  tooltip: hideComments ? "Show Comments" : "Hide comments",
+                                                  onClick: () => setHideComments(!hideComments),
+                                                  isFreeAction: true
+                                              }
+                                          ]}
+                                      />}/>
                         </IonContent>
-                        </div>
-                }
+                    </div>
+            }
 
             {/*<div hidden={true}*/}
             {/*    className={`w-full bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4`}>*/}
