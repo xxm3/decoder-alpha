@@ -3,15 +3,16 @@ import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
 import { environment } from '../../environments/environment';
 import { Calendar, momentLocalizer, SlotInfo } from 'react-big-calendar'
-import { close } from 'ionicons/icons';
 import './Schedule.css'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment';
-import { IonButton, IonContent, IonHeader, IonIcon, IonModal, IonPopover,  IonToolbar, useIonToast } from '@ionic/react';
-import { useHistory} from "react-router";
+import { IonButton, IonContent, IonHeader, IonIcon, IonModal, IonPopover,  IonRippleEffect,  IonToolbar, useIonToast } from '@ionic/react';
+import { useHistory, useParams, useLocation } from 'react-router';
 import MintChart from './MintChart';
 import Loader from '../../components/Loader';
+import { logoDiscord, logoTwitter, link, close } from 'ionicons/icons';
+
 
 
 
@@ -30,21 +31,12 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedEvent,setSelectedEvent] = useState<any>()
     const [showMorePopup, setShowMorePopup] = useState<boolean>(true)
-    const [width, setWidth] = useState(window.innerWidth);
-
+    const [eventGraphData, setEventGraphData] = useState<any>()
+    const [showGraph, setShowGraph] = useState<boolean>(false)
 
     /**
      * Use Effects
      */
-     const chartHeight = useMemo(() => {
-        if (width > 1536) return 100;
-        if (width > 1280) return 115;
-        if (width > 1024) return 135;
-        if (width > 768) return 180;
-        if (width > 640) return 225;
-        return 140;
-    }, [width]);
-
     useEffect(() => {
         fetchMintsData();
     }, []);
@@ -75,6 +67,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
         }
     }, [window.innerWidth]);
 
+
    /**
      * Functions
      */ 
@@ -90,7 +83,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
             .catch((error) => {
                 setIsLoading(false);
                 let msg = '';
-                if (error && error.response) {
+                if (error?.response) {
                     msg = String(error.response.data.body);
                 } else {
                     msg = 'Unable to connect. Please try again later';
@@ -104,15 +97,42 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
             })
     }
 
+    // viewing the chart for a calendar
+    const viewChart = async(id: any) => {
+        // setmintLineData(defaultGraph);
+
+        await instance
+            .get( environment.backendApi + '/mintInfo?mintId=' + id )
+            .then((res) => {
+                setEventGraphData(res)
+                if(res.data.data.length > 1){
+                    setShowGraph(true)
+                }else {
+                    setShowGraph(false)
+                }
+            })
+            .catch((err) => {
+                console.error( 'error when getting event history data: ' + err );
+                present({
+                    message: 'Error - unable to load chart data. Please refresh and try again',
+                    color: 'danger',
+                    duration: 8000,
+                    buttons: [{ text: 'hide', handler: () => dismiss() }],
+                });
+            });
+
+    };
+
  
     const handleSlotSelect = (slotInfo: SlotInfo) => {
-        onNavigate(moment(slotInfo.slots[0]).toDate());
+        onNavigate(moment(slotInfo?.slots[0]).toDate());
      };
 
      // select event handler
     const handleSelectEvent = useCallback((event) => {
-         setOpenEventModal(true)
          setSelectedEvent(event)
+         viewChart(event.id);
+         setOpenEventModal(true)
          setShowMorePopup(false)
     },[])
 
@@ -146,15 +166,15 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
    const CustomCalenderToolbar  = () => {
        return (
            <div className='rbc-toolbar flex justify-between mt-4'>
-               <div>
-                   <button type="button" className={isMobile ? 'w-2.5 ml-2' : ''} onClick={()=> NextPrevMonth('prevMonth')} >{"<"}</button>
-                   <button type="button"  onClick={()=> NextPrevMonth('currentMonth')}>{moment(selectDate).format('MMM')}</button>
-                   <button type="button" className={isMobile ? 'w-2.5' : ''} onClick={()=> NextPrevMonth('nextMonth')} >{">"}</button>
+               <div >
+                   <button type="button" style={{fontSize:isMobile ? '12px' : '', width:isMobile? '20px' : ''}} onClick={()=> NextPrevMonth('prevMonth')} >{"<"}</button>
+                   <button type="button" style={{fontSize:isMobile ? '12px' : ''}} onClick={()=> NextPrevMonth('currentMonth')}>{moment(selectDate).format('MMM')}</button>
+                   <button type="button" style={{fontSize:isMobile ? '12px' : '', width:isMobile? '20px' : ''}} onClick={()=> NextPrevMonth('nextMonth')} >{">"}</button>
                </div>
-               <div>
-                   <button type="button" className={isMobile ? 'w-2.5 ' : ''} onClick={()=> NextPrevDate('prevDay')}>{"<"}</button>
-                   <button type="button" onClick={()=> NextPrevDate('today')} >{moment(selectDate).format('LL')}</button>
-                   <button type="button" className={isMobile ? 'w-2.5' : ''} onClick={()=> NextPrevDate('nextDay')} >{">"}</button>
+               <div >
+                   <button type="button" style={{fontSize:isMobile ? '12px' : '', width:isMobile? '20px' : ''}}  onClick={()=> NextPrevDate('prevDay')}>{"<"}</button>
+                   <button type="button" style={{fontSize:isMobile ? '12px' : ''}}  onClick={()=> NextPrevDate('today')} >{moment(selectDate).format('LL')}</button>
+                   <button type="button" style={{fontSize:isMobile ? '12px' : '', width:isMobile? '20px' : ''}}  onClick={()=> NextPrevDate('nextDay')} >{">"}</button>
                </div>
            </div>
          );
@@ -172,26 +192,25 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                             <IonIcon icon={close} className="text-3xl " />
                         </a>
                     </div>
-                    <div className="ml-3 mr-3">
+                    <div className={ isMobile ? 'ml-1 mr-1' :"ml-3 mr-3"}>
                         <Calendar
                                 defaultDate={ moment().add(-1, "days").toDate()}
+                                className={isMobile ? 'show-more-btn custome-event' : ''}
                                 views={['month']}
                                 events={myEvents}
                                 components = {{
                                     toolbar : CustomCalenderToolbar,
-                                    // dateCellWrapper: ColoredDateCellWrapper,
                                 }}
                                 localizer={localizer}
                                 onSelectEvent={handleSelectEvent}
                                 onSelectSlot={(e: any)=>{handleSlotSelect(e)}}
                                 selectable
                                 onNavigate = {(action: Date)=> onNavigate(action)}
-                                style={{ height: isMobile ? 500 : 700 }}
+                                style={{ height: isMobile ? '80vh' : 700, width:isMobile? '90vw' : '' }}
                                 startAccessor='start'
                                 endAccessor='end'
                                 date={selectDate}
                                 popup={showMorePopup}
-                                // eventPropGetter={eventPropGetter}
                         />
                     </div>
                     <IonModal isOpen={openEventModal} onDidDismiss={() => {setOpenEventModal(false); setShowMorePopup(true)}} cssClass={isMobile ? 'calender-modal-mobile' :'calender-modal-web'} >
@@ -210,11 +229,37 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
 
                         <IonContent  >
                             <div className='ml-4 mt-4 mr-4'>
-                                <MintChart selectedEvent = {selectedEvent}/>
+                                {showGraph ? <MintChart eventGraphData = {eventGraphData}/> : <div className='text-center opacity-40 h-10 bg-slate-500 items-center flex justify-center'> No chart history available</div>}
+                                
                             </div>
+                            
+                            <div className='mt-5 ml-4 mb-2'>
+                                <div className="flex space-x-3">
+                                    {/*discord*/}
+                                    <a href={eventGraphData?.data?.data?.discordLink} target="_blank" style={{ pointerEvents: eventGraphData?.data?.data?.discordLink  ? "initial" : "none" }} className={eventGraphData?.data?.data?.discordLink ? "schedule-link" : "schedule-link-disabled"}>
+                                        <IonIcon icon={logoDiscord} className="big-emoji" />
+                                        <IonRippleEffect />
+                                    </a>
+                                    {/*twitter*/}
+                                    <a href={eventGraphData?.data?.data?.twitterLink} className="schedule-link" target="_blank">
+                                        <IonIcon icon={logoTwitter} className="big-emoji" />
+                                        <IonRippleEffect />
+                                    </a>
+                                </div>
+
+                                    {eventGraphData?.data?.data[0]?.mintName && <span><b>Name : </b>{eventGraphData?.data?.data[0]?.mintName}</span>}
+                                    {eventGraphData?.data?.data[0]?.price && <div className='flex flex-row'><b>Price : </b>{eventGraphData?.data?.data[0]?.price}</div>}
+                                    {eventGraphData?.data?.data[0]?.discord_all && <span><b>Discord (all) : </b>{eventGraphData?.data?.data[0]?.discord_all.toString()}</span>}
+                                    {eventGraphData?.data?.data[0]?.discord_online && <span><br /><b>Discord (online) : </b>{eventGraphData?.data?.data[0]?.discord_online.toString()}</span>}
+                                    {eventGraphData?.data?.data[0]?.tweetInteractions && <span><br /><b>Twitter : </b>{eventGraphData?.data?.data[0]?.tweetInteractions.toString()}</span>}
+                                
+                            </div> 
+                            
+                    
                         </IonContent>
                     </IonModal>
-                </> }
+                </> 
+            }
             </>
     );
 };

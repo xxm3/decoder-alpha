@@ -5,11 +5,9 @@ import { css } from '@emotion/react';
 import { useIonToast } from "@ionic/react";
 import { Chart } from 'react-chartjs-2';
 import "./MintChart.scss"
-import { instance } from '../../axios';
-import { environment } from '../../environments/environment';
 
 
-function MintChart({selectedEvent}: any) {
+function MintChart({eventGraphData}: any) {
     /**
      * States & Variables
      */
@@ -35,28 +33,22 @@ function MintChart({selectedEvent}: any) {
 
     // viewing the chart for a calendar
     const viewChart = () => {
-        setmintLineData(defaultGraph);
-
-        instance
-            .get( environment.backendApi + '/mintInfo?mintId=' + selectedEvent?.id )
-            .then((res) => {
-               
-
-                const labels = res.data.data.map((el: { date: Date }) => {
+        if(eventGraphData){
+            setmintLineData(defaultGraph);
+                const labels = eventGraphData.data.data.map((el: { date: Date }) => {
                     return moment(el.date,'DD MM YYYY').format('l');
                 });
 
-                const discordAllData = res.data.data.map((el: { discord_all: any }) => {
+                const discordAllData = eventGraphData.data.data.map((el: { discord_all: any }) => {
                     return parseInt(el.discord_all);
                 });
-                const tweetInteractionsData = res.data.data.map((el: { tweetInteractions: any }) =>
+                const tweetInteractionsData = eventGraphData.data.data.map((el: { tweetInteractions: any }) =>
                         parseInt(el.tweetInteractions)
                 );
 
-                const discordOnlineData = res.data.data.map((el: { discord_online: any }) =>
+                const discordOnlineData = eventGraphData.data.data.map((el: { discord_online: any }) =>
                         parseInt(el.discord_online)
                 );
-
 
                 if (discordAllData.length === 0 && tweetInteractionsData.length === 0 && discordOnlineData.length ===0) {
                     present({
@@ -106,22 +98,16 @@ function MintChart({selectedEvent}: any) {
                     labels: labels,
                     datasets: datasetsAry,
                 });
-            })
-            .catch((err) => {
-                console.error( 'error when getting event history data: ' + err );
-                present({
-                    message: 'Error - unable to load chart data. Please refresh and try again',
-                    color: 'danger',
-                    duration: 8000,
-                    buttons: [{ text: 'hide', handler: () => dismiss() }],
-                });
-            });
+        }
+                
+            
+            
 
     };
 
     useEffect(() => {
         viewChart();
-    }, []);
+    }, [eventGraphData]);
 
     useEffect(() => {
         function resizeWidth() {
@@ -144,7 +130,7 @@ function MintChart({selectedEvent}: any) {
                                 intersect: true
                             },
                             plugins: {
-                                legend: { display: false},
+                                legend: { display: true},
                                 tooltip: { mode: 'index', intersect: false, },
                             },
                             scales: {

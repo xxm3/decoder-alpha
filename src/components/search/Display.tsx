@@ -106,7 +106,7 @@ const Display: React.FC<{
                                 } else setSelectedMessage(m);
                             }}
                             message={m}
-                            key={m.id}
+                            key={i}
                         />
                     )
                 )}
