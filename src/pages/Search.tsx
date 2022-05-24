@@ -113,7 +113,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
 
     const handlePage = (type: string) => {
         contentRef?.scrollToTop(800)
-        if (type === 'next' && (!messageQuery?.isPreviousData && messageQuery?.data?.hasMore)) setCurrentPage(currentPage + 1)
+        if (type === 'next' && (!messageQuery.isPreviousData && messageQuery.data.hasMore)) setCurrentPage(currentPage + 1)
         else setCurrentPage(currentPage - 1)
     }
 
@@ -135,7 +135,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
             console.error('try/catch in Search.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
 
-            if (error && error.response) {
+            if (error?.response) {
                 throw new Error(String(error.response.data.body));
             } else {
                 throw new Error('Unable to connect. Please try again later');
@@ -167,7 +167,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                     },
                 }
             );
-			if (data?.messages && data.messages.length > 0) {
+			if (data?.messages?.length > 0) {
                 const arr: string[] = [];
                 data.messages.forEach((msg) => {
                     if (msg && !arr.includes(msg.source)) {
@@ -189,7 +189,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
             // }
 
             let msg = '';
-            if (error && error.response) {
+            if (error?.response) {
                 msg = String(error.response.data.body);
             } else {
                 msg = 'Unable to connect. Please try again later';
@@ -219,14 +219,14 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
             select: (data: any) => {
 
                 // in case couldn't search on this
-                if (data.error && data.body) {
+                if (data?.error && data.body) {
                     throw new Error(String(data.body));
                 }
 
                 const datasetForChartDailyCount = getDailyCountData(data);
 
                 const chartDataDailyCount = {
-                    labels: dispLabelsDailyCount(data?.ten_day_count, true),
+                    labels: dispLabelsDailyCount(data && data.ten_day_count, true),
                     datasets: [
                         {
                             type: 'line' as const,
@@ -296,8 +296,8 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                     <p className="text-lg text-red-700 font-medium">
 
                         {/* No results found */}
-                        <b>{(messageQuery?.error as Error)?.message ||
-                            (graphQuery?.error as Error)?.message || 'Unable to connect, please try again later'}</b>
+                        <b>{(messageQuery.error as Error).message ||
+                            (graphQuery.error as Error).message || 'Unable to connect, please try again later'}</b>
                     </p>
                     <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                         !
@@ -318,16 +318,16 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                                 <b>{"Error while loading message"}</b>
                             </p> :
                             <DisplayGraph {...{
-                                chartDataDailyCount: graphQuery?.data.chartDataDailyCount,
-                                chartDataPerSource: graphQuery?.data.chartDataPerSource,
+                                chartDataDailyCount:  graphQuery?.data.chartDataDailyCount,
+                                chartDataPerSource:  graphQuery?.data.chartDataPerSource,
                                 chartHeight,
                                 isLoadingChart: graphQuery?.isLoading,
-                                totalCount: messageQuery?.data?.totalCount
+                                totalCount:  messageQuery?.data?.totalCount
                             }} />}
                     {/* Displaying the custom skeleton loader while fetching */}
                     {messageQuery?.isFetching ?
                         new Array(10).fill(0).map((_, i) => <SearchSkeleton key={i}/>) :
-                        messageQuery?.isError ? <p className="text-lg text-red-700 font-medium">
+                         messageQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                 <b>{"Error while loading message"}</b>
                             </p> :
                             (<div className="relative">
@@ -373,18 +373,15 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                         </div>)
                     }
 
-                    {(messageQuery?.data?.totalCount ?? 0) > 5 && (
+                    {(messageQuery.data?.totalCount ?? 0) > 5 && (
                         <>
-                            {(currentPage != 0 && !messageQuery?.isFetching) &&
+                            {(currentPage != 0 && !messageQuery.isFetching) &&
                                 <IonButton onClick={() => handlePage('previous')}>Previous</IonButton>}
-                            {(!messageQuery?.isPreviousData && messageQuery?.data?.hasMore && !messageQuery?.isFetching) &&
+                            {(!messageQuery.isPreviousData && messageQuery.data.hasMore && !messageQuery.isFetching) &&
                                 <IonButton onClick={() => handlePage('next')} className="ml-4">Next</IonButton>}
 
-                            {!messageQuery?.isFetching &&
-                                <IonButton
-                                    onClick={() => contentRef?.scrollToTop(800)}
-                                    className="float-right"
-                                >
+                            {!messageQuery.isFetching &&
+                                <IonButton onClick={() => contentRef && contentRef.scrollToTop(800)} className="float-right" >
                                     Scroll to Top
                                 </IonButton>}
                         </>

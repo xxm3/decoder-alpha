@@ -119,10 +119,9 @@ const Whitelist = () => {
                         Thanks for completing all the steps to use our site
                     </div>
 
-                    {/*-{userWhitelistDataQuery?.data}-*/}
-                    {/*hidden={userWhitelistDataQuery?.data?.didAllSiteFunctions}*/}
-                    <div className="secondary-bg-forced m-1 p-4 rounded-xl" hidden={didAllSteps}
-                    >
+                    {/*-{userWhitelistDataQuery.data}-*/}
+                    {/*hidden={userWhitelistDataQuery.data.didAllSiteFunctions}*/}
+                    <div className="secondary-bg-forced m-1 p-4 rounded-xl" hidden={didAllSteps} >
                         <div className={`font-bold pb-1`}>Want to be able to submit your wallet, or help get whitelisted?</div>
                         {/*"used-the-site" role progress*/}
                         <div>

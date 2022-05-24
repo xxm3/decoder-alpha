@@ -94,14 +94,14 @@ const WordsCount = () => {
                     <Grid item xs={12} md={6} xl={4}>
                         <div className="secondary-bg-forced p-4 rounded-xl">
                             <div className="flex flex-col">
-                                { wordList?.yesterday ? 
+                                { wordList.yesterday ? 
                                     
                                     <>
                                         <IonLabel className="ml-3 text-xl">
                                         Top 5 new words created in the last day
                                         </IonLabel>
                                         <div className='flex flex-col'>
-                                            {wordList?.yesterday.map((text:any,index:number)=>{
+                                            {wordList.yesterday && wordList.yesterday.map((text:any,index:number)=>{
                                                 return <Link to={'search/' + text.word} className="ml-5 text-sm mt-2 underline underline-offset-2" key={index}> {text.word} </Link>
                                             })}
                                         </div>

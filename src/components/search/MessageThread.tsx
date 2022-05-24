@@ -52,17 +52,19 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             //     // @ts-expect-error
             //     time : message.createdAt ? message.createdAt : message.time_stamp
             // }))
-            data.subsequentMsg = data.subsequentMsg.map(message => ({
-                ...message,
-                // @ts-expect-error
-                time : message.createdAt ? message.createdAt : message.time_stamp
-            }))
+            
+                data.subsequentMsg = data?.subsequentMsg?.map(message => ({
+                    ...message,
+                    // @ts-expect-error
+                    time : message ? message.createdAt : message.time_stamp
+                }))
+            
             if (pageParam === defaultPageParam)
                 // return [...data.priorMsg, message, ...data.subsequentMsg];
                 return [message, ...data.subsequentMsg];
             // return [...data.priorMsg, ...data.subsequentMsg];
             return [...data.subsequentMsg];
-
+            
         } catch (e) {
             console.error('try/catch in MessageThread.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
@@ -85,7 +87,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         fetchPreviousPage,
     } = useInfiniteQuery(['messageThread', message.id], fetchContext, {
         getNextPageParam: (lastPage): PageParam => {
-            const lastMessageId = lastPage?.slice(-1)[0]?.id;
+            const lastMessageId =  lastPage?.slice(-1)[0]?.id;
             return lastMessageId
                 ? {
                       messageId: lastMessageId,
@@ -96,7 +98,10 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                 : undefined;
         },
         getPreviousPageParam: (firstPage) => {
-            const firstMessageId = firstPage[0]?.id;
+            let firstMessageId 
+            if(firstPage[0]){
+                firstMessageId = firstPage[0].id;
+            }
             return firstMessageId
                 ? {
                       messageId: firstMessageId,

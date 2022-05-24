@@ -34,7 +34,7 @@ const FfNamed = () => {
 
             let msg = '';
 
-            if (error && error.response) {
+            if (error?.response) {
                 msg = String(error.response.data.body);
             } else {
                 msg = 'Unable to connect. Please try again later';
@@ -57,9 +57,8 @@ const FfNamed = () => {
 
     const ffNamedQuery = useQuery(['ffNamed'], getFfNamed, {
         select: (data: any) => {
-
             // Error handling
-            if (data?.error && data.message) {
+            if (data.error && data.message) {
                 throw new Error(String(data.message));
             }
             return {
@@ -103,8 +102,7 @@ const FfNamed = () => {
                         </div>
                         <div>
                             <ul style={{listStyle: 'disc'}}>
-                                {
-                                    ffNamedQuery?.data?.data?.map((obj: any) => (
+                                {ffNamedQuery?.data?.data?.map((obj: any) => (
                                         <li key={obj.createdAt} className="ml-3  ">
                                             {/*<Link to={'search/' + obj.msg} className="underline">*/}
                                             <div className="ml-1 flex justify-between p-1">

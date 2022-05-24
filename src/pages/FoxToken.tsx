@@ -79,24 +79,24 @@ const columns: Column<FoxTokenData> [] = [
         ),
         width: "300px",
         customSort: (a, b) => a.token.localeCompare(b.token),
-		customFilterAndSearch: (term, rowData) => rowData.token?.toLowerCase().includes(term.toLowerCase()),
+		customFilterAndSearch: (term, rowData) =>rowData?.token.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Name',
-        customSort: (a, b) => a?.name?.localeCompare(b?.name),
-        render: (record) => <span>{record.name}</span>,
-		customFilterAndSearch: (term, rowData) => rowData.name?.toLowerCase().includes(term.toLowerCase()),
+        customSort: (a, b) => a.name.localeCompare(b.name),
+        render: (record) => <span>{record?.name}</span>,
+		customFilterAndSearch: (term, rowData) =>  rowData?.name.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Price',
         customSort: (a, b) => a.floorPrice - b.floorPrice,
-        render: (record) => <div className='break-all whitespace-normal w-40'>{record.floorPrice} ◎</div>,
-        // customFilterAndSearch: ( rowData) => rowData.floorPrice,        customFilterAndSearch: (term, rowData,) =>   JSON.stringify(rowData.floorPrice)?.toLowerCase().includes(term.toLowerCase()),
+        render: (record) => <div className='break-all whitespace-normal w-40'>{record?.floorPrice} ◎</div>,
+        // customFilterAndSearch: ( rowData) => rowData.floorPrice,        customFilterAndSearch: (term, rowData,) =>   JSON.stringify(rowData.floorPrice).toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Listings',
         customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
-        render: (record) => <span>{record.totalTokenListings}</span>,
+        render: (record) => <span>{ record?.totalTokenListings }</span>,
     },
     {
         title: 'Created',
@@ -109,16 +109,16 @@ const columns: Column<FoxTokenData> [] = [
     {
         title: 'Last Sale',
         customSort: (a, b) => new Date(a.lastSaleDate ? a.lastSaleDate : 0 ) as any - (new Date(b.lastSaleDate ? b.lastSaleDate : 0) as any),
-        render: (record) => <span>{record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : '-'}</span>,
+        render: (record) => <span>{record ? moment(record.lastSaleDate).fromNow() : '-'}</span>,
     },
     {
         title: '# Owned',
-        render: (record) => <span>{record.whichMyWallets ? record.whichMyWallets.split('-')[0] : '' }</span>,
+        render: (record) => <span>{record?.whichMyWallets?.split('-')[0]}</span>,
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
     },
     {
         title: 'Wallet',
-        render: (record) => <span>{record.whichMyWallets ? record.whichMyWallets.split('-')[1] : ''}</span>,
+        render: (record) => <span>{record?.whichMyWallets?.split('-')[1]}</span>,
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
     },
     {
@@ -190,20 +190,21 @@ const columns_mobile: Column<FoxTokenData>[] = [
                 </div>
 
                 {/* <br className="xl:hidden lg:hidden" /> */}
-                {record?.row_obj?.token && <><span> <b>Token : </b>{shortenedWallet(record.row_obj.token)}</span></>}
-                {record?.row_obj?.name && <><br/><span ><b>Name : </b>{record.row_obj.name}</span></>}
-                {record?.row_obj?.floorPrice && <><br/><span><b>Price : </b>{record.row_obj.floorPrice} ◎</span></>}
-                {record?.row_obj?.totalTokenListings && <><br/><span><b>Listings : </b>{record.row_obj.totalTokenListings}</span></>}
-                {record?.row_obj?.createdAt && <><br/><span><b>Created : </b>{moment(record.createdAt).format('MM-DD-YYYY')}</span></>}
-                {record?.row_obj?.lastSaleDate && <><br/><span><b>Last Sale Date : </b>{moment(record.row_obj.lastSaleDate).fromNow()}</span></>}
-                {record?.row_obj?.whichMyWallets &&<><br/><span><b>Owned : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[0] : ''}</span></>}
-                {record?.row_obj?.whichMyWallets && <><br/><span><b>Wallet : </b>{record.row_obj.whichMyWallets ? record.row_obj.whichMyWallets.split('-')[1] : ''}</span></>}
+                {<><span> <b>Token : </b>{shortenedWallet(record?.row_obj?.token)}</span></>}
+                {<><br/><span ><b>Name : </b>{record?.row_obj?.name}</span></>}
+                {<><br/><span><b>Price : </b>{record?.row_obj?.floorPrice} ◎</span></>}
+                {<><br/><span><b>Listings : </b>{record?.row_obj?.totalTokenListings}</span></>}
+                {<><br/><span><b>Created : </b>{moment(record?.row_obj?.createdAt).format('DD-MM-YYYY')}</span></>}
+                {<><br/><span><b>Last Sale Date : </b>{moment(record?.row_obj?.lastSaleDate).fromNow()}</span></>}
+                {<><br/><span><b>Owned : </b>{record?.row_obj?.whichMyWallets?.split('-')[0]}</span></>}
+                {<><br/><span><b>Wallet : </b>{record?.row_obj?.whichMyWallets?.split('-')[1]}</span></>}
+
             </span>
-        ),
-        customSort: (a, b) => a.token.localeCompare(b.token),
-		customFilterAndSearch: (term, rowData) => {
-            return rowData.token?.toLowerCase().includes(term.toLowerCase()) || rowData.name?.toLowerCase().includes(term.toLowerCase())
-        },
+            ),
+            customSort: (a, b) => a.token.localeCompare(b.token),
+            customFilterAndSearch: (term, rowData) => {
+                return rowData?.token?.toLowerCase().includes(term.toLowerCase()) || rowData?.name?.toLowerCase().includes(term.toLowerCase())
+            },
     },
 
 ];
@@ -214,7 +215,7 @@ interface FoxToken {
 
 function FoxToken({contentRef}: FoxToken) {
 
-	const isDemo = useSelector<RootState, boolean>((state : RootState) => state.demo.demo);
+	const isDemo = useSelector<RootState, boolean>((state : RootState) => state?.demo.demo);
 
     const [present, dismiss] = useIonToast();
     const history = useHistory();
@@ -267,7 +268,7 @@ function FoxToken({contentRef}: FoxToken) {
             const error = e as Error & { response?: AxiosResponse };
 
             let msg = '';
-            if (error && error.response) {
+            if (error?.response) {
                 msg = String(error.response.data.body);
             } else {
                 msg = 'Unable to connect. Please try again later';
@@ -339,7 +340,7 @@ function FoxToken({contentRef}: FoxToken) {
     // in the modal for multiple wallets - submit button clicked
     const addMultWalletsSubmit = () => {
         dispatch(setWallet(formWalletMult));
-        if (multWallet && multWallet.length == 3) {
+        if (multWallet?.length == 3) {
             present({
                 message: 'Error - you may only track a maximum of 3 wallets',
                 color: 'danger',
@@ -377,7 +378,7 @@ function FoxToken({contentRef}: FoxToken) {
 			const error = e as Error & { response?: AxiosResponse };
 
 			let msg = '';
-			if (error && error.response) {
+			if (error?.response) {
 				msg = String(error.response.data.body);
 			} else {
 				msg = 'Unable to connect. Please try again later';
@@ -536,7 +537,7 @@ function FoxToken({contentRef}: FoxToken) {
         }
 
         // now go through the wallets in cookies
-        if (multWallet && multWallet.length > 0) {
+        if (multWallet && multWallet?.length > 0) {
             for (let i in multWallet) {
                 const tempWall = multWallet[i];
                 // make sure it's length of a sol wallet ... and that its not the connected wallet
@@ -590,7 +591,7 @@ function FoxToken({contentRef}: FoxToken) {
 
     // call on load, when cookie array set
     useEffect(() => {
-        setSearchValue(location?.search);
+        setSearchValue(location.search);
 
 		if(!multWalletLoading){
 			// however DON'T do this in local host (will do this elsewhere ... since get RPC blocked)
@@ -689,7 +690,6 @@ function FoxToken({contentRef}: FoxToken) {
             if (window.location.href.indexOf(local_host_str) !== -1) {
                 SplTokens = await getUserSpls();
             }
-
             if (!multWallet?.length && !walletAddress ) {
 
                 present({
@@ -702,7 +702,7 @@ function FoxToken({contentRef}: FoxToken) {
             }
 
             // make sure they have tokens
-           if (mySplTokens.length === 0 && (!SplTokens || SplTokens?.length===0) ) {
+           if (mySplTokens.length === 0 && (!SplTokens || SplTokens.length===0) ) {
                 // show toast
                 present({
                     message: 'No tokens found on your wallet(s) :( Tokens must be in your wallet, and have an active listing on Fox Token Market',
@@ -775,7 +775,7 @@ function FoxToken({contentRef}: FoxToken) {
                 instance
                     .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
                     .then((res) => {
-                        const sales = res?.data?.data.salesData;
+                        const sales = res.data.data.salesData;
                         if(sales){
                             sales.forEach((sale: {token: string, lastSaleDate: string}) => {
                                 const row = newTableData.find((d: any) => d.token === sale.token);
@@ -809,7 +809,7 @@ function FoxToken({contentRef}: FoxToken) {
                 hidden={!viewmytoken}
                 className="m-3 relative bg-red-100 p-4 rounded-xl"
             >
-                <p className="text-lg text-red-700 font-medium">
+                <div className="text-lg text-red-700 font-medium">
                     <ul>
                         <li>
                             - Click the red button{' '}
@@ -829,7 +829,7 @@ function FoxToken({contentRef}: FoxToken) {
                             to manually add a wallet
                         </li>
                     </ul>
-                </p>
+                </div>
                 <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                     !
                 </span>
@@ -1022,7 +1022,7 @@ function FoxToken({contentRef}: FoxToken) {
                 className="m-3 relative bg-primary p-4 rounded-xl"
                 hidden={hidHelpTop}
             >
-                <p className="text-medium text-white font-medium">
+                <div className="text-medium text-white font-medium">
                     <b>
                         - Want to see which tokens in your wallet are actually
                         worth something? Click this{' '}
@@ -1059,7 +1059,7 @@ function FoxToken({contentRef}: FoxToken) {
                     >
                         Got it!
                     </IonButton>
-                </p>
+                </div>
                 <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                     ?
                 </span>
@@ -1290,7 +1290,7 @@ function FoxToken({contentRef}: FoxToken) {
                                 //     icon: '📉',
                                 //     tooltip: 'View Chart',
                                 //     render: (record:any) => (
-                                //         <TVChartContainer symbol={record?.rowData?.id || 'token'}  />
+                                //         <TVChartContainer symbol={record.rowData.id || 'token'}  />
                                 //     ),
                                 // },
                             ]}

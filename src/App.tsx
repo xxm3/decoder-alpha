@@ -52,8 +52,8 @@ import Bots from './pages/bots/Bots';
 import ManageServer from './pages/bots/ManageServer';
 import ServerModule from './pages/bots/ServerModule';
 import ScheduleCalendar from './pages/schedule/Calendar';
-import Staking from './pages/staking/Staking';
-import MarketPlace from './pages/marketplace/MarketPlace';
+import StakingLayout from './pages/staking/StakingLayout';
+import MarketPlace from './pages/marketplace/MarketPlacePage';
 
 // // https://javascript.plainenglish.io/how-to-setup-and-add-google-analytics-to-your-react-app-fd361f47ac7b
 // const TRACKING_ID = "G-Z3GDFZ53DN";
@@ -78,6 +78,10 @@ import PrivacyPolicy from './pages/home/PrivacyPolicy';
 import { getPlatforms, isPlatform, getConfig } from '@ionic/react';
 import { AppVersion } from '@awesome-cordova-plugins/app-version';
 import { async } from '@firebase/util';
+import MarketPlaceLayout from './pages/marketplace/MarketPlaceLayout';
+import ConnectWalletLayout from './pages/connect-wallet/ConnectWalletLayout';
+import CreatetWalletLayout from './pages/createtWallet/CreatetWalletLayout';
+import MarketPlaceDetailLayout from './pages/marketPlaceDetail/MarketPlaceDetailLayout';
 
 
 
@@ -233,21 +237,24 @@ const App = () => {
                                     <>
                                         <IonReactRouter>
                                             <IonRouterOutlet id="router">
+
                                             <Switch>
-                                                <AppRoute
-                                                exact
-                                                path="/staking"
-                                                component={
-                                                    Staking
-                                                }
-                                                />
-                                                <AppRoute
-                                                exact
-                                                path="/marketplace"
-                                                component={
-                                                    MarketPlace
-                                                }
-                                                />
+                                            <Route path='/staking' >
+                                                <StakingLayout />
+                                            </Route>
+                                            <Route path='/marketplace' >
+                                                <MarketPlaceLayout />
+                                            </Route>
+                                            <Route path='/connect-wallet' >
+                                                <ConnectWalletLayout />
+                                            </Route>
+                                            <Route path='/create-wallet-account' >
+                                                <CreatetWalletLayout />
+                                            </Route>
+                                            <Route path='/marketplace-details' >
+                                                <MarketPlaceDetailLayout />
+                                            </Route>
+                                               
                                                 {/*  */}
                                                 <Route path="/*">
                                                     <IonPage>

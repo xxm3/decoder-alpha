@@ -103,13 +103,14 @@ function StackedSearch({foo, onSubmit}: any) {
                         .get(`${environment.backendApi}/currentUser`)
                         .then((res: any) => setAlertWalletAddress(res.data.user.walletAddress));
                 }).catch((err : AxiosError) => {
-
-                present({
-                    message: err.response?.data.body || "Something went wrong",
-                    color: 'danger',
-                    duration: 5000,
-                    buttons: [{ text: 'hide', handler: () => dismiss() }],
-                });
+                    if(err.response){
+                        present({
+                            message: err.response.data.body || "Something went wrong",
+                            color: 'danger',
+                            duration: 5000,
+                            buttons: [{ text: 'hide', handler: () => dismiss() }],
+                        });
+                    }
             }).finally(() => setFormLoadingAddalertWalletAddress(false));
 
             /**
