@@ -341,7 +341,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                                 <b>{"Error while loading message"}</b>
                             </p> :
                             (<div className="relative">
-                                <div className="absolute right-0">
+                                <div className="absolute right-0 mt-2">
                                     {/*The button used to open the filter menu*/}
                                     <button
                                         type="button"
@@ -350,7 +350,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                                             setToggleFilters(!toggleFilters);
                                         }}
                                         id="filter"
-                                        className="my-2 mr-2 h-full z-50"
+                                        className="my-2 mr-2 h-full z-50 focus:outline-none"
                                     >
                                         <IonIcon
                                             icon={filterCircleOutline}
