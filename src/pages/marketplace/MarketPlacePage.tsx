@@ -6,25 +6,35 @@ import { useHistory } from 'react-router';
 
 
 function MarketPlacePage() {
-     const [showlive, setShowlive] = useState(true);
+    const [showlive, setShowlive] = useState(true);
     return (
-        <div className="market-wrapper">
-            <div className="flex justify-center mt-6">
-                <IonLabel className="text-4xl font-bold">$DECODE Marketplace</IonLabel>
+        <div className="market-wrapper px-4">
+            <div className="flex justify-between mt-6">
+                <IonLabel className="md:text-4xl text-2xl font-bold">$DECODE Marketplace</IonLabel>
+                <button
+                    className="w-max text-base items-center md:px-10 px-5 md:py-2 py-1 tracking-wide shadow-lg text-white capitalize hover:opacity-75 focus:outline-none focus:bg-gray-900 transition duration-300 transform active:scale-95 ease-in-out bg-grad-green-blue rounded-xl"
+                >
+                    FB4X....TAg8
+                </button>
             </div>
-            <div className="flex justify-center mt-6 flex-row ">
-                <button className="w-32 mr-2 mt-2 sm:mt-5 text-base  px-5 py-2 font-medium tracking-wide shadow-lg text-white capitalize focus:outline-none transition duration-300 transform active:scale-95 ease-in-out tab-btn flex justify-center items-center"
-                  onClick={() => setShowlive(true)}>
-                    Live
-                    <div className="c-badge px-2 pt-0.5 rounded-full ml-2 text-sm">
-                       2
+            <div className="flex justify-start mt-6 flex-row ">
+
+
+                <button className="mr-2 mt-2 sm:mt-5 text-base px-5 py-2 font-normal tracking-wide shadow-lg text-white capitalize focus:outline-none transition duration-300 transform active:scale-95 ease-in-out  flex justify-center items-center action-button rounded-xl"
+
+                    onClick={() => setShowlive(true)}>
+                    Live Auctions
+                    <div className="">
+                        2
                     </div>
                 </button>
-                <button className="w-32 ml-2 mt-2 sm:mt-5 text-base px-5 py-2 font-medium tracking-wide shadow-lg text-white capitalize focus:outline-none transition duration-300 transform active:scale-95 ease-in-out tab-btn flex justify-center items-center"
-                  onClick={() => setShowlive(false)}>
+
+
+                <button className="ml-2 mt-2 sm:mt-5 text-base px-5 py-2 font-normal tracking-wide shadow-lg text-white capitalize focus:outline-none transition duration-300 transform active:scale-95 ease-in-out  flex justify-center items-center action-button rounded-xl"
+                    onClick={() => setShowlive(false)}>
                     Ended
-                    <div className="c-badge px-2 pt-0.5 rounded-full ml-2 text-sm">
-                       3
+                    <div className="">
+                        3
                     </div>
                 </button>
             </div>
@@ -37,7 +47,7 @@ function MarketPlacePage() {
                             className="flex justify-self-center"
                         >
                             {showlive ? <> <Card />
-                            <Card /></>:<><Card1 /><Card1 /><Card1 /></> }
+                                <Card /></> : <><Card1 /><Card1 /><Card1 /></>}
                             {/* <Card />
                             <Card /> */}
                             {/*<Card1 />*/}
@@ -70,19 +80,19 @@ const Card = () => {
                     </p>
                     {/* <div className="seperator my-4"></div> */}
                     {/* image */}
-                    <div className="flex mx-auto my-9">
+                    <div className="flex mx-auto">
                         <div className="image-box rounded-lg relative">
                             <img
-                             onClick={() => {
-                            history.push('/marketplace-details');
-                        }}
+                                onClick={() => {
+                                    history.push('/marketplace-details');
+                                }}
                                 src="./assets/market-place/image1.webp"
                                 className="bg-img"
                             />
                             <div className="absolute top-0 right-0 flex">
                                 <div className="w-7 h-7 flex items-center justify-center mr-2 bg-slate-50/25 rounded-full">
                                     <img
-                                    onClick={()=> window.open('https://twitter.com/SOL_Decoder', "_blank")}
+                                        onClick={() => window.open('https://twitter.com/SOL_Decoder', "_blank")}
                                         src="./assets/icons/twitter.png"
                                         className="w-5 cursor-pointer"
                                         alt=""
@@ -91,7 +101,7 @@ const Card = () => {
 
                                 <div className="w-7 h-7 flex items-center justify-center bg-slate-50/25 rounded-full">
                                     <img
-                                      onClick={()=> window.open('https://discord.com', "_blank")}
+                                        onClick={() => window.open('https://discord.com', "_blank")}
                                         src="./assets/icons/discord.png"
                                         className="w-5 cursor-pointer"
                                         alt=""
@@ -168,16 +178,16 @@ const Card1 = () => {
                     {/* image */}
                     <div className="flex mx-auto my-9">
                         <div className="image-box rounded-lg relative">
-                            <img  onClick={() => {
-                            history.push('/marketplace-details');
-                        }}
+                            <img onClick={() => {
+                                history.push('/marketplace-details');
+                            }}
                                 src="./assets/market-place/image1.webp"
                                 className="bg-img"
                             />
                             <div className="absolute top-0 right-0 flex">
-                               <div className="w-7 h-7 flex items-center justify-center mr-2 bg-slate-50/25 rounded-full">
+                                <div className="w-7 h-7 flex items-center justify-center mr-2 bg-slate-50/25 rounded-full">
                                     <img
-                                    onClick={()=> window.open('https://twitter.com/SOL_Decoder', "_blank")}
+                                        onClick={() => window.open('https://twitter.com/SOL_Decoder', "_blank")}
                                         src="./assets/icons/twitter.png"
                                         className="w-5 cursor-pointer"
                                         alt=""
@@ -186,7 +196,7 @@ const Card1 = () => {
 
                                 <div className="w-7 h-7 flex items-center justify-center bg-slate-50/25 rounded-full">
                                     <img
-                                      onClick={()=> window.open('https://discord.com', "_blank")}
+                                        onClick={() => window.open('https://discord.com', "_blank")}
                                         src="./assets/icons/discord.png"
                                         className="w-5 cursor-pointer"
                                         alt=""
