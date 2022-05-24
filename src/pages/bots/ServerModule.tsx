@@ -8,6 +8,7 @@ import './ServerModule.scss';
 import { useHistory, useLocation } from 'react-router';
 import Loader from '../../components/Loader';
 import Help from '../../components/Help';
+import upIcon from '../../images/up-icon.png'
 
 interface LocationParams {
     pathname: string;
@@ -38,9 +39,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         mintInfoModule: false,
         tokenModule: false,
     });
-    const [age, setAge] = React.useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [server, setServer] = useState<Server | null>(null);
+    const [showInstruction, setShowInstruction] = useState<boolean>(false)
+    const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(false)
+    const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] = useState<boolean>(false)
+    
 
     const [dropdownValue, setDropdownValue] = useState({
         dailyMintsWebhookChannel: '',
@@ -57,70 +61,70 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     /**
      * Use Effects
      */
-    // useEffect(() => {
-    //     if(!localStorage.getItem('role')){
-    //         history.push('/')
-    //         return
-    //     }else{
-    //         setRole(localStorage.getItem('role'))
-    //     }
-    //     if (window.innerWidth < 525) {
-    //         setIsMobile(true);
-    //     }
-    // }, [window.innerWidth]);
+     useEffect(() => {
+        if(!localStorage.getItem('role')){
+            history.push('/')
+            return
+        }else{
+            setRole(localStorage.getItem('role'))
+        }
+        if (window.innerWidth < 525) {
+            setIsMobile(true);
+        }
+        //     window.onbeforeunload = function() {
+    //         console.log('refress')
+    //         alert('refress')
+    //         // return "Dude, are you sure you want to refresh? Think of the kittens!";
+    // }
+    }, [window.innerWidth]);
 
 
     // get guilds
-    // useEffect(() => {
-    //     if (location) {
-    //         if (location.state.server) {
-    //             setIsLoading(true);
-    //             let serverObj = location.state.server;
-    //             setServer(serverObj);
-    //             instance
-    //                 .get(`/guilds/${serverObj.id}`)
-    //                 .then((response) => {
-    //                     let data = response.data.data;
-    //                     if(role ==='3NFT' || role ==='4NFT'){
-    //                         setChecked({
-    //                             ...checked,
-    //                             mintInfoModule: data.mintInfoModule,
-    //                             tokenModule: data.tokenModule,
-    //                         });
-    //                     }
-
-
-    //                     setDropdownValue({
-    //                         ...dropdownValue,
-    //                         dailyMintsWebhookChannel:
-    //                             data.dailyMintsWebhookChannel,
-    //                         oneHourMintInfoWebhookChannel:
-    //                             data.oneHourMintInfoWebhookChannel,
-    //                         analyticsWebhookChannel:
-    //                             data.analyticsWebhookChannel,
-    //                     });
-    //                     setChannel(data.textChannels);
-    //                 })
-    //                 .catch((error: any) => {
-    //                     let msg = '';
-    //                     if (error && error.response) {
-    //                         msg = String(error.response.data.message);
-    //                     } else {
-    //                         msg = 'Unable to connect. Please try again later';
-    //                     }
-    //                     present({
-    //                         message: msg,
-    //                         color: 'danger',
-    //                         duration: 5000,
-    //                         buttons: [{ text: 'X', handler: () => dismiss() }],
-    //                     });
-    //                 })
-    //                 .finally(() => {
-    //                     setIsLoading(false);
-    //                 });
-    //         }
-    //     }
-    // }, [location]);
+    useEffect(() => {
+        
+        if (location?.state?.server) {
+            setIsLoading(true);
+            let serverObj = location.state.server;
+            setServer(serverObj);
+            instance.get(`/guilds/${serverObj.id}`)
+                .then((response) => {
+                    let data = response.data.data;
+                    if(role ==='3NFT' || role ==='4NFT'){
+                        setChecked({
+                            ...checked,
+                            mintInfoModule: data.mintInfoModule,
+                            tokenModule: data.tokenModule,
+                        });
+                    }
+                    setDropdownValue({
+                        ...dropdownValue,
+                        dailyMintsWebhookChannel: data.dailyMintsWebhookChannel,
+                        oneHourMintInfoWebhookChannel: data.oneHourMintInfoWebhookChannel,
+                        analyticsWebhookChannel: data.analyticsWebhookChannel,
+                    });
+                    setChannel(data.textChannels);
+                    
+                })
+                .catch((error: any) => {
+                    let msg = '';
+                    if (error?.response) {
+                        msg = String(error.response.data.message);
+                    } else {
+                        msg = 'Unable to connect. Please try again later';
+                    }
+                    present({
+                        message: msg,
+                        color: 'danger',
+                        duration: 5000,
+                        buttons: [{ text: 'X', handler: () => dismiss() }],
+                    });
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
+        }
+    
+}, [location]);
 
 
 
@@ -135,11 +139,11 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     },
                 })
                 .then(({ data }) => {
-                    if (data.success) {
+                    if(data.success){
                         setChecked({ ...checked, [obj.module]: obj.enabled });
-                    } else {
+                    }else{
                         let msg = '';
-                        if (data && data.message) {
+                        if (data?.message) {
                             msg = String(data.message);
                         } else {
                             msg = 'Unable to connect. Please try again later';
@@ -152,10 +156,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         });
                     }
                 })
-                .catch((error: any) => {
+                .catch((error:any) => {
 
                     let msg = '';
-                    if (error && error.response) {
+                    if (error?.response) {
                         msg = String(error.response.data.message);
                     } else {
                         msg = 'Unable to connect. Please try again later';
@@ -190,10 +194,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         [obj.webhook]: obj.channel,
                     });
                 })
-                .catch((error: any) => {
+                .catch((error:any) => {
 
                     let msg = '';
-                    if (error && error.response) {
+                    if (error?.response) {
                         msg = String(error.response.data.message);
                     } else {
                         msg = 'Unable to connect. Please try again later';
@@ -214,7 +218,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     let getOption = () => {
         // TODO: all dropdowns need to be ordered alphabeticlly
-        return channel && channel.map((obj: any, index: number) => {
+        return channel?.sort((a: { name: string; },b: { name: any; })=>a.name.localeCompare(b.name)).map((obj: any, index: number) => {
             return (
                 <option value={obj.id} key={index}>
                     {obj.name}
@@ -223,7 +227,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         });
     };
 
-    let showDisableBtnMesage = (message: string) => {
+    let showDisableBtnMesage = (message:string) => {
         present({
             message: message,
             color: 'danger',
@@ -298,14 +302,15 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             </IonLabel>
 
             <div className="flex flex-row justify-center w-full mt-9">
-                <div className="server-module-bg p-4 px-6">
+                <div className="server-module-bg p-4 px-6 w-full">
                     {/*TODO: when you refresh the page - everything shows disabled */}
                     <div className='w-full flex items-center justify-between mb-3'>
                         <div className='text-xl font-semibold '>Instructions</div>
-                        <img src={require('../../images/chevron-down-icon.png')} className='w-4' />
+                        <img src={showInstruction ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`)}  className='w-4' onClick={()=>setShowInstruction((e)=>!e)} />
                     </div>
                     {/* <div className='text-xl font-semibold mb-3'>Instructions</div> */}
-                    <ul className='list-disc ml-5 leading-9'>
+                    {
+                        showInstruction ?  <ul className='list-disc ml-5 leading-9'>
                         <li>Make a new private channel in your Discord. If doing the "Mints" package, name the channel "daily-mints" or whatever you want. Optionally make "1h-mint-info" if you want that as well. Or if you are doing the "Fox token" package, make a channel for the fox token names, and another channel for where users can enter their own bot commands</li>
                         <li>Add the bot to the above channels (by going to the channel settings within Discord)</li>
                         <li>Refresh this page</li>
@@ -314,7 +319,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         </li>
                         <li>Wait for the channels to be populated with data before showing it to the public (8am EST is when daily-mints is populated, varying times for other channels)</li>
                         <li>If doing the "Fox token" package, you need to first tell us before you can start using the bot commands (/token, /token_name, /wallet_tokens) in your server. You also need to add permission for any user in that channel to "Use Application Commands"</li>
-                    </ul>
+                    </ul> : ''
+                    }
+                   
 
                 </div>
             </div>
@@ -324,6 +331,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 <div className='flex flex-col lg:flex-row gap-6'>
 
                     {/*mintInfoModule  */}
+                    
                     <div className='basis-1/2'>
                         <div className="server-module-bg overflow-hidden">
                             <div className="flex flex-row justify-center w-full">
@@ -334,7 +342,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 </div>
                             </div>
 
-                            <div className="flex flex-col mt-4 p-2">
+                            <div className="flex flex-col mt-4 p-2 w-full">
                                 <div className='flex justify-between items-center w-full'>
                                     <IonLabel className="ml-3 text-xl font-semibold">
                                         #1 - "Mints" package
@@ -350,8 +358,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     />
                                 </div>
 
-
-                                {!checked.mintInfoModule && (
+                    {/* Hide show channale list of mint module */}
+                                {checked.mintInfoModule && (
                                     <>
                                         <div className="flex flex-row justify-center w-full">
                                             <div className="server-module-bg p-2 mt-2">
@@ -367,13 +375,14 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                                 channel: event.target.value,
                                                             });
                                                         }} >
-                                                        <option value="">
+                                                        <option value="default">
                                                             Please Select the Daily Mints Channel
                                                         </option>
                                                         {getOption()}
                                                     </select>
                                                 </div>
                                                 <div className='italic text-sm'>(Automated posts about today's mints, along with Twitter/Discord stats)</div>
+                                                { dropdownValue.dailyMintsWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendDailyMints')}>Send a test message</IonButton>}
                                                 {/* 
                                                 Choose a channel above, then click the button below to make sure it worked
                                                 <br /> */}
@@ -404,7 +413,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                             });
                                                         }}
                                                     >
-                                                        <option value="">
+                                                        <option value="default">
                                                             Please Select the One Hour Mint Info Channel
                                                         </option>
                                                         {getOption()}
@@ -417,6 +426,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                     {/* <br />
                                                     <b className="text-red-500">Note: we're currently fixing a bug where mints don't alway show up in this feed</b> */}
                                                 </div>
+                                                {dropdownValue.oneHourMintInfoWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendOneHourMints')}>Send a test message</IonButton>}
 
                                                 {/* Choose a channel above, then click the button below to make sure it worked
                                                 <br /> */}
@@ -425,18 +435,20 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         </div>
                                     </>
                                 )}
+                                
 
                                 <div className="text-sm  mt-2 p-2 border-t-2">
                                     <div className='w-full flex items-center justify-between'>
                                         <div className='text-base my-2 '>
                                             More information
                                         </div>
-                                        <img src={require('../../images/chevron-down-icon.png')} className='w-4' />
+                                        <img src={mintMoreInfoShow ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`)} className='w-4' onClick={()=> setMintMoreInfoShow((e)=>!e)} />
                                     </div>
-                                    <ul className='list-disc ml-5 leading-7'>
+                                    {mintMoreInfoShow ? <ul className='list-disc ml-5 leading-7'>
                                         <li>Your server can have the "daily-mints" and "1h-mint-info" feed, and soon "tomorrows-mints". Enable this to learn more about each</li>
                                         <li>Hold and you get lifetime access, and get free upgrades to existing packages such as getting daily summaries of NFTs coming out in a few weeks, when they they get a bump in their twitter / discord numbers</li>
-                                    </ul>
+                                    </ul> : '' }
+                                    
                                 </div>
                             </div>
                         </div>
@@ -474,11 +486,11 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     />
                                 </div>
 
-
-                                {!checked.tokenModule && (
+                    {/* Hide show channale list of fox token module */}
+                                {checked.tokenModule && (
                                     <>
-                                        <div className="flex flex-row justify-center w-full">
-                                            <div className="server-module-bg p-2 mt-2">
+                                        <div className="flex w-full">
+                                            <div className="server-module-bg p-2 mt-2 w-full">
                                                 {/* <div className="text-xl font-semibold flex mt-8 mb-8">
                                                     "Fox Token" package
                                                 </div> */}
@@ -486,11 +498,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                 <div className="text-lg font-semibold">
                                                     "Fox Token" channel
                                                 </div>
-                                                <div className="flex flex-row justify-between my-2">
+                                                <div className="flex flex-row justify-between my-2 ">
                                                     <select
-                                                        value={
-                                                            dropdownValue.analyticsWebhookChannel
-                                                        }
+                                                        value={ dropdownValue.analyticsWebhookChannel }
                                                         className="server-channel-dropdown"
                                                         onChange={(event: any) => {
                                                             updateWebHooks({
@@ -499,7 +509,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                             });
                                                         }}
                                                     >
-                                                        <option value="">
+                                                        <option value="default">
                                                             Please Select the Fox Token channel
                                                         </option>
                                                         {getOption()}
@@ -509,6 +519,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                 <div className='italic text-sm'>
                                                     (Shows when names are added to WL tokens in Fox Token market, along with charts) {' '}
                                                 </div>
+                                                {dropdownValue.analyticsWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendAnalytics')}>Send a test message</IonButton>}
+
 
                                                 {/* Choose a channel above, then click the button below to make sure it worked
                                                 <br />
@@ -523,13 +535,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         <div className='text-base my-2 '>
                                             More information
                                         </div>
-                                        <img src={require('../../images/chevron-down-icon.png')} className='w-4' />
+                                        <img src={foxTokenMoreInfoShow ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`) } className='w-4' onClick={()=> setFoxTokenMoreInfoShow((e)=>!e)} />
                                     </div>
-                                    <ul className='list-disc ml-5 leading-7'>
+                                    {
+                                        foxTokenMoreInfoShow ? <ul className='list-disc ml-5 leading-7'>
                                         <li>Your server can have our "analytics" feed (where we show when tokens get new names from the Fox Token team), and users can use our bot's slash commands of /token_name and /token and /wallet_tokens </li>
                                         <li>Hold and you get lifetime access, and get free upgrades to existing packages such as getting alerts for Fox Token price/listings data (ie. alerted when any fox token with a name & greater than 1 sol price & greater than 10 listings is out)
                                         </li>
-                                    </ul>
+                                    </ul> : ''
+                                    }
+                                    
 
                                     {/*TODO: all staff to test it*/}
 

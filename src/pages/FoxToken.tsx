@@ -810,7 +810,7 @@ function FoxToken({contentRef}: FoxToken) {
                 hidden={!viewmytoken}
                 className="m-3 relative bg-red-100 p-4 rounded-xl"
             >
-                <p className="text-lg text-red-700 font-medium">
+                <div className="text-lg text-red-700 font-medium">
                     <ul>
                         <li>
                             - Click the red button{' '}
@@ -830,7 +830,7 @@ function FoxToken({contentRef}: FoxToken) {
                             to manually add a wallet
                         </li>
                     </ul>
-                </p>
+                </div>
                 <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                     !
                 </span>
@@ -1023,7 +1023,7 @@ function FoxToken({contentRef}: FoxToken) {
                 className="m-3 relative bg-primary p-4 rounded-xl"
                 hidden={hidHelpTop}
             >
-                <p className="text-medium text-white font-medium">
+                <div className="text-medium text-white font-medium">
                     <b>
                         - Want to see which tokens in your wallet are actually
                         worth something? Click this{' '}
@@ -1060,7 +1060,7 @@ function FoxToken({contentRef}: FoxToken) {
                     >
                         Got it!
                     </IonButton>
-                </p>
+                </div>
                 <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                     ?
                 </span>
