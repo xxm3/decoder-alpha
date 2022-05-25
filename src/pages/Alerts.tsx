@@ -103,13 +103,14 @@ function StackedSearch({foo, onSubmit}: any) {
                         .get(`${environment.backendApi}/currentUser`)
                         .then((res: any) => setAlertWalletAddress(res.data.user.walletAddress));
                 }).catch((err : AxiosError) => {
-                
-                present({
-                    message: err.response?.data.body || "Something went wrong",
-                    color: 'danger',
-                    duration: 5000,
-                    buttons: [{ text: 'hide', handler: () => dismiss() }],
-                });
+                    if(err.response){
+                        present({
+                            message: err.response.data.body || "Something went wrong",
+                            color: 'danger',
+                            duration: 5000,
+                            buttons: [{ text: 'hide', handler: () => dismiss() }],
+                        });
+                    }
             }).finally(() => setFormLoadingAddalertWalletAddress(false));
 
             /**
@@ -151,8 +152,8 @@ function StackedSearch({foo, onSubmit}: any) {
     return (
         <>
 
-            {/* hidden={true}   */}
-            <div hidden={!devMode} className="secondary-bg-forced m-1 p-4 rounded-xl">
+            {/* hidden={true}  hidden={!devMode} */}
+            <div  className="secondary-bg-forced m-1 p-4 rounded-xl">
                 <h4 className={`font-medium ${window.location.href.includes('fnt') ? 'text-red-600 font-medium' : ''}`}>
                     Alerts on New Tokens to your Wallet
                 </h4>

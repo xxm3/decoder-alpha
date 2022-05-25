@@ -44,6 +44,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
     const [tableData, setTableData] = useState<FoxTokenData[]>([]);
     // const [fullTableData, setFullTableData] = useState<FoxTokenData[]>([]);
     const [tokenClickedOn, setTokenClickedOn] = useState();
+    const [isChartHidden, setIsChartHidden] = useState<boolean>(false)
 
     // const [mySolBalance, setMySolBalance] = useState("");
     // const [mySplTokens, setMySplTokens]: any = useState([]);
@@ -92,6 +93,16 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
     //
     //     viewChart();
     // }, [chartDateSelected, lineColorSelected, shadedAreaColorSelected]);
+
+    const chartHideShow = () =>{
+        if(foxSalesData.labels){
+            if(foxSalesData.labels.length === 0){
+                setIsChartHidden(true)
+            }else{
+                setIsChartHidden(false)
+            }
+        }
+    }
 
     // viewing the chart for a token
     const viewChart = () => {
@@ -242,6 +253,8 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
         // }
 
         viewChart();
+        chartHideShow();
+
     }, []);
 
     return (
@@ -365,7 +378,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                     {/*// REMOVING-FF-FOR-NOW*/}
                     {/*sales data*/}
                     <Chart
-                        hidden={foxSalesData?.labels?.length === 0}
+                        hidden={isChartHidden}
                         type="line"
                         data={foxSalesData}
                         height={tableHeight / 1.5}

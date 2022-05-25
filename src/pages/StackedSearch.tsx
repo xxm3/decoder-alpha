@@ -92,17 +92,14 @@ function StackedSearch({ foo, onSubmit }: any) {
                         date: string;
                     }[];
                 }[]
-                >(
-                '/getWordCount/',
-                {
-                    array: query.split(' '),
-                },
+                >( '/getWordCount/', { array: query.split(' '), },
                 {
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 }
             );
+
 
             const colorAry = ['rgb(255, 0, 0)',
                 'rgb(153, 255, 51)',
@@ -125,7 +122,7 @@ function StackedSearch({ foo, onSubmit }: any) {
                 });
             }
 
-            const labels = dispLabelsDailyCount(rawFetchedData[0]?.ten_day_count, true);
+            const labels = dispLabelsDailyCount( rawFetchedData[0]?.ten_day_count, true);
 
             // console.log(labels);
             // console.log(datasetsAry);
@@ -150,7 +147,7 @@ function StackedSearch({ foo, onSubmit }: any) {
             // }
 
             let msg = '';
-            if (error && error.response) {
+            if (error?.response) {
                 msg = String(error.response.data.body);
             } else {
                 msg = 'Unable to connect. Please try again later';
@@ -207,47 +204,53 @@ function StackedSearch({ foo, onSubmit }: any) {
                         <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                             <p className="text-lg text-red-700 font-medium">
                                 <b>
-                                    {(errorSearchStacked as string) ||
-                                        'Unable to connect'}
+                                {(errorSearchStacked as string) ||
+                                    'Unable to connect'}
                                 </b>
                             </p>
                             <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                             !
-                        </span>
+                            </span>
                         </div>
                     ) : (
                         // graph itself
-                        <div
-                            className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg default-chart-theme"
-                            hidden={
-                                graphStackedLoading ||
-                                stackedLineData.labels?.length === 1
-                            }
-                        >
-                            <Chart
-                                type="line"
-                                data={stackedLineData}
-                                height={chartHeight}
-                                key={chartHeight}
-                                options={{
-                                    responsive: true,
-                                    maintainAspectRatio: true,
-                                    plugins: {
-                                        legend: {
-                                            display: true,
-                                            reverse: true,
-                                        },
-                                        title: {
-                                            display: true,
-                                            text: '# of messages per day (from several Discords)',
-                                        },
-                                    },
-                                    y: {
-                                        suggestedMin: 0,
-                                    },
-                                }}
-                            />
-                        </div>
+                        <>
+                            { stackedLineData?.labels?.length === 0 ? (
+                                <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
+                                    <p className="text-lg text-red-700 font-medium">
+                                        <b> No data available </b>
+                                    </p>
+                                    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2"> ! </span>
+                                </div>
+                                ) : (
+                                <div className=" p-4 h-full text-white shadow-lg rounded-l bg-cbg default-chart-theme" hidden={ graphStackedLoading ||  stackedLineData.labels && stackedLineData.labels.length === 1 } >
+                                    <Chart
+                                        type="line"
+                                        data={stackedLineData}
+                                        height={chartHeight}
+                                        key={chartHeight}
+                                        options={{
+                                            responsive: true,
+                                            maintainAspectRatio: true,
+                                            plugins: {
+                                                legend: {
+                                                    display: true,
+                                                    reverse: true,
+                                                },
+                                                title: {
+                                                    display: true,
+                                                    text: '# of messages per day (from several Discords)',
+                                                },
+                                            },
+                                            y: {
+                                                suggestedMin: 0,
+                                            },
+                                        }}
+                                    />
+                                </div>
+                            )}
+                    </>
+                       
                     )}
 
             </div>

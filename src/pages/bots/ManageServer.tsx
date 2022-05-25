@@ -1,0 +1,230 @@
+import React, { useEffect, useState } from 'react';
+import { instance } from '../../axios';
+import { AppComponentProps } from '../../components/Route';
+import { environment } from '../../environments/environment';
+import { IonLabel, IonContent, IonButton, useIonToast } from '@ionic/react';
+import { Backdrop, CircularProgress, Grid } from '@material-ui/core';
+import './ManageServer.scss';
+import BgImage from '../../images/logo-transparent.png';
+import { useHistory, useLocation } from 'react-router';
+import Loader from '../../components/Loader';
+
+interface Server {
+    id: string;
+    name: string;
+    icon: string;
+    owner: boolean;
+    permissions: string;
+    features: [];
+}
+
+const ManageServer: React.FC<AppComponentProps> = () => {
+    let history = useHistory();
+    /**
+     * States & Variables
+     */
+    const [isMobile, setIsMobile] = useState(false);
+    const [servers, setServers] = useState<Server[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [present, dismiss] = useIonToast();
+    const [noServers, setNoServers] = useState<boolean>(false)
+
+    /**
+     * Use Effects
+     */
+    useEffect(() => {
+        if (!localStorage.getItem('role')) {
+            history.push('/')
+            return
+        }
+        if (window.innerWidth < 525) {
+            setIsMobile(true);
+
+        }
+    }, [window.innerWidth]);
+
+    useEffect(() => {
+        let serverList: any = localStorage.getItem('servers');
+        console.log('serverList', JSON.parse(serverList));
+        if (serverList) {
+            setServers(JSON.parse(serverList));
+            setNoServers(false);
+        }else {
+            setNoServers(true);
+        }
+    }, []);
+
+    // when they click "Go"
+    let storeGuild = (server: Server) => {
+
+        setIsLoading(true);
+
+        instance
+            .post( `/guilds/${server.id}`, {},
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
+            .then(({ data }) => {
+                history.push({
+                    pathname: '/servermodule',
+                    state: { server: server },
+                });
+            })
+            .catch((error: any) => {
+                console.log('error', error);
+
+                let msg = '';
+                if (error && error.response) {
+                    msg = String(error.response.data.message);
+                } else {
+                    msg = 'Unable to connect. Please try again later';
+                }
+
+                present({
+                    message: msg,
+                    color: 'danger',
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
+                });
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    };
+
+    {/*
+        TODO- BUGS:
+
+         test daily/1h/analytics
+
+         need to switch vehn dojo with production...so it gets updates...
+    */}
+
+    return (
+        <>
+            <Backdrop style={{ color: '#fff', zIndex: 1000, }} open={isLoading} >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+            {/*  */}
+            {noServers ? <div className='text-xl text-center'>Unable to find any servers... </div> :
+            <>
+                <IonLabel className="text-4xl font-semibold mb-3">
+                    Select a Server
+                </IonLabel>
+
+                <div className="my-3 relative bg-yellow-300/25 p-5 rounded-xl">
+                    <span className="text-md text-white">
+                        <div className='mb-2 flex items-center w-full justify-between'>
+                            <div className='flex items-center'>
+                                <span className=" bg-yellow-500 w-7 h-7 flex items-center justify-center font-bold rounded-full mr-2">!</span>
+                                <span className='text-yellow-500 text-lg font-bold'>Server owners only</span>
+                            </div>
+                            <div>
+                                <span className="text-2xl font-thin">x</span>
+                            </div>
+
+                        </div>
+
+                        <p>Note this page is only for server owners (for the time being). Also your server will need to first have our Discord Bot invited to it. Click one of the below links, then in the "Add to Server" on the bottom, select your server. Then click "Continue", then "Authorize"</p>
+                        <br />
+
+                        <ul className='list-disc ml-8'>
+                            <li>
+                                If using JUST the "Daily Mints" bots, <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20guilds.members.read%20bot">click here</a> to add the Discord Bot to your server
+                            </li>
+                            <li>
+                                Or if using the "Fox Token" bots (where users can type /token) ... or if using BOTH bots, this needs additional permissions so <a className="underline cursor-pointer" href="https://discord.com/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20applications.commands%20bot%20guilds.members.read">click here</a> to add the Discord Bot to your server
+                            </li>
+                        </ul>
+
+
+                    </span>
+
+                </div>
+
+                <div className="flex flex-row justify-center w-full mt-8">
+                    <Grid container spacing={4} className="flex justify-self-center items-center mx-auto" >
+                        {servers ? servers.map((server: Server, index: number) => {
+                            if (server.owner) {
+                                return (
+                                    <Grid item lg={3} key={index} className="mx-auto">
+                                        <div className='h-60 rounded-xl c-card-bg overflow-hidden mx-auto'>
+                                            <div
+                                                className="bg-image-wrapper"
+                                                style={{ backgroundImage: server.icon ? `url(https://cdn.discordapp.com/icons/${server.id}/${server.icon}.webp)` : '', }} >
+                                                <div className="server-profile-bg">
+                                                    {/*server-logo-wrapper*/}
+                                                    <div className="rounded-full">
+                                                        <img src={ server.icon ? `https://cdn.discordapp.com/icons/${server.id}/${server.icon}.webp` : '' } alt="" className="server-profile-img rounded-full" ></img>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-row justify-between items-center w-full mt-4 px-4">
+                                                <div className="flex flex-col justify-between">
+                                                    <span className="text-md tracking-wider whitespace-nowrap">
+                                                        {server.name}
+                                                    </span>
+                                                </div>
+                                                <div className="p-3 py-1 ml-2 text-md rounded-lg add-button" onClick={() => { storeGuild(server); }}>ADD </div>
+                                            </div>
+                                        </div>
+
+                                    </Grid>
+                                );
+                            }
+                            // TODO: below not working??
+                        }) : 'Unable to find any servers you are the owner of. If you are one, then reset your cookies and try logging in again'}
+                    </Grid>
+                </div>
+
+                {/*TODO: need to tell user how many modules they are authorized for... on top right of page*/}
+
+                {/*TODO: need some troubleshooting steps or explanations for users that dont have enough NFTs ... but want to manage servers ...*/}
+                    {/*and/or need way for reg users to see manageservers page... - perhasp everyone can see but noting shows up but explanations? */}
+
+                <br />
+                <div className="flex flex-row justify-center w-full">
+                    <div className="py-3">
+                        <div className='text-3xl font-semibold my-3'>Introduction</div>
+                        <ul className='list-disc ml-8 leading-9'>
+                            <li>This page allows you to setup some of the SOL Decoder bots on your own Discord server</li>
+                            <li>Pricing: Hold 3 NFTs (which unlocks all of our existing 3 NFT benefits - <a href="https://docs.soldecoder.app/books/intro/page/discord-overview" target="_blank" className="underline cursor-pointer">read more here</a>) - and you can unlock one of our bot packages. Hold 4 NFTs to unlock a second bot package</li>
+                            <li>Bot package #1 - Mints package - Your server can have our "daily-mints" feed and "1h-mint-info" and soon "tomorrows-mints"</li>
+                            <li>Bot package #2 - Fox token package - Your server can have our "analytics" feed, and users can use our bot's slash commands of /token_name and /token (which shows Fox Token Market info from a token address or name) and /wallet_tokens (Get Fox Token Market info for all tokens in an address)</li>
+                            <li>Hold and you get lifetime access, and get free upgrades to existing packages such as: (1) Mints package:  get daily summaries of NFTs coming out in a few weeks, when they they get a bump in their twitter / discord numbers, and (2) Fox token package: getting alerts for Fox Token price/listings data (ie. alerted when any fox token with a name & greater 1 sol price & greater 10 listings is out)</li>
+                            {/* <ul className='list-disc ml-4'>
+
+                                <br />
+                                <b>Other packages will be released in the future such as:</b>
+                            </ul> */}
+                        </ul>
+
+                        <div className='text-3xl font-semibold my-3 mt-8'>Upcoming features</div>
+
+                        <ul className='list-disc ml-8 leading-9'>
+
+                            <li>"Magic Eden" package: (1) perform the command "/me bohemia" and you'll get the price chart of Bohemia, and (2) you can customize a single alert for your server, to get alerted when any NFT above a certain price goes up X % within Y minutes</li>
+                            <li>"Sales listing" package: Get alerted whenever a sale for your NFT occurs</li>
+                            <li>Other unannounced packages</li>
+                        </ul>
+
+
+                        {/* <br /><br />
+                        <b>Instructions:</b>
+                        <ul>
+                            <li>- Add the Bot to our server using one of the two links above</li>
+                            <li>- Click "Go" on the server you want to add, and follow the steps on the next page</li>
+                        </ul> */}
+
+                    </div>
+                </div>
+            </>
+            }
+        </>
+    );
+};
+
+export default ManageServer;

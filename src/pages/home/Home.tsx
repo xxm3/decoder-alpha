@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import './Home.css';
 import moment from "moment";
 import {AppComponentProps} from '../../components/Route';
@@ -9,6 +9,9 @@ import Whitelist from './Whitelist';
 import {useLocation} from 'react-router-dom';
 import {instance} from '../../axios';
 import {environment} from '../../environments/environment';
+import { IonContent, IonLabel, IonModal } from '@ionic/react';
+import WordsCount from './WordsCount';
+import TopSearchWords from './TopSearchWords';
 
 const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
@@ -18,6 +21,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
      */
         // const [alerts, setAlerts] = useState([]);
     const [isMobile, setIsMobile] = useState(false);
+    const [isHardUpdateOpen, setIsHardUpdateOpen] = useState(false)
 
     // const useQuery = () => new URLSearchParams(useLocation().search);
     // const query = useQuery();
@@ -27,10 +31,13 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
      * Use Effects
      */
     useEffect(() => {
+
         if (window.innerWidth < 525) {
             setIsMobile(true)
         }
     }, [window.innerWidth])
+
+
 
     // useEffect(() => {
     //     instance
@@ -51,6 +58,22 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
             {isMobile ?
                 <>
                     {/*FOR MOBILE*/}
+                    <IonModal isOpen={isHardUpdateOpen} cssClass='update-modal'  >
+                        <IonContent >
+                            <div className='flex flex-col mt-5'>
+                                <IonLabel className="ml-4 text-xl font-semibold">
+                                    New app version available
+                                </IonLabel>
+                                <IonLabel className="ml-4 mt-4 mr-4">
+                                    Please update your app to the new version
+                                </IonLabel>
+                                <div className='flex flex-row justify-end mr-6 mt-7'>
+                                    {/* <IonLabel onClick={()=> setIsHardUpdateOpen(false)} className='text-sky-500 font-semibold tracking-wide'>NO, THANKS</IonLabel> */}
+                                    <IonLabel onClick={()=> setIsHardUpdateOpen(false)} className='ml-6 text-sky-500 font-semibold tracking-wide'>UPDATE</IonLabel>
+                                </div>
+                            </div>
+                        </IonContent>
+                    </IonModal>
                     {/*<Whitelist/>*/}
 
                     <FfNamed/>
@@ -83,10 +106,21 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
             {/* for user to get used-the-site- role */}
             {/*<div hidden={!devMode}>*/}
 
-            {/* Recent Community Searches */}
-            {/*<div hidden={window.location.hostname !== 'localhost'}>*/}
-            {/*    <SearchedWords/>*/}
-            {/*</div>*/}
+
+            {/*TODO wait for sumit */}
+           {/* Word count of yesterday, last 3 days, last 5 days */}
+           {/* <WordsCount/>*/}
+
+            {/* Top search words of past dat */}
+            {/* <TopSearchWords/> */}
+
+
+             {/* Recent Community Searches  */}
+            {/* <div hidden={window.location.hostname !== 'localhost'}>
+               <SearchedWords/>
+            </div> */}
+
+
 
 
             {/* if need to tell the user of errors */}

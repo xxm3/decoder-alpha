@@ -25,14 +25,14 @@
         "abbrev": "AKDT",
         "offset": -8,
         "label": "UTC -09:00",
-        "value": "America/Anchorage"
+        "value": "Pacific/Gambier"
     },
     {
         "name": "Pacific Standard Time (Mexico)",
         "abbrev": "PDT",
         "offset": -7,
         "label": "UTC -08:00",
-        "value": "America/Tijuana"
+        "value": "Pacific/Pitcairn"
     },
     {
         "name": "Pacific Daylight Time",
@@ -88,14 +88,14 @@
         "abbrev": "MDT",
         "offset": 1,
         "label": "UTC  00:00",
-        "value": "Africa/Casablanca"
+        "value": "Atlantic/Azores"
     },
     {
         "name": "W. Europe Standard Time",
         "abbrev": "WEDT",
         "offset": 2,
         "label": "UTC +01:00",
-        "value": "Europe/Belgrade"
+        "value": "Africa/Casablanca"
     },
     {
         "name": "Middle East Standard Time",

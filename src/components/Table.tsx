@@ -2,8 +2,6 @@ import { css } from '@emotion/react';
 import { IonIcon } from '@ionic/react';
 import MaterialTable, {
     MaterialTableProps,
-    MTableFilterRow,
-    MTableToolbar,
 } from '@material-table/core';
 import { createTheme, Grid, MenuItem, MuiThemeProvider, Select } from '@material-ui/core';
 import { eye } from 'ionicons/icons';
@@ -12,8 +10,6 @@ import usePersistentState from '../hooks/usePersistentState';
 import { colorsByName } from '../theme/Theme';
 import Help from './Help';
 import './select-timezone.scss';
-import TimezoneData from '../util/Book1.json'
-import moment from 'moment';
 
 const blue = '#0000FF';
 const red = '#FF0000';
@@ -57,12 +53,13 @@ const customStyles = {
 function Table<RowData extends object>(
     props: MaterialTableProps<RowData> & {
         columns: MaterialTableProps<RowData>['columns'];
-    } & { description?: string; url?: string;showTimezoneSelect?:boolean;selectedTimezone?:any;setSelectedTimezone?:any }
+    } & { description?: string; url?: string}
 ) {
     const { options } = props;
 
     const [mode] = usePersistentState('mode', 'dark');
     const [isMobile, setIsMobile] = useState(false);
+    
 
 
     useEffect(() => {
@@ -235,81 +232,7 @@ function Table<RowData extends object>(
                                   .includes(column.title as string)
                             : false,
                     }))}
-                    components={{
-                        Toolbar: (Toolbarprops) => {
-                            const propsCopy = { ...Toolbarprops };
-
-
-							if(props.showTimezoneSelect){
-								if (isMobile) {
-									propsCopy.showTitle = true;
-								} else {
-									propsCopy.showTitle = false;
-								}
-							}
-                            return (
-								<>
-								{!props?.showTimezoneSelect ?<MTableToolbar {...propsCopy} /> :
-                                <Grid container direction="row">
-                                    <Grid
-                                        container
-                                        item
-                                        sm={8}
-                                        style={{ alignItems: 'center' }}
-                                    >
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                width: '100%',
-                                            }}
-                                        >
-                                            <div className="hidden sm:block"
-                                            style={{ width:'100%'}}>
-                                                {title}
-                                            </div>
-											<Select
-    										labelId="demo-simple-select-label"
-    										id="demo-simple-select"
-    										value={props.selectedTimezone.value}
-    										placeholder='select time zone'
-                                            style={{ width:'100%', lineHeight:1.2,border: `1px solid rgba(171, 171, 171, 0.876)`,borderRadius:'20px',paddingLeft:'10px'}}
-    										onChange={(selected: any) => {
-												props.setSelectedTimezone({...selected.target})
-											}}
-  											>
-												  {
-                                                  TimezoneData.map((item:any,index:number)=>{
-													  return (<MenuItem key={index} value={item?.value}>{item?.label}</MenuItem>)
-												  }
-                                                  )}
-
-  											</Select>
-{/*
-                                            <TimezoneSelect
-                                            // options={TimezoneData}
-                                                value={props.selectedTimezone}
-                                                onChange={(selected: any) => {
-													console.log("selected",selected)
-													props.setSelectedTimezone(selected)
-
-                                                }}
-												styles={customStyles}
-                                            /> */}
-                                        </div>
-                                    </Grid>
-                                    <Grid item sm={4}>
-                                        <MTableToolbar {...propsCopy} />
-                                    </Grid>
-                                </Grid>
-							}
-
-							</>
-                            )
-
-
-                        },
-                    }}
+                    
                     title={<div className="hidden sm:block">{title}</div>}
                     options={{
                         headerStyle: {

@@ -6,14 +6,15 @@ import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
 import { IonContent, IonIcon, IonRippleEffect, useIonToast, IonRefresher, IonRefresherContent } from '@ionic/react';
 import './Schedule.css'
-import { Column } from '@material-table/core';
+import { Column, MTableToolbar } from '@material-table/core';
 import Table from '../../components/Table';
-import { logoDiscord, logoTwitter, link, navigate } from 'ionicons/icons';
+import { logoDiscord, logoTwitter, link, navigate,calendarOutline } from 'ionicons/icons';
 import { useHistory } from "react-router";
 import usePersistentState from '../../hooks/usePersistentState';
 import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
-
+import { Grid, MenuItem, Select } from '@material-ui/core';
+import TimezoneData from '../../util/Book1.json'
 
 interface Mint {
     image: string;
@@ -50,7 +51,6 @@ const Schedule = () => {
      */
     const [present, dismiss] = useIonToast();
     const history = useHistory();
-
     const [date, setDate] = useState('')
     const [mints, setMints] = useState<Mint[]>([])
     const [splitCollectionName, setSplitCollectionName] = useState([])
@@ -60,6 +60,7 @@ const Schedule = () => {
     const [isPaging, setIsPaging] = useState(false);
     const [selectedTimezone, setSelectedTimezone] = useState<any>({})
     const [mode] = usePersistentState("mode", "dark");
+    const [searchFocus, setSearchFocus] = useState<boolean>(false)
 
 
 
@@ -94,7 +95,9 @@ const Schedule = () => {
 
     const GetUserTimeZone = async() => {
         await instance.get(`${environment.backendApi}/currentUser`)
-        .then((res: any) =>  userTimezone = res.data.user.timezone)
+        .then((res: any) => {
+            userTimezone = res?.data.user.timezone
+        })
     }
 
     // console.log('no time zone', moment.tz.names())
@@ -103,7 +106,7 @@ const Schedule = () => {
         if(userTimezone !== selectedTimezone.value){
             SetUserTimeZone();
         }
-        
+
         if(dataSource && Object.keys(selectedTimezone).length !== 0){
             for (let i = 0; i < dataSource.length; i++) {
                 if (dataSource[i].time.includes('UTC')){
@@ -167,7 +170,7 @@ const Schedule = () => {
                 setIsLoading(false);
                 SetDefaultTimeZone()
                 let msg = '';
-                if (error && error.response) {
+                if (error?.response) {
                     msg = String(error.response.data.body);
                 } else {
                     msg = 'Unable to connect. Please try again later';
@@ -224,7 +227,7 @@ const Schedule = () => {
      */
         // const mintExpiresAt = (arr: any) => {
         //   for(let i = 0; i < arr.length; i++) {
-        //     if(arr[i].mintExpiresAt || arr[i].mintExpiresAt?.length !== 0) {
+        //     if(arr[i].mintExpiresAt || arr[i].mintExpiresAt.length !== 0) {
         //       const timeNow = moment()
         //       const timeExpiresAt = moment(arr[i].mintExpiresAt)
         //
@@ -277,23 +280,22 @@ const Schedule = () => {
                         </a>
                     </div>
 
+                    {/*DATA REPEATED ON SCHEDULE.TSX AND CALENDAR.TSX*/}
                     <div className="" onClick={() => handleProjectClick(record)}>
-                        {record?.project && <span><b>Name : </b>{record.project}</span>}
-                        {record?.mintExpiresAt && <span><br /><b>Time : </b> <span>{record.updateTime || record.time.replace('UTC', '')}<span hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}>{record.mintExpiresAt}</span></span></span>}
-                        {record?.price && <div className='flex flex-row'><b>Price : </b><div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'flex flex-row ml-1 ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML={{__html: record.wlPrice ? `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}></div></div>}
-                        {record?.count && <span><b>Supply : </b>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {record?.numbersOfDiscordMembers && <span><br /><b>Discord (all) : </b>{record.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {record?.DiscordOnlineMembers && <span><br /><b>Discord (online) : </b>{record.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {record?.numbersOfTwitterFollowers && <span><br /><b>Twitter : </b>{record.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {record?.tweetInteraction?.total && <span><br /><b>Twitter Interaction : </b>{record.tweetInteraction.total}</span>}
+                        {<span><b>Name : </b>{record?.project}</span>}
+                        {<span><br /><b>Time : </b> <span>{record?.updateTime || record?.time.replace('UTC', '')}<span hidden={record?.mintExpiresAt.indexOf('Invalid') !== -1}>{record?.mintExpiresAt}</span></span></span>}
+                        {<div className='flex flex-row'><b>Price : </b><div onClick={(e) => record?.wlPrice ? history.push( { pathname: '/foxtoken',search: record?.wlTokenAddress }) : '' } className={'flex flex-row ml-1 ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML={{__html: record?.wlPrice ? `${record?.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record?.wlPrice}) ◎` : `${record?.price?.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}></div></div>}
+                        {<span><b>Supply : </b>{record?.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {<span><br /><b>Discord (all) : </b>{record?.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {<span><br /><b>Discord (online) : </b>{record?.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {<span><br /><b>Twitter : </b>{record?.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
+                        {<span><br /><b>Twitter Interaction : </b>{record?.tweetInteraction?.total}</span>}
                     </div>
 
                 </div>
             ),
             customSort: (a, b) => a.project.localeCompare(b.project),
-            customFilterAndSearch: (term, rowData) =>
-                rowData.project.toLowerCase().includes(term.toLowerCase()),
-        },
+            customFilterAndSearch: (term, rowData) => rowData?.project.toLowerCase().includes(term.toLowerCase()), },
 
     ];
 
@@ -339,7 +341,7 @@ const Schedule = () => {
                     </a>
                     <a
                         href={record.projectLink}
-                        className={(record.projectLink && record.projectLink) ? "schedule-link" : "schedule-link-disabled"}
+                        className={(record?.projectLink) ? "schedule-link" : "schedule-link-disabled"}
                         target="_blank"
 
                     >
@@ -350,25 +352,18 @@ const Schedule = () => {
                 </div>
             ),
             hiddenByColumnsButton: true,
-            
+
         },
         {
             title: 'Name',
             render: (record) => (
                 <>
-                    <img className={`avatarImg ${!record?.image ? 'hiddenImg' : ''}`} key={record?.image} src={record?.image} />
-                    <span
-                        // cursor-pointer
-                        className=""
-                        onClick={() => handleProjectClick(record)}
-                    >
-                        {record.project}
-                    </span>
+                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image} src={record.image} />
+                    <span className="" onClick={() => handleProjectClick(record)} > {record?.project} </span>
                 </>
             ),
             customSort: (a, b) => a.project.localeCompare(b.project),
-            customFilterAndSearch: (term, rowData) =>
-                rowData.project.toLowerCase().includes(term.toLowerCase()),
+            customFilterAndSearch: (term, rowData) =>rowData?.project?.toLowerCase().includes(term.toLowerCase()),
         },
         {
             title: 'Time',
@@ -376,11 +371,9 @@ const Schedule = () => {
             customSort: (a, b) => a.time.localeCompare(b.time), // sorting with time
             render: (record) => (
                 <span>
-                    {record.updateTime || record.time.replace('UTC', '')}
-                    <span
-                        hidden={record.mintExpiresAt.indexOf('Invalid') !== -1}
-                    >
-                        {record.mintExpiresAt}
+                    {record?.updateTime || record?.time.replace('UTC', '')}
+                    <span hidden={record.mintExpiresAt.indexOf('Invalid') !== -1} >
+                        {record?.mintExpiresAt}
                     </span>
                     {/* {record.time !== "" && " (" + moment.utc(record.time, 'hh:mm:ss').fromNow() + ")"} */}
                     {
@@ -396,24 +389,22 @@ const Schedule = () => {
             title: 'Price',
             customSort: (a, b) => +a.price.split(' ')[0] - +b.price.split(' ')[0],
             // send price in parmas and redirect to fox token page
-            render: (record) => <div onClick={(e) => record.wlPrice ? history.push( { pathname: '/foxtoken',search: record.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-48 flex flex-row ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML=
+            render: (record) => <div onClick={(e) => record?.wlPrice ? history.push( { pathname: '/foxtoken',search: record?.wlTokenAddress }) : '' } className={'break-normal whitespace-normal w-48 flex flex-row ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML=
                 {{
                     __html: record.wlPrice ? `
-                    ${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record.wlPrice}) ◎` : `${record.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
+                    ${record?.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record?.wlPrice}) ◎` : `${record?.price.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`
                 }}></div>,
         },
         {
             title: 'Supply',
             customSort: (a, b) => + a.count.replace(',', '') - + b.count.replace(',', ''),
-            render: (record) => <span>{record.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>,
+            render: (record) => <span>{record?.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>,
         },
         {
             title: 'Discord (all)',
             render: (record) => (
                 <>
-                    {record.numbersOfDiscordMembers
-                        ?.toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    {record?.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 </>
             ),
             // @ts-ignore
@@ -423,9 +414,7 @@ const Schedule = () => {
             title: 'Discord (online)',
             render: (record) => (
                 <>
-                    {record.DiscordOnlineMembers
-                        ?.toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    {record?.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 </>
             ),
             // @ts-ignore
@@ -435,25 +424,21 @@ const Schedule = () => {
             title: 'Twitter',
             render: (record) => (
                 <>
-                    {record.numbersOfTwitterFollowers
-                        ?.toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    {record?.numbersOfTwitterFollowers?.toString() .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 </>
             ),
-            customSort: (a, b) =>
-                a.numbersOfTwitterFollowers - b.numbersOfTwitterFollowers,
+            customSort: (a, b) => a.numbersOfTwitterFollowers - b.numbersOfTwitterFollowers,
         },
         {
             title: 'Tweet Interactions',
-            customSort: (a, b) =>
-                a.tweetInteraction.total - b.tweetInteraction.total,
+            customSort: (a, b) => a.tweetInteraction.total - b.tweetInteraction.total,
             render: (record) => (
                 <>
                     <span>
-                        {record.tweetInteraction.total}
-                        {/*likes: {record.tweetInteraction?.likes} <br />*/}
-                        {/*comments: {record.tweetInteraction?.comments} <br />*/}
-                        {/*retweets: {record.tweetInteraction?.retweets}*/}
+                        {record?.tweetInteraction?.total}
+                        {/*likes: {record.tweetInteraction.likes} <br />*/}
+                        {/*comments: {record.tweetInteraction.comments} <br />*/}
+                        {/*retweets: {record.tweetInteraction.retweets}*/}
                     </span>
                 </>
             ),
@@ -478,40 +463,101 @@ const Schedule = () => {
 
                         <Virtuoso className='h-full'
                                   totalCount={1}
-                                  itemContent={() => <Table data={dataSource}
-                                                            columns={isMobile ? columns_mobile : columns}
-                                                            title={`Mint Schedule - ${date}`}
-                                                            style={{ overflow: 'auto', overflowWrap: 'break-word' }}
-                                                            // headerStyle:{{backgroundColor:'red'}}
-                                                            // rowStyle: {
-                                                            //     overflowWrap: 'break-word'
-                                                            // }
-                                                            options={{
-                                                                pageSize: 20,
-                                                                searchFieldStyle:{
-                                                                    // marginLeft:'0%',
-                                                                    marginTop:'2%',
-                                                                    paddingLeft:"4%",
-                                                                    borderRadius:30,
-                                                                    border : mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.876) !important' : '1px solid rgba(10,10,10,0.8) !important'
-                                                                },
-                                                                rowStyle: (rowData: any) => ({
-                                                                    fontWeight: timeCount(rowData?.time) ? '' : "",
-                                                                    backgroundColor: mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
-                                                                    color: mode === 'dark' ? "" : '#202124',
-                                                                    borderTop: mode === 'dark' ? "" : '1px solid rgba(260,260,260,0.8)',
-                                                                }),
-                                                                paging: isPaging,
-                                                                columnsButton: isMobile ? false : true,
-                                                            }}
-                                                            showTimezoneSelect={true}
-                                                            selectedTimezone={selectedTimezone}
-                                                            setSelectedTimezone={setSelectedTimezone}
-                                                            description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
-							    \n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.
-						    	The Fox logo in the price is the official Token price that comes from the Fox Token Market.
-							    Rows in bold mean the mint comes out in two hours or less.
-							    `}
+                                  itemContent={() =>
+                                      <Table data={dataSource}
+                                            columns={isMobile ? columns_mobile : columns}
+                                            title={`Mint Schedule - ${date}`}
+                                            description={`Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
+                                            \n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.
+                                            The Fox logo in the price is the official Token price that comes from the Fox Token Market.
+                                            Rows in bold mean the mint comes out in two hours or less.
+                                            `}
+                                            style={{ overflow: 'auto', overflowWrap: 'break-word' }}
+                                            options={{
+                                                pageSize: 20,
+                                                searchFieldStyle:{
+                                                    // marginLeft:'0%',
+                                                    marginTop:'2%',
+                                                    paddingLeft:"4%",
+                                                    borderRadius:30,
+                                                    border : mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.876) !important' : '1px solid rgba(10,10,10,0.8) !important'
+                                                },
+                                                rowStyle: (rowData: any) => ({
+                                                    fontWeight: timeCount(rowData.time) ? '' : "",
+                                                    backgroundColor: mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
+                                                    color: mode === 'dark' ? "" : '#202124',
+                                                    borderTop: mode === 'dark' ? "" : '1px solid rgba(260,260,260,0.8)',
+                                                }),
+                                                paging: isPaging,
+                                                columnsButton: false // isMobile ? false : true,
+                                            }}
+                                            // calendar icon for show calendar do not remove
+                                            actions={[
+                                                /**
+                                                 * TODO !!!! :
+                                                 *
+                                                 * 5 / 10 / 15
+                                                 *
+                                                 * need 3 cronjobs!!!
+                                                 *
+                                                 *
+                                                 * (once all done) need a "click here view calendar" on top...
+                                                 */
+                                                {
+                                                    icon: () => <IonIcon icon={calendarOutline} className="text-3xl " />,
+                                                    onClick: () => history.push( { pathname: '/schedulecalendar',state:mints}),
+                                                    isFreeAction: true,
+                                                },
+                                            ]}
+
+                                            components={{
+                                                Toolbar: (Toolbarprops) => {
+                                                    const propsCopy = { ...Toolbarprops };
+                                                        if (isMobile) {
+                                                            propsCopy.showTitle = true;
+                                                        } else {
+                                                            propsCopy.showTitle = false;
+                                                        }
+
+                                                    return (
+                                                        <>
+
+                                                        <Grid container direction="row">
+                                                            <Grid
+                                                                container
+                                                                item
+                                                                sm={8}
+                                                                style={{ alignItems: 'center' }}
+                                                            >
+                                                                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', }} >
+                                                                    <div className="hidden sm:block" style={{ width:'100%'}}>
+                                                                       {`Mint Schedule - ${date}`}
+                                                                    </div>
+                                                                        <Select
+                                                                        labelId="demo-simple-select-label"
+                                                                        id="demo-simple-select"
+                                                                        value={selectedTimezone.value}
+                                                                        placeholder='select time zone'
+                                                                        style={{ width:'100%', lineHeight:1.2,border: `1px solid rgba(171, 171, 171, 0.876)`,borderRadius:'20px',paddingLeft:'10px'}}
+                                                                        onChange={(selected: any) => { setSelectedTimezone({...selected.target}) }} >
+                                                                            {TimezoneData && TimezoneData.map((item:any,index:number)=>{ return (<MenuItem key={index} value={item.value}>{item.label}</MenuItem>)} )}
+                                                                        </Select>
+                                                                </div>
+                                                            </Grid>
+                                                            <Grid item sm={4}>
+                                                                <MTableToolbar {...propsCopy}
+                                                                    searchAutoFocus={searchFocus}
+                                                                    onSearchChanged={(text:string)=>{
+                                                                        propsCopy.onSearchChanged(text);
+                                                                        setSearchFocus(true)
+                                                                    }}
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+                                                    </>
+                                                    )
+                                                },
+                                             }}
                                   />} >
                         </Virtuoso>
                     </IonContent>
@@ -522,7 +568,7 @@ const Schedule = () => {
                         title={`Mint Schedule - ${date}`}
                         options={{
                             rowStyle:( rowData:any) =>  ({
-                                fontWeight: timeCount (rowData?.time) ? '900' : "",
+                                fontWeight: timeCount (rowData.time) ? '900' : "",
                                 backgroundColor : mode === 'dark' ? '' : '#F5F7F7',
                                 color: mode === 'dark' ? "" : '#4B5563',
                                 borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
@@ -541,7 +587,7 @@ const Schedule = () => {
                           <IonContent>
                             {
                               splitCollectionName.length
-                              && splitCollectionName?.map(name => (
+                              && splitCollectionName.map(name => (
                                   <div key={name} className='text-center'>
                                     <span style={{color: 'white'}}>{name}</span> <br />
                                   </div>
