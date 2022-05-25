@@ -496,20 +496,12 @@ const Schedule = () => {
                                                 /**
                                                  * TODO !!!! :
                                                  *
-                                                 * freelance:
-                                                 * - look for "DATA REPEATED ON SCHEDULE.TSX AND CALENDAR.TSX" - need to DRY this code up and have them pull same code
-                                                 * - the "description" on this page doesn't work, the title isn't correctly formatted
-                                                 * -  need to use image field, when click into one
+                                                 * 5 / 10 / 15
+                                                 *
+                                                 * need 3 cronjobs!!!
                                                  *
                                                  *
-                                                 * ibad
-                                                 * - spreadsheet data needs be added for today
-                                                 * - there are two "router.get('/getSplFromWallet'"
-                                                 *
-                                                 *
-                                                 * (once all done)
-                                                 * need a "click here view calendar" on top...
-                                                 *
+                                                 * (once all done) need a "click here view calendar" on top...
                                                  */
                                                 {
                                                     icon: () => <IonIcon icon={calendarOutline} className="text-3xl " />,

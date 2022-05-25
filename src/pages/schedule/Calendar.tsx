@@ -171,14 +171,19 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                    <button type="button" style={{fontSize:isMobile ? '12px' : ''}} onClick={()=> NextPrevMonth('currentMonth')}>{moment(selectDate).format('MMM')}</button>
                    <button type="button" style={{fontSize:isMobile ? '12px' : '', width:isMobile? '20px' : ''}} onClick={()=> NextPrevMonth('nextMonth')} >{">"}</button>
                </div>
-               <div >
-                   <button type="button" style={{fontSize:isMobile ? '12px' : '', width:isMobile? '20px' : ''}}  onClick={()=> NextPrevDate('prevDay')}>{"<"}</button>
-                   <button type="button" style={{fontSize:isMobile ? '12px' : ''}}  onClick={()=> NextPrevDate('today')} >{moment(selectDate).format('LL')}</button>
-                   <button type="button" style={{fontSize:isMobile ? '12px' : '', width:isMobile? '20px' : ''}}  onClick={()=> NextPrevDate('nextDay')} >{">"}</button>
-               </div>
+               {/*<div >*/}
+               {/*    <button type="button" style={{fontSize:isMobile ? '12px' : '', width:isMobile? '20px' : ''}}  onClick={()=> NextPrevDate('prevDay')}>{"<"}</button>*/}
+               {/*    <button type="button" style={{fontSize:isMobile ? '12px' : ''}}  onClick={()=> NextPrevDate('today')} >{moment(selectDate).format('LL')}</button>*/}
+               {/*    <button type="button" style={{fontSize:isMobile ? '12px' : '', width:isMobile? '20px' : ''}}  onClick={()=> NextPrevDate('nextDay')} >{">"}</button>*/}
+               {/*</div>*/}
            </div>
          );
    }
+
+    const formatNumber = (n: any) => {
+        if (n < 1e3) return n;
+        if (n >= 1e3) return +(n / 1e3).toFixed(1) + 'K';
+    };
 
     return (
             <>
@@ -188,12 +193,12 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                  <>
                      <div className="m-3 relative bg-gray-100 p-4 rounded-xl">
                          <p className="text-lg text-gray-700 font-medium">
-                             {/*TODO*/}
-                             <b>Note this is the first version of our Calendar. Future improvements coming soon:</b>
+                             {/*TODO: remove when done */}
+                             <b>Note this is the first version of our Calendar. Future improvements:</b>
                              <ul>
-                                 <li>- Showing more of Today's mints, as it is missing some</li>
-                                 <li>- Showing all the upcoming Magic Eden Launchpad mints</li>
                                  <li>- Graphing the discord & twitter stats over time (will slowly fill in)</li>
+                                 <li>- Showing all the upcoming Magic Eden Launchpad mints</li>
+                                 <li>- UI/UX updates</li>
                                  <li>- Showing what Discords & Twitters were the top gainers from the past day and week</li>
                              </ul>
                          </p>
@@ -243,36 +248,49 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                             </IonToolbar>
                         </IonHeader>
 
+                        {/*what you see when you click into a day*/}
                         <IonContent>
 
+                            {/*links on top*/}
                             <div className='mt-1 ml-4 mb-2'>
                                 <div className="flex space-x-3">
+
                                     {/*discord*/}
-                                    <a href={eventGraphData?.data?.data?.discordLink} target="_blank" style={{ pointerEvents: eventGraphData?.data?.data?.discordLink  ? "initial" : "none" }} className={eventGraphData?.data?.data?.discordLink ? "schedule-link" : "schedule-link-disabled"}>
+                                    <a href={eventGraphData?.data?.data[0]?.discord_link} target="_blank" style={{ pointerEvents: eventGraphData?.data?.data[0]?.discord_link  ? "initial" : "none" }} className={eventGraphData?.data?.data[0]?.discord_link ? "schedule-link" : "schedule-link-disabled"}>
                                         <IonIcon icon={logoDiscord} className="big-emoji" />
                                         <IonRippleEffect />
                                     </a>
+
                                     {/*twitter*/}
-                                    <a href={eventGraphData?.data?.data?.twitterLink} className="schedule-link" target="_blank">
+                                    <a href={eventGraphData?.data?.data[0]?.twitter_link} target="_blank" className="schedule-link" >
                                         <IonIcon icon={logoTwitter} className="big-emoji" />
                                         <IonRippleEffect />
                                     </a>
+
+                                    <a href={eventGraphData?.data?.data[0]?.website} className={(eventGraphData?.data?.data[0]?.website && eventGraphData?.data?.data[0]?.website) ? "schedule-link" : "schedule-link-disabled"} target="_blank">
+                                        <IonIcon icon={link} className="big-emoji" />
+                                        <IonRippleEffect />
+                                    </a>
+
                                 </div>
 
                                 {/*DATA REPEATED ON SCHEDULE.TSX AND CALENDAR.TSX*/}
                                 {eventGraphData?.data?.data[0]?.mintName && <div><b>Name : </b>{eventGraphData?.data?.data[0]?.mintName}</div>}
                                 {eventGraphData?.data?.data[0]?.price && <div><b>Price : </b>{eventGraphData?.data?.data[0]?.price}</div>}
-                                {eventGraphData?.data?.data[0]?.discord_all && <div><b>Discord (all) : </b>{eventGraphData?.data?.data[0]?.discord_all.toString()}</div>}
-                                {eventGraphData?.data?.data[0]?.discord_online && <div><b>Discord (online) : </b>{eventGraphData?.data?.data[0]?.discord_online.toString()}</div>}
-                                {eventGraphData?.data?.data[0]?.tweetInteractions && <div><b>Twitter : </b>{eventGraphData?.data?.data[0]?.tweetInteractions.toString()}</div>}
+                                {eventGraphData?.data?.data[0]?.discord_all && <div><b>Discord (all) : </b>{formatNumber(eventGraphData?.data?.data[0]?.discord_all)}</div>}
+                                {eventGraphData?.data?.data[0]?.discord_online && <div><b>Discord (online) : </b>{formatNumber(eventGraphData?.data?.data[0]?.discord_online)}</div>}
+                                {eventGraphData?.data?.data[0]?.twitter_all && <div><b>Twitter : </b>{formatNumber(eventGraphData?.data?.data[0]?.twitter_all)}</div>}
+                                {eventGraphData?.data?.data[0]?.tweetInteractions && <div><b>Tweet Interactions : </b>{formatNumber(eventGraphData?.data?.data[0]?.tweetInteractions)}</div>}
                             </div>
 
                             <div className='ml-4 mt-4 mr-4'>
                                 {showGraph ? <MintChart eventGraphData = {eventGraphData}/> : <div className='text-center opacity-40 h-10 bg-slate-500 items-center flex justify-center'> No chart history available</div>}
                             </div>
-
                         </IonContent>
                     </IonModal>
+
+                     <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
                 </>
             }
             </>
