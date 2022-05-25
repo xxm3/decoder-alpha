@@ -105,16 +105,16 @@ function Sidebar() {
                 {/*    // role!=='' || role==='No Roles' ?*/}
 
                 {/*    // commented out code*/}
-                {/*    // localStorage.getItem('role')!=='' || localStorage.getItem('role') === 'No Roles' ?*/}
-                {/*    <>*/}
-                {/*        <NavLink*/}
-                {/*            title="Add Bots"*/}
-                {/*            icon={serverOutline}*/}
-                {/*            to="/manageserver"*/}
-                {/*        />*/}
-                {/*    </>*/}
-                {/*    // :null*/}
-                {/*}*/}
+                {/* { localStorage.getItem('role')!=='' || localStorage.getItem('role') === 'No Roles' ? */}
+                   <>
+                       <NavLink
+                            title="Add Bots"
+                           icon={serverOutline}
+                           to="/manageserver"
+                       />
+                   </>
+                 {/* :null
+                } */}
 
                 <NavLink
                     title="Docs"

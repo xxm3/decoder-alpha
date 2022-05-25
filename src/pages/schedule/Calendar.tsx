@@ -125,7 +125,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
 
 
     const handleSlotSelect = (slotInfo: SlotInfo) => {
-        onNavigate(moment(slotInfo?.slots[0]).toDate());
+        onNavigate(moment(slotInfo.slots[0]).toDate());
      };
 
      // select event handler
@@ -192,7 +192,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                  :
                  <>
                      <div className="m-3 relative bg-gray-100 p-4 rounded-xl">
-                         <p className="text-lg text-gray-700 font-medium">
+                         <div className="text-lg text-gray-700 font-medium">
                              {/*TODO: remove when done */}
                              <b>Note this is the first version of our Calendar. Future improvements:</b>
                              <ul>
@@ -201,7 +201,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                  <li>- UI/UX updates</li>
                                  <li>- Showing what Discords & Twitters were the top gainers from the past day and week</li>
                              </ul>
-                         </p>
+                         </div>
                          <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                              !
                          </span>
@@ -227,11 +227,13 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                 onSelectSlot={(e: any)=>{handleSlotSelect(e)}}
                                 selectable
                                 onNavigate = {(action: Date)=> onNavigate(action)}
-                                style={{ height: isMobile ? '80vh' : 700, width:isMobile? '90vw' : '' }}
+                                style={{ height: isMobile ? '80vh' : 700, width:isMobile ? '90vw' : '' }}
                                 startAccessor='start'
                                 endAccessor='end'
                                 date={selectDate}
                                 popup={showMorePopup}
+                                // onShowMore={(events, date) =>setOpenEventModal(true)}
+                                popupOffset={{x: 0, y: 0}}
                         />
                     </div>
                     <IonModal isOpen={openEventModal} onDidDismiss={() => {setOpenEventModal(false); setShowMorePopup(true)}} cssClass={isMobile ? 'calender-modal-mobile' :'calender-modal-web'} >
@@ -289,7 +291,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                         </IonContent>
                     </IonModal>
 
-                     <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                     {/* <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/> */}
 
                 </>
             }
