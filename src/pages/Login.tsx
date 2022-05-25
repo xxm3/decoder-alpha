@@ -122,12 +122,14 @@ function Login() {
                         <>
                             <IonRow>
                                 <IonCol size='6' >
+                                <div className='ion-text-right'>
                                     <IonButton href="#"  className='iosButton ionTextRight' fill='clear'
                                         onClick={() =>{
                                            window.open( `https://apps.apple.com/in/app/sol-decoder/id1619922481`);
                                         }} >
                                             <img src={IosLogo} />
                                     </IonButton>
+                                </div>
                                 </IonCol>
                                 <IonCol size='6'  >
                                     <IonButton href="#" className='androidButton ionTextLeft' fill='clear'
@@ -148,7 +150,7 @@ function Login() {
                                         Sign In
                                     </IonLabel>
                                 </div>
-                                <div className={`flex flex-col mr-2 ${isMobileDevice ? "mt-6" : 'mt-10'}`}>
+                                <div className={`flex flex-col mr-2 ${isMobileDevice ? "mt-6 mr-0" : 'mt-10'}`}>
                                     <IonButton className='mb-4 h-11' color={ mode === 'dark' ? '' : "dark"}
                                         onClick={() => {
                                             const params = new URLSearchParams();
@@ -193,7 +195,7 @@ function Login() {
                             </div>
 
 
-                            <div className={`login-right-side-wrapper w-full justify-center flex flex-col rounded-md ${isMobileDevice ? 'pl-4 mt-4 pb-4 pt-4 pr-2' : 'pl-10 pr-4' }`} style={{height:isMobileDevice ? 'auto'  : '84vh' }}>
+                            <div className={`login-right-side-wrapper w-full justify-center flex flex-col rounded-md ${isMobileDevice ? 'pl-4 mt-4 pb-4 pt-4 pr-2' : 'pl-10 pr-4' }`} style={{height:isMobileDevice ? 'auto'  : '' }}>
 
                                 {/*this is the error msg at top! no delete!*/}
                                 <p className="text-red-500 my-4 text-xl">
@@ -220,7 +222,7 @@ function Login() {
                                     <hr/>
                                     <br/><span>Full access to SOL Decoder is only available to those holding one of our NFTs. If you still want to click around the site to see what we offer, then try out the demo below. Note that you will only see old data, and some features are disabled.</span>
 
-                                    <div className={`mt-4 flex ${isMobileDevice ? 'self-center flex-col' : ' flex-row'}`}>
+                                    <div className={`mt-4 mb-5 flex ${isMobileDevice ? 'self-center flex-col' : ' flex-row'}`}>
                                         <IonButton className='h-11 w-48' color="dark" onClick={() => {signInAnonymously(auth)}}>
                                             Try our demo
                                         </IonButton>

@@ -37,7 +37,7 @@ function Sidebar() {
             <div className={`px-2 ${isMobile ? '' :'h-full'}`}>
             <IonList
                 lines="none"
-                className={`px-2 h-full ${isMobile ? '' : 'border-r'} md:max-w-max lg:max-w-none`}
+                className={`px-2 h-full overflow-auto ${isMobile ? '' : 'border-r'} md:max-w-max lg:max-w-none`}
                 css={css`
                     border-color: var(--ion-color-step-150);
                 `}
