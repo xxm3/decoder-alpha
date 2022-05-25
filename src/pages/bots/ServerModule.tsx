@@ -31,13 +31,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     let history = useHistory();
     const location: LocationParams = useLocation();
     const [isMobile, setIsMobile] = useState(false);
-    const [checked, setChecked] = useState<{
-        mintInfoModule: boolean;
-        tokenModule: boolean;
-    }>({
-        mintInfoModule: false,
-        tokenModule: false,
-    });
+    const [checked, setChecked] = useState<{ mintInfoModule: boolean; tokenModule: boolean; }>({ mintInfoModule: false, tokenModule: false, });
     const [isLoading, setIsLoading] = useState(false);
     const [server, setServer] = useState<Server | null>(null);
     const [showInstruction, setShowInstruction] = useState<boolean>(false)
@@ -310,7 +304,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 Configure Bot Packages
             </IonLabel>
             <IonLabel className={`text-base flex ${isMobile ? 'mt-2' :''}`}>
-                You are authorized {authorizedModule} moduls
+              {authorizedModule === 0 ?
+                    <>You are not authorized to edit module</> :
+                <>You are authorized {authorizedModule} modules </>}
             </IonLabel>
             </div>
 

@@ -182,7 +182,7 @@ function StackedSearch({ foo, onSubmit }: any) {
                     Compare multiple words on a line graph
                 </div>
 
-                <div className={`max-w-2xl my-2 flex space-x-2`}>
+                <div className={`max-w-2xl my-2 flex space-x-2 items-center`}>
                     <SearchBar
                         initialValue=""
                         onSubmit={doSearch}

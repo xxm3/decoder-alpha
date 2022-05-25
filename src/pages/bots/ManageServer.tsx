@@ -33,10 +33,10 @@ const ManageServer: React.FC<AppComponentProps> = () => {
      * Use Effects
      */
     useEffect(() => {
-        if (!localStorage.getItem('role')) {
-            history.push('/')
-            return
-        }
+        // if (!localStorage.getItem('role')) {
+        //     // history.push('/')
+        //     // return
+        // }
         if (window.innerWidth < 525) {
             setIsMobile(true);
 
@@ -45,7 +45,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
 
     useEffect(() => {
         let serverList: any = localStorage.getItem('servers');
-        console.log('serverList', JSON.parse(serverList));
+        // console.log('serverList', JSON.parse(serverList));
         if (serverList) {
             setServers(JSON.parse(serverList));
             setNoServers(false);
@@ -193,15 +193,16 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                 <b>Other packages will be released in the future such as:</b>
                             </ul> */}
                         </ul>
-
-                        <div className='text-3xl font-semibold my-3 mt-8'>Upcoming features</div>
-
-                        <ul className='list-disc ml-8 leading-9'>
-
-                            <li>"Magic Eden" package: (1) perform the command "/me bohemia" and you'll get the price chart of Bohemia, and (2) you can customize a single alert for your server, to get alerted when any NFT above a certain price goes up X % within Y minutes</li>
-                            <li>"Sales listing" package: Get alerted whenever a sale for your NFT occurs</li>
-                            <li>Other unannounced packages</li>
-                        </ul>
+                        {!noServers &&
+                        <>
+                            <div className='text-3xl font-semibold my-3 mt-8'>Upcoming features</div>
+                            <ul className='list-disc ml-8 leading-9'>
+                                <li>"Magic Eden" package: (1) perform the command "/me bohemia" and you'll get the price chart of Bohemia, and (2) you can customize a single alert for your server, to get alerted when any NFT above a certain price goes up X % within Y minutes</li>
+                                <li>"Sales listing" package: Get alerted whenever a sale for your NFT occurs</li>
+                                <li>Other unannounced packages</li>
+                            </ul>
+                        </>}
+                        
 
 
                         {/* <br /><br />
