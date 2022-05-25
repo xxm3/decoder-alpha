@@ -68,6 +68,7 @@
     background-color: #202124 !important;
     box-shadow: 0 5px 15px rgb(0 0 0 / 25%);
     padding: 10px;
+   
 }
 .rbc-timeslot-group {
     min-height: 200px !important;
@@ -75,9 +76,37 @@
 .custome-event .rbc-event{
     font-size: 14px !important;
     height: 23px !important;
-   padding-top: -5px !important;
+    padding-top: -5px !important;
   }
 
 .show-more-btn .rbc-show-more {
     font-size: 11px !important;
+}
+
+.c-ion-select{
+    width: 300px;
+    border: 2px solid rgba(171, 171, 171, 0.876);    
+    border-radius: 40px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-right: 10px;
+}
+ion-item{
+    --inner-border-width: 0 0 0 0;
+}
+ion-select-popover ion-list {
+    height: 400px;
+    overflow: auto;
+}
+ion-select-popover .sc-ion-popover-md-h{
+    --width: 220px;
+    --max-height: 400px;
+}
+@media screen and (max-width: 475px) {
+    .c-ion-select{
+        width: 100%;
+    }
+    ion-select-popover .sc-ion-popover-md-h{
+        --width: 290px !important;
+    }
 }

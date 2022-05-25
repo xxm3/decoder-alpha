@@ -33,10 +33,6 @@ const ManageServer: React.FC<AppComponentProps> = () => {
      * Use Effects
      */
     useEffect(() => {
-        // if (!localStorage.getItem('role')) {
-        //     history.push('/')
-        //     return
-        // }
         if (window.innerWidth < 525) {
             setIsMobile(true);
 
@@ -45,7 +41,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
 
     useEffect(() => {
         let serverList: any = localStorage.getItem('servers');
-        console.log('serverList', JSON.parse(serverList));
+        // console.log('serverList', JSON.parse(serverList));
         if (serverList) {
             setServers(JSON.parse(serverList));
             setNoServers(false);
@@ -116,32 +112,20 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                 </IonLabel>
 
                 <div className="my-3 relative bg-yellow-300/25 p-5 rounded-xl">
-                    <span className="text-md text-white">
+                    <div className="text-md">
                         <div className='mb-2 flex items-center w-full justify-between'>
                             <div className='flex items-center'>
                                 <span className=" bg-yellow-500 w-7 h-7 flex items-center justify-center font-bold rounded-full mr-2">!</span>
                                 <span className='text-yellow-500 text-lg font-bold'>Server owners only</span>
                             </div>
-                            <div>
-                                <span className="text-2xl font-thin">x</span>
-                            </div>
-
+                            <div> <span className="text-2xl font-thin">x</span> </div>
                         </div>
-
                         <p>Note this page is only for server owners (for the time being). Also your server will need to first have our Discord Bot invited to it. Click one of the below links, then in the "Add to Server" on the bottom, select your server. Then click "Continue", then "Authorize"</p>
-                        <br />
-
-                        <ul className='list-disc ml-8'>
-                            <li>
-                                If using JUST the "Daily Mints" bots, <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20guilds.members.read%20bot">click here</a> to add the Discord Bot to your server
-                            </li>
-                            <li>
-                                Or if using the "Fox Token" bots (where users can type /token) ... or if using BOTH bots, this needs additional permissions so <a className="underline cursor-pointer" href="https://discord.com/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20applications.commands%20bot%20guilds.members.read">click here</a> to add the Discord Bot to your server
-                            </li>
+                        <ul className='list-disc ml-8 mt-3'>
+                            <li> If using JUST the "Daily Mints" bots, <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20guilds.members.read%20bot">click here</a> to add the Discord Bot to your server </li>
+                            <li> Or if using the "Fox Token" bots (where users can type /token) ... or if using BOTH bots, this needs additional permissions so <a className="underline cursor-pointer" href="https://discord.com/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20applications.commands%20bot%20guilds.members.read">click here</a> to add the Discord Bot to your server </li>
                         </ul>
-
-
-                    </span>
+                    </div>
 
                 </div>
 
@@ -164,11 +148,11 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                             </div>
                                             <div className="flex flex-row justify-between items-center w-full mt-4 px-4">
                                                 <div className="flex flex-col justify-between">
-                                                    <span className="text-md tracking-wider whitespace-nowrap">
+                                                    <span className="text-md tracking-wider whitespace-nowrap text-white">
                                                         {server.name}
                                                     </span>
                                                 </div>
-                                                <div className="p-3 py-1 ml-2 text-md rounded-lg add-button" onClick={() => { storeGuild(server); }}>ADD </div>
+                                                <div className="p-3 py-1 ml-2 text-md rounded-lg add-button cursor-pointer text-white" onClick={() => { storeGuild(server); }}>ADD </div>
                                             </div>
                                         </div>
 
@@ -185,8 +169,12 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                 {/*TODO: need some troubleshooting steps or explanations for users that dont have enough NFTs ... but want to manage servers ...*/}
                     {/*and/or need way for reg users to see manageservers page... - perhasp everyone can see but noting shows up but explanations? */}
 
-                <br />
-                <div className="flex flex-row justify-center w-full">
+
+
+            </>
+            }
+
+            <div className="flex flex-row justify-center w-full mt-4">
                     <div className="py-3">
                         <div className='text-3xl font-semibold my-3'>Introduction</div>
                         <ul className='list-disc ml-8 leading-9'>
@@ -201,15 +189,16 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                 <b>Other packages will be released in the future such as:</b>
                             </ul> */}
                         </ul>
+                        {!noServers &&
+                        <>
+                            <div className='text-3xl font-semibold my-3 mt-8'>Upcoming features</div>
+                            <ul className='list-disc ml-8 leading-9'>
+                                <li>"Magic Eden" package: (1) perform the command "/me bohemia" and you'll get the price chart of Bohemia, and (2) you can customize a single alert for your server, to get alerted when any NFT above a certain price goes up X % within Y minutes</li>
+                                <li>"Sales listing" package: Get alerted whenever a sale for your NFT occurs</li>
+                                <li>Other unannounced packages</li>
+                            </ul>
+                        </>}
 
-                        <div className='text-3xl font-semibold my-3 mt-8'>Upcoming features</div>
-
-                        <ul className='list-disc ml-8 leading-9'>
-
-                            <li>"Magic Eden" package: (1) perform the command "/me bohemia" and you'll get the price chart of Bohemia, and (2) you can customize a single alert for your server, to get alerted when any NFT above a certain price goes up X % within Y minutes</li>
-                            <li>"Sales listing" package: Get alerted whenever a sale for your NFT occurs</li>
-                            <li>Other unannounced packages</li>
-                        </ul>
 
 
                         {/* <br /><br />
@@ -221,8 +210,6 @@ const ManageServer: React.FC<AppComponentProps> = () => {
 
                     </div>
                 </div>
-            </>
-            }
         </>
     );
 };
