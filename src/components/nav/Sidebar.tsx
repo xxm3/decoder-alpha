@@ -100,21 +100,12 @@ function Sidebar() {
                 {/*    to="/bots"*/}
                 {/*/>*/}
 
-                {/*TODO: test this later . . .*/}
-                {/*{*/}
-                {/*    // role!=='' || role==='No Roles' ?*/}
-
-                {/*    // commented out code*/}
-                {/* { localStorage.getItem('role')!=='' || localStorage.getItem('role') === 'No Roles' ? */}
-                   <>
-                       <NavLink
-                            title="Add Bots"
-                           icon={serverOutline}
-                           to="/manageserver"
-                       />
-                   </>
-                 {/* :null
-                } */}
+                {/*TODO: enable this later . . .*/}
+               {/*    <NavLink*/}
+               {/*         title="Add Bots"*/}
+               {/*        icon={serverOutline}*/}
+               {/*        to="/manageserver"*/}
+               {/*    />*/}
 
                 <NavLink
                     title="Docs"

@@ -94,9 +94,16 @@ const ManageServer: React.FC<AppComponentProps> = () => {
     {/*
         TODO- BUGS:
 
-         test daily/1h/analytics
-
          need to switch vehn dojo with production...so it gets updates...
+
+
+        tell CY & mods
+
+
+        https://us-central1-nft-discord-relay.cloudfunctions.net/api/thirtyMints?whichSection=first&doScrape=true
+        https://us-central1-nft-discord-relay.cloudfunctions.net/api/thirtyMints?whichSection=second&doScrape=true
+        https://us-central1-nft-discord-relay.cloudfunctions.net/api/thirtyMints?whichSection=third&doScrape=true
+
     */}
 
     return (
@@ -105,7 +112,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                 <CircularProgress color="inherit" />
             </Backdrop>
             {/*  */}
-            {noServers ? <div className='text-xl text-center'>Unable to find any servers... </div> :
+            {noServers ? <div className='text-xl text-center'>Unable to find any servers you are the owner of. If you are one, then reset your cookies and try logging in again (or use a new browser)</div> :
             <>
                 <IonLabel className="text-4xl font-semibold mb-3">
                     Select a Server
@@ -159,17 +166,12 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                     </Grid>
                                 );
                             }
-                            // TODO: below not working??
-                        }) : 'Unable to find any servers you are the owner of. If you are one, then reset your cookies and try logging in again'}
+                        }) : ''}
                     </Grid>
                 </div>
 
-                {/*TODO: need to tell user how many modules they are authorized for... on top right of page*/}
-
                 {/*TODO: need some troubleshooting steps or explanations for users that dont have enough NFTs ... but want to manage servers ...*/}
                     {/*and/or need way for reg users to see manageservers page... - perhasp everyone can see but noting shows up but explanations? */}
-
-
 
             </>
             }
@@ -214,4 +216,5 @@ const ManageServer: React.FC<AppComponentProps> = () => {
     );
 };
 
+// @ts-ignore
 export default ManageServer;

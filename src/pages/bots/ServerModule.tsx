@@ -37,7 +37,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [showInstruction, setShowInstruction] = useState<boolean>(false)
     const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(false)
     const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] = useState<boolean>(false)
-    
+
 
     const [dropdownValue, setDropdownValue] = useState({
         dailyMintsWebhookChannel: 'default',
@@ -74,7 +74,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     // get guilds
     useEffect(() => {
-        
+
         if (location?.state?.server) {
             setIsLoading(true);
             let serverObj = location.state.server;
@@ -96,7 +96,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         analyticsWebhookChannel: data.analyticsWebhookChannel,
                     });
                     setChannel(data.textChannels);
-                    
+
                 })
                 .catch((error: any) => {
                     let msg = '';
@@ -116,7 +116,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     setIsLoading(false);
                 });
         }
-    
+
     }, [location]);
 
     useEffect(() => {
@@ -127,9 +127,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         }else{
             setAuthorizedModule(0)
         }
-         
+
     }, [role])
-    
+
 
 
 
@@ -222,7 +222,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     };
 
     let getOption = () => {
-        // TODO: all dropdowns need to be ordered alphabeticlly
         return channel?.sort((a: { name: string; },b: { name: any; })=>a.name.localeCompare(b.name)).map((obj: any, index: number) => {
             return (
                 <option value={obj.id} key={index}>
@@ -242,6 +241,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     }
 
     let disableButton = (btnType: any) => {
+        // TODO: ??? why showing this... has nothing to do with owner...
         if (role === 'No Roles') {
             showDisableBtnMesage('You are not the owner')
             return true
@@ -300,14 +300,14 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             </Backdrop>
 
             <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
-            <IonLabel className="md:text-4xl text-2xl font-semibold">
-                Configure Bot Packages
-            </IonLabel>
-            <IonLabel className={`text-base flex ${isMobile ? 'mt-2' :''}`}>
-              {authorizedModule === 0 ?
-                    <>You are not authorized to edit module</> :
-                <>You are authorized {authorizedModule} modules </>}
-            </IonLabel>
+                <IonLabel className="md:text-4xl text-2xl font-semibold">
+                    Configure Bot Packages
+                </IonLabel>
+            </div>
+            <div className={`text-base flex ${isMobile ? 'mt-2' :''}`}>
+                {authorizedModule === 0 ?
+                    <span className="text-red-500">You don't have enough NFTs to add packages. Please purchase the appropriate amount and have your role verified in Discord </span> :
+                    <span className="text-green-500">You are authorized to add {authorizedModule} package(s)</span>}
             </div>
 
             <div className="flex flex-row justify-center w-full mt-9">
@@ -330,7 +330,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         <li>If doing the "Fox token" package, you need to first tell us before you can start using the bot commands (/token, /token_name, /wallet_tokens) in your server. You also need to add permission for any user in that channel to "Use Application Commands"</li>
                     </ul> : ''
                     }
-                   
+
 
                 </div>
             </div>
@@ -340,7 +340,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 <div className='flex flex-col lg:flex-row gap-6 w-full'>
 
                     {/*mintInfoModule  */}
-                    
+
                     <div className='basis-1/2'>
                         <div className="server-module-bg overflow-hidden">
                             <div className="flex flex-row justify-center w-full">
@@ -390,18 +390,15 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                 </div>
                                                 <div className='italic text-sm'>(Automated posts about today's mints, along with Twitter/Discord stats)</div>
                                                 { dropdownValue.dailyMintsWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendDailyMints')}>Send a test message</IonButton>}
-                                                {/* 
+                                                {/*
                                                 Choose a channel above, then click the button below to make sure it worked
                                                 <br /> */}
 
                                                 {/*TODO: What happens if someone goes from 4 nft to 3 nft... Does it only disable one of their bot...*/}
 
-                                                {/*TODO: If user not owner...show Nothing on main page */}
-
-                                                {/*TODO: tshow user what each of the output of channel should look like .... tell user analytics needs embeds*/}
+                                                {/*TODO: show user what each of the output of channel should look like .... tell user analytics needs embeds*/}
 
 
-                                                {/*TODO: hide until selected... x3 */}
                                                 {/* <IonButton onClick={() => sendTestWebhook('sendDailyMints')}>Send a test message</IonButton> */}
                                                 <div className="text-lg font-semibold mt-6">
                                                     "One Hour Mint Info" Channel
@@ -423,10 +420,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                 </div>
                                                 <div className='italic text-sm'>
                                                     (An hour before one of the top 7 daily mints comes out, this will show the mint info, recent searches from the Discords we parse, and last two official tweets from their team)
-
-                                                    {/*TODO*/}
-                                                    {/* <br />
-                                                    <b className="text-red-500">Note: we're currently fixing a bug where mints don't alway show up in this feed</b> */}
                                                 </div>
                                                 {dropdownValue.oneHourMintInfoWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendOneHourMints')}>Send a test message</IonButton>}
 
@@ -437,7 +430,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         </div>
                                     </>
                                 )}
-                                
+
 
                                 <div className="text-sm  mt-2 p-2 border-t-2">
                                     <div className='w-full flex items-center justify-between'>
@@ -450,7 +443,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         <li>Your server can have the "daily-mints" and "1h-mint-info" feed, and soon "tomorrows-mints". Enable this to learn more about each</li>
                                         <li>Hold and you get lifetime access, and get free upgrades to existing packages such as getting daily summaries of NFTs coming out in a few weeks, when they they get a bump in their twitter / discord numbers</li>
                                     </ul> : '' }
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -533,17 +526,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         <div className='text-base my-2 '> More information </div>
                                         <img src={foxTokenMoreInfoShow ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`) } className='w-4 cursor-pointer' onClick={()=> setFoxTokenMoreInfoShow((e)=>!e)} />
                                     </div>
-                                    { foxTokenMoreInfoShow ? 
+                                    { foxTokenMoreInfoShow ?
                                         (<ul className='list-disc ml-5 leading-7'>
                                             <li>Your server can have our "analytics" feed (where we show when tokens get new names from the Fox Token team), and users can use our bot's slash commands of /token_name and /token and /wallet_tokens </li>
                                             <li>Hold and you get lifetime access, and get free upgrades to existing packages such as getting alerts for Fox Token price/listings data (ie. alerted when any fox token with a name & greater than 1 sol price & greater than 10 listings is out) </li>
                                         </ul>): ''
                                     }
-                                    
-
-                                    {/*TODO: all staff to test it*/}
-
-                                    {/*<b className="text-red-500">Note: we're currently fixing a bug where tokens created in the last day or two don't work with the /token commands</b>*/}
                                 </div>
                             </div>
                         </div>
