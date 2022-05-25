@@ -8,7 +8,6 @@ import './ServerModule.scss';
 import { useHistory, useLocation } from 'react-router';
 import Loader from '../../components/Loader';
 import Help from '../../components/Help';
-import upIcon from '../../images/up-icon.png'
 
 interface LocationParams {
     pathname: string;
@@ -32,31 +31,25 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     let history = useHistory();
     const location: LocationParams = useLocation();
     const [isMobile, setIsMobile] = useState(false);
-    const [checked, setChecked] = useState<{
-        mintInfoModule: boolean;
-        tokenModule: boolean;
-    }>({
-        mintInfoModule: false,
-        tokenModule: false,
-    });
+    const [checked, setChecked] = useState<{ mintInfoModule: boolean; tokenModule: boolean; }>({ mintInfoModule: false, tokenModule: false, });
     const [isLoading, setIsLoading] = useState(false);
     const [server, setServer] = useState<Server | null>(null);
-    const [showInstruction, setShowInstruction] = useState<boolean>(true)
-    const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(true)
-    const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] = useState<boolean>(true)
+    const [showInstruction, setShowInstruction] = useState<boolean>(false)
+    const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(false)
+    const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] = useState<boolean>(false)
     
 
     const [dropdownValue, setDropdownValue] = useState({
-        dailyMintsWebhookChannel: '',
-        oneHourMintInfoWebhookChannel: '',
-        analyticsWebhookChannel: '',
+        dailyMintsWebhookChannel: 'default',
+        oneHourMintInfoWebhookChannel: 'default',
+        analyticsWebhookChannel: 'default',
     });
     const [channel, setChannel] = useState<any>(null);
     const [backdrop, setBackdrop] = useState(false);
     const [present, dismiss] = useIonToast();
 
     const [role, setRole] = useState<any>(null)
-
+    const [authorizedModule, setAuthorizedModule] = useState<any>()
 
     /**
      * Use Effects
@@ -124,7 +117,19 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 });
         }
     
-}, [location]);
+    }, [location]);
+
+    useEffect(() => {
+        if(role ==='3NFT'){
+            setAuthorizedModule(1)
+        }else if (role ==='4NFT'){
+            setAuthorizedModule(2)
+        }else{
+            setAuthorizedModule(0)
+        }
+         
+    }, [role])
+    
 
 
 
@@ -290,19 +295,18 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     }
     return (
         <>
-            <Backdrop
-                style={{ color: '#fff', zIndex: 1000, }}
-                open={backdrop}
-            >
+            <Backdrop style={{ color: '#fff', zIndex: 1000, }} open={backdrop} >
                 <CircularProgress color="inherit" />
             </Backdrop>
 
-            <div className={isMobile ? 'flex-col items-center flex items-center':'flex justify-between flex-row items-center'}>
+            <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
             <IonLabel className="md:text-4xl text-2xl font-semibold">
                 Configure Bot Packages
             </IonLabel>
             <IonLabel className={`text-base flex ${isMobile ? 'mt-2' :''}`}>
-                You are authorized moduls
+              {authorizedModule === 0 ?
+                    <>You are not authorized to edit module</> :
+                <>You are authorized {authorizedModule} modules </>}
             </IonLabel>
             </div>
 
@@ -311,7 +315,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     {/*TODO: when you refresh the page - everything shows disabled */}
                     <div className='w-full flex items-center justify-between mb-3'>
                         <div className='text-xl font-semibold '>Instructions</div>
-                        <img src={showInstruction ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`)}  className='w-4' onClick={()=>setShowInstruction((e)=>!e)} />
+                        <img style={{color : 'red'}} src={showInstruction ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`)}  className='w-4 cursor-pointer' onClick={()=>setShowInstruction((e)=>!e)} />
                     </div>
                     {/* <div className='text-xl font-semibold mb-3'>Instructions</div> */}
                     {
@@ -333,7 +337,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
             <div className="flex flex-row justify-center w-full mt-6">
                 {/*mt-6*/}
-                <div className='flex flex-col lg:flex-row gap-6'>
+                <div className='flex flex-col lg:flex-row gap-6 w-full'>
 
                     {/*mintInfoModule  */}
                     
@@ -352,8 +356,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     <IonLabel className="ml-3 text-xl font-semibold">
                                         #1 - "Mints" package
                                     </IonLabel>
-                                    <Switch
-                                        checked={checked.mintInfoModule}
+                                    <Switch checked={checked.mintInfoModule}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                             if (disableButton('mintInfoModule')) {
                                                 return
@@ -364,7 +367,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 </div>
 
                     {/* Hide show channale list of mint module */}
-                                {!checked.mintInfoModule && (
+                                {checked.mintInfoModule && (
                                     <>
                                         <div className="flex flex-row justify-center w-full">
                                             <div className="server-module-bg p-2 mt-2">
@@ -372,8 +375,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                     "Daily Mints" Channel
                                                 </div>
                                                 <div className="flex flex-row justify-between my-2">
-                                                    <select value={dropdownValue.dailyMintsWebhookChannel}
-                                                        className="server-channel-dropdown"
+                                                    <select value={dropdownValue.dailyMintsWebhookChannel} className="server-channel-dropdown"
                                                         onChange={(event: any) => {
                                                             updateWebHooks({
                                                                 webhook: 'dailyMintsWebhookChannel',
@@ -405,15 +407,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                     "One Hour Mint Info" Channel
                                                 </div>
                                                 <div className="flex flex-row justify-between my-2">
-                                                    <select
-                                                        value={
-                                                            dropdownValue.oneHourMintInfoWebhookChannel
-                                                        }
-                                                        className="server-channel-dropdown"
+                                                    <select value={ dropdownValue.oneHourMintInfoWebhookChannel } className="server-channel-dropdown"
                                                         onChange={(event: any) => {
                                                             updateWebHooks({
-                                                                webhook:
-                                                                    'oneHourMintInfoWebhookChannel',
+                                                                webhook: 'oneHourMintInfoWebhookChannel',
                                                                 channel: event.target.value,
                                                             });
                                                         }}
@@ -447,7 +444,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         <div className='text-base my-2 '>
                                             More information
                                         </div>
-                                        <img src={mintMoreInfoShow ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`)} className='w-4' onClick={()=> setMintMoreInfoShow((e)=>!e)} />
+                                        <img src={mintMoreInfoShow ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`)} className='w-4 cursor-pointer' onClick={()=> setMintMoreInfoShow((e)=>!e)} />
                                     </div>
                                     {mintMoreInfoShow ? <ul className='list-disc ml-5 leading-7'>
                                         <li>Your server can have the "daily-mints" and "1h-mint-info" feed, and soon "tomorrows-mints". Enable this to learn more about each</li>
@@ -476,9 +473,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     </IonLabel>
                                     <Switch
                                         checked={checked.tokenModule}
-                                        onChange={(
-                                            e: React.ChangeEvent<HTMLInputElement>
-                                        ) => {
+                                        onChange={( e: React.ChangeEvent<HTMLInputElement> ) => {
                                             if (disableButton('tokenModule')) {
                                                 return
                                             }
@@ -492,7 +487,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 </div>
 
                     {/* Hide show channale list of fox token module */}
-                                {!checked.tokenModule && (
+                                {checked.tokenModule && (
                                     <>
                                         <div className="flex w-full">
                                             <div className="server-module-bg p-2 mt-2 w-full">
@@ -504,9 +499,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                     "Fox Token" channel
                                                 </div>
                                                 <div className="flex flex-row justify-between my-2 ">
-                                                    <select
-                                                        value={ dropdownValue.analyticsWebhookChannel }
-                                                        className="server-channel-dropdown"
+                                                    <select value={ dropdownValue.analyticsWebhookChannel } className="server-channel-dropdown"
                                                         onChange={(event: any) => {
                                                             updateWebHooks({
                                                                 webhook: 'analyticsWebhookChannel',
@@ -537,17 +530,14 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                                 <div className="text-sm mt-2 p-2 border-t-2">
                                     <div className='w-full flex items-center justify-between'>
-                                        <div className='text-base my-2 '>
-                                            More information
-                                        </div>
-                                        <img src={foxTokenMoreInfoShow ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`) } className='w-4' onClick={()=> setFoxTokenMoreInfoShow((e)=>!e)} />
+                                        <div className='text-base my-2 '> More information </div>
+                                        <img src={foxTokenMoreInfoShow ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`) } className='w-4 cursor-pointer' onClick={()=> setFoxTokenMoreInfoShow((e)=>!e)} />
                                     </div>
-                                    {
-                                        foxTokenMoreInfoShow ? <ul className='list-disc ml-5 leading-7'>
-                                        <li>Your server can have our "analytics" feed (where we show when tokens get new names from the Fox Token team), and users can use our bot's slash commands of /token_name and /token and /wallet_tokens </li>
-                                        <li>Hold and you get lifetime access, and get free upgrades to existing packages such as getting alerts for Fox Token price/listings data (ie. alerted when any fox token with a name & greater than 1 sol price & greater than 10 listings is out)
-                                        </li>
-                                    </ul> : ''
+                                    { foxTokenMoreInfoShow ? 
+                                        (<ul className='list-disc ml-5 leading-7'>
+                                            <li>Your server can have our "analytics" feed (where we show when tokens get new names from the Fox Token team), and users can use our bot's slash commands of /token_name and /token and /wallet_tokens </li>
+                                            <li>Hold and you get lifetime access, and get free upgrades to existing packages such as getting alerts for Fox Token price/listings data (ie. alerted when any fox token with a name & greater than 1 sol price & greater than 10 listings is out) </li>
+                                        </ul>): ''
                                     }
                                     
 

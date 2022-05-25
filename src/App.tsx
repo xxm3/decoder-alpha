@@ -93,6 +93,8 @@ const App = () => {
     //offline Online
     useEffect(() => {
         statusCheck();
+        checkIsLogin();
+        // localStorage.setItem('isLogin','0')
         const loadEvent = async () => {
             window.addEventListener('online', () => {
                 setNetworkState(true);
@@ -118,6 +120,17 @@ const App = () => {
 			localStorage.removeItem('role')
         };
     }, []);
+
+
+    const checkIsLogin = () => { 
+        let isLogin = localStorage.getItem('isLogin')
+        if(isLogin === '1'){
+            localStorage.setItem('isLogin','1')
+        }else{
+            localStorage.setItem('isLogin','0')
+        }
+    }
+
 
 	// get Current App version
     // let getCurrentVersion = async () => {
@@ -145,6 +158,7 @@ const App = () => {
 
 			getRoleType(JSON.parse(roleList));
 		}
+        
 	}, [localStorage.getItem('roleList')]);
 
 	// get role type

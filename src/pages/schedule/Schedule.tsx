@@ -4,7 +4,7 @@ import 'moment-timezone';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
-import { IonContent, IonIcon, IonRippleEffect, useIonToast, IonRefresher, IonRefresherContent } from '@ionic/react';
+import { IonContent, IonIcon, IonRippleEffect, useIonToast, IonRefresher, IonRefresherContent, IonSelect, IonSelectOption } from '@ionic/react';
 import './Schedule.css'
 import { Column, MTableToolbar } from '@material-table/core';
 import Table from '../../components/Table';
@@ -533,15 +533,12 @@ const Schedule = () => {
                                                                     <div className="hidden sm:block" style={{ width:'100%'}}>
                                                                        {`Mint Schedule - ${date}`}
                                                                     </div>
-                                                                        <Select
-                                                                        labelId="demo-simple-select-label"
-                                                                        id="demo-simple-select"
-                                                                        value={selectedTimezone.value}
-                                                                        placeholder='select time zone'
-                                                                        style={{ width:'100%', lineHeight:1.2,border: `1px solid rgba(171, 171, 171, 0.876)`,borderRadius:'20px',paddingLeft:'10px'}}
-                                                                        onChange={(selected: any) => { setSelectedTimezone({...selected.target}) }} >
-                                                                            {TimezoneData && TimezoneData.map((item:any,index:number)=>{ return (<MenuItem key={index} value={item.value}>{item.label}</MenuItem>)} )}
-                                                                        </Select>
+                                                                    <IonSelect id="demo-simple-select" value={selectedTimezone.value} interface="popover"   onChange={(selected: any) => { setSelectedTimezone({ ...selected.target }) }} className="c-ion-select">
+                                                       
+                                                       {TimezoneData && TimezoneData.map((item: any, index: number) => {  
+                                                              return<IonSelectOption   key={index}  value={item.value} >{item.label}</IonSelectOption>
+                                                        })}
+                                                     </IonSelect>
                                                                 </div>
                                                             </Grid>
                                                             <Grid item sm={4}>
