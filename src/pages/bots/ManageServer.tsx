@@ -67,8 +67,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             )
             .then(({ data }) => {
                 history.push({
-                    pathname: '/servermodule',
-                    state: { server: server },
+                    pathname: `/servermodule/${server.id}`,
                 });
             })
             .catch((error:any) => {

@@ -5,9 +5,10 @@ import {  IonItem, IonButton, IonLabel,  useIonToast } from '@ionic/react';
 import { Backdrop,CircularProgress,Grid, Switch, } from '@material-ui/core';
 import {Tooltip} from "react-tippy";
 import './ServerModule.scss';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory, useLocation, useParams } from 'react-router';
 import Loader from '../../components/Loader';
 import Help from '../../components/Help';
+import { Server } from '../../types/Server';
 
 
 interface LocationParams {
@@ -16,14 +17,7 @@ interface LocationParams {
     search: string;
     hash: string;
 }
-interface Server {
-    id: string;
-    name: string;
-    icon: string;
-    owner: boolean;
-    permissions: string;
-    features: [];
-}
+
 
 const ServerModule: React.FC<AppComponentProps> = () => {
     /**
@@ -41,7 +35,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     });
     const [age, setAge] = React.useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [server, setServer] = useState<Server | null>(null);
 
     const [dropdownValue, setDropdownValue] = useState({
         dailyMintsWebhookChannel: '',
@@ -71,15 +64,14 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     }, [window.innerWidth]);
 
 
+	const { server } = useParams<{server : string}>()
     // get guilds
     useEffect(() => {
-        if (location) {
-            if (location.state.server) {
+        
+            if (server) {
                 setIsLoading(true);
-                let serverObj = location.state.server;
-                setServer(serverObj);
                 instance
-                    .get(`/guilds/${serverObj.id}`)
+                    .get(`/guilds/${server}`)
                     .then((response) => {
                         let data = response.data.data;
                         if(role ==='3NFT' || role ==='4NFT'){
@@ -119,9 +111,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     .finally(() => {
                         setIsLoading(false);
                     });
-            }
         }
-    }, [location]);
+    }, [server]);
 
 
 
@@ -130,7 +121,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         if (server) {
             setBackdrop(true);
             instance
-                .post(`/guilds/${server.id}/modules`, obj, {
+                .post(`/guilds/${server}/modules`, obj, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -180,7 +171,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         if (server) {
             setBackdrop(true);
             instance
-                .post(`/guilds/${server.id}/webhooks`, obj, {
+                .post(`/guilds/${server}/webhooks`, obj, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -260,7 +251,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     const sendTestWebhook = (moduleName: string) => {
         if (!server) return;
-        instance.post(`/guilds/${server.id}/${moduleName}`, {}, {
+        instance.post(`/guilds/${server}/${moduleName}`, {}, {
             headers: {
                 'Content-Type': 'application/json',
             },
