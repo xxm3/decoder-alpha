@@ -33,10 +33,10 @@ const ManageServer: React.FC<AppComponentProps> = () => {
      * Use Effects
      */
     useEffect(() => {
-        if (!localStorage.getItem('role')) {
-            history.push('/')
-            return
-        }
+        // if (!localStorage.getItem('role')) {
+        //     history.push('/')
+        //     return
+        // }
         if (window.innerWidth < 525) {
             setIsMobile(true);
 

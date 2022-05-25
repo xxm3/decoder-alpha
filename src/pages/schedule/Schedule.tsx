@@ -496,9 +496,7 @@ const Schedule = () => {
                                                 /**
                                                  * TODO !!!! :
                                                  *
-                                                 * 5 / 10 / 15
-                                                 *
-                                                 * need 3 cronjobs!!!
+                                                 * need 4 cronjobs!!! -- first/second/third ... guildjs one
                                                  *
                                                  *
                                                  * (once all done) need a "click here view calendar" on top...
