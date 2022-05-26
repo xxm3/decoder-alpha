@@ -70,6 +70,10 @@ ion-toggle {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    -webkit-backdrop-filter: blur(10px);
+    -moz-backdrop-filter: blur(10px);
+    -ms-backdrop-filter: blur(10px);
+    -o-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     img {
         height: 60px;

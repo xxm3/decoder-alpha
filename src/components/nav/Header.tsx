@@ -42,7 +42,7 @@ const HeaderContainer = () => {
 
 	const [mode, setMode] = usePersistentState<"dark" | "light">("mode", "dark");
 
-    const hideSearch = '1'; // localStorage.getItem('isLogin')
+    const hideSearch =  localStorage.getItem('isLogin')
     // TODO - Ruchita: i'm on dev and not logged in ... and its hidden
     //  also need to hide wallet when not logged in
     //  also if hide search is 1 (true) ... then we show the search - no make sense
@@ -170,14 +170,14 @@ const HeaderContainer = () => {
                                 />
                             )}
                             {/* @ts-ignore */}
-                            {hideSearch === '1' ?
+                            {hideSearch === 'isLogin' ?
                             <div className={`flex-grow flex space-x-2 c-header-search items-center ${ showMobileSearch ? 'max-w-[50rem] px-3' : 'hidden lg:flex' }`}>
                                 <SearchBar onSubmit={handleSearch} initialValue={decodeURIComponent(id ?? '')} placeholder={headerPlaceholder} disableReset />
                                 <span className="hidden sm:block"> <Help description={`Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale"). Results include graphs, and messages you can scroll through. Click on a message to view more`} /> </span>
                             </div> : '' }
 
                             {/* @ts-ignore */}
-                            { hideSearch === '1' && !showMobileSearch && (
+                            { hideSearch === 'isLogin' && !showMobileSearch && (
                                 <IonIcon slot="icon-only" icon={search} className="lg:hidden cursor-pointer text-2xl hover:opacity-80" onClick={() => setShowMobileSearch(true)} />
                             )}
                         </div>
@@ -205,9 +205,12 @@ const HeaderContainer = () => {
                             >
                                 <IonIcon icon={mode === 'dark' ? sunny : moon} className="h-7 w-7" />
                             </IonButton>
-                            <div className="hidden md:flex items-center">
+                            {
+                                hideSearch === 'isLogin' &&<div className="hidden md:flex items-center">
                                 <WalletButton />
-                            </div>
+                                </div>
+                            }
+                            
                         </div>
                     </div>
                 </IonToolbar>

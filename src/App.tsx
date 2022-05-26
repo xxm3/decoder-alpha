@@ -124,10 +124,10 @@ const App = () => {
 
     const checkIsLogin = () => {
         let isLogin = localStorage.getItem('isLogin')
-        if(isLogin === '1'){
-            localStorage.setItem('isLogin','1')
+        if(isLogin === 'isLogin'){
+            localStorage.setItem('isLogin','isLogin')
         }else{
-            localStorage.setItem('isLogin','0')
+            localStorage.setItem('isLogin','isNotLogin')
         }
     }
 
