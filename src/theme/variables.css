@@ -229,7 +229,7 @@ html.dark {
 	
 }
 
-html {
+html, .light {
 
 	--ion-background-color: #f5f5f5;
 	--ion-background-color-rgb: 245,245,245;

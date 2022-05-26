@@ -8,7 +8,9 @@ import './ServerModule.scss';
 import { useHistory, useLocation, useParams } from 'react-router';
 import Loader from '../../components/Loader';
 import Help from '../../components/Help';
+import InitiateWhitelist from './InitiateWhitelist';
 import { Server } from '../../types/Server';
+import { css } from '@emotion/react';
 
 
 interface LocationParams {
@@ -371,7 +373,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </Grid>
                 </Grid>
             </div>
-
+			<div className="mt-10 mb-5 w-full flex justify-center">
+            	<IonButton className="text-base" css={css`
+					--padding-top: 25px;
+					--padding-bottom: 25px;
+					--padding-end: 20px;
+					--padding-start: 20px;
+				`} onClick={() => history.push(`/initiatewhitelist/${server}`)}>
+	                Initiate Whitelist
+	            </IonButton>
+            </div>
             {checked.mintInfoModule && (
                 <>
                     <br/>
