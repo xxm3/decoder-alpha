@@ -7,13 +7,47 @@ import './Schedule.css'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment';
-import { IonButton, IonContent, IonHeader, IonIcon, IonModal, IonPopover,  IonRippleEffect,  IonToolbar, useIonToast } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonIcon, IonModal, IonSearchbar,  IonToolbar, useIonToast } from '@ionic/react';
 import { useHistory, useParams, useLocation } from 'react-router';
 import MintChart from './MintChart';
 import Loader from '../../components/Loader';
-import { logoDiscord, logoTwitter, link, close } from 'ionicons/icons';
+import { close } from 'ionicons/icons';
+import Help from '../../components/Help';
+import CommonMintsData from './CommonMintsData';
 
+// const tempArray = [
+//     {
+//         id: 1,
+//         title: 'aa',
+//         start: moment('30-5-2022', 'DD MM YYYY').toDate(),
+//         end: moment('30-5-2022', 'DD MM YYYY').toDate()
+//     },
+//     {
+//         id: 2,
+//         title: 'asdfgh',
+//         start: moment('30-5-2022', 'DD MM YYYY').toDate(),
+//         end: moment('30-5-2022', 'DD MM YYYY').toDate()
+//     },
+//     {
+//         id: 3,
+//         title: 'qwerty',
+//         start: moment('30-5-2022', 'DD MM YYYY').toDate(),
+//         end: moment('30-5-2022', 'DD MM YYYY').toDate()
+//     },
+//     {
+//         id: 4,
+//         title: 'zxcvb',
+//         start: moment('30-5-2022', 'DD MM YYYY').toDate(),
+//         end: moment('30-5-2022', 'DD MM YYYY').toDate()
+//     },
+//     {
+//         id: 5,
+//         title: 'poiuy',
+//         start: moment('30-5-2022', 'DD MM YYYY').toDate(),
+//         end: moment('30-5-2022', 'DD MM YYYY').toDate()
+//     },
 
+// ]
 
 
 const ScheduleCalendar: React.FC<AppComponentProps> = () => {
@@ -33,13 +67,27 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
     const [showMorePopup, setShowMorePopup] = useState<boolean>(true)
     const [eventGraphData, setEventGraphData] = useState<any>()
     const [showGraph, setShowGraph] = useState<boolean>(false)
+    const [searchEvent, setSearchEvent] = useState<any>()
+    const [searchValue, setSearchValue] = useState<any>()
+    const [monthLimit, setMonthLimit] = useState<boolean>(true)
+
+    let titleDiscription = `Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list. \n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them. The Fox logo in the price is the official Token price that comes from the Fox Token Market. Rows in bold mean the mint comes out in two hours or less. `
+    
 
     /**
      * Use Effects
      */
     useEffect(() => {
         fetchMintsData();
+        
     }, []);
+    
+    useEffect(() => {
+        setSearchEvent(myEvents)
+    }, [])
+    
+
+    
 
     useEffect(() => {
         let tempArray = []
@@ -99,8 +147,6 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
 
     // viewing the chart for a calendar
     const viewChart = async(id: any) => {
-        // setmintLineData(defaultGraph);
-
         await instance
             .get( environment.backendApi + '/mintInfo?mintId=' + id )
             .then((res) => {
@@ -123,6 +169,21 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
 
     };
 
+     // does the search functionality
+     function handleSearch(val: any) {
+        val = val.detail.value.trim();
+        setSearchValue(val)
+        let tmpArray:any = []
+        myEvents?.map((item:any)=>{
+            if(item.title.toLowerCase().includes(val.toLowerCase())){
+                tmpArray.push(item)
+            }else if (val=== ''){
+                setSearchEvent(myEvents)
+            }
+            setSearchEvent(tmpArray)
+        })
+    }
+
 
     const handleSlotSelect = (slotInfo: SlotInfo) => {
         onNavigate(moment(slotInfo.slots[0]).toDate());
@@ -142,21 +203,24 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
    const NextPrevMonth = (type:string) => {
        if(type === "prevMonth"){
            onNavigate(moment(selectDate).add(-1,'months').toDate())
+           setMonthLimit(true)
        } else if(type === "currentMonth"){
-           onNavigate(moment().toDate())
+        //    onNavigate(moment().toDate())
        } else if (type === "nextMonth"){
+        setMonthLimit(false)
            onNavigate(moment(selectDate).add(1,'months').toDate())
        }
    }
-   const NextPrevDate = (type:string) => {
-       if(type === "prevDay"){
-           onNavigate(moment(selectDate).add(-1,'days').toDate())
-       } else if(type === "today"){
-           onNavigate(moment().toDate())
-       } else if (type === "nextDay"){
-           onNavigate(moment(selectDate).add(1,'days').toDate())
-       }
-   }
+// next prev data function
+//    const NextPrevDate = (type:string) => {
+//        if(type === "prevDay"){
+//            onNavigate(moment(selectDate).add(-1,'days').toDate())
+//        } else if(type === "today"){
+//            onNavigate(moment().toDate())
+//        } else if (type === "nextDay"){
+//            onNavigate(moment(selectDate).add(1,'days').toDate())
+//        }
+//    }
 
    const onNavigate = (action: Date) =>{
        setSelectDate(action)
@@ -167,9 +231,9 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
        return (
            <div className='rbc-toolbar flex justify-between mt-4'>
                <div >
-                   <button type="button" style={{fontSize:isMobile ? '12px' : '', width:isMobile? '20px' : ''}} onClick={()=> NextPrevMonth('prevMonth')} >{"<"}</button>
-                   <button type="button" style={{fontSize:isMobile ? '12px' : ''}} onClick={()=> NextPrevMonth('currentMonth')}>{moment(selectDate).format('MMM')}</button>
-                   <button type="button" style={{fontSize:isMobile ? '12px' : '', width:isMobile? '20px' : ''}} onClick={()=> NextPrevMonth('nextMonth')} >{">"}</button>
+                  {!monthLimit ? <button type="button" onClick={()=> NextPrevMonth('prevMonth')} >{"<"}</button>: ''} 
+                   <button type="button"  onClick={()=> NextPrevMonth('currentMonth')}>{moment(selectDate).format('MMM YYYY')}</button>
+                  {monthLimit ? <button type="button" onClick={()=> NextPrevMonth('nextMonth')} >{">"}</button> : ''} 
                </div>
                {/*<div >*/}
                {/*    <button type="button" style={{fontSize:isMobile ? '12px' : '', width:isMobile? '20px' : ''}}  onClick={()=> NextPrevDate('prevDay')}>{"<"}</button>*/}
@@ -180,10 +244,11 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
          );
    }
 
-    const formatNumber = (n: any) => {
-        if (n < 1e3) return n;
-        if (n >= 1e3) return +(n / 1e3).toFixed(1) + 'K';
-    };
+   // do not remove 
+    // const formatNumber = (n: any) => {
+    //     if (n < 1e3) return n;
+    //     if (n >= 1e3) return +(n / 1e3).toFixed(1) + 'K';
+    // };
 
     return (
             <>
@@ -207,18 +272,24 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                          </span>
                      </div>
 
-                    <div className= {`${isMobile ? "text-center" : 'text-left' } text-2xl `}>
-                        Mint Calendar
-                        <a className="float-right text-base underline cursor-pointer "onClick= {() => history.push( { pathname: '/schedule'})}>
-                            <IonIcon icon={close} className="text-3xl " />
-                        </a>
+                    <div className= {`${isMobile ? "text-center flex-col" : 'text-left flex-row' } text-2xl flex justify-between ml-1 mr-2 items-center`} >
+                        <div className='flex flex-row' >Mint Calendar <div className='mt-1 ml-2'><Help description={titleDiscription} /></div></div>
+                        <div className="text-base cursor-pointer flex flex-row items-center">
+                          
+                            <IonSearchbar  className={`text-base !p-0 ${isMobile && 'w-60 h-10 items-left '} flex-grow  outline-none overflow-hidden flex rounded-full border`}
+                            type="text" value={searchValue} onIonChange={(e:any) => {handleSearch(e)}} animated placeholder={'search'} />
+                           
+
+                            <div onClick= {() => history.push( { pathname: '/schedule'})}> <IonIcon icon={close} className="text-3xl ml-6" /></div>
+                        </div>
                     </div>
                     <div className={ isMobile ? 'ml-1 mr-1' :"ml-3 mr-3"}>
                         <Calendar
                                 defaultDate={ moment().add(-1, "days").toDate()}
                                 className={isMobile ? 'show-more-btn custome-event' : ''}
                                 views={['month']}
-                                events={myEvents}
+                                // events={myEvents}
+                                events={searchEvent}
                                 components = {{
                                     toolbar : CustomCalenderToolbar,
                                 }}
@@ -254,35 +325,8 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                         <IonContent>
 
                             {/*links on top*/}
-                            <div className='mt-1 ml-4 mb-2'>
-                                <div className="flex space-x-3">
-
-                                    {/*discord*/}
-                                    <a href={eventGraphData?.data?.data[0]?.discord_link} target="_blank" style={{ pointerEvents: eventGraphData?.data?.data[0]?.discord_link  ? "initial" : "none" }} className={eventGraphData?.data?.data[0]?.discord_link ? "schedule-link" : "schedule-link-disabled"}>
-                                        <IonIcon icon={logoDiscord} className="big-emoji" />
-                                        <IonRippleEffect />
-                                    </a>
-
-                                    {/*twitter*/}
-                                    <a href={eventGraphData?.data?.data[0]?.twitter_link} target="_blank" className="schedule-link" >
-                                        <IonIcon icon={logoTwitter} className="big-emoji" />
-                                        <IonRippleEffect />
-                                    </a>
-
-                                    <a href={eventGraphData?.data?.data[0]?.website} className={(eventGraphData?.data?.data[0]?.website && eventGraphData?.data?.data[0]?.website) ? "schedule-link" : "schedule-link-disabled"} target="_blank">
-                                        <IonIcon icon={link} className="big-emoji" />
-                                        <IonRippleEffect />
-                                    </a>
-
-                                </div>
-
-                                {/*DATA REPEATED ON SCHEDULE.TSX AND CALENDAR.TSX*/}
-                                {eventGraphData?.data?.data[0]?.mintName && <div><b>Name : </b>{eventGraphData?.data?.data[0]?.mintName}</div>}
-                                {eventGraphData?.data?.data[0]?.price && <div><b>Price : </b>{eventGraphData?.data?.data[0]?.price}</div>}
-                                {eventGraphData?.data?.data[0]?.discord_all && <div><b>Discord (all) : </b>{formatNumber(eventGraphData?.data?.data[0]?.discord_all)}</div>}
-                                {eventGraphData?.data?.data[0]?.discord_online && <div><b>Discord (online) : </b>{formatNumber(eventGraphData?.data?.data[0]?.discord_online)}</div>}
-                                {eventGraphData?.data?.data[0]?.twitter_all && <div><b>Twitter : </b>{formatNumber(eventGraphData?.data?.data[0]?.twitter_all)}</div>}
-                                {eventGraphData?.data?.data[0]?.tweetInteractions && <div><b>Tweet Interactions : </b>{formatNumber(eventGraphData?.data?.data[0]?.tweetInteractions)}</div>}
+                            <div className='ml-4 mt-2'>
+                            <CommonMintsData record = {eventGraphData?.data?.data[0]}/>
                             </div>
 
                             <div className='ml-4 mt-4 mr-4'>
@@ -292,7 +336,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                     </IonModal>
 
                      {/*TODO: ruchita*/}
-                      <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                      {/* <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/> */}
 
                 </>
             }
