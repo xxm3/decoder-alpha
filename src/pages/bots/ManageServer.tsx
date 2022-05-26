@@ -91,21 +91,6 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             });
     };
 
-    {/*
-        TODO- BUGS:
-
-         need to switch vehn dojo with production...so it gets updates...
-
-
-        tell CY & mods
-
-
-        https://us-central1-nft-discord-relay.cloudfunctions.net/api/thirtyMints?whichSection=first&doScrape=true
-        https://us-central1-nft-discord-relay.cloudfunctions.net/api/thirtyMints?whichSection=second&doScrape=true
-        https://us-central1-nft-discord-relay.cloudfunctions.net/api/thirtyMints?whichSection=third&doScrape=true
-
-    */}
-
     return (
         <>
             <Backdrop style={{ color: '#fff', zIndex: 1000, }} open={isLoading} >
@@ -169,9 +154,6 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                         }) : ''}
                     </Grid>
                 </div>
-
-                {/*TODO: need some troubleshooting steps or explanations for users that dont have enough NFTs ... but want to manage servers ...*/}
-                    {/*and/or need way for reg users to see manageservers page... - perhasp everyone can see but noting shows up but explanations? */}
 
             </>
             }

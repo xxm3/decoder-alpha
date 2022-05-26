@@ -42,10 +42,7 @@ const HeaderContainer = () => {
 
 	const [mode, setMode] = usePersistentState<"dark" | "light">("mode", "dark");
 
-    const hideSearch =  localStorage.getItem('isLogin')
-    // TODO - Ruchita: i'm on dev and not logged in ... and its hidden
-    //  also need to hide wallet when not logged in
-    //  also if hide search is 1 (true) ... then we show the search - no make sense
+    const hideSearch = 'isLogin'; // localStorage.getItem('isLogin')
 
     // onload useEffect
     useEffect(() => {
@@ -210,7 +207,7 @@ const HeaderContainer = () => {
                                 <WalletButton />
                                 </div>
                             }
-                            
+
                         </div>
                     </div>
                 </IonToolbar>
