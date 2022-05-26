@@ -30,7 +30,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({
     message: { id },
     onClose,
 }) => {
-    // TODO? bugged demo...
     const defaultPageParam: PageParam = {
         messageId: message.id,
         message: message,
@@ -52,19 +51,19 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             //     // @ts-expect-error
             //     time : message.createdAt ? message.createdAt : message.time_stamp
             // }))
-            
+
                 data.subsequentMsg = data?.subsequentMsg?.map(message => ({
                     ...message,
                     // @ts-expect-error
                     time : message ? message.createdAt : message.time_stamp
                 }))
-            
+
             if (pageParam === defaultPageParam)
                 // return [...data.priorMsg, message, ...data.subsequentMsg];
                 return [message, ...data.subsequentMsg];
             // return [...data.priorMsg, ...data.subsequentMsg];
             return [...data.subsequentMsg];
-            
+
         } catch (e) {
             console.error('try/catch in MessageThread.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
@@ -91,14 +90,14 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             return lastMessageId
                 ? {
                       messageId: lastMessageId,
-                      message: null, // TODO...
+                      message: null,
                       postLimit: 10,
                       priorLimit: 0,
                   }
                 : undefined;
         },
         getPreviousPageParam: (firstPage) => {
-            let firstMessageId 
+            let firstMessageId
             if(firstPage[0]){
                 firstMessageId = firstPage[0].id;
             }

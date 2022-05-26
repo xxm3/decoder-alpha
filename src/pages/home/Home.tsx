@@ -107,7 +107,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
             {/*<div hidden={!devMode}>*/}
 
 
-            {/*TODO wait for sumit */}
+            {/*TODO - sumit: enable once fixed */}
            {/* Word count of yesterday, last 3 days, last 5 days */}
            {/* <WordsCount/>*/}
 

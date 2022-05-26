@@ -330,7 +330,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 <li>Wait for the channels to be populated with data before showing it to the public (8am EST is when daily-mints is populated, varying times for other channels)</li>
                                 <li>If doing the "Fox token" package, you need to first tell us before you can start using the bot commands (/token, /token_name, /wallet_tokens) in your server. You also need to add permission for any user in that channel to "Use Application Commands"</li>
                             </ul>
-                                {/*TODO: .... also show user what each of the output of channel should look like .... tell user analytics needs embeds */}
                             {/*<b>Discord channel permissions</b>*/}
                             {/*    - Go to your new channel(s) in Discord - click "edit channel" in the sidebar*/}
                             {/*    - Click permissions*/}

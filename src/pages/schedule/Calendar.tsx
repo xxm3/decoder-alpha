@@ -258,7 +258,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                  <>
                      <div className="m-3 relative bg-gray-100 p-4 rounded-xl">
                          <div className="text-lg text-gray-700 font-medium">
-                             {/*TODO: remove when done */}
+                             {/*TODO: remove when done ... and need a "click here view calendar" on top... */}
                              <b>Note this is the first version of our Calendar. Future improvements:</b>
                              <ul>
                                  <li>- Graphing the discord & twitter stats over time (will slowly fill in)</li>
