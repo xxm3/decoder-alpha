@@ -120,6 +120,7 @@ function Sidebar() {
                     to="#"
                     external={'https://twitter.com/SOL_Decoder'}
                 />
+
                 {/* hide wallet button in mobile so don't comment out */}
                 {/* <div className="xl:hidden lg:hidden md:hidden">
                     <WalletButton />

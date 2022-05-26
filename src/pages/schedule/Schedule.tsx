@@ -503,7 +503,7 @@ const Schedule = () => {
                                                  */
                                                 {
                                                     icon: () => <IonIcon icon={calendarOutline} className="text-3xl " />,
-                                                    onClick: () => history.push( { pathname: '/schedulecalendar',state:mints}),
+                                                    onClick: () => history.push( { pathname: '/calendar',state:mints}),
                                                     isFreeAction: true,
                                                 },
                                             ]}
@@ -532,8 +532,8 @@ const Schedule = () => {
                                                                        {`Mint Schedule - ${date}`}
                                                                     </div>
                                                                     <IonSelect id="demo-simple-select" value={selectedTimezone.value} interface="popover"   onChange={(selected: any) => { setSelectedTimezone({ ...selected.target }) }} className="c-ion-select">
-                                                       
-                                                       {TimezoneData && TimezoneData.map((item: any, index: number) => {  
+
+                                                       {TimezoneData && TimezoneData.map((item: any, index: number) => {
                                                               return<IonSelectOption   key={index}  value={item.value} >{item.label}</IonSelectOption>
                                                         })}
                                                      </IonSelect>

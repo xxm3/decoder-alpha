@@ -456,6 +456,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 <div className='card-bg-blur flex justify-center items-center w-full'>
                                     <div className="module-icon-wrapper w-full">
                                         <img src={require('../../images/me.png')} />
+                                        {/*TODO: fox...*/}
                                     </div>
                                 </div>
                             </div>

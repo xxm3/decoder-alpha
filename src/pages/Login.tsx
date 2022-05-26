@@ -93,16 +93,23 @@ function Login() {
                 .then(({ data }) => {
                     // console.log(data);
 					// auth.setPersistence(browserLocalPersistence)
-                    localStorage.setItem('servers',JSON.stringify(data.servers))
-                    localStorage.setItem('roleList',JSON.stringify(data.roles))
-                    localStorage.setItem('isLogin','1')
+                    localStorage.setItem('servers',JSON.stringify(data.servers));
+                    localStorage.setItem('roleList',JSON.stringify(data.roles));
+                    localStorage.setItem('isLogin','1');
+
+                    // console.log('servers: ' + data.servers);
+                    console.log('roles: ' + data.roles);
+
                     return signInWithCustomToken(auth, data.body);
                 })
                 .catch((e) => {
-                    console.log(e);
-                    if (e.response.status === 403)
+                    console.error(e);
+
+                    if (e?.response?.status === 403){
                         setError("You need a proper role in Discord before accessing the site. Buy the NFT then go to the 'metahelix-verify' channel");
-                    else setError('Something went wrong. Please try again, and try using a VPN program, not a VPN in your browser (ie. people in Russia currently banned by Google)');
+                    }else {
+                        setError('Something went wrong, please try again. You may also try using a VPN program, and not a VPN in your browser (as people in Russia are  currently banned by Google). Some anti-virus programs like Bullguard can block the site, so unblock it there.');
+                    }
                 })
                 .finally(() => {
                     setLoading(false);

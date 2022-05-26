@@ -122,7 +122,7 @@ const App = () => {
     }, []);
 
 
-    const checkIsLogin = () => { 
+    const checkIsLogin = () => {
         let isLogin = localStorage.getItem('isLogin')
         if(isLogin === '1'){
             localStorage.setItem('isLogin','1')
@@ -157,8 +157,10 @@ const App = () => {
 			let roleList:any = localStorage.getItem('roleList');
 
 			getRoleType(JSON.parse(roleList));
-		}
-        
+		}else{
+            console.info('no roleList found for user');
+        }
+
 	}, [localStorage.getItem('roleList')]);
 
 	// get role type
@@ -176,9 +178,11 @@ const App = () => {
                 }
             )
             .then(({ data }) => {
-				localStorage.setItem('role',data.roleType)
-				 // localStorage.setItem('role','3NFT')
-				 dispatch(setRole(data.roleType));
+				localStorage.setItem('role',data.roleType);
+
+                console.log('roleType: ', data.roleType);
+
+                dispatch(setRole(data.roleType));
 
             })
             .catch((error:any) => {
@@ -268,7 +272,7 @@ const App = () => {
                                             <Route path='/marketplace-details' >
                                                 <MarketPlaceDetailLayout />
                                             </Route>
-                                               
+
                                                 {/*  */}
                                                 <Route path="/*">
                                                     <IonPage>
@@ -368,19 +372,10 @@ const App = () => {
                                                                                     }
                                                                                 />
 
-                                                                                {/* bots */}
-                                                                                {/*<ProtectedRoute*/}
-                                                                                {/*    exact*/}
-                                                                                {/*    path="/bots"*/}
-                                                                                {/*    component={*/}
-                                                                                {/*        Bots*/}
-                                                                                {/*    }*/}
-                                                                                {/*/>*/}
-
                                                                                 {/* Calendar page */}
                                                                                 <ProtectedRoute
                                                                                     exact
-                                                                                    path="/schedulecalendar"
+                                                                                    path="/calendar"
                                                                                     component={ ScheduleCalendar }
                                                                                 />
                                                                                 {/* manage server */}
