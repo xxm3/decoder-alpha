@@ -69,6 +69,11 @@ function InitiateWhitelist() {
     const now = useMemo(() => new Date(), []);
     const image = watch('image');
 
+	const todayEnd = useMemo(() => {
+		const date = new Date( +now + 86400 * 1000 );
+		date.setHours(23,59,59,999);
+		return date;
+	}, [now])
     const [present] = useIonToast();
     return (
         <>
@@ -317,6 +322,7 @@ function InitiateWhitelist() {
                             rules={{
                                 required: true,
                             }}
+							defaultValue={todayEnd.toISOString()}
                             render={({
                                 field: { onChange, onBlur, value, name, ref },
                                 fieldState: { error },
@@ -326,7 +332,7 @@ function InitiateWhitelist() {
                                         value={value}
                                         onIonChange={(e) => {
 											const value = new Date(e.detail.value as string);
-											value.setHours(11,59,59,0);
+											value.setHours(23,59,59,999);
                                             (
                                                 e.target as HTMLInputElement
                                             ).value =  value.toISOString();
