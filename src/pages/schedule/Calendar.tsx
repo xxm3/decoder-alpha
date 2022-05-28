@@ -70,9 +70,9 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
     const [searchEvent, setSearchEvent] = useState<any>()
     const [searchValue, setSearchValue] = useState<any>()
     const [monthLimit, setMonthLimit] = useState<boolean>(true)
+    const [isSearch, setIsSearch] = useState<boolean>(false)
 
     let titleDiscription = `Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list. \n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them. The Fox logo in the price is the official Token price that comes from the Fox Token Market. Rows in bold mean the mint comes out in two hours or less. `
-    
 
     /**
      * Use Effects
@@ -82,9 +82,9 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
         
     }, []);
     
-    useEffect(() => {
-        setSearchEvent(myEvents)
-    }, [])
+    // useEffect(() => {
+    //     setSearchEvent(myEvents)
+    // }, [mints])
     
 
     
@@ -106,6 +106,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
             }
         }
         setEvents(tempArray)
+        // setSearchEvent(tempArray)
     }, [mints])
 
 
@@ -171,17 +172,16 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
 
      // does the search functionality
      function handleSearch(val: any) {
+        setIsSearch(true)
         val = val.detail.value.trim();
         setSearchValue(val)
-        let tmpArray:any = []
-        myEvents?.map((item:any)=>{
-            if(item.title.toLowerCase().includes(val.toLowerCase())){
-                tmpArray.push(item)
-            }else if (val=== ''){
-                setSearchEvent(myEvents)
-            }
+        
+        if(val){
+            let tmpArray:any = myEvents?.filter((item:any)=>item.title.toLowerCase().includes(val.toLowerCase()))
             setSearchEvent(tmpArray)
-        })
+        }else{
+            setSearchEvent(myEvents)
+        }
     }
 
 
@@ -277,7 +277,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                         <div className="text-base cursor-pointer flex flex-row items-center">
                           
                             <IonSearchbar  className={`text-base !p-0 ${isMobile && 'w-60 h-10 items-left '} flex-grow  outline-none overflow-hidden flex rounded-full border`}
-                            type="text" value={searchValue} onIonChange={(e:any) => {handleSearch(e)}} animated placeholder={'search'} />
+                            type="text" value={searchValue} onIonChange={(e:any) => {handleSearch(e)}} animated placeholder={'search'}   />
                            
 
                             <div onClick= {() => history.push( { pathname: '/schedule'})}> <IonIcon icon={close} className="text-3xl ml-6" /></div>
@@ -285,17 +285,17 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                     </div>
                     <div className={ isMobile ? 'ml-1 mr-1' :"ml-3 mr-3"}>
                         <Calendar
-                                defaultDate={ moment().add(-1, "days").toDate()}
+                                // defaultDate={ moment().add(-1, "days").toDate()}
                                 className={isMobile ? 'show-more-btn custome-event' : ''}
                                 views={['month']}
                                 // events={myEvents}
-                                events={searchEvent}
+                                events={isSearch ? searchEvent : myEvents }
                                 components = {{
                                     toolbar : CustomCalenderToolbar,
                                 }}
                                 localizer={localizer}
                                 onSelectEvent={handleSelectEvent}
-                                onSelectSlot={(e: any)=>{handleSlotSelect(e)}}
+                                // onSelectSlot={(e: any)=>{handleSlotSelect(e)}}
                                 selectable
                                 onNavigate = {(action: Date)=> onNavigate(action)}
                                 style={{ height: isMobile ? '80vh' : 700, width:isMobile ? '90vw' : '' }}
