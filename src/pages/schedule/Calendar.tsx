@@ -272,14 +272,14 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                          </span>
                      </div>
 
-                     <div className="m-3 relative bg-red-100 p-4 rounded-xl">
-                         <div className="text-lg text-red-700 font-medium">
-                             Sorry small bug with the calendar - click "next month" then "previous month" to get all data
-                         </div>
-                         <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                             !
-                         </span>
-                     </div>
+                     {/*<div className="m-3 relative bg-red-100 p-4 rounded-xl">*/}
+                     {/*    <div className="text-lg text-red-700 font-medium">*/}
+                     {/*        Sorry small bug with the calendar - click "next month" then "previous month" to get all data*/}
+                     {/*    </div>*/}
+                     {/*    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">*/}
+                     {/*        !*/}
+                     {/*    </span>*/}
+                     {/*</div>*/}
 
                     <div className= {`${isMobile ? "text-center flex-col" : 'text-left flex-row' } text-2xl flex justify-between ml-1 mr-2 items-center`} >
                         <div className='flex flex-row' >Mint Calendar <div className='mt-1 ml-2'><Help description={titleDiscription} /></div></div>
