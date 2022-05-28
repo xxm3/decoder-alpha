@@ -285,9 +285,9 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                         <div className='flex flex-row' >Mint Calendar <div className='mt-1 ml-2'><Help description={titleDiscription} /></div></div>
                         <div className="text-base cursor-pointer flex flex-row items-center">
 
-                            <IonSearchbar  className={`text-base !p-0 ${isMobile && 'w-60 h-10 items-left '} flex-grow  outline-none overflow-hidden flex rounded-full border`}
-                            type="text" value={searchValue} onIonChange={(e:any) => {handleSearch(e)}} animated placeholder={'search'} />
-
+                            {/*TODO: ruchita: bugged with the "nothing shows up by default"*/}
+                            {/*<IonSearchbar  className={`text-base !p-0 ${isMobile && 'w-60 h-10 items-left '} flex-grow  outline-none overflow-hidden flex rounded-full border`}*/}
+                            {/*type="text" value={searchValue} onIonChange={(e:any) => {handleSearch(e)}} animated placeholder={'search'} />*/}
 
                             <div onClick= {() => history.push( { pathname: '/schedule'})}> <IonIcon icon={close} className="text-3xl ml-6" /></div>
                         </div>
@@ -344,7 +344,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                         </IonContent>
                     </IonModal>
 
-                      {/* <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/> */}
+                   <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 
                 </>
             }
