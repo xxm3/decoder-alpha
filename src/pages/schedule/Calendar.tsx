@@ -72,14 +72,15 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
     const [monthLimit, setMonthLimit] = useState<boolean>(true)
     const [isSearch, setIsSearch] = useState<boolean>(false)
 
-    let titleDiscription = `Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list. \n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them. The Fox logo in the price is the official Token price that comes from the Fox Token Market. Rows in bold mean the mint comes out in two hours or less. `
+    let titleDiscription = `Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list. \n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them. The Fox logo in the price is the official Token price that comes from the Fox Token Market`
+
 
     /**
      * Use Effects
      */
     useEffect(() => {
         fetchMintsData();
-        
+
     }, []);
     
     // useEffect(() => {
@@ -87,7 +88,8 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
     // }, [mints])
     
 
-    
+
+
 
     useEffect(() => {
         let tempArray = []
@@ -231,9 +233,9 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
        return (
            <div className='rbc-toolbar flex justify-between mt-4'>
                <div >
-                  {!monthLimit ? <button type="button" onClick={()=> NextPrevMonth('prevMonth')} >{"<"}</button>: ''} 
+                  {!monthLimit ? <button type="button" onClick={()=> NextPrevMonth('prevMonth')} >{"<"}</button>: ''}
                    <button type="button"  onClick={()=> NextPrevMonth('currentMonth')}>{moment(selectDate).format('MMM YYYY')}</button>
-                  {monthLimit ? <button type="button" onClick={()=> NextPrevMonth('nextMonth')} >{">"}</button> : ''} 
+                  {monthLimit ? <button type="button" onClick={()=> NextPrevMonth('nextMonth')} >{">"}</button> : ''}
                </div>
                {/*<div >*/}
                {/*    <button type="button" style={{fontSize:isMobile ? '12px' : '', width:isMobile? '20px' : ''}}  onClick={()=> NextPrevDate('prevDay')}>{"<"}</button>*/}
@@ -244,7 +246,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
          );
    }
 
-   // do not remove 
+   // do not remove
     // const formatNumber = (n: any) => {
     //     if (n < 1e3) return n;
     //     if (n >= 1e3) return +(n / 1e3).toFixed(1) + 'K';
@@ -258,7 +260,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                  <>
                      <div className="m-3 relative bg-gray-100 p-4 rounded-xl">
                          <div className="text-lg text-gray-700 font-medium">
-                             {/*TODO: remove when done */}
+                             {/*TODO: remove when done ... and need a "click here view calendar" on top... */}
                              <b>Note this is the first version of our Calendar. Future improvements:</b>
                              <ul>
                                  <li>- Graphing the discord & twitter stats over time (will slowly fill in)</li>
@@ -266,6 +268,15 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                  <li>- UI/UX updates</li>
                                  <li>- Showing what Discords & Twitters were the top gainers from the past day and week</li>
                              </ul>
+                         </div>
+                         <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                             !
+                         </span>
+                     </div>
+
+                     <div className="m-3 relative bg-red-100 p-4 rounded-xl">
+                         <div className="text-lg text-red-700 font-medium">
+                             Sorry small bug with the calendar - click "next month" then "previous month" to get all data
                          </div>
                          <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                              !
@@ -335,8 +346,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                         </IonContent>
                     </IonModal>
 
-                     {/*TODO: ruchita*/}
-                      {/* <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/> */}
+                   <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 
                 </>
             }

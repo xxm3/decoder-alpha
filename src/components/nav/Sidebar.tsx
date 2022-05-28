@@ -100,7 +100,6 @@ function Sidebar() {
                 {/*    to="/bots"*/}
                 {/*/>*/}
 
-                {/*TODO: enable this later . . .*/}
                {/*    <NavLink*/}
                {/*         title="Add Bots"*/}
                {/*        icon={serverOutline}*/}

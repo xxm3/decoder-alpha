@@ -63,7 +63,7 @@ const Schedule = () => {
     const [selectedTimezone, setSelectedTimezone] = useState<any>({})
     const [mode] = usePersistentState("mode", "dark");
     const [searchFocus, setSearchFocus] = useState<boolean>(false)
-    
+
     let titleDiscription = `Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
     \n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.
     The Fox logo in the price is the official Token price that comes from the Fox Token Market.
@@ -469,14 +469,6 @@ const Schedule = () => {
                                             }}
                                             // calendar icon for show calendar do not remove
                                             actions={[
-                                                /**
-                                                 * TODO !!!! :
-                                                 *
-                                                 * need 4 cronjobs!!! -- first/second/third ... guildjs one
-                                                 *
-                                                 *
-                                                 * (once all done) need a "click here view calendar" on top...
-                                                 */
                                                 {
                                                     icon: () => <IonIcon icon={calendarOutline} className="text-3xl " />,
                                                     onClick: () => history.push( { pathname: '/calendar',state:mints}),

@@ -241,9 +241,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     }
 
     let disableButton = (btnType: any) => {
-        // TODO: ??? why showing this... has nothing to do with owner...
         if (role === 'No Roles') {
-            showDisableBtnMesage('You are not the owner')
+            showDisableBtnMesage('Sorry you do not have the right number of NFTs')
             return true
         } else if (role === '3NFT') {
             if (checked.mintInfoModule || checked.tokenModule) {
@@ -261,7 +260,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         } else if (role === '4NFT') {
             return false;
         } else {
-            showDisableBtnMesage('You are not the owner')
+            showDisableBtnMesage('Sorry you do not have the right number of NFTs')
             return true
         }
     }
@@ -312,25 +311,40 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
             <div className="flex flex-row justify-center w-full mt-9">
                 <div className="server-module-bg p-4 px-6 w-full">
-                    {/*TODO: when you refresh the page - everything shows disabled */}
                     <div className='w-full flex items-center justify-between mb-3'>
                         <div className='text-xl font-semibold '>Instructions</div>
                         <img style={{color : 'red'}} src={showInstruction ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`)}  className='w-4 cursor-pointer' onClick={()=>setShowInstruction((e)=>!e)} />
                     </div>
                     {/* <div className='text-xl font-semibold mb-3'>Instructions</div> */}
                     {
-                        showInstruction ?  <ul className='list-disc ml-5 leading-9'>
-                        <li>Make a new private channel in your Discord. If doing the "Mints" package, name the channel "daily-mints" or whatever you want. Optionally make "1h-mint-info" if you want that as well. Or if you are doing the "Fox token" package, make a channel for the fox token names, and another channel for where users can enter their own bot commands</li>
-                        <li>Add the bot to the above channels (by going to the channel settings within Discord)</li>
-                        <li>Refresh this page</li>
-                        <li>Enable the "Mints" package (or "Fox token" package)</li>
-                        <li>It should ask you about the channels - pick your new channels. Click the test button. If it doesn't work, make sure the SOL Decoder bot is in that channel, and has permission to "Send Messages" (done within the channel settings in Discord)
-                        </li>
-                        <li>Wait for the channels to be populated with data before showing it to the public (8am EST is when daily-mints is populated, varying times for other channels)</li>
-                        <li>If doing the "Fox token" package, you need to first tell us before you can start using the bot commands (/token, /token_name, /wallet_tokens) in your server. You also need to add permission for any user in that channel to "Use Application Commands"</li>
-                    </ul> : ''
+                        showInstruction ?
+                            <div>
+                            <b>General Instructions</b>
+                            <ul className='list-disc ml-5 leading-9'>
+                                <li>Make a new private channel in your Discord. If doing the "Mints" package, name the channel "daily-mints" or whatever you want. Optionally make "1h-mint-info" if you want that as well. Or if you are doing the "Fox token" package, make a channel for the fox token names, and another channel for where users can enter their own bot commands</li>
+                                <li>Add the bot to the above channels (by going to the channel settings within Discord)</li>
+                                <li>Refresh this page</li>
+                                <li>Enable the "Mints" package (or "Fox token" package)</li>
+                                <li>It should ask you about the channels - pick your new channels. Click the test button. If it doesn't work, make sure the SOL Decoder bot is in that channel, and has permission to "Send Messages" (done within the channel settings in Discord)
+                                </li>
+                                <li>Wait for the channels to be populated with data before showing it to the public (8am EST is when daily-mints is populated, varying times for other channels)</li>
+                                <li>If doing the "Fox token" package, you need to first tell us before you can start using the bot commands (/token, /token_name, /wallet_tokens) in your server. You also need to add permission for any user in that channel to "Use Application Commands"</li>
+                            </ul>
+                            {/*<b>Discord channel permissions</b>*/}
+                            {/*    - Go to your new channel(s) in Discord - click "edit channel" in the sidebar*/}
+                            {/*    - Click permissions*/}
+                            {/*    - Click "Add Members or Roles"*/}
+                            {/*    - Search for "SOL Decoder Bot"*/}
+                            {/*    - Scroll down to "Advanced Permissions", make sure the bot is selected on the left*/}
+                            {/*    - On the right, check the following:*/}
+                            {/*    - View Channel*/}
+                            {/*    - Send Messages*/}
+                            {/*    - Embed Links*/}
+                            {/*    - Make sure the bot shows as "Online" in the sidebar*/}
+                            {/*    - Click the "Send a test message" and make sure it works*/}
+                            </div>
+                            : ''
                     }
-
 
                 </div>
             </div>
@@ -394,11 +408,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                 Choose a channel above, then click the button below to make sure it worked
                                                 <br /> */}
 
-                                                {/*TODO: What happens if someone goes from 4 nft to 3 nft... Does it only disable one of their bot...*/}
-
-                                                {/*TODO: show user what each of the output of channel should look like .... tell user analytics needs embeds*/}
-
-
                                                 {/* <IonButton onClick={() => sendTestWebhook('sendDailyMints')}>Send a test message</IonButton> */}
                                                 <div className="text-lg font-semibold mt-6">
                                                     "One Hour Mint Info" Channel
@@ -456,7 +465,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 <div className='card-bg-blur flex justify-center items-center w-full'>
                                     <div className="module-icon-wrapper w-full">
                                         <img src={require('../../images/me.png')} />
-                                        {/*TODO: fox...*/}
                                     </div>
                                 </div>
                             </div>

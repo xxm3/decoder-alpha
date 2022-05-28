@@ -91,21 +91,6 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             });
     };
 
-    {/*
-        TODO- BUGS:
-
-         need to switch vehn dojo with production...so it gets updates...
-
-
-        tell CY & mods
-
-
-        https://us-central1-nft-discord-relay.cloudfunctions.net/api/thirtyMints?whichSection=first&doScrape=true
-        https://us-central1-nft-discord-relay.cloudfunctions.net/api/thirtyMints?whichSection=second&doScrape=true
-        https://us-central1-nft-discord-relay.cloudfunctions.net/api/thirtyMints?whichSection=third&doScrape=true
-
-    */}
-
     return (
         <>
             <Backdrop style={{ color: '#fff', zIndex: 1000, }} open={isLoading} >
@@ -125,7 +110,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                 <span className=" bg-yellow-500 w-7 h-7 flex items-center justify-center font-bold rounded-full mr-2">!</span>
                                 <span className='text-yellow-500 text-lg font-bold'>Server owners only</span>
                             </div>
-                            <div> <span className="text-2xl font-thin">x</span> </div>
+                            {/*<div> <span className="text-2xl font-thin">x</span> </div>*/}
                         </div>
                         <p>Note this page is only for server owners (for the time being). Also your server will need to first have our Discord Bot invited to it. Click one of the below links, then in the "Add to Server" on the bottom, select your server. Then click "Continue", then "Authorize"</p>
                         <ul className='list-disc ml-8 mt-3'>
@@ -170,9 +155,6 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                     </Grid>
                 </div>
 
-                {/*TODO: need some troubleshooting steps or explanations for users that dont have enough NFTs ... but want to manage servers ...*/}
-                    {/*and/or need way for reg users to see manageservers page... - perhasp everyone can see but noting shows up but explanations? */}
-
             </>
             }
 
@@ -199,16 +181,17 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                 <li>"Sales listing" package: Get alerted whenever a sale for your NFT occurs</li>
                                 <li>Other unannounced packages</li>
                             </ul>
+
+                            {/*TODO: clean up these instruction s...*/}
+                            {/*TODO: all expanding of instructions need a "view more"*/}
+
+                            <br /><br />
+                            <div className='text-3xl font-semibold my-3 mt-8'>Instructions:</div>
+                            <ul>
+                                <li>- Add the Bot to our server using one of the two links above</li>
+                                <li>- Click "Go" on the server you want to add, and follow the steps on the next page</li>
+                            </ul>
                         </>}
-
-
-
-                        {/* <br /><br />
-                        <b>Instructions:</b>
-                        <ul>
-                            <li>- Add the Bot to our server using one of the two links above</li>
-                            <li>- Click "Go" on the server you want to add, and follow the steps on the next page</li>
-                        </ul> */}
 
                     </div>
                 </div>
