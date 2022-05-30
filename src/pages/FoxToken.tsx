@@ -146,7 +146,9 @@ const columns: Column<FoxTokenData> [] = [
                     <IonIcon icon={logoDiscord} className="big-emoji "/>
                     <IonRippleEffect />
                 </a>
-            </>
+            </>,
+            hiddenByColumnsButton:true
+            
     }
 
 ];
