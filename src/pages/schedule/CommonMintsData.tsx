@@ -12,7 +12,8 @@ const CommonMintsData = (record1: any) => {
 
     let record:any = record1.record
 
-console.log('record',record)
+    // console.log('record',record);
+
     return (
             <>
             <div>

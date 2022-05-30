@@ -96,7 +96,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                 <CircularProgress color="inherit" />
             </Backdrop>
             {/*  */}
-            {noServers ? <div className='text-xl text-center'>Unable to find any servers you are the owner of. If you are one, then reset your cookies and try logging in again (or use a new browser)</div> :
+            {noServers ? <div className='text-xl text-center text-red-500'>Unable to find any servers you are the owner of. If you are one, then reset your cookies and try logging in again (or use a new browser)</div> :
             <>
                 <IonLabel className="text-4xl font-semibold mb-3">
                     Select a Server
@@ -109,8 +109,9 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                 <span className=" bg-yellow-500 w-7 h-7 flex items-center justify-center font-bold rounded-full mr-2">!</span>
                                 <span className='text-yellow-500 text-lg font-bold'>Server owners only</span>
                             </div>
-                            {/*<div> <span className="text-2xl font-thin">x</span> </div>*/}
+                            {/*<div> <span className="text-1xl font-thin">x</span> </div>*/}
                         </div>
+
                         <p>Note this page is only for server owners (for the time being). Also your server will need to first have our Discord Bot invited to it. Click one of the below links, then in the "Add to Server" on the bottom, select your server. Then click "Continue", then "Authorize"</p>
                         <ul className='list-disc ml-8 mt-3'>
                             <li> If using JUST the "Daily Mints" bots, <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20guilds.members.read%20bot">click here</a> to add the Discord Bot to your server </li>
@@ -159,37 +160,34 @@ const ManageServer: React.FC<AppComponentProps> = () => {
 
             <div className="flex flex-row justify-center w-full mt-4">
                     <div className="py-3">
-                        <div className='text-3xl font-semibold my-3'>Introduction</div>
+
+                        <div className='text-1xl font-semibold my-3'>Introduction</div>
                         <ul className='list-disc ml-8 leading-9'>
                             <li>This page allows you to setup some of the SOL Decoder bots on your own Discord server</li>
-                            <li>Pricing: Hold 3 NFTs (which unlocks all of our existing 3 NFT benefits - <a href="https://docs.soldecoder.app/books/intro/page/discord-overview" target="_blank" className="underline cursor-pointer">read more here</a>) - and you can unlock one of our bot packages. Hold 4 NFTs to unlock a second bot package</li>
-                            <li>Bot package #1 - Mints package - Your server can have our "daily-mints" feed and "1h-mint-info" and soon "tomorrows-mints"</li>
-                            <li>Bot package #2 - Fox token package - Your server can have our "analytics" feed, and users can use our bot's slash commands of /token_name and /token (which shows Fox Token Market info from a token address or name) and /wallet_tokens (Get Fox Token Market info for all tokens in an address)</li>
+                            <li>Pricing: Hold 3 NFTs (which unlocks all of our existing 3 NFT benefits - <a href="https://docs.soldecoder.app/books/intro/page/discord-overview" target="_blank" className="underline cursor-pointer">read more here</a>) - and you can unlock one of our bot packages. Hold 4 NFTs to unlock a second bot package, and get all future bot packages for free</li>
                             <li>Hold and you get lifetime access, and get free upgrades to existing packages such as: (1) Mints package:  get daily summaries of NFTs coming out in a few weeks, when they they get a bump in their twitter / discord numbers, and (2) Fox token package: getting alerts for Fox Token price/listings data (ie. alerted when any fox token with a name & greater 1 sol price & greater 10 listings is out)</li>
-                            {/* <ul className='list-disc ml-4'>
-
-                                <br />
-                                <b>Other packages will be released in the future such as:</b>
-                            </ul> */}
                         </ul>
 
-                        // TODO: update the website to only show the bot invite if they have 3-4 NFT
-                        // TODO: if they have 0 servers .. .show stuff better (clear cookies etc...)
+                        <div className='text-1xl font-semibold my-3'>Package Overview</div>
+                        <ul className='list-disc ml-8 leading-9'>
+                            <li><b>Bot package #1 - Mints package</b> - Your server can have our "daily-mints" feed and "1h-mint-info" and soon "tomorrows-mints"</li>
+                            <li><b>Bot package #2 - Fox token package</b> - Your server can have our "analytics" feed, and users can use our bot's slash commands of /token_name and /token (which shows Fox Token Market info from a token address or name) and /wallet_tokens (Get Fox Token Market info for all tokens in an address)</li>
+                        </ul>
+
+                        <div className='text-1xl font-semibold my-3'>Upcoming packages</div>
+                        <ul className='list-disc ml-8 leading-9'>
+                            <li><b>"Magic Eden" package:</b> (1) perform the command "/me bohemia" and you'll get the price chart of Bohemia, and (2) you can customize a single alert for your server, to get alerted when any NFT above a certain price goes up X % within Y minutes</li>
+                            <li><b>"Sales listing" package:</b> Get alerted whenever a sale for your NFT occurs</li>
+                            <li>Other unannounced packages</li>
+                        </ul>
+
+                        {/* TODO: update the website to only show the bot invite if they have 3-4 NFT */}
+                        {/* TODO: instructions are still crap */}
 
                         {!noServers &&
                         <>
-                            <div className='text-3xl font-semibold my-3 mt-8'>Upcoming features</div>
-                            <ul className='list-disc ml-8 leading-9'>
-                                <li>"Magic Eden" package: (1) perform the command "/me bohemia" and you'll get the price chart of Bohemia, and (2) you can customize a single alert for your server, to get alerted when any NFT above a certain price goes up X % within Y minutes</li>
-                                <li>"Sales listing" package: Get alerted whenever a sale for your NFT occurs</li>
-                                <li>Other unannounced packages</li>
-                            </ul>
-
-                            {/*TODO: clean up these instruction s...*/}
-                            {/*TODO: all expanding of instructions need a "view more"*/}
-
-                            <br /><br />
-                            <div className='text-3xl font-semibold my-3 mt-8'>Instructions:</div>
+                            <br />
+                            <div className='text-1xl font-semibold my-3'>Instructions:</div>
                             <ul>
                                 <li>- Add the Bot to our server using one of the two links above</li>
                                 <li>- Click "Go" on the server you want to add, and follow the steps on the next page</li>

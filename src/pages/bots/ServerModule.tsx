@@ -27,7 +27,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [checked, setChecked] = useState<{ mintInfoModule: boolean; tokenModule: boolean; }>({ mintInfoModule: false, tokenModule: false, });
     const [isLoading, setIsLoading] = useState(false);
-    const [server, setServer] = useState<Server | null>(null);
+
+    // const [server, setServer] = useState<Server | null>(null);
+
     const [showInstruction, setShowInstruction] = useState<boolean>(false)
     const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(false)
     const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] = useState<boolean>(false)
@@ -66,50 +68,25 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     }, [window.innerWidth]);
 
 
-	const { server } = useParams<{server : string}>()
+	const { server } = useParams<{server : string}>();
+
     // get guilds
     useEffect(() => {
-        
-            if (server) {
-                setIsLoading(true);
-                instance
-                    .get(`/guilds/${server}`)
-                    .then((response) => {
-                        let data = response.data.data;
-                        if(role ==='3NFT' || role ==='4NFT'){
-                            setChecked({
-                                ...checked,
-                                mintInfoModule: data.mintInfoModule,
-                                tokenModule: data.tokenModule,
-                            });
-                        }
-                        
 
-                        setDropdownValue({
-                            ...dropdownValue,
-                            dailyMintsWebhookChannel:
-                                data.dailyMintsWebhookChannel,
-                            oneHourMintInfoWebhookChannel:
-                                data.oneHourMintInfoWebhookChannel,
-                            analyticsWebhookChannel:
-                                data.analyticsWebhookChannel,
-                        });
-                        setChannel(data.textChannels);
-                    })
-                    .catch((error: any) => {
-                        let msg = '';
-                        if (error && error.response) {
-                            msg = String(error.response.data.message);
-                        } else {
-                            msg = 'Unable to connect. Please try again later';
-                        }
-                        present({
-                            message: msg,
-                            color: 'danger',
-                            duration: 5000,
-                            buttons: [{ text: 'X', handler: () => dismiss() }],
+        if (server) {
+            setIsLoading(true);
+            instance
+                .get(`/guilds/${server}`)
+                .then((response) => {
+                    let data = response.data.data;
+                    if(role ==='3NFT' || role ==='4NFT'){
+                        setChecked({
+                            ...checked,
+                            mintInfoModule: data.mintInfoModule,
+                            tokenModule: data.tokenModule,
                         });
                     }
+
                     setDropdownValue({
                         ...dropdownValue,
                         dailyMintsWebhookChannel: data.dailyMintsWebhookChannel,
@@ -121,17 +98,19 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 })
                 .catch((error: any) => {
                     let msg = '';
-                    if (error?.response) {
+                    if (error && error.response) {
                         msg = String(error.response.data.message);
                     } else {
                         msg = 'Unable to connect. Please try again later';
                     }
+
                     present({
                         message: msg,
                         color: 'danger',
                         duration: 5000,
                         buttons: [{ text: 'X', handler: () => dismiss() }],
                     });
+
                 })
                 .finally(() => {
                     setIsLoading(false);
@@ -313,6 +292,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             </div>
         );
     }
+
     return (
         <>
             <Backdrop style={{ color: '#fff', zIndex: 1000, }} open={backdrop} >
@@ -340,29 +320,33 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     {
                         showInstruction ?
                             <div>
-                            <b>General Instructions</b>
-                            <ul className='list-disc ml-5 leading-9'>
-                                <li>Make a new private channel in your Discord. If doing the "Mints" package, name the channel "daily-mints" or whatever you want. Optionally make "1h-mint-info" if you want that as well. Or if you are doing the "Fox token" package, make a channel for the fox token names, and another channel for where users can enter their own bot commands</li>
-                                <li>Add the bot to the above channels (by going to the channel settings within Discord)</li>
-                                <li>Refresh this page</li>
-                                <li>Enable the "Mints" package (or "Fox token" package)</li>
-                                <li>It should ask you about the channels - pick your new channels. Click the test button. If it doesn't work, make sure the SOL Decoder bot is in that channel, and has permission to "Send Messages" (done within the channel settings in Discord)
-                                </li>
-                                <li>Wait for the channels to be populated with data before showing it to the public (8am EST is when daily-mints is populated, varying times for other channels)</li>
-                                <li>If doing the "Fox token" package, you need to first tell us before you can start using the bot commands (/token, /token_name, /wallet_tokens) in your server. You also need to add permission for any user in that channel to "Use Application Commands"</li>
-                            </ul>
-                            {/*<b>Discord channel permissions</b>*/}
-                            {/*    - Go to your new channel(s) in Discord - click "edit channel" in the sidebar*/}
-                            {/*    - Click permissions*/}
-                            {/*    - Click "Add Members or Roles"*/}
-                            {/*    - Search for "SOL Decoder Bot"*/}
-                            {/*    - Scroll down to "Advanced Permissions", make sure the bot is selected on the left*/}
-                            {/*    - On the right, check the following:*/}
-                            {/*    - View Channel*/}
-                            {/*    - Send Messages*/}
-                            {/*    - Embed Links*/}
-                            {/*    - Make sure the bot shows as "Online" in the sidebar*/}
-                            {/*    - Click the "Send a test message" and make sure it works*/}
+
+                                <b>General Instructions</b>
+                                <ul className='list-disc ml-5 leading-9'>
+                                    <li>Make a new private channel in your Discord. If doing the "Mints" package, name the channel "daily-mints" or whatever you want. Optionally make "1h-mint-info" if you want that as well. Or if you are doing the "Fox token" package, make a channel for the fox token names, and another channel for where users can enter their own bot commands</li>
+                                    <li>Add the bot to the above channels (by going to the channel settings within Discord)</li>
+                                    <li>Refresh this page</li>
+                                    <li>Enable the "Mints" package (or "Fox token" package)</li>
+                                    <li>It should ask you about the channels - pick your new channels. Click the test button. If it doesn't work, make sure the SOL Decoder bot is in that channel, and has permission to "Send Messages" (done within the channel settings in Discord)
+                                    </li>
+                                    <li>Wait for the channels to be populated with data before showing it to the public (8am EST is when daily-mints is populated, varying times for other channels)</li>
+                                    <li>If doing the "Fox token" package, you need to first tell us before you can start using the bot commands (/token, /token_name, /wallet_tokens) in your server. You also need to add permission for any user in that channel to "Use Application Commands"</li>
+                                </ul>
+
+                                <b>Discord channel permissions</b>
+                                <ul className='list-disc ml-5 leading-9'>
+                                    <li>Go to your new channel(s) in Discord - click "edit channel" in the sidebar</li>
+                                    <li>Click permissions</li>
+                                    <li>Click "Add Members or Roles"</li>
+                                    <li>Search for "SOL Decoder Bot"</li>
+                                    <li>Scroll down to "Advanced Permissions", make sure the bot is selected on the left</li>
+                                    <li>On the right, check the following:</li>
+                                    <li>View Channel</li>
+                                    <li>Send Messages</li>
+                                    <li>Embed Links</li>
+                                    <li>Make sure the bot shows as "Online" in the sidebar</li>
+                                    <li>Click the "Send a test message" and make sure it works</li>
+                                </ul>
                             </div>
                             : ''
                     }
@@ -568,10 +552,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </div>
                 </div>
             </div>
-
-
-
-
 
         </>
     );
