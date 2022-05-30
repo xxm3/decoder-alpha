@@ -56,7 +56,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
      */
      useEffect(() => {
         if(!localStorage.getItem('role')){
-            history.push('/')
+            history.push('/manageserver')
             return
         }else{
             setRole(localStorage.getItem('role'))
