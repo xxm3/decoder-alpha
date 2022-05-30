@@ -5,9 +5,10 @@ import { IonItem, IonButton, IonLabel, useIonToast } from '@ionic/react';
 import { Backdrop, CircularProgress, Grid, Switch, } from '@material-ui/core';
 import { Tooltip } from "react-tippy";
 import './ServerModule.scss';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory, useLocation, useParams } from 'react-router';
 import Loader from '../../components/Loader';
 import Help from '../../components/Help';
+import { Server } from '../../types/Server';
 
 interface LocationParams {
     pathname: string;
@@ -15,14 +16,7 @@ interface LocationParams {
     search: string;
     hash: string;
 }
-interface Server {
-    id: string;
-    name: string;
-    icon: string;
-    owner: boolean;
-    permissions: string;
-    features: [];
-}
+
 
 const ServerModule: React.FC<AppComponentProps> = () => {
     /**
@@ -72,21 +66,48 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     }, [window.innerWidth]);
 
 
+	const { server } = useParams<{server : string}>()
     // get guilds
     useEffect(() => {
+        
+            if (server) {
+                setIsLoading(true);
+                instance
+                    .get(`/guilds/${server}`)
+                    .then((response) => {
+                        let data = response.data.data;
+                        if(role ==='3NFT' || role ==='4NFT'){
+                            setChecked({
+                                ...checked,
+                                mintInfoModule: data.mintInfoModule,
+                                tokenModule: data.tokenModule,
+                            });
+                        }
+                        
 
-        if (location?.state?.server) {
-            setIsLoading(true);
-            let serverObj = location.state.server;
-            setServer(serverObj);
-            instance.get(`/guilds/${serverObj.id}`)
-                .then((response) => {
-                    let data = response.data.data;
-                    if(role ==='3NFT' || role ==='4NFT'){
-                        setChecked({
-                            ...checked,
-                            mintInfoModule: data.mintInfoModule,
-                            tokenModule: data.tokenModule,
+                        setDropdownValue({
+                            ...dropdownValue,
+                            dailyMintsWebhookChannel:
+                                data.dailyMintsWebhookChannel,
+                            oneHourMintInfoWebhookChannel:
+                                data.oneHourMintInfoWebhookChannel,
+                            analyticsWebhookChannel:
+                                data.analyticsWebhookChannel,
+                        });
+                        setChannel(data.textChannels);
+                    })
+                    .catch((error: any) => {
+                        let msg = '';
+                        if (error && error.response) {
+                            msg = String(error.response.data.message);
+                        } else {
+                            msg = 'Unable to connect. Please try again later';
+                        }
+                        present({
+                            message: msg,
+                            color: 'danger',
+                            duration: 5000,
+                            buttons: [{ text: 'X', handler: () => dismiss() }],
                         });
                     }
                     setDropdownValue({
@@ -138,7 +159,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         if (server) {
             setBackdrop(true);
             instance
-                .post(`/guilds/${server.id}/modules`, obj, {
+                .post(`/guilds/${server}/modules`, obj, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -188,7 +209,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         if (server) {
             setBackdrop(true);
             instance
-                .post(`/guilds/${server.id}/webhooks`, obj, {
+                .post(`/guilds/${server}/webhooks`, obj, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -267,7 +288,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     const sendTestWebhook = (moduleName: string) => {
         if (!server) return;
-        instance.post(`/guilds/${server.id}/${moduleName}`, {}, {
+        instance.post(`/guilds/${server}/${moduleName}`, {}, {
             headers: {
                 'Content-Type': 'application/json',
             },
