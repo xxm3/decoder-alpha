@@ -109,11 +109,11 @@ const columns: Column<FoxTokenData> [] = [
     {
         title: 'Last Sale',
         customSort: (a, b) => new Date(a.lastSaleDate ? a.lastSaleDate : 0 ) as any - (new Date(b.lastSaleDate ? b.lastSaleDate : 0) as any),
-        render: (record) => <span>{record && record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : '-'}</span>,
+        render: (record) => <div className='w-20'>{record && record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : '-'}</div>,
     },
     {
         title: '# Owned',
-        render: (record) => <span>{record?.whichMyWallets?.split('-')[0]}</span>,
+        render: (record) => <div className='w-20'>{record?.whichMyWallets?.split('-')[0]}</div>,
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
     },
     {
