@@ -63,7 +63,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
         }, [message, word]);
 
         return (
-            <div
+            <div key={id}
                 className={`relative w-full items-start  my-2 ${
                     onClick ? 'hover:bg-opacity-100 cursor-pointer' : ''
                 } py-1 space-x-4 rounded-xl text-lg flex`}
@@ -170,12 +170,12 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                             }
                     </div>
                     <div className="media">
-                        {mediaUrls.map((url) => {
+                        {mediaUrls.map((url, index) => {
                             switch (mediaTypes.get(getUrlExtension(url))) {
                                 case 'img':
-                                    return <img key={url} src={url} />;
+                                    return <img key={index} src={url} />;
                                 case 'video':
-                                    return <video key={url} src={url} />;
+                                    return <video key={index} src={url} />;
                             }
                         })}
                     </div>

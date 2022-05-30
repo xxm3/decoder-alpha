@@ -42,6 +42,8 @@ const HeaderContainer = () => {
 
 	const [mode, setMode] = usePersistentState<"dark" | "light">("mode", "dark");
 
+    const hideSearch = 'isLogin'; // localStorage.getItem('isLogin')
+
     // onload useEffect
     useEffect(() => {
         const onLoad = async () => {
@@ -143,7 +145,7 @@ const HeaderContainer = () => {
 											<IonIcon icon={close} />
 											<IonRippleEffect />
 										</IonBadge> : null}
-										
+
                                     </div>
                                 </IonRouterLink>
                             </div>
@@ -164,33 +166,16 @@ const HeaderContainer = () => {
                                     onClick={() => setShowMobileSearch(false)}
                                 />
                             )}
-                            <div
-                                className={`flex-grow flex space-x-2 c-header-search items-center ${
-                                    showMobileSearch
-                                        ? 'max-w-[50rem] px-3'
-                                        : 'hidden lg:flex'
-                                }`}
-                            >
-                                <SearchBar
-                                    onSubmit={handleSearch}
-                                    initialValue={decodeURIComponent(id ?? '')}
-                                    placeholder={headerPlaceholder}
-                                    disableReset
-                                />
+                            {/* @ts-ignore */}
+                            {hideSearch === 'isLogin' ?
+                            <div className={`flex-grow flex space-x-2 c-header-search items-center ${ showMobileSearch ? 'max-w-[50rem] px-3' : 'hidden lg:flex' }`}>
+                                <SearchBar onSubmit={handleSearch} initialValue={decodeURIComponent(id ?? '')} placeholder={headerPlaceholder} disableReset />
+                                <span className="hidden sm:block"> <Help description={`Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale"). Results include graphs, and messages you can scroll through. Click on a message to view more`} /> </span>
+                            </div> : '' }
 
-                                <span className="hidden sm:block">
-                                    <Help
-                                        description={`Does an exact match on a single word (ex. "catalina"), or does an exact match on multiple words (ex. "catalina whale"). Results include graphs, and messages you can scroll through. Click on a message to view more`}
-                                    />
-                                </span>
-                            </div>
-                            {!showMobileSearch && (
-                                <IonIcon
-                                    slot="icon-only"
-                                    icon={search}
-                                    className="lg:hidden cursor-pointer text-2xl hover:opacity-80"
-                                    onClick={() => setShowMobileSearch(true)}
-                                />
+                            {/* @ts-ignore */}
+                            { hideSearch === 'isLogin' && !showMobileSearch && (
+                                <IonIcon slot="icon-only" icon={search} className="lg:hidden cursor-pointer text-2xl hover:opacity-80" onClick={() => setShowMobileSearch(true)} />
                             )}
                         </div>
 
@@ -217,9 +202,12 @@ const HeaderContainer = () => {
                             >
                                 <IonIcon icon={mode === 'dark' ? sunny : moon} className="h-7 w-7" />
                             </IonButton>
-                            <div className="hidden md:flex items-center">
+                            {
+                                hideSearch === 'isLogin' &&<div className="hidden md:flex items-center">
                                 <WalletButton />
-                            </div>
+                                </div>
+                            }
+
                         </div>
                     </div>
                 </IonToolbar>

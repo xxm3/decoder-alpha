@@ -30,7 +30,7 @@ const SearchedWords = () => {
             const error = e as Error & { response?: AxiosResponse };
 
             let msg = '';
-            if (error && error.response) {
+            if (error?.response) {
                 msg = String(error.response.data.body);
             } else {
                 msg = 'Unable to connect. Please try again later';
@@ -72,7 +72,7 @@ const SearchedWords = () => {
     return (
         // bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4
         <div className="secondary-bg-forced m-1 p-4 rounded-xl">
-            {searchWordsQuery.isFetching ?
+            {searchWordsQuery?.isFetching ?
                 <div className="flex justify-center items-center">
                     {/*<Loader/>*/}
                     Loading . . .
@@ -83,7 +83,7 @@ const SearchedWords = () => {
                     <div>
                         <ul style={{listStyle: 'disc'}}>
                             {
-                                searchWordsQuery && searchWordsQuery.data.data.map((word: any) => (
+                                searchWordsQuery?.data?.data?.map((word: any) => (
                                     <li key={word.createdAt} className="ml-3">
                                         <Link to={'search/' + word.searchterm} className="underline">
                                             {word.searchterm.length > 20 ?
