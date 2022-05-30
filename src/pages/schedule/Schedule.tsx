@@ -4,7 +4,7 @@ import 'moment-timezone';
 import { instance } from '../../axios';
 import { environment } from '../../environments/environment';
 import Loader from '../../components/Loader';
-import { IonContent, IonIcon, IonRippleEffect, useIonToast, IonRefresher, IonRefresherContent } from '@ionic/react';
+import { IonContent, IonIcon, IonRippleEffect, useIonToast, IonRefresher, IonRefresherContent, IonSelect, IonSelectOption } from '@ionic/react';
 import './Schedule.css'
 import { Column, MTableToolbar } from '@material-table/core';
 import Table from '../../components/Table';
@@ -15,6 +15,8 @@ import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
 import { Grid, MenuItem, Select } from '@material-ui/core';
 import TimezoneData from '../../util/Book1.json'
+import Help from '../../components/Help';
+import CommonMintsData from './CommonMintsData';
 
 interface Mint {
     image: string;
@@ -61,6 +63,12 @@ const Schedule = () => {
     const [selectedTimezone, setSelectedTimezone] = useState<any>({})
     const [mode] = usePersistentState("mode", "dark");
     const [searchFocus, setSearchFocus] = useState<boolean>(false)
+
+    let titleDiscription = `Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list.
+    \n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them.
+    The Fox logo in the price is the official Token price that comes from the Fox Token Market.
+    Rows in bold mean the mint comes out in two hours or less.
+    `
 
 
 
@@ -261,42 +269,10 @@ const Schedule = () => {
         {
             title: 'Details',
             render: (record) => (
-                <div>
-                    <div className="flex space-x-3">
-                        {/*discord*/}
-                        <a href={record.discordLink} target="_blank" style={{ pointerEvents: (record.discordLink && record.numbersOfDiscordMembers) ? "initial" : "none" }} className={(record.discordLink && record.numbersOfDiscordMembers) ? "schedule-link" : "schedule-link-disabled"}>
-                            <IonIcon icon={logoDiscord} className="big-emoji" />
-                            <IonRippleEffect />
-                        </a>
-                        {/*twitter*/}
-                        <a href={record.twitterLink} className="schedule-link" target="_blank">
-                            <IonIcon icon={logoTwitter} className="big-emoji" />
-                            <IonRippleEffect />
-                        </a>
-                        {/* Link */}
-                        <a href={record.projectLink} className={(record.projectLink && record.projectLink) ? "schedule-link" : "schedule-link-disabled"} target="_blank">
-                            <IonIcon icon={link} className="big-emoji" />
-                            <IonRippleEffect />
-                        </a>
-                    </div>
-
-                    {/*DATA REPEATED ON SCHEDULE.TSX AND CALENDAR.TSX*/}
-                    <div className="" onClick={() => handleProjectClick(record)}>
-                        {<span><b>Name : </b>{record?.project}</span>}
-                        {<span><br /><b>Time : </b> <span>{record?.updateTime || record?.time.replace('UTC', '')}<span hidden={record?.mintExpiresAt.indexOf('Invalid') !== -1}>{record?.mintExpiresAt}</span></span></span>}
-                        {<div className='flex flex-row'><b>Price : </b><div onClick={(e) => record?.wlPrice ? history.push( { pathname: '/foxtoken',search: record?.wlTokenAddress }) : '' } className={'flex flex-row ml-1 ' + (record.wlPrice ? ' cursor-pointer underline' : '') } dangerouslySetInnerHTML={{__html: record?.wlPrice ? `${record?.price.replace(/public/gi, "<br>public").replace('SOL', '')} (<img src="/assets/icons/FoxTokenLogo.svg" class="h-5 pr-1 foxImg" /> ${record?.wlPrice}) ◎` : `${record?.price?.replace(/public/gi, "<br>public").replace('SOL', '')} ◎`}}></div></div>}
-                        {<span><b>Supply : </b>{record?.count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {<span><br /><b>Discord (all) : </b>{record?.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {<span><br /><b>Discord (online) : </b>{record?.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {<span><br /><b>Twitter : </b>{record?.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                        {<span><br /><b>Twitter Interaction : </b>{record?.tweetInteraction?.total}</span>}
-                    </div>
-
-                </div>
+               <CommonMintsData record={record} />
             ),
             customSort: (a, b) => a.project.localeCompare(b.project),
             customFilterAndSearch: (term, rowData) => rowData?.project.toLowerCase().includes(term.toLowerCase()), },
-
     ];
 
     const columns: Column<Mint>[] = [
@@ -493,19 +469,9 @@ const Schedule = () => {
                                             }}
                                             // calendar icon for show calendar do not remove
                                             actions={[
-                                                /**
-                                                 * TODO !!!! :
-                                                 *
-                                                 * 5 / 10 / 15
-                                                 *
-                                                 * need 3 cronjobs!!!
-                                                 *
-                                                 *
-                                                 * (once all done) need a "click here view calendar" on top...
-                                                 */
                                                 {
                                                     icon: () => <IonIcon icon={calendarOutline} className="text-3xl " />,
-                                                    onClick: () => history.push( { pathname: '/schedulecalendar',state:mints}),
+                                                    onClick: () => history.push( { pathname: '/calendar',state:mints}),
                                                     isFreeAction: true,
                                                 },
                                             ]}
@@ -530,18 +496,15 @@ const Schedule = () => {
                                                                 style={{ alignItems: 'center' }}
                                                             >
                                                                 <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', }} >
-                                                                    <div className="hidden sm:block" style={{ width:'100%'}}>
-                                                                       {`Mint Schedule - ${date}`}
-                                                                    </div>
-                                                                        <Select
-                                                                        labelId="demo-simple-select-label"
-                                                                        id="demo-simple-select"
-                                                                        value={selectedTimezone.value}
-                                                                        placeholder='select time zone'
-                                                                        style={{ width:'100%', lineHeight:1.2,border: `1px solid rgba(171, 171, 171, 0.876)`,borderRadius:'20px',paddingLeft:'10px'}}
-                                                                        onChange={(selected: any) => { setSelectedTimezone({...selected.target}) }} >
-                                                                            {TimezoneData && TimezoneData.map((item:any,index:number)=>{ return (<MenuItem key={index} value={item.value}>{item.label}</MenuItem>)} )}
-                                                                        </Select>
+                                                                        <div className="hidden sm:block" style={{ width:'100%'}}>
+                                                                            <div className='text-xl font-medium text-ellipsis flex flex-row items-center'>{`Mint Schedule - ${date}`}  <div className='mt-1 ml-2'><Help description={titleDiscription} /></div></div>
+                                                                        </div>
+                                                                    <IonSelect id="demo-simple-select" value={selectedTimezone.value} interface="popover" onIonChange={(selected: any) => { setSelectedTimezone({ ...selected.detail }) }} className="c-ion-select">
+
+                                                       {TimezoneData && TimezoneData.map((item: any, index: number) => {
+                                                              return<IonSelectOption   key={index}  value={item.value} >{item.label}</IonSelectOption>
+                                                        })}
+                                                     </IonSelect>
                                                                 </div>
                                                             </Grid>
                                                             <Grid item sm={4}>

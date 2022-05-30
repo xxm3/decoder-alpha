@@ -236,7 +236,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                 const datasetForChartDailyCount = getDailyCountData(data);
 
                 const chartDataDailyCount = {
-                    labels: dispLabelsDailyCount(data && data.ten_day_count, true),
+                    labels: dispLabelsDailyCount(data?.ten_day_count, true),
                     datasets: [
                         {
                             type: 'line' as const,
@@ -278,9 +278,8 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
         keepPreviousData: true,
         select: (data: any) => {
             // in case couldn't search on this
-
             if (data?.error && data.body) {
-                throw new Error(String(data.body));
+                throw new Error(String(data?.body));
             }
             if (data?.totalCount > 100) {
                 data.hasMore = true;
@@ -300,14 +299,13 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
         <React.Fragment>
 
             {/* ERROR bar */}
-            {graphQuery.isError || messageQuery.isError || messageQuery?.data?.error || graphQuery?.data?.error ? (
+            {graphQuery?.isError || messageQuery?.isError || messageQuery?.data?.error || graphQuery?.data?.error ? (
                 <>
                 <div className="relative mt-6 bg-red-100 p-6 rounded-xl">
                     <p className="text-lg text-red-700 font-medium">
 
                         {/* No results found */}
-                        <b>{(messageQuery.error as Error).message ||
-                            (graphQuery.error as Error).message || 'Unable to connect, please try again later'}</b>
+                        <b>{(messageQuery?.error as Error)?.message || (graphQuery?.error as Error)?.message || 'Unable to connect, please try again later'}</b>
                     </p>
                     <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                         !
@@ -402,7 +400,11 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                     <br />
                     <div className="m-3 relative bg-blue-100 p-4 rounded-xl">
                         <p className="text-lg text-blue-700 font-medium">
-                            <b>Search results are based off 18+ private Discords worth 740+ SOL. Discord & user names are randomized for privacy. This means that your search results are coming from Blue Chip DAOs, and all of the messages they type in their main alpha chat are being shown above.</b>
+                            {/*worth 740+ SOL*/}
+                            <b>
+                                Search results are based off 18+ private Discords (blue chips and top alpha Discords). Discord & user names are randomized for privacy.
+                                {/*This means that your search results are coming from Blue Chip DAOs, and all of the messages they type in their main alpha chat are being shown above.*/}
+                            </b>
                         </p>
                         <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
                             !
