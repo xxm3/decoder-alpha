@@ -390,7 +390,7 @@ const App = () => {
                                                                                 {/* Server module */}
                                                                                 <ProtectedRoute
                                                                                     exact
-                                                                                    path="/servermodule"
+                                                                                    path="/servermodule/:server"
                                                                                     component={
                                                                                         ServerModule
                                                                                     }
