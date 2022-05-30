@@ -10,9 +10,7 @@ import { logoDiscord, logoTwitter, link, close } from 'ionicons/icons';
 const CommonMintsData = (record1: any) => {
     const history = useHistory();
 
-    let record:any = record1.record
-
-    // console.log('record',record);
+    let record:any = record1.record;
 
     return (
             <>
@@ -45,7 +43,7 @@ const CommonMintsData = (record1: any) => {
                          {<span>{record?.count ? <br /> :'' }<b>Discord (all) : </b>{record?.discord_all ? record?.discord_all : record?.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                          {<span><br /><b>Discord (online) : </b>{ record?.discord_online ? record?.discord_online : record?.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
                          {<span><br /><b>Twitter : </b>{ record?.twitter_all ? record?.twitter_all : record?.numbersOfTwitterFollowers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>}
-                         {<span><br /><b>Twitter Interaction : </b>{ record?.tweetInteractions ? record?.tweetInteractions : record?.tweetInteraction?.total}</span>}
+                         {<span><br /><b>Twitter Interaction : </b>{ (record?.tweetInteractions ? record?.tweetInteractions : record?.tweetInteraction?.total).toLocaleString()}</span>}
                      </div>
                  </div>
             </>
