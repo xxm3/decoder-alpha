@@ -173,6 +173,10 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                 <b>Other packages will be released in the future such as:</b>
                             </ul> */}
                         </ul>
+
+                        // TODO: update the website to only show the bot invite if they have 3-4 NFT
+                        // TODO: if they have 0 servers .. .show stuff better (clear cookies etc...)
+
                         {!noServers &&
                         <>
                             <div className='text-3xl font-semibold my-3 mt-8'>Upcoming features</div>

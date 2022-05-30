@@ -165,8 +165,7 @@ const DisplayGraph:React.FC<{
                                 },
                                 title: {
                                     display: true,
-                                    // text: '# of messages per Discord (powered by SOL Decoder)',
-                                    text: `# messages per Discord (${totalCount} results in last 10 days)`,
+                                    text: `# messages per Discord`, //  (${totalCount} results in last 10 days)
                                     // color: '#14F195'
                                     // color: mode === 'dark' ? 'white' : 'black'
                                 },
