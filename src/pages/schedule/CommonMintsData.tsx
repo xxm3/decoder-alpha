@@ -7,16 +7,15 @@ import { IonButton, IonContent, IonHeader, IonIcon, IonModal, IonPopover,  IonRi
 import { useHistory, useParams, useLocation } from 'react-router';
 import { logoDiscord, logoTwitter, link, close } from 'ionicons/icons';
 
-
-
 const CommonMintsData = (record1: any) => {
     const history = useHistory();
 
-    let record:any = record1.record
-    
+    let record:any = record1.record;
+
     return (
             <>
             <div>
+                {/*TODO: twitter link no work... no supply....*/}
                      <div className="flex space-x-3">
                          {/*discord*/}
                          <a href={record?.discordLink} target="_blank" style={{ pointerEvents: (record?.discordLink && record?.numbersOfDiscordMembers) ? "initial" : "none" }} className={(record?.discordLink && record?.numbersOfDiscordMembers) ? "schedule-link" : "schedule-link-disabled"}>
