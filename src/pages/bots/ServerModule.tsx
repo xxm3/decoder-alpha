@@ -60,12 +60,14 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         if (window.innerWidth < 525) {
             setIsMobile(true);
         }
-        //     window.onbeforeunload = function() {
-    //         console.log('refress')
-    //         alert('refress')
-    //         // return "Dude, are you sure you want to refresh? Think of the kittens!";
-    // }
+
+        if (performance.navigation.type == 1) {
+            history.push('/manageserver')
+        } 
+        
     }, [window.innerWidth]);
+
+
 
 
 	const { server } = useParams<{server : string}>();
@@ -467,9 +469,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     <div className='basis-1/2'>
                         <div className="server-module-bg overflow-hidden">
                             <div className="flex flex-row justify-between w-full">
-                                <div className='card-bg-blur flex justify-center items-center w-full'>
+                                <div className='card-bg-blur-fox flex justify-center items-center w-full'>
                                     <div className="module-icon-wrapper w-full">
-                                        <img src={require('../../images/me.png')} />
+                                        <img src={require('../../images/fox.png')} />
                                     </div>
                                 </div>
                             </div>

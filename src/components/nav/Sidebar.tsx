@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import {IonButton, IonIcon, IonList, IonMenuToggle, IonContent, useIonToast } from "@ionic/react"
+import {IonButton, IonIcon, IonList, IonMenuToggle, IonContent, useIonToast, IonModal, IonHeader, IonToolbar } from "@ionic/react"
 import {
     bookOutline,
     calendarClearOutline,
@@ -19,13 +19,16 @@ import { RootState } from "../../redux/store";
 import { auth } from "../../firebase";
 import { VERSION_CODE } from '../../environments/environment'
 import { useState,useEffect } from "react";
+import './Sidebar.css'
+
+
 
 function Sidebar() {
 	const isDemo = useSelector<RootState>(state => state.demo.demo);
 	const role:any = useSelector<RootState>(state => state.demo.role);
     const [isMobile,setIsMobile] = useState(false)
-    const [present, dismiss] = useIonToast();
-
+    const isLogin = localStorage.getItem('isLogin')
+    const [logoutPopupOpen, setLogoutPopupOpen] = useState<boolean>(false)
 
     useEffect(() => {
         if (window.innerWidth < 525){
@@ -34,17 +37,9 @@ function Sidebar() {
     }, [window.innerWidth])
 
     const logOutHandler = () => {
+		auth.signOut()
         localStorage.clear();
-        window.location.href = '/';
-        // cookies.remove('Token');
-        console.log('document.cookie',document.cookie)
-
-        present({
-            message: 'Wallet disconnected. Refresh the page if connecting a new wallet, to get "Fox Token Market - View My Tokens" to show properly',
-            color: 'success',
-            duration: 10000,
-            buttons: [{ text: 'hide', handler: () => dismiss() }],
-        });
+        window.location.href = '/login';
     }
 
     return (
@@ -135,9 +130,12 @@ function Sidebar() {
                     to="#"
                     external={'https://twitter.com/SOL_Decoder'}
                 />
-                <div>
-                <IonButton onClick={() => logOutHandler()} color="primary" className="px-2 mx-0 w-full"> Logout </IonButton>
-                </div>
+
+                {/* logout Button  */}
+                {isLogin === 'isLogin' ? <div>
+                <IonButton onClick={() => setLogoutPopupOpen(true)} color="primary" className="px-2 mx-0 w-full"> Logout </IonButton>
+                </div> : '' }
+                
 
                 {/* hide wallet button in mobile so don't comment out */}
                 {/* <div className="xl:hidden lg:hidden md:hidden">
@@ -148,8 +146,24 @@ function Sidebar() {
             </IonList>
             </div>
             </IonContent>
+
+            <IonModal isOpen={logoutPopupOpen} onDidDismiss={() => setLogoutPopupOpen(false)} cssClass={isMobile ? 'logout-modal-mobile' :'logout-modal-web'} >
+                <IonContent className="flex items-center">
+                    <div className='text-xl font-bold text-center w-full mt-5'>
+                        Are you sure !
+                    </div>
+                    <div className=' text-center w-full mt-8'>
+                        you want to Logout ?
+                    </div>
+                    <div className="flex flex-row mt-10">
+                        <IonButton onClick={() => logOutHandler()} color="primary" className="px-2 mx-0 w-full"> Logout </IonButton>
+                        <IonButton onClick={() => setLogoutPopupOpen(false)} color="medium" className="px-2 mx-0 w-full"> Cancel </IonButton>
+                    </div>
+                </IonContent>
+            </IonModal>
         </>
     );
 }
 
 export default Sidebar
+
