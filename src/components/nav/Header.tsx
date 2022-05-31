@@ -42,7 +42,7 @@ const HeaderContainer = () => {
 
 	const [mode, setMode] = usePersistentState<"dark" | "light">("mode", "dark");
 
-    const hideSearch = 'isLogin'; // localStorage.getItem('isLogin')
+    const hideSearch = localStorage.getItem('isLogin')
 
     // onload useEffect
     useEffect(() => {

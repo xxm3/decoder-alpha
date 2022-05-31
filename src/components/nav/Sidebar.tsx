@@ -34,10 +34,10 @@ function Sidebar() {
     }, [window.innerWidth])
 
     const logOutHandler = () => {
-    
+        localStorage.clear();
         window.location.href = '/';
         // cookies.remove('Token');
-        // console.log('document.cookie',document.cookie)
+        console.log('document.cookie',document.cookie)
 
         present({
             message: 'Wallet disconnected. Refresh the page if connecting a new wallet, to get "Fox Token Market - View My Tokens" to show properly',
