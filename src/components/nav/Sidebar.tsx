@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import {IonButton, IonIcon, IonList, IonMenuToggle, IonContent } from "@ionic/react"
+import {IonButton, IonIcon, IonList, IonMenuToggle, IonContent, useIonToast } from "@ionic/react"
 import {
     bookOutline,
     calendarClearOutline,
@@ -24,12 +24,28 @@ function Sidebar() {
 	const isDemo = useSelector<RootState>(state => state.demo.demo);
 	const role:any = useSelector<RootState>(state => state.demo.role);
     const [isMobile,setIsMobile] = useState(false)
+    const [present, dismiss] = useIonToast();
+
 
     useEffect(() => {
         if (window.innerWidth < 525){
             setIsMobile(true)
         }
     }, [window.innerWidth])
+
+    const logOutHandler = () => {
+    
+        window.location.href = '/';
+        // cookies.remove('Token');
+        // console.log('document.cookie',document.cookie)
+
+        present({
+            message: 'Wallet disconnected. Refresh the page if connecting a new wallet, to get "Fox Token Market - View My Tokens" to show properly',
+            color: 'success',
+            duration: 10000,
+            buttons: [{ text: 'hide', handler: () => dismiss() }],
+        });
+    }
 
     return (
         <>
@@ -119,6 +135,9 @@ function Sidebar() {
                     to="#"
                     external={'https://twitter.com/SOL_Decoder'}
                 />
+                <div>
+                <IonButton onClick={() => logOutHandler()} color="primary" className="px-2 mx-0 w-full"> Logout </IonButton>
+                </div>
 
                 {/* hide wallet button in mobile so don't comment out */}
                 {/* <div className="xl:hidden lg:hidden md:hidden">
