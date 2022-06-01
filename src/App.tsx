@@ -18,7 +18,7 @@ import { Network } from '@capacitor/network';
 import { useEffect, useRef, useState } from 'react';
 import { auth } from './firebase';
 import { IUser } from './types/User';
-import { Route, Switch } from 'react-router';
+import { Redirect, Route, Switch, useHistory } from 'react-router';
 import './App.css';
 import Loader from './components/Loader';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -88,6 +88,7 @@ import MarketPlaceDetailLayout from './pages/marketPlaceDetail/MarketPlaceDetail
 const App = () => {
     const [networkState, setNetworkState] = useState(true);
 	const [present, dismiss] = useIonToast();
+
 	// const [role, setRole] = useState('')
 
     //offline Online
@@ -180,7 +181,7 @@ const App = () => {
             .then(({ data }) => {
 				localStorage.setItem('role',data.roleType);
 
-                console.log('roleType: ', data.roleType);
+                // console.log('roleType: ', data.roleType);
 
                 dispatch(setRole(data.roleType));
 
@@ -387,13 +388,18 @@ const App = () => {
                                                                                     }
                                                                                 />
 
+                                                                                {/* if anyone direct access Server module  */}
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/servermodule"
+                                                                                    render={()=> <Redirect to={`/manageserver`} />}
+                                                                                />
+
                                                                                 {/* Server module */}
                                                                                 <ProtectedRoute
                                                                                     exact
-                                                                                    path="/servermodule/:server"
-                                                                                    component={
-                                                                                        ServerModule
-                                                                                    }
+                                                                                    path="/servermodule/:serverId"
+                                                                                    component={ ServerModule }
                                                                                 />
 
                                                                                 {/*login button etc...*/}

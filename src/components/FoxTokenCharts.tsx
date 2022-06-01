@@ -262,7 +262,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
 
     return (
         <>
-            <div className='cursor-pointer text-lg flex justify-center default-chart-theme pt-2 underline text-blue-600' onClick={()=> refreshChart()}>Refresh chart</div>
+            <div className='text-lg flex justify-center default-chart-theme pt-2 ' > <div onClick={()=> refreshChart()} className ='underline text-blue-600 cursor-pointer'>Refresh chart</div></div>
             <div className="foxTokenCharts px-5 gap-4 grid grid-cols-12 default-chart-theme w-full" css={css` background-color: var(--ion-color-step-50); `} ref={chartsRef}>
                 <div className="chart chart-width">
                     <Chart

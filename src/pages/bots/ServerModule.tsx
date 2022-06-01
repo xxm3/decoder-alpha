@@ -27,14 +27,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [checked, setChecked] = useState<{ mintInfoModule: boolean; tokenModule: boolean; }>({ mintInfoModule: false, tokenModule: false, });
     const [isLoading, setIsLoading] = useState(false);
-
     // const [server, setServer] = useState<Server | null>(null);
-
     const [showInstruction, setShowInstruction] = useState<boolean>(false)
     const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(false)
     const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] = useState<boolean>(false)
-
-
     const [dropdownValue, setDropdownValue] = useState({
         dailyMintsWebhookChannel: 'default',
         oneHourMintInfoWebhookChannel: 'default',
@@ -43,9 +39,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [channel, setChannel] = useState<any>(null);
     const [backdrop, setBackdrop] = useState(false);
     const [present, dismiss] = useIonToast();
-
     const [role, setRole] = useState<any>(null)
     const [authorizedModule, setAuthorizedModule] = useState<any>()
+    const { serverId } = useParams<{serverId : string}>();
 
     /**
      * Use Effects
@@ -57,6 +53,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         }else{
             setRole(localStorage.getItem('role'))
         }
+
         if (window.innerWidth < 525) {
             setIsMobile(true);
         }
@@ -64,21 +61,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         if (performance.navigation.type == 1) {
             history.push('/manageserver')
         } 
-        
+
     }, [window.innerWidth]);
-
-
-
-
-	const { server } = useParams<{server : string}>();
 
     // get guilds
     useEffect(() => {
 
-        if (server) {
+        if (serverId) {
             setIsLoading(true);
             instance
-                .get(`/guilds/${server}`)
+                .get(`/guilds/${serverId}`)
                 .then((response) => {
                     let data = response.data.data;
                     if(role ==='3NFT' || role ==='4NFT'){
@@ -91,9 +83,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                     setDropdownValue({
                         ...dropdownValue,
-                        dailyMintsWebhookChannel: data.dailyMintsWebhookChannel,
-                        oneHourMintInfoWebhookChannel: data.oneHourMintInfoWebhookChannel,
-                        analyticsWebhookChannel: data.analyticsWebhookChannel,
+                        dailyMintsWebhookChannel: data.dailyMintsWebhookChannel || 'default',
+                        oneHourMintInfoWebhookChannel: data.oneHourMintInfoWebhookChannel || 'default',
+                        analyticsWebhookChannel: data.analyticsWebhookChannel || 'default',
                     });
                     setChannel(data.textChannels);
 
@@ -118,7 +110,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     setIsLoading(false);
                 });
         }
-
     }, [location]);
 
     useEffect(() => {
@@ -137,10 +128,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     // update guilds modules
     let enableModule = (obj: { module: string; enabled: boolean }) => {
-        if (server) {
+        if (serverId) {
             setBackdrop(true);
             instance
-                .post(`/guilds/${server}/modules`, obj, {
+                .post(`/guilds/${serverId}/modules`, obj, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -188,10 +179,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     // ie. selecting a channel
     let updateWebHooks = (obj: { webhook: string; channel: string }) => {
-        if (server) {
+        if (serverId) {
             setBackdrop(true);
             instance
-                .post(`/guilds/${server}/webhooks`, obj, {
+                .post(`/guilds/${serverId}/webhooks`, obj, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -278,8 +269,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     }
 
     const sendTestWebhook = (moduleName: string) => {
-        if (!server) return;
-        instance.post(`/guilds/${server}/${moduleName}`, {}, {
+        if (!serverId) return;
+        instance.post(`/guilds/${serverId}/${moduleName}`, {}, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -326,7 +317,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 <div className="server-module-bg p-4 px-6 w-full">
                     <div className='w-full flex items-center justify-between mb-3'>
                         <div className='text-xl font-semibold '>Instructions</div>
-                        <img style={{color : 'red'}} src={showInstruction ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`)}  className='w-4 cursor-pointer' onClick={()=>setShowInstruction((e)=>!e)} />
+                        <img style={{color : 'red'}} src={showInstruction ?  require(`../../images/up-icon.png`) : require(`../../images/chevron-down-icon.png`)}  className='w-4 cursor-pointer' onClick={()=>setShowInstruction((e)=>!e)} />
                     </div>
                     {/* <div className='text-xl font-semibold mb-3'>Instructions</div> */}
                     {
@@ -463,7 +454,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         <div className='text-base my-2 '>
                                             More information
                                         </div>
-                                        <img src={mintMoreInfoShow ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`)} className='w-4 cursor-pointer' onClick={()=> setMintMoreInfoShow((e)=>!e)} />
+                                        <img src={mintMoreInfoShow ?  require(`../../images/up-icon.png`) : require(`../../images/chevron-down-icon.png`)} className='w-4 cursor-pointer' onClick={()=> setMintMoreInfoShow((e)=>!e)} />
                                     </div>
                                     {mintMoreInfoShow ? <ul className='list-disc ml-5 leading-7'>
                                         <li>Your server can have the "daily-mints" and "1h-mint-info" feed, and soon "tomorrows-mints". Enable this to learn more about each</li>
@@ -550,7 +541,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 <div className="text-sm mt-2 p-2 border-t-2">
                                     <div className='w-full flex items-center justify-between'>
                                         <div className='text-base my-2 '> More information </div>
-                                        <img src={foxTokenMoreInfoShow ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`) } className='w-4 cursor-pointer' onClick={()=> setFoxTokenMoreInfoShow((e)=>!e)} />
+                                        <img src={foxTokenMoreInfoShow ?  require(`../../images/up-icon.png`) : require(`../../images/chevron-down-icon.png`) } className='w-4 cursor-pointer' onClick={()=> setFoxTokenMoreInfoShow((e)=>!e)} />
                                     </div>
                                     { foxTokenMoreInfoShow ?
                                         (<ul className='list-disc ml-5 leading-7'>
