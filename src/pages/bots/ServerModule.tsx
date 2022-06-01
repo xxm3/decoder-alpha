@@ -184,6 +184,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         }
     };
 
+    // ie. selecting a channel
     let updateWebHooks = (obj: { webhook: string; channel: string }) => {
         if (server) {
             setBackdrop(true);
@@ -198,6 +199,15 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         ...dropdownValue,
                         [obj.webhook]: obj.channel,
                     });
+
+                    // show success
+                    present({
+                        message: 'Selection saved. Messages will be sent to the channel in the future',
+                        color: 'success',
+                        duration: 5000,
+                        buttons: [{ text: 'X', handler: () => dismiss() }],
+                    });
+
                 })
                 .catch((error:any) => {
 
@@ -385,7 +395,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     />
                                 </div>
 
-                    {/* Hide show channale list of mint module */}
+                                {/* Hide show channel list of mint module */}
                                 {checked.mintInfoModule && (
                                     <>
                                         <div className="flex flex-row justify-center w-full">
@@ -493,7 +503,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     />
                                 </div>
 
-                    {/* Hide show channale list of fox token module */}
+                                {/* Hide show channels list of fox token module */}
                                 {checked.tokenModule && (
                                     <>
                                         <div className="flex w-full">
@@ -544,6 +554,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         (<ul className='list-disc ml-5 leading-7'>
                                             <li>Your server can have our "analytics" feed (where we show when tokens get new names from the Fox Token team), and users can use our bot's slash commands of /token_name and /token and /wallet_tokens </li>
                                             <li>Hold and you get lifetime access, and get free upgrades to existing packages such as getting alerts for Fox Token price/listings data (ie. alerted when any fox token with a name & greater than 1 sol price & greater than 10 listings is out) </li>
+                                            <li>Please contact us after enabling this, so we can enable the bot commands (/token, /token_name, /wallet_tokens) in your server</li>
                                         </ul>): ''
                                     }
                                 </div>

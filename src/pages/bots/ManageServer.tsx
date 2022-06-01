@@ -95,8 +95,13 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             <Backdrop style={{ color: '#fff', zIndex: 1000, }} open={isLoading} >
                 <CircularProgress color="inherit" />
             </Backdrop>
-            {/*  */}
-            {noServers ? <div className='text-xl text-center text-red-500'>Unable to find any servers you are the owner of. If you are one, then reset your cookies and try logging in again (or use a new browser)</div> :
+
+            {/* only show if they have servers they owner / admin of */}
+
+            {noServers ?
+                <div className='text-xl text-center text-red-500'>
+                    Unable to find any servers you are the owner of. If you are one, then reset your cookies and try logging in again (or use a new browser)
+                </div> :
             <>
                 <IonLabel className="text-4xl font-semibold mb-3">
                     Select a Server
@@ -109,7 +114,6 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                 <span className=" bg-yellow-500 w-7 h-7 flex items-center justify-center font-bold rounded-full mr-2">!</span>
                                 <span className='text-yellow-500 text-lg font-bold'>Server owners only</span>
                             </div>
-                            {/*<div> <span className="text-1xl font-thin">x</span> </div>*/}
                         </div>
 
                         <p>Note this page is only for server owners (for the time being). Also your server will need to first have our Discord Bot invited to it. Click one of the below links, then in the "Add to Server" on the bottom, select your server. Then click "Continue", then "Authorize"</p>
@@ -184,13 +188,14 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                         {/* TODO: update the website to only show the bot invite if they have 3-4 NFT */}
                         {/* TODO: instructions are still crap */}
 
+                        {/* only show if they have servers they owner of */}
                         {!noServers &&
                         <>
                             <br />
                             <div className='text-1xl font-semibold my-3'>Instructions:</div>
                             <ul>
-                                <li>- Add the Bot to our server using one of the two links above</li>
-                                <li>- Click "Go" on the server you want to add, and follow the steps on the next page</li>
+                                <li>- Add the Bot to our server using one of the two links at the top of the page</li>
+                                <li>- Click "Add" on the server you want to add the bots to, and follow the steps on the next page</li>
                             </ul>
                         </>}
 
