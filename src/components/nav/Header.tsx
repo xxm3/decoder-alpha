@@ -42,7 +42,8 @@ const HeaderContainer = () => {
 
 	const [mode, setMode] = usePersistentState<"dark" | "light">("mode", "dark");
 
-    const hideSearch = localStorage.getItem('isLogin')
+    // TODO-ruchita: i can't see search bar on localhost...
+    const hideSearch = 'isLogin'; // localStorage.getItem('isLogin')
 
     // onload useEffect
     useEffect(() => {
