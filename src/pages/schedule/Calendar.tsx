@@ -267,14 +267,14 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                 popupOffset={{x: 0, y: 0}}
                         />
                     </div>
-                    <IonModal isOpen={openEventModal} onDidDismiss={() => {setOpenEventModal(false); setShowMorePopup(true)}} cssClass={isMobile ? `${showGraph ? 'calender-modal-mobile' : 'calender-modal-mobile-nochart'}` : `${showGraph ? 'calender-modal-web' : 'calender-modal-web-nochart'}`} >
+                    <IonModal mode='ios' isOpen={openEventModal} onDidDismiss={() => {setOpenEventModal(false); setShowMorePopup(true)}} cssClass={isMobile ? `${showGraph ? 'calender-modal-mobile' : 'calender-modal-mobile-nochart'}` : `${showGraph ? 'calender-modal-web' : 'calender-modal-web-nochart'}`} >
                         <IonContent>
                                 <div className='flex popup-half-bg'>
                                     <div className='absolute top-2 right-3  cursor-pointer' onClick={() => {setOpenEventModal(false); setShowMorePopup(true)}}>
                                         <IonIcon icon={close} className="h-6 w-6"/>
                                     </div>
                                     <div>
-                                        <img src={eventGraphData?.data?.data[0]?.image} className={`${isMobile ? 'h-24 w-24' : 'h-52 w-52'}`} alt=''/>
+                                        <img src={eventGraphData?.data?.data[0]?.image ? eventGraphData?.data?.data[0]?.image : require('../../images/fox.png')} className={`${isMobile ? 'h-24 w-24' : 'h-52 w-52'}`} alt=''/>
                                     </div>
                                     <div className={`flex ${isMobile  ? 'items-start ml-3 mt-2' : 'items-cente ml-6 mt-6' } flex-col`}>
                                         <div className={`items-center flex`}>
@@ -315,7 +315,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                     </div>
                                 </div>
                             <div className='pm-4'>
-                                {showGraph ? <MintChart eventGraphData = {eventGraphData}/> : <div className='text-center opacity-40 h-10 bg-slate-500 items-center flex justify-center mt-4'> No chart history available</div>}
+                                {showGraph ? <MintChart eventGraphData = {eventGraphData}/> : <div className='text-center popup-half-bg h-10  items-center flex justify-center mt-4'><div>No chart history available</div> </div>}
                             </div>
                         </IonContent>
                     </IonModal>
