@@ -7,47 +7,12 @@ import './Schedule.css'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment';
-import { IonButton, IonContent, IonHeader, IonIcon, IonModal, IonSearchbar,  IonToolbar, useIonToast } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonIcon, IonModal, IonRippleEffect, IonSearchbar,  IonToolbar, useIonToast } from '@ionic/react';
 import { useHistory, useParams, useLocation } from 'react-router';
 import MintChart from './MintChart';
 import Loader from '../../components/Loader';
-import { close } from 'ionicons/icons';
 import Help from '../../components/Help';
-import CommonMintsData from './CommonMintsData';
-
-// const tempArray = [
-//     {
-//         id: 1,
-//         title: 'aa',
-//         start: moment('30-5-2022', 'DD MM YYYY').toDate(),
-//         end: moment('30-5-2022', 'DD MM YYYY').toDate()
-//     },
-//     {
-//         id: 2,
-//         title: 'asdfgh',
-//         start: moment('30-5-2022', 'DD MM YYYY').toDate(),
-//         end: moment('30-5-2022', 'DD MM YYYY').toDate()
-//     },
-//     {
-//         id: 3,
-//         title: 'qwerty',
-//         start: moment('30-5-2022', 'DD MM YYYY').toDate(),
-//         end: moment('30-5-2022', 'DD MM YYYY').toDate()
-//     },
-//     {
-//         id: 4,
-//         title: 'zxcvb',
-//         start: moment('30-5-2022', 'DD MM YYYY').toDate(),
-//         end: moment('30-5-2022', 'DD MM YYYY').toDate()
-//     },
-//     {
-//         id: 5,
-//         title: 'poiuy',
-//         start: moment('30-5-2022', 'DD MM YYYY').toDate(),
-//         end: moment('30-5-2022', 'DD MM YYYY').toDate()
-//     },
-
-// ]
+import { logoDiscord, logoTwitter, link, close } from 'ionicons/icons';
 
 
 const ScheduleCalendar: React.FC<AppComponentProps> = () => {
@@ -86,16 +51,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
      */
     useEffect(() => {
         fetchMintsData();
-
     }, []);
-
-    // useEffect(() => {
-    //     setSearchEvent(myEvents)
-    // }, [mints])
-
-
-
-
 
     useEffect(() => {
         let tempArray = []
@@ -114,7 +70,6 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
             }
         }
         setEvents(tempArray)
-        // setSearchEvent(tempArray)
     }, [mints])
 
 
@@ -123,7 +78,6 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
             setIsMobile(true);
         }
     }, [window.innerWidth]);
-
 
    /**
      * Functions
@@ -192,10 +146,9 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
         }
     }
 
-
-    const handleSlotSelect = (slotInfo: SlotInfo) => {
-        onNavigate(moment(slotInfo.slots[0]).toDate());
-     };
+    // const handleSlotSelect = (slotInfo: SlotInfo) => {
+    //     onNavigate(moment(slotInfo.slots[0]).toDate());
+    //  };
 
      // select event handler
     const handleSelectEvent = useCallback((event) => {
@@ -204,7 +157,6 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
          setOpenEventModal(true)
          setShowMorePopup(false)
     },[])
-
 
     // next previous day and month
 
@@ -253,10 +205,10 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
    }
 
    // do not remove
-    // const formatNumber = (n: any) => {
-    //     if (n < 1e3) return n;
-    //     if (n >= 1e3) return +(n / 1e3).toFixed(1) + 'K';
-    // };
+    const formatNumber = (n: any) => {
+        if (n < 1e3) return n;
+        if (n >= 1e3) return +(n / 1e3).toFixed(1) + 'K';
+    };
 
     return (
             <>
@@ -292,27 +244,19 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                     <div className= {`${isMobile ? "text-center flex-col" : 'text-left flex-row' } text-2xl flex justify-between ml-1 mr-2 items-center`} >
                         <div className='flex flex-row' >Mint Calendar <div className='mt-1 ml-2'><Help description={titleDiscription} /></div></div>
                         <div className="text-base cursor-pointer flex flex-row items-center">
-
                             <IonSearchbar  className={`text-base !p-0 ${isMobile && 'w-60 h-10 items-left '} flex-grow  outline-none overflow-hidden flex rounded-full border`}
                             type="text" value={searchValue} onIonChange={(e:any) => {handleSearch(e)}} animated placeholder={'search'}   />
-
-
                             <div onClick= {() => history.push( { pathname: '/schedule'})}> <IonIcon icon={close} className="text-3xl ml-6" /></div>
                         </div>
                     </div>
                     <div className={ isMobile ? 'ml-1 mr-1' :"ml-3 mr-3"}>
                         <Calendar
-                                // defaultDate={ moment().add(-1, "days").toDate()}
                                 className={isMobile ? 'show-more-btn custome-event' : ''}
                                 views={['month']}
-                                // events={myEvents}
                                 events={isSearch ? searchEvent : myEvents }
-                                components = {{
-                                    toolbar : CustomCalenderToolbar,
-                                }}
+                                components = {{ toolbar : CustomCalenderToolbar, }}
                                 localizer={localizer}
                                 onSelectEvent={handleSelectEvent}
-                                // onSelectSlot={(e: any)=>{handleSlotSelect(e)}}
                                 selectable
                                 onNavigate = {(action: Date)=> onNavigate(action)}
                                 style={{ height: isMobile ? '80vh' : 700, width:isMobile ? '90vw' : '' }}
@@ -320,40 +264,61 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                 endAccessor='end'
                                 date={selectDate}
                                 popup={showMorePopup}
-                                // onShowMore={(events, date) =>setOpenEventModal(true)}
                                 popupOffset={{x: 0, y: 0}}
                         />
                     </div>
-                    <IonModal isOpen={openEventModal} onDidDismiss={() => {setOpenEventModal(false); setShowMorePopup(true)}} cssClass={isMobile ? 'calender-modal-mobile' :'calender-modal-web'} >
-                        <IonHeader>
-                            <IonToolbar className='flex items-center justify-between'>
-                                <div className='float-left ml-3 font-bold'>
-                                    {selectedEvent?.title}
-                                </div>
-                                <div>
-                                    <a className="float-right text-base cursor-pointer mr-3" onClick={() => {setOpenEventModal(false); setShowMorePopup(true)}}>
-                                        <IonIcon icon={close} className="h-6 w-6" />
-                                    </a>
-                                </div>
-                            </IonToolbar>
-                        </IonHeader>
-
-                        {/*what you see when you click into a day*/}
+                    <IonModal isOpen={openEventModal} onDidDismiss={() => {setOpenEventModal(false); setShowMorePopup(true)}} cssClass={isMobile ? `${showGraph ? 'calender-modal-mobile' : 'calender-modal-mobile-nochart'}` : `${showGraph ? 'calender-modal-web' : 'calender-modal-web-nochart'}`} >
                         <IonContent>
+                                <div className='flex popup-half-bg'>
+                                    <div className='absolute top-2 right-3  cursor-pointer' onClick={() => {setOpenEventModal(false); setShowMorePopup(true)}}>
+                                        <IonIcon icon={close} className="h-6 w-6"/>
+                                    </div>
+                                    <div>
+                                        <img src={eventGraphData?.data?.data[0]?.image} className={`${isMobile ? 'h-24 w-24' : 'h-52 w-52'}`} alt=''/>
+                                    </div>
+                                    <div className={`flex ${isMobile  ? 'items-start ml-3 mt-2' : 'items-cente ml-6 mt-6' } flex-col`}>
+                                        <div className={`items-center flex`}>
+                                            <div className={`font-bold ${isMobile ? 'text-lg' : 'text-2xl' }`}>{eventGraphData?.data?.data[0]?.mintName}</div>
+                                            <div className={`items-center flex justify-center pt-2 pl-2 ${isMobile ? 'ml-1' : 'ml-4'}  flex-row`}>
 
-                            {/*links on top*/}
-                            <div className='ml-4 mt-2'>
-                                <CommonMintsData record = {eventGraphData?.data?.data[0]}/>
-                            </div>
+                                                {/*Link*/}
+                                                <a href={eventGraphData?.data?.data[0]?.website} className={`${eventGraphData?.data?.data[0]?.website && eventGraphData?.data?.data[0]?.website ? "schedule-link" : "schedule-link-disabled"}`} target="_blank">
+                                                    <IonIcon icon={link} className="big-emoji"/>
+                                                    <IonRippleEffect />
+                                                </a>
 
-                            <div className='ml-4 mt-4 mr-4'>
-                                {showGraph ? <MintChart eventGraphData = {eventGraphData}/> : <div className='text-center opacity-40 h-10 bg-slate-500 items-center flex justify-center'> No chart history available</div>}
+                                                {/*discord*/}
+                                                <a href={eventGraphData?.data?.data[0]?.discord_link} target="_blank" style={{ pointerEvents: eventGraphData?.data?.data[0]?.discord_link  ? "initial" : "none" }} className={`${eventGraphData?.data?.data[0]?.discord_link ? "schedule-link" : "schedule-link-disabled"} ml-2`}>
+                                                    <IonIcon icon={logoDiscord} className="big-emoji"/>
+                                                    <IonRippleEffect />
+                                                </a>
+
+                                                {/*twitter*/}
+                                                <a href={eventGraphData?.data?.data[0]?.twitter_link} target="_blank" className="schedule-link ml-2" >
+                                                    <IonIcon icon={logoTwitter} className="big-emoji"/>
+                                                    <IonRippleEffect />
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div className='text-base'>{moment(eventGraphData?.data?.data[0]?.date).format('LLL')}</div>
+                                        <div className={`${isMobile ? 'mt-2' : 'mt-4'}`}><b>Price : </b>{eventGraphData?.data?.data[0]?.price}</div>
+                                        <div className={`flex ${isMobile ? '' : ' mt-4'} flex-row`}>
+                                        <div className={`flex flex-col`}>
+                                            <div><b>Discord : </b>{formatNumber(eventGraphData?.data?.data[0]?.discord_all) || 0}</div>
+                                            <div><b>Twitter : </b>{formatNumber(eventGraphData?.data?.data[0]?.twitter_all) || 0}</div>
+                                        </div>
+                                        <div className={`flex flex-col ${isMobile ? 'ml-3' : 'ml-4'}`}>
+                                            <div><b>Online : </b>{formatNumber(eventGraphData?.data?.data[0]?.discord_online)}</div>
+                                            <div><b>Interactions : </b>{formatNumber(eventGraphData?.data?.data[0]?.tweetInteractions)}</div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div className='pm-4'>
+                                {showGraph ? <MintChart eventGraphData = {eventGraphData}/> : <div className='text-center opacity-40 h-10 bg-slate-500 items-center flex justify-center mt-4'> No chart history available</div>}
                             </div>
                         </IonContent>
                     </IonModal>
-
-                   {/*<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>*/}
-
                 </>
             }
             </>

@@ -53,11 +53,19 @@
 }
 .calender-modal-web .modal-wrapper {
     --width: 50vw;
-    --height: 50%;
+    --height: 65%;
+}
+.calender-modal-web-nochart .modal-wrapper {
+    --width: 50vw;
+    --height: 30%;
 }
 .calender-modal-mobile .modal-wrapper {
-    --width: 90vw;
-    --height: 35%;
+    --width: 98vw;
+    --height: 56%;
+}
+.calender-modal-mobile-nochart .modal-wrapper {
+    --width: 98vw;
+    --height: 26%;
 }
 
 .rbc-overlay {
@@ -119,4 +127,7 @@ ion-select-popover .sc-ion-popover-md-h{
         max-height: 280px !important;
         justify-self: center !important;
     }
+}
+.popup-half-bg{
+    background-color: var(--ion-color-step-150);
 }
