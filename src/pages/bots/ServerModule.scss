@@ -4,7 +4,7 @@
     background-repeat: no-repeat;
     background-position: center center;
     background-color: var(--ion-color-step-100);
-    border-radius: 10px;
+    border-radius: 3px;
 }
 
 .bg-image-wrapper {
@@ -14,7 +14,7 @@
     background-repeat: no-repeat;
     background-position: center center;
     background-color: var(--ion-color-step-100);
-    border-radius: 10px;
+    border-radius: 3px;
 }
 
 .module-icon {
@@ -37,7 +37,7 @@ ion-toggle {
     background-color: var(--ion-color-step-100);
     border-radius: 8px;
     border: 1px solid var(--ion-color-step-600);
-    padding-left: 10px;
+    padding-left: 3px;
     &:focus-visible {
         outline: none;
     }
@@ -76,16 +76,16 @@ ion-toggle {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    -webkit-backdrop-filter: blur(10px);
-    -moz-backdrop-filter: blur(10px);
-    -ms-backdrop-filter: blur(10px);
-    -o-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(3px);
+    -moz-backdrop-filter: blur(3px);
+    -ms-backdrop-filter: blur(3px);
+    -o-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
     img {
         height: 60px;
         width: 60px;
         background-color: #ffffff;
         border-radius: 50%;
-        // padding: 10px;
+        // padding: 3px;
     }
 }
