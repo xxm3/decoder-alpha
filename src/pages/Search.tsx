@@ -30,6 +30,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
     const [currentPage, setCurrentPage] = useState(0);
     const [showFoxTokenLink, setShowFoxTokenLink] = useState<boolean>(false)
     const [isMobile, setIsMobile] = useState(false);
+    const [showGraph, setShowGraph] = useState<boolean>(false)
 
     // const [searchText, setSearchText] = useState(useParams<{id: string}>());
 
@@ -95,7 +96,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
     }, [searchText])
 
     useEffect(() => {
-      if(searchText.length >= 43 && searchText.length <= 44){
+      if(searchText?.length >= 43 && searchText?.length <= 44){
         setShowFoxTokenLink(true)
       }else{
         setShowFoxTokenLink(false)
@@ -229,11 +230,14 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
             select: (data: any) => {
 
                 // in case couldn't search on this
-                if (data?.error && data.body) {
+                if (data?.error && data?.body) {
                     throw new Error(String(data.body));
                 }
+                let datasetForChartDailyCount
 
-                const datasetForChartDailyCount = getDailyCountData(data);
+                if(data){
+                    datasetForChartDailyCount = getDailyCountData(data);
+                } 
 
                 const chartDataDailyCount = {
                     labels: dispLabelsDailyCount(data?.ten_day_count, true),
@@ -325,13 +329,16 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                         graphQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                 <b>{"Error while loading message"}</b>
                             </p> :
+                            
                             <DisplayGraph {...{
                                 chartDataDailyCount:  graphQuery?.data.chartDataDailyCount,
                                 chartDataPerSource:  graphQuery?.data.chartDataPerSource,
                                 chartHeight,
                                 isLoadingChart: graphQuery?.isLoading,
                                 totalCount:  messageQuery?.data?.totalCount
-                            }} />}
+                            }} />
+
+                            }
                     {/* Displaying the custom skeleton loader while fetching */}
                     {messageQuery?.isFetching ?
                         new Array(10).fill(0).map((_, i) => <SearchSkeleton key={i}/>) :
@@ -343,17 +350,11 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                                     {/*The button used to open the filter menu*/}
                                     <button
                                         type="button"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setToggleFilters(!toggleFilters);
-                                        }}
+                                        onClick={(e) => { e.preventDefault(); setToggleFilters(!toggleFilters);}}
                                         id="filter"
                                         className="my-2 mr-2 h-full z-50 focus:outline-none"
                                     >
-                                        <IonIcon
-                                            icon={filterCircleOutline}
-                                            className="w-10 h-10 z-40"
-                                        />
+                                        <IonIcon icon={filterCircleOutline} className="w-10 h-10 z-40" />
                                     </button>
                                      {/* Filter implemented for filter date and source wise */}
                                     {toggleFilters && (
@@ -375,10 +376,10 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                                 </div>
                                 <Display
                                     {...{
-                                        messages:
-                                            messageQuery?.data?.messages ?? [],
+                                        messages: messageQuery?.data?.messages ?? [],
                                         totalCount: messageQuery?.data?.totalCount,
-                                    }}
+                                        }
+                                    }
                                 />
                         </div>)
                     }
@@ -391,14 +392,13 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                                 <IonButton onClick={() => handlePage('next')} className="ml-4">Next</IonButton>}
 
                             {!messageQuery.isFetching &&
-                                <IonButton onClick={() => contentRef && contentRef.scrollToTop(800)} className="float-right" >
+                                <IonButton onClick={() => contentRef && contentRef.scrollToTop(800)} className="float-right mt-1" >
                                     Scroll to Top
                                 </IonButton>}
                         </>
                     )}
 
-                    <br />
-                    <div className="m-3 relative bg-blue-100 p-4 rounded-xl">
+                    <div className="m-3 relative bg-blue-100 p-4 rounded-xl mt-16">
                         <p className="text-lg text-blue-700 font-medium">
                             {/*worth 740+ SOL*/}
                             <b>
