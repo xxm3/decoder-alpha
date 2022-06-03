@@ -277,7 +277,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                         <IonIcon icon={close} className="h-6 w-6"/>
                                     </div>
                                     <div>
-                                        <img src={eventGraphData?.data?.data[0]?.image ? eventGraphData?.data?.data[0]?.image : require('../../images/fox.png')} className={`${isMobile ? 'h-24 w-24' : 'h-52 w-52'}`} alt=''/>
+                                        <img src={eventGraphData?.data?.data[0]?.image} className={`${isMobile ? 'h-24 w-24' : 'h-52 w-52'}`} alt=''/>
                                     </div>
                                     <div className={`flex ${isMobile  ? 'items-start ml-3 mt-2' : 'items-cente ml-6 mt-6' } flex-col`}>
                                         <div className={`items-center flex`}>

@@ -15,9 +15,9 @@ const TopDiscordGainers = () => {
     /**
      * Functions
      */
-    const getSearchedWords = async () => {
+    const getTopFiveDiscordData = async () => {
         try {
-            const {data} = await instance.get(environment.backendApi + '/getSearchedWords', { headers: { 'Content-Type': 'application/json', },})
+            const {data} = await instance.get(environment.backendApi + '/getTopFiveDiscordData', { headers: { 'Content-Type': 'application/json', },})
             return data;
         } catch (e) {
             console.error('try/catch in Search.tsx: ', e);
@@ -39,7 +39,7 @@ const TopDiscordGainers = () => {
         }
     }
 
-    const topSearchWordsQuery = useQuery(['searchWords'], getSearchedWords, {
+    const topSearchWordsQuery = useQuery(['searchWords'], getTopFiveDiscordData, {
         select: (data: any) => {
             if (data?.error && data.message) {
                 throw new Error(String(data.message));
@@ -50,6 +50,12 @@ const TopDiscordGainers = () => {
         },
         retry: false
     })
+
+    const formatNumber = (n: any) => {
+        if (n < 1e3) return n;
+        if (n >= 1e3) return +(n / 1e3).toFixed(1) + 'K';
+    };
+
 
     /**
      * Use Effects
@@ -64,18 +70,15 @@ const TopDiscordGainers = () => {
                 :
                 <>
                     <div className={`font-bold pb-1 tracking-wider text-xl`}>Top Discord Gainers - 24h</div>
-                    <div className='flex flex-row justify-between'>
-                        <div>Shrouded</div>
-                        <div>+150k</div>
+                    {topSearchWordsQuery?.data?.data?.map((item:any,index:number)=>{
+                        return (
+                            <div className='flex flex-row justify-between' key={index}>
+                                <div>{item.mint_detail.name}</div>
+                            <div>+{formatNumber(item.discord_all)}</div>
                     </div>
-                    <div className='flex flex-row justify-between'>
-                        <div>Shrouded</div>
-                        <div>+150k</div>
-                    </div>
-                    <div className='flex flex-row justify-between'>
-                        <div>Shrouded</div>
-                        <div>+150k</div>
-                    </div>
+                        )
+                    })}
+                    
                 </>}
         </div>
     )
