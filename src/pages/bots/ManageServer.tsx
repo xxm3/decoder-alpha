@@ -8,6 +8,7 @@ import './ManageServer.scss';
 import BgImage from '../../images/logo-transparent.png';
 import { useHistory, useLocation } from 'react-router';
 import Loader from '../../components/Loader';
+import Addserver from './components/Addserver';
 
 interface Server {
     id: string;
@@ -28,6 +29,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [present, dismiss] = useIonToast();
     const [noServers, setNoServers] = useState<boolean>(false)
+    
 
     /**
      * Use Effects
@@ -89,6 +91,9 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                 setIsLoading(false);
             });
     };
+
+
+  
 
     return (
         <>
