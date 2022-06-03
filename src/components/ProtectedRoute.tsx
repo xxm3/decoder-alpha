@@ -13,7 +13,6 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
 	const user = useUser();
 	const needsRole = props.needsRole ?? true;
 	const hasRoles = useSelector<RootState>(state => state.user.hasRoles);
-	return (user)
 	return user
         || isDev
     ? (
