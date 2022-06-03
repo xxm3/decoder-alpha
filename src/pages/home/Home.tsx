@@ -12,6 +12,8 @@ import {environment} from '../../environments/environment';
 import { IonContent, IonLabel, IonModal } from '@ionic/react';
 import WordsCount from './WordsCount';
 import TopSearchWords from './TopSearchWords';
+import TopDiscordGainers from './TopDiscordGainers';
+import TopTwitterGainers from './TopTwitterGainers';
 
 const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
@@ -80,6 +82,12 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
                     {/*TODO-aries: FIX ALERTS (then enable below...) */}
                     {/*<RecentAlerts/>*/}
+
+                    {/*Top Discord Gainers*/}
+                    <TopDiscordGainers/>
+
+                    {/* Top Twitter Gainers*/}
+                    <TopTwitterGainers/>
                 </> : <>
 
                     {/*FOR DESKTOP*/}
@@ -90,13 +98,22 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
                             {/*Recent FF Named Stuff*/}
                             <FfNamed/>
-
                         </div>
                         <div className='w-1/2'>
 
                             {/* recent alerts */}
                             {/*<RecentAlerts/>*/}
 
+                        </div>
+                    </div>
+                    <div className='flex flex-row w-full'>
+                        <div className='w-1/2 '>
+                            {/*Top Discord Gainers*/}
+                            <TopDiscordGainers/>
+                        </div>
+                        <div className='w-1/2'>
+                            {/* Top Twitter Gainers*/}
+                            <TopTwitterGainers/>
                         </div>
                     </div>
 

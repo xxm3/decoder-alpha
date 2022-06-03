@@ -7,7 +7,7 @@ import './Schedule.css'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment';
-import { IonButton, IonContent, IonHeader, IonIcon, IonModal, IonRippleEffect, IonSearchbar,  IonToolbar, useIonToast } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonIcon, IonItemDivider, IonModal, IonPopover, IonRippleEffect, IonSearchbar,  IonToolbar, useIonToast } from '@ionic/react';
 import { useHistory, useParams, useLocation } from 'react-router';
 import MintChart from './MintChart';
 import Loader from '../../components/Loader';
@@ -36,6 +36,9 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
     const [searchValue, setSearchValue] = useState<any>()
     const [monthLimit, setMonthLimit] = useState<boolean>(true)
     const [isSearch, setIsSearch] = useState<boolean>(false)
+    const [showCalenarPopup, setShowCalendarPopup] = useState<boolean>(false)
+    const [moreEvents, setMoreEvents] = useState<any>()
+    const [eventDate,setEventDate] = useState<Date>()
 
     let titleDiscription = `Projects must have > 2,000 Discord members (with > 300 being online), and  > 1,000 Twitter followers before showing up on the list. \n"# Tweet Interactions" gets an average of the Comments / Likes / Retweets (over the last 5 tweets), and adds them. The Fox logo in the price is the official Token price that comes from the Fox Token Market`
 
@@ -256,21 +259,22 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                 events={isSearch ? searchEvent : myEvents }
                                 components = {{ toolbar : CustomCalenderToolbar, }}
                                 localizer={localizer}
-                                onSelectEvent={handleSelectEvent}
+                                // onSelectEvent={handleSelectEvent}
                                 selectable
                                 onNavigate = {(action: Date)=> onNavigate(action)}
                                 style={{ height: isMobile ? '80vh' : 700, width:isMobile ? '90vw' : '' }}
                                 startAccessor='start'
                                 endAccessor='end'
                                 date={selectDate}
-                                popup={showMorePopup}
-                                popupOffset={{x: 0, y: 0}}
+                                // popup={showMorePopup}
+                                // popupOffset={{x: 0, y: 0}}
+                                onShowMore={(events: any[], date: Date) => {setShowCalendarPopup((n)=> !n); setEventDate(date); setMoreEvents(events)}}
                         />
                     </div>
-                    <IonModal mode='ios' isOpen={openEventModal} onDidDismiss={() => {setOpenEventModal(false); setShowMorePopup(true)}} cssClass={isMobile ? `${showGraph ? 'calender-modal-mobile' : 'calender-modal-mobile-nochart'}` : `${showGraph ? 'calender-modal-web' : 'calender-modal-web-nochart'}`} >
+                    <IonModal isOpen={openEventModal} onDidDismiss={() => {setOpenEventModal(false); setShowMorePopup(true)}} cssClass={isMobile ? `${showGraph ? 'calender-modal-mobile' : 'calender-modal-mobile-nochart'}` : `${showGraph ? 'calender-modal-web' : 'calender-modal-web-nochart'}`} >
                         <IonContent>
                                 <div className='flex popup-half-bg'>
-                                    <div className='absolute top-2 right-3  cursor-pointer' onClick={() => {setOpenEventModal(false); setShowMorePopup(true)}}>
+                                    <div className='absolute top-2 right-3 cursor-pointer' onClick={() => {setOpenEventModal(false); setShowMorePopup(true)}}>
                                         <IonIcon icon={close} className="h-6 w-6"/>
                                     </div>
                                     <div>
@@ -319,6 +323,22 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                             </div>
                         </IonContent>
                     </IonModal>
+
+                    {/* show more popup  */}
+                    
+                    <IonPopover isOpen={showCalenarPopup} onDidDismiss={()=>setShowCalendarPopup(false)}>
+                        <IonContent >
+                            <div className='pl-2 h-10 items-center flex'>{ moment (eventDate).format('ll')}</div>
+                            <div className='w-full h-0.5 mb-1 popup-devider'/>
+                            {moreEvents && moreEvents.map((item: any,index: any)=>{
+                                return(
+                                    <div key={index} onClick={()=>{setOpenEventModal(true); handleSelectEvent(item); setShowCalendarPopup(false) }} className='my-px text-white pl-2 pr-1 items-center flex rounded-md mx-px cursor-pointer w-full' style={{backgroundColor:'#3174AD'}}>
+                                        <div>{item.title}</div>
+                                    </div>
+                                )
+                            }) }
+                        </IonContent>
+                    </IonPopover>
                 </>
             }
             </>
