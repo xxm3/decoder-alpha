@@ -211,8 +211,8 @@ function Table<RowData extends object>(
 							align-item: isMobile ? center : "";
 							display:flex;
 							justify-content: isMobile ? center : "";
-}
-						}
+                        }
+						
 			`}
             >
                 <div className="sm:hidden">{title}</div>

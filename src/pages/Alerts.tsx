@@ -170,6 +170,10 @@ function StackedSearch({foo, onSubmit}: any) {
                                              href="https://support.discord.com/hc/en-us/articles/217916488-Blocking-Privacy-Settings-">you
                             must enable DMs from all users in our server</a> (note we will NEVER DM you with mint
                             links).
+
+                            {/*TODO-aries */}
+                            <br/>
+                            <b className="text-red-500">Note: Some bugs are present with this, where it won't send any alerts, or send alerts a day late, or send duplicate alerts. We're slowly working on it - and this is disabled until then, sorry!</b>
                         </p>
                     </div>
                 </div>

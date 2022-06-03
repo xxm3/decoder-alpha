@@ -53,11 +53,28 @@
 }
 .calender-modal-web .modal-wrapper {
     --width: 50vw;
-    --height: 50%;
+    --height: 100%;
+    background: transparent;
+    --background: transparent;
+
+}
+.calender-modal-web-nochart .modal-wrapper {
+    --width: 50vw;
+    --height: 100%;
+    background: transparent;
+    --background: transparent;
 }
 .calender-modal-mobile .modal-wrapper {
-    --width: 90vw;
-    --height: 35%;
+    --width: 98vw;
+     --height: 100%;
+    background: transparent;
+    --background: transparent;
+}
+.calender-modal-mobile-nochart .modal-wrapper {
+    --width: 98vw;
+    --height: 100%;
+    background: transparent;
+    --background: transparent;
 }
 
 .rbc-overlay {
@@ -68,6 +85,10 @@
     background-color: #202124 !important;
     box-shadow: 0 5px 15px rgb(0 0 0 / 25%);
     padding: 10px;
+    /* margin-top: -20% !important; */
+    overflow-y: scroll !important;
+    max-height: 340px !important;
+   
 }
 .rbc-timeslot-group {
     min-height: 200px !important;
@@ -75,9 +96,68 @@
 .custome-event .rbc-event{
     font-size: 14px !important;
     height: 23px !important;
-   padding-top: -5px !important;
+    padding-top: -5px !important;
   }
 
 .show-more-btn .rbc-show-more {
     font-size: 11px !important;
+}
+
+.c-ion-select{
+    width: 300px;
+    border: 2px solid rgba(171, 171, 171, 0.876);    
+    border-radius: 40px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-right: 10px;
+}
+ion-item{
+    --inner-border-width: 0 0 0 0;
+}
+ion-select-popover ion-list {
+    height: 400px;
+    overflow: auto;
+}
+ion-select-popover .sc-ion-popover-md-h{
+    --width: 220px;
+    --max-height: 400px;
+}
+@media screen and (max-width: 475px) {
+    .c-ion-select{
+        width: 100%;
+    }
+    ion-select-popover .sc-ion-popover-md-h{
+        --width: 290px !important;
+    }
+    .rbc-overlay {
+        position: absolute;
+        margin-top: -70% !important;
+        overflow-y: scroll !important;
+        max-height: 280px !important;
+        justify-self: center !important;
+    }
+}
+.popup-half-bg{
+    background-color: var(--ion-color-step-150);
+}
+.popup-devider{
+    background-color: var(--ion-color-step-350);
+}
+.schedule-popup-inner{
+    width:100%;
+    position: relative;
+}
+.schedule-popup-outer{
+height:100%;
+display: flex;
+    align-items: center;
+    max-height: 100vh;
+    overflow-y: auto !important;
+}
+.schedule-popup-wrapper{
+    background: transparent;
+    --background: transparent;
+}
+.schedule-popup{
+    height:100%;
 }

@@ -93,15 +93,23 @@ function Login() {
                 .then(({ data }) => {
                     // console.log(data);
 					// auth.setPersistence(browserLocalPersistence)
-                    localStorage.setItem('servers',JSON.stringify(data.servers))
-                    localStorage.setItem('roleList',JSON.stringify(data.roles))
+                    localStorage.setItem('servers',JSON.stringify(data.servers));
+                    localStorage.setItem('roleList',JSON.stringify(data.roles));
+                    localStorage.setItem('isLogin','isLogin')
+
+                    // console.log('servers: ' + data.servers);
+                    console.log('roles: ' + data.roles);
+
                     return signInWithCustomToken(auth, data.body);
                 })
                 .catch((e) => {
-                    console.log(e);
-                    if (e.response.status === 403)
-                        setError("You need a proper role in Discord before accessing the site. Buy the NFT then go to the 'matrica-verify' channel");
-                    else setError('Something went wrong. Please try again, and try using a VPN program, not a VPN in your browser (ie. people in Russia currently banned by Google)');
+                    console.error(e);
+
+                    if (e?.response?.status === 403){
+                        setError("You need a proper role in Discord before accessing the site. Buy the NFT then go to the 'metahelix-verify' channel");
+                    }else {
+                        setError('Something went wrong, please try again. You may also try using a VPN program, and not a VPN in your browser (as people in Russia are  currently banned by Google). Some anti-virus programs like Bullguard can block the site, so unblock it there.');
+                    }
                 })
                 .finally(() => {
                     setLoading(false);
@@ -122,12 +130,14 @@ function Login() {
                         <>
                             <IonRow>
                                 <IonCol size='6' >
+                                <div className='ion-text-right'>
                                     <IonButton href="#"  className='iosButton ionTextRight' fill='clear'
                                         onClick={() =>{
                                            window.open( `https://apps.apple.com/in/app/sol-decoder/id1619922481`);
                                         }} >
                                             <img src={IosLogo} />
                                     </IonButton>
+                                </div>
                                 </IonCol>
                                 <IonCol size='6'  >
                                     <IonButton href="#" className='androidButton ionTextLeft' fill='clear'
@@ -148,7 +158,7 @@ function Login() {
                                         Sign In
                                     </IonLabel>
                                 </div>
-                                <div className={`flex flex-col mr-2 ${isMobileDevice ? "mt-6" : 'mt-10'}`}>
+                                <div className={`flex flex-col mr-2 ${isMobileDevice ? "mt-6 mr-0" : 'mt-10'}`}>
                                     <IonButton className='mb-4 h-11' color={ mode === 'dark' ? '' : "dark"}
                                         onClick={() => {
                                             const params = new URLSearchParams();
@@ -192,7 +202,14 @@ function Login() {
                                 </div>
                             </div>
 
-                            <div className={`login-right-side-wrapper w-full justify-center flex flex-col rounded-md ${isMobileDevice ? 'pl-4 mt-4 pb-4 pt-4 pr-2' : 'pl-10 pr-4 mt-4' }`} style={{height:isMobileDevice ? 'auto'  : '750px' }}>
+
+                            <div className={`login-right-side-wrapper w-full justify-center flex flex-col rounded-md ${isMobileDevice ? 'pl-4 mt-4 pb-4 pt-4 pr-2' : 'pl-10 pr-4' }`} style={{height:isMobileDevice ? 'auto'  : '' }}>
+
+                                {/*this is the error msg at top! no delete!*/}
+                                <p className="text-red-500 my-4 text-xl">
+                                    {error}
+                                </p>
+
                                 <div className="title-text text-4xl font-bold flex">
                                     New to<br/>SOL Decoder ?
                                 </div>
@@ -213,7 +230,7 @@ function Login() {
                                     <hr/>
                                     <br/><span>Full access to SOL Decoder is only available to those holding one of our NFTs. If you still want to click around the site to see what we offer, then try out the demo below. Note that you will only see old data, and some features are disabled.</span>
 
-                                    <div className={`mt-4 flex ${isMobileDevice ? 'self-center flex-col' : ' flex-row'}`}>
+                                    <div className={`mt-4 mb-5 flex ${isMobileDevice ? 'self-center flex-col' : ' flex-row'}`}>
                                         <IonButton className='h-11 w-48' color="dark" onClick={() => {signInAnonymously(auth)}}>
                                             Try our demo
                                         </IonButton>

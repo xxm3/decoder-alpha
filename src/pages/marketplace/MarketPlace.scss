@@ -4,10 +4,6 @@
         cursor: pointer;
         background-image: linear-gradient(to right, #924cfa, #00beca);
         opacity: 0.5;
-        .c-badge {
-            color: #ffffff;
-            background-color: #22277d;
-        }
         &:focus {
             background-image: linear-gradient(to right, #924cfa, #00beca);
             opacity: 1;
@@ -17,11 +13,11 @@
         min-width: 260px;
         max-width: 300px;
         // min-height: 55vh;
-        padding: 1rem;
+        // padding: 1rem;
         --tw-bg-opacity: 1;
         background-color: rgba(10, 12, 46, var(--tw-bg-opacity));
+        background-color: #2A3246ad;
         transition: all 0.5s ease;
-        font-family: Geomanist, monospace !important;
         .h-100 {
             height: 100%;
         }
@@ -40,8 +36,9 @@
                 background-color: #ffffff66;
             }
             .c-table {
-                font-size: 12px;
+                font-size: 14px;
                 margin: 10px 0px;
+                // font-family: Geomanist, monospace !important;
             }
             .c-badge {
                 height: 10px;
@@ -58,7 +55,7 @@
         }
         .image-box {
             width: 100%;
-            max-height: 180px;
+            max-height: 260px;
             opacity: 1;
             padding: 0px;
             // border :1px solid white !important;
@@ -69,9 +66,31 @@
                 object-fit: cover;
             }
         }
-        &:hover {
-            // transform: translateY(-0.5rem);
-            box-shadow: 0px 20px 35px 10px rgb(25 31 120 / 30%), 0 8px 20px -4px rgb(255 255 255 / 20%);
+        // &:hover {
+        //     // transform: translateY(-0.5rem);
+        //     box-shadow: 0px 20px 35px 10px rgb(25 31 120 / 30%), 0 8px 20px -4px rgb(255 255 255 / 20%);
+        // }
+    }
+    .bg-grad-green-blue {
+        background-image: linear-gradient(90deg, #6fdda9, #6276df);
+    }
+    .action-button {
+        background-image: linear-gradient(90deg, #737C9B, #3C476D);
+        &:active,
+        &:target,
+        &:focus {
+            background-image: linear-gradient(90deg, #6fdda9, #6276df);
+        }
+    }
+    .c-text-green-light {
+        color: #6FDAAB;
+    }
+    .c-text-dark-blue {
+        color: #77BDF4;
+    }
+    #quantity-input {
+        &:focus-visible {
+            outline: none !important;
         }
     }
 }

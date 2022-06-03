@@ -30,7 +30,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({
     message: { id },
     onClose,
 }) => {
-    // TODO? bugged demo...
     const defaultPageParam: PageParam = {
         messageId: message.id,
         message: message,
@@ -38,7 +37,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         postLimit: 100,
         // #s REPEATED on MessageThread.tsx & priorAndSubsequent.js
     };
-
     async function fetchContext({
         pageParam = defaultPageParam,
     }: QueryFunctionContext<MessageThreadQueryKey, PageParam>) {
@@ -52,11 +50,13 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             //     // @ts-expect-error
             //     time : message.createdAt ? message.createdAt : message.time_stamp
             // }))
-            data.subsequentMsg = data && data.subsequentMsg.map(message => ({
-                ...message,
-                // @ts-expect-error
-                time : message.createdAt ? message.createdAt : message.time_stamp
-            }))
+
+                data.subsequentMsg = data?.subsequentMsg?.map(message => ({
+                    ...message,
+                    // @ts-expect-error
+                    time : message ? message.createdAt : message.time_stamp
+                }))
+
             if (pageParam === defaultPageParam)
                 // return [...data.priorMsg, message, ...data.subsequentMsg];
                 return [message, ...data.subsequentMsg];
@@ -64,7 +64,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             return [...data.subsequentMsg];
 
         } catch (e) {
-            // console.error('try/catch in MessageThread.tsx: ', e);
+            console.error('try/catch in MessageThread.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
 
             // if (error && error.response) {
@@ -89,14 +89,14 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             return lastMessageId
                 ? {
                       messageId: lastMessageId,
-                      message: null, // TODO...
+                      message: null,
                       postLimit: 10,
                       priorLimit: 0,
                   }
                 : undefined;
         },
         getPreviousPageParam: (firstPage) => {
-            let firstMessageId 
+            let firstMessageId
             if(firstPage[0]){
                 firstMessageId = firstPage[0].id;
             }
@@ -143,7 +143,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                     ref={containerRef}
                     className="p-5 c-res-messages messages h-full w-full mx-auto"
                 >
-                    <div onClick={()=> setIsModalOpen(false)}  className=' justify-end text-red-500  flex m-3'  >
+                    <div onClick={()=> setIsModalOpen(false)}  className=' justify-end text-red-500 flex m-3 cursor-pointer'  >
                         <HighlightOffIcon className='text-2xl'/>
                     </div>
                     <div className='overflow-y-scroll h-full w-full mx-auto p-5'>

@@ -18,7 +18,7 @@ import { Network } from '@capacitor/network';
 import { useEffect, useRef, useState } from 'react';
 import { auth } from './firebase';
 import { IUser } from './types/User';
-import { Route, Switch } from 'react-router';
+import { Redirect, Route, Switch, useHistory } from 'react-router';
 import './App.css';
 import Loader from './components/Loader';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -90,11 +90,14 @@ import WhitelistMarketplace from './pages/bots/WhitelistMarketplace';
 const App = () => {
     const [networkState, setNetworkState] = useState(true);
 	const [present, dismiss] = useIonToast();
+
 	// const [role, setRole] = useState('')
 
     //offline Online
     useEffect(() => {
         statusCheck();
+        checkIsLogin();
+        // localStorage.setItem('isLogin','0')
         const loadEvent = async () => {
             window.addEventListener('online', () => {
                 setNetworkState(true);
@@ -121,6 +124,17 @@ const App = () => {
         };
     }, []);
 
+
+    const checkIsLogin = () => {
+        let isLogin = localStorage.getItem('isLogin')
+        if(isLogin === 'isLogin'){
+            localStorage.setItem('isLogin','isLogin')
+        }else{
+            localStorage.setItem('isLogin','isNotLogin')
+        }
+    }
+
+
 	// get Current App version
     // let getCurrentVersion = async () => {
     //     let getVersionCode = await AppVersion.getVersionCode();
@@ -146,7 +160,10 @@ const App = () => {
 			let roleList:any = localStorage.getItem('roleList');
 
 			getRoleType(JSON.parse(roleList));
-		}
+		}else{
+            console.info('no roleList found for user');
+        }
+
 	}, [localStorage.getItem('roleList')]);
 
 	// get role type
@@ -164,9 +181,11 @@ const App = () => {
                 }
             )
             .then(({ data }) => {
-				localStorage.setItem('role',data.roleType)
-				 // localStorage.setItem('role','3NFT')
-				 dispatch(setRole(data.roleType));
+				localStorage.setItem('role',data.roleType);
+
+                // console.log('roleType: ', data.roleType);
+
+                dispatch(setRole(data.roleType));
 
             })
             .catch((error:any) => {
@@ -256,7 +275,7 @@ const App = () => {
                                             <Route path='/marketplace-details' >
                                                 <MarketPlaceDetailLayout />
                                             </Route>
-                                               
+
                                                 {/*  */}
                                                 <Route path="/*">
                                                     <IonPage>
@@ -356,19 +375,10 @@ const App = () => {
                                                                                     }
                                                                                 />
 
-                                                                                {/* bots */}
-                                                                                {/*<ProtectedRoute*/}
-                                                                                {/*    exact*/}
-                                                                                {/*    path="/bots"*/}
-                                                                                {/*    component={*/}
-                                                                                {/*        Bots*/}
-                                                                                {/*    }*/}
-                                                                                {/*/>*/}
-
                                                                                 {/* Calendar page */}
                                                                                 <ProtectedRoute
                                                                                     exact
-                                                                                    path="/schedulecalendar"
+                                                                                    path="/calendar"
                                                                                     component={ ScheduleCalendar }
                                                                                 />
                                                                                 {/* manage server */}
@@ -380,13 +390,18 @@ const App = () => {
                                                                                     }
                                                                                 />
 
+                                                                                {/* if anyone direct access Server module  */}
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/servermodule"
+                                                                                    render={()=> <Redirect to={`/manageserver`} />}
+                                                                                />
+
                                                                                 {/* Server module */}
                                                                                 <ProtectedRoute
                                                                                     exact
-                                                                                    path="/servermodule/:server"
-                                                                                    component={
-                                                                                        ServerModule
-                                                                                    }
+                                                                                    path="/servermodule/:serverId"
+                                                                                    component={ ServerModule }
                                                                                 />
                                                                                 <ProtectedRoute
                                                                                     exact

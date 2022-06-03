@@ -39,7 +39,7 @@ const Whitelist = () => {
         } catch (e) {
             console.error('try/catch in Whitelist.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
-            const msg = error.response ? String(error.response.data.body) : 'Unable to connect. Please try again later';
+            const msg = error?.response ? String(error.response.data.body) : 'Unable to connect. Please try again later';
             present({
                 message: msg,
                 color: 'danger',
@@ -52,7 +52,7 @@ const Whitelist = () => {
     const userWhitelistDataQuery = useQuery(['whitelistData'], getUserClickedData, {
         select: (data: any) => {
             // Error handling
-            if (data.error && data.message) {
+            if (data?.error && data.message) {
                 throw new Error(String(data.message));
             }
 
@@ -107,7 +107,7 @@ const Whitelist = () => {
     // @ts-ignore
     return (
         <div >
-            {userWhitelistDataQuery.isFetching ?
+            {userWhitelistDataQuery?.isFetching ?
                 <div className="flex justify-center items-center">
                     {/*<Loader/>*/}
                     {/*Loading . . .*/}
@@ -121,8 +121,7 @@ const Whitelist = () => {
 
                     {/*-{userWhitelistDataQuery.data}-*/}
                     {/*hidden={userWhitelistDataQuery.data.didAllSiteFunctions}*/}
-                    <div className="secondary-bg-forced m-1 p-4 rounded-xl" hidden={didAllSteps}
-                    >
+                    <div className="secondary-bg-forced m-1 p-4 rounded-xl" hidden={didAllSteps} >
                         <div className={`font-bold pb-1`}>Want to be able to submit your wallet, or help get whitelisted?</div>
                         {/*"used-the-site" role progress*/}
                         <div>
@@ -143,7 +142,7 @@ const Whitelist = () => {
                         <div>
                             <div style={{ listStyle: '' }}>
                                 {
-                                    userWhitelistDataQuery && userWhitelistDataQuery.data.map((step: any) => (
+                                    userWhitelistDataQuery?.data?.map((step: any) => (
                                         <div key={step.step} className="ml-0 mt-2">
                                             <IonIcon className="text-green-500" hidden={step.value === false} icon={checkmarkCircleOutline} />
                                             <IonIcon className="text-red-500" hidden={step.value === true} icon={closeCircleOutline} />

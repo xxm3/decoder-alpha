@@ -86,7 +86,7 @@ const Display: React.FC<{
      */
     return (
         <>
-            <div className="py-5 px-5 messages my-2 overflow-y-scroll rounded-lg">
+            <div className="py-10 px-5 messages my-2 overflow-y-scroll rounded-lg mt-10">
                 {/* bar & line chart */}
                 {/* <DisplayGraph {...{
                     chartDataDailyCount : chartDataDailyCount ? chartDataDailyCount: {},
@@ -97,7 +97,7 @@ const Display: React.FC<{
 
                 {/* list of messages, ie. search results */}
                 {messages.map((m, i) => (
-                    
+
                         <MessageListItem
                             onClick={() => {
                                 if (m.source === 'Twitter') {
@@ -106,7 +106,7 @@ const Display: React.FC<{
                                 } else setSelectedMessage(m);
                             }}
                             message={m}
-                            key={m.id}
+                            key={i}
                         />
                     )
                 )}

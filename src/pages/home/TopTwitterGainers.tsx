@@ -7,7 +7,7 @@ import {Link, useLocation} from "react-router-dom";
 import {IonCard, useIonToast} from "@ionic/react";
 import {useHistory} from "react-router";
 
-const TopSearchWords = () => {
+const TopTwitterGainers = () => {
 
     const [present, dismiss] = useIonToast();
     const history = useHistory();
@@ -15,14 +15,9 @@ const TopSearchWords = () => {
     /**
      * Functions
      */
-    const getSearchedWords = async () => {
+    const getTopFiveTwitterData = async () => {
         try {
-            const {data} = await instance.get(environment.backendApi + '/getSearchedWords', {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-
+            const {data} = await instance.get(environment.backendApi + '/getTopFiveTwitterData', { headers: { 'Content-Type': 'application/json', },})
             return data;
         } catch (e) {
             console.error('try/catch in Search.tsx: ', e);
@@ -34,7 +29,6 @@ const TopSearchWords = () => {
             } else {
                 msg = 'Unable to connect. Please try again later';
             }
-
             present({
                 message: msg,
                 color: 'danger',
@@ -45,10 +39,8 @@ const TopSearchWords = () => {
         }
     }
 
-    const topSearchWordsQuery = useQuery(['searchWords'], getSearchedWords, {
+    const topSearchWordsQuery = useQuery(['twitterdata'], getTopFiveTwitterData, {
         select: (data: any) => {
-
-            // Error handling
             if (data?.error && data.message) {
                 throw new Error(String(data.message));
             }
@@ -56,7 +48,6 @@ const TopSearchWords = () => {
                 ...data,
             }
         },
-        // refetchOnWindowFocus: true,
         retry: false
     })
 
@@ -64,43 +55,30 @@ const TopSearchWords = () => {
      * Use Effects
      */
 
-    return (
-        // bg-satin-3 rounded-lg pt-3 pb-6 pr-3 pl-3 h-fit xl:pb-3 2xl:pb-2 lg:pb-4
-        <div className="secondary-bg-forced m-1 p-4 rounded-xl mt-7">
+     const formatNumber = (n: any) => {
+        if (n < 1e3) return n;
+        if (n >= 1e3) return +(n / 1e3).toFixed(1) + 'K';
+    };
+     return (
+        <div className="secondary-bg-forced m-1 p-4 rounded-xl mt-6">
             {topSearchWordsQuery?.isFetching ?
                 <div className="flex justify-center items-center">
-                    {/*<Loader/>*/}
                     Loading . . .
                 </div>
                 :
                 <>
-                    <div className={`font-bold pb-1 tracking-wider text-xl`}>Top searches of past day</div>
-                    <div>
-                    <ul style={{listStyle: 'disc'}}>
-                        <li  className="ml-8">
-                            Word 1
-                        </li>
-                        <li  className="ml-8">
-                            Word 2
-                        </li>
-                        <li  className="ml-8">
-                            Word 3
-                        </li>
-                        <li  className="ml-8">
-                            Word 4
-                        </li>
-                        <li  className="ml-8">
-                            Word 5
-                        </li>
-                    </ul>
-
+                    <div className={`font-bold pb-1 tracking-wider text-xl`}>Top Twitter Gainers - 24h</div>
+                    {topSearchWordsQuery?.data?.data?.map((item:any,index:number)=>{
+                        return (
+                            <div className='flex flex-row justify-between' key={index}>
+                                <div>{item.mint_detail.name}</div>
+                            <div>+{formatNumber(item.tweetInteractions)}</div>
                     </div>
+                        )
+                    })}
+                    
                 </>}
         </div>
     )
 }
-
-
-
-
-export default TopSearchWords
+export default TopTwitterGainers
