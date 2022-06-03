@@ -173,7 +173,7 @@ function StackedSearch({foo, onSubmit}: any) {
 
                             {/*TODO-aries */}
                             <br/>
-                            <b className="text-red-500">Note: Some bugs are present with this, where it won't send any alerts, or send alerts a day late, or send duplicate alerts. We're slowly working on it!</b>
+                            <b className="text-red-500">Note: Some bugs are present with this, where it won't send any alerts, or send alerts a day late, or send duplicate alerts. We're slowly working on it - and this is disabled until then, sorry!</b>
                         </p>
                     </div>
                 </div>

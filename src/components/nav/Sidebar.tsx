@@ -133,9 +133,9 @@ function Sidebar() {
 
                 {/* logout Button  */}
                 {isLogin === 'isLogin' ? <div>
-                <IonButton onClick={() => setLogoutPopupOpen(true)} color="primary" className="px-2 mx-0 w-full"> Logout </IonButton>
+                <span onClick={() => setLogoutPopupOpen(true)} color="primary" className="px-2 mx-0 w-full"> Logout </span>
                 </div> : '' }
-                
+
 
                 {/* hide wallet button in mobile so don't comment out */}
                 {/* <div className="xl:hidden lg:hidden md:hidden">
@@ -150,10 +150,10 @@ function Sidebar() {
             <IonModal isOpen={logoutPopupOpen} onDidDismiss={() => setLogoutPopupOpen(false)} cssClass={isMobile ? 'logout-modal-mobile' :'logout-modal-web'} >
                 <IonContent className="flex items-center">
                     <div className='text-xl font-bold text-center w-full mt-5'>
-                        Are you sure !
+                        Logout?
                     </div>
                     <div className=' text-center w-full mt-8'>
-                        you want to Logout ?
+                        Are you sure want to Logout of Discord?
                     </div>
                     <div className="flex flex-row mt-10">
                         <IonButton onClick={() => logOutHandler()} color="primary" className="px-2 mx-0 w-full"> Logout </IonButton>
