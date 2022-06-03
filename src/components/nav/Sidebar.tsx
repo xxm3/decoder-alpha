@@ -103,6 +103,7 @@ function Sidebar() {
                     title="Whitelist Marketplace"
                     icon={diamondOutline}
                     to="/whitelistmarketplace"
+					needsRole={false}
                 />
                 <NavLink
                     title="Alerts"

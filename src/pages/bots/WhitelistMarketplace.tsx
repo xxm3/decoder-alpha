@@ -9,7 +9,7 @@ function WhitelistMarketplace() {
         ['whitelistPartnerships'],
         async () => {
             const { data: whitelists } = await instance.get<IWhitelist[]>(
-                '/whitelistPartnerships/all'
+                '/whitelistPartnerships/me'
             );
             return whitelists;
         }

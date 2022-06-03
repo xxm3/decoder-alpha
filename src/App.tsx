@@ -84,8 +84,17 @@ import CreatetWalletLayout from './pages/createtWallet/CreatetWalletLayout';
 import MarketPlaceDetailLayout from './pages/marketPlaceDetail/MarketPlaceDetailLayout';
 import InitiateWhitelist from './pages/bots/InitiateWhitelist';
 import WhitelistMarketplace from './pages/bots/WhitelistMarketplace';
+import { setHasRoles } from './redux/slices/userSlice';
 
-
+function b64DecodeUnicode(str : string) {
+    return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
+        let code = p.charCodeAt(0).toString(16).toUpperCase();
+        if (code.length < 2) {
+            code = '0' + code;
+        }
+        return '%' + code;
+    }));
+  }
 
 const App = () => {
     const [networkState, setNetworkState] = useState(true);
@@ -230,16 +239,26 @@ const App = () => {
 
         // code that is supposed to update the authorization header whenever the token changes
         return auth.onAuthStateChanged((context) => {
+
             if (context) {
                 setUser({ id: context.uid });
                 isAnonymous.current = context.isAnonymous;
                 if (context.isAnonymous) {
                     dispatch(setDemo(true));
                 }
+				else { 
+					context.getIdTokenResult().then((idTokenResult) => {
+						console.log(idTokenResult.claims.hasRoles, typeof idTokenResult.claims.hasRoles)
+						dispatch(setHasRoles(Boolean(idTokenResult.claims.hasRoles)));
+					})
+				}
             } else {
                 if (isAnonymous.current) {
                     dispatch(setDemo(false));
                 }
+				else { 
+					dispatch(setHasRoles(false));
+				}
                 isAnonymous.current = null;
                 setUser(null);
             }
@@ -416,6 +435,7 @@ const App = () => {
                                                                                     component={
                                                                                        WhitelistMarketplace
                                                                                     }
+																					needsRole={false}
                                                                                 />
 
                                                                                 {/*login button etc...*/}
