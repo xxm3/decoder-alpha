@@ -51,23 +51,23 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     /**
      * Use Effects
      */
-     useEffect(() => {
-        if(!localStorage.getItem('role')){
-            history.push('/manageserver')
-            return
-        }else{
-            setRole(localStorage.getItem('role'))
-        }
+    //  useEffect(() => {
+    //     if(!localStorage.getItem('role')){
+    //         history.push('/manageserver')
+    //         return
+    //     }else{
+    //         setRole(localStorage.getItem('role'))
+    //     }
 
-        if (window.innerWidth < 525) {
-            setIsMobile(true);
-        }
+    //     if (window.innerWidth < 525) {
+    //         setIsMobile(true);
+    //     }
 
-        // if (performance.navigation.type == 1) {
-        //     history.push('/manageserver')
-        // } 
+    //     // if (performance.navigation.type == 1) {
+    //     //     history.push('/manageserver')
+    //     // } 
 
-    }, [window.innerWidth]);
+    // }, [window.innerWidth]);
 
     // get guilds
     useEffect(() => {
@@ -571,7 +571,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </div>
                 </div>
             </div>
-
+			<div className="mt-10 mb-5 w-full flex justify-center">
+            	<IonButton className="text-base" css={css`
+					--padding-top: 25px;
+					--padding-bottom: 25px;
+					--padding-end: 20px;
+					--padding-start: 20px;
+				`} onClick={() => history.push(`/initiatewhitelist/${serverId}`)}>
+	                Initiate Whitelist
+	            </IonButton>
+            </div>
         </>
     );
 };
