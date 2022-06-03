@@ -16,6 +16,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import { instance } from '../../../axios';
 import Loader from '../../../components/Loader';
+import { IonRow, IonCol } from '@ionic/react';
 
 type props = {
     addServerFlag: boolean;
@@ -96,14 +97,13 @@ const Addserver: React.FC<props> = (props) => {
             }
         }, [serverId]);
 
-
-        let getRoleType = async(roleList:any,id:string) => {
+        let getRoleType = async (roleList: any, id: string) => {
             // console.log("roleList",roleList);
             setIsLoading(true);
             instance
                 .post(
                     `getRoleType`,
-                    {roles:roleList},
+                    { roles: roleList },
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -111,22 +111,20 @@ const Addserver: React.FC<props> = (props) => {
                     }
                 )
                 .then(({ data }) => {
-                    
-                    if(data.roleType!=="No Roles"){
-                        SetAdmin(id)
-                    }else{
-                       present({
-                        message: 'This admin has no NFTS available.',
-                        color: 'danger',
-                        duration: 5000,
-                        buttons: [{ text: 'X', handler: () => dismiss() }],
-                    }); 
+                    if (data.roleType !== 'No Roles') {
+                        SetAdmin(id);
+                    } else {
+                        present({
+                            message: 'This admin has no NFTS available.',
+                            color: 'danger',
+                            duration: 5000,
+                            buttons: [{ text: 'X', handler: () => dismiss() }],
+                        });
                     }
-                    
                 })
-                .catch((error:any) => {
+                .catch((error: any) => {
                     console.error('error', error);
-    
+
                     let msg = '';
                     if (error && error.response) {
                         msg = String(error.response.data.body);
@@ -144,7 +142,7 @@ const Addserver: React.FC<props> = (props) => {
                     setIsLoading(false);
                     // console.log("done")
                 });
-        }
+        };
 
         // Set Admin
 
@@ -215,7 +213,9 @@ const Addserver: React.FC<props> = (props) => {
                 <List dense={dense}>
                     {adminsList.map((admin: any, index) => {
                         return (
-                            <ListItem key={index}>
+                            <IonRow>
+                                <IonCol size-lg="5" size-md="9" size="12">
+                                <ListItem key={index}>
                                 <ListItemAvatar>
                                     <Avatar>
                                         {admin?.user?.avatar ? (
@@ -238,20 +238,22 @@ const Addserver: React.FC<props> = (props) => {
                                     {!AssigenAdmin.includes(
                                         admin?.user?.id
                                     ) && (
-                                        <IconButton
-                                            edge="end"
-                                            aria-label="delete"
-                                            onClick={() =>{
+                                        <IonButton
+                                            color="primary"
+                                            className="text-sm space-x-1"
+                                            onClick={() =>
                                                 getRoleType(admin.roles,admin?.user?.id)
-                                                // SetAdmin(admin?.user?.id)
-                                            }
                                             }
                                         >
-                                            <AddBoxIcon className="text-white" />
-                                        </IconButton>
+                                            <p>Assign</p>
+                                        </IonButton>
                                     )}
                                 </ListItemSecondaryAction>
                             </ListItem>
+                                </IonCol>
+                                <IonCol></IonCol>
+                                </IonRow> 
+                           
                         );
                     })}
                 </List>
