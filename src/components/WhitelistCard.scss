@@ -1,0 +1,42 @@
+.whitelistInfo > *:nth-child(even) {
+	text-align: right;
+	
+}
+.light {
+	.whitelistInfo > *:nth-child(even) {
+		font-weight: 500;
+	}
+	.whitelistInfo > *:nth-of-type(even) {
+		color: #361616;
+	}
+	.whitelistInfo > *:nth-of-type(4n) {
+		color: #4c4316;
+	}
+}
+
+.dark {
+	.whitelistInfo > *:nth-of-type(even) {
+		color: #6fdaab;
+	}
+	.whitelistInfo > *:nth-of-type(4n) {
+		color: #77bdf4;
+	}
+}
+
+.timeLeft {
+	@apply my-4
+}
+
+.dark {
+	.timeCard {
+		background-color: #2a2a74;
+		@apply text-white
+	}
+}
+
+.light {
+	.timeCard {
+		background-color: #dfdfdf;
+		color: var(--ion-text-color)
+	}
+}

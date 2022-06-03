@@ -83,6 +83,7 @@ import ConnectWalletLayout from './pages/connect-wallet/ConnectWalletLayout';
 import CreatetWalletLayout from './pages/createtWallet/CreatetWalletLayout';
 import MarketPlaceDetailLayout from './pages/marketPlaceDetail/MarketPlaceDetailLayout';
 import InitiateWhitelist from './pages/bots/InitiateWhitelist';
+import WhitelistMarketplace from './pages/bots/WhitelistMarketplace';
 
 
 
@@ -392,6 +393,13 @@ const App = () => {
                                                                                     path="/initiatewhitelist/:server"
                                                                                     component={
                                                                                        InitiateWhitelist
+                                                                                    }
+                                                                                />
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/whitelistmarketplace"
+                                                                                    component={
+                                                                                       WhitelistMarketplace
                                                                                     }
                                                                                 />
 

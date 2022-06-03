@@ -200,7 +200,7 @@ http://ionicframework.com/docs/theming/ */
 
 }
 
-html.dark {
+html.dark, .dark {
 	--ion-background-color : #01021A;
 	--ion-background-color-rgb : 1,2,26;
 	--ion-text-color: var(--ion-color-primary-contrast);
