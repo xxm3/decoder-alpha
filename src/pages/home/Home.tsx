@@ -23,9 +23,9 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
     const [isMobile, setIsMobile] = useState(false);
     const [isHardUpdateOpen, setIsHardUpdateOpen] = useState(false)
 
-    // const useQuery = () => new URLSearchParams(useLocation().search);
-    // const query = useQuery();
-    // const devMode = query.get('devMode');
+    const useQuery = () => new URLSearchParams(useLocation().search);
+    const query = useQuery();
+    const devMode = query.get('devMode');
 
     /**
      * Use Effects
@@ -103,13 +103,11 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                 </>
             }
 
-            {/* for user to get used-the-site- role */}
-            {/*<div hidden={!devMode}>*/}
-
-
-            {/*TODO - sumit: enable once fixed */}
+            {/*TODO: WTF TEST IT???*/}
            {/* Word count of yesterday, last 3 days, last 5 days */}
-           {/* <WordsCount/>*/}
+            <div hidden={!devMode}>
+                <WordsCount/>
+            </div>
 
             {/* Top search words of past dat */}
             {/* <TopSearchWords/> */}
