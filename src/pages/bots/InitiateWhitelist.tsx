@@ -22,14 +22,7 @@ import { useParams } from 'react-router';
 import { instance } from '../../axios';
 import { Server } from '../../types/Server';
 import { AxiosError } from 'axios';
-
-const isAxiosError = (error: unknown): error is AxiosError => {
-    return (
-        error instanceof Error &&
-        error.hasOwnProperty('isAxiosError') &&
-        (error as AxiosError).isAxiosError
-    );
-};
+import isAxiosError from '../../util/isAxiosError';
 
 interface FormFields {
     image: File & {
@@ -454,6 +447,9 @@ function InitiateWhitelist() {
                         <Controller
                             name="image"
                             control={control}
+							rules={{
+								required: true,
+							}}
                             render={({
                                 field: { onChange, onBlur, value, name, ref },
                                 fieldState: { error },
