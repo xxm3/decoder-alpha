@@ -9,6 +9,7 @@ import { useHistory, useLocation, useParams } from 'react-router';
 import Loader from '../../components/Loader';
 import Help from '../../components/Help';
 import { Server } from '../../types/Server';
+import Addserver from './components/Addserver';
 
 interface LocationParams {
     pathname: string;
@@ -42,6 +43,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [role, setRole] = useState<any>(null)
     const [authorizedModule, setAuthorizedModule] = useState<any>()
     const { serverId } = useParams<{serverId : string}>();
+    const [addServerFlag, setAddServerFlag] = useState(false)
 
     /**
      * Use Effects
@@ -58,9 +60,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             setIsMobile(true);
         }
 
-        if (performance.navigation.type == 1) {
-            history.push('/manageserver')
-        } 
+        // if (performance.navigation.type == 1) {
+        //     history.push('/manageserver')
+        // } 
 
     }, [window.innerWidth]);
 
@@ -296,6 +298,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         );
     }
 
+    if(addServerFlag && serverId){
+        return (
+            <Addserver addServerFlag={addServerFlag} setAddServerFlag={setAddServerFlag} serverId={serverId} />
+        )
+    }
+
     return (
         <>
             <Backdrop style={{ color: '#fff', zIndex: 1000, }} open={backdrop} >
@@ -309,8 +317,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             </div>
             <div className={`text-base flex ${isMobile ? 'mt-2' :''}`}>
                 {authorizedModule === 0 ?
-                    <span className="text-red-500">You don't have enough NFTs to add packages. Please purchase the appropriate amount and have your role verified in Discord </span> :
+                <>
+                    <span className="text-red-500">You don't have enough NFTs to add packages. Please purchase the appropriate amount and have your role verified in Discord </span>
+                    <Addserver addServerFlag={addServerFlag} setAddServerFlag={setAddServerFlag} />
+                </> :
                     <span className="text-green-500">You are authorized to add {authorizedModule} package(s)</span>}
+                    
             </div>
 
             <div className="flex flex-row justify-center w-full mt-9">

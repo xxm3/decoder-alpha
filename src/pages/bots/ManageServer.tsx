@@ -8,6 +8,7 @@ import './ManageServer.scss';
 import BgImage from '../../images/logo-transparent.png';
 import { useHistory, useLocation } from 'react-router';
 import Loader from '../../components/Loader';
+import Addserver from './components/Addserver';
 
 interface Server {
     id: string;
@@ -28,6 +29,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [present, dismiss] = useIonToast();
     const [noServers, setNoServers] = useState<boolean>(false)
+    
 
     /**
      * Use Effects
@@ -90,6 +92,9 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             });
     };
 
+
+  
+
     return (
         <>
             <Backdrop style={{ color: '#fff', zIndex: 1000, }} open={isLoading} >
@@ -100,7 +105,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
 
             {noServers ?
                 <div className='text-xl text-center text-red-500'>
-                    Unable to find any servers you are the owner of. If you are one, then reset your cookies and try logging in again (or use a new browser)
+                    Unable to find any servers you are the owner of. If you are one, then logout in the sidebar and try logging in again (or use a new browser)
                 </div> :
             <>
                 <IonLabel className="text-4xl font-semibold mb-3">
