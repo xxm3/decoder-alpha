@@ -379,8 +379,9 @@ const App = () => {
                                                                                     path="/calendar"
                                                                                     component={ ScheduleCalendar }
                                                                                 />
+
                                                                                 {/* manage server */}
-                                                                                <ProtectedRoute
+                                                                                <AppRoute
                                                                                     exact
                                                                                     path="/manageserver"
                                                                                     component={
@@ -389,14 +390,14 @@ const App = () => {
                                                                                 />
 
                                                                                 {/* if anyone direct access Server module  */}
-                                                                                <ProtectedRoute
+                                                                                <AppRoute
                                                                                     exact
                                                                                     path="/servermodule"
                                                                                     render={()=> <Redirect to={`/manageserver`} />}
                                                                                 />
 
                                                                                 {/* Server module */}
-                                                                                <ProtectedRoute
+                                                                                <AppRoute
                                                                                     exact
                                                                                     path="/servermodule/:serverId"
                                                                                     component={ ServerModule }

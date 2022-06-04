@@ -106,16 +106,18 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
                         </div>
                     </div>
-                    <div className='flex flex-row w-full'>
-                        <div className='w-1/2 '>
-                            {/*Top Discord Gainers*/}
-                            <TopDiscordGainers/>
-                        </div>
-                        <div className='w-1/2'>
-                            {/* Top Twitter Gainers*/}
-                            <TopTwitterGainers/>
-                        </div>
-                    </div>
+
+                    {/*TODO: waiting my other todo... in scheudle howrare */}
+                    {/*<div className='flex flex-row w-full'>*/}
+                    {/*    <div className='w-1/2 '>*/}
+                    {/*        /!*Top Discord Gainers*!/*/}
+                    {/*        <TopDiscordGainers/>*/}
+                    {/*    </div>*/}
+                    {/*    <div className='w-1/2'>*/}
+                    {/*        /!* Top Twitter Gainers*!/*/}
+                    {/*        <TopTwitterGainers/>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
 
                 </>
             }
