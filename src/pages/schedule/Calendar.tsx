@@ -223,7 +223,6 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                              <ul>
                                  <li>- Graphing the discord & twitter stats over time (will slowly fill in)</li>
                                  <li>- Showing all the upcoming Magic Eden Launchpad mints</li>
-                                 <li>- UI/UX updates</li>
                                  <li>- Showing what Discords & Twitters were the top gainers from the past day and week</li>
                              </ul>
                          </div>
@@ -307,12 +306,12 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                         <div className={`${isMobile ? 'mt-2' : 'mt-4'}`}><b>Price : </b>{eventGraphData?.data?.data[0]?.price}</div>
                                         <div className={`flex ${isMobile ? '' : ' mt-4'} flex-row`}>
                                         <div className={`flex flex-col`}>
-                                            <div><b>Discord : </b>{formatNumber(eventGraphData?.data?.data[0]?.discord_all) || 0}</div>
-                                            <div><b>Twitter : </b>{formatNumber(eventGraphData?.data?.data[0]?.twitter_all) || 0}</div>
+                                            <div><b>Discord : </b>{formatNumber(eventGraphData?.data?.data[0]?.numbersOfDiscordMembers) || 0}</div>
+                                            <div><b>Twitter : </b>{formatNumber(eventGraphData?.data?.data[0]?.numbersOfTwitterFollowers) || 0}</div>
                                         </div>
                                         <div className={`flex flex-col ${isMobile ? 'ml-3' : 'ml-4'}`}>
-                                            <div><b>Online : </b>{formatNumber(eventGraphData?.data?.data[0]?.discord_online)}</div>
-                                            <div><b>Interactions : </b>{formatNumber(eventGraphData?.data?.data[0]?.tweetInteractions)}</div>
+                                            <div><b>Online : </b>{formatNumber(eventGraphData?.data?.data[0]?.DiscordOnlineMembers)}</div>
+                                            <div><b>Interactions : </b>{formatNumber(eventGraphData?.data?.data[0]?.tweetInteraction?.total)}</div>
                                         </div>
                                         </div>
                                     </div>

@@ -20,7 +20,7 @@ const CommonMintsData = (record1: any) => {
     return (
             <>
             <div>
-                {/*TODO: twitter link no work... no supply....*/}
+                {/*TODO: no supply....*/}
                      <div className="flex space-x-3">
                          {/*discord*/}
                          <a href={record?.discordLink} target="_blank" style={{ pointerEvents: (record?.discordLink && record?.numbersOfDiscordMembers) ? "initial" : "none" }} className={(record?.discordLink && record?.numbersOfDiscordMembers) ? "schedule-link" : "schedule-link-disabled"}>
