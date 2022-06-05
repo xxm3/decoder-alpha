@@ -107,7 +107,6 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                         </div>
                     </div>
 
-                    {/*TODO: waiting my other todo... in scheudle howrare */}
                     {/*<div className='flex flex-row w-full'>*/}
                     {/*    <div className='w-1/2 '>*/}
                     {/*        /!*Top Discord Gainers*!/*/}
@@ -122,11 +121,11 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                 </>
             }
 
-            {/*TODO: WTF TEST IT???*/}
+            {/*TODO sumit freelance -- all messed up  */}
            {/* Word count of yesterday, last 3 days, last 5 days */}
-            <div hidden={!devMode}>
-                <WordsCount/>
-            </div>
+           {/* <div hidden={!devMode}>*/}
+           {/*     <WordsCount/>*/}
+           {/* </div>*/}
 
             {/* Top search words of past dat */}
             {/* <TopSearchWords/> */}
