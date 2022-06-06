@@ -162,3 +162,6 @@ display: flex;
 .schedule-popup{
     height:100%;
 }
+.rbc-overlay-header {
+    color:#ffffff !important;
+  }
