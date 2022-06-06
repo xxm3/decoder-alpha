@@ -3,7 +3,6 @@ import {AxiosResponse} from 'axios';
 import {instance} from '../../axios';
 import {environment} from '../../environments/environment';
 import Loader from '../../components/Loader';
-import {Link, useLocation} from "react-router-dom";
 import {IonCard, useIonToast} from "@ionic/react";
 import {useHistory} from "react-router";
 
@@ -60,25 +59,27 @@ const TopTwitterGainers = () => {
         if (n >= 1e3) return +(n / 1e3).toFixed(1) + 'K';
     };
      return (
-        <div className="secondary-bg-forced m-1 p-4 rounded-xl mt-6">
-            {topSearchWordsQuery?.isFetching ?
-                <div className="flex justify-center items-center">
-                    Loading . . .
-                </div>
-                :
-                <>
-                    <div className={`font-bold pb-1 tracking-wider text-xl`}>Top Twitter Gainers - 24h</div>
-                    {topSearchWordsQuery?.data?.data?.map((item:any,index:number)=>{
-                        return (
-                            <div className='flex flex-row justify-between' key={index}>
-                                <div>{item.mint_detail.name}</div>
-                            <div>+{formatNumber(item.tweetInteractions)}</div>
+        <> 
+            { topSearchWordsQuery?.data?.data.length > 0 ?
+                <div className="secondary-bg-forced m-1 p-4 rounded-xl mt-6">
+                {topSearchWordsQuery?.isFetching ?
+                    <div className="flex justify-center items-center">
+                        Loading . . .
                     </div>
-                        )
-                    })}
-                    
-                </>}
-        </div>
+                    : <>
+                        <div className={`font-bold pb-1 tracking-wider text-xl`}>Top Twitter Gainers - 24h</div>
+                        {topSearchWordsQuery?.data?.data?.map((item:any,index:number)=>{
+                            return (
+                                <div className='flex flex-row justify-between' key={index}>
+                                    <div>{item.mint_detail.name}</div>
+                                <div>+{formatNumber(item.tweetInteractions)}</div>
+                        </div>
+                            )
+                        })}
+                    </>}
+                </div> : ''
+             }
+        </> 
     )
 }
 export default TopTwitterGainers

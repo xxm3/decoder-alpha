@@ -52,7 +52,7 @@ const Addserver: React.FC<props> = (props) => {
             if (serverId) {
                 setIsLoading(true);
                 instance
-                    .get(`/guilds/${serverId}/admins`)
+                    .get(`/guilds/${serverId}/getAllGuildAdmins`)
                     .then(({ data }) => {
                         if (data.success) {
                             setAdminsList(data.admins);
@@ -151,7 +151,7 @@ const Addserver: React.FC<props> = (props) => {
 
             instance
                 .post(
-                    `/guilds/${serverId}/admins`,
+                    `/guilds/${serverId}/setUserAdminGuild`,
                     { adminId: id },
                     {
                         headers: {
@@ -252,8 +252,8 @@ const Addserver: React.FC<props> = (props) => {
                             </ListItem>
                                 </IonCol>
                                 <IonCol></IonCol>
-                                </IonRow> 
-                           
+                                </IonRow>
+
                         );
                     })}
                 </List>

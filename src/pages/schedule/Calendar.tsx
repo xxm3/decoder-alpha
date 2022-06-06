@@ -116,7 +116,9 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                 setEventGraphData(res)
                 if(res.data.data.length > 1){
                     setShowGraph(true)
-                }else {
+                }else if (res.data.data.length === 0){
+                    setShowGraph(false)
+                }else{
                     setShowGraph(false)
                 }
             })
@@ -216,22 +218,6 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                 <div className='flex justify-center items-center mt-4'><Loader/></div>
                  :
                  <>
-                     <div className="m-3 relative bg-gray-100 p-4 rounded-xl">
-                         <div className="text-lg text-gray-700 font-medium">
-                             {/*TODO: remove when done ... and need a "click here view calendar" on top... */}
-                             <b>Note this is the first version of our Calendar. Future improvements:</b>
-                             <ul>
-                                 <li>- Graphing the discord & twitter stats over time (will slowly fill in)</li>
-                                 <li>- Showing all the upcoming Magic Eden Launchpad mints</li>
-                                 <li>- UI/UX updates</li>
-                                 <li>- Showing what Discords & Twitters were the top gainers from the past day and week</li>
-                             </ul>
-                         </div>
-                         <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                             !
-                         </span>
-                     </div>
-
                      {/*<div className="m-3 relative bg-red-100 p-4 rounded-xl">*/}
                      {/*    <div className="text-lg text-red-700 font-medium">*/}
                      {/*        Sorry small bug with the calendar - click "next month" then "previous month" to get all data*/}
@@ -273,7 +259,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                             <div className="schedule-popup-outer">
                                 <div className="schedule-popup-inner">
                                 <div className='flex popup-half-bg'>
-                                    <div className='absolute top-2 right-3  cursor-pointer' onClick={() => {setOpenEventModal(false); setShowMorePopup(true)}}>
+                                    <div className='absolute top-2 cursor-pointer cancel-icon' onClick={() => {setOpenEventModal(false); setShowMorePopup(true)}}>
                                         <IonIcon icon={close} className="h-6 w-6"/>
                                     </div>
                                     <div>
@@ -307,12 +293,12 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                         <div className={`${isMobile ? 'mt-2' : 'mt-4'}`}><b>Price : </b>{eventGraphData?.data?.data[0]?.price}</div>
                                         <div className={`flex ${isMobile ? '' : ' mt-4'} flex-row`}>
                                         <div className={`flex flex-col`}>
-                                            <div><b>Discord : </b>{formatNumber(eventGraphData?.data?.data[0]?.discord_all) || 0}</div>
-                                            <div><b>Twitter : </b>{formatNumber(eventGraphData?.data?.data[0]?.twitter_all) || 0}</div>
+                                            <div><b>Discord : </b>{formatNumber(eventGraphData?.data?.data[0]?.numbersOfDiscordMembers) || 0}</div>
+                                            <div><b>Twitter : </b>{formatNumber(eventGraphData?.data?.data[0]?.numbersOfTwitterFollowers) || 0}</div>
                                         </div>
                                         <div className={`flex flex-col ${isMobile ? 'ml-3' : 'ml-4'}`}>
-                                            <div><b>Online : </b>{formatNumber(eventGraphData?.data?.data[0]?.discord_online)}</div>
-                                            <div><b>Interactions : </b>{formatNumber(eventGraphData?.data?.data[0]?.tweetInteractions)}</div>
+                                            <div><b>Online : </b>{formatNumber(eventGraphData?.data?.data[0]?.DiscordOnlineMembers)}</div>
+                                            <div><b>Interactions : </b>{formatNumber(eventGraphData?.data?.data[0]?.tweetInteraction?.total)}</div>
                                         </div>
                                         </div>
                                     </div>
