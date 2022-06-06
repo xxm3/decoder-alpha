@@ -85,9 +85,9 @@
     background-color: #202124 !important;
     box-shadow: 0 5px 15px rgb(0 0 0 / 25%);
     padding: 10px;
-    /* margin-top: -20% !important; */
-    overflow-y: scroll !important;
-    max-height: 340px !important;
+       margin-top: -178px !important;
+    overflow-y: auto !important;
+    max-height: 161px !important;
    
 }
 .rbc-timeslot-group {
@@ -131,9 +131,9 @@ ion-select-popover .sc-ion-popover-md-h{
     }
     .rbc-overlay {
         position: absolute;
-        margin-top: -70% !important;
-        overflow-y: scroll !important;
-        max-height: 280px !important;
+                margin-top: -173px !important;
+    overflow-y: auto !important;
+    max-height: 162px !important;
         justify-self: center !important;
     }
 }
