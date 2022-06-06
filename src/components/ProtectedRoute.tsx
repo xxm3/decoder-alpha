@@ -7,14 +7,14 @@ import { RootState } from "../redux/store";
 import AppRoute from "./Route";
 
 // a route to be used to protect pages against unauthenticated users
-const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & { 
+const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
 	needsRole ?: boolean
 }) => {
 	const user = useUser();
 	const needsRole = props.needsRole ?? true;
 	const hasRoles = useSelector<RootState>(state => state.user.hasRoles);
 	return user
-        || isDev
+        // || isDev // TODO !!!
     ? (
 		(needsRole ? hasRoles : true) ? <AppRoute {...props} /> : <AppRoute {...props} component={() => <div>You cannot access this page</div>} />
 	) : (

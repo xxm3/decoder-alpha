@@ -168,7 +168,10 @@ const App = () => {
 		if(localStorage.getItem('roleList')){
 			let roleList:any = localStorage.getItem('roleList');
 
-			getRoleType(JSON.parse(roleList));
+            try{
+                getRoleType(JSON.parse(roleList));
+            }catch(err){ }
+
 		}else{
             console.info('no roleList found for user');
         }
@@ -246,7 +249,7 @@ const App = () => {
                 if (context.isAnonymous) {
                     dispatch(setDemo(true));
                 }
-				else { 
+				else {
 					context.getIdTokenResult().then((idTokenResult) => {
 						console.log(idTokenResult.claims.hasRoles, typeof idTokenResult.claims.hasRoles)
 						dispatch(setHasRoles(Boolean(idTokenResult.claims.hasRoles)));
@@ -256,7 +259,7 @@ const App = () => {
                 if (isAnonymous.current) {
                     dispatch(setDemo(false));
                 }
-				else { 
+				else {
 					dispatch(setHasRoles(false));
 				}
                 isAnonymous.current = null;
@@ -423,6 +426,7 @@ const App = () => {
                                                                                     path="/servermodule/:serverId"
                                                                                     component={ ServerModule }
                                                                                 />
+                                                                                {/*TODO: how to see this.. on manageserver? how to initiate request... oh maybe from server page...*/}
                                                                                 <ProtectedRoute
                                                                                     exact
                                                                                     path="/initiatewhitelist/:server"
