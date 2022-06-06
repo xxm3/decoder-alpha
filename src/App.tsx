@@ -15,7 +15,7 @@ import { Network } from '@capacitor/network';
 // import { useEffect, useState } from "react";
 // import Search from "./pages/Search";
 // import Login from "./pages/Login";
-import { useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { auth } from './firebase';
 import { IUser } from './types/User';
 import { Redirect, Route, Switch, useHistory } from 'react-router';
@@ -82,14 +82,50 @@ import MarketPlaceLayout from './pages/marketplace/MarketPlaceLayout';
 import ConnectWalletLayout from './pages/connect-wallet/ConnectWalletLayout';
 import CreatetWalletLayout from './pages/createtWallet/CreatetWalletLayout';
 import MarketPlaceDetailLayout from './pages/marketPlaceDetail/MarketPlaceDetailLayout';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { clusterApiUrl } from '@solana/web3.js';
+import { GlowWalletAdapter, PhantomWalletAdapter, SlopeWalletAdapter, SolflareWalletAdapter, TorusWalletAdapter } from '@solana/wallet-adapter-wallets';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 
+
+
+
+
+const Context: FC<{ children: ReactNode }> = ({ children }) => {
+    // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
+    const network = WalletAdapterNetwork.Devnet;
+
+    // You can also provide a custom RPC endpoint.
+    const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+
+    // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking and lazy loading --
+    // Only the wallets you configure here will be compiled into your application, and only the dependencies
+    // of wallets that your users connect to will be loaded.
+    const wallets = useMemo(
+        () => [
+            new PhantomWalletAdapter(),
+            new GlowWalletAdapter(),
+            new SlopeWalletAdapter(),
+            new SolflareWalletAdapter({ network }),
+            new TorusWalletAdapter(),
+        ],
+        [network]
+    );
+
+    return (
+        <ConnectionProvider endpoint={endpoint}>
+            <WalletProvider wallets={wallets} autoConnect>
+                <WalletModalProvider>{children}</WalletModalProvider>
+            </WalletProvider>
+        </ConnectionProvider>
+    );
+};
 
 
 const App = () => {
     const [networkState, setNetworkState] = useState(true);
 	const [present, dismiss] = useIonToast();
-
-	// const [role, setRole] = useState('')
 
     //offline Online
     useEffect(() => {
@@ -246,7 +282,7 @@ const App = () => {
 
 
     return (
-        <>
+        <Context>
             {networkState ? (
                 <IonApp>
                     <Theme>
@@ -461,7 +497,7 @@ const App = () => {
                     </div>
                 </>
             )}
-        </>
+        </Context>
     );
 };
 

@@ -63,6 +63,7 @@ import { Virtuoso } from 'react-virtuoso';
 import './FoxToken.scss';
 import { setWallet } from '../redux/slices/walletSlice';
 import TVChartContainer from '../components/ChartContainer';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 // @ts-ignore
 const columns: Column<FoxTokenData>[] = [
@@ -403,6 +404,9 @@ function FoxToken({ contentRef }: FoxToken) {
         false
     );
 
+
+    const { disconnect } = useWallet();
+
     const clickedSetHidHelpTop = () => {
         setHidHelpTop(true);
     };
@@ -497,7 +501,7 @@ function FoxToken({ contentRef }: FoxToken) {
     const dispatch = useDispatch();
     // in the modal for multiple wallets - submit button clicked
     const addMultWalletsSubmit = () => {
-        dispatch(setWallet(formWalletMult));
+        // dispatch(setWallet(formWalletMult));
         if (multWallet?.length == 3) {
             present({
                 message: 'Error - you may only track a maximum of 3 wallets',
@@ -577,6 +581,9 @@ function FoxToken({ contentRef }: FoxToken) {
                 {
                     text: 'Ok',
                     handler: () => {
+                        disconnect().then(result=>{
+                            console.log("Result",result)
+                        }).catch((err) => {console.log("err",err)})
                         resetMultWallet.mutate();
                         dispatch(setWallet(null));
                     },
@@ -1072,7 +1079,7 @@ function FoxToken({ contentRef }: FoxToken) {
                     </div>
 
                     <div
-                        hidden={!multWallet || multWallet.length == 0}
+                        hidden={(!multWallet || multWallet.length == 0) && !walletAddress}
                         className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl"
                     >
                         <div className="font-medium">
