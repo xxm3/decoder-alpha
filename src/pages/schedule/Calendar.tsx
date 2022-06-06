@@ -257,7 +257,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                             <div className="schedule-popup-outer">
                                 <div className="schedule-popup-inner">
                                 <div className='flex popup-half-bg'>
-                                    <div className='absolute top-2 right-3  cursor-pointer' onClick={() => {setOpenEventModal(false); setShowMorePopup(true)}}>
+                                    <div className='absolute top-2 right-3  cursor-pointer cancel-icon' onClick={() => {setOpenEventModal(false); setShowMorePopup(true)}}>
                                         <IonIcon icon={close} className="h-6 w-6"/>
                                     </div>
                                     <div>
