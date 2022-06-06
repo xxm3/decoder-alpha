@@ -65,3 +65,17 @@
 //         }
 //     }
 // }
+
+.cancel-icon{
+        position: absolute !important;
+    right: 15px !important;
+    top: -14px !important;
+    background: #c9c9ca;
+    color: #0052ff !important;
+    height: 30px;
+    width: 30px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
