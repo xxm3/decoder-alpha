@@ -159,6 +159,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                         label: 'Price',
                         borderColor: lineColorSelected,
                         data: lineData,
+                        // data: [10,10,150,10,50,12,85,45,78,36],
                         fill: {
                             target: 'origin',
                             above: shadedAreaColorSelected,
@@ -177,11 +178,8 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                 // console.log(labels);
                 // console.log("Arrays ::: foxLineData ===>>> ", foxLineData)
                 // console.log(datasetsAry);
-
-                setFoxLineData({
-                    labels: labels,
-                    datasets: datasetsAry,
-                });
+                removeChartHighValue(datasetsAry,labels)
+                
             })
             .catch((err) => {
                 console.error(
@@ -203,7 +201,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
             .post(environment.backendApi + '/receiver/foxSales', {token: token})
             .then((res) => {
                 // now graph it!
-                if(res.data.data.length === 0){
+                if(res.data.data?.length === 0){
                     setIsChartHidden(true)
                     present({
                         message: 'No sales data found!',
@@ -252,6 +250,82 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
 
     }, []);
 
+    // remove initial high value of graph price
+    const removeChartHighValue = (data : any, labels:any) =>{
+
+    let dataLength = data[0]?.data?.length
+
+    if(dataLength > 8){
+        let arrayLength = (dataLength * 10) / 100
+        // let arrayLength = 5
+        let tempArray = []
+        let arrayOfIndex: any[] = []
+        let sum : any 
+
+        for(var i=0; i<arrayLength; i++){
+            tempArray.push(data[0]?.data[i])
+        }
+
+        for(var i=0; i<tempArray.length; i++){
+            sum = tempArray[i]- tempArray[i + 1]
+            arrayOfIndex.push(sum)
+        }
+        arrayOfIndex.splice(arrayOfIndex.length-1 , 1)
+        const maxValue = Math.max.apply(null, arrayOfIndex);
+        const valueIndex = arrayOfIndex.indexOf(maxValue)
+        const originalValue = tempArray[valueIndex+1]
+        let finalGraphdata = []
+        let lables = []
+
+        if(maxValue >((originalValue*30/100)+originalValue) ){
+            for(var i=valueIndex+1; i<data[0]?.data.length; i++ ){
+                finalGraphdata.push(data[0]?.data[i])
+                }
+
+            for(var i=valueIndex+1; i<data[0]?.data.length; i++ ){
+                lables.push(labels[i])
+                }
+                setFoxLineData({
+                    labels:lables,
+                    datasets: finalGraphdata
+                    });
+        }else{
+              setFoxLineData({
+                labels:labels,
+                datasets: data,
+                });
+        }
+        }
+        else if (dataLength > 2){
+
+        if((data[0].data[0]-data[0].data[1]) > (data[0].data[1]-data[0].data[2]) && (data[0].data[1]-data[0].data[2]) >= 0){
+            data[0]?.data.splice(0, 1)
+            setFoxLineData({
+                labels: removeLable(labels),
+                datasets: data
+            });
+        }else{
+            setFoxLineData({
+                labels: labels,
+                datasets: data
+            });
+        }
+
+        }else{
+            setFoxLineData({
+                labels:labels,
+                datasets: data
+            });
+        }
+        
+    }
+
+// remove initial high value of graph lable
+    const removeLable = (labels:any) =>{
+        labels.splice(0,1)
+        return(labels)
+    }
+ 
     return (
         <>
             <div className='text-lg flex justify-center default-chart-theme pt-2 ' > <div onClick={()=> refreshChart()} className ='underline text-blue-600 cursor-pointer'>Refresh chart</div></div>

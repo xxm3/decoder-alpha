@@ -1,5 +1,5 @@
-import { IonContent, IonModal } from '@ionic/react';
-import React, { useRef , useState} from 'react';
+import { IonButton, IonContent, IonModal } from '@ionic/react';
+import React, { useEffect, useRef , useState} from 'react';
 import { Message } from '../../types/Message';
 import MessageListItem from './MessageListItem';
 import { QueryFunctionContext, useInfiniteQuery } from 'react-query';
@@ -9,6 +9,7 @@ import ReactTooltip from "react-tooltip";
 import SearchSkeleton from "./SearchSkeleton"
 import { css } from '@emotion/react';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import axios from 'axios';
 
 interface MessageThreadProps {
     message: Message;
@@ -39,12 +40,11 @@ const MessageThread: React.FC<MessageThreadProps> = ({
     };
     async function fetchContext({
         pageParam = defaultPageParam,
+
+        
     }: QueryFunctionContext<MessageThreadQueryKey, PageParam>) {
         try {
-            const { data } = await instance.post<MessageThreadData>(
-                '/getPriorAndSubMessages',
-                pageParam
-            );
+            const { data } = await instance.post<MessageThreadData>('/getPriorAndSubMessages', pageParam );
             // data.priorMsg = data.priorMsg.map(message => ({
             //     ...message,
             //     // @ts-expect-error
@@ -54,7 +54,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                 data.subsequentMsg = data?.subsequentMsg?.map(message => ({
                     ...message,
                     // @ts-expect-error
-                    time : message ? message.createdAt : message.time_stamp
+                    time : message.time ? message.time : message.time_stamp
                 }))
 
             if (pageParam === defaultPageParam)
@@ -125,11 +125,23 @@ const MessageThread: React.FC<MessageThreadProps> = ({
     const containerRef = useRef<HTMLDivElement>(null);
 
     const [isModalOpen, setIsModalOpen] = useState(true)
+    const [isMobile, setIsMobile] = useState(false);
+    const role = localStorage.getItem('role')
+
+    useEffect(() => {
+        if (window.innerWidth < 525) {
+            setIsMobile(true)
+        }else{
+            setIsMobile(false)
+        }
+    }, [window.innerWidth])
+
+
+
+console.log('data-------',data)
     return (
         <>
-            <IonModal
-                isOpen = {isModalOpen}
-                onDidDismiss={onClose as any}
+            <IonModal isOpen = {isModalOpen} onDidDismiss={onClose as any}
                 // onDidPresent={() => {
                 //     if (mainMessageRef.current) {
                 //         mainMessageRef.current.scrollIntoView({
@@ -139,41 +151,34 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                 //     }
                 // }}
             >
-                <div
-                    ref={containerRef}
-                    className="p-5 c-res-messages messages h-full w-full mx-auto"
-                >
-                    <div onClick={()=> setIsModalOpen(false)}  className=' justify-end text-red-500 flex m-3 cursor-pointer'  >
+                <div ref={containerRef} className={`${isMobile ? 'p-2' : 'p-4'} c-res-messages messages h-full w-full mx-auto`} >
+                    <div onClick={()=> setIsModalOpen(false)}  className={`${data.pages[0].length > 0 ? 'justify-between' : 'justify-end'} ${isMobile ? 'm-3' :'mb-3'} text-red-500 flex cursor-pointer items-center`}>
+                        {data.pages[0].length > 0 && role !== '3NFT' ? <IonButton>View Live Message</IonButton> :''}
                         <HighlightOffIcon className='text-2xl'/>
                     </div>
-                    <div className='overflow-y-scroll h-full w-full mx-auto p-5'>
-
-                        {/*<div hidden={data}>*/}
-                        {/*    Down!*/}
-                        {/*</div>*/}
-
-                        {data.pages
-                            .map((page) =>
-                                page.map((message, i) =>
-                                    message ? (
-                                        <div className="my-1.5" key={i}>
-                                            <MessageListItem
-                                                message={message}
-                                                isFromMsgThread={true}
-                                                key={message.id}
-                                                ref={
-                                                    message.id === id
-                                                        ? mainMessageRef
-                                                        : null
-                                                }
-                                            />
-                                        </div>
-                                    ) : (
-                                        <SearchSkeleton key={i}/>
-                                    )
-                                )
-                            )
+                    
+                    <div className={`overflow-y-scroll h-full w-full mx-auto ${isMobile ? 'p1' :'p-5'}`}>
+                        { data.pages[0].length > 0 ? data.pages.map((page,index) =>{
+                            //   console.log('message----form api ---',page)
+                                return <div key={index}>
+                                    {page.map((message, i) => {
+                                        console.log('message-----',message)
+                                        return <div key={i}>
+                                                    {message ? (
+                                                        <div className="my-1.5" key={i}>
+                                                            <MessageListItem message={message} isFromMsgThread={true} key={message.id} ref={ message.id === id ? mainMessageRef : null } />
+                                                        </div>
+                                                    ) : (
+                                                        <SearchSkeleton key={i}/>
+                                                    )}
+                                                </div>
+                                        })
+                                    }
+                                </div>
+                                })
                             .flat(1)
+                        :
+                        <div className='flex justify-center text-xl opacity-60'>No data available</div>
                         }
                     </div>
                 </div>
