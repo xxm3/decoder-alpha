@@ -5,9 +5,11 @@ import { IonItem, IonButton, IonLabel, useIonToast } from '@ionic/react';
 import { Backdrop, CircularProgress, Grid, Switch, } from '@material-ui/core';
 import { Tooltip } from "react-tippy";
 import './ServerModule.scss';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory, useLocation, useParams } from 'react-router';
 import Loader from '../../components/Loader';
 import Help from '../../components/Help';
+import { Server } from '../../types/Server';
+import Addserver from './components/Addserver';
 
 interface LocationParams {
     pathname: string;
@@ -15,14 +17,7 @@ interface LocationParams {
     search: string;
     hash: string;
 }
-interface Server {
-    id: string;
-    name: string;
-    icon: string;
-    owner: boolean;
-    permissions: string;
-    features: [];
-}
+
 
 const ServerModule: React.FC<AppComponentProps> = () => {
     /**
@@ -33,12 +28,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [checked, setChecked] = useState<{ mintInfoModule: boolean; tokenModule: boolean; }>({ mintInfoModule: false, tokenModule: false, });
     const [isLoading, setIsLoading] = useState(false);
-    const [server, setServer] = useState<Server | null>(null);
+    // const [server, setServer] = useState<Server | null>(null);
     const [showInstruction, setShowInstruction] = useState<boolean>(false)
     const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(false)
     const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] = useState<boolean>(false)
-
-
     const [dropdownValue, setDropdownValue] = useState({
         dailyMintsWebhookChannel: 'default',
         oneHourMintInfoWebhookChannel: 'default',
@@ -47,9 +40,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [channel, setChannel] = useState<any>(null);
     const [backdrop, setBackdrop] = useState(false);
     const [present, dismiss] = useIonToast();
-
     const [role, setRole] = useState<any>(null)
     const [authorizedModule, setAuthorizedModule] = useState<any>()
+    const { serverId } = useParams<{serverId : string}>();
+    const [addServerFlag, setAddServerFlag] = useState(false)
 
     /**
      * Use Effects
@@ -61,25 +55,24 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         }else{
             setRole(localStorage.getItem('role'))
         }
+
         if (window.innerWidth < 525) {
             setIsMobile(true);
         }
-        //     window.onbeforeunload = function() {
-    //         console.log('refress')
-    //         alert('refress')
-    //         // return "Dude, are you sure you want to refresh? Think of the kittens!";
-    // }
-    }, [window.innerWidth]);
 
+        // if (performance.navigation.type == 1) {
+        //     history.push('/manageserver')
+        // } 
+
+    }, [window.innerWidth]);
 
     // get guilds
     useEffect(() => {
 
-        if (location?.state?.server) {
+        if (serverId) {
             setIsLoading(true);
-            let serverObj = location.state.server;
-            setServer(serverObj);
-            instance.get(`/guilds/${serverObj.id}`)
+            instance
+                .get(`/guilds/${serverId}`)
                 .then((response) => {
                     let data = response.data.data;
                     if(role ==='3NFT' || role ==='4NFT'){
@@ -89,34 +82,36 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                             tokenModule: data.tokenModule,
                         });
                     }
+
                     setDropdownValue({
                         ...dropdownValue,
-                        dailyMintsWebhookChannel: data.dailyMintsWebhookChannel,
-                        oneHourMintInfoWebhookChannel: data.oneHourMintInfoWebhookChannel,
-                        analyticsWebhookChannel: data.analyticsWebhookChannel,
+                        dailyMintsWebhookChannel: data.dailyMintsWebhookChannel || 'default',
+                        oneHourMintInfoWebhookChannel: data.oneHourMintInfoWebhookChannel || 'default',
+                        analyticsWebhookChannel: data.analyticsWebhookChannel || 'default',
                     });
                     setChannel(data.textChannels);
 
                 })
                 .catch((error: any) => {
                     let msg = '';
-                    if (error?.response) {
+                    if (error && error.response) {
                         msg = String(error.response.data.message);
                     } else {
                         msg = 'Unable to connect. Please try again later';
                     }
+
                     present({
                         message: msg,
                         color: 'danger',
                         duration: 5000,
                         buttons: [{ text: 'X', handler: () => dismiss() }],
                     });
+
                 })
                 .finally(() => {
                     setIsLoading(false);
                 });
         }
-
     }, [location]);
 
     useEffect(() => {
@@ -135,10 +130,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     // update guilds modules
     let enableModule = (obj: { module: string; enabled: boolean }) => {
-        if (server) {
+        if (serverId) {
             setBackdrop(true);
             instance
-                .post(`/guilds/${server.id}/modules`, obj, {
+                .post(`/guilds/${serverId}/modules`, obj, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -184,11 +179,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         }
     };
 
+    // ie. selecting a channel
     let updateWebHooks = (obj: { webhook: string; channel: string }) => {
-        if (server) {
+        if (serverId) {
             setBackdrop(true);
             instance
-                .post(`/guilds/${server.id}/webhooks`, obj, {
+                .post(`/guilds/${serverId}/webhooks`, obj, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -198,6 +194,15 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         ...dropdownValue,
                         [obj.webhook]: obj.channel,
                     });
+
+                    // show success
+                    present({
+                        message: 'Selection saved. Messages will be sent to the channel in the future',
+                        color: 'success',
+                        duration: 5000,
+                        buttons: [{ text: 'X', handler: () => dismiss() }],
+                    });
+
                 })
                 .catch((error:any) => {
 
@@ -266,8 +271,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     }
 
     const sendTestWebhook = (moduleName: string) => {
-        if (!server) return;
-        instance.post(`/guilds/${server.id}/${moduleName}`, {}, {
+        if (!serverId) return;
+        instance.post(`/guilds/${serverId}/${moduleName}`, {}, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -292,6 +297,13 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             </div>
         );
     }
+
+    if(addServerFlag && serverId){
+        return (
+            <Addserver addServerFlag={addServerFlag} setAddServerFlag={setAddServerFlag} serverId={serverId} />
+        )
+    }
+
     return (
         <>
             <Backdrop style={{ color: '#fff', zIndex: 1000, }} open={backdrop} >
@@ -305,43 +317,51 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             </div>
             <div className={`text-base flex ${isMobile ? 'mt-2' :''}`}>
                 {authorizedModule === 0 ?
-                    <span className="text-red-500">You don't have enough NFTs to add packages. Please purchase the appropriate amount and have your role verified in Discord </span> :
+                <>
+                    <span className="text-red-500">You don't have enough NFTs to add packages. Please purchase the appropriate amount and have your role verified in Discord </span>
+                    <Addserver addServerFlag={addServerFlag} setAddServerFlag={setAddServerFlag} />
+                </> :
                     <span className="text-green-500">You are authorized to add {authorizedModule} package(s)</span>}
+                    
             </div>
 
             <div className="flex flex-row justify-center w-full mt-9">
                 <div className="server-module-bg p-4 px-6 w-full">
                     <div className='w-full flex items-center justify-between mb-3'>
                         <div className='text-xl font-semibold '>Instructions</div>
-                        <img style={{color : 'red'}} src={showInstruction ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`)}  className='w-4 cursor-pointer' onClick={()=>setShowInstruction((e)=>!e)} />
+                        <img style={{color : 'red'}} src={showInstruction ?  require(`../../images/up-icon.png`) : require(`../../images/chevron-down-icon.png`)}  className='w-4 cursor-pointer' onClick={()=>setShowInstruction((e)=>!e)} />
                     </div>
                     {/* <div className='text-xl font-semibold mb-3'>Instructions</div> */}
                     {
                         showInstruction ?
                             <div>
-                            <b>General Instructions</b>
-                            <ul className='list-disc ml-5 leading-9'>
-                                <li>Make a new private channel in your Discord. If doing the "Mints" package, name the channel "daily-mints" or whatever you want. Optionally make "1h-mint-info" if you want that as well. Or if you are doing the "Fox token" package, make a channel for the fox token names, and another channel for where users can enter their own bot commands</li>
-                                <li>Add the bot to the above channels (by going to the channel settings within Discord)</li>
-                                <li>Refresh this page</li>
-                                <li>Enable the "Mints" package (or "Fox token" package)</li>
-                                <li>It should ask you about the channels - pick your new channels. Click the test button. If it doesn't work, make sure the SOL Decoder bot is in that channel, and has permission to "Send Messages" (done within the channel settings in Discord)
-                                </li>
-                                <li>Wait for the channels to be populated with data before showing it to the public (8am EST is when daily-mints is populated, varying times for other channels)</li>
-                                <li>If doing the "Fox token" package, you need to first tell us before you can start using the bot commands (/token, /token_name, /wallet_tokens) in your server. You also need to add permission for any user in that channel to "Use Application Commands"</li>
-                            </ul>
-                            {/*<b>Discord channel permissions</b>*/}
-                            {/*    - Go to your new channel(s) in Discord - click "edit channel" in the sidebar*/}
-                            {/*    - Click permissions*/}
-                            {/*    - Click "Add Members or Roles"*/}
-                            {/*    - Search for "SOL Decoder Bot"*/}
-                            {/*    - Scroll down to "Advanced Permissions", make sure the bot is selected on the left*/}
-                            {/*    - On the right, check the following:*/}
-                            {/*    - View Channel*/}
-                            {/*    - Send Messages*/}
-                            {/*    - Embed Links*/}
-                            {/*    - Make sure the bot shows as "Online" in the sidebar*/}
-                            {/*    - Click the "Send a test message" and make sure it works*/}
+
+                                <b>General Instructions</b>
+                                <ul className='list-disc ml-5 leading-9'>
+                                    <li>Make a new private channel in your Discord. If doing the "Mints" package, name the channel "daily-mints" or whatever you want. Optionally make "1h-mint-info" if you want that as well. Or if you are doing the "Fox token" package, make a channel for the fox token names, and another channel for where users can enter their own bot commands</li>
+                                    <li>Add the bot to the above channels (by going to the channel settings within Discord)</li>
+                                    <li>Refresh this page</li>
+                                    <li>Enable the "Mints" package (or "Fox token" package)</li>
+                                    <li>It should ask you about the channels - pick your new channels. Click the test button. If it doesn't work, make sure the SOL Decoder bot is in that channel, and has permission to "Send Messages" (done within the channel settings in Discord)
+                                    </li>
+                                    <li>Wait for the channels to be populated with data before showing it to the public (8am EST is when daily-mints is populated, varying times for other channels)</li>
+                                    <li>If doing the "Fox token" package, you need to first tell us before you can start using the bot commands (/token, /token_name, /wallet_tokens) in your server. You also need to add permission for any user in that channel to "Use Application Commands"</li>
+                                </ul>
+
+                                <b>Discord channel permissions</b>
+                                <ul className='list-disc ml-5 leading-9'>
+                                    <li>Go to your new channel(s) in Discord - click "edit channel" in the sidebar</li>
+                                    <li>Click permissions</li>
+                                    <li>Click "Add Members or Roles"</li>
+                                    <li>Search for "SOL Decoder Bot"</li>
+                                    <li>Scroll down to "Advanced Permissions", make sure the bot is selected on the left</li>
+                                    <li>On the right, check the following:</li>
+                                    <li>View Channel</li>
+                                    <li>Send Messages</li>
+                                    <li>Embed Links</li>
+                                    <li>Make sure the bot shows as "Online" in the sidebar</li>
+                                    <li>Click the "Send a test message" and make sure it works</li>
+                                </ul>
                             </div>
                             : ''
                     }
@@ -380,7 +400,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     />
                                 </div>
 
-                    {/* Hide show channale list of mint module */}
+                                {/* Hide show channel list of mint module */}
                                 {checked.mintInfoModule && (
                                     <>
                                         <div className="flex flex-row justify-center w-full">
@@ -446,7 +466,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         <div className='text-base my-2 '>
                                             More information
                                         </div>
-                                        <img src={mintMoreInfoShow ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`)} className='w-4 cursor-pointer' onClick={()=> setMintMoreInfoShow((e)=>!e)} />
+                                        <img src={mintMoreInfoShow ?  require(`../../images/up-icon.png`) : require(`../../images/chevron-down-icon.png`)} className='w-4 cursor-pointer' onClick={()=> setMintMoreInfoShow((e)=>!e)} />
                                     </div>
                                     {mintMoreInfoShow ? <ul className='list-disc ml-5 leading-7'>
                                         <li>Your server can have the "daily-mints" and "1h-mint-info" feed, and soon "tomorrows-mints". Enable this to learn more about each</li>
@@ -462,9 +482,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     <div className='basis-1/2'>
                         <div className="server-module-bg overflow-hidden">
                             <div className="flex flex-row justify-between w-full">
-                                <div className='card-bg-blur flex justify-center items-center w-full'>
+                                <div className='card-bg-blur-fox flex justify-center items-center w-full'>
                                     <div className="module-icon-wrapper w-full">
-                                        <img src={require('../../images/me.png')} />
+                                        <img src={require('../../images/fox.png')} />
                                     </div>
                                 </div>
                             </div>
@@ -488,7 +508,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     />
                                 </div>
 
-                    {/* Hide show channale list of fox token module */}
+                                {/* Hide show channels list of fox token module */}
                                 {checked.tokenModule && (
                                     <>
                                         <div className="flex w-full">
@@ -533,12 +553,13 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 <div className="text-sm mt-2 p-2 border-t-2">
                                     <div className='w-full flex items-center justify-between'>
                                         <div className='text-base my-2 '> More information </div>
-                                        <img src={foxTokenMoreInfoShow ?  require(`../../images/chevron-down-icon.png`) : require(`../../images/up-icon.png`) } className='w-4 cursor-pointer' onClick={()=> setFoxTokenMoreInfoShow((e)=>!e)} />
+                                        <img src={foxTokenMoreInfoShow ?  require(`../../images/up-icon.png`) : require(`../../images/chevron-down-icon.png`) } className='w-4 cursor-pointer' onClick={()=> setFoxTokenMoreInfoShow((e)=>!e)} />
                                     </div>
                                     { foxTokenMoreInfoShow ?
                                         (<ul className='list-disc ml-5 leading-7'>
                                             <li>Your server can have our "analytics" feed (where we show when tokens get new names from the Fox Token team), and users can use our bot's slash commands of /token_name and /token and /wallet_tokens </li>
                                             <li>Hold and you get lifetime access, and get free upgrades to existing packages such as getting alerts for Fox Token price/listings data (ie. alerted when any fox token with a name & greater than 1 sol price & greater than 10 listings is out) </li>
+                                            <li>Please contact us after enabling this, so we can enable the bot commands (/token, /token_name, /wallet_tokens) in your server</li>
                                         </ul>): ''
                                     }
                                 </div>
@@ -547,10 +568,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </div>
                 </div>
             </div>
-
-
-
-
 
         </>
     );

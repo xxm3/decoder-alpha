@@ -89,8 +89,12 @@ const Schedule = () => {
         setMints([...dataSource]);
     }
 
-    // set user time zone in user data
+    const formatNumber = (n: any) => {
+        if (n < 1e3) return n;
+        if (n >= 1e3) return +(n / 1e3).toFixed(1) + 'K';
+    };
 
+    // set user time zone in user data
     const SetUserTimeZone = async () =>{
         let param = {timezone:selectedTimezone.value}
         await instance.post(environment.backendApi + '/setUserTimeZone',param)
@@ -380,7 +384,8 @@ const Schedule = () => {
             title: 'Discord (all)',
             render: (record) => (
                 <>
-                    {record?.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    {/*{record?.numbersOfDiscordMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}*/}
+                    {formatNumber(record?.numbersOfDiscordMembers)}
                 </>
             ),
             // @ts-ignore
@@ -390,7 +395,8 @@ const Schedule = () => {
             title: 'Discord (online)',
             render: (record) => (
                 <>
-                    {record?.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    {/*{record?.DiscordOnlineMembers?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}*/}
+                    {formatNumber(record?.DiscordOnlineMembers)}
                 </>
             ),
             // @ts-ignore
@@ -400,7 +406,8 @@ const Schedule = () => {
             title: 'Twitter',
             render: (record) => (
                 <>
-                    {record?.numbersOfTwitterFollowers?.toString() .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    {/*{record?.numbersOfTwitterFollowers?.toString() .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}*/}
+                    {formatNumber(record?.numbersOfTwitterFollowers)}
                 </>
             ),
             customSort: (a, b) => a.numbersOfTwitterFollowers - b.numbersOfTwitterFollowers,
@@ -411,10 +418,8 @@ const Schedule = () => {
             render: (record) => (
                 <>
                     <span>
-                        {record?.tweetInteraction?.total}
-                        {/*likes: {record.tweetInteraction.likes} <br />*/}
-                        {/*comments: {record.tweetInteraction.comments} <br />*/}
-                        {/*retweets: {record.tweetInteraction.retweets}*/}
+                        {/*{record?.tweetInteraction?.total}*/}
+                        {formatNumber(record?.tweetInteraction?.total)}
                     </span>
                 </>
             ),

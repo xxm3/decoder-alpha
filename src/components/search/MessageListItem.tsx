@@ -43,9 +43,9 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
 						return '';
                     } else return ` <${url.trim()}>`;
                 },
-            ).replaceAll(new RegExp(word, 'gi'), `**${word}**`)
-            .replaceAll('\n', '  \n'); // Two spaces before \n adds a new line in the markdown
-
+            ).replaceAll('\n', '  \n'); // Two spaces before \n adds a new line in the markdown
+            // Surround a word with ** (bold) only if it's not a URL.
+            if (!urlRegExp.test(message)) formattedMessage = formattedMessage.replaceAll(new RegExp(word, 'gi'), `**${word}**`);
            if (source !== 'Twitter') {
                formattedMessage = formattedMessage
                    .replaceAll(/<(@|!|@!)(\d{18})>/g, '`@User`')

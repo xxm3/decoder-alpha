@@ -57,7 +57,6 @@ const DisplayGraph:React.FC<{
     const {id: word} = useParams<{ id: string; }>();
     const completelyHideChart = false; // useMemo(() => word.indexOf(" ") !== -1 ? true : false, [word]);
     const [mode] = usePersistentState("mode", "dark");
-
     const chartsRef = useRef<HTMLDivElement | null>(null);
 
     /**
@@ -117,7 +116,7 @@ const DisplayGraph:React.FC<{
             background-color: var(--ion-color-step-50);
         `}
         ref={chartsRef} >
-                <div className="chart chart-col6  ">
+            {chartDataDailyCount.labels.length > 0 ? <div className="chart chart-col6  ">
                     <Chart
                         type="bar"
                         data={chartDataDailyCount}
@@ -151,9 +150,9 @@ const DisplayGraph:React.FC<{
                         }}
                         key={chartHeight}
                     />
-                </div>
-
-                <div className="chart chart-col6">
+                </div> : '' }
+                
+                { chartDataPerSource.labels.length > 0 ? <div className="chart chart-col6">
                     <Chart
                         type="bar"
                         data={chartDataPerSource}
@@ -165,8 +164,7 @@ const DisplayGraph:React.FC<{
                                 },
                                 title: {
                                     display: true,
-                                    // text: '# of messages per Discord (powered by SOL Decoder)',
-                                    text: `# messages per Discord (${totalCount} results in last 10 days)`,
+                                    text: `# messages per Discord`, //  (${totalCount} results in last 10 days)
                                     // color: '#14F195'
                                     // color: mode === 'dark' ? 'white' : 'black'
                                 },
@@ -188,7 +186,8 @@ const DisplayGraph:React.FC<{
                         }}
                         key={chartHeight}
                     />
-                </div>
+                </div> : ''}
+                
             </div>
         )}
     </div>

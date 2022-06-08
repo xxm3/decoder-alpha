@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import {IonButton, IonIcon, IonList, IonMenuToggle, IonContent } from "@ionic/react"
+import {IonButton, IonIcon, IonList, IonMenuToggle, IonContent, useIonToast, IonModal, IonHeader, IonToolbar } from "@ionic/react"
 import {
     bookOutline,
     calendarClearOutline,
@@ -19,17 +19,28 @@ import { RootState } from "../../redux/store";
 import { auth } from "../../firebase";
 import { VERSION_CODE } from '../../environments/environment'
 import { useState,useEffect } from "react";
+import './Sidebar.css'
+
+
 
 function Sidebar() {
 	const isDemo = useSelector<RootState>(state => state.demo.demo);
 	const role:any = useSelector<RootState>(state => state.demo.role);
     const [isMobile,setIsMobile] = useState(false)
+    const isLogin = localStorage.getItem('isLogin')
+    const [logoutPopupOpen, setLogoutPopupOpen] = useState<boolean>(false)
 
     useEffect(() => {
         if (window.innerWidth < 525){
             setIsMobile(true)
         }
     }, [window.innerWidth])
+
+    const logOutHandler = () => {
+		auth.signOut()
+        localStorage.clear();
+        window.location.href = '/login';
+    }
 
     return (
         <>
@@ -120,6 +131,12 @@ function Sidebar() {
                     external={'https://twitter.com/SOL_Decoder'}
                 />
 
+                {/* logout Button  */}
+                {isLogin === 'isLogin' ? <div>
+                <span onClick={() => setLogoutPopupOpen(true)} color="primary" className="px-2 mx-0 w-full"> Logout </span>
+                </div> : '' }
+
+
                 {/* hide wallet button in mobile so don't comment out */}
                 {/* <div className="xl:hidden lg:hidden md:hidden">
                     <WalletButton />
@@ -129,8 +146,24 @@ function Sidebar() {
             </IonList>
             </div>
             </IonContent>
+
+            <IonModal isOpen={logoutPopupOpen} onDidDismiss={() => setLogoutPopupOpen(false)} cssClass={isMobile ? 'logout-modal-mobile' :'logout-modal-web'} >
+                <IonContent className="flex items-center">
+                    <div className='text-xl font-bold text-center w-full mt-5'>
+                        Logout?
+                    </div>
+                    <div className=' text-center w-full mt-8'>
+                        Are you sure want to Logout of Discord?
+                    </div>
+                    <div className="flex flex-row mt-10">
+                        <IonButton onClick={() => logOutHandler()} color="primary" className="px-2 mx-0 w-full"> Logout </IonButton>
+                        <IonButton onClick={() => setLogoutPopupOpen(false)} color="medium" className="px-2 mx-0 w-full"> Cancel </IonButton>
+                    </div>
+                </IonContent>
+            </IonModal>
         </>
     );
 }
 
 export default Sidebar
+

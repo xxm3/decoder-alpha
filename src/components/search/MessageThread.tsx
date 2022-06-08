@@ -37,7 +37,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         postLimit: 100,
         // #s REPEATED on MessageThread.tsx & priorAndSubsequent.js
     };
-
     async function fetchContext({
         pageParam = defaultPageParam,
     }: QueryFunctionContext<MessageThreadQueryKey, PageParam>) {
@@ -144,7 +143,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                     ref={containerRef}
                     className="p-5 c-res-messages messages h-full w-full mx-auto"
                 >
-                    <div onClick={()=> setIsModalOpen(false)}  className=' justify-end text-red-500  flex m-3'  >
+                    <div onClick={()=> setIsModalOpen(false)}  className=' justify-end text-red-500 flex m-3 cursor-pointer'  >
                         <HighlightOffIcon className='text-2xl'/>
                     </div>
                     <div className='overflow-y-scroll h-full w-full mx-auto p-5'>

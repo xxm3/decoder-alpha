@@ -12,6 +12,7 @@ import { useIonToast } from "@ionic/react";
 
 import { Chart } from 'react-chartjs-2';
 import "./FoxTokenCharts.scss"
+import { async } from '@firebase/util';
 // import { Chart, Interaction } from 'chart.js';
 // import {CrosshairPlugin,Interpolate} from 'chartjs-plugin-crosshair';
 function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTokenData) {
@@ -44,7 +45,8 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
     const [tableData, setTableData] = useState<FoxTokenData[]>([]);
     // const [fullTableData, setFullTableData] = useState<FoxTokenData[]>([]);
     const [tokenClickedOn, setTokenClickedOn] = useState();
-    const [isChartHidden, setIsChartHidden] = useState<boolean>(false)
+    const [isChartHidden, setIsChartHidden] = useState<boolean>(true)
+
 
     // const [mySolBalance, setMySolBalance] = useState("");
     // const [mySplTokens, setMySplTokens]: any = useState([]);
@@ -66,6 +68,8 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
 
     const { chartDateSelected, lineColorSelected, shadedAreaColorSelected } =
         useFoxTokenChartCookies();
+
+        // console.log('foxSalesData-----',foxSalesData)
 
     // user clicked change colour
 
@@ -94,16 +98,10 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
     //     viewChart();
     // }, [chartDateSelected, lineColorSelected, shadedAreaColorSelected]);
 
-    const chartHideShow = () =>{
-        if(foxSalesData.labels){
-            if(foxSalesData.labels.length === 0){
-                setIsChartHidden(true)
-            }else{
-                setIsChartHidden(false)
-            }
-        }
-    }
 
+    const refreshChart = () => {
+        viewChart()
+    }
     // viewing the chart for a token
     const viewChart = () => {
         // token: string, name: string
@@ -116,14 +114,10 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
         // console.log(token);
 
         // get the price/listings history for a SINGLE token
-        instance
-            .get(
-                environment.backendApi +
-                    '/receiver/foxTokenHistory?token=' +
-                    token
-            )
+      instance
+            .get(  environment.backendApi + '/receiver/foxTokenHistory?token=' + token )
             .then((res) => {
-                const labels = res.data.map((el: { createdAt: any }) => {
+                const labels = res?.data?.map((el: { createdAt: any }) => {
                     // user can set this in the chart
                     if (chartDateSelected === 'fromNow') {
                         return moment(el.createdAt).fromNow()
@@ -131,11 +125,11 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                         return moment(el.createdAt).format('MM-DD HH:MM');
                     }
                 });
-                const lineData = res.data.map((el: { floorPrice: any }) => {
+                const lineData = res?.data?.map((el: { floorPrice: any }) => {
                     return parseFloat(el.floorPrice);
                 });
 
-                const listingsData = res.data.map(
+                const listingsData = res?.data?.map(
                     (el: { totalTokenListings: any }) =>
                         parseInt(el.totalTokenListings)
                 );
@@ -208,28 +202,30 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
         instance
             .post(environment.backendApi + '/receiver/foxSales', {token: token})
             .then((res) => {
-
                 // now graph it!
-                setFoxSalesData({
-                    labels: res.data.labels,
-                    datasets: [
-                        {
-                            type: 'line' as const,
-                            label: 'Price',
-                            yAxisID: 'y0',
-                            borderColor: lineColorSelected,
-                            // tension: 0.1,
-                            data: res.data.data,
-                            showLine: false
-                        },
-                    ]
-                });
-
                 if(res.data.data.length === 0){
+                    setIsChartHidden(true)
                     present({
                         message: 'No sales data found!',
                         color: 'danger',
                         duration: 5000
+                    });
+                }else {
+                    setIsChartHidden(false)
+                    setFoxSalesData({
+                        labels: res.data.labels,
+                        datasets: [
+                            {
+                                type: 'line' as const,
+                                label: 'Price',
+                                yAxisID: 'y0',
+                                borderColor: lineColorSelected,
+                                // tension: 0.1,
+                                data: res.data.data,
+                                showLine: false
+                            },
+
+                        ]
                     });
                 }
 
@@ -253,19 +249,13 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
         // }
 
         viewChart();
-        chartHideShow();
 
     }, []);
 
     return (
         <>
-            <div
-                className="foxTokenCharts px-5 gap-4 grid grid-cols-12 default-chart-theme "
-                css={css`
-                    background-color: var(--ion-color-step-50);
-                `}
-                ref={chartsRef}
-            >
+            <div className='text-lg flex justify-center default-chart-theme pt-2 ' > <div onClick={()=> refreshChart()} className ='underline text-blue-600 cursor-pointer'>Refresh chart</div></div>
+            <div className="foxTokenCharts px-5 gap-4 grid grid-cols-12 default-chart-theme w-full" css={css` background-color: var(--ion-color-step-50); `} ref={chartsRef}>
                 <div className="chart chart-width">
                     <Chart
                         type="line"
@@ -379,6 +369,7 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                     {/*sales data*/}
                     <Chart
                         hidden={isChartHidden}
+                        className='mt-6'
                         type="line"
                         data={foxSalesData}
                         height={tableHeight / 1.5}
