@@ -117,14 +117,18 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                         <div className='mb-2 flex items-center w-full justify-between'>
                             <div className='flex items-center'>
                                 <span className=" bg-yellow-500 w-7 h-7 flex items-center justify-center font-bold rounded-full mr-2">!</span>
-                                <span className='text-yellow-500 text-lg font-bold'>Server owners only</span>
+                                <span className='text-yellow-500 text-lg font-bold'>Bot Invite</span>
                             </div>
                         </div>
 
-                        <p>Note this page is only for server owners (for the time being). Also your server will need to first have our Discord Bot invited to it. Click one of the below links, then in the "Add to Server" on the bottom, select your server. Then click "Continue", then "Authorize"</p>
+                        <p>Your server will need to first have our Discord Bot invited to it. Click one of the below links, then in the "Add to Server" on the bottom, select your server. Then click "Continue", then "Authorize"</p>
                         <ul className='list-disc ml-8 mt-3'>
-                            <li> If using JUST the "Daily Mints" bots, <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20guilds.members.read%20bot">click here</a> to add the Discord Bot to your server </li>
-                            <li> Or if using the "Fox Token" bots (where users can type /token) ... or if using BOTH bots, this needs additional permissions so <a className="underline cursor-pointer" href="https://discord.com/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20applications.commands%20bot%20guilds.members.read">click here</a> to add the Discord Bot to your server </li>
+                            <li> If using just the "Daily Mints" bots, <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20guilds.members.read%20bot">click here</a> to add the Discord Bot to your server </li>
+
+                            <li> Or if using the "Fox Token" bots (where users can type /token),  <a className="underline cursor-pointer" href="https://discord.com/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20applications.commands%20bot%20guilds.members.read">click here</a> to add the Discord Bot to your server </li>
+
+                            {/* identify, guilds, guilds.members.read, bot, application.commands --- manage roles, send messages,  */}
+                            <li>If you are a new mint and are using the Whitelist bots (where we will give users whitelist roles if they are in a DAO and win a giveaway), <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=268437504&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=applications.commands%20guilds%20guilds.members.read%20bot%20identify">click here</a> to add the Discord Bot to your server</li>
                         </ul>
                     </div>
 

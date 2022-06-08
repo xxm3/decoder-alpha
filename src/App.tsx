@@ -251,7 +251,7 @@ const App = () => {
                 }
 				else {
 					context.getIdTokenResult().then((idTokenResult) => {
-						console.log(idTokenResult.claims.hasRoles, typeof idTokenResult.claims.hasRoles)
+						console.log('setting hasRoles - ', idTokenResult.claims.hasRoles, typeof idTokenResult.claims.hasRoles);
 						dispatch(setHasRoles(Boolean(idTokenResult.claims.hasRoles)));
 					})
 				}
@@ -405,7 +405,7 @@ const App = () => {
                                                                                 />
 
                                                                                 {/* manage server */}
-                                                                                <AppRoute
+                                                                                <ProtectedRoute
                                                                                     exact
                                                                                     path="/manageserver"
                                                                                     component={
@@ -414,19 +414,18 @@ const App = () => {
                                                                                 />
 
                                                                                 {/* if anyone direct access Server module  */}
-                                                                                <AppRoute
+                                                                                <ProtectedRoute
                                                                                     exact
                                                                                     path="/servermodule"
                                                                                     render={()=> <Redirect to={`/manageserver`} />}
                                                                                 />
 
                                                                                 {/* Server module */}
-                                                                                <AppRoute
+                                                                                <ProtectedRoute
                                                                                     exact
                                                                                     path="/servermodule/:serverId"
                                                                                     component={ ServerModule }
                                                                                 />
-                                                                                {/*TODO: how to see this.. on manageserver? how to initiate request... oh maybe from server page...*/}
                                                                                 <ProtectedRoute
                                                                                     exact
                                                                                     path="/initiatewhitelist/:server"

@@ -31,7 +31,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [checked, setChecked] = useState<{ mintInfoModule: boolean; tokenModule: boolean; }>({ mintInfoModule: false, tokenModule: false, });
     const [isLoading, setIsLoading] = useState(false);
-    // const [server, setServer] = useState<Server | null>(null);
     const [showInstruction, setShowInstruction] = useState<boolean>(false)
     const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(false)
     const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] = useState<boolean>(false)
@@ -43,8 +42,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [channel, setChannel] = useState<any>(null);
     const [backdrop, setBackdrop] = useState(false);
     const [present, dismiss] = useIonToast();
-    const [role, setRole] = useState<any>(null)
-    const [authorizedModule, setAuthorizedModule] = useState<any>()
+    const [role, setRole] = useState<any>(null);
+    const [authorizedModule, setAuthorizedModule] = useState<any>();
+    // const [server, setServer] = useState<Server | null>(null);
     const { serverId } = useParams<{serverId : string}>();
     const [addServerFlag, setAddServerFlag] = useState(false)
 
@@ -65,7 +65,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     //     // if (performance.navigation.type == 1) {
     //     //     history.push('/manageserver')
-    //     // } 
+    //     // }
 
     // }, [window.innerWidth]);
 
@@ -325,7 +325,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     <Addserver addServerFlag={addServerFlag} setAddServerFlag={setAddServerFlag} />
                 </> :
                     <span className="text-green-500">You are authorized to add {authorizedModule} package(s)</span>}
-                    
+
             </div>
 
             <div className="flex flex-row justify-center w-full mt-9">

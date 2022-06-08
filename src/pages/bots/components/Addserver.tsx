@@ -34,6 +34,7 @@ const Addserver: React.FC<props> = (props) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const [AssigenAdmin, setAssigenAdmin] = React.useState<string[]>([]);
 
+    // TODO: need to put name of server on top
     if (!addServerFlag) {
         return (
             <IonButton
