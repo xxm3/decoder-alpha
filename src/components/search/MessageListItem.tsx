@@ -31,7 +31,6 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
     ) => {
 
        useEffect(() => {
-         console.log('8888888888888888',message)
        }, [message])
        
         const { id: word } = useParams<{ id: string }>();

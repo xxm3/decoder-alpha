@@ -138,7 +138,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({
 
 
 
-console.log('data-------',data)
     return (
         <>
             <IonModal isOpen = {isModalOpen} onDidDismiss={onClose as any}
@@ -162,7 +161,6 @@ console.log('data-------',data)
                             //   console.log('message----form api ---',page)
                                 return <div key={index}>
                                     {page.map((message, i) => {
-                                        console.log('message-----',message)
                                         return <div key={i}>
                                                     {message ? (
                                                         <div className="my-1.5" key={i}>
