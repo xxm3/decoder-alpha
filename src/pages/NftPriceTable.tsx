@@ -289,7 +289,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
                                                   borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
                                               }),
                                           }}
-                                          title={"Mint Alerts Automated - Stats"}
+                                          title={"Mint Stats"}
                                           description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
                                           actions={[
                                               {
