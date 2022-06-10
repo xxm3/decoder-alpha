@@ -7,10 +7,10 @@ import { instance } from '../../axios';
 import { AxiosResponse } from 'axios';
 import ReactTooltip from "react-tooltip";
 import SearchSkeleton from "./SearchSkeleton"
-import { css } from '@emotion/react';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { io, Socket } from "socket.io-client";
 import { DefaultEventsMap } from '@socket.io/component-emitter';
+import Loader from '../Loader';
 
 
 interface MessageThreadProps {
@@ -40,15 +40,22 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         postLimit: 100,
         // #s REPEATED on MessageThread.tsx & priorAndSubsequent.js
     };
+
+    const mainMessageRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isModalOpen, setIsModalOpen] = useState(true)
+    const [isMobile, setIsMobile] = useState(false);
+    const [isSocketConnected, setIsSocketConnected] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [present, dismiss] = useIonToast();
+    const [socketVar,setSocketVar] = useState<any>()
+    const [dataPages,setDatapages] = useState<any>([])
+    const role = localStorage.getItem('role')
+    var socket: Socket<DefaultEventsMap, DefaultEventsMap>; 
+
     async function fetchContext({ pageParam = defaultPageParam}: QueryFunctionContext<MessageThreadQueryKey, PageParam>) {
         try {
             const { data } = await instance.post<MessageThreadData>('/getPriorAndSubMessages', pageParam );
-            // data.priorMsg = data.priorMsg.map(message => ({
-            //     ...message,
-            //     // @ts-expect-error
-            //     time : message.createdAt ? message.createdAt : message.time_stamp
-            // }))
-
                 data.subsequentMsg = data?.subsequentMsg?.map(message => ({
                     ...message,
                     // @ts-expect-error
@@ -119,19 +126,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         },
     });
 
-    const mainMessageRef = useRef<HTMLDivElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    const [isModalOpen, setIsModalOpen] = useState(true)
-    const [isMobile, setIsMobile] = useState(false);
-    const [isFromSocket, setIsFromSocket] = useState<boolean>(false)
-    const [isSocketConnected, setIsSocketConnected] = useState<boolean>(false)
-    const [present, dismiss] = useIonToast();
-    let socket: Socket<DefaultEventsMap, DefaultEventsMap>; 
-
-
-    const role = localStorage.getItem('role')
-
     useEffect(() => {
         if (window.innerWidth < 525) {
             setIsMobile(true)
@@ -140,11 +134,12 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         }
     }, [window.innerWidth])
 
-    const viewLiveMessages = () => {
-        console.log('defaultPageParam----',defaultPageParam)
+    // get Live messages 
 
+    const viewLiveMessages = () => {
+        initiateSocket()
         if(role === '3NFT'){
-            // connectSocket();
+            initiateSocket()
             console.log('Connect Socket------')
         }else{
             present({
@@ -154,79 +149,102 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                 buttons: [{ text: 'X', handler: () => dismiss() }],
             })
         }
-
-         
-
     }
 
+    // Socket initial
     const initiateSocket = () => {
-        console.log('********** initaliaze socket **********');
+        setIsLoading(true)
         socket = io('http://localhost:5027');
 
         socket.on('connect', () => {
             setIsSocketConnected(true);
-            console.log('ID: ', socket.id);
         })
 
-        socket.emit('getData', { defaultPageParam });
+        // socket.emit('getData', defaultPageParam);
+        socket.emit('getData', {
+            "message": {
+                "author": "Bentley DeLorenzo",
+                "message": "here whoever wants tat tool suite dm this guy, i have no interest or benefits from it do it at your own risk bonimba#5543",
+                "objectID": "1337669002",
+                "source": "Sierra",
+                "time": "2022-01-27 17:11:23",
+                "time_stamp": 1643303483,
+                "_highlightResult": {
+                    "message": {
+                        "fullyHighlighted": false,
+                        "matchLevel": "full",
+                        "matchedWords": ["Sierra"],
+                        "value": "here whoever wants tat tool suite dm this guy, i have no interest or benefits from it do it at your own risk bonimba#5543"
+                    },
+                    "source": {
+                        "matchLevel": "none",
+                        "matchedWords": [],
+                        "value": "Sierra"
+                    }
+                }
+            },
+            "postLimit": 100,
+            "priorLimit": 5
+        });
 
         socket.on('Data', (data) => {
-            setIsFromSocket(true);
-            console.log('Message Data: ',data);
+            setIsLoading(false)
+            data.subsequentMsg = data?.subsequentMsg?.map((message: { time: any; updatedAt: any; }) => ({
+                ...message,
+                time : message.time ? message.time : message.updatedAt
+            }))
+             
+            setDatapages([data.subsequentMsg])
         })
+        setSocketVar(socket)
+       
     }
      
-     
-    const connectSocket = () => {
-        console.log("Socket connection-----------");
-        initiateSocket();
-    }
-
+    // Disconnect socket on close button
     const disconnectSocket = () => {
-        console.log("Disconnect-----------");
-        socket.disconnect();
-        setIsSocketConnected(false);
-        setIsFromSocket(false);
+        socketVar.disconnect();
+        setIsSocketConnected(false)
     }
 
-
+    useEffect(() => {
+        setDatapages(data.pages)
+    }, [data])
 
     return (
         <>
-            <IonModal isOpen = {isModalOpen} onDidDismiss={onClose as any}
-                // onDidPresent={() => {
-                //     if (mainMessageRef.current) {
-                //         mainMessageRef.current.scrollIntoView({
-                //             block: 'center',
-                //             inline: 'center',
-                //         });
-                //     }
-                // }}
-            >
+            <IonModal isOpen = {isModalOpen} onDidDismiss={onClose as any} >
                 <div ref={containerRef} className={`${isMobile ? 'p-2' : 'p-4'} c-res-messages messages h-full w-full mx-auto`} >
-                    <div className={`${data.pages[0].length > 0 ? 'justify-between' : 'justify-end'} ${isMobile ? 'm-3' :'mb-3'} text-red-500 flex cursor-pointer items-center`}>
-                        {data.pages[0].length > 0 ? <IonButton onClick={()=>viewLiveMessages()}>View Live Messages</IonButton> : '' }
-                        <div onClick={()=> {setIsModalOpen(false); {isSocketConnected ? disconnectSocket() :'' } }}>
+                    <div className={`${ dataPages && dataPages[0]?.length > 0 ? 'justify-end ' : 'justify-end'}  ${isMobile ? 'm-3' :'mb-3'} text-red-500 flex cursor-pointer items-center`}>
+                        {/* {dataPages && dataPages[0]?.length > 0 ? <IonButton onClick={()=>viewLiveMessages()}>View Live Messages</IonButton> : '' } */}
+                        <div onClick={()=>
+                             {
+                                 if(isSocketConnected){
+                                    disconnectSocket()
+                                 }
+                                 setIsModalOpen(false)}
+                            } >
                             <HighlightOffIcon className='text-2xl'/>
                         </div>
                     </div>
+                    {isLoading ? <div className='flex justify-center'><Loader/></div> : ''}
+                    
                     
                     <div className={`overflow-y-scroll h-full w-full mx-auto ${isMobile ? 'p1' :'p-5'}`}>
-                        { data.pages[0].length > 0 ? data.pages.map((page,index) =>{
+                        { dataPages && dataPages?.length > 0 ? dataPages.map((page:any,index:number) =>{
                                 return <div key={index}>
-                                    {page.map((message, i) => {
-                                        return <div key={i}>
-                                                    {message ? (
-                                                        <div className="my-1.5" key={i}>
-                                                            <MessageListItem message={message} isFromMsgThread={true} key={message.id} ref={ message.id === id ? mainMessageRef : null } />
+                                            {page.map((message:any, i:number) => {
+                                                return <div key={i}>
+                                                            {message ? (
+                                                                <div className="my-1.5" key={i}>
+                                                                    <MessageListItem message={message} isFromMsgThread={true} key={message.id} ref={ message.id === id ? mainMessageRef : null } />
+                                                                </div>
+                                                            ) : (
+                                                                <SearchSkeleton key={i}/>
+                                                            )}
                                                         </div>
-                                                    ) : (
-                                                        <SearchSkeleton key={i}/>
-                                                    )}
-                                                </div>
-                                        })
-                                    }
-                                </div>
+                                                })
+                                            }
+                                        </div>
                                 })
                             .flat(1)
                         :
@@ -234,7 +252,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                         }
                     </div>
                 </div>
-
                 <ReactTooltip />
             </IonModal>
         </>
