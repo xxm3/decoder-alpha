@@ -30,8 +30,6 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
         ref
     ) => {
 
-       useEffect(() => {
-       }, [message])
        
         const { id: word } = useParams<{ id: string }>();
         const { formattedMessage, mediaUrls } = useMemo(() => {

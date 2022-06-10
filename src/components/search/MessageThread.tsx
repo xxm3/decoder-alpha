@@ -51,7 +51,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
     const [socketVar,setSocketVar] = useState<any>()
     const [dataPages,setDatapages] = useState<any>([])
     const role = localStorage.getItem('role')
-    var socket: Socket<DefaultEventsMap, DefaultEventsMap>; 
+    let socket: Socket<DefaultEventsMap, DefaultEventsMap>; 
 
     async function fetchContext({ pageParam = defaultPageParam}: QueryFunctionContext<MessageThreadQueryKey, PageParam>) {
         try {

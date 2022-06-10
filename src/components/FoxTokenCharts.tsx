@@ -260,11 +260,11 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
         let arrayOfIndex: any[] = []
         let sum : any 
 
-        for(var i=0; i<arrayLength; i++){
+        for(let i=0; i<arrayLength; i++){
             tempArray.push(data[0]?.data[i])
         }
 
-        for(var i=0; i<tempArray.length; i++){
+        for(let i=0; i<tempArray.length; i++){
             sum = tempArray[i]- tempArray[i + 1]
             arrayOfIndex.push(sum)
         }
@@ -276,11 +276,11 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
         let lables = []
 
         if(maxValue >((originalValue*30/100)+originalValue) ){
-            for(var i=valueIndex+1; i<data[0]?.data.length; i++ ){
+            for(let i=valueIndex+1; i<data[0]?.data.length; i++ ){
                 finalGraphdata.push(data[0]?.data[i])
                 }
 
-            for(var i=valueIndex+1; i<data[0]?.data.length; i++ ){
+            for(let i=valueIndex+1; i<data[0]?.data.length; i++ ){
                 lables.push(labels[i])
                 }
                 setFoxLineData({
