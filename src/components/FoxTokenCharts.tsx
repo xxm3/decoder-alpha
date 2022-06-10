@@ -180,7 +180,11 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
                 // console.log(labels);
                 // console.log("Arrays ::: foxLineData ===>>> ", foxLineData)
                 // console.log(datasetsAry);
-                removeChartHighValue(datasetsAry,labels)
+                setFoxLineData({
+                    labels:labels,
+                    datasets: datasetsAry,
+                    });
+                // removeChartHighValue(datasetsAry,labels)
                 
             })
             .catch((err) => {
@@ -250,73 +254,73 @@ function FoxTokenCharts({ token, name, floorPrice, totalTokenListings, }: FoxTok
     }, []);
 
     // remove initial high value of graph price
-    const removeChartHighValue = (data : any, labels:any) =>{
-    let dataLength = data[0]?.data?.length
+    // const removeChartHighValue = (data : any, labels:any) =>{
+    // let dataLength = data[0]?.data?.length
 
-    if(dataLength > 8){
-        let arrayLength = (dataLength * 10) / 100
-        // let arrayLength = 5
-        let tempArray = []
-        let arrayOfIndex: any[] = []
-        let sum : any 
+    // if(dataLength > 8){
+    //     let arrayLength = (dataLength * 10) / 100
+    //     // let arrayLength = 5
+    //     let tempArray = []
+    //     let arrayOfIndex: any[] = []
+    //     let sum : any 
 
-        for(let i=0; i<arrayLength; i++){
-            tempArray.push(data[0]?.data[i])
-        }
+    //     for(let i=0; i<arrayLength; i++){
+    //         tempArray.push(data[0]?.data[i])
+    //     }
 
-        for(let i=0; i<tempArray.length; i++){
-            sum = tempArray[i]- tempArray[i + 1]
-            arrayOfIndex.push(sum)
-        }
-        arrayOfIndex.splice(arrayOfIndex.length-1 , 1)
-        const maxValue = Math.max.apply(null, arrayOfIndex);
-        const valueIndex = arrayOfIndex.indexOf(maxValue)
-        const originalValue = tempArray[valueIndex+1]
-        let finalGraphdata = []
-        let lables = []
+    //     for(let i=0; i<tempArray.length; i++){
+    //         sum = tempArray[i]- tempArray[i + 1]
+    //         arrayOfIndex.push(sum)
+    //     }
+    //     arrayOfIndex.splice(arrayOfIndex.length-1 , 1)
+    //     const maxValue = Math.max.apply(null, arrayOfIndex);
+    //     const valueIndex = arrayOfIndex.indexOf(maxValue)
+    //     const originalValue = tempArray[valueIndex+1]
+    //     let finalGraphdata = []
+    //     let lables = []
 
-        if(maxValue >((originalValue*30/100)+originalValue) ){
-            for(let i=valueIndex+1; i<data[0]?.data.length; i++ ){
-                finalGraphdata.push(data[0]?.data[i])
-                }
+    //     if(maxValue >((originalValue*30/100)+originalValue) ){
+    //         for(let i=valueIndex+1; i<data[0]?.data.length; i++ ){
+    //             finalGraphdata.push(data[0]?.data[i])
+    //             }
 
-            for(let i=valueIndex+1; i<data[0]?.data.length; i++ ){
-                lables.push(labels[i])
-                }
-                setFoxLineData({
-                    labels:lables,
-                    datasets: finalGraphdata
-                    });
-        }else{
-              setFoxLineData({
-                labels:labels,
-                datasets: data,
-                });
-        }
-        }
-        else if (dataLength > 2){
+    //         for(let i=valueIndex+1; i<data[0]?.data.length; i++ ){
+    //             lables.push(labels[i])
+    //             }
+    //             setFoxLineData({
+    //                 labels:lables,
+    //                 datasets: finalGraphdata
+    //                 });
+    //     }else{
+    //           setFoxLineData({
+    //             labels:labels,
+    //             datasets: data,
+    //             });
+    //     }
+    //     }
+    //     else if (dataLength > 2){
 
-        if((data[0].data[0]-data[0].data[1]) > (data[0].data[1]-data[0].data[2]) && (data[0].data[1]-data[0].data[2]) >= 0){
-            data[0]?.data.splice(0, 1)
-            setFoxLineData({
-                labels: removeLable(labels),
-                datasets: data
-            });
-        }else{
-            setFoxLineData({
-                labels: labels,
-                datasets: data
-            });
-        }
+    //     if((data[0].data[0]-data[0].data[1]) > (data[0].data[1]-data[0].data[2]) && (data[0].data[1]-data[0].data[2]) >= 0){
+    //         data[0]?.data.splice(0, 1)
+    //         setFoxLineData({
+    //             labels: removeLable(labels),
+    //             datasets: data
+    //         });
+    //     }else{
+    //         setFoxLineData({
+    //             labels: labels,
+    //             datasets: data
+    //         });
+    //     }
 
-        }else{
-            setFoxLineData({
-                labels:labels,
-                datasets: data
-            });
-        }
+    //     }else{
+    //         setFoxLineData({
+    //             labels:labels,
+    //             datasets: data
+    //         });
+    //     }
         
-    }
+    // }
 
 // remove initial high value of graph lable
     const removeLable = (labels:any) =>{
