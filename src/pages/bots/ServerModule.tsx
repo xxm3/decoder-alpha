@@ -359,11 +359,13 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     <li>Search for "SOL Decoder Bot"</li>
                                     <li>Scroll down to "Advanced Permissions", make sure the bot is selected on the left</li>
                                     <li>On the right, check the following:</li>
-                                    <li>View Channel</li>
-                                    <li>Send Messages</li>
-                                    <li>Embed Links</li>
+                                    <li>- Send Messages</li>
+                                    <li>- Embed Links</li>
+                                    <li>- Attach Files</li>
                                     <li>Make sure the bot shows as "Online" in the sidebar</li>
                                     <li>Click the "Send a test message" and make sure it works</li>
+
+                                    <img width="350px" src="https://cdn.discordapp.com/attachments/983706216733765642/984217168889667654/Screen_Shot_2022-06-08_at_6.07.31_PM.png" />
                                 </ul>
                             </div>
                             : ''
