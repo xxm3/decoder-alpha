@@ -10,7 +10,9 @@ import {
     searchOutline,
     statsChartOutline,
     skullOutline, earthOutline,
-    serverOutline
+    serverOutline,
+	diamondOutline
+
 } from "ionicons/icons"
 import NavLink from "./NavLink"
 import WalletButton from '../WalletButton';
@@ -97,6 +99,13 @@ function Sidebar() {
                     icon={searchOutline}
                     to="/stackedsearch"
                 />
+                {/*TODO: enable later*/}
+                {/*<NavLink*/}
+                {/*    title="Whitelist Marketplace"*/}
+                {/*    icon={diamondOutline}*/}
+                {/*    to="/whitelistmarketplace"*/}
+				{/*	needsRole={false}*/}
+                {/*/>*/}
                 <NavLink
                     title="Alerts"
                     icon={notificationsOutline}

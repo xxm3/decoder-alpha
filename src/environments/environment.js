@@ -12,7 +12,9 @@ export const environment = {
 
     // freelance - 973441843347984424
     // production - 927008889092857898
-    clientId: isDev ? '973441843347984424' : '927008889092857898', // client ID for our discord bot,
+    // vehn IC bot - 861589624400904204
+    // damjan? - 973608903801708634
+    clientId: isDev ? '861589624400904204' : '927008889092857898', // client ID for our discord bot,
 	ionicAppUrl : isDev ? "http://localhost:8100" : "https://soldecoder.app"
 };
 
