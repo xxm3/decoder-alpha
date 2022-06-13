@@ -99,12 +99,13 @@ function Sidebar() {
                     icon={searchOutline}
                     to="/stackedsearch"
                 />
-                <NavLink
-                    title="Whitelist Marketplace"
-                    icon={diamondOutline}
-                    to="/whitelistmarketplace"
-					needsRole={false}
-                />
+                {/*TODO: enable later*/}
+                {/*<NavLink*/}
+                {/*    title="Whitelist Marketplace"*/}
+                {/*    icon={diamondOutline}*/}
+                {/*    to="/whitelistmarketplace"*/}
+				{/*	needsRole={false}*/}
+                {/*/>*/}
                 <NavLink
                     title="Alerts"
                     icon={notificationsOutline}
