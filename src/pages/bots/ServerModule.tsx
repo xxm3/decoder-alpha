@@ -8,7 +8,11 @@ import './ServerModule.scss';
 import { useHistory, useLocation, useParams } from 'react-router';
 import Loader from '../../components/Loader';
 import Help from '../../components/Help';
+import InitiateWhitelist from './InitiateWhitelist';
 import { Server } from '../../types/Server';
+import { css } from '@emotion/react';
+
+import Addserver from './components/Addserver';
 
 interface LocationParams {
     pathname: string;
@@ -27,7 +31,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [checked, setChecked] = useState<{ mintInfoModule: boolean; tokenModule: boolean; }>({ mintInfoModule: false, tokenModule: false, });
     const [isLoading, setIsLoading] = useState(false);
-    // const [server, setServer] = useState<Server | null>(null);
     const [showInstruction, setShowInstruction] = useState<boolean>(false)
     const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(false)
     const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] = useState<boolean>(false)
@@ -39,30 +42,32 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [channel, setChannel] = useState<any>(null);
     const [backdrop, setBackdrop] = useState(false);
     const [present, dismiss] = useIonToast();
-    const [role, setRole] = useState<any>(null)
-    const [authorizedModule, setAuthorizedModule] = useState<any>()
+    const [role, setRole] = useState<any>(null);
+    const [authorizedModule, setAuthorizedModule] = useState<any>();
+    // const [server, setServer] = useState<Server | null>(null);
     const { serverId } = useParams<{serverId : string}>();
+    const [addServerFlag, setAddServerFlag] = useState(false)
 
     /**
      * Use Effects
      */
-     useEffect(() => {
-        if(!localStorage.getItem('role')){
-            history.push('/manageserver')
-            return
-        }else{
-            setRole(localStorage.getItem('role'))
-        }
+    //  useEffect(() => {
+    //     if(!localStorage.getItem('role')){
+    //         history.push('/manageserver')
+    //         return
+    //     }else{
+    //         setRole(localStorage.getItem('role'))
+    //     }
 
-        if (window.innerWidth < 525) {
-            setIsMobile(true);
-        }
+    //     if (window.innerWidth < 525) {
+    //         setIsMobile(true);
+    //     }
 
-        if (performance.navigation.type == 1) {
-            history.push('/manageserver')
-        } 
+    //     // if (performance.navigation.type == 1) {
+    //     //     history.push('/manageserver')
+    //     // }
 
-    }, [window.innerWidth]);
+    // }, [window.innerWidth]);
 
     // get guilds
     useEffect(() => {
@@ -296,6 +301,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         );
     }
 
+    if(addServerFlag && serverId){
+        return (
+            <Addserver addServerFlag={addServerFlag} setAddServerFlag={setAddServerFlag} serverId={serverId} />
+        )
+    }
+
     return (
         <>
             <Backdrop style={{ color: '#fff', zIndex: 1000, }} open={backdrop} >
@@ -309,8 +320,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             </div>
             <div className={`text-base flex ${isMobile ? 'mt-2' :''}`}>
                 {authorizedModule === 0 ?
-                    <span className="text-red-500">You don't have enough NFTs to add packages. Please purchase the appropriate amount and have your role verified in Discord </span> :
+                <>
+                    <span className="text-red-500">You don't have enough NFTs to add packages. Please purchase the appropriate amount and have your role verified in Discord </span>
+                    <Addserver addServerFlag={addServerFlag} setAddServerFlag={setAddServerFlag} />
+                </> :
                     <span className="text-green-500">You are authorized to add {authorizedModule} package(s)</span>}
+
             </div>
 
             <div className="flex flex-row justify-center w-full mt-9">
@@ -344,11 +359,13 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     <li>Search for "SOL Decoder Bot"</li>
                                     <li>Scroll down to "Advanced Permissions", make sure the bot is selected on the left</li>
                                     <li>On the right, check the following:</li>
-                                    <li>View Channel</li>
-                                    <li>Send Messages</li>
-                                    <li>Embed Links</li>
+                                    <li>- Send Messages</li>
+                                    <li>- Embed Links</li>
+                                    <li>- Attach Files</li>
                                     <li>Make sure the bot shows as "Online" in the sidebar</li>
                                     <li>Click the "Send a test message" and make sure it works</li>
+
+                                    <img width="350px" src="https://cdn.discordapp.com/attachments/983706216733765642/984217168889667654/Screen_Shot_2022-06-08_at_6.07.31_PM.png" />
                                 </ul>
                             </div>
                             : ''
@@ -556,7 +573,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </div>
                 </div>
             </div>
-
+			<div className="mt-10 mb-5 w-full flex justify-center">
+            	<IonButton className="text-base" css={css`
+					--padding-top: 25px;
+					--padding-bottom: 25px;
+					--padding-end: 20px;
+					--padding-start: 20px;
+				`} onClick={() => history.push(`/initiatewhitelist/${serverId}`)}>
+	                Initiate Whitelist
+	            </IonButton>
+            </div>
         </>
     );
 };

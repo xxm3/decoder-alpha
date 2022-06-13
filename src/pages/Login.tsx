@@ -225,7 +225,7 @@ function Login() {
                                     <span>Read our <a href="https://docs.soldecoder.app" target="_blank" className="underline">docs here</a> </span>
 
                                     <div >View our official YouTube channel to view videos about our website / Discord <a href="https://www.youtube.com/playlist?list=PLeuijfzk0Wfv3rgrurWKo26l7rNy4lJE_" target="_blank" className="underline">here <IonIcon icon={logoYoutube} className="big-emoji ml-1"/></a></div>
-                                    <span> Read our <IonRouterLink href="/privacy" className="pr-7 underline text-inherit">Privacy Policy</IonRouterLink> </span>
+                                    <span> Read our <IonRouterLink href="/privacy" className="pr-7 underline text-inherit">Privacy Policy & ToS</IonRouterLink> </span>
                                     <br/>
                                     <hr/>
                                     <br/><span>Full access to SOL Decoder is only available to those holding one of our NFTs. If you still want to click around the site to see what we offer, then try out the demo below. Note that you will only see old data, and some features are disabled.</span>

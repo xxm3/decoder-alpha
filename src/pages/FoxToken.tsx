@@ -1024,34 +1024,18 @@ function FoxToken({ contentRef }: FoxToken) {
 
     return (
         <>
-            <div
-                hidden={!viewmytoken}
-                className="m-3 relative bg-red-100 p-4 rounded-xl"
-            >
+            <div hidden={!viewmytoken} className="m-3 relative bg-red-100 p-4 rounded-xl" >
                 <div className="text-lg text-red-700 font-medium">
                     <ul>
                         <li>
-                            - Click the red button{' '}
-                            <IonIcon
-                                icon={wallet}
-                                className="text-red-600 text-2xl"
-                            />{' '}
-                            on the top right of the table to check off this step
+                            - Click the red button{' '} <IonIcon icon={wallet} className="text-red-600 text-2xl" />{' '} on the top right of the table to check off this step
                         </li>
                         <li>
-                            - Note you do NOT have to connect your wallet, click
-                            the third button{' '}
-                            <IonIcon
-                                icon={albums}
-                                className="text-2xl text-gray-500"
-                            />{' '}
-                            to manually add a wallet
+                            - Note you do NOT have to connect your wallet, click the third button{' '} <IonIcon  icon={albums} className="text-2xl text-gray-500" />{' '} to manually add a wallet
                         </li>
                     </ul>
                 </div>
-                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                    !
-                </span>
+                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2"> ! </span>
             </div>
 
             {/*
@@ -1245,49 +1229,26 @@ function FoxToken({ contentRef }: FoxToken) {
             </IonModal>
 
             {/* please don't remove this... we need this to teach the user... */}
-            <div
-                className="m-3 relative bg-primary p-4 rounded-xl"
-                hidden={hidHelpTop}
-            >
+            <div className="m-3 relative bg-primary p-4 rounded-xl" hidden={hidHelpTop} >
                 <div className="text-medium text-white font-medium">
                     <b>
-                        - Want to see which tokens in your wallet are actually
-                        worth something? Click this{' '}
-                        <IonIcon
-                            icon={wallet}
-                            className="text-red-600 text-2xl"
-                        />{' '}
-                        to show ONLY the tokens that are in your wallet and
-                        their respective FP
+                        - Want to see which tokens in your wallet are actually worth something? Click this{' '} <IonIcon icon={wallet} className="text-red-600 text-2xl" />{' '} to show ONLY the tokens that are in your wallet and their respective FP
                         {/*Click this on the top right of the table, to filter the table to only the whitelist tokens in your wallet. You may either connect your wallet in the top right of the site, or add 1-3 wallets with the "+" button discussed below*/}
-                        <br />- If you want to add a wallet manually, click this{' '}
-                        <IonIcon icon={albums} className="text-2xl" /> to add
-                        the wallet of your choosing
+                        <br />
+                        - If you want to add a wallet manually, click this{' '} <IonIcon icon={albums} className="text-2xl" /> to add the wallet of your choosing
                         {/*Used with the above "View My Tokens", use this to filter the table to tokens that are on multiple wallets. You may add up to three wallets to watch*/}
-                        <br />- Know what the name of a token is? Click{' '}
-                        <IonIcon icon={add} className="text-2xl" /> and share
-                        the knowledge
+                        <br />
+                        - Know what the name of a token is? Click{' '} <IonIcon icon={add} className="text-2xl" /> and share the knowledge
                         {/*Use this if a token on the Fox Token Market doesn't have an official name yet, and you know for certain what the name of the token is*/}
                         <br />
                         <div className="pt-1">
-                            - Click 📈 to show a Price / Listing chart for that
-                            token
+                            - Click 📈 to show a Price / Listing chart for that token
                         </div>
                     </b>
                     <br />
-                    <IonButton
-                        color="secondary"
-                        className="text-sm space-x-1"
-                        onClick={() => {
-                            clickedSetHidHelpTop();
-                        }}
-                    >
-                        Got it!
-                    </IonButton>
+                    <IonButton color="secondary" className="text-sm space-x-1" onClick={() => { clickedSetHidHelpTop(); }} > Got it! </IonButton>
                 </div>
-                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                    ?
-                </span>
+                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2"> ? </span>
             </div>
 
             <div>
@@ -1296,7 +1257,6 @@ function FoxToken({ contentRef }: FoxToken) {
                         <Loader />
                     </div>
                 ) : (
-                    // css={css``}
                     <div>
                         {/*<IonItem style={{"width": "250px"}}>*/}
                         {/*    <IonLabel>Show Verified Only</IonLabel>*/}
@@ -1317,144 +1277,85 @@ function FoxToken({ contentRef }: FoxToken) {
                                 ''
                             )}
 
-                            <Virtuoso
-                                className="h-20 foxtoken-table"
-                                totalCount={1}
-                                itemContent={() => (
-                                    <>
-                                        {' '}
-                                        <Table
-                                            // id="fox-table-id"
-                                            data={tableData}
-                                            columns={
-                                                isMobile
-                                                    ? columns_mobile
-                                                    : columns
-                                            }
-                                            title="Fox Token Market"
-                                            description="
+                        <Virtuoso  className='h-20 foxtoken-table' totalCount={1}
+                            itemContent ={()=> <>  <Table
+                            data={tableData}
+                            columns={ isMobile ? columns_mobile :columns }
+                            title="Fox Token Market"
+                            description="
                             👪 are community added names.
                             'Not Listed' means it is not listed for sale anymore, and shown for historical purposes.
                             The Last Sale column is only updated when viewing the chart or your own tokens (which updates it for others as well).
                             "
-                                            url="https://famousfoxes.com/tokenmarket"
-                                            actions={[
-                                                {
-                                                    icon: () => (
-                                                        <IonIcon
-                                                            icon={wallet}
-                                                            className={
-                                                                !isDemo
-                                                                    ? 'text-red-600 text-3xl'
-                                                                    : ''
-                                                            }
-                                                        />
-                                                    ),
-                                                    tooltip: viewMyTokensClicked
-                                                        ? 'View All Tokens'
-                                                        : 'View My Tokens',
-                                                    onClick: () =>
-                                                        viewMyTokens(
-                                                            !viewMyTokensClicked
-                                                        ),
-                                                    isFreeAction: true,
-                                                    disabled: isDemo,
-                                                },
-                                                // {
-                                                //     icon: () => (
-                                                //         <IonIcon
-                                                //             icon={notifications}
-                                                //             className=""
-                                                //         />
-                                                //     ),
-                                                //     tooltip:
-                                                //         'Alert on new Tokens to your Wallet',
-                                                //     onClick: () => history.push('/alerts#fnt'),
-                                                //     isFreeAction: true,
-                                                // },
-                                                {
-                                                    icon: () => (
-                                                        <IonIcon
-                                                            icon={albums}
-                                                        />
-                                                    ),
-                                                    tooltip:
-                                                        'Track Multiple wallets',
-                                                    onClick: () =>
-                                                        clickedMultWall(true),
-                                                    isFreeAction: true,
-                                                    disabled: isDemo,
-                                                },
-                                                {
-                                                    icon: () => (
-                                                        <IonIcon icon={add} />
-                                                    ),
-                                                    tooltip:
-                                                        'Add Custom Token Name',
-                                                    onClick: () =>
-                                                        clickedAddName(true),
-                                                    isFreeAction: true,
-                                                },
-                                            ]}
-                                            options={{
-                                                thirdSortClick: false,
-                                                detailPanelType: 'single',
-                                                search: true,
-                                                // sortModel={sortModel},
-                                                searchText: searchValue
-                                                    ? searchValue.replace(
-                                                          '?',
-                                                          ''
-                                                      )
-                                                    : '',
-                                                searchFieldStyle: {
-                                                    marginLeft: '-20%',
-                                                    marginTop: '2%',
-                                                    paddingLeft: '4%',
-                                                    borderRadius: 30,
-                                                    borderWidth: 1,
-                                                    border:
-                                                        mode === 'dark'
-                                                            ? '1px solid rgba(255, 255, 255, 0.876) !important'
-                                                            : '1px solid rgba(10,10,10,0.8) !important',
-                                                },
-                                                rowStyle: (rowData: any) => ({
-                                                    backgroundColor:
-                                                        mode === 'dark'
-                                                            ? ''
-                                                            : 'rgba(239,239,239,0.8)',
-                                                    color:
-                                                        mode === 'dark'
-                                                            ? ''
-                                                            : '#202124',
-                                                    borderTop:
-                                                        mode === 'dark'
-                                                            ? ''
-                                                            : '1px solid rgba(220,220,220,0.8)',
-                                                }),
-                                                // hide eye icon on mobile
-                                                columnsButton: isMobile
-                                                    ? false
-                                                    : true,
-                                            }}
-                                            detailPanel={[
-                                                {
-                                                    icon: '📈',
-                                                    tooltip: 'View Chart',
-                                                    render: (record: any) => (
-                                                        <FoxTokenCharts
-                                                            {...record.rowData}
-                                                        />
-                                                    ),
-                                                },
-                                            ]}
-                                        />
-                                        {/*recent FF tokens*/}
-                                        <FfNamed />
-                                        <ReactTooltip />
-                                    </>
-                                )}
-                            />
+                            url="https://famousfoxes.com/tokenmarket"
+                            actions={[
+                                {
+                                    icon: () => <IonIcon icon={wallet} className={!isDemo ? "text-red-600 text-3xl" : ""} />,
+                                    tooltip: viewMyTokensClicked ? 'View All Tokens' : 'View My Tokens',
+                                    onClick: () => viewMyTokens(!viewMyTokensClicked),
+                                    isFreeAction: true,
+									disabled: isDemo
+                                },
+                                // {
+                                //     icon: () => (
+                                //         <IonIcon
+                                //             icon={notifications}
+                                //             className=""
+                                //         />
+                                //     ),
+                                //     tooltip:
+                                //         'Alert on new Tokens to your Wallet',
+                                //     onClick: () => history.push('/alerts#fnt'),
+                                //     isFreeAction: true,
+                                // },
+                                {
+                                    icon: () => <IonIcon icon={albums} />,
+                                    tooltip: 'Track Multiple wallets',
+                                    onClick: () => clickedMultWall(true),
+                                    isFreeAction: true,
+									disabled: isDemo
+                                },
+                                {
+                                    icon: () => <IonIcon icon={add} />,
+                                    tooltip: 'Add Custom Token Name',
+                                    onClick: () => clickedAddName(true),
+                                    isFreeAction: true,
+                                },
+                            ]}
+                            options={{
+                                thirdSortClick: false,
+                                detailPanelType: 'single',
+                                search: true,
+                                // sortModel={sortModel},
+                                searchText: searchValue ? searchValue.replace('?', "") : '' ,
+                                searchFieldStyle:{
+                                    marginLeft:'-20%',
+                                    marginTop:'2%',
+                                    paddingLeft:"4%",
+                                    borderRadius:30,
+                                    borderWidth: 1,
+                                    border : mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.876) !important' : '1px solid rgba(10,10,10,0.8) !important'
+                                },
+                                rowStyle:( rowData:any) =>  ({
+                                    backgroundColor : mode === 'dark' ? '' : 'rgba(239,239,239,0.8)',
+                                    color: mode === 'dark' ? "" : '#202124',
+                                    borderTop: mode === 'dark' ? "" : '1px solid rgba(220,220,220,0.8)',
+                                }),
+                                // hide eye icon on mobile
+                                columnsButton: isMobile ? false : true,
+                            }}
+                            detailPanel={[
+                                {
+                                    icon: '📈',
+                                    tooltip: 'View Chart',
+                                    render: (record:any) => ( <FoxTokenCharts {...record.rowData} /> ),
+                                },
+                            ]}
+                        />
+                        {/*recent FF tokens*/}
+                        <FfNamed />
+                        <ReactTooltip />
+                        </>}/>
                         </IonContent>
                         {/*-{foxLineData.labels}-*/}
                     </div>
