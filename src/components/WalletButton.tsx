@@ -17,6 +17,7 @@ import {
 import { clusterApiUrl } from '@solana/web3.js';
 import React, { FC, ReactNode, useEffect, useMemo } from 'react';
 import { WalletMultiButton } from './wallet-modal/componet/WalletMultiButton';
+import "./WalletButton.scss"
 
 require('@solana/wallet-adapter-react-ui/styles.css');
 

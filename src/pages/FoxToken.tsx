@@ -530,6 +530,7 @@ function FoxToken({ contentRef }: FoxToken) {
         setFormWalletMult(''); // clear the form
     };
 
+
     const resetMultWallet = useMutation(
         async () => {
             try {
@@ -1006,7 +1007,18 @@ function FoxToken({ contentRef }: FoxToken) {
         }
     };
 
-    /**
+
+
+    useEffect(() => {
+      if(walletAddress){
+        return
+      }
+      if(multWallet && multWallet.length>0){
+        dispatch(setWallet(multWallet[0]));
+      }
+    }, [multWallet])
+    
+   /**
      * Renders
      */
 
@@ -1091,7 +1103,7 @@ function FoxToken({ contentRef }: FoxToken) {
                                     multWallet.map(function (wallet: any) {
                                         return <li key={wallet}>- {wallet}</li>;
                                     })}
-                                    {walletAddress&&<li>- {walletAddress}</li>}
+                                    {walletAddress&& !multWallet?.includes(walletAddress) && <li>- {walletAddress}</li>}
                             </ul>
                         </div>
                     </div>

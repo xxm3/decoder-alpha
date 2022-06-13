@@ -15,8 +15,12 @@ import React, {
 import { Button, ButtonProps } from './Button';
 import { Tooltip } from 'react-tippy';
 import { setWallet } from '../../../redux/slices/walletSlice';
-import { useDispatch } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { useMutation, useQuery as useReactQuery } from 'react-query';
+import { instance } from '../../../axios';
+import { AxiosResponse } from 'axios';
+import { RootState } from '../../../redux/store';
+import { queryClient } from '../../../queryClient';
 
 export const WalletMultiButton: FC<ButtonProps> = ({ children, ...props }) => {
     const { publicKey, wallet, disconnect } = useWallet();
@@ -24,7 +28,10 @@ export const WalletMultiButton: FC<ButtonProps> = ({ children, ...props }) => {
     const [copied, setCopied] = useState(false);
     const [active, setActive] = useState(false);
     const ref = useRef<HTMLUListElement>(null);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const walletAddress = useSelector(
+        (state: RootState) => state.wallet.walletAddress
+    );
 
     const base58 = useMemo(() => publicKey?.toBase58(), [publicKey]);
     const content = useMemo(() => {
@@ -33,15 +40,38 @@ export const WalletMultiButton: FC<ButtonProps> = ({ children, ...props }) => {
         return base58.slice(0, 4) + '..' + base58.slice(-4);
     }, [children, wallet, base58]);
 
+    const { data: multWallet, isLoading: multWalletLoading } = useReactQuery(
+        ['multWallet'],
+        async () => {
+            try {
+                const {
+                    data: { body: multWallet },
+                } = await instance.get('/getMultWallet');
+                console.log('Wallets Added', multWallet);
+                return multWallet as string[];
+            } catch (e) {
+                console.error('try/catch in FoxToken.tsx: ', e);
+                const error = e as Error & { response?: AxiosResponse };
+
+                let msg = '';
+                if (error?.response) {
+                    msg = String(error.response.data.body);
+                } else {
+                    msg = 'Unable to connect. Please try again later';
+                }
+            }
+        }
+    );
+
     useEffect(() => {
-      if(base58){
-        dispatch(setWallet(base58))
-      }else{
-        dispatch(setWallet(null))
-        
-      }
-    }, [base58])
-    
+        if (base58) {
+            dispatch(setWallet(base58));
+        } else if (multWallet && multWallet.length > 0) {
+            dispatch(setWallet(multWallet[0]));
+        } else {
+            dispatch(setWallet(null));
+        }
+    }, [base58, multWallet,content]);
 
     const openDropdown = useCallback(() => {
         setActive(true);
@@ -75,38 +105,50 @@ export const WalletMultiButton: FC<ButtonProps> = ({ children, ...props }) => {
         };
     }, [ref, closeDropdown]);
 
-    if (!wallet)
+    useEffect(() => {
+        console.log("walletAddress",walletAddress)
+    }, [walletAddress])
+    
+
+    if (!wallet && !walletAddress )
         return <WalletModalButton {...props}>{children}</WalletModalButton>;
-    if (!base58)
+    if (!base58  && !walletAddress)
         return <WalletConnectButton {...props}>{children}</WalletConnectButton>;
+
+
 
     return (
         <Tooltip
-            open={true}
-            html={
-                <ul
-                    aria-label="dropdown-list"
-                    className={`wallet-adapter-dropdown-list ${
-                        active && 'wallet-adapter-dropdown-list-active'
-                    }`}
-                    ref={ref}
-                    role="menu"
-                >
-                    <li
-                        onClick={disconnect}
-                        className="wallet-adapter-dropdown-list-item"
-                        role="menuitem"
-                    >
-                        Disconnect
-                    </li>
-                </ul>
-            }
+            html={(
+                <div>
+                 <Button className="tooltip-btn" onClick={async()=>{
+                    if(base58){
+                        disconnect()
+                        if(multWallet && multWallet.length > 0){
+                            dispatch(setWallet(multWallet[0]));
+                        }else{
+                            dispatch(null);
+                        }
+                        return
+                    }
+                        await instance.delete('/resetMultWallet');
+                        queryClient.setQueryData('multWallet', () => []);
+                        dispatch(setWallet(null));
+                        console.log("null")
+                    
+                    }}>
+                 Disconnect
+                 </Button>
+                </div>
+              )}
+            position="bottom"
             trigger="click"
-            position={'bottom'}
+            animation="perspective"
         >
             <Button
                 aria-expanded={active}
                 className="wallet-adapter-button-trigger"
+                
                 style={{
                     pointerEvents: active ? 'none' : 'auto',
                     ...props.style,
@@ -114,29 +156,11 @@ export const WalletMultiButton: FC<ButtonProps> = ({ children, ...props }) => {
                 onClick={openDropdown}
                 {...props}
             >
-                {content}
+                {walletAddress
+                    ? walletAddress.slice(0, 4) + '..' + walletAddress.slice(-4)
+                    : content}
             </Button>
         </Tooltip>
-        // <div className="wallet-adapter-dropdown">
-        //     <Button
-        //         aria-expanded={active}
-        //         className="wallet-adapter-button-trigger"
-        //         style={{ pointerEvents: active ? 'none' : 'auto', ...props.style }}
-        //         onClick={openDropdown}
-        //         {...props}
-        //     >
-        //         {content}
-        //     </Button>
-        //     <ul
-        //         aria-label="dropdown-list"
-        //         className={`wallet-adapter-dropdown-list ${active && 'wallet-adapter-dropdown-list-active'}`}
-        //         ref={ref}
-        //         role="menu"
-        //     >
-        //         <li onClick={disconnect} className="wallet-adapter-dropdown-list-item" role="menuitem">
-        //             Disconnect
-        //         </li>
-        //     </ul>
-        // </div>
+        
     );
 };

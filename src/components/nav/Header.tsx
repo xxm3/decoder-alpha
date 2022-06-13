@@ -74,7 +74,7 @@ const HeaderContainer = () => {
 
         window.addEventListener("resize", resizeWidth);
 
-        onLoad();
+        // onLoad();
         resizeWidth();
 
         return () => {
