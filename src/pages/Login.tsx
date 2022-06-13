@@ -82,7 +82,7 @@ function Login() {
             // console.log(code)
             instance
                 .post(
-                    '/getToken',
+                    '/getTokenNEW', // TODO !!!
                     { code },
                     {
                         headers: {
