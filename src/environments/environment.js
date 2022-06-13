@@ -19,4 +19,4 @@ export const environment = {
 };
 
 
-export const VERSION_CODE = '1.0.33';
+export const VERSION_CODE = '1.0.34';
