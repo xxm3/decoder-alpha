@@ -38,6 +38,9 @@ import meLogo from '../images/me.png';
  * Backend
  * - middleware is in from verify.js
  *   - has some (OVERRIDES FOR LOCAL) to skip logging in via localhost
+ *
+ * If want to test stuff locally:
+ * - ProtectedRoute.tsx - comment out the isDev
  */
 
 function Login() {

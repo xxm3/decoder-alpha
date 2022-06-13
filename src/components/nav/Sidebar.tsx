@@ -99,7 +99,6 @@ function Sidebar() {
                     icon={searchOutline}
                     to="/stackedsearch"
                 />
-                {/*TODO: enable later*/}
                 {/*<NavLink*/}
                 {/*    title="Whitelist Marketplace"*/}
                 {/*    icon={diamondOutline}*/}

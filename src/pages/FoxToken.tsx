@@ -148,7 +148,7 @@ const columns: Column<FoxTokenData> [] = [
                 </a>
             </>,
             hiddenByColumnsButton:true
-            
+
     }
 
 ];
@@ -686,7 +686,7 @@ function FoxToken({contentRef}: FoxToken) {
         // user wants to see MY tokens
         if (wantViewTokens) {
             // set the fact they viewed their token
-            instance.get(environment.backendApi + '/receiver/userViewedMyToken');
+            // instance.get(environment.backendApi + '/receiver/userViewedMyToken');
 
             // see other local host on here to see why
             if (window.location.href.indexOf(local_host_str) !== -1) {

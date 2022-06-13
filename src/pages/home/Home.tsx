@@ -80,7 +80,6 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
                     <FfNamed/>
 
-                    {/*TODO-aries: FIX ALERTS (then enable below...) */}
                     {/*<RecentAlerts/>*/}
 
                     {/*Top Discord Gainers*/}

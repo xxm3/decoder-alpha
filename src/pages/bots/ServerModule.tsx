@@ -51,23 +51,23 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     /**
      * Use Effects
      */
-    //  useEffect(() => {
-    //     if(!localStorage.getItem('role')){
-    //         history.push('/manageserver')
-    //         return
-    //     }else{
-    //         setRole(localStorage.getItem('role'))
-    //     }
+     useEffect(() => {
+        if(!localStorage.getItem('role')){
+            history.push('/manageserver')
+            return
+        }else{
+            setRole(localStorage.getItem('role'))
+        }
 
-    //     if (window.innerWidth < 525) {
-    //         setIsMobile(true);
-    //     }
+        if (window.innerWidth < 525) {
+            setIsMobile(true);
+        }
 
-    //     // if (performance.navigation.type == 1) {
-    //     //     history.push('/manageserver')
-    //     // }
+        // if (performance.navigation.type == 1) {
+        //     history.push('/manageserver')
+        // }
 
-    // }, [window.innerWidth]);
+    }, [window.innerWidth]);
 
     // get guilds
     useEffect(() => {
