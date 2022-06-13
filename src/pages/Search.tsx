@@ -142,14 +142,22 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
             );
             return data;
         } catch (e) {
-            console.error('try/catch in Search.tsx: ', e);
-            const error = e as Error & { response?: AxiosResponse };
+            return {
+                messages: [...Array(20).keys()].map(() => undefined),
+                totalCount: 20,
+                word: searchText,
+                ten_day_count: [],
+                source: []
+            };
 
-            if (error?.response) {
-                throw new Error(String(error.response.data.body));
-            } else {
-                throw new Error('Unable to connect. Please try again later');
-            }
+            // console.error('try/catch in Search.tsx: ', e);
+            // const error = e as Error & { response?: AxiosResponse };
+            //
+            // if (error?.response) {
+            //     throw new Error(String(error.response.data.body));
+            // } else {
+            //     throw new Error('Unable to connect. Please try again later');
+            // }
         }
     }
 
@@ -237,7 +245,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
 
                 if(data){
                     datasetForChartDailyCount = getDailyCountData(data);
-                } 
+                }
 
                 const chartDataDailyCount = {
                     labels: dispLabelsDailyCount(data?.ten_day_count, true),
@@ -302,6 +310,18 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
     return (
         <React.Fragment>
 
+            {/*TODO!*/}
+
+            {/* if need to tell the user of errors */}
+            <div className="m-3 relative bg-red-100 p-4 rounded-xl">
+                <p className="text-lg text-red-700 font-medium">
+                    <b>Sorry some old data was inadvertently deleted, causing charts to reset. They'll fill back in as people type about them, from June 11 and on</b>
+                </p>
+                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                    !
+                </span>
+            </div>
+
             {/* ERROR bar */}
             {graphQuery?.isError || messageQuery?.isError || messageQuery?.data?.error || graphQuery?.data?.error ? (
                 <>
@@ -329,7 +349,7 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
                         graphQuery?.isError ? <p className="text-lg text-red-700 font-medium">
                                 <b>{"Error while loading message"}</b>
                             </p> :
-                            
+
                             <DisplayGraph {...{
                                 chartDataDailyCount:  graphQuery?.data.chartDataDailyCount,
                                 chartDataPerSource:  graphQuery?.data.chartDataPerSource,

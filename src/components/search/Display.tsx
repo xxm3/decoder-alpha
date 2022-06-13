@@ -69,6 +69,9 @@ const Display: React.FC<{
     const completelyHideChart = false; // useMemo(() => word.indexOf(" ") !== -1 ? true : false, [word]);
 
     const definedMessages = messages.filter(Boolean);
+    const [isMobile, setIsMobile] = useState(false);
+
+   
 
     /**
      * Use Effects
@@ -76,6 +79,14 @@ const Display: React.FC<{
     useEffect(() => {
         cookies.set("showChart", String(showChart));
     }, [showChart, cookies])
+
+    useEffect(() => {
+        if (window.innerWidth < 525) {
+            setIsMobile(true)
+        }else{
+            setIsMobile(false)
+        }
+    }, [window.innerWidth])
 
     /**
      * Functions
@@ -86,7 +97,7 @@ const Display: React.FC<{
      */
     return (
         <>
-            <div className="py-10 px-5 messages my-2 overflow-y-scroll rounded-lg mt-10">
+            <div className={`py-10 ${isMobile ? 'px' : 'px-5'} messages my-2 overflow-y-scroll rounded-lg mt-10`}>
                 {/* bar & line chart */}
                 {/* <DisplayGraph {...{
                     chartDataDailyCount : chartDataDailyCount ? chartDataDailyCount: {},
@@ -113,10 +124,7 @@ const Display: React.FC<{
 
                 {/*if you click on a message*/}
                 {selectedMessage && (
-                    <MessageThread
-                        onClose={() => setSelectedMessage(null)}
-                        message={selectedMessage}
-                    />
+                    <MessageThread onClose={() => setSelectedMessage(null)} message={selectedMessage} />
                 )}
             </div>
         </>

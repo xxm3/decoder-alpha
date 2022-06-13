@@ -126,6 +126,58 @@ const PrivacyPolicy = (props:any) => {
                 {/*    In response to a user's direct support inquiry, We may send email(s) providing assistance with regards to his/her questions.*/}
                 {/*</p>*/}
 
+            <div className='secondary-bg-forced m-1 p-4 rounded-xl'>
+                <div className={`font-bold pb-1`}>
+                    Terms of Service
+                </div>
+            </div>
+
+            <p>Last Modified: June 11, 2022</p>
+
+            <p>Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the soldecoder.app website (the "Service") operated by RST LLC ("us", "we", or "our").</p>
+            <p>Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service.</p>
+            <p>By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service.</p>
+
+            <h4>Termination</h4>
+            <p>We may terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
+            <p>All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of
+                liability.</p>
+
+            <h4>Governing Law</h4>
+            <p>These Terms shall be governed and construed in accordance with the laws of the United States, without
+                regard to its conflict of law provisions.</p>
+            <p>Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights.
+                If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions
+                of these Terms will remain in effect. These Terms constitute the entire agreement between us regarding our
+                Service, and supersede and replace any prior agreements we might have between us regarding the Service.</p>
+
+            <h4>No Investment Advice Provided</h4>
+            <p>Any alerts, opinions, chats, messages, news, research, analyses, prices, or other information contained on this Website are provided as general market information for
+                educational and entertainment purposes only, and do not constitute investment advice. The Website should not be relied upon as a substitute for extensive
+                independent market research before making your actual trading decisions. Opinions, market data, recommendations or any other content is subject to change
+                at any time without notice. Our website will not accept liability for any loss or damage, including without limitation any loss of profit, which may
+                arise directly or indirectly from use of or reliance on such information.</p>
+            <p>We do not recommend the use of technical analysis as a sole means of trading decisions. We do not recommend making hurried trading decisions.
+                You should always understand that PAST PERFORMANCE IS NOT NECESSARILY INDICATIVE OF FUTURE RESULTS.</p>
+
+            <h4>Liability & Warranty</h4>
+            <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+                INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+                PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+                HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+                OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+                SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+
+            <h4>Changes</h4>
+            <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material we will try to provide at least 30 days notice prior to any new terms taking effect. What
+                constitutes a material change will be determined at our sole discretion.</p>
+            <p>By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, please stop using the Service.</p>
+
+            <h4>Contact Us</h4>
+            <p>If you have any questions about these Terms, please contact us.</p>
+
+
+
             {/*</div>*/}
 
 
