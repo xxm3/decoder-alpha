@@ -737,7 +737,7 @@ function FoxToken({ contentRef }: FoxToken) {
             return mySplTokensTemporary;
         } else {
             present({
-                message:'Getting your Whitelist tokens from your wallet successfully but no data found',
+                message:'None of your tokens seem to be listed, sorry!',
                 color: 'danger',
                 duration: 5000,
                 buttons: [{ text: 'X', handler: () => dismiss() }],
