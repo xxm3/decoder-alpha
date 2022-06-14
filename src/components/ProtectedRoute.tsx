@@ -19,6 +19,7 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
 	const hasRoles = useSelector<RootState>(state => state.user.hasRoles);
 
 	return user
+        // ### skip if test vehn dojo
         || isDev
     ? (
 		(needsRole && !isDev ? hasRoles : true) ?
