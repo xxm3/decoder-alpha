@@ -736,6 +736,12 @@ function FoxToken({ contentRef }: FoxToken) {
             setMySplTokens(mySplTokensTemporary);
             return mySplTokensTemporary;
         } else {
+            present({
+                message:'Getting your Whitelist tokens from your wallet successfully but no data found',
+                color: 'danger',
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
+            });
             fetchTableData();
         }
 
