@@ -8,7 +8,9 @@ import { IWhitelist } from '../types/IWhitelist';
 import isAxiosError from '../util/isAxiosError';
 import TimeAgo from './TimeAgo';
 import "./WhitelistCard.scss"
-
+import {getUrlExtension, mediaTypes, urlRegExp} from '../util/getURLs';
+import ReactMarkdown from "react-markdown";
+import parse from 'html-react-parser';
 
 const getButtonText = (expired : boolean, claiming : boolean, claimed : boolean, full : boolean) => {
 	if(claimed){
@@ -90,7 +92,14 @@ function WhitelistCard({
             <div
                 className="py-4 px-6 flex-col flex"
             >
-                <p>{description}</p>
+                {/*TODO: need better way for this html /discord stuff asap...*/}
+                {parse( description.replaceAll(
+                        urlRegExp,
+                        (url) => {
+                            return ` <a href="${url}" class="underline cursor-pointer text-blue-300" target="_blank">${url.trim()}</a>`;
+                        }
+                ))
+                }
                 <br/>
 
                 <div className="whitelistInfo grid grid-cols-2">
@@ -133,19 +142,20 @@ function WhitelistCard({
 							duration: 2000,
 						});
 					} catch (error) {
-						console.error(error)
+						console.error(error);
+
 						if(isAxiosError(error) && error.response?.data){
 							present({
 								message: error.response?.data.body,
 								color: 'danger',
-								duration: 1000,
+								duration: 5000,
 							});
 						}
 						else {
 							present({
 								message: "Something went wrong",
 								color: 'danger',
-								duration: 1000,
+								duration: 5000,
 							});
 						}
 					}
