@@ -8,7 +8,7 @@ function useConnectWallet() {
 	const dispatch = useDispatch()
 	const [present] = useIonAlert();
 	const connectWallet = useCallback(async (options : { onlyIfTrusted : boolean} | null) => {
-
+// console.log("options&&&&&&&&&",options)
 			// @ts-ignore
 			const { solana } = window;
 			if (solana && solana.isPhantom) {
