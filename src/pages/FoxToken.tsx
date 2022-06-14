@@ -975,7 +975,6 @@ function FoxToken({ contentRef }: FoxToken) {
                 // this should instantly show the table to the user
                 setTableData(newTableData);
 
-                // REMOVING-FF-FOR-NOW
                 // but then we need to go out and get their latest sales data... takes about 1.5 sec per token
                 instance
                     .post(
@@ -983,24 +982,29 @@ function FoxToken({ contentRef }: FoxToken) {
                         { tokens: newTableData.map((x: any) => x.token) }
                     )
                     .then((res) => {
-                        const sales = res.data.data.salesData;
-                        if (sales) {
-                            sales.forEach(
-                                (sale: {
-                                    token: string;
-                                    lastSaleDate: string;
-                                }) => {
-                                    const row = newTableData.find(
-                                        (d: any) => d.token === sale.token
-                                    );
-                                    row.lastSaleDate = sale.lastSaleDate;
-                                }
-                            );
+                        try{
+                            const sales = res.data.data.salesData;
+                            if (sales) {
+                                sales.forEach(
+                                    (sale: {
+                                        token: string;
+                                        lastSaleDate: string;
+                                    }) => {
+                                        const row = newTableData.find(
+                                            (d: any) => d.token === sale.token
+                                        );
+                                        row.lastSaleDate = sale.lastSaleDate;
+                                    }
+                                );
 
+                                // once we get the data, then we can set it yet again...
+                                setTableData(newTableData);
+                            }
+                        }catch(err){
                             // once we get the data, then we can set it yet again...
                             setTableData(newTableData);
                         }
-                        // }).finally(() => {
+
                     });
             }
 

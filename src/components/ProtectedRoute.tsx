@@ -21,7 +21,7 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
 	return user
         || isDev
     ? (
-		(needsRole ? hasRoles : true) ?
+		(needsRole && !isDev ? hasRoles : true) ?
             <AppRoute {...props} /> :
             <AppRoute {...props} component={() => <div>You cannot access this page</div>} />
 	) : (

@@ -40,38 +40,48 @@ export const WalletMultiButton: FC<ButtonProps> = ({ children, ...props }) => {
         return base58.slice(0, 4) + '..' + base58.slice(-4);
     }, [children, wallet, base58]);
 
-    const { data: multWallet, isLoading: multWalletLoading } = useReactQuery(
-        ['multWallet'],
-        async () => {
-            try {
-                const {
-                    data: { body: multWallet },
-                } = await instance.get('/getMultWallet');
-                console.log('Wallets Added', multWallet);
-                return multWallet as string[];
-            } catch (e) {
-                console.error('try/catch in FoxToken.tsx: ', e);
-                const error = e as Error & { response?: AxiosResponse };
 
-                let msg = '';
-                if (error?.response) {
-                    msg = String(error.response.data.body);
-                } else {
-                    msg = 'Unable to connect. Please try again later';
-                }
-            }
-        }
-    );
+    // const { data: multWallet, isLoading: multWalletLoading } = useReactQuery(
+    //     ['multWallet'],
+    //     async () => {
+    //         try {
+    //             const {
+    //                 data: { body: multWallet },
+    //             } = await instance.get('/getMultWallet');
+    //             console.log('Wallets Added', multWallet);
+    //             return multWallet as string[];
+    //         } catch (e) {
+    //             console.error('try/catch in FoxToken.tsx: ', e);
+    //             const error = e as Error & { response?: AxiosResponse };
+    //
+    //             let msg = '';
+    //             if (error?.response) {
+    //                 msg = String(error.response.data.body);
+    //             } else {
+    //                 msg = 'Unable to connect. Please try again later';
+    //             }
+    //         }
+    //     }
+    // );
+
+    // useEffect(() => {
+    //     if (base58) {
+    //         dispatch(setWallet(base58));
+    //     } else if (multWallet && multWallet.length > 0) {
+    //         dispatch(setWallet(multWallet[0]));
+    //     } else {
+    //         dispatch(setWallet(null));
+    //     }
+    // }, [base58, multWallet,content]);
 
     useEffect(() => {
         if (base58) {
             dispatch(setWallet(base58));
-        } else if (multWallet && multWallet.length > 0) {
-            dispatch(setWallet(multWallet[0]));
         } else {
             dispatch(setWallet(null));
         }
-    }, [base58, multWallet,content]);
+    }, [base58, content]);
+
 
     const openDropdown = useCallback(() => {
         setActive(true);
@@ -108,7 +118,7 @@ export const WalletMultiButton: FC<ButtonProps> = ({ children, ...props }) => {
     useEffect(() => {
         console.log("walletAddress",walletAddress)
     }, [walletAddress])
-    
+
 
     if (!wallet && !walletAddress )
         return <WalletModalButton {...props}>{children}</WalletModalButton>;
@@ -124,18 +134,19 @@ export const WalletMultiButton: FC<ButtonProps> = ({ children, ...props }) => {
                  <Button className="tooltip-btn" onClick={async()=>{
                     if(base58){
                         disconnect()
-                        if(multWallet && multWallet.length > 0){
-                            dispatch(setWallet(multWallet[0]));
-                        }else{
+                        // if(multWallet && multWallet.length > 0){
+                        //     dispatch(setWallet(multWallet[0]));
+                        // }else{
                             dispatch(null);
-                        }
-                        return
+                        // }
+                        return;
                     }
-                        await instance.delete('/resetMultWallet');
-                        queryClient.setQueryData('multWallet', () => []);
-                        dispatch(setWallet(null));
-                        console.log("null")
-                    
+
+                    // await instance.delete('/resetMultWallet');
+                    // queryClient.setQueryData('multWallet', () => []);
+                    // dispatch(setWallet(null));
+                    // console.log("null")
+
                     }}>
                  Disconnect
                  </Button>
@@ -148,7 +159,7 @@ export const WalletMultiButton: FC<ButtonProps> = ({ children, ...props }) => {
             <Button
                 aria-expanded={active}
                 className="wallet-adapter-button-trigger"
-                
+
                 style={{
                     pointerEvents: active ? 'none' : 'auto',
                     ...props.style,
@@ -161,6 +172,6 @@ export const WalletMultiButton: FC<ButtonProps> = ({ children, ...props }) => {
                     : content}
             </Button>
         </Tooltip>
-        
+
     );
 };

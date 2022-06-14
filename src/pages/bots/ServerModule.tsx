@@ -21,11 +21,14 @@ interface LocationParams {
     hash: string;
 }
 
-
 const ServerModule: React.FC<AppComponentProps> = () => {
     /**
      * States & Variables
      */
+    const useQuery = () => new URLSearchParams(useLocation().search);
+    const query = useQuery();
+    const devMode = query.get('devMode');
+
     let history = useHistory();
     const location: LocationParams = useLocation();
     const [isMobile, setIsMobile] = useState(false);
@@ -573,7 +576,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </div>
                 </div>
             </div>
-			<div className="mt-10 mb-5 w-full flex justify-center">
+
+			<div className="mt-10 mb-5 w-full flex justify-center" hidden={!devMode}>
             	<IonButton className="text-base" css={css`
 					--padding-top: 25px;
 					--padding-bottom: 25px;
@@ -583,6 +587,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 	                Initiate Whitelist
 	            </IonButton>
             </div>
+
         </>
     );
 };

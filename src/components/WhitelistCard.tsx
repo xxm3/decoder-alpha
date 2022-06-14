@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { IonButton, IonIcon, IonSpinner, useIonToast } from '@ionic/react';
-import { logoTwitter } from 'ionicons/icons';
+import {logoDiscord, logoTwitter} from 'ionicons/icons';
 import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { instance } from '../axios';
@@ -66,6 +66,16 @@ function WhitelistCard({
                         </p>
                     </div>
 
+                    {/*{discord && (*/}
+                    {/*    <a*/}
+                    {/*        href={discord}*/}
+                    {/*        className="self-center hover:opacity-70"*/}
+                    {/*        target="_blank"*/}
+                    {/*    >*/}
+                    {/*        <IonIcon icon={logoDiscord} className="h-5 w-5" />*/}
+                    {/*    </a>*/}
+                    {/*)}*/}
+
                     {twitter && (
                         <a
                             href={twitter}
@@ -80,6 +90,9 @@ function WhitelistCard({
             <div
                 className="py-4 px-6 flex-col flex"
             >
+                <p>{description}</p>
+                <br/>
+
                 <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>
                     <p>{type.toUpperCase()}</p>
@@ -128,7 +141,7 @@ function WhitelistCard({
 								duration: 1000,
 							});
 						}
-						else { 
+						else {
 							present({
 								message: "Something went wrong",
 								color: 'danger',
