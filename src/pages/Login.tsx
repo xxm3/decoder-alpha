@@ -41,6 +41,9 @@ import meLogo from '../images/me.png';
  *
  * If want to test stuff locally:
  * - ProtectedRoute.tsx - comment out the isDev
+ * - verify.js
+ *      - uncomment -> if (process.env.TEST_VEHN_DOJO) {
+ *      - comment -> req.headers.host === 'localhost:5001'
  */
 
 function Login() {

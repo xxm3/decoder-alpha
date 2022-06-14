@@ -120,14 +120,13 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                 </>
             }
 
-            {/*TODO sumit freelance -- all messed up  */}
            {/* Word count of yesterday, last 3 days, last 5 days */}
            {/* <div hidden={!devMode}>*/}
            {/*     <WordsCount/>*/}
            {/* </div>*/}
 
-            {/* Top search words of past dat */}
-            {/* <TopSearchWords/> */}
+            {/* Top search words of past day */}
+            {/* <TopSearchWords/>*/}
 
 
              {/* Recent Community Searches  */}
