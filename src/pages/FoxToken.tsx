@@ -736,6 +736,12 @@ function FoxToken({ contentRef }: FoxToken) {
             setMySplTokens(mySplTokensTemporary);
             return mySplTokensTemporary;
         } else {
+            present({
+                message:'None of your tokens seem to be listed, sorry!',
+                color: 'danger',
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
+            });
             fetchTableData();
         }
 
