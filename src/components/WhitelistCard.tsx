@@ -10,7 +10,8 @@ import TimeAgo from './TimeAgo';
 import "./WhitelistCard.scss"
 import {getUrlExtension, mediaTypes, urlRegExp} from '../util/getURLs';
 import ReactMarkdown from "react-markdown";
-import parse from 'html-react-parser';
+// import parse from 'html-react-parser';
+import reactStringReplace from 'react-string-replace';
 import ConfettiExplosion from 'react-confetti-explosion';
 
 const getButtonText = (expired : boolean, claiming : boolean, claimed : boolean, full : boolean) => {
@@ -105,14 +106,14 @@ function WhitelistCard({
             <div
                 className="py-4 px-6 flex-col flex"
             >
-                {/*TODO: need better way for this html /discord stuff asap...*/}
-                {parse( description.replaceAll(
-                        urlRegExp,
-                        (url) => {
-                            return ` <a href="${url}" class="underline cursor-pointer text-blue-300" target="_blank">${url.trim()}</a>`;
-                        }
-                ))
-                }
+
+                {description}
+                {/*{*/}
+                {/*    reactStringReplace(description, urlRegExp, (match: any, url: any) => (*/}
+                {/*        <a href="${url}" class="underline cursor-pointer text-blue-300" target="_blank">${url.trim()}</a>;*/}
+                {/*    ))*/}
+                {/*}*/}
+
                 <br/>
 
                 <div className="whitelistInfo grid grid-cols-2">

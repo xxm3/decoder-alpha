@@ -119,6 +119,7 @@
     "react-refresh": "^0.11.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
+    "react-string-replace": "^1.1.0",
     "react-tippy": "^1.4.0",
     "react-tooltip": "^4.2.21",
     "react-virtuoso": "^2.10.0",

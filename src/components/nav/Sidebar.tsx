@@ -139,7 +139,6 @@ function Sidebar() {
                     external={'https://twitter.com/SOL_Decoder'}
                 />
 
-                {/*TODO: uncomment*/}
                 {/* logout Button  */}
                 {/*{isLogin === 'isLogin' ? */}
                     <div>
