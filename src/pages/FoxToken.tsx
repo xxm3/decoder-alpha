@@ -736,12 +736,12 @@ function FoxToken({ contentRef }: FoxToken) {
             setMySplTokens(mySplTokensTemporary);
             return mySplTokensTemporary;
         } else {
-            // present({
-            //     message:'None of your tokens seem to be listed, sorry!',
-            //     color: 'danger',
-            //     duration: 5000,
-            //     buttons: [{ text: 'X', handler: () => dismiss() }],
-            // });
+            present({
+                message:'None of your tokens seem to be listed, sorry!',
+                color: 'danger',
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
+            });
             fetchTableData();
         }
 
@@ -876,6 +876,7 @@ function FoxToken({ contentRef }: FoxToken) {
             // see other local host on here to see why
             if (window.location.href.indexOf(local_host_str) !== -1) {
                 SplTokens = await getUserSpls();
+               
             }
             if (!multWallet?.length && !walletAddress) {
                 present({
@@ -890,8 +891,7 @@ function FoxToken({ contentRef }: FoxToken) {
 
             // make sure they have tokens
             if (
-                mySplTokens.length === 0 &&
-                (!SplTokens || SplTokens.length === 0)
+                mySplTokens.length === 0 && (!SplTokens || SplTokens.length === 0 ) && !walletAddress
             ) {
                 // show toast
                 present({
