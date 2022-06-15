@@ -26,6 +26,7 @@ function WhitelistMarketplace() {
             {whitelists.map((whitelist) => (
                 <WhitelistCard {...whitelist} key={whitelist.id}/>
             ))}
+
         </div>
     );
 }

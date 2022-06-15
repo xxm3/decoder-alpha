@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { IonButton, IonIcon, IonSpinner, useIonToast } from '@ionic/react';
 import {logoDiscord, logoTwitter} from 'ionicons/icons';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useQueryClient } from 'react-query';
 import { instance } from '../axios';
 import { IWhitelist } from '../types/IWhitelist';
@@ -11,6 +11,7 @@ import "./WhitelistCard.scss"
 import {getUrlExtension, mediaTypes, urlRegExp} from '../util/getURLs';
 import ReactMarkdown from "react-markdown";
 import parse from 'html-react-parser';
+import ConfettiExplosion from 'react-confetti-explosion';
 
 const getButtonText = (expired : boolean, claiming : boolean, claimed : boolean, full : boolean) => {
 	if(claimed){
@@ -52,8 +53,19 @@ function WhitelistCard({
 	const [present] = useIonToast();
 
 	const full = claimCounts >= max_users;
+
+    const [isExploding, setIsExploding] = React.useState(false);
+
+    // useEffect(() => {
+    //     setIsExploding(true);
+    // }, []);
+
     return (
+
         <div className="border-gray-500 border-[0.5px] rounded-2xl w-80 overflow-clip">
+
+            {isExploding && <ConfettiExplosion />}
+
             <div className="relative overflow-y-hidden h-60 w-80">
                 <img
                     src={image}
@@ -89,6 +101,7 @@ function WhitelistCard({
                     )}
                 </div>
             </div>
+
             <div
                 className="py-4 px-6 flex-col flex"
             >
@@ -111,8 +124,8 @@ function WhitelistCard({
 					<p>{required_role_name}</p>
 					<p className="timeLeft">Time left</p>
 					<TimeAgo setExpired={setExpired} date={expiration_date}/>
-
                 </div>
+
 				{expired !== undefined && <IonButton css={css`
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
 				`} className="my-2 self-center" onClick={async () => {
@@ -135,12 +148,16 @@ function WhitelistCard({
                                 );
                             }
                         );
+
+                        setIsExploding(true);
+
 						present({
 							message:
-								'Whitelist claimed successfully!',
+								'Whitelist claimed successfully! You are now whitelisted in the other Discord',
 							color: 'success',
-							duration: 2000,
+							duration: 10000,
 						});
+
 					} catch (error) {
 						console.error(error);
 
@@ -163,6 +180,7 @@ function WhitelistCard({
 						setClaiming(false)
 					}
 				}} disabled={expired || claiming || claimed || full}>{getButtonText(expired,claiming,claimed, full)}</IonButton>}
+
             </div>
         </div>
     );
