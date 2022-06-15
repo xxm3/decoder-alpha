@@ -9,6 +9,7 @@ import BgImage from '../../images/logo-transparent.png';
 import { useHistory, useLocation } from 'react-router';
 import Loader from '../../components/Loader';
 import Addserver from './components/Addserver';
+import { Button } from '../../components/wallet-modal/componet/Button';
 
 interface Server {
     id: string;
@@ -21,6 +22,7 @@ interface Server {
 
 const ManageServer: React.FC<AppComponentProps> = () => {
     let history = useHistory();
+    
     /**
      * States & Variables
      */
@@ -108,9 +110,22 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                     Unable to find any servers you are the owner of. If you are one, then logout in the sidebar and try logging in again (or use a new browser)
                 </div> :
             <>
+            <div className='flex justify-between'>
                 <IonLabel className="text-4xl font-semibold mb-3">
                     Select a Server
                 </IonLabel>
+
+                {/*  */}
+
+                <Button onClick={()=>{
+                    history.push('/view-guild')
+                }}>
+                    View Guild Members
+                </Button>
+            </div>
+
+
+                {/*  */}
 
                 <div className="my-3 relative bg-yellow-300/25 p-5 rounded-xl">
                     <div className="text-md">
