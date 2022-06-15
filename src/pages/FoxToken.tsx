@@ -876,7 +876,7 @@ function FoxToken({ contentRef }: FoxToken) {
             // see other local host on here to see why
             if (window.location.href.indexOf(local_host_str) !== -1) {
                 SplTokens = await getUserSpls();
-               
+
             }
             if (!multWallet?.length && !walletAddress) {
                 present({

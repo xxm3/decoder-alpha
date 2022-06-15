@@ -129,14 +129,6 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
             {/* <TopSearchWords/>*/}
 
 
-             {/* Recent Community Searches  */}
-            {/* <div hidden={window.location.hostname !== 'localhost'}>
-               <SearchedWords/>
-            </div> */}
-
-
-
-
             {/* if need to tell the user of errors */}
             {/*<div className="m-3 relative bg-red-100 p-4 rounded-xl">*/}
             {/*    <p className="text-lg text-red-700 font-medium">*/}
