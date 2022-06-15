@@ -16,9 +16,6 @@ type MessageListItemProps =
           onClick?: (message: Message) => any;
       }
 
-
-
-
 const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
     (
         {
@@ -30,7 +27,6 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
         ref
     ) => {
 
-       
         const { id: word } = useParams<{ id: string }>();
         const { formattedMessage, mediaUrls } = useMemo(() => {
             if (!message) return { formattedMessage : "", mediaUrls: [] };
@@ -103,7 +99,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                         {/*time*/}
                         {(
                             <div className="text-xs text-gray-400 c-res-time-text flex justify-between items-center" // underline cursor-pointer
-                                data-tip={new Date( time as string ).toLocaleString()} 
+                                data-tip={new Date( time as string ).toLocaleString()}
                                 >
                                 <div className='whitespace-nowrap' >
                                     {getDateAgo(time)}

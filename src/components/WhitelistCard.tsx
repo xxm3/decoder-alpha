@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { IonButton, IonIcon, IonSpinner, useIonToast } from '@ionic/react';
-import { logoTwitter } from 'ionicons/icons';
+import {logoDiscord, logoTwitter} from 'ionicons/icons';
 import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { instance } from '../axios';
@@ -8,7 +8,9 @@ import { IWhitelist } from '../types/IWhitelist';
 import isAxiosError from '../util/isAxiosError';
 import TimeAgo from './TimeAgo';
 import "./WhitelistCard.scss"
-
+import {getUrlExtension, mediaTypes, urlRegExp} from '../util/getURLs';
+import ReactMarkdown from "react-markdown";
+import parse from 'html-react-parser';
 
 const getButtonText = (expired : boolean, claiming : boolean, claimed : boolean, full : boolean) => {
 	if(claimed){
@@ -66,6 +68,16 @@ function WhitelistCard({
                         </p>
                     </div>
 
+                    {/*{discord && (*/}
+                    {/*    <a*/}
+                    {/*        href={discord}*/}
+                    {/*        className="self-center hover:opacity-70"*/}
+                    {/*        target="_blank"*/}
+                    {/*    >*/}
+                    {/*        <IonIcon icon={logoDiscord} className="h-5 w-5" />*/}
+                    {/*    </a>*/}
+                    {/*)}*/}
+
                     {twitter && (
                         <a
                             href={twitter}
@@ -80,6 +92,16 @@ function WhitelistCard({
             <div
                 className="py-4 px-6 flex-col flex"
             >
+                {/*TODO: need better way for this html /discord stuff asap...*/}
+                {parse( description.replaceAll(
+                        urlRegExp,
+                        (url) => {
+                            return ` <a href="${url}" class="underline cursor-pointer text-blue-300" target="_blank">${url.trim()}</a>`;
+                        }
+                ))
+                }
+                <br/>
+
                 <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>
                     <p>{type.toUpperCase()}</p>
@@ -120,19 +142,20 @@ function WhitelistCard({
 							duration: 2000,
 						});
 					} catch (error) {
-						console.error(error)
+						console.error(error);
+
 						if(isAxiosError(error) && error.response?.data){
 							present({
 								message: error.response?.data.body,
 								color: 'danger',
-								duration: 1000,
+								duration: 5000,
 							});
 						}
-						else { 
+						else {
 							present({
 								message: "Something went wrong",
 								color: 'danger',
-								duration: 1000,
+								duration: 5000,
 							});
 						}
 					}
