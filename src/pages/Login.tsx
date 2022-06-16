@@ -39,7 +39,7 @@ import meLogo from '../images/me.png';
  * - middleware is in from verify.js
  *   - has some (OVERRIDES FOR LOCAL) to skip logging in via localhost
  *
- * If want to test stuff locally:
+ * If want to test stuff locally (ie. To skip over Discord ouath)
  * - ProtectedRoute.tsx - comment out the isDev
  * - verify.js
  *      - comment out -> if (process.env.TEST_VEHN_DOJO) {

@@ -51,7 +51,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
     const [socketVar,setSocketVar] = useState<any>()
     const [dataPages,setDatapages] = useState<any>([])
     const role = localStorage.getItem('role')
-    let socket: Socket<DefaultEventsMap, DefaultEventsMap>; 
+    let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
     async function fetchContext({ pageParam = defaultPageParam}: QueryFunctionContext<MessageThreadQueryKey, PageParam>) {
         try {
@@ -134,7 +134,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         }
     }, [window.innerWidth])
 
-    // get Live messages 
+    // get Live messages
 
     const viewLiveMessages = () => {
         initiateSocket()
@@ -143,7 +143,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             console.log('Connect Socket------')
         }else{
             present({
-                message: `You are not able to view live messages because you don't have 3 NFT`,
+                message: `You are not able to view live messages because you don't have 3 NFTs`,
                 color: 'danger',
                 duration: 5000,
                 buttons: [{ text: 'X', handler: () => dismiss() }],
@@ -193,13 +193,13 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                 ...message,
                 time : message.time ? message.time : message.updatedAt
             }))
-             
+
             setDatapages([data.subsequentMsg])
         })
         setSocketVar(socket)
-       
+
     }
-     
+
     // Disconnect socket on close button
     const disconnectSocket = () => {
         socketVar.disconnect();
@@ -227,8 +227,8 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                         </div>
                     </div>
                     {isLoading ? <div className='flex justify-center'><Loader/></div> : ''}
-                    
-                    
+
+
                     <div className={`overflow-y-scroll h-full w-full mx-auto ${isMobile ? 'p1' :'p-5'}`}>
                         { dataPages && dataPages?.length > 0 ? dataPages.map((page:any,index:number) =>{
                                 return <div key={index}>
