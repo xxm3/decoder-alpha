@@ -1,18 +1,47 @@
 import {
-    IonButton,IonList,IonLabel,IonItem,IonInput,IonModal,IonContent,IonHeader,
-    IonToolbar, IonTitle, useIonToast, IonIcon, IonRippleEffect,IonRefresher, IonRefresherContent, IonGrid
+    IonButton,
+    IonList,
+    IonLabel,
+    IonItem,
+    IonInput,
+    IonModal,
+    IonContent,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    useIonToast,
+    IonIcon,
+    IonRippleEffect,
+    IonRefresher,
+    IonRefresherContent,
+    IonGrid,
 } from '@ionic/react';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
-import Loader from "../components/Loader";
-import {instance} from "../axios";
-import {environment} from "../environments/environment";
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import Loader from '../components/Loader';
+import { instance } from '../axios';
+import { environment } from '../environments/environment';
 import * as solanaWeb3 from '@solana/web3.js';
-import {add,albums,chevronDown,chevronUp,close,notifications,notificationsOutline,wallet,cog,logoDiscord, logoTwitter} from "ionicons/icons";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../redux/store";
-import ReactTooltip from "react-tooltip";
-import Cookies from "universal-cookie";
-import {getLiveFoxTokenData, shortenedWallet} from "../components/FoxTokenFns";
+import {
+    add,
+    albums,
+    chevronDown,
+    chevronUp,
+    close,
+    notifications,
+    notificationsOutline,
+    wallet,
+    cog,
+    logoDiscord,
+    logoTwitter,
+} from 'ionicons/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import ReactTooltip from 'react-tooltip';
+import Cookies from 'universal-cookie';
+import {
+    getLiveFoxTokenData,
+    shortenedWallet,
+} from '../components/FoxTokenFns';
 import Table from '../components/Table';
 import { Column } from '@material-table/core';
 import _ from 'lodash';
@@ -23,35 +52,37 @@ import useFoxTokenChartCookies from '../components/useFoxTokenChartCookies';
 import { css } from '@emotion/react';
 import moment from 'moment';
 import { useHistory, Route, useParams } from 'react-router';
-import FfNamed from "./home/FfNamed";
-import usePersistentState from "../hooks/usePersistentState"
-import {useLocation} from 'react-router-dom';
-import { useMutation, useQuery as useReactQuery } from "react-query"
+import FfNamed from './home/FfNamed';
+import usePersistentState from '../hooks/usePersistentState';
+import { useLocation } from 'react-router-dom';
+import { useMutation, useQuery as useReactQuery } from 'react-query';
 import { AxiosResponse } from 'axios';
 import { queryClient } from '../queryClient';
 import { RefresherEventDetail } from '@ionic/core';
 import { Virtuoso } from 'react-virtuoso';
-import './FoxToken.scss'
+import './FoxToken.scss';
 import { setWallet } from '../redux/slices/walletSlice';
-import  TVChartContainer  from '../components/ChartContainer'
+import TVChartContainer from '../components/ChartContainer';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 // @ts-ignore
-const columns: Column<FoxTokenData> [] = [
+const columns: Column<FoxTokenData>[] = [
     {
         title: 'Token',
         render: (record) => (
             <div className="w-44">
-
-                <span className="relative top-2 pr-3 w-24" >
+                <span className="relative top-2 pr-3 w-24">
                     {/*ff link*/}
                     <a
                         href={`https://famousfoxes.com/tokenmarket/${record.token}`}
                         target="_blank"
                         className="hover:opacity-80 "
-                        >
+                    >
                         <img
                             src="/assets/icons/FoxTokenLogo.svg"
-                            css={css`color: var(--ion-text-color);`}
+                            css={css`
+                                color: var(--ion-text-color);
+                            `}
                             className="h-5 pr-1 inline mb-4"
                         />
                     </a>
@@ -67,9 +98,6 @@ const columns: Column<FoxTokenData> [] = [
                             className="h-5 pr-1 inline mb-4"
                         />
                     </a>
-
-
-
                 </span>
 
                 <br className="xl:hidden lg:hidden" />
@@ -77,53 +105,73 @@ const columns: Column<FoxTokenData> [] = [
                 {shortenedWallet(record.token)}
             </div>
         ),
-        width: "300px",
+        width: '300px',
         customSort: (a, b) => a.token.localeCompare(b.token),
-		customFilterAndSearch: (term, rowData) =>rowData?.token?.toLowerCase().includes(term.toLowerCase()),
+        customFilterAndSearch: (term, rowData) =>
+            rowData?.token?.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Name',
         customSort: (a, b) => a.name?.localeCompare(b.name),
         render: (record) => <span>{record?.name}</span>,
-		customFilterAndSearch: (term, rowData) =>  rowData?.name?.toLowerCase().includes(term.toLowerCase()),
+        customFilterAndSearch: (term, rowData) =>
+            rowData?.name?.toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Price',
         customSort: (a, b) => a.floorPrice - b.floorPrice,
-        render: (record) => <div className='break-all whitespace-normal w-40'>{record?.floorPrice} ◎</div>,
+        render: (record) => (
+            <div className="break-all whitespace-normal w-40">
+                {record?.floorPrice} ◎
+            </div>
+        ),
         // customFilterAndSearch: ( rowData) => rowData.floorPrice,        customFilterAndSearch: (term, rowData,) =>   JSON.stringify(rowData.floorPrice).toLowerCase().includes(term.toLowerCase()),
     },
     {
         title: 'Listings',
         customSort: (a, b) => a.totalTokenListings - b.totalTokenListings,
-        render: (record) => <span>{ record?.totalTokenListings }</span>,
+        render: (record) => <span>{record?.totalTokenListings}</span>,
     },
     {
         title: 'Created',
         // @ts-ignore
-        render: (record) => <span>{moment(record.createdAt).format('MM-DD-YYYY')}</span>,
+        render: (record) => (
+            <span>{moment(record.createdAt).format('MM-DD-YYYY')}</span>
+        ),
         // @ts-ignore
-        customSort: (a, b) => new Date(a.createdAt) as any - (new Date(b.createdAt) as any),
-
+        customSort: (a, b) =>
+            (new Date(a.createdAt) as any) - (new Date(b.createdAt) as any),
     },
     {
         title: 'Last Sale',
-        customSort: (a, b) => new Date(a.lastSaleDate ? a.lastSaleDate : 0 ) as any - (new Date(b.lastSaleDate ? b.lastSaleDate : 0) as any),
-        render: (record) => <div className='w-20'>{record && record.lastSaleDate ? moment(record.lastSaleDate).fromNow() : '-'}</div>,
+        customSort: (a, b) =>
+            (new Date(a.lastSaleDate ? a.lastSaleDate : 0) as any) -
+            (new Date(b.lastSaleDate ? b.lastSaleDate : 0) as any),
+        render: (record) => (
+            <div className="w-20">
+                {record && record.lastSaleDate
+                    ? moment(record.lastSaleDate).fromNow()
+                    : '-'}
+            </div>
+        ),
     },
     {
         title: '# Owned',
-        render: (record) => <div className='w-20'>{record?.whichMyWallets?.split('-')[0]}</div>,
+        render: (record) => (
+            <div className="w-20">{record?.whichMyWallets?.split('-')[0]}</div>
+        ),
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
     },
     {
         title: 'Wallet',
-        render: (record) => <span>{record?.whichMyWallets?.split('-')[1]}</span>,
+        render: (record) => (
+            <span>{record?.whichMyWallets?.split('-')[1]}</span>
+        ),
         // sorter: (a, b) => a.whichMyWallets.localeCompare(b.whichMyWallets),
     },
     {
         title: '',
-        render: (record) =>
+        render: (record) => (
             <>
                 {/*twitter*/}
                 <a
@@ -140,84 +188,188 @@ const columns: Column<FoxTokenData> [] = [
                 <a
                     href={'https://discord.gg/' + record.discord}
                     target="_blank"
-                    className={"hover:opacity-80 pr-1"}
+                    className={'hover:opacity-80 pr-1'}
                     hidden={!record.discord}
                 >
-                    <IonIcon icon={logoDiscord} className="big-emoji "/>
+                    <IonIcon icon={logoDiscord} className="big-emoji " />
                     <IonRippleEffect />
                 </a>
-            </>,
-            hiddenByColumnsButton:true
-            
-    }
+
+    {/*        </>,*/}
+    {/*        hiddenByColumnsButton:true*/}
+
+    {/*}*/}
+
+            </>
+        ),
+        hiddenByColumnsButton: true,
+    },
 
 ];
 const columns_mobile: Column<FoxTokenData>[] = [
     {
         title: 'Details',
-        render: (record:any) => (
+        render: (record: any) => (
             <span className="">
                 <div>
                     {/*twitter*/}
-                    {record.twitter ? <a
-                        href={'https://twitter.com/' + record.twitter}
-                        className="hover:opacity-80"
-                        target="_blank"
-                        hidden={!record.twitter}
-                    >
-                        <IonIcon icon={logoTwitter} className="big-emoji " />
-                        <IonRippleEffect />
-                    </a> : null }
+                    {record.twitter ? (
+                        <a
+                            href={'https://twitter.com/' + record.twitter}
+                            className="hover:opacity-80"
+                            target="_blank"
+                            hidden={!record.twitter}
+                        >
+                            <IonIcon
+                                icon={logoTwitter}
+                                className="big-emoji "
+                            />
+                            <IonRippleEffect />
+                        </a>
+                    ) : null}
 
                     {/*discord*/}
-                    { record.discord ? <> <a
-                        href={'https://discord.gg/' + record.discord}
-                        target="_blank"
-                        className={"hover:opacity-80 ml-1"}
-                        hidden={!record.discord}
-                    >
-                        <IonIcon icon={logoDiscord} className="big-emoji "/>
-                        <IonRippleEffect />
-                    </a> </> : null }
+                    {record.discord ? (
+                        <>
+                            {' '}
+                            <a
+                                href={'https://discord.gg/' + record.discord}
+                                target="_blank"
+                                className={'hover:opacity-80 ml-1'}
+                                hidden={!record.discord}
+                            >
+                                <IonIcon
+                                    icon={logoDiscord}
+                                    className="big-emoji "
+                                />
+                                <IonRippleEffect />
+                            </a>{' '}
+                        </>
+                    ) : null}
 
                     {/*ff link*/}
-                    <a href={`https://famousfoxes.com/tokenmarket/${record.token}`} target="_blank" className="hover:opacity-80 ml-1 ">
-                        <img src="/assets/icons/FoxTokenLogo.svg" css={css`color: var(--ion-text-color);`} className="h-5 pr-1 inline mb-4"/>
+                    <a
+                        href={`https://famousfoxes.com/tokenmarket/${record.token}`}
+                        target="_blank"
+                        className="hover:opacity-80 ml-1 "
+                    >
+                        <img
+                            src="/assets/icons/FoxTokenLogo.svg"
+                            css={css`
+                                color: var(--ion-text-color);
+                            `}
+                            className="h-5 pr-1 inline mb-4"
+                        />
                     </a>
 
                     {/*solscan*/}
-                    <a href={`https://solscan.io/token/${record.token}`} target="_blank" className="hover:opacity-80">
-                            <img src="/assets/icons/solscan.png" className="h-5 ml-1 inline mb-4" />
+                    <a
+                        href={`https://solscan.io/token/${record.token}`}
+                        target="_blank"
+                        className="hover:opacity-80"
+                    >
+                        <img
+                            src="/assets/icons/solscan.png"
+                            className="h-5 ml-1 inline mb-4"
+                        />
                     </a>
                 </div>
 
                 {/* <br className="xl:hidden lg:hidden" /> */}
-                {<><span> <b>Token : </b>{shortenedWallet(record?.row_obj?.token)}</span></>}
-                {<><br/><span ><b>Name : </b>{record?.row_obj?.name}</span></>}
-                {<><br/><span><b>Price : </b>{record?.row_obj?.floorPrice} ◎</span></>}
-                {<><br/><span><b>Listings : </b>{record?.row_obj?.totalTokenListings}</span></>}
-                {<><br/><span><b>Created : </b>{moment(record?.row_obj?.createdAt).format('DD-MM-YYYY')}</span></>}
-                {<><br/><span><b>Last Sale Date : </b>{moment(record?.row_obj?.lastSaleDate).fromNow()}</span></>}
-                {<><br/><span><b>Owned : </b>{record?.row_obj?.whichMyWallets?.split('-')[0]}</span></>}
-                {<><br/><span><b>Wallet : </b>{record?.row_obj?.whichMyWallets?.split('-')[1]}</span></>}
-
+                {
+                    <>
+                        <span>
+                            {' '}
+                            <b>Token : </b>
+                            {shortenedWallet(record?.row_obj?.token)}
+                        </span>
+                    </>
+                }
+                {
+                    <>
+                        <br />
+                        <span>
+                            <b>Name : </b>
+                            {record?.row_obj?.name}
+                        </span>
+                    </>
+                }
+                {
+                    <>
+                        <br />
+                        <span>
+                            <b>Price : </b>
+                            {record?.row_obj?.floorPrice} ◎
+                        </span>
+                    </>
+                }
+                {
+                    <>
+                        <br />
+                        <span>
+                            <b>Listings : </b>
+                            {record?.row_obj?.totalTokenListings}
+                        </span>
+                    </>
+                }
+                {
+                    <>
+                        <br />
+                        <span>
+                            <b>Created : </b>
+                            {moment(record?.row_obj?.createdAt).format(
+                                'DD-MM-YYYY'
+                            )}
+                        </span>
+                    </>
+                }
+                {
+                    <>
+                        <br />
+                        <span>
+                            <b>Last Sale Date : </b>
+                            {moment(record?.row_obj?.lastSaleDate).fromNow()}
+                        </span>
+                    </>
+                }
+                {
+                    <>
+                        <br />
+                        <span>
+                            <b>Owned : </b>
+                            {record?.row_obj?.whichMyWallets?.split('-')[0]}
+                        </span>
+                    </>
+                }
+                {
+                    <>
+                        <br />
+                        <span>
+                            <b>Wallet : </b>
+                            {record?.row_obj?.whichMyWallets?.split('-')[1]}
+                        </span>
+                    </>
+                }
             </span>
-            ),
-            customSort: (a, b) => a.token.localeCompare(b.token),
-            customFilterAndSearch: (term, rowData) => {
-                return rowData?.token?.toLowerCase().includes(term.toLowerCase()) || rowData?.name?.toLowerCase().includes(term.toLowerCase())
-            },
+        ),
+        customSort: (a, b) => a.token.localeCompare(b.token),
+        customFilterAndSearch: (term, rowData) => {
+            return (
+                rowData?.token?.toLowerCase().includes(term.toLowerCase()) ||
+                rowData?.name?.toLowerCase().includes(term.toLowerCase())
+            );
+        },
     },
-
 ];
 
 interface FoxToken {
-    contentRef: AppComponentProps["contentRef"]
+    contentRef: AppComponentProps['contentRef'];
 }
 
-function FoxToken({contentRef}: FoxToken) {
-
-	const isDemo = useSelector<RootState, boolean>((state : RootState) => state?.demo.demo);
+function FoxToken({ contentRef }: FoxToken) {
+    const isDemo = useSelector<RootState, boolean>(
+        (state: RootState) => state?.demo.demo
+    );
 
     const [present, dismiss] = useIonToast();
     const history = useHistory();
@@ -227,7 +379,7 @@ function FoxToken({contentRef}: FoxToken) {
     const viewmytoken = query.get('viewmytoken');
 
     // search value from today's mint
-    const [searchValue,setSearchValue] = useState<string>();
+    const [searchValue, setSearchValue] = useState<string>();
     const location = useLocation();
 
     /**
@@ -241,107 +393,122 @@ function FoxToken({contentRef}: FoxToken) {
 
     const [popoverOpened, setPopoverOpened] = useState(false);
     const [viewAbuse, setViewAbuse] = useState(false);
-    const [isMobile,setIsMobile] = useState(false)
+    const [isMobile, setIsMobile] = useState(false);
 
-    const [mode] = usePersistentState("mode", "dark");
+    const [mode] = usePersistentState('mode', 'dark');
     const cookies = useMemo(() => new Cookies(), []);
 
-	const {
-		chartDateSelected,
-		setChartDateSelected,
-		lineColorSelected,
-		setLineColorSelected,
-		shadedAreaColorSelected,
-		setShadedAreaColorSelected
-	} = useFoxTokenChartCookies()
-    const [hidHelpTop, setHidHelpTop] = usePersistentState<boolean>('hidHelpTop', false)
+    const {
+        chartDateSelected,
+        setChartDateSelected,
+        lineColorSelected,
+        setLineColorSelected,
+        shadedAreaColorSelected,
+        setShadedAreaColorSelected,
+    } = useFoxTokenChartCookies();
+    const [hidHelpTop, setHidHelpTop] = usePersistentState<boolean>(
+        'hidHelpTop',
+        false
+    );
+
+
+    const { disconnect } = useWallet();
 
     const clickedSetHidHelpTop = () => {
         setHidHelpTop(true);
-    }
+    };
 
+    const { data: multWallet, isLoading: multWalletLoading } = useReactQuery(
+        ['multWallet'],
+        async () => {
+            try {
+                const {
+                    data: { body: multWallet },
+                } = await instance.get('/getMultWallet');
+                console.log('Wallets Added', multWallet);
+                return multWallet as string[];
+            } catch (e) {
+                console.error('try/catch in FoxToken.tsx: ', e);
+                const error = e as Error & { response?: AxiosResponse };
 
-	const { data : multWallet, isLoading : multWalletLoading} = useReactQuery(["multWallet"], async () => {
-		try {
-			const { data : { body : multWallet }} = await instance.get("/getMultWallet");
-			return multWallet as string[];
-		} catch (e) {
-			console.error('try/catch in FoxToken.tsx: ', e);
-            const error = e as Error & { response?: AxiosResponse };
+                let msg = '';
+                if (error?.response) {
+                    msg = String(error.response.data.body);
+                } else {
+                    msg = 'Unable to connect. Please try again later';
+                }
 
-            let msg = '';
-            if (error?.response) {
-                msg = String(error.response.data.body);
-            } else {
-                msg = 'Unable to connect. Please try again later';
+                present({
+                    message: msg,
+                    color: 'danger',
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
+                });
             }
-
-            present({
-                message: msg,
-                color: 'danger',
-                duration: 5000,
-                buttons: [{ text: 'X', handler: () => dismiss() }],
-            });
-		}
-
-	})
+        }
+    );
     // clicked link to add multiple wallets
     const clickedMultWall = (val: boolean) => {
         setAddMultWallModalOpen(val);
         // setPopoverOpened(false);
-    }
+    };
 
     useEffect(() => {
-        if (window.innerWidth < 525){
-            setIsMobile(true)
+        if (window.innerWidth < 525) {
+            setIsMobile(true);
         }
-    }, [window.innerWidth])
+    }, [window.innerWidth]);
 
-	const addMultWallet = useMutation(async (multWallet : string) => {
-		try {
-			await instance.post('/addaMultWallet', {
-				multWallet
-			})
-			return multWallet
-		} catch (e) {
-			console.error('try/catch in FoxToken.tsx: ', e);
-			const error = e as Error & { response?: AxiosResponse };
+    const addMultWallet = useMutation(
+        async (multWallet: string) => {
+            try {
+                await instance.post('/addaMultWallet', {
+                    multWallet,
+                });
+                return multWallet;
+            } catch (e) {
+                console.error('try/catch in FoxToken.tsx: ', e);
+                const error = e as Error & { response?: AxiosResponse };
 
-			let msg = '';
-			if (error && error.response) {
-				msg = String(error.response.data.body);
-			} else {
-				msg = 'Unable to connect. Please try again later';
-			}
+                let msg = '';
+                if (error && error.response) {
+                    msg = String(error.response.data.body);
+                } else {
+                    msg = 'Unable to connect. Please try again later';
+                }
 
-			throw new Error(msg);
-		}
+                throw new Error(msg);
+            }
+        },
+        {
+            onError: (error: Error) => {
+                present({
+                    message: error.message,
+                    color: 'danger',
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
+                });
+            },
+            onSuccess: (multWallet: string) => {
+                queryClient.setQueryData('multWallet', (old) => [
+                    ...(old as string[]),
+                    multWallet,
+                ]);
+                present({
+                    message: 'Successfully added the wallet',
+                    color: 'success',
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
+                });
+            },
+        }
+    );
 
-	}, {
-		onError : (error : Error) => {
-			present({
-				message: error.message,
-				color: 'danger',
-				duration: 5000,
-				buttons: [{ text: 'X', handler: () => dismiss() }],
-			});
-		},
-		onSuccess : (multWallet : string) => {
-			queryClient.setQueryData('multWallet', old => [...(old as string[]), multWallet]);
-			present({
-                message: 'Successfully added the wallet',
-                color: 'success',
-                duration: 5000,
-                buttons: [{ text: 'X', handler: () => dismiss() }],
-            });
-		}
-	})
-
-	const formLoadingMultWallet = addMultWallet.isLoading;
+    const formLoadingMultWallet = addMultWallet.isLoading;
     const dispatch = useDispatch();
     // in the modal for multiple wallets - submit button clicked
     const addMultWalletsSubmit = () => {
-        dispatch(setWallet(formWalletMult));
+        // dispatch(setWallet(formWalletMult));
         if (multWallet?.length == 3) {
             present({
                 message: 'Error - you may only track a maximum of 3 wallets',
@@ -371,74 +538,79 @@ function FoxToken({contentRef}: FoxToken) {
     };
 
 
-	const resetMultWallet = useMutation(async () => {
-		try {
-			await instance.delete('/resetMultWallet');
+    const resetMultWallet = useMutation(
+        async () => {
+            try {
+                await instance.delete('/resetMultWallet');
+            } catch (e) {
+                console.error('try/catch in FoxToken.tsx: ', e);
+                const error = e as Error & { response?: AxiosResponse };
 
-		} catch (e) {
-			console.error('try/catch in FoxToken.tsx: ', e);
-			const error = e as Error & { response?: AxiosResponse };
+                let msg = '';
+                if (error?.response) {
+                    msg = String(error.response.data.body);
+                } else {
+                    msg = 'Unable to connect. Please try again later';
+                }
 
-			let msg = '';
-			if (error?.response) {
-				msg = String(error.response.data.body);
-			} else {
-				msg = 'Unable to connect. Please try again later';
-			}
-
-			throw new Error(msg);
-		}
-
-	}, {
-		onError : (error : Error) => {
-			present({
-				message: error.message,
-				color: 'danger',
-				duration: 5000,
-				buttons: [{ text: 'X', handler: () => dismiss() }],
-			});
-		},
-		onSuccess : () => {
-			queryClient.setQueryData('multWallet', []);
-			present({
-                message: 'Successfully reset mult wallet',
-                color: 'success',
-                duration: 5000,
-                buttons: [{ text: 'X', handler: () => dismiss() }],
-            });
-		}
-	})
+                throw new Error(msg);
+            }
+        },
+        {
+            onError: (error: Error) => {
+                present({
+                    message: error.message,
+                    color: 'danger',
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
+                });
+            },
+            onSuccess: () => {
+                queryClient.setQueryData('multWallet', []);
+                present({
+                    message: 'Successfully reset mult wallet',
+                    color: 'success',
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
+                });
+            },
+        }
+    );
 
     // user clicked button to delete their multiple wallets
     const resetMultWalletsSubmit = () => {
-
         present({
             cssClass: '',
             header: 'Delete Wallets?',
-            message: 'Are you sure you want to reset all of your stored wallets?',
+            message:
+                'Are you sure you want to reset all of your stored wallets?',
             buttons: [
                 'Cancel',
                 {
                     text: 'Ok',
-					handler: () => {
+                    handler: () => {
+                        disconnect().then(result=>{
+                            console.log("Result",result)
+                        }).catch((err) => {console.log("err",err)})
                         resetMultWallet.mutate();
                         dispatch(setWallet(null));
-					}
+                    },
                 },
             ],
         });
-
-    }
+    };
 
     /**
      * States & Variables
      */
     const [tableData, _setTableData] = useState<FoxTokenData[]>([]);
     const [fullTableData, setFullTableData] = useState<FoxTokenData[]>([]);
-    const [mySolBalance, setMySolBalance] = useState("");
+    const [mySolBalance, setMySolBalance] = useState('');
 
     const setTableData = (data: FoxTokenData[]) =>
-        _setTableData(data.map((row) => ({...row,row_obj:row, id: row.token})));
+        _setTableData(
+            data.map((row) => ({ ...row, row_obj: row, id: row.token }))
+        );
     const [mySplTokens, setMySplTokens]: any = useState([]);
 
     const [viewMyTokensClicked, setViewMyTokensClicked] = useState(false);
@@ -461,65 +633,68 @@ function FoxToken({contentRef}: FoxToken) {
      * Functions
      */
     // Pull to refresh function
-     function doRefresh(event: CustomEvent<RefresherEventDetail>) {
+    function doRefresh(event: CustomEvent<RefresherEventDetail>) {
         setTimeout(() => {
-            fetchTableData()
-          event.detail.complete();
+            fetchTableData();
+            event.detail.complete();
         }, 1000);
-      }
-
+    }
 
     // load table data!
     const fetchTableData = async () => {
-            setTableData([]);
+        setTableData([]);
 
-            // ....bugs site...
-            // getUserSpls();
+        // ....bugs site...
+        // getUserSpls();
 
-            const data: any = await getLiveFoxTokenData(mySplTokens);
+        const data: any = await getLiveFoxTokenData(mySplTokens);
 
-            // sometimes only gets named ones...
-            if(data.length > 50 && data.length < 500){
-                present({
-                    message: 'We had trouble loading all tokens. Refresh to load all tokens',
-                    color: 'danger',
-                    duration: 5000,
-                    buttons: [{ text: 'X', handler: () => dismiss() }],
-                });
-            }
-
-            if(data.length > 0){
-                setTableData(data);
-                setFullTableData(data);
-            }else{
-                present({
-                    message: 'Unable to load data. Refresh and try again.',
-                    color: 'danger',
-                    duration: 5000,
-                    buttons: [{ text: 'X', handler: () => dismiss() }],
-                });
-            }
+        // sometimes only gets named ones...
+        if (data.length > 50 && data.length < 500) {
+            present({
+                message:
+                    'We had trouble loading all tokens. Refresh to load all tokens',
+                color: 'danger',
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
+            });
         }
 
+        if (data.length > 0) {
+            setTableData(data);
+            setFullTableData(data);
+        } else {
+            present({
+                message: 'Unable to load data. Refresh and try again.',
+                color: 'danger',
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
+            });
+        }
+    };
 
     // give a wallet ... return all spl tokens in it
     const getSplFromWallet = async (wallet: string) => {
         try {
-            const { data: splTokens } = await instance.get(`${environment.backendApi}/getSplFromWallet`, { params: { wallet } });
+            const { data: splTokens } = await instance.get(
+                `${environment.backendApi}/getSplFromWallet`,
+                { params: { wallet } }
+            );
             if (splTokens) {
                 setMySolBalance(splTokens.balance);
                 return splTokens.data;
             } else return [];
         } catch (err) {
             present({
-                message: 'Error when getting your Whitelist tokens from your wallet',
+                message:
+                    'Error when getting your Whitelist tokens from your wallet',
                 color: 'danger',
                 duration: 5000,
                 buttons: [{ text: 'X', handler: () => dismiss() }],
             });
             return [];
         }
-    }
+    };
 
     // https://github.com/solana-labs/solana-program-library/blob/master/token/js/examples/create_mint_and_transfer_tokens.ts
     // https://docs.solana.com/es/developing/clients/jsonrpc-api#gettokenaccountsbyowner
@@ -535,7 +710,9 @@ function FoxToken({contentRef}: FoxToken) {
         // first try with the wallet address we got logged in
         if (walletAddress) {
             // @ts-ignore
-            mySplTokensTemporary = mySplTokensTemporary.concat(await getSplFromWallet(walletAddress));
+            mySplTokensTemporary = mySplTokensTemporary.concat(
+                await getSplFromWallet(walletAddress)
+            );
         }
 
         // now go through the wallets in cookies
@@ -544,26 +721,32 @@ function FoxToken({contentRef}: FoxToken) {
                 const tempWall = multWallet[i];
                 // make sure it's length of a sol wallet ... and that its not the connected wallet
                 if (tempWall.length === 44 && tempWall !== walletAddress) {
-                    mySplTokensTemporary = mySplTokensTemporary.concat(await getSplFromWallet(tempWall));
+                    mySplTokensTemporary = mySplTokensTemporary.concat(
+                        await getSplFromWallet(tempWall)
+                    );
                 }
-
             }
-        // if didn't have any wallets ... then just load table...
-        }else{
+            // if didn't have any wallets ... then just load table...
+        } else {
             fetchTableData();
         }
 
         // @ts-ignore
-         if(mySplTokensTemporary && mySplTokensTemporary.length > 0) {
+        if (mySplTokensTemporary && mySplTokensTemporary.length > 0) {
             setMySplTokens(mySplTokensTemporary);
-            return mySplTokensTemporary
-
-        }else{
-             fetchTableData();
-         }
+            return mySplTokensTemporary;
+        } else {
+            present({
+                message:'None of your tokens seem to be listed, sorry!',
+                color: 'danger',
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
+            });
+            fetchTableData();
+        }
 
         // console.log(mySplTokensTemporary);
-    }
+    };
 
     // useEffect(() => {
     //     console.log(viewmytoken);
@@ -579,7 +762,6 @@ function FoxToken({contentRef}: FoxToken) {
     // load table data, after we load in user tokens
     // isn't called on local host, see below useEffect
     useEffect(() => {
-
         if (firstUpdate.current) {
             firstUpdate.current = false;
             return;
@@ -588,33 +770,34 @@ function FoxToken({contentRef}: FoxToken) {
         if (window.location.href.indexOf(local_host_str) === -1) {
             fetchTableData();
         }
-
     }, [mySplTokens]);
 
     // call on load, when cookie array set
     useEffect(() => {
         setSearchValue(location.search);
 
-		if(!multWalletLoading){
-			// however DON'T do this in local host (will do this elsewhere ... since get RPC blocked)
-			if (window.location.href.indexOf(local_host_str) === -1) {
-				getUserSpls();
-			} else {
-                if(location.search){
+        if (!multWalletLoading) {
+            // however DON'T do this in local host (will do this elsewhere ... since get RPC blocked)
+            if (window.location.href.indexOf(local_host_str) === -1) {
+                getUserSpls();
+            } else {
+                if (location.search) {
                     fetchTableData();
-                }else{
-                    if(location.pathname === '/foxtoken'){
+                } else {
+                    if (location.pathname === '/foxtoken') {
                         fetchTableData();
                     }
                 }
-			}
-		}
-
-    }, [multWallet, multWalletLoading,location]);
+            }
+        }
+    }, [multWallet, multWalletLoading, location]);
 
     // also call when new wallet is connected to
     useEffect(() => {
-        if (window.location.href.indexOf(local_host_str) === -1 && walletAddress) {
+        if (
+            window.location.href.indexOf(local_host_str) === -1 &&
+            walletAddress
+        ) {
             getUserSpls();
         }
     }, [walletAddress]);
@@ -630,72 +813,75 @@ function FoxToken({contentRef}: FoxToken) {
     const clickedAddName = (val: boolean) => {
         setAddNameModalOpen(val);
         // setPopoverOpened(false);
-    }
+    };
 
     // submit form to add new wallet
     const submittedForm = () => {
-
         const body = {
             formToken: formToken,
             formName: formName,
-        }
+        };
 
         setFormLoading(true);
         setFormErrMsg('');
 
-        instance.post(environment.backendApi + '/receiver/foxTokenNameAdd', body).then(resp => {
-
-            if (resp.data.error) {
-                setFormLoading(false);
-                if (resp.data.message) {
-                    setFormErrMsg(resp.data.message);
+        instance
+            .post(environment.backendApi + '/receiver/foxTokenNameAdd', body)
+            .then((resp) => {
+                if (resp.data.error) {
+                    setFormLoading(false);
+                    if (resp.data.message) {
+                        setFormErrMsg(resp.data.message);
+                    } else {
+                        setFormErrMsg(
+                            'An error occurred. Please contact us if this continues to happen'
+                        );
+                    }
                 } else {
-                    setFormErrMsg('An error occurred. Please contact us if this continues to happen');
+                    setFormLoading(false);
+                    setFormToken('');
+                    setFormName('');
+
+                    clickedAddName(false);
+
+                    // show toast
+                    present({
+                        message:
+                            'Successfully added the name. Refresh to see it',
+                        color: 'success',
+                        duration: 5000,
+                        buttons: [{ text: 'X', handler: () => dismiss() }],
+                    });
                 }
+            })
+            .catch((err) => {
+                console.error(err);
 
-            } else {
                 setFormLoading(false);
-                setFormToken('');
-                setFormName('');
-
-                clickedAddName(false);
-
-                // show toast
-                present({
-                    message: 'Successfully added the name. Refresh to see it',
-                    color: 'success',
-                    duration: 5000,
-                    buttons: [{ text: 'X', handler: () => dismiss() }],
-                });
-            }
-
-        }).catch(err => {
-            console.error(err);
-
-            setFormLoading(false);
-            setFormErrMsg(err);
-        });
-    }
+                setFormErrMsg(err);
+            });
+    };
 
     // Viewing MY tokens - filter the table
     const viewMyTokens = async (wantViewTokens: boolean) => {
-        let SplTokens:any
+        let SplTokens: any;
 
         // setPopoverOpened(null);
 
         // user wants to see MY tokens
         if (wantViewTokens) {
             // set the fact they viewed their token
-            instance.get(environment.backendApi + '/receiver/userViewedMyToken');
+            // instance.get(environment.backendApi + '/receiver/userViewedMyToken');
 
             // see other local host on here to see why
             if (window.location.href.indexOf(local_host_str) !== -1) {
                 SplTokens = await getUserSpls();
-            }
-            if (!multWallet?.length && !walletAddress ) {
 
+            }
+            if (!multWallet?.length && !walletAddress) {
                 present({
-                    message: 'Please connect to your wallet, or click "Add Multiple Wallets" to add one (or three!) manually. Then you can filter this table to only the tokens in your wallet.',
+                    message:
+                        'Please connect to your wallet, or click "Add Multiple Wallets" to add one (or three!) manually. Then you can filter this table to only the tokens in your wallet.',
                     color: 'danger',
                     duration: 10000,
                     buttons: [{ text: 'X', handler: () => dismiss() }],
@@ -704,16 +890,18 @@ function FoxToken({contentRef}: FoxToken) {
             }
 
             // make sure they have tokens
-           if (mySplTokens.length === 0 && (!SplTokens || SplTokens.length===0) ) {
+            if (
+                mySplTokens.length === 0 && (!SplTokens || SplTokens.length === 0 ) && !walletAddress
+            ) {
                 // show toast
                 present({
-                    message: 'No tokens found on your wallet(s) :( Tokens must be in your wallet, and have an active listing on Fox Token Market',
+                    message:
+                        'No tokens found on your wallet(s) :( Tokens must be in your wallet, and have an active listing on Fox Token Market',
                     color: 'danger',
                     duration: 5000,
                     buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
                 return;
-
             } else {
                 setViewMyTokensClicked(true);
                 // setTableData([]);
@@ -724,32 +912,52 @@ function FoxToken({contentRef}: FoxToken) {
                 // loop through table data (all fox tokens)
                 for (let i in tableData) {
                     // if match, then push
-                    if(mySplTokens.length > 0){
+                    if (mySplTokens.length > 0) {
                         for (let y in mySplTokens) {
                             if (mySplTokens[y].token === tableData[i].token) {
-
-                                if (window.location.href.indexOf(local_host_str) !== -1) {
+                                if (
+                                    window.location.href.indexOf(
+                                        local_host_str
+                                    ) !== -1
+                                ) {
                                     // then ADD data
                                     if (!tableData[i].whichMyWallets) {
-                                        tableData[i].whichMyWallets = shortenedWallet(mySplTokens[y].wallet);
+                                        tableData[i].whichMyWallets =
+                                            shortenedWallet(
+                                                mySplTokens[y].wallet
+                                            );
                                     } else {
-                                        tableData[i].whichMyWallets += ", " + shortenedWallet(mySplTokens[y].wallet);
+                                        tableData[i].whichMyWallets +=
+                                            ', ' +
+                                            shortenedWallet(
+                                                mySplTokens[y].wallet
+                                            );
                                     }
                                 }
-                               newTableData.push(tableData[i]);
+                                newTableData.push(tableData[i]);
                                 break;
                             }
                         }
-                    }else{
+                    } else {
                         for (let y in SplTokens) {
                             if (SplTokens[y].token === tableData[i].token) {
-
-                                if (window.location.href.indexOf(local_host_str) !== -1) {
+                                if (
+                                    window.location.href.indexOf(
+                                        local_host_str
+                                    ) !== -1
+                                ) {
                                     // then ADD data
                                     if (!tableData[i].whichMyWallets) {
-                                        tableData[i].whichMyWallets = shortenedWallet(SplTokens[y].wallet);
+                                        tableData[i].whichMyWallets =
+                                            shortenedWallet(
+                                                SplTokens[y].wallet
+                                            );
                                     } else {
-                                        tableData[i].whichMyWallets += ", " + shortenedWallet(SplTokens[y].wallet);
+                                        tableData[i].whichMyWallets +=
+                                            ', ' +
+                                            shortenedWallet(
+                                                SplTokens[y].wallet
+                                            );
                                     }
                                 }
                                 newTableData.push(tableData[i]);
@@ -761,7 +969,8 @@ function FoxToken({contentRef}: FoxToken) {
 
                 if (newTableData.length === 0) {
                     present({
-                        message: 'None of your tokens are also listed on FF Token Market :(',
+                        message:
+                            'None of your tokens are also listed on FF Token Market :(',
                         color: 'danger',
                         duration: 5000,
                         buttons: [{ text: 'X', handler: () => dismiss() }],
@@ -772,25 +981,37 @@ function FoxToken({contentRef}: FoxToken) {
                 // this should instantly show the table to the user
                 setTableData(newTableData);
 
-                // REMOVING-FF-FOR-NOW
                 // but then we need to go out and get their latest sales data... takes about 1.5 sec per token
                 instance
-                    .post(`${environment.backendApi}/receiver/foxTokenLatestSale`, { tokens: newTableData.map((x: any) => x.token) })
+                    .post(
+                        `${environment.backendApi}/receiver/foxTokenLatestSale`,
+                        { tokens: newTableData.map((x: any) => x.token) }
+                    )
                     .then((res) => {
-                        const sales = res.data.data.salesData;
-                        if(sales){
-                            sales.forEach((sale: {token: string, lastSaleDate: string}) => {
-                                const row = newTableData.find((d: any) => d.token === sale.token);
-                                row.lastSaleDate = sale.lastSaleDate;
-                            });
+                        try{
+                            const sales = res.data.data.salesData;
+                            if (sales) {
+                                sales.forEach(
+                                    (sale: {
+                                        token: string;
+                                        lastSaleDate: string;
+                                    }) => {
+                                        const row = newTableData.find(
+                                            (d: any) => d.token === sale.token
+                                        );
+                                        row.lastSaleDate = sale.lastSaleDate;
+                                    }
+                                );
 
+                                // once we get the data, then we can set it yet again...
+                                setTableData(newTableData);
+                            }
+                        }catch(err){
                             // once we get the data, then we can set it yet again...
                             setTableData(newTableData);
                         }
-                    // }).finally(() => {
 
                     });
-
             }
 
             // user wants to see ALL tokens
@@ -801,7 +1022,18 @@ function FoxToken({contentRef}: FoxToken) {
         }
     };
 
-    /**
+
+
+    useEffect(() => {
+      if(walletAddress){
+        return
+      }
+      if(multWallet && multWallet.length>0){
+        dispatch(setWallet(multWallet[0]));
+      }
+    }, [multWallet])
+
+   /**
      * Renders
      */
 
@@ -851,20 +1083,26 @@ function FoxToken({contentRef}: FoxToken) {
                                 Used with "View My Tokens" (where you can filter
                                 the table to show only tokens in your wallet).
                                 Use this to filter the table to tokens that are
-                                on multiple wallets. Data is saved cross-platform.
+                                on multiple wallets. Data is saved
+                                cross-platform.
                             </p>
                         </div>
                     </div>
 
-                    <div hidden={!multWallet || multWallet.length == 0} className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl">
+                    <div
+                        hidden={(!multWallet || multWallet.length == 0) && !walletAddress}
+                        className="ml-3 mr-3 mb-5 relative bg-gradient-to-b from-bg-primary to-bg-secondary p-3 rounded-xl"
+                    >
                         <div className="font-medium">
                             {' '}
                             {/* text-lg   */}
                             <span className="font-bold">Wallets Added:</span>
                             <ul>
-                                {multWallet && multWallet.map(function (wallet: any) {
-                                    return <li key={wallet}>- {wallet}</li>;
-                                })}
+                                {multWallet &&
+                                    multWallet.map(function (wallet: any) {
+                                        return <li key={wallet}>- {wallet}</li>;
+                                    })}
+                                    {walletAddress&& !multWallet?.includes(walletAddress) && <li>- {walletAddress}</li>}
                             </ul>
                         </div>
                     </div>
@@ -875,7 +1113,9 @@ function FoxToken({contentRef}: FoxToken) {
                                 SOL Wallet Address
                             </IonLabel>
                             <IonInput
-                                onIonChange={(e) => setFormWalletMult(e.detail.value!)}
+                                onIonChange={(e) =>
+                                    setFormWalletMult(e.detail.value!)
+                                }
                                 value={formWalletMult}
                                 placeholder="ex. 91q2zKjAATs28sdXT5rbtKddSU81BzvJtmvZGjFj54iU"
                             ></IonInput>
@@ -1037,10 +1277,20 @@ function FoxToken({contentRef}: FoxToken) {
                         {/*    <IonLabel>Show Verified Only</IonLabel>*/}
                         {/*    <IonCheckbox onIonChange={e => setCheckedVerifiedOnly(e.detail.checked)} />*/}
                         {/*</IonItem>*/}
-                        <IonContent  className='h-screen' scroll-y='false'>
-                        {isMobile ?  <IonRefresher slot="fixed" onIonRefresh={doRefresh} pullFactor={0.5} pullMin={100} pullMax={200}  >
-                            <IonRefresherContent />
-                        </IonRefresher> : '' }
+                        <IonContent className="h-screen" scroll-y="false">
+                            {isMobile ? (
+                                <IonRefresher
+                                    slot="fixed"
+                                    onIonRefresh={doRefresh}
+                                    pullFactor={0.5}
+                                    pullMin={100}
+                                    pullMax={200}
+                                >
+                                    <IonRefresherContent />
+                                </IonRefresher>
+                            ) : (
+                                ''
+                            )}
 
                         <Virtuoso  className='h-20 foxtoken-table' totalCount={1}
                             itemContent ={()=> <>  <Table

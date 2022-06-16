@@ -310,17 +310,15 @@ const Search: React.FC<AppComponentProps> = ({contentRef}) => {
     return (
         <React.Fragment>
 
-            {/*TODO!*/}
-
             {/* if need to tell the user of errors */}
-            <div className="m-3 relative bg-red-100 p-4 rounded-xl">
-                <p className="text-lg text-red-700 font-medium">
-                    <b>Sorry some old data was inadvertently deleted, causing charts to reset. They'll fill back in as people type about them, from June 11 and on</b>
-                </p>
-                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
-                    !
-                </span>
-            </div>
+            {/*<div className="m-3 relative bg-red-100 p-4 rounded-xl">*/}
+            {/*    <p className="text-lg text-red-700 font-medium">*/}
+            {/*        <b>Sorry some old data was inadvertently deleted, causing charts to reset. They'll fill back in as people type about them, from June 11 and on</b>*/}
+            {/*    </p>*/}
+            {/*    <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">*/}
+            {/*        !*/}
+            {/*    </span>*/}
+            {/*</div>*/}
 
             {/* ERROR bar */}
             {graphQuery?.isError || messageQuery?.isError || messageQuery?.data?.error || graphQuery?.data?.error ? (

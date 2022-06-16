@@ -104,7 +104,6 @@ const Schedule = () => {
     }
 
     // get user time zone from user data
-
     const GetUserTimeZone = async() => {
         await instance.get(`${environment.backendApi}/currentUser`)
         .then((res: any) => {

@@ -6,6 +6,10 @@ import { isDev } from "../environments/environment";
 import { RootState } from "../redux/store";
 import AppRoute from "./Route";
 
+/**
+ * Descriptions of the login flow on Login.tsx
+ */
+
 // a route to be used to protect pages against unauthenticated users
 const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
 	needsRole ?: boolean
@@ -15,11 +19,12 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
 	const hasRoles = useSelector<RootState>(state => state.user.hasRoles);
 
 	return user
-        || isDev // TODO (if test WL) !!!
+        // ### skip if test vehn dojo
+        || isDev
     ? (
-		(needsRole ? hasRoles : true) ?
+		(needsRole && !isDev ? hasRoles : true) ?
             <AppRoute {...props} /> :
-            <AppRoute {...props} component={() => <div>You cannot access this page</div>} />
+            <AppRoute {...props} component={() => <div>You cannot access this page. If you feel this is an error, click "Logout" on bottom left and log back in</div>} />
 	) : (
 		<Route
 			{...props}

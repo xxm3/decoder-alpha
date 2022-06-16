@@ -99,7 +99,6 @@ function Sidebar() {
                     icon={searchOutline}
                     to="/stackedsearch"
                 />
-                {/*TODO: enable later*/}
                 {/*<NavLink*/}
                 {/*    title="Whitelist Marketplace"*/}
                 {/*    icon={diamondOutline}*/}
@@ -141,9 +140,11 @@ function Sidebar() {
                 />
 
                 {/* logout Button  */}
-                {isLogin === 'isLogin' ? <div>
-                <span onClick={() => setLogoutPopupOpen(true)} color="primary" className="px-2 mx-0 w-full"> Logout </span>
-                </div> : '' }
+                {/*{isLogin === 'isLogin' ? */}
+                    <div>
+                        <span onClick={() => setLogoutPopupOpen(true)} color="primary" className="px-2 mx-0 w-full"> Logout </span>
+                    </div>
+                {/*: '' }*/}
 
 
                 {/* hide wallet button in mobile so don't comment out */}
