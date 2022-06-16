@@ -157,7 +157,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
     // Socket initial
     const initiateSocket = () => {
         setIsLoading(true)
-        socket = io('http://192.168.1.102:5027');
+        socket = io('http://149.28.101.165:5027');
 
         socket.on('connect', () => {
             setIsSocketConnected(true);
@@ -192,7 +192,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         // });
 
         socket.on('Data', (data) => {
-            // console.log('socket connect')
+            // console.log('socket connect',data)
             setIsLoading(false)
             if(data.subsequentMsg.length > 0){
                 if(isNewData < data.subsequentMsg.length){
