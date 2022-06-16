@@ -120,7 +120,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                 <Button onClick={()=>{
                     history.push('/view-guild')
                 }}>
-                    View Guild Members
+                    View Discord Members
                 </Button>
             </div>
 
