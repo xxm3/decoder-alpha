@@ -194,9 +194,6 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                             <li>Other unannounced packages</li>
                         </ul>
 
-                        {/* TODO: update the website to only show the bot invite if they have 3-4 NFT */}
-                        {/* TODO: instructions are still crap --- If user is not an owner of a server...show Nothing on main page -- just our "Unable to find any servers..." message. Also clean up the UI for this message - not styled at all ---- allow anyone to access this page.... but make sure they have BOTH an owner AND 3 NFTs... if missing one that make sure proper explanations show up with how to fix it*/}
-
                         {/* only show if they have servers they owner of */}
                         {!noServers &&
                         <>
