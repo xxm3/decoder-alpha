@@ -175,7 +175,7 @@ function StakingPage() {
                     <div className="c-card text-center p-5 bg-sections-bslgray w-full md:w-2/3 mt-5 rounded-xl max-w-3xl mx-4 md:mx-0">
                         <div className="py-2 ">
                             <span className="mt-2 font-semibold text-2xl">
-                                Stake your SOL Decoders for
+                                Stake your SOL Decoder NFT(s) for
                             </span>
                             <div className="c-text-green text-4xl my-3">
                                 {' '}
@@ -183,7 +183,7 @@ function StakingPage() {
                             </div>
 
                             <div className="text-md text-white text-md lg:px-12 leading-9 ">
-                                Use your $DECODE to enter our raffles, earn prizes, win WLs. You can stake your SOL Decoder to earn $DECODE.
+                                Use your $DECODE to enter our win whitelists, buy SOL Decoder DAO passes, and buy external DAO passes. You can stake your SOL Decoder NFT to earn $DECODE.
                             </div>
 
                             <button

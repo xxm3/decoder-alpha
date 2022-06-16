@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Message } from '../../types/Message';
 import moment from 'moment';
 import { useParams } from 'react-router';
@@ -17,9 +17,7 @@ type MessageListItemProps =
       }
 
 
-const getDateAgo = function (time: moment.MomentInput) {
-    return moment(time).fromNow();
-};
+
 
 const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
     (
@@ -27,9 +25,12 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
             onClick,
             isFromMsgThread,
             message: { message, time, source, author, id } = {}
+            // message: { message, time, source, author, id } = {}
         },
         ref
     ) => {
+
+       
         const { id: word } = useParams<{ id: string }>();
         const { formattedMessage, mediaUrls } = useMemo(() => {
             if (!message) return { formattedMessage : "", mediaUrls: [] };
@@ -43,9 +44,9 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
 						return '';
                     } else return ` <${url.trim()}>`;
                 },
-            ).replaceAll(new RegExp(word, 'gi'), `**${word}**`)
-            .replaceAll('\n', '  \n'); // Two spaces before \n adds a new line in the markdown
-
+            ).replaceAll('\n', '  \n'); // Two spaces before \n adds a new line in the markdown
+            // Surround a word with ** (bold) only if it's not a URL.
+            if (!urlRegExp.test(message)) formattedMessage = formattedMessage.replaceAll(new RegExp(word, 'gi'), `**${word}**`);
            if (source !== 'Twitter') {
                formattedMessage = formattedMessage
                    .replaceAll(/<(@|!|@!)(\d{18})>/g, '`@User`')
@@ -61,6 +62,11 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                 mediaUrls: mediaUrls,
             };
         }, [message, word]);
+
+        const getDateAgo = (time: moment.MomentInput) => {
+            // console.log('time---',time)
+            return moment(time).fromNow();
+        };
 
         return (
             <div key={id}
@@ -89,28 +95,21 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                     }
                 />
                 <div className="flex-grow">
-                    <div
-                        className={`flex font-semibold items-center space-x-2 text-base mb-1  justify-between`}
-                    >
+                    <div className={`flex font-semibold items-center space-x-2 text-base mb-1  justify-between`} >
                         {/*source & author*/}
                         <p className='c-res-title-text'>
-                            ({source} {
-                                      source !== 'Twitter' ? '- Discord' : ''
-                                  }) {author}
+                            ({source} { source !== 'Twitter' ? '- Discord' : '' }) {author}
                         </p>
                         {/*time*/}
                         {(
-                            <div
-                                className="text-xs text-gray-400 c-res-time-text flex justify-between items-center" // underline cursor-pointer
-                                data-tip={new Date(
-                                    time as string
-                                ).toLocaleString()}
-                            >
-                                <div className='whitespace-nowrap' hidden={!time}>
+                            <div className="text-xs text-gray-400 c-res-time-text flex justify-between items-center" // underline cursor-pointer
+                                data-tip={new Date( time as string ).toLocaleString()} 
+                                >
+                                <div className='whitespace-nowrap' >
                                     {getDateAgo(time)}
                                 </div>
                                 <div>
-                                    {isFromMsgThread? <></> :
+                                    {isFromMsgThread ? <></> :
                                     <VisibilityIcon className='ml-2 text-blue-500' data-tip='Click to see chat history after this message' />}
                                 </div>
                             </div>
@@ -118,9 +117,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                     </div>
 
                     {/* show the message and highlight matches */}
-                    <div
-                        className={'max-w-full word-wrap c-res-list-wrapper'}
-                    >
+                    <div className={'max-w-full word-wrap c-res-list-wrapper'} >
                         {<ReactMarkdown
 								components={{
 									strong({ children, ...props  }){

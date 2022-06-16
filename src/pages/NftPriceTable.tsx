@@ -48,6 +48,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
     const [width, setWidth] = useState(window.innerWidth);
 
     const [isMobile, setIsMobile] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [mode] = usePersistentState("mode", "dark");
 
     const smallWidthpx = 768;
@@ -58,24 +59,16 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
             render: (record) => (
                 <>
                     <b>Name : </b>{record?.image ?
-                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image}
-                         src={record.image}/> : null}
-                    <span>{record ? record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()) : '-'}</span>
+                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image} src={record.image}/> : null}
+                    <span>{record ? record.name?.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()) : '-'}</span>
                     <span><br/><b>Mint Date : </b>{record ? moment(record.createdAt).fromNow() : "-"}</span>
                     <span><br/><b>Mint Price : </b>{record ? `${record.mintPrice} ◎` : '-'}</span>
                     <span><br/><b>High Price : </b>{record ? `${record.highestPrice} ◎` : "-"}</span>
-                    <span><br/><b>% Change : </b>{record ?
-                        <span className={record.pctChange > 0 ? 'greenPctChange' : 'redPctChange'}
-                              hidden={!record.pctChange}>{record ? record.pctChange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''}%</span> : '-'}</span>
+                    <span><br/><b>% Change : </b>{record ? <span className={record.pctChange > 0 ? 'greenPctChange' : 'redPctChange'} hidden={!record.pctChange}>{record ? record?.pctChange?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''}%</span> : '-'}</span>
                     <span><br/><b>Meta : </b>{record ? record.meta : '-'}</span>
-                    <span className='flex flex-row items-center'><br/><b>ME URL : </b> {record ?
-                        <a href={record.meUrl} target="_blank" className="big-emoji"
-                           hidden={!record.meUrl || record.meUrl.length < 5}><img src={meLogo}
-                                                                                  className="me-logo ml-2"/></a> : '-'}</span>
-                    <span><b>Mint URL : </b>{record ? <a href={record?.mintUrl} target="_blank" className="big-emoji"
-                                                         hidden={record.mintUrl.length < 5}> 🌐 </a> : "-"}</span>
-                    <span><br/><b>Comments : </b>{record ?
-                        <span hidden={hideComments}>{record.comments}</span> : "-"}</span>
+                    <span className='flex flex-row items-center'><br/><b>ME URL : </b> {record ? <a href={record.meUrl} target="_blank" className="big-emoji" hidden={!record.meUrl || record.meUrl.length < 5}><img src={meLogo} className="me-logo ml-2"/></a> : '-'}</span>
+                    <span><b>Mint URL : </b>{record ? <a href={record?.mintUrl} target="_blank" className="big-emoji" hidden={record.mintUrl.length < 5}> 🌐 </a> : "-"}</span>
+                    <span><br/><b>Comments : </b>{record ? <span hidden={hideComments}>{record.comments}</span> : "-"}</span>
                 </>
             ),
             customSort: (a, b) => a.name.localeCompare(b.name),
@@ -89,8 +82,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
             title: 'Name',
             render: (record) => (
                 <>
-                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image}
-                         src={record.image}/>
+                    <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image} src={record.image}/>
                     <span> {record.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())} </span>
                 </>
             ),
@@ -118,8 +110,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
         {
             title: '% change',
             customSort: (a, b) => a.pctChange - b.pctChange,
-            render: (record) => (<span className={record?.pctChange > 0 ? 'greenPctChange' : 'redPctChange'}
-                                       hidden={!record.pctChange}> {record ? record?.pctChange?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''} % </span>),
+            render: (record) => (<span className={record?.pctChange > 0 ? 'greenPctChange' : 'redPctChange'} hidden={!record.pctChange}> {record ? record?.pctChange?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''} % </span>),
         },
         {
             title: 'Meta',
@@ -129,8 +120,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
         {
             title: 'ME URL',
             render: (record) => (
-                <a href={record?.meUrl} target="_blank" className="big-emoji"
-                   hidden={!record.meUrl || record.meUrl.length < 5}>
+                <a href={record?.meUrl} target="_blank" className="big-emoji" hidden={!record.meUrl || record.meUrl.length < 5}>
                     <img src={meLogo} className="me-logo"/>
                 </a>
             ),
@@ -139,9 +129,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
         {
             title: 'Mint URL',
             render: (record) => (
-                <a href={record?.mintUrl} target="_blank" className="big-emoji" hidden={record.mintUrl.length < 5}>
-                    🌐
-                </a>
+                <a href={record?.mintUrl} target="_blank" className="big-emoji" hidden={record.mintUrl.length < 5}> 🌐  </a>
             ),
             sorting: false
         },
@@ -182,6 +170,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
     /**
      * Functions
      */
+
 // Pull to refresh function
     function doRefresh(event: CustomEvent<RefresherEventDetail>) {
         setTimeout(() => {
@@ -193,15 +182,17 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
     const fetchTableData = async () => {
 
         setTableData([]);
+        setIsLoading(true);
 
         instance
             .get(environment.backendApi + '/mintAlertsAutomatedStats')
             .then((res) => {
                 setTableData(res.data);
+                setIsLoading(false);
             })
             .catch((error) => {
+                setIsLoading(false);
                 console.error("error when getting mint alerts automated: " + error);
-
                 let msg = '';
                 if (error?.response) {
                     msg = String(error.response.data.body);
@@ -261,17 +252,15 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
             {
                 !tableData.length
                     ? <div className="pt-10 flex justify-center items-center">
-                        <Loader/>
-                    </div>
+                        {isLoading ? <Loader/> : <div>No data available</div> }
+                      </div>
                     : <div className=" "> {/* max-w-fit mx-auto */}
                         <IonContent className='h-screen' scroll-y='false'>
-                            {isMobile ? <IonRefresher slot="fixed" onIonRefresh={doRefresh} pullFactor={0.5} pullMin={100}
-                                                      pullMax={200}>
+                            {isMobile ? <IonRefresher slot="fixed" onIonRefresh={doRefresh} pullFactor={0.5} pullMin={100}  pullMax={200}>
                                 <IonRefresherContent/>
                             </IonRefresher> : ''}
 
-                            <Virtuoso className='h-full'
-                                      totalCount={1}
+                            <Virtuoso className='h-full' totalCount={1}
                                       itemContent={() => <Table
                                           data={tableData}
                                           columns={isMobile ? columns_mobile : columns}
@@ -289,7 +278,7 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
                                                   borderTop: mode === 'dark' ? "" : '1px solid #E3E8EA',
                                               }),
                                           }}
-                                          title={"Mint Alerts Automated - Stats"}
+                                          title={"Mint Stats"}
                                           description="These are mints that were posted in at least two discords, and sent to the #mint-alerts-automated channel"
                                           actions={[
                                               {

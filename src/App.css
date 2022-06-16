@@ -115,3 +115,13 @@ ion-item {
 	--background :  var(--ion-color-step-150);
     background-color: var(--background);
 }
+
+.picker-wrapper {
+	bottom : 50% !important;
+	top: 50%;
+	position:  fixed !important;
+}
+
+.formError {
+	@apply text-red-600 text-sm font-medium;
+}

@@ -82,8 +82,19 @@ import MarketPlaceLayout from './pages/marketplace/MarketPlaceLayout';
 import ConnectWalletLayout from './pages/connect-wallet/ConnectWalletLayout';
 import CreatetWalletLayout from './pages/createtWallet/CreatetWalletLayout';
 import MarketPlaceDetailLayout from './pages/marketPlaceDetail/MarketPlaceDetailLayout';
+import InitiateWhitelist from './pages/bots/InitiateWhitelist';
+import WhitelistMarketplace from './pages/bots/WhitelistMarketplace';
+import { setHasRoles } from './redux/slices/userSlice';
 
-
+function b64DecodeUnicode(str : string) {
+    return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
+        let code = p.charCodeAt(0).toString(16).toUpperCase();
+        if (code.length < 2) {
+            code = '0' + code;
+        }
+        return '%' + code;
+    }));
+  }
 
 const App = () => {
     const [networkState, setNetworkState] = useState(true);
@@ -157,7 +168,10 @@ const App = () => {
 		if(localStorage.getItem('roleList')){
 			let roleList:any = localStorage.getItem('roleList');
 
-			getRoleType(JSON.parse(roleList));
+            try{
+                getRoleType(JSON.parse(roleList));
+            }catch(err){ }
+
 		}else{
             console.info('no roleList found for user');
         }
@@ -228,16 +242,26 @@ const App = () => {
 
         // code that is supposed to update the authorization header whenever the token changes
         return auth.onAuthStateChanged((context) => {
+
             if (context) {
                 setUser({ id: context.uid });
                 isAnonymous.current = context.isAnonymous;
                 if (context.isAnonymous) {
                     dispatch(setDemo(true));
                 }
+				else {
+					context.getIdTokenResult().then((idTokenResult) => {
+						console.log('setting hasRoles - ', idTokenResult.claims.hasRoles, typeof idTokenResult.claims.hasRoles);
+						dispatch(setHasRoles(Boolean(idTokenResult.claims.hasRoles)));
+					})
+				}
             } else {
                 if (isAnonymous.current) {
                     dispatch(setDemo(false));
                 }
+				else {
+					dispatch(setHasRoles(false));
+				}
                 isAnonymous.current = null;
                 setUser(null);
             }
@@ -379,6 +403,7 @@ const App = () => {
                                                                                     path="/calendar"
                                                                                     component={ ScheduleCalendar }
                                                                                 />
+
                                                                                 {/* manage server */}
                                                                                 <ProtectedRoute
                                                                                     exact
@@ -400,6 +425,21 @@ const App = () => {
                                                                                     exact
                                                                                     path="/servermodule/:serverId"
                                                                                     component={ ServerModule }
+                                                                                />
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/initiatewhitelist/:server"
+                                                                                    component={
+                                                                                       InitiateWhitelist
+                                                                                    }
+                                                                                />
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/whitelistmarketplace"
+                                                                                    component={
+                                                                                       WhitelistMarketplace
+                                                                                    }
+																					needsRole={false}
                                                                                 />
 
                                                                                 {/*login button etc...*/}

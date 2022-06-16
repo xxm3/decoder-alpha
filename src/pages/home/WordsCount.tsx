@@ -44,7 +44,7 @@ const WordsCount = () => {
                         });
                 })
     }
-    
+
 
     /**
      * Functions
@@ -94,8 +94,8 @@ const WordsCount = () => {
                     <Grid item xs={12} md={6} xl={4}>
                         <div className="secondary-bg-forced p-4 rounded-xl">
                             <div className="flex flex-col">
-                                { wordList.yesterday ? 
-                                    
+                                { wordList?.yesterday ?
+
                                     <>
                                         <IonLabel className="ml-3 text-xl">
                                         Top 5 new words created in the last day
@@ -109,12 +109,12 @@ const WordsCount = () => {
                                     :
                                     <>
                                     {
-                                        wordError ? <div className='text-center'>Somthing went wrong</div> : <div className='text-center'>Loading...</div>
+                                        wordError ? <div className='text-center'>Something went wrong</div> : <div className='text-center'>Loading...</div>
                                     }
-                                    </> 
-                                    
+                                    </>
+
                                 }
-                                
+
                             </div>
                         </div>
                     </Grid>
@@ -136,9 +136,9 @@ const WordsCount = () => {
                                 :
                                 <>
                                     {
-                                        wordError ? <div className='text-center'>Somthing went wrong</div> : <div className='text-center'>Loading...</div>
+                                        wordError ? <div className='text-center'>Something went wrong</div> : <div className='text-center'>Loading...</div>
                                     }
-                                </> 
+                                </>
                               }
                             </div>
                         </div>
@@ -161,9 +161,9 @@ const WordsCount = () => {
                                     :
                                     <>
                                     {
-                                        wordError ? <div className='text-center'>Somthing went wrong</div> : <div className='text-center'>Loading...</div>
+                                        wordError ? <div className='text-center'>Something went wrong</div> : <div className='text-center'>Loading...</div>
                                     }
-                                    </> 
+                                    </>
                                 }
                             </div>
                         </div>

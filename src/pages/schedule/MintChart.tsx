@@ -2,9 +2,11 @@ import { ChartData } from 'chart.js';
 import moment from 'moment';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { css } from '@emotion/react';
-import { useIonToast } from "@ionic/react";
+import { IonIcon, useIonToast } from "@ionic/react";
 import { Chart } from 'react-chartjs-2';
 import "./MintChart.scss"
+import { logoDiscord, logoTwitter, link, close } from 'ionicons/icons';
+
 
 
 function MintChart({eventGraphData}: any) {
@@ -20,10 +22,11 @@ function MintChart({eventGraphData}: any) {
     const [width, setWidth] = useState(window.innerWidth);
     const [mintLineData, setmintLineData] = useState(defaultGraph);
     const chartsRef = useRef<HTMLDivElement | null>(null);
+    const [isMobile, setIsMobile] = useState(false);
    
     // for setting height of chart, depending on what width browser is
     const tableHeight = useMemo(() => {
-        if (width > 1536) return 125;
+        if (width > 1536) return 100;
         if (width > 1280) return 140;
         if (width > 1024) return 130;
         if (width > 768) return 160;
@@ -117,9 +120,15 @@ function MintChart({eventGraphData}: any) {
         return () => window.removeEventListener('resize', resizeWidth);
     }, []);
 
+    useEffect(() => {
+        if (window.innerWidth < 525) {
+            setIsMobile(true);
+        }
+    }, [window.innerWidth]);
+
     return (
         <>
-            <div className="calendarCharts px-5 default-chart-theme " css={css` background-color: var(--ion-color-step-50); `} ref={chartsRef} >
+            <div className="calendarCharts  default-chart-theme " css={css` background-color: var(--ion-color-step-50); `} ref={chartsRef} >
                 <div className="chart">
                     <Chart type="line" data={mintLineData} height={tableHeight}
                         options={{
@@ -130,7 +139,7 @@ function MintChart({eventGraphData}: any) {
                                 intersect: true
                             },
                             plugins: {
-                                legend: { display: true},
+                                legend: { display: false},
                                 tooltip: { mode: 'index', intersect: false, },
                             },
                             scales: {
@@ -147,8 +156,11 @@ function MintChart({eventGraphData}: any) {
                             },
                         }}
                     />
-
-                   
+                </div>
+                <div className="items-center flex justify-center pt-5 flex-row pb-4">
+                    <div className='flex items-center flex-row' style={{color:'#14F195'}}><IonIcon icon={logoDiscord} className="big-emoji"/><span className='ml-1'>{isMobile ? 'All' : 'Discord All'}</span></div>
+                    <div className='flex items-center flex-row ml-4' style={{color:'#9052F8'}}><IonIcon icon={logoDiscord} className="big-emoji"/><span className='ml-1'>{isMobile ? 'Online' : 'Discord Online'}</span></div>
+                    <div className='flex items-center flex-row ml-4' style={{color:'#0052FF'}}><IonIcon icon={logoTwitter} className="big-emoji"/><span className='ml-1'>{isMobile ? 'Interactions' : 'Tweet Interactions'}</span></div>
                 </div>
             </div>
         </>

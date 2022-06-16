@@ -12,6 +12,8 @@ import {environment} from '../../environments/environment';
 import { IonContent, IonLabel, IonModal } from '@ionic/react';
 import WordsCount from './WordsCount';
 import TopSearchWords from './TopSearchWords';
+import TopDiscordGainers from './TopDiscordGainers';
+import TopTwitterGainers from './TopTwitterGainers';
 
 const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
@@ -23,9 +25,9 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
     const [isMobile, setIsMobile] = useState(false);
     const [isHardUpdateOpen, setIsHardUpdateOpen] = useState(false)
 
-    // const useQuery = () => new URLSearchParams(useLocation().search);
-    // const query = useQuery();
-    // const devMode = query.get('devMode');
+    const useQuery = () => new URLSearchParams(useLocation().search);
+    const query = useQuery();
+    const devMode = query.get('devMode');
 
     /**
      * Use Effects
@@ -80,6 +82,12 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
                     {/*TODO-aries: FIX ALERTS (then enable below...) */}
                     {/*<RecentAlerts/>*/}
+
+                    {/*Top Discord Gainers*/}
+                    <TopDiscordGainers/>
+
+                    {/* Top Twitter Gainers*/}
+                    <TopTwitterGainers/>
                 </> : <>
 
                     {/*FOR DESKTOP*/}
@@ -90,7 +98,6 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
                             {/*Recent FF Named Stuff*/}
                             <FfNamed/>
-
                         </div>
                         <div className='w-1/2'>
 
@@ -100,16 +107,25 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                         </div>
                     </div>
 
+                    {/*<div className='flex flex-row w-full'>*/}
+                    {/*    <div className='w-1/2 '>*/}
+                    {/*        /!*Top Discord Gainers*!/*/}
+                    {/*        <TopDiscordGainers/>*/}
+                    {/*    </div>*/}
+                    {/*    <div className='w-1/2'>*/}
+                    {/*        /!* Top Twitter Gainers*!/*/}
+                    {/*        <TopTwitterGainers/>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+
                 </>
             }
 
-            {/* for user to get used-the-site- role */}
-            {/*<div hidden={!devMode}>*/}
-
-
-            {/*TODO - sumit: enable once fixed */}
+            {/*TODO sumit freelance -- all messed up  */}
            {/* Word count of yesterday, last 3 days, last 5 days */}
-           {/* <WordsCount/>*/}
+           {/* <div hidden={!devMode}>*/}
+           {/*     <WordsCount/>*/}
+           {/* </div>*/}
 
             {/* Top search words of past dat */}
             {/* <TopSearchWords/> */}
