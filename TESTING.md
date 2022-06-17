@@ -98,3 +98,10 @@ https://prowe214.medium.com/tip-how-to-view-localhost-web-apps-on-your-phone-ad6
 (5) If you have 3NFT then you can get live messages from socket
 (6) Every 5 second Socket will send data if data is changes from previous data then you can show on top of list new messages
 (7) When you click close messages socket will disconnect
+
+### 13) Connect Wallet issue
+(1) I am try to connect and disconnect wallet in fox token page
+(2) I try with uncomment walletMultiButton.tsx  line 145 function and check
+(3) I also change local_host_str = 'localhost' to 'test'
+(4) then connect wallet with phantom connect and disconnect
+(5) then also connect with multi wallet and also disconnect and complete working
