@@ -80,7 +80,6 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
                     <FfNamed/>
 
-                    {/*TODO-aries: FIX ALERTS (then enable below...) */}
                     {/*<RecentAlerts/>*/}
 
                     {/*Top Discord Gainers*/}
@@ -121,22 +120,13 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                 </>
             }
 
-            {/*TODO sumit freelance -- all messed up  */}
            {/* Word count of yesterday, last 3 days, last 5 days */}
            {/* <div hidden={!devMode}>*/}
            {/*     <WordsCount/>*/}
            {/* </div>*/}
 
-            {/* Top search words of past dat */}
-            {/* <TopSearchWords/> */}
-
-
-             {/* Recent Community Searches  */}
-            {/* <div hidden={window.location.hostname !== 'localhost'}>
-               <SearchedWords/>
-            </div> */}
-
-
+            {/* Top search words of past day */}
+            {/* <TopSearchWords/>*/}
 
 
             {/* if need to tell the user of errors */}

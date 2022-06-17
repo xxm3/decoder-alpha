@@ -194,10 +194,17 @@ const columns: Column<FoxTokenData>[] = [
                     <IonIcon icon={logoDiscord} className="big-emoji " />
                     <IonRippleEffect />
                 </a>
+
+    {/*        </>,*/}
+    {/*        hiddenByColumnsButton:true*/}
+
+    {/*}*/}
+
             </>
         ),
         hiddenByColumnsButton: true,
     },
+
 ];
 const columns_mobile: Column<FoxTokenData>[] = [
     {
@@ -729,6 +736,12 @@ function FoxToken({ contentRef }: FoxToken) {
             setMySplTokens(mySplTokensTemporary);
             return mySplTokensTemporary;
         } else {
+            present({
+                message:'None of your tokens seem to be listed, sorry!',
+                color: 'danger',
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
+            });
             fetchTableData();
         }
 
@@ -858,13 +871,12 @@ function FoxToken({ contentRef }: FoxToken) {
         // user wants to see MY tokens
         if (wantViewTokens) {
             // set the fact they viewed their token
-            instance.get(
-                environment.backendApi + '/receiver/userViewedMyToken'
-            );
+            // instance.get(environment.backendApi + '/receiver/userViewedMyToken');
 
             // see other local host on here to see why
             if (window.location.href.indexOf(local_host_str) !== -1) {
                 SplTokens = await getUserSpls();
+
             }
             if (!multWallet?.length && !walletAddress) {
                 present({
@@ -879,8 +891,7 @@ function FoxToken({ contentRef }: FoxToken) {
 
             // make sure they have tokens
             if (
-                mySplTokens.length === 0 &&
-                (!SplTokens || SplTokens.length === 0)
+                mySplTokens.length === 0 && (!SplTokens || SplTokens.length === 0 ) && !walletAddress
             ) {
                 // show toast
                 present({
@@ -970,7 +981,6 @@ function FoxToken({ contentRef }: FoxToken) {
                 // this should instantly show the table to the user
                 setTableData(newTableData);
 
-                // REMOVING-FF-FOR-NOW
                 // but then we need to go out and get their latest sales data... takes about 1.5 sec per token
                 instance
                     .post(
@@ -978,24 +988,29 @@ function FoxToken({ contentRef }: FoxToken) {
                         { tokens: newTableData.map((x: any) => x.token) }
                     )
                     .then((res) => {
-                        const sales = res.data.data.salesData;
-                        if (sales) {
-                            sales.forEach(
-                                (sale: {
-                                    token: string;
-                                    lastSaleDate: string;
-                                }) => {
-                                    const row = newTableData.find(
-                                        (d: any) => d.token === sale.token
-                                    );
-                                    row.lastSaleDate = sale.lastSaleDate;
-                                }
-                            );
+                        try{
+                            const sales = res.data.data.salesData;
+                            if (sales) {
+                                sales.forEach(
+                                    (sale: {
+                                        token: string;
+                                        lastSaleDate: string;
+                                    }) => {
+                                        const row = newTableData.find(
+                                            (d: any) => d.token === sale.token
+                                        );
+                                        row.lastSaleDate = sale.lastSaleDate;
+                                    }
+                                );
 
+                                // once we get the data, then we can set it yet again...
+                                setTableData(newTableData);
+                            }
+                        }catch(err){
                             // once we get the data, then we can set it yet again...
                             setTableData(newTableData);
                         }
-                        // }).finally(() => {
+
                     });
             }
 
@@ -1017,7 +1032,7 @@ function FoxToken({ contentRef }: FoxToken) {
         dispatch(setWallet(multWallet[0]));
       }
     }, [multWallet])
-    
+
    /**
      * Renders
      */

@@ -45,9 +45,9 @@ const HeaderContainer = () => {
 
 	const [mode, setMode] = usePersistentState<"dark" | "light">("mode", "dark");
 
-    // TODO-ruchita: i can't see search bar on localhost...
-    const hideSearch = 'isLogin'; // localStorage.getItem('isLogin')
-    // const hideSearch = localStorage.getItem('isLogin')
+    // TODO: !! release same time as reset login ... when iphone app out ... next removed...
+    const hideSearch = 'isLogin';
+    // const hideSearch = localStorage.getItem('isLogin');
 
     // onload useEffect
     useEffect(() => {
@@ -70,7 +70,7 @@ const HeaderContainer = () => {
         // set the placeholder of the header search bar
         function smallPlaceholder() {
             if (window.innerWidth > 1000) {
-                setHeaderPlaceholder("Search Discord/tweets & view graphs");
+                setHeaderPlaceholder("Search & view graphs");
             } else {
                 setHeaderPlaceholder("Type then press enter");
             }

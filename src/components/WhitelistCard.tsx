@@ -1,14 +1,18 @@
 import { css } from '@emotion/react';
 import { IonButton, IonIcon, IonSpinner, useIonToast } from '@ionic/react';
-import { logoTwitter } from 'ionicons/icons';
-import React, { useState } from 'react';
+import {logoDiscord, logoTwitter} from 'ionicons/icons';
+import React, {useEffect, useState} from 'react';
 import { useQueryClient } from 'react-query';
 import { instance } from '../axios';
 import { IWhitelist } from '../types/IWhitelist';
 import isAxiosError from '../util/isAxiosError';
 import TimeAgo from './TimeAgo';
 import "./WhitelistCard.scss"
-
+import {getUrlExtension, mediaTypes, urlRegExp} from '../util/getURLs';
+import ReactMarkdown from "react-markdown";
+// import parse from 'html-react-parser';
+import reactStringReplace from 'react-string-replace';
+import ConfettiExplosion from 'react-confetti-explosion';
 
 const getButtonText = (expired : boolean, claiming : boolean, claimed : boolean, full : boolean) => {
 	if(claimed){
@@ -50,8 +54,19 @@ function WhitelistCard({
 	const [present] = useIonToast();
 
 	const full = claimCounts >= max_users;
+
+    const [isExploding, setIsExploding] = React.useState(false);
+
+    // useEffect(() => {
+    //     setIsExploding(true);
+    // }, []);
+
     return (
+
         <div className="border-gray-500 border-[0.5px] rounded-2xl w-80 overflow-clip">
+
+            {isExploding && <ConfettiExplosion />}
+
             <div className="relative overflow-y-hidden h-60 w-80">
                 <img
                     src={image}
@@ -66,6 +81,16 @@ function WhitelistCard({
                         </p>
                     </div>
 
+                    {/*{discord && (*/}
+                    {/*    <a*/}
+                    {/*        href={discord}*/}
+                    {/*        className="self-center hover:opacity-70"*/}
+                    {/*        target="_blank"*/}
+                    {/*    >*/}
+                    {/*        <IonIcon icon={logoDiscord} className="h-5 w-5" />*/}
+                    {/*    </a>*/}
+                    {/*)}*/}
+
                     {twitter && (
                         <a
                             href={twitter}
@@ -77,9 +102,20 @@ function WhitelistCard({
                     )}
                 </div>
             </div>
+
             <div
                 className="py-4 px-6 flex-col flex"
             >
+
+                {description}
+                {/*{*/}
+                {/*    reactStringReplace(description, urlRegExp, (match: any, url: any) => (*/}
+                {/*        <a href="${url}" class="underline cursor-pointer text-blue-300" target="_blank">${url.trim()}</a>;*/}
+                {/*    ))*/}
+                {/*}*/}
+
+                <br/>
+
                 <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>
                     <p>{type.toUpperCase()}</p>
@@ -89,8 +125,8 @@ function WhitelistCard({
 					<p>{required_role_name}</p>
 					<p className="timeLeft">Time left</p>
 					<TimeAgo setExpired={setExpired} date={expiration_date}/>
-
                 </div>
+
 				{expired !== undefined && <IonButton css={css`
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
 				`} className="my-2 self-center" onClick={async () => {
@@ -113,26 +149,31 @@ function WhitelistCard({
                                 );
                             }
                         );
+
+                        setIsExploding(true);
+
 						present({
 							message:
-								'Whitelist claimed successfully!',
+								'Whitelist claimed successfully! You are now whitelisted in the other Discord',
 							color: 'success',
-							duration: 2000,
+							duration: 10000,
 						});
+
 					} catch (error) {
-						console.error(error)
+						console.error(error);
+
 						if(isAxiosError(error) && error.response?.data){
 							present({
 								message: error.response?.data.body,
 								color: 'danger',
-								duration: 1000,
+								duration: 5000,
 							});
 						}
-						else { 
+						else {
 							present({
 								message: "Something went wrong",
 								color: 'danger',
-								duration: 1000,
+								duration: 5000,
 							});
 						}
 					}
@@ -140,6 +181,7 @@ function WhitelistCard({
 						setClaiming(false)
 					}
 				}} disabled={expired || claiming || claimed || full}>{getButtonText(expired,claiming,claimed, full)}</IonButton>}
+
             </div>
         </div>
     );

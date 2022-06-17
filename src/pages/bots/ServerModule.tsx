@@ -21,11 +21,14 @@ interface LocationParams {
     hash: string;
 }
 
-
 const ServerModule: React.FC<AppComponentProps> = () => {
     /**
      * States & Variables
      */
+    const useQuery = () => new URLSearchParams(useLocation().search);
+    const query = useQuery();
+    const devMode = query.get('devMode');
+
     let history = useHistory();
     const location: LocationParams = useLocation();
     const [isMobile, setIsMobile] = useState(false);
@@ -51,23 +54,23 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     /**
      * Use Effects
      */
-    //  useEffect(() => {
-    //     if(!localStorage.getItem('role')){
-    //         history.push('/manageserver')
-    //         return
-    //     }else{
-    //         setRole(localStorage.getItem('role'))
-    //     }
+     useEffect(() => {
+        if(!localStorage.getItem('role')){
+            history.push('/manageserver')
+            return
+        }else{
+            setRole(localStorage.getItem('role'))
+        }
 
-    //     if (window.innerWidth < 525) {
-    //         setIsMobile(true);
-    //     }
+        if (window.innerWidth < 525) {
+            setIsMobile(true);
+        }
 
-    //     // if (performance.navigation.type == 1) {
-    //     //     history.push('/manageserver')
-    //     // }
+        // if (performance.navigation.type == 1) {
+        //     history.push('/manageserver')
+        // }
 
-    // }, [window.innerWidth]);
+    }, [window.innerWidth]);
 
     // get guilds
     useEffect(() => {
@@ -573,7 +576,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </div>
                 </div>
             </div>
-			<div className="mt-10 mb-5 w-full flex justify-center">
+
+			<div className="mt-10 mb-5 w-full flex justify-center" hidden={!devMode}>
             	<IonButton className="text-base" css={css`
 					--padding-top: 25px;
 					--padding-bottom: 25px;
@@ -583,6 +587,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 	                Initiate Whitelist
 	            </IonButton>
             </div>
+
         </>
     );
 };
