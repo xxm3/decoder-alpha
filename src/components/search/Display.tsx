@@ -70,6 +70,8 @@ const Display: React.FC<{
 
     const definedMessages = messages.filter(Boolean);
     const [isMobile, setIsMobile] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(true)
+
 
    
 
@@ -111,6 +113,7 @@ const Display: React.FC<{
 
                         <MessageListItem
                             onClick={() => {
+                                setIsModalOpen(true)
                                 if (m.source === 'Twitter') {
                                     const url = `https://twitter.com/${m.author}`;
                                     window.open(url, '_blank');
@@ -124,7 +127,7 @@ const Display: React.FC<{
 
                 {/*if you click on a message*/}
                 {selectedMessage && (
-                    <MessageThread onClose={() => setSelectedMessage(null)} message={selectedMessage} />
+                    <MessageThread onClose={() => setSelectedMessage(null)} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} message={selectedMessage} />
                 )}
             </div>
         </>

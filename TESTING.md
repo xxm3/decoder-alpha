@@ -79,3 +79,22 @@ https://prowe214.medium.com/tip-how-to-view-localhost-web-apps-on-your-phone-ad6
 (6) You can hit the api a couple of times to see if data is the same and it should be since the date has not changed
 (7) If you want to check if the date is working fine then you need to change the current date maybe give it of 5 days ahead and see if you get any new mints from changing the date (can be done through backend code or if you know of other possible ways to change your date).
 (8) This need more refactors and needs to be integrated with todays mint after approval and final testing oncee its integrated with todays mints things like discord online members, twitter followers, tweet interactions will be inserted accurately.
+
+### 11) Assign Admin if you have no enough nft to enable bot configure packages
+(1) First you login and then go to  https://soldecoder.app/manageserver page
+(2) You see available server that you create in  discord
+(3) Now select server that you want and click add button
+(4) Now you redirect to https://soldecoder.app/servermodule configure bot package page 
+(5) If you don't have enough NFT and no Roll then you see a 'Add Admin For Your Server' Button on top
+(6) Then you can show list of Admin that available
+(7) You can assign admin through assign button
+(8) Then Admin that you assign is access your bot module but they have 3nf or 4nft otherwise they can't access your bot module packages
+
+### 12) View Live messages
+(1) Search any word in header global search
+(2) And you can show the list of messages 
+(3) You can click on message and open a popup in popup you show list of comment of particular messages
+(4) In popup top you can see button 'View Live Messages' 
+(5) If you have 3NFT then you can get live messages from socket
+(6) Every 5 second Socket will send data if data is changes from previous data then you can show on top of list new messages
+(7) When you click close messages socket will disconnect

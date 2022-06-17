@@ -31,91 +31,108 @@ interface guildData {
 }
 
 
-const columns: Column<guildData>[] = [
-
-    {
-        title: '',
-        render: (record) => <img className={`avatarImg ${!record.iconUrl ? 'hiddenImg' : ''}`} key={record.iconUrl} src={record.iconUrl} />,
-    },
-    {
-        title: 'Name',
-        customSort: (a: any, b: any) => a.name - b.name,
-        render: (record) => <span>{record?.name ? record?.name : '-'}</span>,
-    },
-    {
-        title: 'Created At',
-        render: (record) => <span>{ record?.createdAt ?  moment(record?.createdAt).fromNow() : '-'}</span>,
-    },
-    {
-        title: 'Analytics Webhook Channel',
-        render: (record) => <span>{record?.analyticsWebhookChannel ? record?.analyticsWebhookChannel : '-'}</span>,
-    },
-    {
-        title: 'Analytics Webhook LastSendDate',
-        render: (record) => <span>{record?.analyticsWebhookLastSendDate ? moment(record?.analyticsWebhookLastSendDate).fromNow() : '-'}</span>,
-    },
-    {
-        title: 'Daily Mints Webhook Channel',
-        render: (record) => <span>{record?.dailyMintsWebhookChannel ? record?.dailyMintsWebhookChannel : '-'}</span>,
-    },
-    {
-        title: 'DailyMints Webhook LastSendDate',
-        render: (record) => <span>{ record?.dailyMintsWebhookLastSendDate ? moment(record?.dailyMintsWebhookLastSendDate).fromNow() : '-'}</span>,
-    },
-    {
-        title: 'Magiceden Sol Module',
-        render: (record) => <span>{record?.magicedenSolModule ? record?.magicedenSolModule?.toString() : '-'}</span>,
-    },
-    {
-        title: 'Mint Info Module',
-        render: (record) => <span>{record?.mintInfoModule ? record?.mintInfoModule?.toString() : '-'}</span>,
-    },
-    {
-        title: 'One Hour Mint Info Webhook Channel',
-        render: (record) => <span>{record?.oneHourMintInfoWebhookChannel ? record?.oneHourMintInfoWebhookChannel : '-'}</span>,
-    },
-    {
-        title: 'One Hour Mint Info Webhook LastSendDate',
-        render: (record) => <span>{record?.oneHourMintInfoWebhookLastSendDate ? moment(record?.oneHourMintInfoWebhookLastSendDate).fromNow() : '-'}</span>,
-    },
-    {
-        title: 'Token Module',
-        render: (record) => <span>{record?.tokenModule ? record?.tokenModule?.toString() : '-'}</span>,
-    },
-    {
-        title: 'Updated At',
-        render: (record) => <span>{record?.updatedAt ? moment(record?.updatedAt).fromNow() : '-'}</span>,
-    },
-];
-
-
-
-const columns_mobile: Column<guildData>[] = [
-    {
-        render: (record: any, index) => (
-            <>
-                {<><span><b>Name : </b>{record?.iconUrl ? <img className={`avatarImg ${!record.iconUrl ? 'hiddenImg' : ''}`} key={index} src={record?.iconUrl} /> : ''}  {record?.name} </span> </>  }
-                {<span><br/><b>Created At : </b>{ record?.createdAt ?  moment(record?.createdAt).fromNow() : '-'}</span>}
-                {<span><br/><b>Analytics Webhook Channel : </b>{record?.analyticsWebhookChannel ? record?.analyticsWebhookChannel : '-'}</span>}
-                {<span><br/><b>Analytics Webhook LastSendDate : </b>{record?.analyticsWebhookLastSendDate ? moment(record?.analyticsWebhookLastSendDate).fromNow() : '-'}</span>}
-                {<span><br/><b>Daily Mints Webhook Channel : </b>{record?.dailyMintsWebhookChannel ? record?.dailyMintsWebhookChannel : '-'}</span>}
-                {<span><br/><b>DailyMints Webhook LastSendDate : </b>{record?.dailyMintsWebhookLastSendDate ? moment(record?.dailyMintsWebhookLastSendDate).fromNow() : '-'}</span>}
-                {<span><br/><b>Magiceden Sol Module : </b>{record?.magicedenSolModule ? record?.magicedenSolModule?.toString() : '-'}</span>}
-                {<span><br/><b>Mint Info Module : </b>{record?.mintInfoModule ? record?.mintInfoModule?.toString() : '-'}</span>}
-                {<span><br/><b>One Hour Mint Info Webhook Channel : </b>{record?.oneHourMintInfoWebhookChannel ? record?.oneHourMintInfoWebhookChannel : '-'}</span>}
-                {<span><br/><b>Token Module : </b>{record?.tokenModule ? record?.tokenModule?.toString() : '-'}</span>}
-                {<span><br/><b>Updated At : </b>{record?.updatedAt ? moment(record?.updatedAt).fromNow() : '-'}</span>}
-            </>
-        )
-    },
-];
-
 
 
 function ViewGuild() {
     const [present, dismiss] = useIonToast();
     const [isMobile, setIsMobile] = useState(false);
     const [mode] = usePersistentState('mode', 'dark');
+    const [isModeGuild, setIsModeGuild] = useState<boolean>(true)
+
+
+    const columns: Column<guildData>[] =  
+        isModeGuild ? [
+            {
+            title: 'Name',
+            customSort: (a: any, b: any) => a.name - b.name,
+            render: (record) => <span>{record?.name ? record?.name : '-'}</span>,
+            },
+        ] : [
+        {
+            title: '',
+            render: (record) => <img className={`avatarImg ${!record.iconUrl ? 'hiddenImg' : ''}`} key={record.iconUrl} src={record.iconUrl} />,
+        },
+        {
+            title: 'Name',
+            customSort: (a: any, b: any) => a.name - b.name,
+            render: (record) => <span>{record?.name ? record?.name : '-'}</span>,
+        },
+        {
+            title: 'Created At',
+            render: (record) => <span>{ record?.createdAt ?  moment(record?.createdAt).fromNow() : '-'}</span>,
+        },
+        {
+            title: 'Analytics Webhook Channel',
+            render: (record) => <span>{record?.analyticsWebhookChannel ? record?.analyticsWebhookChannel : '-'}</span>,
+        },
+        {
+            title: 'Analytics Webhook LastSendDate',
+            render: (record) => <span>{record?.analyticsWebhookLastSendDate ? moment(record?.analyticsWebhookLastSendDate).fromNow() : '-'}</span>,
+        },
+        {
+            title: 'Daily Mints Webhook Channel',
+            render: (record) => <span>{record?.dailyMintsWebhookChannel ? record?.dailyMintsWebhookChannel : '-'}</span>,
+        },
+        {
+            title: 'DailyMints Webhook LastSendDate',
+            render: (record) => <span>{ record?.dailyMintsWebhookLastSendDate ? moment(record?.dailyMintsWebhookLastSendDate).fromNow() : '-'}</span>,
+        },
+        {
+            title: 'Magiceden Sol Module',
+            render: (record) => <span>{record?.magicedenSolModule ? record?.magicedenSolModule?.toString() : '-'}</span>,
+        },
+        {
+            title: 'Mint Info Module',
+            render: (record) => <span>{record?.mintInfoModule ? record?.mintInfoModule?.toString() : '-'}</span>,
+        },
+        {
+            title: 'One Hour Mint Info Webhook Channel',
+            render: (record) => <span>{record?.oneHourMintInfoWebhookChannel ? record?.oneHourMintInfoWebhookChannel : '-'}</span>,
+        },
+        {
+            title: 'One Hour Mint Info Webhook LastSendDate',
+            render: (record) => <span>{record?.oneHourMintInfoWebhookLastSendDate ? moment(record?.oneHourMintInfoWebhookLastSendDate).fromNow() : '-'}</span>,
+        },
+        {
+            title: 'Token Module',
+            render: (record) => <span>{record?.tokenModule ? record?.tokenModule?.toString() : '-'}</span>,
+        },
+        {
+            title: 'Updated At',
+            render: (record) => <span>{record?.updatedAt ? moment(record?.updatedAt).fromNow() : '-'}</span>,
+        },
+    ];
+    
+    
+    
+    const columns_mobile: Column<guildData>[] =
+    isModeGuild ? [
+        {
+            render: (record: any, index) => (
+                <>{<span><b></b>{record?.name} </span>} </>
+            )
+        },
+    ] :  [
+        {
+            render: (record: any, index) => (
+                <>
+                    {<><span><b>Name : </b>{record?.iconUrl ? <img className={`avatarImg ${!record.iconUrl ? 'hiddenImg' : ''}`} key={index} src={record?.iconUrl} /> : ''}  {record?.name} </span> </>  }
+                    {<span><br/><b>Created At : </b>{ record?.createdAt ?  moment(record?.createdAt).fromNow() : '-'}</span>}
+                    {<span><br/><b>Analytics Webhook Channel : </b>{record?.analyticsWebhookChannel ? record?.analyticsWebhookChannel : '-'}</span>}
+                    {<span><br/><b>Analytics Webhook LastSendDate : </b>{record?.analyticsWebhookLastSendDate ? moment(record?.analyticsWebhookLastSendDate).fromNow() : '-'}</span>}
+                    {<span><br/><b>Daily Mints Webhook Channel : </b>{record?.dailyMintsWebhookChannel ? record?.dailyMintsWebhookChannel : '-'}</span>}
+                    {<span><br/><b>DailyMints Webhook LastSendDate : </b>{record?.dailyMintsWebhookLastSendDate ? moment(record?.dailyMintsWebhookLastSendDate).fromNow() : '-'}</span>}
+                    {<span><br/><b>Magiceden Sol Module : </b>{record?.magicedenSolModule ? record?.magicedenSolModule?.toString() : '-'}</span>}
+                    {<span><br/><b>Mint Info Module : </b>{record?.mintInfoModule ? record?.mintInfoModule?.toString() : '-'}</span>}
+                    {<span><br/><b>One Hour Mint Info Webhook Channel : </b>{record?.oneHourMintInfoWebhookChannel ? record?.oneHourMintInfoWebhookChannel : '-'}</span>}
+                    {<span><br/><b>Token Module : </b>{record?.tokenModule ? record?.tokenModule?.toString() : '-'}</span>}
+                    {<span><br/><b>Updated At : </b>{record?.updatedAt ? moment(record?.updatedAt).fromNow() : '-'}</span>}
+                </>
+            )
+        },
+    ];
+    
+    
 
 
     // fetch guildData
@@ -156,6 +173,18 @@ function ViewGuild() {
             setIsMobile(true);
         }
     }, [window.innerWidth]);
+
+    useEffect(() => {
+        if(guildData){
+            if(guildData[0].createdAt){
+                setIsModeGuild(false)
+            }else{
+                setIsModeGuild(true)
+            }
+        }
+      
+    }, [guildData])
+    
 
     return (
         <div>
