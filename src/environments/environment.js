@@ -10,11 +10,7 @@ export const environment = {
     backendApi: isDev?  'http://localhost:5001/nft-discord-relay/us-central1/api' : 'https://us-central1-nft-discord-relay.cloudfunctions.net/api',
     // backendApi: 'http://localhost:5001/nft-discord-relay/us-central1/api', // if doing prod locally ... but want to still point to dev
 
-    // freelance - 973441843347984424
-    // production - 927008889092857898
-    // vehn IC bot - 861589624400904204
-    // damjan? - 973608903801708634
-    clientId: isDev ? '861589624400904204' : '927008889092857898', // client ID for our discord bot,
+    clientId: isDev ? process.env.devClientId : '927008889092857898', // client ID for our discord bot,
 	ionicAppUrl : isDev ? "http://localhost:8100" : "https://soldecoder.app"
 };
 

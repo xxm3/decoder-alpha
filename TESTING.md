@@ -81,10 +81,15 @@ https://prowe214.medium.com/tip-how-to-view-localhost-web-apps-on-your-phone-ad6
 (8) This need more refactors and needs to be integrated with todays mint after approval and final testing oncee its integrated with todays mints things like discord online members, twitter followers, tweet interactions will be inserted accurately.
 
 ### 12) Set up the "Manage server" page
-Go go .env in backend and fill out:
+Go to .env in backend and fill out:
 ```
 devBotToken
 devUid
+```
+
+Go to .env in frontend and fill out:
+```
+devClientId
 ```
 
 Go to /manageserver and invite the bot to your server using the third link. Make sure to change the "clientId" in the URL with what you see on your discord bot management page (so set that up on the README.md -> " Discord oauth" section
