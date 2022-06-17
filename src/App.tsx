@@ -90,6 +90,7 @@ import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import InitiateWhitelist from './pages/bots/InitiateWhitelist';
 import WhitelistMarketplace from './pages/bots/WhitelistMarketplace';
 import { setHasRoles } from './redux/slices/userSlice';
+import ViewGuild from './pages/view-guild/ViewGuild';
 
 function b64DecodeUnicode(str : string) {
     return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
@@ -469,6 +470,15 @@ const App = () => {
                                                                                        InitiateWhitelist
                                                                                     }
                                                                                 />
+                                                                                {/* view all guild */}
+                                                                                <ProtectedRoute
+                                                                                        exact
+                                                                                        path="/view-guild"
+                                                                                        component={
+                                                                                            ViewGuild
+                                                                                        }
+                                                                                />
+                                                                                {/*  */}
                                                                                 <ProtectedRoute
                                                                                     exact
                                                                                     path="/whitelistmarketplace"
