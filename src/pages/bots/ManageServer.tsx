@@ -9,6 +9,7 @@ import BgImage from '../../images/logo-transparent.png';
 import { useHistory, useLocation } from 'react-router';
 import Loader from '../../components/Loader';
 import Addserver from './components/Addserver';
+import { Button } from '../../components/wallet-modal/componet/Button';
 
 interface Server {
     id: string;
@@ -21,6 +22,7 @@ interface Server {
 
 const ManageServer: React.FC<AppComponentProps> = () => {
     let history = useHistory();
+    
     /**
      * States & Variables
      */
@@ -108,9 +110,22 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                     Unable to find any servers you are the owner of. If you are one, then logout in the sidebar and try logging in again (or use a new browser)
                 </div> :
             <>
+            <div className='flex justify-between'>
                 <IonLabel className="text-4xl font-semibold mb-3">
                     Select a Server
                 </IonLabel>
+
+                {/*  */}
+
+                <Button onClick={()=>{
+                    history.push('/view-guild')
+                }}>
+                    View Discord Members
+                </Button>
+            </div>
+
+
+                {/*  */}
 
                 <div className="my-3 relative bg-yellow-300/25 p-5 rounded-xl">
                     <div className="text-md">
@@ -193,9 +208,6 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                             <li><b>"Sales listing" package:</b> Get alerted whenever a sale for your NFT occurs</li>
                             <li>Other unannounced packages</li>
                         </ul>
-
-                        {/* TODO: update the website to only show the bot invite if they have 3-4 NFT */}
-                        {/* TODO: instructions are still crap --- If user is not an owner of a server...show Nothing on main page -- just our "Unable to find any servers..." message. Also clean up the UI for this message - not styled at all ---- allow anyone to access this page.... but make sure they have BOTH an owner AND 3 NFTs... if missing one that make sure proper explanations show up with how to fix it*/}
 
                         {/* only show if they have servers they owner of */}
                         {!noServers &&
