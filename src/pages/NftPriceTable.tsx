@@ -62,8 +62,8 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
                     <img className={`avatarImg ${!record.image ? 'hiddenImg' : ''}`} key={record.image} src={record.image}/> : null}
                     <span>{record ? record.name?.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()) : '-'}</span>
                     <span><br/><b>Mint Date : </b>{record ? moment(record.createdAt).fromNow() : "-"}</span>
-                    <span><br/><b>Mint Price : </b>{record ? `${record.mintPrice} ◎` : '-'}</span>
-                    <span><br/><b>High Price : </b>{record ? `${record.highestPrice} ◎` : "-"}</span>
+                    <span><br/><b>Mint Price : </b>{record && record.mintPrice ? `${record.mintPrice} ◎` : '-'}</span>
+                    <span><br/><b>High Price : </b>{record  && record.highestPrice && record.highestPrice !== null ? `${record.highestPrice} ◎` : "-"}</span>
                     <span><br/><b>% Change : </b>{record ? <span className={record.pctChange > 0 ? 'greenPctChange' : 'redPctChange'} hidden={!record.pctChange}>{record ? record?.pctChange?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''}%</span> : '-'}</span>
                     <span><br/><b>Meta : </b>{record ? record.meta : '-'}</span>
                     <span className='flex flex-row items-center'><br/><b>ME URL : </b> {record ? <a href={record.meUrl} target="_blank" className="big-emoji" hidden={!record.meUrl || record.meUrl.length < 5}><img src={meLogo} className="me-logo ml-2"/></a> : '-'}</span>
@@ -98,13 +98,13 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
         {
             title: 'Mint Price',
             customSort: (a, b) => +a.mintPrice - +b.mintPrice,
-            render: (record) => <span>{record?.mintPrice} ◎</span>,
+            render: (record) => <span>{record && record.mintPrice ? `${record.mintPrice} ◎ ` : '-' }</span>,
 
         },
         {
             title: 'High Price',
             customSort: (a, b) => +a.highestPrice - +b.highestPrice,
-            render: (record) => <span>{record ? `${record.highestPrice} ◎` : "-"}</span>,
+            render: (record) => <span>{record && record.highestPrice ? `${record.highestPrice} ◎` : "-"}</span>,
 
         },
         {
@@ -248,6 +248,15 @@ function NftPriceTable({foo, onSubmit}: NftPriceTableProps) {
             {/*            />*/}
             {/*        </div>*/}
             {/*}*/}
+
+            <div className="m-3 relative bg-red-100 p-4 rounded-xl">
+                <p className="text-lg text-red-700 font-medium">
+                    <b>These are mints that 2 of our 15+ Discords worth several hundred SOL linked. You can click through a few pages to see when the rest of the columns were filled in. Currently pausing filling them in as need to find the mint name, mint price, and link to ME, and for most part these are just less than $5 degen mints. Will resume data parsing in near future</b>
+                </p>
+                <span className="absolute bg-red-500 w-8 h-8 flex items-center justify-center font-bold text-green-50 rounded-full -top-2 -left-2">
+                    !
+                </span>
+            </div>
 
             {
                 !tableData.length

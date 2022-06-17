@@ -132,14 +132,13 @@ function Sidebar() {
                     external={'https://docs.soldecoder.app'}
                 />
 
-                <NavLink
-                    title="Twitter"
-                    icon={logoTwitter}
-                    to="#"
-                    external={'https://twitter.com/SOL_Decoder'}
-                />
+                {/*<NavLink*/}
+                {/*    title="Twitter"*/}
+                {/*    icon={logoTwitter}*/}
+                {/*    to="#"*/}
+                {/*    external={'https://twitter.com/SOL_Decoder'}*/}
+                {/*/>*/}
 
-                {/*TODO: uncomment*/}
                 {/* logout Button  */}
                 {/*{isLogin === 'isLogin' ? */}
                     <div>
