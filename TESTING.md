@@ -83,13 +83,14 @@ https://prowe214.medium.com/tip-how-to-view-localhost-web-apps-on-your-phone-ad6
 ### 12) Set up the "Manage server" page
 Go to .env in backend and fill out:
 ```
-devBotToken
-devUid
+devBotToken    -- secret token of your bot...
+devUid    -- your discord ID that you log in the site with
+devApplicationId    -- ID of the bot (app or client ID)
 ```
 
 Go to .env in frontend and fill out:
 ```
-devClientId
+devClientId     -- ID of the bot (app or client ID)
 ```
 
 Go to /manageserver and invite the bot to your server using the third link. Make sure to change the "clientId" in the URL with what you see on your discord bot management page (so set that up on the README.md -> " Discord oauth" section
