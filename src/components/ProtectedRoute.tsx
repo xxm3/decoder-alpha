@@ -20,7 +20,7 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
 
 	return user
         // ### skip if test vehn dojo
-        || isDev
+        // || (isDev ) // || process.env.FORCE_DISCORD_LOGIN
     ? (
 		(needsRole && !isDev ? hasRoles : true) ?
             <AppRoute {...props} /> :
