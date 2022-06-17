@@ -151,7 +151,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             // console.log('Connect Socket------')
         }else{
             present({
-                message: `You are not able to view live messages because you don't have 3 NFT`,
+                message: `You are not able to view live messages because you don't have 3 NFTs`,
                 color: 'danger',
                 duration: 5000,
                 buttons: [{ text: 'X', handler: () => dismiss() }],
