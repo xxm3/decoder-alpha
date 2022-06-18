@@ -448,6 +448,7 @@ const App = () => {
                                                                                     component={
                                                                                         ManageServer
                                                                                     }
+                                                                                    needsRole={false}
                                                                                 />
 
                                                                                 {/* if anyone direct access Server module  */}
@@ -455,6 +456,7 @@ const App = () => {
                                                                                     exact
                                                                                     path="/servermodule"
                                                                                     render={()=> <Redirect to={`/manageserver`} />}
+                                                                                    needsRole={false}
                                                                                 />
 
                                                                                 {/* Server module */}
@@ -462,6 +464,7 @@ const App = () => {
                                                                                     exact
                                                                                     path="/servermodule/:serverId"
                                                                                     component={ ServerModule }
+                                                                                    needsRole={false}
                                                                                 />
                                                                                 <ProtectedRoute
                                                                                     exact
@@ -469,6 +472,7 @@ const App = () => {
                                                                                     component={
                                                                                        InitiateWhitelist
                                                                                     }
+                                                                                    needsRole={false}
                                                                                 />
                                                                                 {/* view all guild */}
                                                                                 <ProtectedRoute
@@ -485,7 +489,7 @@ const App = () => {
                                                                                     component={
                                                                                        WhitelistMarketplace
                                                                                     }
-																					needsRole={false}
+																					so
                                                                                 />
 
                                                                                 {/*login button etc...*/}

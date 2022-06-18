@@ -24,7 +24,7 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
     ? (
 		(needsRole && !isDev ? hasRoles : true) ?
             <AppRoute {...props} /> :
-            <AppRoute {...props} component={() => <div>You cannot access this page. If you feel this is an error, click "Logout" on bottom left and log back in, and otherwise buy 1 of our NFTs on Magiceden</div>} />
+            <AppRoute {...props} component={() => <div>You cannot access this page (SOL Decoder holders only). If you feel this is an error, click "Logout" on bottom left and log back in, or otherwise buy 1 of our NFTs on Magiceden. After purchasing, you must verify within Discord, and then login with Discord</div>} />
 	) : (
 		<Route
 			{...props}
