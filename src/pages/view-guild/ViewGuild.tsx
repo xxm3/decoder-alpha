@@ -40,15 +40,21 @@ function ViewGuild() {
     const [isModeGuild, setIsModeGuild] = useState<boolean>(true)
 
 
-    const columns: Column<guildData>[] =  
+    const columns: Column<guildData>[] =
         isModeGuild ? [
             {
             title: 'Name',
             customSort: (a: any, b: any) => a.name - b.name,
             render: (record) => <span>{record?.name ? record?.name : '-'}</span>,
             },
+            {
+                title: 'Created At',
+                customSort: (a: any, b: any) => a.name - b.name,
+                render: (record) => <span>{record?.createdAt ? record?.createdAt : '-'}</span>,
+            },
         ] : [
         {
+            // TODO: test 1/2 .. 2/2 -- will fill in automatically etc...
             title: '',
             render: (record) => <img className={`avatarImg ${!record.iconUrl ? 'hiddenImg' : ''}`} key={record.iconUrl} src={record.iconUrl} />,
         },
@@ -57,10 +63,19 @@ function ViewGuild() {
             customSort: (a: any, b: any) => a.name - b.name,
             render: (record) => <span>{record?.name ? record?.name : '-'}</span>,
         },
+            // TODO: reorder... show 1s and 0
         {
             title: 'Created At',
             render: (record) => <span>{ record?.createdAt ?  moment(record?.createdAt).fromNow() : '-'}</span>,
         },
+            {
+                title: 'Discord ID',
+                render: (record) => <span>{ record?.discordGuildId }</span>,
+            },
+            {
+                title: 'Owner / Admin ID',
+                render: (record) => <span>{ record?.guildOwnerDiscordId }</span>,
+            },
         {
             title: 'Analytics Webhook Channel',
             render: (record) => <span>{record?.analyticsWebhookChannel ? record?.analyticsWebhookChannel : '-'}</span>,
@@ -102,14 +117,17 @@ function ViewGuild() {
             render: (record) => <span>{record?.updatedAt ? moment(record?.updatedAt).fromNow() : '-'}</span>,
         },
     ];
-    
-    
-    
+
+
+
     const columns_mobile: Column<guildData>[] =
     isModeGuild ? [
         {
             render: (record: any, index) => (
-                <>{<span><b></b>{record?.name} </span>} </>
+                <>
+                    {<span><b></b>{record?.name} </span>}
+                    {/*{<span><br/><b>Created At : </b>{ record?.createdAt ?  moment(record?.createdAt).fromNow() : '-'}</span>}*/}
+                </>
             )
         },
     ] :  [
@@ -131,8 +149,8 @@ function ViewGuild() {
             )
         },
     ];
-    
-    
+
+
 
 
     // fetch guildData
@@ -176,15 +194,15 @@ function ViewGuild() {
 
     useEffect(() => {
         if(guildData){
-            if(guildData[0].createdAt){
+            if(guildData[0].discordGuildId){
                 setIsModeGuild(false)
             }else{
                 setIsModeGuild(true)
             }
         }
-      
+
     }, [guildData])
-    
+
 
     return (
         <div>
@@ -200,8 +218,8 @@ function ViewGuild() {
                         itemContent={index => <Table
                             data={guildData}
                             columns={isMobile ? columns_mobile : columns}
-                            title="All Guild"
-                            description="👪"
+                            title="Discords that have our bots"
+                            // description="👪"
                             url="https://famousfoxes.com/tokenmarket"
                             options={{
                                 thirdSortClick: false,

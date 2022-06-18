@@ -122,7 +122,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
            {/* Word count of yesterday, last 3 days, last 5 days */}
            {/* <div hidden={!devMode}>*/}
-                <WordsCount/>
+           {/*     <WordsCount/>*/}
            {/* </div>*/}
 
             {/* Top search words of past day */}

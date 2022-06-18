@@ -86,6 +86,7 @@ Go to .env in backend and fill out:
 devBotToken    -- secret token of your bot...
 devUid    -- your discord ID that you log in the site with
 devApplicationId    -- ID of the bot (app or client ID)
+devGuildId   -- ID of the server that you log into ... when using the website (ie. your dev server)
 ```
 
 Go to .env in frontend and fill out:

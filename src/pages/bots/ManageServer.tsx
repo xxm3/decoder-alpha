@@ -22,7 +22,7 @@ interface Server {
 
 const ManageServer: React.FC<AppComponentProps> = () => {
     let history = useHistory();
-    
+
     /**
      * States & Variables
      */
@@ -120,7 +120,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                 <Button onClick={()=>{
                     history.push('/view-guild')
                 }}>
-                    View Discord Members
+                    View Discords that have our bots
                 </Button>
             </div>
 
