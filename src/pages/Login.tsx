@@ -90,7 +90,6 @@ function Login() {
                 .catch((e) => {
                     console.error(e);
 
-                    // TODO: where do people go after logging in... and not in discord...
                     if (e?.response?.status === 403){
                         // You need a proper role in Discord before accessing the site. Buy the NFT then go to the 'metahelix-verify' channel
                         setError("An error occurred. Please try again or contact us");

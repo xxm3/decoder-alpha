@@ -489,7 +489,6 @@ const App = () => {
                                                                                     component={
                                                                                        WhitelistMarketplace
                                                                                     }
-																					so
                                                                                 />
 
                                                                                 {/*login button etc...*/}

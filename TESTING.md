@@ -87,6 +87,7 @@ devBotToken    -- secret token of your bot...
 devUid    -- your discord ID that you log in the site with
 devApplicationId    -- ID of the bot (app or client ID)
 devGuildId   -- ID of the server that you log into ... when using the website (ie. your dev server)
+devRoleId  -- this is the ID of the role you give to yourself in your Discord, that mkes it so you have "4 nfts" locally
 ```
 
 Go to .env in frontend and fill out:

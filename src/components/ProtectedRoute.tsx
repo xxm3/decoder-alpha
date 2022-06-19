@@ -20,11 +20,13 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
 
 	return user
         // ### skip if test vehn dojo
-        || (isDev ) // || process.env.FORCE_DISCORD_LOGIN
+        // || (isDev ) // || process.env.FORCE_DISCORD_LOGIN
     ? (
 		(needsRole && !isDev ? hasRoles : true) ?
             <AppRoute {...props} /> :
-            <AppRoute {...props} component={() => <div>You cannot access this page (SOL Decoder holders only). If you feel this is an error, click "Logout" on bottom left and log back in, or otherwise buy 1 of our NFTs on Magiceden. After purchasing, you must verify within Discord, and then login with Discord</div>} />
+
+            // TODO: update
+            <AppRoute {...props} component={() => <div>You cannot access this page (SOL Decoder holders only). If you feel this is an error, click "Logout" on bottom left and log back in, or otherwise buy 1 of our NFTs on Magiceden. After purchasing, you must verify within the SOL Decoder Discord (metahelix-verify channel), and then login with Discord on this website. <br/> If you are looking to add our Discord bots to your server - then <a>click here</a></div>} />
 	) : (
 		<Route
 			{...props}
