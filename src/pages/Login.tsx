@@ -91,7 +91,8 @@ function Login() {
                     console.error(e);
 
                     if (e?.response?.status === 403){
-                        setError("You need a proper role in Discord before accessing the site. Buy the NFT then go to the 'metahelix-verify' channel");
+                        // You need a proper role in Discord before accessing the site. Buy the NFT then go to the 'metahelix-verify' channel
+                        setError("An error occurred. Please try again or contact us");
                     }else {
                         setError('Something went wrong, please try again. You may also try using a VPN program, and not a VPN in your browser (as people in Russia are  currently banned by Google). Some anti-virus programs like Bullguard can block the site, so unblock it there.');
                     }
