@@ -144,6 +144,52 @@ const Addserver: React.FC<props> = (props) => {
                 });
         };
 
+        let getHighestRoleType = async (id: string) => {
+            setIsLoading(true);
+            instance
+                .post(
+                    `highestRoleType`,
+                    { discordId: id },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                )
+                .then(({ data }) => {
+                    if (data.roleType !== 'No Roles') {
+                        SetAdmin(id);
+                    } else {
+                        present({
+                            message: 'This admin has no NFTS available.',
+                            color: 'danger',
+                            duration: 5000,
+                            buttons: [{ text: 'X', handler: () => dismiss() }],
+                        });
+                    }
+                })
+                .catch((error: any) => {
+                    console.error('error', error);
+
+                    let msg = '';
+                    if (error && error.response) {
+                        msg = String(error.response.data.body);
+                    } else {
+                        msg = 'Unable to connect. Please try again later';
+                    }
+                    present({
+                        message: msg,
+                        color: 'danger',
+                        duration: 5000,
+                        buttons: [{ text: 'X', handler: () => dismiss() }],
+                    });
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                    // console.log("done")
+                });
+        };
+
         // Set Admin
 
         let SetAdmin = (id: string) => {
@@ -215,45 +261,48 @@ const Addserver: React.FC<props> = (props) => {
                         return (
                             <IonRow>
                                 <IonCol size-lg="5" size-md="9" size="12">
-                                <ListItem key={index}>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        {admin?.user?.avatar ? (
-                                            <img
-                                                src={`https://cdn.discordapp.com/icons/${admin.user.id}/${admin.user.icon}.webp`}
-                                                alt="avtar"
-                                            />
-                                        ) : (
-                                            <PersonIcon />
-                                        )}
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary={admin?.user.username}
-                                    secondary={
-                                        secondary ? 'Secondary text' : null
-                                    }
-                                />
-                                <ListItemSecondaryAction>
-                                    {!AssigenAdmin.includes(
-                                        admin?.user?.id
-                                    ) && (
-                                        <IonButton
-                                            color="primary"
-                                            className="text-sm space-x-1"
-                                            onClick={() =>
-                                                getRoleType(admin.roles,admin?.user?.id)
+                                    <ListItem key={index}>
+                                        <ListItemAvatar>
+                                            <Avatar>
+                                                {admin?.user?.avatar ? (
+                                                    <img
+                                                        src={`https://cdn.discordapp.com/icons/${admin.user.id}/${admin.user.icon}.webp`}
+                                                        alt="avtar"
+                                                    />
+                                                ) : (
+                                                    <PersonIcon />
+                                                )}
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={admin?.user.username}
+                                            secondary={
+                                                secondary
+                                                    ? 'Secondary text'
+                                                    : null
                                             }
-                                        >
-                                            <p>Assign</p>
-                                        </IonButton>
-                                    )}
-                                </ListItemSecondaryAction>
-                            </ListItem>
+                                        />
+                                        <ListItemSecondaryAction>
+                                            {!AssigenAdmin.includes(
+                                                admin?.user?.id
+                                            ) && (
+                                                <IonButton
+                                                    color="primary"
+                                                    className="text-sm space-x-1"
+                                                    onClick={() =>
+                                                        getHighestRoleType(
+                                                            admin?.user?.id
+                                                        )
+                                                    }
+                                                >
+                                                    <p>Assign</p>
+                                                </IonButton>
+                                            )}
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
                                 </IonCol>
                                 <IonCol></IonCol>
-                                </IonRow>
-
+                            </IonRow>
                         );
                     })}
                 </List>
