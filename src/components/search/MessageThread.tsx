@@ -143,7 +143,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         // initiateSocket()
         if(role === '3NFT'){
             initiateSocket()
-            // console.log('Connect Socket------')
         }else{
             present({
                 message: `You are not able to view live messages because you don't have 3 NFT`,
@@ -157,14 +156,32 @@ const MessageThread: React.FC<MessageThreadProps> = ({
     // Socket initial
     const initiateSocket = () => {
         setIsLoading(true)
-        socket = io('http://192.168.1.102:5027');
+        socket = io('http://192.168.1.102:5027',{
+            auth: {
+                uid: localStorage.getItem('uid'),
+            }
+        });
 
-        socket.on('connect', () => {
-            setIsSocketConnected(true);
-            setHideMessageBtn(false)
-        })
 
-        socket.emit('getData', defaultPageParam);
+        if(!socket.connected) {
+            setIsLoading(false)
+            present({
+                message: `You are not able to view live messages because you are not authorized`,
+                color: 'danger',
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
+            })
+        }else{
+
+            socket.on('connect', () => {
+                 setIsSocketConnected(true);
+                 setHideMessageBtn(false)
+             })
+
+            socket.emit('getData', defaultPageParam);
+        }
+        
+
         // socket.emit('getData', {
         //     "message": {
         //         "author": "Bentley DeLorenzo",
@@ -192,7 +209,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         // });
 
         socket.on('Data', (data) => {
-            // console.log('socket connect')
             setIsLoading(false)
             if(data.subsequentMsg.length > 0){
                 if(isNewData < data.subsequentMsg.length){
@@ -214,6 +230,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         socketVar.disconnect();
         setIsSocketConnected(false)
         setHideMessageBtn(true)
+        setSocketVar('')
     }
 
     useEffect(() => {
