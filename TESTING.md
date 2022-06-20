@@ -125,6 +125,10 @@ When you start the app, go to ProtectedRoute.tsx and comment out "isDev" ... and
 (4) then connect wallet with phantom connect and disconnect
 (5) then also connect with multi wallet and also disconnect and complete working
 
+### 16) Token name alerts
+(1) Token name alerts should be sent to all of the guilds in the database. If there is a failure for a single guild then the token should not be marked as alerted (property nameAlerted=1) in the database.
+(2) The name alerts can be tested by calling the endpoint GET http://localhost:5001/nft-discord-relay/us-central1/api/receiver/alertTokenNames. In the database the tokens which have nameAlerted=0 and have a name will be alerted in the analytics channel (for vehn's dojo that is analytics-etc-test0000).
+
 
 ------
 
