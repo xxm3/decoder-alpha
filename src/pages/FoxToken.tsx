@@ -388,7 +388,7 @@ function FoxToken({ contentRef }: FoxToken) {
     const [addMultWallModalOpen, setAddMultWallModalOpen] = useState(false); // model open or not
     const [formWalletMult, setFormWalletMult] = useState(''); // single wallet in the form
 
-    const local_host_str = 'localhost';
+    const local_host_str = 'localhasdfost';
     const firstUpdate = useRef(true);
 
     const [popoverOpened, setPopoverOpened] = useState(false);

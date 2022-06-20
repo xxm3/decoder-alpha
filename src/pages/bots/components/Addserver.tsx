@@ -247,7 +247,7 @@ const Addserver: React.FC<props> = (props) => {
         return (
             <div>
 
-                <p>Usage of many of the SOL Decoder bots require 3-4 NFTs. If you are a server owner but don't have 3-4 NFTs, you may allow an admin of your server (that has 3-4 NFTs) to setup this server for you. Create a new role in your Discord that has a permission of "Administrator", add the user to that permission, then you should see them in the list below. Click "Assign", then that person can login here and setup the rest of the bots for you.</p>
+                <p>Usage of many of the SOL Decoder bots require 3-4 NFTs. If you are a server owner but don't have 3-4 NFTs, you may allow an admin of your server (that has 3-4 NFTs) to setup this server for you. Create a new role in your Discord that has a permission of "Administrator", add the user to that role, then you should see them in the list below. Click "Assign", then that person can login here and setup the rest of the bots for you.</p>
 
                 <div>
                     <IonButton

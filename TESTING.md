@@ -97,6 +97,8 @@ devClientId     -- ID of the bot (app or client ID)
 
 Go to /manageserver and invite the bot to your server using the third link. Make sure to change the "clientId" in the URL with what you see on your discord bot management page (so set that up on the README.md -> " Discord oauth" section
 
+When you start the app, go to ProtectedRoute.tsx and comment out "isDev" ... and in backend start it with `FORCE_DISCORD_LOGIN=true`
+
 ### 13) Assign Admin if you have no enough nft to enable bot configure packages
 (1) First you login and then go to  https://soldecoder.app/manageserver page
 (2) You see available server that you create in  discord

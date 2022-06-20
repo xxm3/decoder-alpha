@@ -57,7 +57,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
     const [isNewData,setIsNewData] = useState<number>(0)
     const [hideMessageBtn, setHideMessageBtn] = useState<boolean>(true)
     const role = localStorage.getItem('role')
-    let socket: Socket<DefaultEventsMap, DefaultEventsMap>; 
+    let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
 
     async function fetchContext({ pageParam = defaultPageParam}: QueryFunctionContext<MessageThreadQueryKey, PageParam>) {
@@ -142,7 +142,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         }
     }, [window.innerWidth])
 
-    // get Live messages 
+    // get Live messages
 
     const viewLiveMessages = () => {
         // initiateSocket()
@@ -185,7 +185,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         // }
         // );
 
-        
+
 
         socket.on('Data', (data) => {
             // console.log('socket data',data)
@@ -200,11 +200,11 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                     setDataPages([data.subsequentMsg])
                 }
             }
-            
+
         })
         setSocketVar(socket)
     }
-     
+
     // Disconnect socket on close button
     const disconnectSocket = () => {
         socketVar.disconnect();
@@ -220,27 +220,28 @@ const MessageThread: React.FC<MessageThreadProps> = ({
 
     return (
         <>
-            <IonModal isOpen = {isModalOpen} onDidDismiss={()=> { 
-                        if(isSocketConnected) { 
-                            disconnectSocket() 
-                        } 
+            <IonModal isOpen = {isModalOpen} onDidDismiss={()=> {
+                        if(isSocketConnected) {
+                            disconnectSocket()
+                        }
                         setIsModalOpen(false)
                         }}>
                 <div ref={containerRef} className={`${isMobile ? 'p-2' : 'p-4'} c-res-messages messages h-full w-full mx-auto`} >
-                    <div className={` ${hideMessageBtn ? 'justify-between' : 'justify-end' } ${isMobile ? 'm-3' :'mb-3'} text-red-500 flex cursor-pointer items-center`}>
-                        {hideMessageBtn ? <IonButton onClick={()=>viewLiveMessages()}>View Live Messages</IonButton> : ''}
-                        <div onClick={()=> {
-                                if(isSocketConnected){
-                                    disconnectSocket() 
-                                }
-                                  setIsModalOpen(false)
-                                } 
-                             }>
-                            <HighlightOffIcon className='text-2xl'/>
-                        </div>
-                    </div>
+                    {/*TODO: ruchita...*/}
+                    {/*<div className={` ${hideMessageBtn ? 'justify-between' : 'justify-end' } ${isMobile ? 'm-3' :'mb-3'} text-red-500 flex cursor-pointer items-center`}>*/}
+                    {/*    {hideMessageBtn ? <IonButton onClick={()=>viewLiveMessages()}>View Live Messages</IonButton> : ''}*/}
+                    {/*    <div onClick={()=> {*/}
+                    {/*            if(isSocketConnected){*/}
+                    {/*                disconnectSocket() */}
+                    {/*            }*/}
+                    {/*              setIsModalOpen(false)*/}
+                    {/*            } */}
+                    {/*         }>*/}
+                    {/*        <HighlightOffIcon className='text-2xl'/>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                     {isLoading ? <div className='flex justify-center'><Loader/></div> : ''}
-                    
+
                     <div className={`overflow-y-scroll h-full w-full mx-auto ${isMobile ? 'p1' :'p-5'}`}>
                         { dataPages && dataPages?.length > 0 ? dataPages.map((page:any,index:number) =>{
                                 return <div key={index}>
