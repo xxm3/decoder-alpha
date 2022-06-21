@@ -388,7 +388,7 @@ function FoxToken({ contentRef }: FoxToken) {
     const [addMultWallModalOpen, setAddMultWallModalOpen] = useState(false); // model open or not
     const [formWalletMult, setFormWalletMult] = useState(''); // single wallet in the form
 
-    const local_host_str = 'localhasdfost';
+    const local_host_str = 'localhost';
     const firstUpdate = useRef(true);
 
     const [popoverOpened, setPopoverOpened] = useState(false);
@@ -736,12 +736,13 @@ function FoxToken({ contentRef }: FoxToken) {
             setMySplTokens(mySplTokensTemporary);
             return mySplTokensTemporary;
         } else {
-            present({
-                message:'None of your tokens seem to be listed, sorry!',
-                color: 'danger',
-                duration: 5000,
-                buttons: [{ text: 'X', handler: () => dismiss() }],
-            });
+            // stupid bug we can't seem to fix where it shows up all the time, even with no wallets selected
+            // present({
+            //     message:'None of your tokens seem to be listed, sorry!',
+            //     color: 'danger',
+            //     duration: 5000,
+            //     buttons: [{ text: 'X', handler: () => dismiss() }],
+            // });
             fetchTableData();
         }
 

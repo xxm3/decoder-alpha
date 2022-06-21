@@ -227,7 +227,8 @@ const MessageThread: React.FC<MessageThreadProps> = ({
                         setIsModalOpen(false)
                         }}>
                 <div ref={containerRef} className={`${isMobile ? 'p-2' : 'p-4'} c-res-messages messages h-full w-full mx-auto`} >
-                    {/*TODO: ruchita...*/}
+
+                    {/*TODO: damjan eventually...*/}
                     {/*<div className={` ${hideMessageBtn ? 'justify-between' : 'justify-end' } ${isMobile ? 'm-3' :'mb-3'} text-red-500 flex cursor-pointer items-center`}>*/}
                     {/*    {hideMessageBtn ? <IonButton onClick={()=>viewLiveMessages()}>View Live Messages</IonButton> : ''}*/}
                     {/*    <div onClick={()=> {*/}

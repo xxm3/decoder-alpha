@@ -78,9 +78,10 @@ function Login() {
                 .then(({ data }) => {
                     // console.log(data);
 					// auth.setPersistence(browserLocalPersistence)
+
                     localStorage.setItem('servers',JSON.stringify(data.servers));
                     localStorage.setItem('roleList',JSON.stringify(data.roles));
-                    localStorage.setItem('isLogin','isLogin')
+                    localStorage.setItem('isLogin','isLogin'); // used for showing search bar or not, and stuff
 
                     // console.log('servers: ' + data.servers);
                     console.log('roles: ' + data.roles);
