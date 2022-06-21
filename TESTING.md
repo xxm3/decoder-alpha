@@ -7,7 +7,12 @@
 - E) search a multiple word with results (sol nft)
 
 ### 2) Today's mints page
-- A) make sure filled out with data, and for the right day (UTC time)
+- 1) Execute a GET request to http://localhost:5001/nft-discord-relay/us-central1/api/getTodaysMints?doScrape=true
+- 2) Since scraping mints for a whole month takes a lot of time, a month is divided intro three 10-day intervals and each of those intervals get scraped. We separate this with a parameter called whichSection which can hold the values 'first', 'second' or 'third'.
+Example: http://localhost:5001/nft-discord-relay/us-central1/api/thirtyMints?whichSection=first. Execute this endpoint for all sections, usually takes 5-10 minutes per section. Make sure you have the FUNCTIONS_EMULATOR_TIMEOUT_SECONDS variable set in .env to 300 and up to 600.
+- 3) Load up todays mints and make sure it only shows things that are actually minting today. make sure data filled out in most columns
+- 4) Load up the calendar and ensure there are no duplicates. Make sure there is 30+ days of data. Ensure you can click into a date and get the calendar details. Ensure you can click into a date and all the fields are filled in
+- 5) Go to Vehn's Dojo - daily mints -- make sure it is filled out and looks good, according to the specifications.
 
 ### 3) Testing Fox Token page:
 - A) Make sure filled out
