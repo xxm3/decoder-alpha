@@ -111,19 +111,12 @@ function Sidebar() {
                     to="/alerts"
                 />
 
-                {/* commented out until feature is done ... you can go to http://localhost:3000/bots manually in meantime */}
-                {/* bot page hide for now do not remove */}
-                {/*<NavLink*/}
-                {/*    title="Bots"*/}
-                {/*    icon={earthOutline}*/}
-                {/*    to="/bots"*/}
-                {/*/>*/}
-
-               {/*    <NavLink*/}
-               {/*         title="Add Bots"*/}
-               {/*        icon={serverOutline}*/}
-               {/*        to="/manageserver"*/}
-               {/*    />*/}
+               {/* TODO: can't show this until we enable a module first time?? or on manageserver ... don't show the list until they have modules -> so show the AddServer button? */}
+               {/*<NavLink*/}
+               {/*     title="Add DAO Bots"*/}
+               {/*    icon={serverOutline}*/}
+               {/*    to="/manageserver"*/}
+               {/*/>*/}
 
                 <NavLink
                     title="Docs"
@@ -132,14 +125,13 @@ function Sidebar() {
                     external={'https://docs.soldecoder.app'}
                 />
 
-                <NavLink
-                    title="Twitter"
-                    icon={logoTwitter}
-                    to="#"
-                    external={'https://twitter.com/SOL_Decoder'}
-                />
+                {/*<NavLink*/}
+                {/*    title="Twitter"*/}
+                {/*    icon={logoTwitter}*/}
+                {/*    to="#"*/}
+                {/*    external={'https://twitter.com/SOL_Decoder'}*/}
+                {/*/>*/}
 
-                {/*TODO: uncomment*/}
                 {/* logout Button  */}
                 {/*{isLogin === 'isLogin' ? */}
                     <div>

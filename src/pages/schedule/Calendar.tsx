@@ -265,7 +265,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                     <div>
                                         <img src={eventGraphData?.data?.data[0]?.image} className={`${isMobile ? 'h-24 w-24' : 'h-52 w-52'}`} alt=''/>
                                     </div>
-                                    <div className={`flex ${isMobile  ? 'items-start ml-3 mt-2' : 'items-cente ml-6 mt-6' } flex-col`}>
+                                    <div className={`flex ${isMobile  ? 'items-start ml-3 mt-2 mb-3' : 'items-cente ml-6 mt-6 mb-3' } flex-col`}>
                                         <div className={`items-center flex`}>
                                             <div className={`font-bold ${isMobile ? 'text-lg' : 'text-2xl' }`}>{eventGraphData?.data?.data[0]?.mintName}</div>
                                             <div className={`items-center flex justify-center pt-2 pl-2 ${isMobile ? 'ml-1' : 'ml-4'}  flex-row`}>
@@ -291,20 +291,21 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                         </div>
                                         <div className='text-base'>{moment(eventGraphData?.data?.data[0]?.date).format('LLL')}</div>
                                         <div className={`${isMobile ? 'mt-2' : 'mt-4'}`}><b>Price : </b>{eventGraphData?.data?.data[0]?.price}</div>
+                                        <div><b>Supply : </b>{eventGraphData?.data?.data[0]?.supply}</div>
                                         <div className={`flex ${isMobile ? '' : ' mt-4'} flex-row`}>
-                                        <div className={`flex flex-col`}>
-                                            <div><b>Discord : </b>{formatNumber(eventGraphData?.data?.data[0]?.numbersOfDiscordMembers) || 0}</div>
-                                            <div><b>Twitter : </b>{formatNumber(eventGraphData?.data?.data[0]?.numbersOfTwitterFollowers) || 0}</div>
-                                        </div>
-                                        <div className={`flex flex-col ${isMobile ? 'ml-3' : 'ml-4'}`}>
-                                            <div><b>Online : </b>{formatNumber(eventGraphData?.data?.data[0]?.DiscordOnlineMembers)}</div>
-                                            <div><b>Interactions : </b>{formatNumber(eventGraphData?.data?.data[0]?.tweetInteraction?.total)}</div>
-                                        </div>
+                                            <div className={`flex flex-col`}>
+                                                <div><b>Discord : </b>{formatNumber(eventGraphData?.data?.data[0]?.numbersOfDiscordMembers) || 0}</div>
+                                                <div><b>Twitter : </b>{formatNumber(eventGraphData?.data?.data[0]?.numbersOfTwitterFollowers) || 0}</div>
+                                            </div>
+                                            <div className={`flex flex-col ${isMobile ? 'ml-3' : 'ml-4'}`}>
+                                                <div><b>Online : </b>{formatNumber(eventGraphData?.data?.data[0]?.DiscordOnlineMembers)}</div>
+                                                <div><b>Interactions : </b>{formatNumber(eventGraphData?.data?.data[0]?.tweetInteraction?.total)}</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             <div className='pm-4'>
-                                {showGraph ? <MintChart eventGraphData = {eventGraphData}/> : <div className='text-center popup-half-bg h-10  items-center flex justify-center mt-4'><div>No chart history available</div> </div>}
+                                {showGraph ? <MintChart eventGraphData = {eventGraphData}/> : <div className='text-center popup-half-bg h-10  items-center flex justify-center '><div>No chart history available</div> </div>}
                             </div>
                             </div>
                             </div>

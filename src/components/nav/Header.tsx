@@ -45,8 +45,8 @@ const HeaderContainer = () => {
 
 	const [mode, setMode] = usePersistentState<"dark" | "light">("mode", "dark");
 
-    const hideSearch = 'isLogin'; // localStorage.getItem('isLogin')
-    // const hideSearch = localStorage.getItem('isLogin')
+    // const hideSearch = 'isLogin';
+    const hideSearch = localStorage.getItem('isLogin');
 
     // onload useEffect
     useEffect(() => {
@@ -69,7 +69,7 @@ const HeaderContainer = () => {
         // set the placeholder of the header search bar
         function smallPlaceholder() {
             if (window.innerWidth > 1000) {
-                setHeaderPlaceholder("Search Discord/tweets & view graphs");
+                setHeaderPlaceholder("Search & view graphs");
             } else {
                 setHeaderPlaceholder("Type then press enter");
             }

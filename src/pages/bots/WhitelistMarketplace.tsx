@@ -18,7 +18,6 @@ function WhitelistMarketplace() {
     return (
         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 sm:grid-cols-2 md:gap-6 gap-4 p-10">
 
-            {/*TODO: only show when loading state*/}
             <div hidden={whitelists.length > 0}>
                 <Loader />
             </div>
@@ -26,6 +25,7 @@ function WhitelistMarketplace() {
             {whitelists.map((whitelist) => (
                 <WhitelistCard {...whitelist} key={whitelist.id}/>
             ))}
+
         </div>
     );
 }
