@@ -322,11 +322,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 </IonLabel>
             </div>
             <div className={`text-base flex ${isMobile ? 'mt-2' :''}`}>
+
+                {/* if they can't add any packages */}
                 {authorizedModule === 0 ?
                 <>
-                    <span className="text-red-500">You don't have enough NFTs to add packages. Please purchase the appropriate amount and have your role verified in Discord </span>
+                    <span className="text-red-500">You don't have enough NFTs to add packages. Please purchase the appropriate amount and have your role verified in Discord. If you feel this is an error, then log out (bottom left) and log in again. If you want to give one of your admins (that have the NFTs) to manage the bots in your server, then click the 'Add Admin' button here </span>
+
                     <Addserver addServerFlag={addServerFlag} setAddServerFlag={setAddServerFlag} />
                 </> :
+
+                    // else show how many packages they can add
                     <span className="text-green-500">You are authorized to add {authorizedModule} package(s)</span>}
 
             </div>
@@ -396,7 +401,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                             <div className="flex flex-col mt-4 p-2 w-full">
                                 <div className='flex justify-between items-center w-full'>
                                     <IonLabel className="ml-3 text-xl font-semibold">
-                                        #1 - "Mints" package
+                                        "Mints" package
                                     </IonLabel>
                                     <Switch checked={checked.mintInfoModule}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

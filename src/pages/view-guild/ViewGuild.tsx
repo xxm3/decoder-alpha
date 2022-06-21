@@ -54,7 +54,6 @@ function ViewGuild() {
             },
         ] : [
         {
-            // TODO: test 1/2 .. 2/2 -- will fill in automatically etc...
             title: '',
             render: (record) => <img className={`avatarImg ${!record.iconUrl ? 'hiddenImg' : ''}`} key={record.iconUrl} src={record.iconUrl} />,
         },
@@ -63,7 +62,6 @@ function ViewGuild() {
             customSort: (a: any, b: any) => a.name - b.name,
             render: (record) => <span>{record?.name ? record?.name : '-'}</span>,
         },
-            // TODO: reorder... show 1s and 0
         {
             title: 'Created At',
             render: (record) => <span>{ record?.createdAt ?  moment(record?.createdAt).fromNow() : '-'}</span>,

@@ -6,7 +6,7 @@
 export const isDev = process.env.NODE_ENV !== 'production';
 // export const isDev = false; // if want to test prod stuff, when on local
 
-console.log(process.env);
+// console.log(process.env);
 
 export const environment = {
     backendApi: isDev?  'http://localhost:5001/nft-discord-relay/us-central1/api' : 'https://us-central1-nft-discord-relay.cloudfunctions.net/api',
@@ -17,9 +17,9 @@ export const environment = {
     // vehn IC bot - 861589624400904204
     // damjan? - 973608903801708634
     // clientId: isDev ? process.env.devClientId : '927008889092857898', // client ID for our discord bot,
-    clientId: isDev ? '861589624400904204' : '927008889092857898', // client ID for our discord bot, // TODO: wait Kishan
+    clientId: isDev ? '861589624400904204' : '927008889092857898', // client ID for our discord bot, // TODO: wait Kishan - asked him
 	ionicAppUrl : isDev ? "http://localhost:8100" : "https://soldecoder.app"
 };
 
 
-export const VERSION_CODE = '1.0.36';
+export const VERSION_CODE = '1.0.38';

@@ -45,9 +45,8 @@ const HeaderContainer = () => {
 
 	const [mode, setMode] = usePersistentState<"dark" | "light">("mode", "dark");
 
-    // TODO: !! release same time as reset login ... when iphone app out ... next removed...
-    const hideSearch = 'isLogin';
-    // const hideSearch = localStorage.getItem('isLogin');
+    // const hideSearch = 'isLogin';
+    const hideSearch = localStorage.getItem('isLogin');
 
     // onload useEffect
     useEffect(() => {
