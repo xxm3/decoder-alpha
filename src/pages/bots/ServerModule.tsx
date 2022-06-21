@@ -27,7 +27,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
      */
     const useQuery = () => new URLSearchParams(useLocation().search);
     const query = useQuery();
-    const devMode = query.get('devMode');
+    const devMode = query.get('devMode') || window.location.href.indexOf('localhost') !== -1;
 
     let history = useHistory();
     const location: LocationParams = useLocation();
