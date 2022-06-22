@@ -67,11 +67,11 @@ function WhitelistCard({
                 <img
                     src={image}
                     className="h-full w-full object-cover object-left"
-                    alt={`${sourceServer.name} X ${targetServer.name}`}
+                    alt={`${sourceServer?.name} X ${targetServer?.name}`}
                 />
                 <div className="absolute flex bottom-0 right-0 justify-between bg-white bg-opacity-50 dark:bg-black dark:bg-opacity-50 py-2 px-5 left-0">
                     <div className="w-full">
-                        <p className="font-bold text-lg">{sourceServer.name}</p>
+                        <p className="font-bold text-lg">{sourceServer?.name}</p>
                         <p className="text-sm italic">
                             Whitelist
                         </p>
