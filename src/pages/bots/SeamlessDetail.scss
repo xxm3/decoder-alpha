@@ -1,0 +1,55 @@
+ion-card {
+    border-radius: 10px;
+    --background: #2a3246;
+    .cardImage {
+        .cardMainImage {
+            height: 250px;
+            width: 100%;
+            object-fit: cover;
+        }
+        .cardOverlay-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            .socialMediaIcon {
+                img {
+                    filter: invert(100%);
+                    margin: 5px;
+                }
+            }
+        }
+    }
+    .content-extra-space {
+        height: 10px;
+    }
+   
+    .greenText {
+        color: rgb(44, 150, 100);
+    }
+    .BlueText {
+        color: rgb(100 113 224);
+    }
+    ion-select {
+        width: 100%;
+    max-width: unset;
+    }
+    .ion-item-wrapper{
+        --color: #fff !important;
+        --background: #212838 !important;
+    }
+}
+.cardButton {
+    text-transform: capitalize;
+    --border-radius: 10px;
+    --background: linear-gradient(
+        to right,
+        rgb(110 222 170),
+        rgb(100 113 224)
+    );
+}

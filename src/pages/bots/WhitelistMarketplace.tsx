@@ -4,6 +4,7 @@ import { instance } from '../../axios';
 import WhitelistCard from '../../components/WhitelistCard';
 import { IWhitelist } from '../../types/IWhitelist';
 import Loader from '../../components/Loader';
+import TargetServerCard from '../../components/TargetServerCard';
 
 function WhitelistMarketplace() {
     const { data: whitelists = [] } = useQuery(
@@ -25,6 +26,9 @@ function WhitelistMarketplace() {
             {whitelists.map((whitelist) => (
                 <WhitelistCard {...whitelist} key={whitelist.id}/>
             ))}
+            {/* {whitelists.map((whitelist) => (
+                <TargetServerCard {...whitelist} key={whitelist.id}/>
+            ))} */}
 
         </div>
     );

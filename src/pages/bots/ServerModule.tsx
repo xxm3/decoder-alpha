@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
-import { IonItem, IonButton, IonLabel, useIonToast } from '@ionic/react';
+import { IonItem, IonButton, IonLabel, useIonToast, IonInput, IonTextarea } from '@ionic/react';
 import { Backdrop, CircularProgress, Grid, Switch, } from '@material-ui/core';
 import { Tooltip } from "react-tippy";
 import './ServerModule.scss';
@@ -51,6 +51,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const { serverId } = useParams<{serverId : string}>();
     const [addServerFlag, setAddServerFlag] = useState(false)
 
+    const [discordLink,setDiscordLink] = useState<any>()
+    const [twitterLink,setTwitterLink] = useState<any>()
+    const [description,setDescription] = useState<any>()
+    const [image,setImage] = useState<any>()
+
+
     /**
      * Use Effects
      */
@@ -71,6 +77,60 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         // }
 
     }, [window.innerWidth]);
+
+    const submitWhitelist = () => {
+        const formData = new FormData();
+        formData.append('image', image)
+        formData.append('discordLink', discordLink)
+        formData.append('twitterLink', twitterLink)
+        formData.append('description', description)
+
+        setIsLoading(true)
+        instance .post(`/updateGuild/${serverId}`, formData, { headers: { 'Content-Type': 'application/json', }, })
+        .then(({ data }) => {
+            if(data.success){
+                present({
+                    message: data.message,
+                    color: 'success',
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
+                });
+            }else{
+                let msg = '';
+                if (data?.message) {
+                    msg = String(data.message);
+                } else {
+                    msg = 'Unable to connect. Please try again later';
+                }
+                present({
+                    message: msg,
+                    color: 'danger',
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
+                });
+            }
+        })
+        .catch((error:any) => {
+
+            let msg = '';
+            if (error?.response) {
+                msg = String(error.response.data.message);
+            } else {
+                msg = 'Unable to connect. Please try again later';
+            }
+            present({
+                message: msg,
+                color: 'danger',
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
+            });
+
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+
+    }
 
     // get guilds
     useEffect(() => {
@@ -139,11 +199,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         if (serverId) {
             setBackdrop(true);
             instance
-                .post(`/guilds/${serverId}/modules`, obj, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                })
+                .post(`/guilds/${serverId}/modules`, obj, { headers: { 'Content-Type': 'application/json', }, })
                 .then(({ data }) => {
                     if(data.success){
                         setChecked({ ...checked, [obj.module]: obj.enabled });
@@ -588,9 +644,36 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 					--padding-bottom: 25px;
 					--padding-end: 20px;
 					--padding-start: 20px;
-				`} onClick={() => history.push(`/initiatewhitelist/${serverId}`)}>
+				`} onClick={() => history.push(`/seamless/${serverId}`)}>
 	                Initiate Whitelist
 	            </IonButton>
+            </div>
+            <div>
+                <IonItem className="ion-item-wrapper mt-1">
+                    <IonInput placeholder="Discord Link" onIonChange={e => setDiscordLink(e.detail.value!)}/>
+                </IonItem>
+                <IonItem className="ion-item-wrapper mt-1">
+                    <IonInput placeholder="Twitter Link" onIonChange={e => setTwitterLink(e.detail.value!)}/>
+                </IonItem>
+                <IonItem className="ion-item-wrapper mt-1">
+                    <IonTextarea placeholder="Description" onIonChange={e => setDescription(e.detail.value!)}/>
+                </IonItem>
+                <div className='mb-5 flex-row flex items-center'>
+                    {/* <IonLabel className="text-white">Image</IonLabel> */}
+                    <IonItem className="ion-item-wrapper mt-2">
+                        <input type="file" id="img" name="img" accept="image/png, image/gif, image/jpeg" onChange={(e)=>setImage(e.target.files?.[0])}/>
+                    </IonItem>
+                </div>
+                <div className="mt-4 mb-5 w-full flex justify-center" hidden={!devMode}>
+                    <IonButton  css={css`
+                        --padding-top: 25px;
+                        --padding-bottom: 25px;
+                        --padding-end: 20px;
+                        --padding-start: 20px;
+                    `} onClick={() => submitWhitelist()}>
+                        Submit
+                    </IonButton>
+                </div>
             </div>
 
         </>
