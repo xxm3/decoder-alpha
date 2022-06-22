@@ -85,26 +85,6 @@ https://prowe214.medium.com/tip-how-to-view-localhost-web-apps-on-your-phone-ad6
 (7) If you want to check if the date is working fine then you need to change the current date maybe give it of 5 days ahead and see if you get any new mints from changing the date (can be done through backend code or if you know of other possible ways to change your date).
 (8) This need more refactors and needs to be integrated with todays mint after approval and final testing oncee its integrated with todays mints things like discord online members, twitter followers, tweet interactions will be inserted accurately.
 
-### 12) Set up the "Manage server" page
-Go to .env in backend and fill out:
-```
-devBotToken    -- secret token of your bot...
-devUid    -- your discord ID that you log in the site with
-devApplicationId    -- ID of the bot (app or client ID)
-devClientSecret   -- is next to your client/app ID above, in the discord bot page
-devGuildId   -- ID of the server that you log into ... when using the website (ie. your dev server)
-devRoleId  -- this is the ID of the role you give to yourself in your Discord, that mkes it so you have "4 nfts" locally
-```
-
-Go to .env in frontend and fill out:
-```
-devClientId     -- ID of the bot (app or client ID)
-```
-
-Go to /manageserver and invite the bot to your server using the third link. Make sure to change the "clientId" in the URL with what you see on your discord bot management page (so set that up on the README.md -> " Discord oauth" section
-
-When you start the app, go to ProtectedRoute.tsx and comment out "isDev" (x2) ... and in backend start it with `FORCE_DISCORD_LOGIN=true`. This forces Discord login locally
-
 ### 13) Assign Admin if you have no enough nft to enable bot configure packages
 (1) First you login and then go to  https://soldecoder.app/manageserver page
 (2) You see available server that you create in  discord
