@@ -113,7 +113,7 @@ function InitiateWhitelist() {
                                 message:
                                     'Whitelist partnership created successfully!',
                                 color: 'success',
-                                duration: 2000,
+                                duration: 10000,
                             });
                             reset();
                         } catch (error) {
@@ -158,7 +158,7 @@ function InitiateWhitelist() {
                     })}
                 >
                     <IonItem>
-                        <IonLabel position="stacked">Select a server</IonLabel>
+                        <IonLabel position="stacked">Select an existing DAO server</IonLabel>
                         <Controller
                             name="target_server"
                             rules={{
@@ -329,7 +329,7 @@ function InitiateWhitelist() {
                                             (
                                                 e.target as HTMLInputElement
                                             ).value =  value.toISOString();
-											
+
                                             onChange(e);
                                         }}
                                         name={name}
@@ -351,7 +351,7 @@ function InitiateWhitelist() {
                     </IonItem>
 
                     <IonItem>
-                        <IonLabel position="stacked">Whitelist role</IonLabel>
+                        <IonLabel position="stacked">Whitelist role (users winning WL will be granted this role in new mint server)</IonLabel>
                         <Controller
                             name="whitelist_role"
                             control={control}
@@ -382,7 +382,7 @@ function InitiateWhitelist() {
                         />
                     </IonItem>
                     <IonItem>
-                        <IonLabel position="stacked">Required Role</IonLabel>
+                        <IonLabel position="stacked">Required Role (users must have this role in existing DAO server to enter WL)</IonLabel>
                         <Controller
                             name="required_role"
                             control={control}

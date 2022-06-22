@@ -57,10 +57,6 @@ function WhitelistCard({
 
     const [isExploding, setIsExploding] = React.useState(false);
 
-    // useEffect(() => {
-    //     setIsExploding(true);
-    // }, []);
-
     return (
 
         <div className="border-gray-500 border-[0.5px] rounded-2xl w-80 overflow-clip">
@@ -114,14 +110,14 @@ function WhitelistCard({
                 {/*    ))*/}
                 {/*}*/}
 
-                <br/>
+                <br/><br/>
 
                 <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>
                     <p>{type.toUpperCase()}</p>
                     <p>Slots left </p>
                     <p>{max_users - claimCounts}/{max_users}</p>
-					<p>Required Role</p>
+					<p>Required Role (in {targetServer.name})</p>
 					<p>{required_role_name}</p>
 					<p className="timeLeft">Time left</p>
 					<TimeAgo setExpired={setExpired} date={expiration_date}/>
@@ -154,7 +150,7 @@ function WhitelistCard({
 
 						present({
 							message:
-								'Whitelist claimed successfully! You are now whitelisted in the other Discord',
+								'Whitelist claimed successfully! You are now whitelisted in ' + sourceServer.name,
 							color: 'success',
 							duration: 10000,
 						});

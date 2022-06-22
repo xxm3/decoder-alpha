@@ -414,6 +414,7 @@ const App = () => {
                                                                                     component={
                                                                                         NftPriceTable
                                                                                     }
+                                                                                    needsRole={false}
                                                                                 />
 
                                                                                 {/* Stacked Line Search */}
@@ -481,6 +482,7 @@ const App = () => {
                                                                                         component={
                                                                                             ViewGuild
                                                                                         }
+                                                                                        needsRole={false}
                                                                                 />
                                                                                 {/*  */}
                                                                                 <ProtectedRoute
@@ -489,6 +491,7 @@ const App = () => {
                                                                                     component={
                                                                                        WhitelistMarketplace
                                                                                     }
+                                                                                    needsRole={false}
                                                                                 />
 
                                                                                 {/*login button etc...*/}
