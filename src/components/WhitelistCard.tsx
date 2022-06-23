@@ -75,9 +75,8 @@ function WhitelistCard({
 
             {/*TODO: SFLKDSJFKLJS*/}
             {/*<ConfettiExplosion />*/}
-            --<div>{isExploding}</div>--
-
-            {isExploding && <div>set defaultttt</div>}
+            {/*--<div>{isExploding}</div>--*/}
+            {/*{isExploding && <div>set defaultttt</div>}*/}
 
             {isExploding && <ConfettiExplosion />}
 
