@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
-import { IonButton, IonGrid, IonRow, IonCol, IonCard,  IonText, IonRippleEffect, IonIcon, } from '@ionic/react';
+import { IonButton, IonGrid, IonRow, IonCol, IonCard,  IonText,} from '@ionic/react';
 import './ManageServer.scss';
 import { useHistory, useLocation, useParams } from 'react-router';
 import Loader from '../../components/Loader';

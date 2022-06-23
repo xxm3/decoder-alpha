@@ -56,35 +56,52 @@ function InitiateWhitelist() {
 		return date;
 	}, [now])
     const [present] = useIonToast();
-  
-        return (
-            <>
-                <div
-                    className="p-10"
-                    css={css`
-                        /* Chrome, Safari, Edge, Opera */
-                        input::-webkit-outer-spin-button,
-                        input::-webkit-inner-spin-button {
-                            -webkit-appearance: none;
-                            margin: 0;
-                        }
-    
-                        /* Firefox */
-                        input[type='number'] {
-                            -moz-appearance: textfield;
-                        }
-                    `}
-                >
-                    <h1 className="font-bold text-2xl mt-2 mb-5">  Initiate New Whitelist </h1>
-                    <form
-                        className="space-y-3"
-                        onSubmit={handleSubmit(async (data) => {
-                            const { image, ...rest } = data;
-                            const rawData = { ...rest, source_server: server,   };
-                            const formData = new FormData();
-    
-                            Object.entries(rawData).forEach(([key, value]) => {
-                                if (value) formData.append(key, value as string);
+    return (
+        <>
+            <div
+                className="p-10"
+                css={css`
+                    /* Chrome, Safari, Edge, Opera */
+                    input::-webkit-outer-spin-button,
+                    input::-webkit-inner-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+
+                    /* Firefox */
+                    input[type='number'] {
+                        -moz-appearance: textfield;
+                    }
+                `}
+            >
+                <h1 className="font-bold text-2xl mt-2 mb-5">
+                    Initiate New Whitelist
+                </h1>
+                <form
+                    className="space-y-3"
+                    onSubmit={handleSubmit(async (data) => {
+                        const { image, ...rest } = data;
+
+                        const rawData = {
+                            ...rest,
+                            source_server: server,
+                        };
+                        const formData = new FormData();
+
+                        Object.entries(rawData).forEach(([key, value]) => {
+                            if (value) formData.append(key, value as string);
+                        });
+                        formData.append('image', image);
+                        try {
+                            await instance.post(
+                                '/createWhitelistPartnership',
+                                formData
+                            );
+                            present({
+                                message:
+                                    'Whitelist partnership created successfully!',
+                                color: 'success',
+                                duration: 10000,
                             });
                             formData.append('image', image);
                             try {
@@ -126,333 +143,294 @@ function InitiateWhitelist() {
                                     }
                                 }
                             }
-                        })}
-                    >
-                        <IonItem>
-                            <IonLabel position="stacked">Select a server</IonLabel>
-                            <Controller
-                                name="target_server"
-                                rules={{  required: true, }}
-                                control={control}
-                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                    <>
-                                        <IonSelect
-                                            onIonChange={(e) => {
-                                                (  e.target as HTMLInputElement ).value = e.detail.value;
-                                                onChange(e);
-                                            }}
-                                            name={name}
-                                            value={value}
-                                            onIonBlur={onBlur}
-                                            ref={ref}
+                        } catch(e){
+                            console.log(e)
+                        }
+                    })}
+                >
+                    <IonItem>
+                        <IonLabel position="stacked">Select an existing DAO server</IonLabel>
+                        <Controller
+                            name="target_server"
+                            rules={{
+                                required: true,
+                            }}
+                            control={control}
+                            render={({
+                                field: { onChange, onBlur, value, name, ref },
+                                fieldState: { error },
+                            }) => (
+                                <>
+                                    <IonSelect
+                                        onIonChange={(e) => {
+                                            (
+                                                e.target as HTMLInputElement
+                                            ).value = e.detail.value;
+                                            onChange(e);
+                                        }}
+                                        name={name}
+                                        value={value}
+                                        onIonBlur={onBlur}
+                                        ref={ref}
+                                    >
+                                        {servers.map((server) =>
+                                            server.name ? (
+                                                <IonSelectOption
+                                                    key={server.id}
+                                                    value={server.id}
+                                                >
+                                                    {server.name}
+                                                </IonSelectOption>
+                                            ) : null
+                                        )}
+                                    </IonSelect>
+                                    <p className="formError">
+                                        {error?.message}
+                                    </p>
+                                </>
+                            )}
+                        />
+                    </IonItem>
+                    <IonItem>
+                        <IonLabel position="stacked">Giveaway Type</IonLabel>
+
+                        <Controller
+                            name="type"
+                            rules={{
+                                required: true,
+                            }}
+                            defaultValue="fcfs"
+                            control={control}
+                            render={({
+                                field: { onChange, onBlur, value, name, ref },
+                                fieldState: { error },
+                            }) => (
+                                <>
+                                    <IonSelect
+                                        onIonChange={(e) => {
+                                            (
+                                                e.target as HTMLInputElement
+                                            ).value = e.detail.value;
+                                            onChange(e);
+                                        }}
+                                        name={name}
+                                        value={value}
+                                        onIonBlur={onBlur}
+                                        ref={ref}
+                                    >
+                                        <IonSelectOption value="fcfs">
+                                            FCFS
+                                        </IonSelectOption>
+                                        <IonSelectOption
+                                            value="raffle"
+                                            disabled
                                         >
-                                            {servers.map((server) =>
-                                                server.name ? (
-                                                    <IonSelectOption
-                                                        key={server.id}
-                                                        value={server.id}
-                                                    >
-                                                        {server.name}
-                                                    </IonSelectOption>
-                                                ) : null
-                                            )}
-                                        </IonSelect>
-                                        <p className="formError">
-                                            {error?.message}
-                                        </p>
-                                    </>
-                                )}
-                            />
-                        </IonItem>
-                        <IonItem>
-                            <IonLabel position="stacked">Giveaway Type</IonLabel>
-    
-                            <Controller
-                                name="type"
-                                rules={{
-                                    required: true,
-                                }}
-                                defaultValue="fcfs"
-                                control={control}
-                                render={({
-                                    field: { onChange, onBlur, value, name, ref },
-                                    fieldState: { error },
-                                }) => (
-                                    <>
-                                        <IonSelect
-                                            onIonChange={(e) => {
-                                                (
-                                                    e.target as HTMLInputElement
-                                                ).value = e.detail.value;
-                                                onChange(e);
-                                            }}
-                                            name={name}
-                                            value={value}
-                                            onIonBlur={onBlur}
-                                            ref={ref}
-                                        >
-                                            <IonSelectOption value="fcfs">
-                                                FCFS
-                                            </IonSelectOption>
-                                            <IonSelectOption
-                                                value="raffle"
-                                                disabled
-                                            >
-                                                Raffle (Coming soon)
-                                            </IonSelectOption>
-                                        </IonSelect>
-                                        <p className="formError">
-                                            {error?.message}
-                                        </p>
-                                    </>
-                                )}
-                            />
-                        </IonItem>
-                        <IonItem>
-                            <IonLabel position="stacked">Max users</IonLabel>
-                            <Controller
-                                name="max_users"
-                                control={control}
-                                defaultValue={10}
-                                render={({
-                                    field: { onChange, onBlur, value, name, ref },
-                                    fieldState: { error },
-                                }) => (
-                                    <>
-                                        <IonInput
-                                            onIonChange={(e) => {
-                                                (
-                                                    e.target as HTMLInputElement
-                                                ).value = e.detail.value as string;
-                                                onChange(e);
-                                            }}
-                                            required
-                                            type="number"
-                                            min="1"
-                                            name={name}
-                                            value={value}
-                                            onIonBlur={onBlur}
-                                            ref={ref}
-                                        />
-                                        <p className="formError">
-                                            {error?.message}
-                                        </p>
-                                    </>
-                                )}
-                            />
-                        </IonItem>
-                        <IonItem>
-                            <IonLabel position="stacked">Description</IonLabel>
-                            <Controller
-                                name="description"
-                                control={control}
-                                render={({
-                                    field: { onChange, onBlur, value, name, ref },
-                                    fieldState: { error },
-                                }) => (
-                                    <>
-                                        <IonTextarea
-                                            value={value}
-                                            onIonChange={(e) => {
-                                                (
-                                                    e.target as HTMLInputElement
-                                                ).value = e.detail.value as string;
-                                                onChange(e);
-                                            }}
-                                            required
-                                            name={name}
-                                            ref={ref}
-                                            onIonBlur={onBlur}
-                                        />
-                                        <p className="formError">
-                                            {error?.message}
-                                        </p>
-                                    </>
-                                )}
-                            />
-                        </IonItem>
-                        <IonItem>
-                            <IonLabel position="stacked">Expiration Date</IonLabel>
-                            <Controller
-                                name="expiration_date"
-                                control={control}
-                                rules={{
-                                    required: true,
-                                }}
-                                defaultValue={todayEnd.toISOString()}
-                                render={({
-                                    field: { onChange, onBlur, value, name, ref },
-                                    fieldState: { error },
-                                }) => (
-                                    <>
-                                        <IonDatetime
-                                            value={value}
-                                            onIonChange={(e) => {
-                                                const value = new Date(e.detail.value as string);
-                                                value.setHours(23,59,59,999);
-                                                (
-                                                    e.target as HTMLInputElement
-                                                ).value =  value.toISOString();
-                                                
-                                                onChange(e);
-                                            }}
-                                            name={name}
-                                            ref={ref}
-                                            onIonBlur={onBlur}
-                                            min={new Date(
-                                                +now + 86400 * 1000
-                                            ).toISOString()}
-                                            max={new Date(
-                                                +now + 86400 * 365 * 1000
-                                            ).toISOString()}
-                                        />
-                                        <p className="formError">
-                                            {error?.message}
-                                        </p>
-                                    </>
-                                )}
-                            />
-                        </IonItem>
-    
-                        <IonItem>
-                            <IonLabel position="stacked">Whitelist role</IonLabel>
-                            <Controller
-                                name="whitelist_role"
-                                control={control}
-                                render={({
-                                    field: { onChange, onBlur, value, name, ref },
-                                    fieldState: { error },
-                                }) => (
-                                    <>
-                                        <IonInput
-                                            value={value}
-                                            onIonChange={(e) => {
-                                                (
-                                                    e.target as HTMLInputElement
-                                                ).value = e.detail.value as string;
-                                                onChange(e);
-                                            }}
-                                            type="number"
-                                            name={name}
-                                            ref={ref}
-                                            onIonBlur={onBlur}
-                                            required
-                                        />
-                                        <p className="formError">
-                                            {error?.message}
-                                        </p>
-                                    </>
-                                )}
-                            />
-                        </IonItem>
-                        <IonItem>
-                            <IonLabel position="stacked">Required Role</IonLabel>
-                            <Controller
-                                name="required_role"
-                                control={control}
-                                render={({
-                                    field: { onChange, onBlur, value, name, ref },
-                                    fieldState: { error },
-                                }) => (
-                                    <>
-                                        <IonInput
-                                            value={value}
-                                            onIonChange={(e) => {
-                                                (
-                                                    e.target as HTMLInputElement
-                                                ).value = e.detail.value as string;
-                                                onChange(e);
-                                            }}
-                                            required
-                                            type="number"
-                                            name={name}
-                                            ref={ref}
-                                            onIonBlur={onBlur}
-                                        />
-                                        <p className="formError">
-                                            {error?.message}
-                                        </p>
-                                    </>
-                                )}
-                            />
-                        </IonItem>
-                        <IonItem>
-                            <IonLabel position="stacked">Twitter Link</IonLabel>
-                            <Controller
-                                name="twitter"
-                                control={control}
-                                render={({
-                                    field: { onChange, onBlur, value, name, ref },
-                                    fieldState: { error },
-                                }) => (
-                                    <>
-                                        <IonInput
-                                            value={value}
-                                            onIonChange={(e) => {
-                                                (
-                                                    e.target as HTMLInputElement
-                                                ).value = e.detail.value as string;
-                                                onChange(e);
-                                            }}
-                                            type="url"
-                                            name={name}
-                                            ref={ref}
-                                            onIonBlur={onBlur}
-                                        />
-                                        <p className="formError">
-                                            {error?.message}
-                                        </p>
-                                    </>
-                                )}
-                            />
-                        </IonItem>
-                        <IonItem>
-                            <IonLabel>Image</IonLabel>
-                            <Controller
-                                name="image"
-                                control={control}
-                                rules={{
-                                    required: true,
-                                }}
-                                render={({
-                                    field: { onChange, onBlur, value, name, ref },
-                                    fieldState: { error },
-                                }) => (
-                                    <>
-                                        <IonInput
-                                            value={value as unknown as string}
-                                            onIonChange={(e) => {
-                                                const target = (
-                                                    e.target as HTMLIonInputElement
-                                                ).getElementsByTagName('input')[0];
-                                                const file = target
-                                                    .files?.[0] as FieldValues['image'];
-    
-                                                if (file)
-                                                    file.path =
-                                                        URL.createObjectURL(file);
-                                                (
-                                                    e.target as HTMLInputElement
-                                                ).value = file as unknown as string;
-                                                onChange(e);
-                                            }}
-                                            name={name}
-                                            ref={ref}
-                                            onIonBlur={onBlur}
-                                            type={'file' as TextFieldTypes}
-                                            accept="image"
-                                        />
-                                        <p className="formError">
-                                            {error?.message}
-                                        </p>
-                                    </>
-                                )}
-                            />
-                        </IonItem>
-                        <img
-                            src={image?.path}
-                            className="max-h-80 mx-auto"
-                            hidden={!image}
+                                            Raffle (Coming soon)
+                                        </IonSelectOption>
+                                    </IonSelect>
+                                    <p className="formError">
+                                        {error?.message}
+                                    </p>
+                                </>
+                            )}
+                        />
+                    </IonItem>
+                    <IonItem>
+                        <IonLabel position="stacked">Max users</IonLabel>
+                        <Controller
+                            name="max_users"
+                            control={control}
+                            defaultValue={10}
+                            render={({
+                                field: { onChange, onBlur, value, name, ref },
+                                fieldState: { error },
+                            }) => (
+                                <>
+                                    <IonInput
+                                        onIonChange={(e) => {
+                                            (
+                                                e.target as HTMLInputElement
+                                            ).value = e.detail.value as string;
+                                            onChange(e);
+                                        }}
+                                        required
+                                        type="number"
+                                        min="1"
+                                        name={name}
+                                        value={value}
+                                        onIonBlur={onBlur}
+                                        ref={ref}
+                                    />
+                                    <p className="formError">
+                                        {error?.message}
+                                    </p>
+                                </>
+                            )}
+                        />
+                    </IonItem>
+                    <IonItem>
+                        <IonLabel position="stacked">Description</IonLabel>
+                        <Controller
+                            name="description"
+                            control={control}
+                            render={({
+                                field: { onChange, onBlur, value, name, ref },
+                                fieldState: { error },
+                            }) => (
+                                <>
+                                    <IonTextarea
+                                        value={value}
+                                        onIonChange={(e) => {
+                                            (
+                                                e.target as HTMLInputElement
+                                            ).value = e.detail.value as string;
+                                            onChange(e);
+                                        }}
+                                        required
+                                        name={name}
+                                        ref={ref}
+                                        onIonBlur={onBlur}
+                                    />
+                                    <p className="formError">
+                                        {error?.message}
+                                    </p>
+                                </>
+                            )}
+                        />
+                    </IonItem>
+                    <IonItem>
+                        <IonLabel position="stacked">Expiration Date</IonLabel>
+                        <Controller
+                            name="expiration_date"
+                            control={control}
+                            rules={{
+                                required: true,
+                            }}
+							defaultValue={todayEnd.toISOString()}
+                            render={({
+                                field: { onChange, onBlur, value, name, ref },
+                                fieldState: { error },
+                            }) => (
+                                <>
+                                    <IonDatetime
+                                        value={value}
+                                        onIonChange={(e) => {
+											const value = new Date(e.detail.value as string);
+											value.setHours(23,59,59,999);
+                                            (
+                                                e.target as HTMLInputElement
+                                            ).value =  value.toISOString();
+
+                                            onChange(e);
+                                        }}
+                                        name={name}
+                                        ref={ref}
+                                        onIonBlur={onBlur}
+                                        min={new Date(
+                                            +now + 86400 * 1000
+                                        ).toISOString()}
+                                        max={new Date(
+                                            +now + 86400 * 365 * 1000
+                                        ).toISOString()}
+                                    />
+                                    <p className="formError">
+                                        {error?.message}
+                                    </p>
+                                </>
+                            )}
+                        />
+                    </IonItem>
+
+                    <IonItem>
+                        <IonLabel position="stacked">Whitelist role (users winning WL will be granted this role in new mint server)</IonLabel>
+                        <Controller
+                            name="whitelist_role"
+                            control={control}
+                            render={({
+                                field: { onChange, onBlur, value, name, ref },
+                                fieldState: { error },
+                            }) => (
+                                <>
+                                    <IonInput
+                                        value={value}
+                                        onIonChange={(e) => {
+                                            (
+                                                e.target as HTMLInputElement
+                                            ).value = e.detail.value as string;
+                                            onChange(e);
+                                        }}
+                                        type="number"
+                                        name={name}
+                                        ref={ref}
+                                        onIonBlur={onBlur}
+                                        required
+                                    />
+                                    <p className="formError">
+                                        {error?.message}
+                                    </p>
+                                </>
+                            )}
+                        />
+                    </IonItem>
+                    <IonItem>
+                        <IonLabel position="stacked">Required Role (users must have this role in existing DAO server to enter WL)</IonLabel>
+                        <Controller
+                            name="required_role"
+                            control={control}
+                            render={({
+                                field: { onChange, onBlur, value, name, ref },
+                                fieldState: { error },
+                            }) => (
+                                <>
+                                    <IonInput
+                                        value={value}
+                                        onIonChange={(e) => {
+                                            (
+                                                e.target as HTMLInputElement
+                                            ).value = e.detail.value as string;
+                                            onChange(e);
+                                        }}
+                                        required
+                                        type="number"
+                                        name={name}
+                                        ref={ref}
+                                        onIonBlur={onBlur}
+                                    />
+                                    <p className="formError">
+                                        {error?.message}
+                                    </p>
+                                </>
+                            )}
+                        />
+                    </IonItem>
+                    <IonItem>
+                        <IonLabel position="stacked">Twitter Link</IonLabel>
+                        <Controller
+                            name="twitter"
+                            control={control}
+                            render={({
+                                field: { onChange, onBlur, value, name, ref },
+                                fieldState: { error },
+                            }) => (
+                                <>
+                                    <IonInput
+                                        value={value}
+                                        onIonChange={(e) => {
+                                            (
+                                                e.target as HTMLInputElement
+                                            ).value = e.detail.value as string;
+                                            onChange(e);
+                                        }}
+                                        type="url"
+                                        name={name}
+                                        ref={ref}
+                                        onIonBlur={onBlur}
+                                    />
+                                    <p className="formError">
+                                        {error?.message}
+                                    </p>
+                                </>
+                            )}
                         />
                         <div className="w-full flex justify-end">
                             <IonButton
@@ -467,6 +445,7 @@ function InitiateWhitelist() {
                                 )}
                             </IonButton>
                         </div>
+                        </IonItem>
                     </form>
                 </div>
             </>

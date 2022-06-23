@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo ,useState} from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
 import { IonLabel, IonButton, useIonToast, IonGrid, IonRow, IonCol, IonCard, IonText, IonItem, IonSelect, IonSelectOption, IonInput, IonTextarea, IonDatetime, IonSpinner, } from '@ionic/react';
@@ -21,6 +21,7 @@ interface FormFields {
     description: string;
     required_role: string;
     twitter: string;
+    discordInvite:string;
 }
 const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
@@ -31,12 +32,42 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, } = useForm<FormFields, any>();
     const [present] = useIonToast();
     const now = useMemo(() => new Date(), []);
+    const [whiteListRole,setWhiteListRole] = useState<any>([])
 
     const todayEnd = useMemo(() => {
         const date = new Date( + now + 86400 * 1000 );
         date.setHours(23,59,59,999);
         return date;
     }, [now])
+
+    const getWhiteListRole = async() =>{
+        const  data = await instance.get(`/getAllRoles/${serverId}`)
+        if(data){
+            setWhiteListRole(data.data.data)
+           }
+    }
+
+    console.log('-------- whiteListRole',whiteListRole)
+
+    useEffect(() => {
+        getWhiteListRole()
+    }, [])
+    
+
+    const whitelistroll = [
+        {
+        id:1,
+        name:4545454545
+        },
+        {
+        id:2,
+        name:4545454545
+        },
+        {
+        id:3,
+        name:4545454545
+        },
+]
 
 
     return (
@@ -50,7 +81,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                 <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12">
                     <IonCard className="ion-no-margin">
                         <div className="cardImage relative">
-                            <img src={server.state.icon} className="cardMainImage" alt='server icon'/>
+                            <img src={server?.state?.icon} className="cardMainImage" alt='server icon'/>
                             <div className="cardOverlay-content py-1 px-4">
                                 <div className=" text-md">{ server.state?.name}</div>
                                 <div className="socialMediaIcon">
@@ -229,46 +260,70 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 <IonLabel className="text-white">Whitelist Role</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
                                 <Controller
-                                name="whitelist_role"
-                                control={control}
-                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                    <>
-                                        <IonInput
-                                            value={value}
-                                            onIonChange={(e) => { (  e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
-                                            type="number"
-                                            name={name}
-                                            ref={ref}
-                                            onIonBlur={onBlur}
-                                            placeholder='Whitelist Role'
-                                            required
-                                        />
-                                        <p className="formError"> {error?.message} </p>
-                                    </>
-                                )} />
+                                    name="whitelist_role"
+                                    rules={{ required: true, }}
+                                    control={control}
+                                    render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
+                                        <>
+                                            <IonSelect
+                                                onIonChange={(e) => {
+                                                    ( e.target as HTMLInputElement ).value = e.detail.value;
+                                                    onChange(e);
+                                                }}
+                                                name={name}
+                                                value={value}
+                                                onIonBlur={onBlur}
+                                                ref={ref}
+                                                placeholder='Select Whitelist Role'
+                                            >
+                                                {whiteListRole && whiteListRole.map((role:any) =>{
+                                                 return (<IonSelectOption  key={role.id}  value={role.id} >
+                                                            {role.name}
+                                                        </IonSelectOption>)}
+                                                )}
+                                            </IonSelect>
+                                            <p className="formError">
+                                                {error?.message}
+                                            </p>
+                                        </>
+                                    )}
+                                />
+                              
                                 </IonItem>
                             </div>
                             <div>
                                 <IonLabel className="text-white">Required Role</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
-                                    <Controller
+                                <Controller
                                     name="required_role"
+                                    rules={{ required: true, }}
                                     control={control}
-                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                    render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
                                         <>
-                                            <IonInput
-                                                value={value}
-                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
-                                                required
-                                                type="number"
+                                            <IonSelect
+                                                onIonChange={(e) => {
+                                                    ( e.target as HTMLInputElement ).value = e.detail.value;
+                                                    onChange(e);
+                                                }}
                                                 name={name}
-                                                ref={ref}
+                                                value={value}
                                                 onIonBlur={onBlur}
-                                                placeholder="Require Role"
-                                            />
-                                            <p className="formError"> {error?.message} </p>
+                                                ref={ref}
+                                                placeholder='Select Require Role'
+                                            >
+                                                {whiteListRole && whiteListRole.map((role:any) =>{
+                                                 return (<IonSelectOption  key={role.id}  value={role.id} >
+                                                            {role.name}
+                                                        </IonSelectOption>)}
+                                                )}
+                                            </IonSelect>
+                                            <p className="formError">
+                                                {error?.message}
+                                            </p>
                                         </>
-                                    )} />
+                                    )}
+                                />
+                                 
                                 </IonItem>
                             </div>
                         </IonCard>
@@ -301,6 +356,28 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             <p className="formError">
                                                 {error?.message}
                                             </p>
+                                        </>
+                                    )} />
+                                </IonItem>
+                            </div>
+                            <div className='mb-5'>
+                                <IonLabel className="text-white">Discord Link</IonLabel>
+                                <IonItem className="ion-item-wrapper mt-1">
+                                    <Controller
+                                    name="discordInvite"
+                                    control={control}
+                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                        <>
+                                            <IonInput
+                                                value={value}
+                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                type="url"
+                                                name={name}
+                                                ref={ref}
+                                                onIonBlur={onBlur}
+                                                placeholder='Discord Link'
+                                            />
+                                            <p className="formError"> {error?.message} </p>
                                         </>
                                     )} />
                                 </IonItem>

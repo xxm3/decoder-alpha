@@ -111,7 +111,8 @@ function Sidebar() {
                     to="/alerts"
                 />
 
-               {/* TODO: can't show this until we enable a module first time?? or on manageserver ... don't show the list until they have modules -> so show the AddServer button? */}
+               {/* TODO: (aries) can't show this until we enable a module first time?? or on manageserver ...
+                            don't show the list until they have modules -> so show the AddServer button? */}
                {/*<NavLink*/}
                {/*     title="Add DAO Bots"*/}
                {/*    icon={serverOutline}*/}

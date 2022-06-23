@@ -53,3 +53,24 @@ ion-card {
         rgb(100 113 224)
     );
 }
+.seamless-tab-btn-active{
+    background-color:#2A3246 ;
+    color: #fff;
+    display: flex;
+    cursor: pointer;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.seamless-tab-btn-deactive{
+    // background-color:#2A3246 ;
+    border: 2px solid #2A3246;
+    color: #2A3246;
+    display: flex;
+    cursor: pointer;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
