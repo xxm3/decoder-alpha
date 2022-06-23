@@ -46,6 +46,7 @@ function WhitelistCard({
 	claimed,
 	claimCounts
 }: IWhitelist) {
+
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
 	const [claiming, setClaiming] = useState<boolean>(false);
 
@@ -55,11 +56,28 @@ function WhitelistCard({
 
 	const full = claimCounts >= max_users;
 
-    const [isExploding, setIsExploding] = React.useState(false);
+    // const [isExploding, setIsExploding] = React.useState(false);
+    const [isExploding, setIsExploding] = useState<boolean>(false);
+
+    // useEffect(() => {
+    //     console.log('???');
+    //     setIsExploding(true);
+    // },[isExploding]);
+
+    // const doExplode = () => {
+    //     setIsExploding(true);
+    //     console.log('alsfjlsafj')
+    // };
 
     return (
 
         <div className="border-gray-500 border-[0.5px] rounded-2xl w-80 overflow-clip">
+
+            {/*TODO: SFLKDSJFKLJS*/}
+            {/*<ConfettiExplosion />*/}
+            --<div>{isExploding}</div>--
+
+            {isExploding && <div>set defaultttt</div>}
 
             {isExploding && <ConfettiExplosion />}
 
@@ -127,7 +145,12 @@ function WhitelistCard({
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
 				`} className="my-2 self-center" onClick={async () => {
 					setClaiming(true);
+
+                    // TODO
+                    // setIsExploding(true);
+
 					try {
+
 						await instance.post("/whitelistClaims", {
 							whitelist_id : id
 						});
@@ -174,7 +197,7 @@ function WhitelistCard({
 						}
 					}
 					finally {
-						setClaiming(false)
+						setClaiming(false);
 					}
 				}} disabled={expired || claiming || claimed || full}>{getButtonText(expired,claiming,claimed, full)}</IonButton>}
 
