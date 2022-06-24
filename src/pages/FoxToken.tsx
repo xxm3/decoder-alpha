@@ -1331,12 +1331,13 @@ function FoxToken({ contentRef }: FoxToken) {
                                     isFreeAction: true,
 									disabled: isDemo
                                 },
-                                {
-                                    icon: () => <IonIcon icon={add} />,
-                                    tooltip: 'Add Custom Token Name',
-                                    onClick: () => clickedAddName(true),
-                                    isFreeAction: true,
-                                },
+                                // TODO: xss --- plus how often this used?
+                                // {
+                                //     icon: () => <IonIcon icon={add} />,
+                                //     tooltip: 'Add Custom Token Name',
+                                //     onClick: () => clickedAddName(true),
+                                //     isFreeAction: true,
+                                // },
                             ]}
                             options={{
                                 thirdSortClick: false,

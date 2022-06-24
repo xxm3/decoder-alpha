@@ -102,9 +102,9 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                                 data-tip={new Date( time as string ).toLocaleString()}
                                 >
                                 {/*TODO: BUGGED!!! */}
-                                {/*<div className='whitespace-nowrap' >*/}
-                                {/*    {getDateAgo(time)}*/}
-                                {/*</div>*/}
+                                <div className='whitespace-nowrap' >
+                                    {getDateAgo(time) === 'a few seconds ago' ? '' : getDateAgo(time)}
+                                </div>
                                 <div>
                                     {isFromMsgThread ? <></> :
                                     <VisibilityIcon className='ml-2 text-blue-500' data-tip='Click to see chat history after this message' />}
