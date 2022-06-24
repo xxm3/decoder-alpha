@@ -11,7 +11,7 @@ import {
     statsChartOutline,
     skullOutline, earthOutline,
     serverOutline,
-	diamondOutline
+    diamondOutline, logoDiscord
 
 } from "ionicons/icons"
 import NavLink from "./NavLink"
@@ -128,6 +128,13 @@ function Sidebar() {
                     icon={bookOutline}
                     to="#"
                     external={'https://docs.soldecoder.app'}
+                />
+
+                <NavLink
+                    title="Contact / Discord"
+                    icon={logoDiscord}
+                    to="#"
+                    external={'https://discord.com/invite/sol-decoder'}
                 />
 
                 {/*<NavLink*/}

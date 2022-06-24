@@ -111,11 +111,12 @@ const ManageServer: React.FC<AppComponentProps> = () => {
 
                         <p>Your server will need to first have our Discord Bot invited to it. Click one of the below links, then in the "Add to Server" on the bottom, select your server. Then click "Continue", then "Authorize"</p>
                         <ul className='list-disc ml-8 mt-3'>
-                            <li> If using just the "Daily Mints" bots, <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20guilds.members.read%20bot">click here</a> to add the Discord Bot to your server </li>
-                            <li> Or if using the "Fox Token" bots (where users can type /token),  <a className="underline cursor-pointer" href="https://discord.com/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20applications.commands%20bot%20guilds.members.read">click here</a> to add the Discord Bot to your server </li>
+                            {/*<li> If using just the "Daily Mints" bots, <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20guilds.members.read%20bot">click here</a> to add the Discord Bot to your server </li>*/}
+                            <li> If using the "Daily Mints", "Fox Token", or "Magic Eden" package,  <a className="font-bold underline cursor-pointer" href="https://discord.com/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20applications.commands%20bot%20guilds.members.read">then click here</a> to add the Discord Bot to your server </li>
                             {/* identify, guilds, guilds.members.read, bot, application.commands --- manage roles, send messages,  */}
-                            <li>If you are a new mint and are using the Whitelist bots (where we will give users whitelist roles if they are in a DAO and win a giveaway), <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=268437504&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=applications.commands%20guilds%20guilds.members.read%20bot%20identify">click here</a> to add the Discord Bot to your server</li>
+                            <li>If you are a new mint and are using Seamless (our whitelist bot where we will give users whitelist roles if they are in a DAO and win a fcfs/giveaway), <a className="underline cursor-pointer font-bold" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=268437504&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=applications.commands%20guilds%20guilds.members.read%20bot%20identify">then click here</a> to add the Discord Bot to your server. This bot also supports all of the packages from the first link</li>
                         </ul>
+                        <p className="mt-3">After the bot is invited, click "Add" on one of your servers below</p>
                     </div>
                 </div>
 
@@ -151,12 +152,12 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             }
 
             {/* introduction! */}
-            <div className="flex flex-row justify-center w-full mt-4">
-                <div className="py-3">
+            <div className="flex flex-row justify-center w-full mt-4 rounded-xl">
+                <div className="py-3 server-module-bg pl-3">
                     <div className='text-1xl font-semibold my-3'>Introduction</div>
                     <ul className='list-disc ml-8 leading-9'>
                         <li>This page allows you to setup some of the SOL Decoder bots on your own Discord server</li>
-                        <li>Pricing: Hold 3 NFTs (which unlocks all of our existing 3 NFT benefits - <a href="https://docs.soldecoder.app/books/intro/page/discord-overview" target="_blank" className="underline cursor-pointer">read more here</a>) - and you can unlock one of our bot packages. Hold 4 NFTs to unlock a second bot package, and get most future bot packages for free</li>
+                        <li>Pricing: Hold 3 NFTs (which unlocks all of our existing 3 NFT benefits for yourself - <a href="https://docs.soldecoder.app/books/intro/page/discord-overview" target="_blank" className="underline cursor-pointer">read more here</a>) - and you can unlock one of our bot packages. Hold 4 NFTs to unlock the rest of the bot packages</li>
                         <li>If you are an upcoming mint, you can use our bots for free until you mint, in return for some of your whitelist. Open a ticket in the SOL Decoder Discord to learn more</li>
                         {/*<li>Hold and you get lifetime access, and get free upgrades to existing packages such as: (1) Mints package:  get daily summaries of NFTs coming out in a few weeks, when they they get a bump in their twitter / discord numbers, and (2) Fox token package: getting alerts for Fox Token price/listings data (ie. alerted when any fox token with a name & greater 1 sol price & greater 10 listings is out)</li>*/}
                     </ul>
@@ -165,16 +166,12 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                     <ul className='list-disc ml-8 leading-9'>
                         <li><b>#1 - Mints package</b> - Your server can have our "daily-mints" feed and "1h-mint-info" and soon "tomorrows-mints"</li>
                         <li><b>#2 - Fox token package</b> - Your server can have our "Fox Token" feed, and users can use our bot's slash commands of /token_name and /token (which shows Fox Token Market info from a token address or name) and /wallet_tokens (Get Fox Token Market info for all tokens in an address)</li>
-                        <li><b>#3 - Magic Eden package</b> - (1) use the command "/me_floor bohemia" and you'll get the price info of Bohemia, and (3) use the command "/tps" to see a live count of Solana's Transactions Per Second</li>
-                        {/*(2) get alerted whenever a sale for your NFT occurs,*/}
+                        <li><b>#3 - Magic Eden package</b> - (1) use the command "/fp any_magiceden_nt" and you'll get the price / listings / volume of that NFT, and (3) use the command "/tps" to see a live count of Solana's Transactions Per Second</li>
+                         {/*(2) get alerted whenever a sale for your NFT occurs,*/}
+                        <li><b>(Future) #4 - "Assassin" bot - Kick bots/spammers from your server (that impersonate your team, or have Bot in their name), and automatically delete non-approved links posted to any channel</b></li>
+                        <li><b>(Free) #5 - "Seamless" package - Allow verified DAO members to whitelist in less than 10 seconds, with 0 work on your mods</b></li>
                     </ul>
 
-                    <div className='text-1xl font-semibold my-3'>Upcoming packages</div>
-                    <ul className='list-disc ml-8 leading-9'>
-                            {/*and (2) you can customize a single alert for your server, to get alerted when any NFT above a certain price goes up X % within Y minutes*/}
-                        </li>
-                        <li>"Security" package - details to be announced</li>
-                    </ul>
                 </div>
             </div>
         </>
