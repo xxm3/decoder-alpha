@@ -162,13 +162,14 @@ const ManageServer: React.FC<AppComponentProps> = () => {
 
                     <div className='text-1xl font-semibold my-3'>Package Overview</div>
                     <ul className='list-disc ml-8 leading-9'>
-                        <li><b>Bot package #1 - Mints package</b> - Your server can have our "daily-mints" feed and "1h-mint-info" and soon "tomorrows-mints"</li>
-                        <li><b>Bot package #2 - Fox token package</b> - Your server can have our "Fox Token" feed, and users can use our bot's slash commands of /token_name and /token (which shows Fox Token Market info from a token address or name) and /wallet_tokens (Get Fox Token Market info for all tokens in an address)</li>
+                        <li><b>#1 - Mints package</b> - Your server can have our "daily-mints" feed and "1h-mint-info" and soon "tomorrows-mints"</li>
+                        <li><b>#2 - Fox token package</b> - Your server can have our "Fox Token" feed, and users can use our bot's slash commands of /token_name and /token (which shows Fox Token Market info from a token address or name) and /wallet_tokens (Get Fox Token Market info for all tokens in an address)</li>
+                        <li><b>#3 - Magic Eden package</b> - (1) use the command "/me_floor bohemia" and you'll get the price info of Bohemia, and (3) use the command "/tps" to see a live count of Solana's Transactions Per Second</li>
+                        {/*(2) get alerted whenever a sale for your NFT occurs,*/}
                     </ul>
 
                     <div className='text-1xl font-semibold my-3'>Upcoming packages</div>
                     <ul className='list-disc ml-8 leading-9'>
-                        <li><b>"Magic Eden" package:</b> (1) use the command "/me_floor bohemia" and you'll get the price info of Bohemia, (2) get alerted whenever a sale for your NFT occurs, and (3) use the command "/tps" to see a live count of Solana's Transactions Per Second
                             {/*and (2) you can customize a single alert for your server, to get alerted when any NFT above a certain price goes up X % within Y minutes*/}
                         </li>
                         <li>"Security" package - details to be announced</li>
