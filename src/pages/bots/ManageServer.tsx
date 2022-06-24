@@ -171,7 +171,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                     <div className='text-1xl font-semibold my-3'>Upcoming packages</div>
                     <ul className='list-disc ml-8 leading-9'>
                             {/*and (2) you can customize a single alert for your server, to get alerted when any NFT above a certain price goes up X % within Y minutes*/}
-                        </li>
+                        {/*</li>*/}
                         <li>"Security" package - details to be announced</li>
                     </ul>
                 </div>
