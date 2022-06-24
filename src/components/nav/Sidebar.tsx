@@ -77,7 +77,16 @@ function Sidebar() {
 	                    </IonButton>
                    </IonMenuToggle>
                 )}
-                <NavLink title="Home" icon={homeOutline} to="/" />
+
+                {/*<NavLink title="Home" icon={homeOutline} to="/" />*/}
+
+                <NavLink
+                    title="Seamless"
+                    icon={diamondOutline}
+                    to="/seamless"
+                    needsRole={false}
+                />
+
                 <NavLink
                     title="Today's Mints"
                     icon={calendarClearOutline}
@@ -99,17 +108,12 @@ function Sidebar() {
                     icon={searchOutline}
                     to="/stackedsearch"
                 />
+
                 {/*<NavLink*/}
-                {/*    title="Whitelist Marketplace"*/}
-                {/*    icon={diamondOutline}*/}
-                {/*    to="/whitelistmarketplace"*/}
-				{/*	needsRole={false}*/}
+                {/*    title="Alerts"*/}
+                {/*    icon={notificationsOutline}*/}
+                {/*    to="/alerts"*/}
                 {/*/>*/}
-                <NavLink
-                    title="Alerts"
-                    icon={notificationsOutline}
-                    to="/alerts"
-                />
 
                {/* TODO: (aries) can't show this until we enable a module first time?? or on manageserver ...
                             don't show the list until they have modules -> so show the AddServer button? */}

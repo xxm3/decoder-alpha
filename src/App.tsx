@@ -91,6 +91,8 @@ import InitiateWhitelist from './pages/bots/InitiateWhitelist';
 import WhitelistMarketplace from './pages/bots/WhitelistMarketplace';
 import { setHasRoles } from './redux/slices/userSlice';
 import ViewGuild from './pages/view-guild/ViewGuild';
+import SeamlessDetail from './pages/bots/SeamlessDetail';
+import Seamless from './pages/bots/Seamless';
 
 function b64DecodeUnicode(str : string) {
     return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
@@ -484,7 +486,8 @@ const App = () => {
                                                                                         }
                                                                                         needsRole={false}
                                                                                 />
-                                                                                {/*  */}
+
+                                                                                {/* Seamless! */}
                                                                                 <ProtectedRoute
                                                                                     exact
                                                                                     path="/whitelistmarketplace"
@@ -492,6 +495,27 @@ const App = () => {
                                                                                        WhitelistMarketplace
                                                                                     }
                                                                                     needsRole={false}
+                                                                                />
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/seamless"
+                                                                                    component={
+                                                                                        WhitelistMarketplace
+                                                                                    }
+                                                                                    needsRole={false}
+                                                                                />
+
+                                                                                {/* SeamlessServer */}
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/seamlessdetail/:serverId"
+                                                                                    component={ SeamlessDetail }
+                                                                                />
+                                                                                {/* SeamlessServer */}
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/seamless/:serverId"
+                                                                                    component={ Seamless }
                                                                                 />
 
                                                                                 {/*login button etc...*/}

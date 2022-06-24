@@ -24,11 +24,11 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
     // console.log(hasRoles);
 
 	return user
-        // ### skip if in dev
+        // ### if this is UNCOMMENTED - it will skip logging in, if in dev
         // || (isDev )
     ? (
 		(needsRole
-            // ### skip if in dev
+            // ### if this is UNCOMMENTED - it will skip logging in, if in dev
             // && !isDev
             ? hasRoles : true) ?
             <AppRoute {...props} /> :

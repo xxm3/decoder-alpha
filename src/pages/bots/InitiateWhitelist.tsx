@@ -1,28 +1,16 @@
 import { css } from '@emotion/react';
 import { TextFieldTypes } from '@ionic/core';
-import {
-    IonButton,
-    IonContent,
-    IonDatetime,
-    IonImg,
-    IonInput,
-    IonItem,
-    IonLabel,
-    IonModal,
-    IonSelect,
-    IonSelectOption,
-    IonSpinner,
-    IonTextarea,
-    useIonToast,
-} from '@ionic/react';
+import { IonButton, IonDatetime, IonInput, IonItem, IonLabel, IonSelect, IonSelectOption, IonSpinner, IonTextarea, useIonToast, } from '@ionic/react';
 import { Controller, FieldValues, useForm } from 'react-hook-form';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router';
 import { instance } from '../../axios';
 import { Server } from '../../types/Server';
 import { AxiosError } from 'axios';
 import isAxiosError from '../../util/isAxiosError';
+import './SeamlessDetail.scss';
+
 
 interface FormFields {
     image: File & {
@@ -115,45 +103,48 @@ function InitiateWhitelist() {
                                 color: 'success',
                                 duration: 10000,
                             });
-                            reset();
-                        } catch (error) {
-                            if (isAxiosError(error)) {
-                                const { response: { data } = { errors: [] } } =
-                                    error as AxiosError<{
-                                        errors: {
-                                            location: string;
-                                            msg: string;
-                                            param: string;
-                                        }[];
-                                    }>;
-                                if (!data || data.hasOwnProperty('error')) {
-                                    present({
-                                        message: (
-                                            data as unknown as { body: string }
-                                        ).body,
-                                        color: 'danger',
-                                        duration: 1000,
-                                    });
-                                } else if (data.hasOwnProperty('errors')) {
-                                    data.errors.forEach(({ param, msg }) => {
-                                        if (param !== 'source_server') {
-                                            setError(
-                                                param as keyof FormFields,
-                                                {
+                            formData.append('image', image);
+                            try {
+                                await instance.post( '/createWhitelistPartnership',  formData  );
+                                present({
+                                    message: 'Whitelist partnership created successfully!',
+                                    color: 'success',
+                                    duration: 2000,
+                                });
+                                reset();
+                            } catch (error) {
+                                if (isAxiosError(error)) {
+                                    const { response: { data } = { errors: [] } } =
+                                        error as AxiosError<{
+                                            errors: {
+                                                location: string;
+                                                msg: string;
+                                                param: string;
+                                            }[];
+                                        }>;
+                                    if (!data || data.hasOwnProperty('error')) {
+                                        present({
+                                            message: ( data as unknown as { body: string } ).body,
+                                            color: 'danger',
+                                            duration: 1000,
+                                        });
+                                    } else if (data.hasOwnProperty('errors')) {
+                                        data.errors.forEach(({ param, msg }) => {
+                                            if (param !== 'source_server') {
+                                                setError(  param as keyof FormFields, {  message: msg, type: 'custom', } );
+                                            } else {
+                                                present({
                                                     message: msg,
-                                                    type: 'custom',
-                                                }
-                                            );
-                                        } else {
-                                            present({
-                                                message: msg,
-                                                color: 'danger',
-                                                duration: 1000,
-                                            });
-                                        }
-                                    });
+                                                    color: 'danger',
+                                                    duration: 1000,
+                                                });
+                                            }
+                                        });
+                                    }
                                 }
                             }
+                        } catch(e){
+                            console.log(e)
                         }
                     })}
                 >
@@ -441,72 +432,27 @@ function InitiateWhitelist() {
                                 </>
                             )}
                         />
-                    </IonItem>
-                    <IonItem>
-                        <IonLabel>Image</IonLabel>
-                        <Controller
-                            name="image"
-                            control={control}
-							rules={{
-								required: true,
-							}}
-                            render={({
-                                field: { onChange, onBlur, value, name, ref },
-                                fieldState: { error },
-                            }) => (
-                                <>
-                                    <IonInput
-                                        value={value as unknown as string}
-                                        onIonChange={(e) => {
-                                            const target = (
-                                                e.target as HTMLIonInputElement
-                                            ).getElementsByTagName('input')[0];
-                                            const file = target
-                                                .files?.[0] as FieldValues['image'];
+                        <div className="w-full flex justify-end">
+                            <IonButton
+                                type={'submit'}
+                                className="w-24 h-10"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? (
+                                    <IonSpinner className="" />
+                                ) : (
+                                    'Submit'
+                                )}
+                            </IonButton>
+                        </div>
+                        </IonItem>
+                    </form>
+                </div>
+            </>
+        );
 
-                                            if (file)
-                                                file.path =
-                                                    URL.createObjectURL(file);
-                                            (
-                                                e.target as HTMLInputElement
-                                            ).value = file as unknown as string;
-                                            onChange(e);
-                                        }}
-                                        name={name}
-                                        ref={ref}
-                                        onIonBlur={onBlur}
-                                        type={'file' as TextFieldTypes}
-                                        accept="image"
-                                    />
-                                    <p className="formError">
-                                        {error?.message}
-                                    </p>
-                                </>
-                            )}
-                        />
-                    </IonItem>
-                    <img
-                        src={image?.path}
-                        className="max-h-80 mx-auto"
-                        hidden={!image}
-                    />
-                    <div className="w-full flex justify-end">
-                        <IonButton
-                            type={'submit'}
-                            className="w-24 h-10"
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ? (
-                                <IonSpinner className="" />
-                            ) : (
-                                'Submit'
-                            )}
-                        </IonButton>
-                    </div>
-                </form>
-            </div>
-        </>
-    );
+   
 }
+
 
 export default InitiateWhitelist;

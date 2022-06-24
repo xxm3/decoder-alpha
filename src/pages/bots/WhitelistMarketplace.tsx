@@ -1,38 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { instance } from '../../axios';
 import WhitelistCard from '../../components/WhitelistCard';
 import { IWhitelist } from '../../types/IWhitelist';
 import Loader from '../../components/Loader';
 import {IonLabel} from '@ionic/react';
+import './SeamlessDetail.scss';
 
 function WhitelistMarketplace() {
 
-    const [isLoading, setisLoading] = React.useState(true)
+    const [isLoading, setIsLoading] = React.useState(true)
+    const [showLive, setShowLive] = useState<boolean>(true);
+    const[liveWhiteList,setLiveWhiteList] = useState<IWhitelist[]>([])
+    const[expireWhiteList,setExpireWhiteList] = useState<IWhitelist[]>([])
 
-    const { data: whitelists = [] } = useQuery(
-        ['whitelistPartnerships'],
+    const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
         async () => {
-
             try {
-                const { data: whitelists } = await instance.get<IWhitelist[]>(
-                    '/whitelistPartnerships/me'
-                );
-                return whitelists;
+                setIsLoading(true)
+                const { data: whitelists } = await instance.get<IWhitelist[]>( '/getWhitelistPartnerships/me' );
+                let whiteListExpire:any = []
+                let whiteListLive:any = []
+                for(let i = 0; i<whitelists.length; i++){
+                    if(whitelists[i].isExpired){
+                        whiteListExpire.push(whitelists[i])
+                    }else{
+                        whiteListLive.push(whitelists[i])
+                    }
+                }
+                setLiveWhiteList(whiteListLive)
+                setExpireWhiteList(whiteListExpire)
+
+                return  whitelists;
             } catch (error) {
                 console.error(error)
             }
             finally {
-                setisLoading(false)
+                setIsLoading(false)
             }
 
         }
     );
 
     return (
-        <div>
 
-            {/*<div className="text-xl font-medium text-ellipsis flex flex-row items-center">Seamless</div>*/}
+        <>
 
             <div className="flex flex-row justify-center w-full mt-9">
                 <div className="server-module-bg p-4 px-6 w-full">
@@ -49,23 +61,47 @@ function WhitelistMarketplace() {
                 </div>
             </div>
 
-            <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 sm:grid-cols-2 md:gap-6 gap-4 p-10">
+            {whitelists && whitelists.length > 0 ?
+                <div>
+                    <div className=' text-xl flex justify-center mt-5'>
+                        <div className={`${showLive ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive ' } w-32 h-10 `} onClick={()=>setShowLive(true)}><p>Live({liveWhiteList?.length})</p></div>
+                        <div className={`${showLive ? 'seamless-tab-btn-deactive ' : 'seamless-tab-btn-active  '} ml-2 w-32 h-10`}onClick={()=>setShowLive(false)}><p>Expired ({expireWhiteList?.length})</p></div>
+                    </div>
+                    <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 sm:grid-cols-2 md:gap-6 gap-4 p-10">
+                        {showLive ? liveWhiteList && liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) => (
+                                <WhitelistCard {...whitelist} key={Math.random()} showLive={showLive} />
+                            )) : <div className='text-xl'> There is no data available</div> :
+                            expireWhiteList && expireWhiteList.length > 0 ? expireWhiteList.map((whitelist:any) => (
+                                <WhitelistCard {...whitelist} key={Math.random()} showLive={showLive} />
+                            )) :<div className='text-xl'> There is no data available</div>
+                        }
+                    </div>
+                    <div className={(whitelists?.length < 1 && !isLoading) ? "flex items-center justify-between w-full" : 'flex items-center justify-end w-full'}>
+                        {whitelists?.length < 1 && !isLoading && <div className='flex  w-full justify-center align-text-bottom ml-2 mr-2'>
+                            <IonLabel className='text-red-500 text-2xl w-full text-center'>No active whitelists are open. Please check back later!</IonLabel>
+                        </div>}
+                    </div>
 
-                <div hidden={!isLoading}>
-                    <Loader />
+
+{/*=======*/}
+{/*        <div>*/}
+
+{/*            /!*<div className="text-xl font-medium text-ellipsis flex flex-row items-center">Seamless</div>*!/*/}
+
+{/*            <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 sm:grid-cols-2 md:gap-6 gap-4 p-10">*/}
+
+{/*                <div hidden={!isLoading}>*/}
+{/*                    <Loader />*/}
+{/*>>>>>>> cb205f5fc4e265ac094544ca8da21cac5f861d43*/}
+
+
                 </div>
-
-                {whitelists.map((whitelist) => (
-                    <WhitelistCard {...whitelist} key={Math.random()} />
-                ))}
-
-            </div>
-            <div className={(whitelists?.length < 1 && !isLoading) ? "flex items-center justify-between w-full" : 'flex items-center justify-end w-full'}>
-                {whitelists?.length < 1 && !isLoading && <div className='flex  w-full justify-center align-text-bottom ml-2 mr-2'>
-                    <IonLabel className='text-red-500 text-2xl w-full text-center'>No active whitelists are open. Please check back later!</IonLabel>
-                </div>}
-            </div>
-        </div>
+            :   <>{ isLoading ?
+                     <div className='flex justify-center'> <Loader /> </div>
+                     :
+                     <div className='text-center text-xl mt-6'>There is no Data available</div> }
+                </> }
+        </>
     );
 
 }
