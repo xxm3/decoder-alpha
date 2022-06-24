@@ -486,7 +486,8 @@ const App = () => {
                                                                                         }
                                                                                         needsRole={false}
                                                                                 />
-                                                                                {/*  */}
+
+                                                                                {/* Seamless! */}
                                                                                 <ProtectedRoute
                                                                                     exact
                                                                                     path="/whitelistmarketplace"
@@ -495,6 +496,15 @@ const App = () => {
                                                                                     }
                                                                                     needsRole={false}
                                                                                 />
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/seamless"
+                                                                                    component={
+                                                                                        WhitelistMarketplace
+                                                                                    }
+                                                                                    needsRole={false}
+                                                                                />
+
                                                                                 {/* SeamlessServer */}
                                                                                 <ProtectedRoute
                                                                                     exact
