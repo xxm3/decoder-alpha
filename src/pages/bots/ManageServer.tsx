@@ -157,29 +157,22 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                         if (server.owner) {
                             return (
                                 <Grid item lg={3} key={index} className="mx-auto">
-                                    <div className='h-60 rounded-xl c-card-bg overflow-hidden mx-auto'>
-                                        <div
-                                            className="bg-image-wrapper"
-                                            style={{backgroundImage: server.icon ? `url(https://cdn.discordapp.com/icons/${server.id}/${server.icon}.webp)` : '',}}>
+                                    <div className=' rounded-xl c-card-bg overflow-hidden mx-auto'>
+                                        <div className="bg-image-wrapper" style={{backgroundImage: server.icon ? `url(https://cdn.discordapp.com/icons/${server.id}/${server.icon}.webp)` : '',}}>
                                             <div className="server-profile-bg">
                                                 <div className="rounded-full">
-                                                    <img
-                                                        src={server.icon ? `https://cdn.discordapp.com/icons/${server.id}/${server.icon}.webp` : ''}
-                                                        alt="" className="server-profile-img rounded-full"></img>
+                                                    <img src={server.icon ? `https://cdn.discordapp.com/icons/${server.id}/${server.icon}.webp` : ''} alt="" className="server-profile-img rounded-full"></img>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex flex-row justify-between items-center w-full mt-4 px-4">
-                                            <div className="flex flex-col justify-between">
-                                                <span className="text-md tracking-wider whitespace-nowrap text-white">
+                                        <div className="flex flex-row justify-between items-center w-full mt-4 px-4 ">
+                                            <div className="whitespace-normal mb-4  " style={{ maxWidth:'82%'}}>
+                                                <span className="text-md tracking-wider  text-white">
                                                     {server.name}
                                                 </span>
                                             </div>
-                                            <div
-                                                className="p-3 py-1 ml-2 text-md rounded-lg add-button cursor-pointer text-white"
-                                                onClick={() => {
-                                                    storeGuild(server);
-                                                }}>ADD
+                                            <div className="p-3 py-1 ml-2 text-md rounded-lg add-button cursor-pointer text-white mb-4"  onClick={() => { storeGuild(server);  }}>
+                                                ADD
                                             </div>
                                         </div>
                                     </div>

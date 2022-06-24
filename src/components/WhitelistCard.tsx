@@ -48,6 +48,7 @@ function WhitelistCard({
 	showLive,
 	
 }: IWhitelist) {
+
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
 	const [claiming, setClaiming] = useState<boolean>(false);
 
@@ -57,7 +58,18 @@ function WhitelistCard({
 
 	const full = claimCounts >= max_users;
 
-    const [isExploding, setIsExploding] = React.useState(false);
+    // const [isExploding, setIsExploding] = React.useState(false);
+    const [isExploding, setIsExploding] = useState<boolean>(false);
+
+    // useEffect(() => {
+    //     console.log('???');
+    //     setIsExploding(true);
+    // },[isExploding]);
+
+    // const doExplode = () => {
+    //     setIsExploding(true);
+    //     console.log('alsfjlsafj')
+    // };
 
     return (
 		<>

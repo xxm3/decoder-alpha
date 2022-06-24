@@ -73,7 +73,7 @@ const Display: React.FC<{
     const [isModalOpen, setIsModalOpen] = useState(true)
 
 
-   
+
 
     /**
      * Use Effects
@@ -127,7 +127,9 @@ const Display: React.FC<{
 
                 {/*if you click on a message*/}
                 {selectedMessage && (
-                    <MessageThread onClose={() => setSelectedMessage(null)} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} message={selectedMessage} />
+                    <MessageThread onClose={() => setSelectedMessage(null)}  message={selectedMessage} />
+                    // TODO (on messagethread & display.tsx): https://discord.com/channels/925207817923743794/955986068937769050/989448949205180516
+                    // isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}
                 )}
             </div>
         </>
