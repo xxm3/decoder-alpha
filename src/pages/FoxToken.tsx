@@ -1331,7 +1331,7 @@ function FoxToken({ contentRef }: FoxToken) {
                                     isFreeAction: true,
 									disabled: isDemo
                                 },
-                                // TODO: xss --- plus how often this used?
+                                // TODO: damjan
                                 // {
                                 //     icon: () => <IonIcon icon={add} />,
                                 //     tooltip: 'Add Custom Token Name',

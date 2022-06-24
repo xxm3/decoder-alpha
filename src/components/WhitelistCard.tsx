@@ -73,7 +73,7 @@ function WhitelistCard({
 
         <div className="border-gray-500 border-[0.5px] rounded-2xl w-80 overflow-clip">
 
-            {/*TODO: SFLKDSJFKLJS*/}
+            {/*TODO adam: SFLKDSJFKLJS*/}
             {/*<ConfettiExplosion />*/}
             {/*--<div>{isExploding}</div>--*/}
             {/*{isExploding && <div>set defaultttt</div>}*/}
@@ -88,7 +88,8 @@ function WhitelistCard({
                 />
                 <div className="absolute flex bottom-0 right-0 justify-between bg-white bg-opacity-50 dark:bg-black dark:bg-opacity-50 py-2 px-5 left-0">
                     <div className="w-full">
-                        <p className="font-bold text-lg">{sourceServer?.name}</p>
+                        <p className="text-lg font-bold">{sourceServer?.name}</p>
+                        <p className="text-sm italic">requires membership in {targetServer?.name}</p>
                         <p className="text-sm italic">
                             Whitelist
                         </p>
@@ -145,7 +146,6 @@ function WhitelistCard({
 				`} className="my-2 self-center" onClick={async () => {
 					setClaiming(true);
 
-                    // TODO
                     // setIsExploding(true);
 
 					try {
