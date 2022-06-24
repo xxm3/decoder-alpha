@@ -1331,13 +1331,12 @@ function FoxToken({ contentRef }: FoxToken) {
                                     isFreeAction: true,
 									disabled: isDemo
                                 },
-                                // TODO: damjan
-                                // {
-                                //     icon: () => <IonIcon icon={add} />,
-                                //     tooltip: 'Add Custom Token Name',
-                                //     onClick: () => clickedAddName(true),
-                                //     isFreeAction: true,
-                                // },
+                                {
+                                    icon: () => <IonIcon icon={add} />,
+                                    tooltip: 'Add Custom Token Name',
+                                    onClick: () => clickedAddName(true),
+                                    isFreeAction: true,
+                                },
                             ]}
                             options={{
                                 thirdSortClick: false,

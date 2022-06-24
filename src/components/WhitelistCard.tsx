@@ -91,7 +91,7 @@ function WhitelistCard({
                         <p className="text-lg font-bold">{sourceServer?.name}</p>
                         <p className="text-sm italic">requires membership in {targetServer?.name}</p>
                         <p className="text-sm italic">
-                            Whitelist
+                            Type: Whitelist
                         </p>
                     </div>
 
