@@ -28,12 +28,11 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const server:any = useLocation()
     const { serverId } = useParams<any>();
     let history = useHistory();
-
     const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, } = useForm<FormFields, any>();
     const [present] = useIonToast();
     const now = useMemo(() => new Date(), []);
     const [whiteListRole,setWhiteListRole] = useState<any>([])
-
+    const [whiteListRequireRole,setWhiteListRequireRole] = useState<any>([])
     const todayEnd = useMemo(() => {
         const date = new Date( + now + 86400 * 1000 );
         date.setHours(23,59,59,999);
@@ -46,38 +45,25 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             setWhiteListRole(data.data.data)
            }
     }
-
-    console.log('-------- whiteListRole',whiteListRole)
+    const getWhiteListRequireRole = async() =>{
+        const  data = await instance.get(`/getAllRoles/${server.state.id}`)
+        if(data){
+            setWhiteListRequireRole(data.data.data)
+           }
+    }
 
     useEffect(() => {
         getWhiteListRole()
+        getWhiteListRequireRole()
     }, [])
-    
 
-    const whitelistroll = [
-        {
-        id:1,
-        name:4545454545
-        },
-        {
-        id:2,
-        name:4545454545
-        },
-        {
-        id:3,
-        name:4545454545
-        },
-]
-
+    console.log('whiteListRequireRole',whiteListRequireRole)
 
     return (
         <IonGrid>
             <IonRow>
-                <IonCol size="12">
-                    <h2 className="ion-no-margin font-bold text-xl"> Seamless - a new way for brand collabs </h2>
-                </IonCol>
+                <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - a new way for brand collabs </h2> </IonCol>
                 <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12" />
-
                 <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12">
                     <IonCard className="ion-no-margin">
                         <div className="cardImage relative">
@@ -142,11 +128,14 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             const { image, ...rest } = data;
                             const rawData = { ...rest,  source_server: serverId, target_server:server.state.id, };
                             const formData = new FormData();
+                            
                             Object.entries(rawData).forEach(([key, value]) => { 
                                 if (value) formData.append(key, value as string);
                             });
                             formData.append('image', image);
-                            try { await instance.post( '/createWhitelistPartnership', formData );
+                            console.log('Object.entries(rawData)',rawData.description.length)
+
+                            try { await instance.post( '/createNewWhitelistPartnership', formData );
                                 history.push(`/whitelistmarketplace`)
                                 present({
                                     message: 'Whitelist partnership created successfully!',
@@ -187,15 +176,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     <Controller name="type" rules={{ required: true, }} defaultValue="fcfs" control={control}
                                     render={({  field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
                                         <>
-                                            <IonSelect
-                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value; onChange(e); }}
-                                                name={name} value={value}  onIonBlur={onBlur} ref={ref} >
-                                                <IonSelectOption value="fcfs">
-                                                    FCFS
-                                                </IonSelectOption>
-                                                <IonSelectOption  value="raffle" disabled  >
-                                                    Raffle (Coming soon)
-                                                </IonSelectOption>
+                                            <IonSelect onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value; onChange(e); }}  name={name} value={value}  onIonBlur={onBlur} ref={ref} >
+                                                <IonSelectOption value="fcfs"> FCFS </IonSelectOption>
+                                                <IonSelectOption  value="raffle" disabled  > Raffle (Coming soon) </IonSelectOption>
                                             </IonSelect>
                                         </>
                                     )}  />
@@ -223,8 +206,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 ref={ref}
                                                 onIonBlur={onBlur}
                                                 min={new Date(  +now + 86400 * 1000 ).toISOString()}
-                                                max={new Date(  +now + 86400 * 365 * 1000 ).toISOString()}
-                                            />
+                                                max={new Date(  +now + 86400 * 365 * 1000 ).toISOString()} />
                                             <p className="formError"> {error?.message} </p>
                                         </>
                                     )} />
@@ -274,17 +256,11 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 value={value}
                                                 onIonBlur={onBlur}
                                                 ref={ref}
-                                                placeholder='Select Whitelist Role'
-                                            >
+                                                placeholder='Select Whitelist Role' >
                                                 {whiteListRole && whiteListRole.map((role:any) =>{
-                                                 return (<IonSelectOption  key={role.id}  value={role.id} >
-                                                            {role.name}
-                                                        </IonSelectOption>)}
-                                                )}
+                                                return (<IonSelectOption  key={role.id}  value={role.id} > {role.name} </IonSelectOption>)}  )}
                                             </IonSelect>
-                                            <p className="formError">
-                                                {error?.message}
-                                            </p>
+                                            <p className="formError">  {error?.message} </p>
                                         </>
                                     )}
                                 />
@@ -309,21 +285,14 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 value={value}
                                                 onIonBlur={onBlur}
                                                 ref={ref}
-                                                placeholder='Select Require Role'
-                                            >
-                                                {whiteListRole && whiteListRole.map((role:any) =>{
-                                                 return (<IonSelectOption  key={role.id}  value={role.id} >
-                                                            {role.name}
-                                                        </IonSelectOption>)}
-                                                )}
+                                                placeholder='Select Require Role' >
+                                                {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{
+                                                 return (<IonSelectOption  key={role.id}  value={role.id} > {role.name} </IonSelectOption>)} )}
                                             </IonSelect>
-                                            <p className="formError">
-                                                {error?.message}
-                                            </p>
+                                            <p className="formError"> {error?.message} </p>
                                         </>
                                     )}
                                 />
-                                 
                                 </IonItem>
                             </div>
                         </IonCard>
@@ -351,11 +320,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 ref={ref}
                                                 onIonBlur={onBlur}
                                                 type={'file' as TextFieldTypes}
-                                                accept="image"
-                                            />
-                                            <p className="formError">
-                                                {error?.message}
-                                            </p>
+                                                accept="image" />
+                                            <p className="formError"> {error?.message} </p>
                                         </>
                                     )} />
                                 </IonItem>
@@ -375,8 +341,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 name={name}
                                                 ref={ref}
                                                 onIonBlur={onBlur}
-                                                placeholder='Discord Link'
-                                            />
+                                                placeholder='Discord Link' />
                                             <p className="formError"> {error?.message} </p>
                                         </>
                                     )} />
@@ -397,8 +362,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 name={name}
                                                 ref={ref}
                                                 onIonBlur={onBlur}
-                                                placeholder='Twitter Link'
-                                            />
+                                                placeholder='Twitter Link' />
                                             <p className="formError"> {error?.message} </p>
                                         </>
                                     )} />
@@ -414,17 +378,22 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         <>
                                             <IonTextarea
                                                 value={value}
-                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string;  onChange(e); }}
+                                                onIonChange={(e:any) => { 
+                                                    ( e.target as HTMLInputElement ).value = e.detail.value as string; 
+                                                     onChange(e);
+                                                    }}
                                                 required
                                                 name={name}
                                                 ref={ref}
                                                 onIonBlur={onBlur}
                                                 placeholder='Description'
-                                            />
+                                                maxlength={2000} />
                                             <p className="formError"> {error?.message} </p>
                                         </>
                                     )}/>
+                                    
                                 </IonItem>
+                                 <p className='mt-2'>Max character limit is 2000</p> 
                             </div>
                         </IonCard>
                         <div className='ion-text-right'>

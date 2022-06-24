@@ -1,17 +1,12 @@
 import { css } from '@emotion/react';
-import { IonButton, IonIcon, IonSpinner, useIonToast } from '@ionic/react';
-import {logoDiscord, logoTwitter} from 'ionicons/icons';
-import React, {useEffect, useState} from 'react';
+import { IonButton, IonSpinner, useIonToast } from '@ionic/react';
+import {useEffect, useState} from 'react';
 import { useQueryClient } from 'react-query';
 import { instance } from '../axios';
 import { IWhitelist } from '../types/IWhitelist';
 import isAxiosError from '../util/isAxiosError';
 import TimeAgo from './TimeAgo';
 import "./WhitelistCard.scss"
-import {getUrlExtension, mediaTypes, urlRegExp} from '../util/getURLs';
-import ReactMarkdown from "react-markdown";
-// import parse from 'html-react-parser';
-import reactStringReplace from 'react-string-replace';
 import ConfettiExplosion from 'react-confetti-explosion';
 
 const getButtonText = (expired : boolean, claiming : boolean, claimed : boolean, full : boolean) => {
@@ -45,20 +40,13 @@ function WhitelistCard({
 	id,
 	claimed,
 	claimCounts,
-	showLive,
-	
 }: IWhitelist) {
 
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
 	const [claiming, setClaiming] = useState<boolean>(false);
-
 	const queryClient = useQueryClient();
-
 	const [present] = useIonToast();
-
 	const full = claimCounts >= max_users;
-
-    // const [isExploding, setIsExploding] = React.useState(false);
     const [isExploding, setIsExploding] = useState<boolean>(false);
 
     // useEffect(() => {
@@ -86,16 +74,8 @@ function WhitelistCard({
 				</div>
 
 				<div className="py-4 px-6 flex-col flex" >
-
 					{description}
-					{/*{*/}
-					{/*    reactStringReplace(description, urlRegExp, (match: any, url: any) => (*/}
-					{/*        <a href="${url}" class="underline cursor-pointer text-blue-300" target="_blank">${url.trim()}</a>;*/}
-					{/*    ))*/}
-					{/*}*/}
-
 					<br/><br/>
-
 					<div className="whitelistInfo grid grid-cols-2">
 						<p>Type </p>
 						<p>{type.toUpperCase()}</p>
@@ -110,14 +90,9 @@ function WhitelistCard({
 					{expired !== undefined && <IonButton css={css` --background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%); `} className="my-2 self-center" onClick={async () => {
 						setClaiming(true);
 						try {
-							await instance.post("/whitelistClaims", {
-								whitelist_id : id
-							});
-							queryClient.setQueryData(
-								['whitelistPartnerships'],
-								(queryData) => {
-									return (queryData as IWhitelist[]).map(
-										(whitelist) => {
+							await instance.post("/whitelistClaims", { whitelist_id : id });
+							queryClient.setQueryData( ['whitelistPartnerships'], (queryData:any) => {
+									return (queryData as IWhitelist[]).map( (whitelist) => {
 											if (whitelist.id === id) {
 												whitelist.claimed = true;
 												whitelist.claimCounts += 1
@@ -138,7 +113,6 @@ function WhitelistCard({
 
 						} catch (error) {
 							console.error(error);
-
 							if(isAxiosError(error) && error.response?.data){
 								present({
 									message: error.response?.data.body,

@@ -1,41 +1,42 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
 import { IonButton, IonGrid, IonRow, IonCol, IonCard,  IonText,} from '@ionic/react';
 import './ManageServer.scss';
-import { useHistory, useLocation, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import Loader from '../../components/Loader';
 import './SeamlessDetail.scss';
 import discordImage from '../../images/discord.png';
 import twitterImage from '../../images/twitter.png';
 import { useQuery } from 'react-query';
 
-
-
 const SeamlessDetail: React.FC<AppComponentProps> = () => {
     let history = useHistory();
     const { serverId } = useParams<any>();
     const [isLoading, setIsLoading] = useState<boolean>(false)
-
-
+    const [serverList, setServerList] = useState<any>([])
     const { data: servers = [] } = useQuery<any>(  ['allServers'],
         async () => {
             setIsLoading(true)
             const { data: { guilds },  } = await instance.get('/getAllGuildsData');
+            let tmpServerArr = []
             setIsLoading(false)
+            for(let i=0; i<guilds.length;i++){
+                if(guilds[i].id !== serverId ){
+                    tmpServerArr.push(guilds[i])
+                }
+            }
+            setServerList(tmpServerArr)
             return guilds;
         }
     );
-
 
     return (
         <>
             <IonGrid>
                 <IonRow>
                     <IonCol size="12">
-                        <h2 className="ion-no-margin font-bold text-xl">
-                            Seamless - a new way for brand collabs
-                        </h2>
+                        <h2 className="ion-no-margin font-bold text-xl"> Seamless - a new way for brand collapse </h2>
                         <p className='ion-no-margin text-sm'>A new way to Request a collaboration with one of our  partnered servers, select the server you wish to collaborate with in list below, and fill out the collaboration form on the next page.</p>
                     </IonCol>
                     <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12"></IonCol>
@@ -45,7 +46,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                         <>
                             {isLoading ? <Loader/> : 
                             <>
-                                {servers && servers.map((server: any,index:number)=>{
+                                {serverList && serverList.map((server: any,index:number)=>{
                                     return(
                                         <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" key={index} >
                                             <IonCard className='ion-no-margin'>
@@ -54,19 +55,16 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                     <div className="cardOverlay-content py-1 px-4">
                                                         <div className=' text-md'>{server?.name}</div>
                                                         <div className="socialMediaIcon">
-                                                             <img src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
+                                                            <img src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
                                                                 event.stopPropagation();
                                                                 if(server.discord_link){
                                                                     window.open(server?.discord_link)
-                                                                }
-                                                             }} />
-
+                                                                }}} />
                                                             <img src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
                                                                 event.stopPropagation();
                                                                 if(server.twitter_link){
                                                                     window.open(server?.twitter_link)
-                                                                }
-                                                            }} />
+                                                                }}} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -108,8 +106,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         <IonCol size="12">
                                                             <IonButton className="cardButton w-full" onClick={(event) => {
                                                                 event.stopPropagation()
-                                                                history.push({pathname:`/seamlessdetail/${serverId}`,state:server})}
-                                                                }>
+                                                                history.push({pathname:`/seamlessdetail/${serverId}`,state:server})} }>
                                                                 Initiate Collabs
                                                             </IonButton>
                                                         </IonCol>
@@ -126,6 +123,5 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         </>
     );
 };
-
 // @ts-ignore
 export default SeamlessDetail;
