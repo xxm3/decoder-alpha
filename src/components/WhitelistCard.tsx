@@ -59,24 +59,15 @@ function WhitelistCard({
     // const [isExploding, setIsExploding] = React.useState(false);
     const [isExploding, setIsExploding] = useState<boolean>(false);
 
-    // useEffect(() => {
-    //     console.log('???');
-    //     setIsExploding(true);
-    // },[isExploding]);
-
-    // const doExplode = () => {
-    //     setIsExploding(true);
-    //     console.log('alsfjlsafj')
-    // };
+    useEffect(() => {
+        if(claimed) {
+            setIsExploding(true);
+        }
+    },[]);
 
     return (
 
         <div className="border-gray-500 border-[0.5px] rounded-2xl w-80 overflow-clip">
-
-            {/*TODO adam: SFLKDSJFKLJS*/}
-            {/*<ConfettiExplosion />*/}
-            {/*--<div>{isExploding}</div>--*/}
-            {/*{isExploding && <div>set defaultttt</div>}*/}
 
             {isExploding && <ConfettiExplosion />}
 
@@ -146,8 +137,6 @@ function WhitelistCard({
 				`} className="my-2 self-center" onClick={async () => {
 					setClaiming(true);
 
-                    // setIsExploding(true);
-
 					try {
 
 						await instance.post("/whitelistClaims", {
@@ -168,7 +157,7 @@ function WhitelistCard({
                             }
                         );
 
-                        setIsExploding(true);
+                        // setIsExploding(true);
 
 						present({
 							message:
