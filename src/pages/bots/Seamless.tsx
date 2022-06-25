@@ -107,7 +107,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                             <IonButton className="cardButton w-full" onClick={(event) => {
                                                                 event.stopPropagation()
                                                                 history.push({pathname:`/seamlessdetail/${serverId}`,state:server})} }>
-                                                                Initiate Collabs
+                                                                Initiate Collapse
                                                             </IonButton>
                                                         </IonCol>
                                                     </IonRow>

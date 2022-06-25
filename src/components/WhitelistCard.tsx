@@ -8,24 +8,9 @@ import isAxiosError from '../util/isAxiosError';
 import TimeAgo from './TimeAgo';
 import "./WhitelistCard.scss"
 import ConfettiExplosion from 'react-confetti-explosion';
+import { Grid } from '@material-ui/core';
 
-const getButtonText = (expired : boolean, claiming : boolean, claimed : boolean, full : boolean) => {
-	if(claimed){
-		return "Claimed"
-	}
 
-	if(expired){
-		return "Already expired"
-	}
-	if(full){
-		return "Full"
-	}
-	if(claiming){
-		return <IonSpinner />
-	}
-	return "Obtain whitelist"
-
-}
 
 function WhitelistCard({
     image,
@@ -40,6 +25,7 @@ function WhitelistCard({
 	id,
 	claimed,
 	claimCounts,
+    claims,
 }: IWhitelist) {
 
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
@@ -48,24 +34,38 @@ function WhitelistCard({
 	const [present] = useIonToast();
 	const full = claimCounts >= max_users;
     const [isExploding, setIsExploding] = useState<boolean>(false);
+    const uid  = localStorage.getItem('uid')
+   
 
-    // useEffect(() => {
-    //     console.log('???');
-    //     setIsExploding(true);
-    // },[isExploding]);
+    const getButtonText = (expired : boolean, claiming : boolean, claimed : boolean, full : boolean, claims:any) => {
 
-    // const doExplode = () => {
-    //     setIsExploding(true);
-    //     console.log('alsfjlsafj')
-    // };
+        if(claimed){
+            return "Claimed"
+        }else if(expired){
+            return "Already expired"
+        }else if(full){
+            return "Full"
+        }else  if(claiming){
+            return <IonSpinner />
+        }else if(claims[0].user && uid){
+            if(claims[0].user.discordId === JSON.parse(uid)){
+                return  "Claimed"
+            }else{
+            }
+        }else {
+            return "Obtain whitelist"
+         }
+    
+    }
 
     return (
 		<>
-			<div className="border-gray-500 border-[0.5px] rounded-2xl w-80 overflow-clip">
+        
+			<div className="border-gray-500 border-[0.5px] rounded-2xl w-74 overflow-clip">
 				{isExploding && <ConfettiExplosion />}
-				<div className="relative overflow-y-hidden h-60 w-80">
+				<div className="relative overflow-y-hidden h-60 w-74">
 					<img src={image} className="h-full w-full object-cover object-left" alt={`${sourceServer?.name} X ${targetServer?.name}`} />
-					<div className="absolute flex bottom-0 right-0 justify-between bg-white bg-opacity-50 dark:bg-black dark:bg-opacity-50 py-2 px-5 left-0">
+					<div className="absolute flex bottom-0 right-0 justify-between bg-white bg-opacity-50 dark:bg-black dark:bg-opacity-50 py-2 px-4 left-0">
 						<div className="w-full">
                             <p className="text-lg font-bold">{sourceServer?.name}</p>
                             <p className="text-sm italic">requires membership in {targetServer?.name}</p>
@@ -76,7 +76,7 @@ function WhitelistCard({
 					</div>
 				</div>
 
-				<div className="py-4 px-6 flex-col flex" >
+				<div className="py-4 px-4 flex-col flex" >
 					{description}
 					<br/><br/>
 					<div className="whitelistInfo grid grid-cols-2">
@@ -93,7 +93,7 @@ function WhitelistCard({
 					{expired !== undefined && <IonButton css={css` --background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%); `} className="my-2 self-center" onClick={async () => {
 						setClaiming(true);
 						try {
-							await instance.post("/whitelistClaims", { whitelist_id : id });
+							await instance.post("/createWhitelistClaims", { whitelist_id : id });
 							queryClient.setQueryData( ['whitelistPartnerships'], (queryData:any) => {
 									return (queryData as IWhitelist[]).map( (whitelist) => {
 											if (whitelist.id === id) {
@@ -247,11 +247,14 @@ function WhitelistCard({
 						finally {
 							setClaiming(false)
 						}
-					}} disabled={expired || claiming || claimed || full}>{getButtonText(expired,claiming,claimed, full)}</IonButton>}
+					}} disabled={expired || claiming || claimed || full || getButtonText(expired,claiming,claimed, full, claims) === 'Claimed'  }>
+                        {getButtonText(expired,claiming,claimed, full, claims)}
+                        </IonButton>}
 
 				</div>
 
 			</div>
+            
 		</>
     );
 }

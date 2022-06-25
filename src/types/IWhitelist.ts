@@ -21,4 +21,5 @@ export interface IWhitelist {
 	claimCounts: number;
 	isExpired:boolean;
 	showLive:boolean;
+	claims:[];
 }
