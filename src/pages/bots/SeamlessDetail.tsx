@@ -57,8 +57,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         getWhiteListRequireRole()
     }, [])
 
-    console.log('whiteListRequireRole',whiteListRequireRole)
-
     return (
         <IonGrid>
             <IonRow>
@@ -123,17 +121,19 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                 </IonCol>
                 
                 <IonCol size-xl="8" size-md="6" size-sm="6" size-xs="12">
-                    <form className="space-y-3"
-                        onSubmit={  handleSubmit(async (data) => {
+                    <form className="space-y-3" 
+                    onChange={()=>{
+                        
+                    }}
+                     onSubmit={  handleSubmit(async (data) => {
                             const { image, ...rest } = data;
                             const rawData = { ...rest,  source_server: serverId, target_server:server.state.id, };
                             const formData = new FormData();
-                            
+
                             Object.entries(rawData).forEach(([key, value]) => { 
                                 if (value) formData.append(key, value as string);
                             });
                             formData.append('image', image);
-                            console.log('Object.entries(rawData)',rawData.description.length)
 
                             try { await instance.post( '/createNewWhitelistPartnership', formData );
                                 history.push(`/whitelistmarketplace`)
@@ -174,9 +174,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 <IonLabel className="text-white">Giveaway</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
                                     <Controller name="type" rules={{ required: true, }} defaultValue="fcfs" control={control}
-                                    render={({  field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                    render={({  field: { onChange, onBlur, value, name, ref, }, fieldState: { error }, }) => (
                                         <>
-                                            <IonSelect onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value; onChange(e); }}  name={name} value={value}  onIonBlur={onBlur} ref={ref} >
+                                            <IonSelect  onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value; onChange(e); }}  name={name} value={value}  onIonBlur={onBlur} ref={ref} >
                                                 <IonSelectOption value="fcfs"> FCFS </IonSelectOption>
                                                 <IonSelectOption  value="raffle" disabled  > Raffle (Coming soon) </IonSelectOption>
                                             </IonSelect>
@@ -220,22 +220,27 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 <Controller
                                 name="max_users"
                                 control={control}
-                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                    <>
-                                        <IonInput
-                                            onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string;  onChange(e); }}
-                                            required
-                                            type="number"
-                                            min="1"
-                                            name={name}
-                                            value={value}
-                                            onIonBlur={onBlur}
-                                            ref={ref}
-                                            placeholder='60'
-                                        />
-                                        <p className="formError"> {error?.message} </p>
-                                    </>
-                                )} />
+                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => {
+                                    console.log("values number fild",value)
+                                    console.log("error",error)
+
+                                    return (
+                                        <>
+                                            <IonInput
+                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string;  onChange(e); }}
+                                                required
+                                                type="number"
+                                                min="1"
+                                                name={name}
+                                                value={value}
+                                                onIonBlur={onBlur}
+                                                ref={ref}
+                                                placeholder='60'
+                                            />
+                                            <p className="formError"> {error?.message} </p>
+                                        </>
+                                    )
+                                }} />
                                 </IonItem>
                             </div>
                             <div className='mb-5'>
@@ -245,24 +250,31 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     name="whitelist_role"
                                     rules={{ required: true, }}
                                     control={control}
-                                    render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
+                                    render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) =>{
+                                        console.log('value',value)
+
+                                    return (
+                                        
                                         <>
-                                            <IonSelect
+                                            <IonSelect 
+                                            
                                                 onIonChange={(e) => {
                                                     ( e.target as HTMLInputElement ).value = e.detail.value;
                                                     onChange(e);
                                                 }}
+                                               
                                                 name={name}
                                                 value={value}
-                                                onIonBlur={onBlur}
+                                                onIonBlur={ blur }
                                                 ref={ref}
-                                                placeholder='Select Whitelist Role' >
+                                                placeholder='Select Whitelist Role'
+                                                >
                                                 {whiteListRole && whiteListRole.map((role:any) =>{
                                                 return (<IonSelectOption  key={role.id}  value={role.id} > {role.name} </IonSelectOption>)}  )}
                                             </IonSelect>
                                             <p className="formError">  {error?.message} </p>
                                         </>
-                                    )}
+                                    )}}
                                 />
                               
                                 </IonItem>
@@ -282,10 +294,11 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                     onChange(e);
                                                 }}
                                                 name={name}
-                                                value={value}
                                                 onIonBlur={onBlur}
                                                 ref={ref}
-                                                placeholder='Select Require Role' >
+                                                placeholder='Select Require Role' 
+                                                aria-required={true}
+                                                >
                                                 {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{
                                                  return (<IonSelectOption  key={role.id}  value={role.id} > {role.name} </IonSelectOption>)} )}
                                             </IonSelect>
@@ -318,6 +331,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 }}
                                                 name={name}
                                                 ref={ref}
+                                                required
                                                 onIonBlur={onBlur}
                                                 type={'file' as TextFieldTypes}
                                                 accept="image" />
@@ -338,6 +352,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 value={value}
                                                 onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                                 type="url"
+                                                required
                                                 name={name}
                                                 ref={ref}
                                                 onIonBlur={onBlur}
@@ -359,6 +374,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 value={value}
                                                 onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                                 type="url"
+                                                required
                                                 name={name}
                                                 ref={ref}
                                                 onIonBlur={onBlur}
