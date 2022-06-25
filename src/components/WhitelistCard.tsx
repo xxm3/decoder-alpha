@@ -89,7 +89,7 @@ function WhitelistCard({
                 <div className="absolute flex bottom-0 right-0 justify-between bg-white bg-opacity-50 dark:bg-black dark:bg-opacity-50 py-2 px-5 left-0">
                     <div className="w-full">
                         <p className="text-lg font-bold">{sourceServer?.name}</p>
-                        <p className="text-sm italic">requires membership in {targetServer?.name}</p>
+                        <p className="text-sm italic">must be in "{targetServer?.name}" DAO</p>
                         <p className="text-sm italic">
                             Type: Whitelist
                         </p>
@@ -135,7 +135,7 @@ function WhitelistCard({
                     <p>{type.toUpperCase()}</p>
                     <p>Slots left </p>
                     <p>{max_users - claimCounts}/{max_users}</p>
-					<p>Required Role (in {targetServer.name})</p>
+					<p>Required Role (in "{targetServer.name}" DAO)</p>
 					<p>{required_role_name}</p>
 					<p className="timeLeft">Time left</p>
 					<TimeAgo setExpired={setExpired} date={expiration_date}/>
