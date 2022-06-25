@@ -54,7 +54,7 @@ function WhitelistMarketplace() {
                         This is an early look at Seamless - SOL Decoder's next joint venture with Communi3. We estimate it is only 10% complete - so plenty upgrades coming.
                         <ul>
                             <li>- You will have to copy/paste to join the new mint Discord manually - soon we'll have a link to help with this</li>
-                            <li>- You will have to see which DAO the whitelist is for - soon we'll have filters to help</li>
+                            <li>- You will have to see which DAO the whitelist is for - soon we'll have filters to help. <span className="text-red-500">This is not only for SOL Decoder holders - other DAOs use this, so look at the "Required membership" and "Required Role" section</span></li>
                             <li>- Also coming soon is Twitter integration to make sure you're following, and built in giveaways to have more people join</li>
                         </ul>
                     </div>
