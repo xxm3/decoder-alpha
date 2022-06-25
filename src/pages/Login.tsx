@@ -88,10 +88,10 @@ function Login() {
 
                     return signInWithCustomToken(auth, data.body).then(async (userCredential: any) => {
                         const user = userCredential.user;
-                        console.log("user:::::::::::::", user);
+                        // console.log("user:::::::::::::", user);
                         localStorage.setItem('uid', JSON.stringify(user.uid));
                         // localStorage.setItem('token', JSON.stringify(user.accessToken));
-                        
+
                     });
                 })
                 .catch((e) => {
