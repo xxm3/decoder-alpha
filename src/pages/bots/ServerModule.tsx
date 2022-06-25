@@ -124,7 +124,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         if(role ==='3NFT'){
             setAuthorizedModule(1)
         }else if (role ==='4NFT'){
-            setAuthorizedModule(2)
+            setAuthorizedModule(10)
         }else{
             setAuthorizedModule(0)
         }
