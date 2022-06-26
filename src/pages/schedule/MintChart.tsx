@@ -23,7 +23,7 @@ function MintChart({eventGraphData}: any) {
     const [mintLineData, setmintLineData] = useState(defaultGraph);
     const chartsRef = useRef<HTMLDivElement | null>(null);
     const [isMobile, setIsMobile] = useState(false);
-   
+
     // for setting height of chart, depending on what width browser is
     const tableHeight = useMemo(() => {
         if (width > 1536) return 100;
@@ -36,10 +36,14 @@ function MintChart({eventGraphData}: any) {
 
     // viewing the chart for a calendar
     const viewChart = () => {
+
+        // now sort again so chart can be right
+        eventGraphData.data.data = eventGraphData.data.data.reverse();
+
         if(eventGraphData){
             setmintLineData(defaultGraph);
                 const labels = eventGraphData.data.data.map((el: { date: Date }) => {
-                    return moment(el.date,'DD MM YYYY').format('l');
+                    return moment(el.date,'MM/DD/YYYY').format('l'); // DD MM YYYY
                 });
 
                 const discordAllData = eventGraphData.data.data.map((el: { discord_all: any }) => {
@@ -53,13 +57,13 @@ function MintChart({eventGraphData}: any) {
                         parseInt(el.discord_online)
                 );
 
-                if (discordAllData.length === 0 && tweetInteractionsData.length === 0 && discordOnlineData.length ===0) {
-                    present({
-                        message: 'Unable to get Twitter & Discord data on this!',
-                        color: 'danger',
-                        duration: 8000,
-                    });
-                }
+                // if (discordAllData.length === 0 && tweetInteractionsData.length === 0 && discordOnlineData.length ===0) {
+                //     present({
+                //         message: 'Unable to get Twitter & Discord data on this!',
+                //         color: 'danger',
+                //         duration: 8000,
+                //     });
+                // }
 
                 let datasetsAry = [
                     {
@@ -95,16 +99,16 @@ function MintChart({eventGraphData}: any) {
                             above: '#0052FF05',
                         },
                     },
-                    
+
                 ];
                 setmintLineData({
                     labels: labels,
                     datasets: datasetsAry,
                 });
         }
-                
-            
-            
+
+
+
 
     };
 
