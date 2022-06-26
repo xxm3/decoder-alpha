@@ -126,7 +126,7 @@ function WhitelistCard({
                     <p>{type.toUpperCase()}</p>
                     <p>Slots left </p>
                     <p>{max_users - claimCounts}/{max_users}</p>
-					<p>Required Role (in "{targetServer.name}" DAO)</p>
+					<p>Required Role (in "{targetServer?.name}" DAO)</p>
 					<p>{required_role_name}</p>
 					<p className="timeLeft">Time left</p>
 					<TimeAgo setExpired={setExpired} date={expiration_date}/>
