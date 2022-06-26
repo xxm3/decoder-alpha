@@ -69,7 +69,7 @@ function WhitelistCard({
 
         <div className="border-gray-500 border-[0.5px] rounded-2xl w-80 overflow-clip">
 
-            {isExploding && <ConfettiExplosion />}
+            {isExploding && expired!==undefined && <ConfettiExplosion />}
 
             <div className="relative overflow-y-hidden h-60 w-80">
                 <img
