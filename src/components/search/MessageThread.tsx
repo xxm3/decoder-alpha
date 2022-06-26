@@ -192,9 +192,9 @@ export default MessageThread;
 
 
 
-// TODO (on messagethread & display.tsx): https://discord.com/channels/925207817923743794/955986068937769050/989448949205180516
+// TODO -ruchita: (on messagethread & display.tsx): https://discord.com/channels/925207817923743794/955986068937769050/989448949205180516
     // reverted back to https://gitlab.com/nft-relay-group/frontend-app/-/blob/24ea7c9cb6ffb2761c6eecd6e459f71ca2771ab3/src/components/search/MessageThread.tsx
-// TODO: need loading bar when click into a message
+// TODO: - ruchita: need loading bar when click into a message
 
 
 // import { IonButton, IonContent, IonModal, useIonToast } from '@ionic/react';

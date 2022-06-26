@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
-import { IonItem, IonButton, IonLabel, useIonToast } from '@ionic/react';
+import { IonItem, IonButton, IonLabel, useIonToast, IonInput, IonTextarea } from '@ionic/react';
 import { Backdrop, CircularProgress, Grid, Switch, } from '@material-ui/core';
 import { Tooltip } from "react-tippy";
 import './ServerModule.scss';
 import { useHistory, useLocation, useParams } from 'react-router';
 import Loader from '../../components/Loader';
-import Help from '../../components/Help';
-import InitiateWhitelist from './InitiateWhitelist';
 import { Server } from '../../types/Server';
 import { css } from '@emotion/react';
 
 import Addserver from './components/Addserver';
+
+/**
+ * The page they see when they click "Add" on one of their servers
+ */
 
 interface LocationParams {
     pathname: string;
@@ -51,6 +53,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const { serverId } = useParams<{serverId : string}>();
     const [addServerFlag, setAddServerFlag] = useState(false)
 
+    const [discordLink,setDiscordLink] = useState<any>()
+    const [twitterLink,setTwitterLink] = useState<any>()
+    const [description,setDescription] = useState<any>()
+    const [image,setImage] = useState<any>()
+
+
     /**
      * Use Effects
      */
@@ -71,6 +79,60 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         // }
 
     }, [window.innerWidth]);
+
+    const submitWhitelist = () => {
+        const formData = new FormData();
+        formData.append('image', image)
+        formData.append('discordLink', discordLink)
+        formData.append('twitterLink', twitterLink)
+        formData.append('description', description)
+
+        setIsLoading(true)
+        instance .post(`/updateGuild/${serverId}`, formData, { headers: { 'Content-Type': 'application/json', }, })
+        .then(({ data }) => {
+            if(data.success){
+                present({
+                    message: data.message,
+                    color: 'success',
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
+                });
+            }else{
+                let msg = '';
+                if (data?.message) {
+                    msg = String(data.message);
+                } else {
+                    msg = 'Unable to connect. Please try again later';
+                }
+                present({
+                    message: msg,
+                    color: 'danger',
+                    duration: 5000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
+                });
+            }
+        })
+        .catch((error:any) => {
+
+            let msg = '';
+            if (error?.response) {
+                msg = String(error.response.data.message);
+            } else {
+                msg = 'Unable to connect. Please try again later';
+            }
+            present({
+                message: msg,
+                color: 'danger',
+                duration: 5000,
+                buttons: [{ text: 'X', handler: () => dismiss() }],
+            });
+
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+
+    }
 
     // get guilds
     useEffect(() => {
@@ -139,11 +201,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         if (serverId) {
             setBackdrop(true);
             instance
-                .post(`/guilds/${serverId}/modules`, obj, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                })
+                .post(`/guilds/${serverId}/modules`, obj, { headers: { 'Content-Type': 'application/json', }, })
                 .then(({ data }) => {
                     if(data.success){
                         setChecked({ ...checked, [obj.module]: obj.enabled });
@@ -317,7 +375,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             </Backdrop>
 
             <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
-                <IonLabel className="md:text-4xl text-2xl font-semibold">
+                <IonLabel className="md:text-2xl text-2xl font-semibold">
                     Configure Bot Packages
                 </IonLabel>
             </div>
@@ -335,11 +393,11 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             </div>
 
             {/* ability for owner to add someone else */}
-            <div className="float-right pb-5">
-                <Addserver addServerFlag={addServerFlag} setAddServerFlag={setAddServerFlag} />
-            </div>
+            {/*<div className="float-right pb-5">*/}
+            {/*    <Addserver addServerFlag={addServerFlag} setAddServerFlag={setAddServerFlag} />*/}
+            {/*</div>*/}
 
-            <div className="flex flex-row justify-center w-full mt-9">
+            <div className="flex flex-row justify-center w-full mt-3">
                 <div className="server-module-bg p-4 px-6 w-full">
                     <div className='w-full flex items-center justify-between mb-3'>
                         <div className='text-xl font-semibold '>Instructions</div>
@@ -585,16 +643,67 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 </div>
             </div>
 
-			<div className="mt-10 mb-5 w-full flex justify-center" hidden={!devMode}>
+            {/*Seamless button...*/}
+            <br/>
+            <hr/>
+            <br/>
+
+            <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
+                <IonLabel className="md:text-2xl text-2xl font-semibold">
+                    Seamless - New mint
+                </IonLabel>
+            </div>
+
+            <p>Give your whitelist out to servers with 0 work on your mods, 0 fake DAO screenshots, and soon 100% Twitter follower verification</p>
+
+            {/*justify-center*/}
+			<div className="mt-3 mb-10 w-full flex " hidden={!devMode}>
             	<IonButton className="text-base" css={css`
 					--padding-top: 25px;
 					--padding-bottom: 25px;
 					--padding-end: 20px;
 					--padding-start: 20px;
-				`} onClick={() => history.push(`/initiatewhitelist/${serverId}`)}>
-	                Initiate Whitelist
+				`} onClick={() => history.push(`/seamless/${serverId}`)}>
+	                Initiate Seamless
 	            </IonButton>
             </div>
+
+            {/*TODO - ruchita/ajay: broke*/}
+
+            {/*<div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>*/}
+            {/*    <IonLabel className="md:text-2xl text-2xl font-semibold">*/}
+            {/*        Seamless - Existing DAO*/}
+            {/*    </IonLabel>*/}
+            {/*</div>*/}
+            {/*<p>Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about.</p>*/}
+
+            {/*<div>*/}
+            {/*    <IonItem className="ion-item-wrapper mt-1">*/}
+            {/*        <IonInput placeholder="Discord Invite Link (never expires, no invite limit)" onIonChange={e => setDiscordLink(e.detail.value!)}/>*/}
+            {/*    </IonItem>*/}
+            {/*    <IonItem className="ion-item-wrapper mt-1">*/}
+            {/*        <IonInput placeholder="Twitter Link" onIonChange={e => setTwitterLink(e.detail.value!)}/>*/}
+            {/*    </IonItem>*/}
+            {/*    <IonItem className="ion-item-wrapper mt-1">*/}
+            {/*        <IonTextarea placeholder="Description of your DAO" onIonChange={e => setDescription(e.detail.value!)}/>*/}
+            {/*    </IonItem>*/}
+            {/*    <div className='mb-5 flex-row flex items-center'>*/}
+            {/*         <IonLabel className="text-white">Image</IonLabel>*/}
+            {/*        <IonItem className="ion-item-wrapper mt-2">*/}
+            {/*            <input type="file" id="img" name="img" accept="image/png, image/gif, image/jpeg" onChange={(e)=>setImage(e.target.files?.[0])}/>*/}
+            {/*        </IonItem>*/}
+            {/*    </div>*/}
+            {/*    <div className="mt-4 mb-5 w-full flex justify-center" hidden={!devMode}>*/}
+            {/*        <IonButton  css={css`*/}
+            {/*            --padding-top: 25px;*/}
+            {/*            --padding-bottom: 25px;*/}
+            {/*            --padding-end: 20px;*/}
+            {/*            --padding-start: 20px;*/}
+            {/*        `} onClick={() => submitWhitelist()}>*/}
+            {/*            Submit*/}
+            {/*        </IonButton>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
 
         </>
     );

@@ -2,6 +2,7 @@ import { ServerModel } from "./Server";
 
 export interface IWhitelist {
 	id: string;
+	active:boolean;
 	max_users : number;
 	target_server : string;
 	source_server : string;
@@ -18,4 +19,7 @@ export interface IWhitelist {
 	sourceServer: ServerModel;
 	claimed: boolean;
 	claimCounts: number;
+	isExpired:boolean;
+	showLive:boolean;
+	claims:[];
 }

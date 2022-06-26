@@ -16,8 +16,10 @@ export const environment = {
     // production - 927008889092857898
     // vehn IC bot - 861589624400904204
     // damjan? - 973608903801708634
+
     // clientId: isDev ? process.env.devClientId : '927008889092857898', // client ID for our discord bot,
-    clientId: isDev ? '861589624400904204' : '927008889092857898', // client ID for our discord bot,
+    clientId: isDev ? '861589624400904204' : '927008889092857898', // client ID for our discord bot, // TODO: need someone fix this to pull from env...
+
 	ionicAppUrl : isDev ? "http://localhost:8100" : "https://soldecoder.app"
 };
 

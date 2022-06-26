@@ -11,7 +11,7 @@ import {
     statsChartOutline,
     skullOutline, earthOutline,
     serverOutline,
-	diamondOutline
+    diamondOutline, logoDiscord, todayOutline, calendarOutline
 
 } from "ionicons/icons"
 import NavLink from "./NavLink"
@@ -77,12 +77,28 @@ function Sidebar() {
 	                    </IonButton>
                    </IonMenuToggle>
                 )}
-                <NavLink title="Home" icon={homeOutline} to="/" />
+
+                {/*<NavLink title="Home" icon={homeOutline} to="/" />*/}
+
+                <NavLink
+                    title="Seamless"
+                    icon={diamondOutline}
+                    to="/seamless"
+                    needsRole={false}
+                />
+
                 <NavLink
                     title="Today's Mints"
-                    icon={calendarClearOutline}
+                    icon={todayOutline}
                     to="/schedule"
                 />
+
+                <NavLink
+                    title="Mint Calendar"
+                    icon={calendarOutline}
+                    to="/calendar"
+                />
+
                 <NavLink
                     title="Fox Token Market"
                     icon="/assets/icons/FoxTokenLogo.svg"
@@ -99,17 +115,12 @@ function Sidebar() {
                     icon={searchOutline}
                     to="/stackedsearch"
                 />
+
                 {/*<NavLink*/}
-                {/*    title="Whitelist Marketplace"*/}
-                {/*    icon={diamondOutline}*/}
-                {/*    to="/whitelistmarketplace"*/}
-				{/*	needsRole={false}*/}
+                {/*    title="Alerts"*/}
+                {/*    icon={notificationsOutline}*/}
+                {/*    to="/alerts"*/}
                 {/*/>*/}
-                <NavLink
-                    title="Alerts"
-                    icon={notificationsOutline}
-                    to="/alerts"
-                />
 
                {/* TODO: (aries) can't show this until we enable a module first time?? or on manageserver ...
                             don't show the list until they have modules -> so show the AddServer button? */}
@@ -124,6 +135,13 @@ function Sidebar() {
                     icon={bookOutline}
                     to="#"
                     external={'https://docs.soldecoder.app'}
+                />
+
+                <NavLink
+                    title="Contact / Discord"
+                    icon={logoDiscord}
+                    to="#"
+                    external={'https://discord.com/invite/sol-decoder'}
                 />
 
                 {/*<NavLink*/}
