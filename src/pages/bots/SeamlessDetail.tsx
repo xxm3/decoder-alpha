@@ -51,18 +51,48 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
     // get roles for the WL role we will give to people --- new mint --- source server
     const getWhiteListRole = async() =>{
-        const  data = await instance.get(`/getAllRoles/${serverId}`)
-        if(data){
-            setWhiteListRole(data.data.data)
-           }
+        const errMsg = () => {
+            present({
+                message: 'Unable to get the roles from the new mint server. Please make sure the SOL Decoder bot is in that server!',
+                color: 'danger',
+                duration: 1000,
+            });
+        }
+
+        try{
+            const  data = await instance.get(`/getAllRoles/${serverId}`);
+            if(data?.data?.data){
+                setWhiteListRole(data.data.data);
+            }else{
+                errMsg();
+            }
+        }catch(err){
+            errMsg();
+        }
+
     }
 
     // get roles for what is required to enter the collab
     const getWhiteListRequireRole = async() =>{
-        const  data = await instance.get(`/getAllRoles/${server.state.id}`)
-        if(data){
-            setWhiteListRequireRole(data.data.data)
-           }
+        const errMsg = () => {
+            present({
+                message: 'Unable to get the roles from the new mint server. Please make sure the SOL Decoder bot is in that server!',
+                color: 'danger',
+                duration: 1000,
+            });
+        }
+
+        try{
+            const data = await instance.get(`/getAllRoles/${server.state.discordGuildId}`);
+            if(data?.data?.data){
+                setWhiteListRequireRole(data.data.data);
+            }else{
+                errMsg();
+            }
+        }catch(err){
+            errMsg();
+        }
+
     }
 
     // load it on load...
@@ -145,9 +175,14 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                     //
                     // }}
 
+                     // when submitting the form...
                      onSubmit={  handleSubmit(async (data) => {
                             const { image, ...rest } = data;
-                            const rawData = { ...rest,  source_server: serverId, target_server:server.state.id, };
+                            const rawData = {
+                                ...rest,
+                                source_server: serverId,
+                                target_server:server.state.discordGuildId,
+                            };
                             const formData = new FormData();
 
                             Object.entries(rawData).forEach(([key, value]) => {
@@ -155,23 +190,29 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             });
                             formData.append('image', image);
 
-                            try { await instance.post( '/createNewWhitelistPartnership', formData );
-                                history.push(`/whitelistmarketplace`)
+                            try {
+                                await instance.post( '/createNewWhitelistPartnership', formData );
+
+                                history.push(`/whitelistmarketplace`);
                                 present({
                                     message: 'Whitelist partnership created successfully!',
                                     color: 'success',
-                                    duration: 2000,
+                                    duration: 10000,
                                 });
                                 reset();
+
                             } catch (error) {
+                                console.error(error);
+
                                 if (isAxiosError(error)) {
                                     const { response: { data } = { errors: [] } } =
                                         error as AxiosError<{ errors: { location: string; msg: string; param: string; }[]; }>;
+
                                     if (!data || data.hasOwnProperty('error')) {
                                         present({
                                             message: ( data as unknown as { body: string } ).body,
                                             color: 'danger',
-                                            duration: 1000,
+                                            duration: 10000,
                                         });
                                     } else if (data.hasOwnProperty('errors')) {
                                         data.errors.forEach(({ param, msg }) => {
@@ -181,17 +222,31 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 present({
                                                     message: msg,
                                                     color: 'danger',
-                                                    duration: 1000,
+                                                    duration: 10000,
                                                 });
                                             }
                                         });
                                     }
+                                }else{
+                                    /**
+                                     * TODO: this doesn't work when there is a 400 error - need to tell the user what went wrong
+                                     * get a 400 error when error like "{"errors":[{"value":"456","msg":"Invalid discord id","param":"target_server","location":"body"}]}" - so need to show this
+                                     *
+                                     * after fixing the error in the form - I click submit again but it doesn't work, nothing in network
+                                     */
+                                    present({
+                                        message: 'An error occurred, please try again later or contact us',
+                                        color: 'danger',
+                                        duration: 10000,
+                                    });
                                 }
                             }
                         })}>
+
                         <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
+
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Giveaway</IonLabel>
+                                <IonLabel className="text-white">Giveaway Type</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
                                     <Controller name="type" rules={{ required: true, }} defaultValue="fcfs" control={control}
                                     render={({  field: { onChange, onBlur, value, name, ref, }, fieldState: { error }, }) => (
@@ -204,7 +259,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     )}  />
                                 </IonItem>
                             </div>
-                            <div >
+
+                            <div>
                                 <IonLabel className="text-white">Expiration Date</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
                                     <Controller
@@ -233,6 +289,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </IonItem>
                             </div>
                         </IonCard>
+
                         <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
                             <div className='mb-5'>
                                 <IonLabel className="text-white">Max Users</IonLabel>
@@ -241,8 +298,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 name="max_users"
                                 control={control}
                                 render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => {
-                                    console.log("values number fild",value)
-                                    console.log("error",error)
+                                    // console.log("values number fild",value)
+                                    // console.log("error",error)
 
                                     return (
                                         <>
@@ -263,6 +320,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 }} />
                                 </IonItem>
                             </div>
+
                             <div className='mb-5'>
                                 <IonLabel className="text-white">Whitelist Role (role they will get once Whitelisted in your new mint server)</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
@@ -274,10 +332,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         // console.log('value',value);
 
                                     return (
-
                                         <>
                                             <IonSelect
-
                                                 onIonChange={(e) => {
                                                     ( e.target as HTMLInputElement ).value = e.detail.value;
                                                     onChange(e);
@@ -299,6 +355,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                                 </IonItem>
                             </div>
+
                             <div>
                                 <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
@@ -384,6 +441,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     )} />
                                 </IonItem>
                             </div>
+
                             <div className='mb-5'>
                                 <IonLabel className="text-white">Twitter Link</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
@@ -406,6 +464,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     )} />
                                 </IonItem>
                             </div>
+
                             <div>
                                 <IonLabel className="text-white">Description</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">

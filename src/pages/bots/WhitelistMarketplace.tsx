@@ -74,7 +74,7 @@ function WhitelistMarketplace() {
                     {/* tabs on the top (Live vs Expired) */}
                     <div className=' text-xl flex justify-center mt-5'>
                         <div className={`${showLive ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive ' } w-32 h-10 `} onClick={()=>setShowLive(true)}>
-                            <p>Live({liveWhiteList?.length})</p>
+                            <p>Live ({liveWhiteList?.length})</p>
                         </div>
                         <div className={`${showLive ? 'seamless-tab-btn-deactive ' : 'seamless-tab-btn-active  '} ml-2 w-32 h-10`}onClick={()=>setShowLive(false)}>
                             <p>Expired ({expireWhiteList?.length})</p>
