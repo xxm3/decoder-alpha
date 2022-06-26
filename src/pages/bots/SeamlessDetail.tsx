@@ -119,18 +119,20 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                         </IonGrid>
                     </IonCard>
                 </IonCol>
-                
+
                 <IonCol size-xl="8" size-md="6" size-sm="6" size-xs="12">
-                    <form className="space-y-3" 
-                    onChange={()=>{
-                        
-                    }}
+                    <form className="space-y-3"
+
+                    // onChange={()=>{
+                    //
+                    // }}
+
                      onSubmit={  handleSubmit(async (data) => {
                             const { image, ...rest } = data;
                             const rawData = { ...rest,  source_server: serverId, target_server:server.state.id, };
                             const formData = new FormData();
 
-                            Object.entries(rawData).forEach(([key, value]) => { 
+                            Object.entries(rawData).forEach(([key, value]) => {
                                 if (value) formData.append(key, value as string);
                             });
                             formData.append('image', image);
@@ -196,7 +198,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         <>
                                             <IonDatetime
                                                 value={value}
-                                                onIonChange={(e) => { 
+                                                onIonChange={(e) => {
                                                     const value = new Date(e.detail.value as string);
                                                     value.setHours(23,59,59,999);
                                                     ( e.target as HTMLInputElement ).value =  value.toISOString();
@@ -254,15 +256,15 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         console.log('value',value)
 
                                     return (
-                                        
+
                                         <>
-                                            <IonSelect 
-                                            
+                                            <IonSelect
+
                                                 onIonChange={(e) => {
                                                     ( e.target as HTMLInputElement ).value = e.detail.value;
                                                     onChange(e);
                                                 }}
-                                               
+
                                                 name={name}
                                                 value={value}
                                                 onIonBlur={ blur }
@@ -276,7 +278,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         </>
                                     )}}
                                 />
-                              
+
                                 </IonItem>
                             </div>
                             <div>
@@ -296,7 +298,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 name={name}
                                                 onIonBlur={onBlur}
                                                 ref={ref}
-                                                placeholder='Select Require Role' 
+                                                placeholder='Select Require Role'
                                                 aria-required={true}
                                                 >
                                                 {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{
@@ -394,8 +396,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         <>
                                             <IonTextarea
                                                 value={value}
-                                                onIonChange={(e:any) => { 
-                                                    ( e.target as HTMLInputElement ).value = e.detail.value as string; 
+                                                onIonChange={(e:any) => {
+                                                    ( e.target as HTMLInputElement ).value = e.detail.value as string;
                                                      onChange(e);
                                                     }}
                                                 required
@@ -407,9 +409,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             <p className="formError"> {error?.message} </p>
                                         </>
                                     )}/>
-                                    
+
                                 </IonItem>
-                                 <p className='mt-2'>Max character limit is 2000</p> 
+                                 <p className='mt-2'>Max character limit is 2000</p>
                             </div>
                         </IonCard>
                         <div className='ion-text-right'>

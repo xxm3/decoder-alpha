@@ -11,7 +11,7 @@ import {
     statsChartOutline,
     skullOutline, earthOutline,
     serverOutline,
-    diamondOutline, logoDiscord
+    diamondOutline, logoDiscord, todayOutline, calendarOutline
 
 } from "ionicons/icons"
 import NavLink from "./NavLink"
@@ -89,9 +89,16 @@ function Sidebar() {
 
                 <NavLink
                     title="Today's Mints"
-                    icon={calendarClearOutline}
+                    icon={todayOutline}
                     to="/schedule"
                 />
+
+                <NavLink
+                    title="Mint Calendar"
+                    icon={calendarOutline}
+                    to="/calendar"
+                />
+
                 <NavLink
                     title="Fox Token Market"
                     icon="/assets/icons/FoxTokenLogo.svg"
