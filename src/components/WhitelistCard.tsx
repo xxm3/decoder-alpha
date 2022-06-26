@@ -47,7 +47,7 @@ function WhitelistCard({
             return "Full"
         }else  if(claiming){
             return <IonSpinner />
-        }else if(claims[0].user && uid){
+        }else if(claims[0] && claims[0].user && uid){
             if(claims[0].user.discordId === JSON.parse(uid)){
                 return  "Claimed"
             }else{
