@@ -31,21 +31,25 @@ interface FormFields {
 }
 const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
-    const server:any = useLocation()
+    const server:any = useLocation();
+
+    // new mint / source server --- comes from params
     const { serverId } = useParams<any>();
+
     let history = useHistory();
     const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, } = useForm<FormFields, any>();
     const [present] = useIonToast();
     const now = useMemo(() => new Date(), []);
     const [whiteListRole,setWhiteListRole] = useState<any>([])
     const [whiteListRequireRole,setWhiteListRequireRole] = useState<any>([])
+
     const todayEnd = useMemo(() => {
         const date = new Date( + now + 86400 * 1000 );
         date.setHours(23,59,59,999);
         return date;
     }, [now]);
 
-    // get roles for the WL role we will give to people
+    // get roles for the WL role we will give to people --- new mint --- source server
     const getWhiteListRole = async() =>{
         const  data = await instance.get(`/getAllRoles/${serverId}`)
         if(data){
@@ -251,7 +255,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 value={value}
                                                 onIonBlur={onBlur}
                                                 ref={ref}
-                                                placeholder='60'
+                                                placeholder='ie. 25'
                                             />
                                             <p className="formError"> {error?.message} </p>
                                         </>
@@ -260,14 +264,14 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </IonItem>
                             </div>
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Whitelist Role</IonLabel>
+                                <IonLabel className="text-white">Whitelist Role (role they will get once Whitelisted in your new mint server)</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
                                 <Controller
                                     name="whitelist_role"
                                     rules={{ required: true, }}
                                     control={control}
                                     render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) =>{
-                                        console.log('value',value)
+                                        // console.log('value',value);
 
                                     return (
 
@@ -283,7 +287,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 value={value}
                                                 onIonBlur={ blur }
                                                 ref={ref}
-                                                placeholder='Select Whitelist Role'
+                                                placeholder='Select a Whitelist Role'
                                                 >
                                                 {whiteListRole && whiteListRole.map((role:any) =>{
                                                 return (<IonSelectOption  key={role.id}  value={role.id} > {role.name} </IonSelectOption>)}  )}
@@ -296,7 +300,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </IonItem>
                             </div>
                             <div>
-                                <IonLabel className="text-white">Required Role</IonLabel>
+                                <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
                                 <Controller
                                     name="required_role"
@@ -312,7 +316,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 name={name}
                                                 onIonBlur={onBlur}
                                                 ref={ref}
-                                                placeholder='Select Require Role'
+                                                placeholder='Select a Required Role'
                                                 aria-required={true}
                                                 >
                                                 {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{
@@ -325,9 +329,10 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </IonItem>
                             </div>
                         </IonCard>
+
                         <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Image</IonLabel>
+                                <IonLabel className="text-white">Image to represent your DAO</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
                                     <Controller
                                     name="image"
@@ -356,8 +361,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     )} />
                                 </IonItem>
                             </div>
+
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Discord Link</IonLabel>
+                                <IonLabel className="text-white">Discord Invite Link (never expires, no invite limit)</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
                                     <Controller
                                     name="discordInvite"
@@ -372,7 +378,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 name={name}
                                                 ref={ref}
                                                 onIonBlur={onBlur}
-                                                placeholder='Discord Link' />
+                                                placeholder='Discord Invite Link' />
                                             <p className="formError"> {error?.message} </p>
                                         </>
                                     )} />
