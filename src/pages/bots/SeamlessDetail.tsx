@@ -11,6 +11,12 @@ import isAxiosError from '../../util/isAxiosError';
 import { AxiosError } from 'axios';
 import { TextFieldTypes } from '@ionic/core';
 
+/**
+ * The page they see when they've clicked "initiate seamless" ... then clicked on a guild
+ *
+ * This lists the form for them to fill out
+ */
+
 interface FormFields {
     image: File & { path: string;};
     target_server: number;
@@ -37,14 +43,17 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         const date = new Date( + now + 86400 * 1000 );
         date.setHours(23,59,59,999);
         return date;
-    }, [now])
+    }, [now]);
 
+    // get roles for the WL role we will give to people
     const getWhiteListRole = async() =>{
         const  data = await instance.get(`/getAllRoles/${serverId}`)
         if(data){
             setWhiteListRole(data.data.data)
            }
     }
+
+    // get roles for what is required to enter the collab
     const getWhiteListRequireRole = async() =>{
         const  data = await instance.get(`/getAllRoles/${server.state.id}`)
         if(data){
@@ -52,6 +61,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
            }
     }
 
+    // load it on load...
     useEffect(() => {
         getWhiteListRole()
         getWhiteListRequireRole()
@@ -60,65 +70,69 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     return (
         <IonGrid>
             <IonRow>
-                <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - a new way for brand collabs </h2> </IonCol>
+                <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - fill out whitelist details</h2> </IonCol>
+
                 <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12" />
-                <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12">
-                    <IonCard className="ion-no-margin">
-                        <div className="cardImage relative">
-                            <img src={server?.state?.icon} className="cardMainImage" alt='server icon'/>
-                            <div className="cardOverlay-content py-1 px-4">
-                                <div className=" text-md">{ server.state?.name}</div>
-                                <div className="socialMediaIcon">
-                                    <img src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
-                                            event.stopPropagation();
-                                            if(server.state.discord_link){
-                                                window.open(server.state.discord_link)
-                                            } }} />
-                                    <img src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
-                                            event.stopPropagation();
-                                            if(server.state.discord_link){
-                                                window.open(server.state.twitter_link)
-                                            } }} />
-                                </div>
-                            </div>
-                        </div>
-                        <IonGrid className="py-4 px-4">
-                            <IonRow>
-                                <IonCol size="8">
-                                    <IonText className="text-white"> Twitter Followers </IonText>
-                                </IonCol>
-                                <IonCol size="4" className="ion-text-end">
-                                    <IonText className="greenText">{server.state?.twitter_followers || 0}</IonText>
-                                </IonCol>
-                            </IonRow>
-                            <IonRow>
-                                <IonCol size="8">
-                                    <IonText className="text-white"> Twitter Interaction </IonText>
-                                </IonCol>
-                                <IonCol size="4" className="ion-text-end">
-                                    <IonText className="BlueText">{server.state?.twitter_interactions || 0}</IonText>
-                                </IonCol>
-                            </IonRow>
-                            <div className="content-extra-space"></div>
-                            <IonRow>
-                                <IonCol size="8">
-                                    <IonText className="text-white"> Discord Members </IonText>
-                                </IonCol>
-                                <IonCol size="4" className="ion-text-end">
-                                    <IonText className="greenText">{server.state?.discord_members || 0}</IonText>
-                                </IonCol>
-                            </IonRow>
-                            <IonRow>
-                                <IonCol size="8">
-                                    <IonText className="text-white"> Online </IonText>
-                                </IonCol>
-                                <IonCol size="4" className="ion-text-end">
-                                    <IonText className="BlueText">{server.state?.discord_online || 0}</IonText>
-                                </IonCol>
-                            </IonRow>
-                        </IonGrid>
-                    </IonCard>
-                </IonCol>
+
+                {/* TODO: this is 100% copy/pasted from seamless.tsx (Which I heavily updated - not acceptable!!!*/}
+
+                {/*<IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12">*/}
+                {/*    <IonCard className="ion-no-margin">*/}
+                {/*        <div className="cardImage relative">*/}
+                {/*            <img src={server?.state?.icon} className="cardMainImage" alt='server icon'/>*/}
+                {/*            <div className="cardOverlay-content py-1 px-4">*/}
+                {/*                <div className=" text-md">{ server.state?.name}</div>*/}
+                {/*                <div className="socialMediaIcon">*/}
+                {/*                    <img src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{*/}
+                {/*                            event.stopPropagation();*/}
+                {/*                            if(server.state.discord_link){*/}
+                {/*                                window.open(server.state.discord_link)*/}
+                {/*                            } }} />*/}
+                {/*                    <img src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{*/}
+                {/*                            event.stopPropagation();*/}
+                {/*                            if(server.state.discord_link){*/}
+                {/*                                window.open(server.state.twitter_link)*/}
+                {/*                            } }} />*/}
+                {/*                </div>*/}
+                {/*            </div>*/}
+                {/*        </div>*/}
+                {/*        <IonGrid className="py-4 px-4">*/}
+                {/*            <IonRow>*/}
+                {/*                <IonCol size="8">*/}
+                {/*                    <IonText className="text-white"> Twitter Followers </IonText>*/}
+                {/*                </IonCol>*/}
+                {/*                <IonCol size="4" className="ion-text-end">*/}
+                {/*                    <IonText className="greenText">{server.state?.twitter_followers || 0}</IonText>*/}
+                {/*                </IonCol>*/}
+                {/*            </IonRow>*/}
+                {/*            <IonRow>*/}
+                {/*                <IonCol size="8">*/}
+                {/*                    <IonText className="text-white"> Twitter Interaction </IonText>*/}
+                {/*                </IonCol>*/}
+                {/*                <IonCol size="4" className="ion-text-end">*/}
+                {/*                    <IonText className="BlueText">{server.state?.twitter_interactions || 0}</IonText>*/}
+                {/*                </IonCol>*/}
+                {/*            </IonRow>*/}
+                {/*            <div className="content-extra-space"></div>*/}
+                {/*            <IonRow>*/}
+                {/*                <IonCol size="8">*/}
+                {/*                    <IonText className="text-white"> Discord Members </IonText>*/}
+                {/*                </IonCol>*/}
+                {/*                <IonCol size="4" className="ion-text-end">*/}
+                {/*                    <IonText className="greenText">{server.state?.discord_members || 0}</IonText>*/}
+                {/*                </IonCol>*/}
+                {/*            </IonRow>*/}
+                {/*            <IonRow>*/}
+                {/*                <IonCol size="8">*/}
+                {/*                    <IonText className="text-white"> Online </IonText>*/}
+                {/*                </IonCol>*/}
+                {/*                <IonCol size="4" className="ion-text-end">*/}
+                {/*                    <IonText className="BlueText">{server.state?.discord_online || 0}</IonText>*/}
+                {/*                </IonCol>*/}
+                {/*            </IonRow>*/}
+                {/*        </IonGrid>*/}
+                {/*    </IonCard>*/}
+                {/*</IonCol>*/}
 
                 <IonCol size-xl="8" size-md="6" size-sm="6" size-xs="12">
                     <form className="space-y-3"

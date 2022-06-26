@@ -10,11 +10,19 @@ import discordImage from '../../images/discord.png';
 import twitterImage from '../../images/twitter.png';
 import { useQuery } from 'react-query';
 
+/**
+ * The page they see when they click "Initiate Seamless"
+ *
+ * This lists all of the discords we have. User has to click into one to proceed
+ */
+
 const SeamlessDetail: React.FC<AppComponentProps> = () => {
     let history = useHistory();
     const { serverId } = useParams<any>();
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [serverList, setServerList] = useState<any>([])
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [serverList, setServerList] = useState<any>([]);
+
+    // this loads up all the discords etc
     const { data: servers = [] } = useQuery<any>(  ['allServers'],
         async () => {
             setIsLoading(true)
@@ -36,40 +44,54 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             <IonGrid>
                 <IonRow>
                     <IonCol size="12">
-                        <h2 className="ion-no-margin font-bold text-xl"> Seamless - a new way for brand collapse </h2>
+                        <h2 className="ion-no-margin font-bold text-xl"> Seamless - select a DAO</h2>
                         <p className='ion-no-margin text-sm'>A new way to Request a collaboration with one of our  partnered servers, select the server you wish to collaborate with in list below, and fill out the collaboration form on the next page.</p>
                     </IonCol>
+
                     <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12"></IonCol>
-                    <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12">
-                        <div className='font-bold text-xl'>Select Partner</div>
-                    </IonCol>
+
+                    {/*<IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12">*/}
+                    {/*    <div className='font-bold text-xl'>Select a DAO to give whitelists to</div>*/}
+                    {/*</IonCol>*/}
+
                         <>
-                            {isLoading ? <Loader/> : 
+                            {isLoading ? <Loader/> :
                             <>
                                 {serverList && serverList.map((server: any,index:number)=>{
                                     return(
                                         <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" key={index} >
                                             <IonCard className='ion-no-margin'>
+
                                                 <div className="cardImage relative">
-                                                    <img src={server?.icon} className="cardMainImage"  alt='server icon' />
+
+                                                    {/*image*/}
+                                                    <img src={server?.icon} className={server?.icon ? 'cardMainImage' : 'cardNoImage'}  alt='' />
+
                                                     <div className="cardOverlay-content py-1 px-4">
+
                                                         <div className=' text-md'>{server?.name}</div>
+
                                                         <div className="socialMediaIcon">
-                                                            <img src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
+
+                                                            {/*discord*/}
+                                                            <img hidden={!discordImage} src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
                                                                 event.stopPropagation();
                                                                 if(server.discord_link){
                                                                     window.open(server?.discord_link)
                                                                 }}} />
-                                                            <img src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
+
+                                                            {/*twitter*/}
+                                                            <img hidden={!twitterImage} src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
                                                                 event.stopPropagation();
                                                                 if(server.twitter_link){
                                                                     window.open(server?.twitter_link)
                                                                 }}} />
                                                         </div>
                                                     </div>
+
                                                 </div>
                                                 <IonGrid className="py-4 px-4">
-                                                    <IonRow>
+                                                    <IonRow hidden={!server?.twitter_followers}>
                                                         <IonCol size="8">
                                                             <IonText className='text-white'>Twitter Followers</IonText>
                                                         </IonCol>
@@ -77,7 +99,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                             <IonText className="greenText">{server?.twitter_followers || 0 } </IonText>
                                                         </IonCol>
                                                     </IonRow>
-                                                    <IonRow>
+                                                    <IonRow hidden={!server?.twitter_interactions}>
                                                         <IonCol size="8">
                                                             <IonText className='text-white'>Twitter Interaction</IonText>
                                                         </IonCol>
@@ -86,7 +108,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         </IonCol>
                                                     </IonRow>
                                                     <div className="content-extra-space"></div>
-                                                    <IonRow>
+
+                                                    <IonRow hidden={!server?.discord_members}>
                                                         <IonCol size="8">
                                                             <IonText className='text-white'>Discord Members</IonText>
                                                         </IonCol>
@@ -94,7 +117,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                             <IonText className="greenText">{server?.discord_members || 0}</IonText>
                                                         </IonCol>
                                                     </IonRow>
-                                                    <IonRow>
+                                                    <IonRow hidden={!server?.discord_online}>
                                                         <IonCol size="8">
                                                             <IonText className='text-white'>Online</IonText>
                                                         </IonCol>
@@ -107,7 +130,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                             <IonButton className="cardButton w-full" onClick={(event) => {
                                                                 event.stopPropagation()
                                                                 history.push({pathname:`/seamlessdetail/${serverId}`,state:server})} }>
-                                                                Initiate Collapse
+                                                                Initiate Seamless
                                                             </IonButton>
                                                         </IonCol>
                                                     </IonRow>

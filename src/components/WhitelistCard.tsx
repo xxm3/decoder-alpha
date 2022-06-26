@@ -11,6 +11,14 @@ import ConfettiExplosion from 'react-confetti-explosion';
 import { Grid } from '@material-ui/core';
 import {logoTwitter} from 'ionicons/icons';
 
+/**
+ * The page they see when they are on /seamless, and browsing for whitelists etc..
+ *
+ * These are individual cards
+ *
+ * Parent is "WhitelistMarketplace.tsx"
+ */
+
 function WhitelistCard({
     image,
     max_users,
@@ -35,7 +43,21 @@ function WhitelistCard({
     const [isExploding, setIsExploding] = useState<boolean>(false);
     const uid  = localStorage.getItem('uid');
 
-    const getButtonText = (expired : boolean, claiming : boolean, claimed : boolean, full : boolean, claims:any) => {
+    // what to show in each button
+    const getButtonText = (
+        expired : boolean,
+        claiming : boolean,
+        claimed : boolean, // undefined...
+        full : boolean,
+        claims:any,
+        name: any) => {
+
+        // if(name === 'Ready Set Trade'){
+        //     console.log(expired, claiming, claimed, full , claims);
+        //     console.log(claims[0]);
+        //     console.log(uid);
+        // }
+
         if(claimed){
             return "Claimed"
         }else if(expired){
@@ -45,9 +67,11 @@ function WhitelistCard({
         }else  if(claiming){
             return <IonSpinner />
         }else if(claims[0] && claims[0].user && uid){
+            // these should always match, so just returning it here. Query is on whitelistRouter.js.getQueryOptions()
             if(claims[0].user.discordId === JSON.parse(uid)){
-                return  "Claimed"
+                return "Claimed"
             }else{
+                return "Claimed"
             }
         }else {
             return "Obtain whitelist"
@@ -110,78 +134,89 @@ function WhitelistCard({
                 className="py-4 px-6 flex-col flex"
             >
 
-                {description}
-                <br/><br/>
+                <div className="mb-3">{description}</div>
 
                 <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>
-                    <p>{type.toUpperCase()}</p>
+                        <p>{type.toUpperCase()}</p>
                     <p>Slots left </p>
-                    <p>{max_users - claimCounts}/{max_users}</p>
+                        <p>{max_users - claimCounts}/{max_users}</p>
 					<p>Required Role (in "{targetServer?.name}" DAO)</p>
-					<p>{required_role_name}</p>
+					    <p>{required_role_name}</p>
 					<p className="timeLeft">Time left</p>
-					<TimeAgo setExpired={setExpired} date={expiration_date}/>
+					    <TimeAgo setExpired={setExpired} date={expiration_date}/>
                 </div>
 
+                {/* button! */}
 				{expired !== undefined && <IonButton css={css`
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
-				`} className="my-2 self-center" onClick={async () => {
-					setClaiming(true);
+				`} className="my-2 self-center"
 
-					try {
+                     // when you click the button!
+                     onClick={async () => {
+                        setClaiming(true);
 
-						await instance.post("/whitelistClaims", {
-							whitelist_id : id
-						});
-						queryClient.setQueryData(
-                            ['whitelistPartnerships'],
-                            (queryData) => {
-                                return (queryData as IWhitelist[]).map(
-                                    (whitelist) => {
-                                        if (whitelist.id === id) {
-                                            whitelist.claimed = true;
-											whitelist.claimCounts += 1
+                        try {
+
+                            // submit form!
+                            await instance.post("/whitelistClaims", {
+                                whitelist_id : id
+                            });
+                            queryClient.setQueryData(
+                                ['whitelistPartnerships'],
+                                (queryData) => {
+                                    return (queryData as IWhitelist[]).map(
+                                        (whitelist) => {
+                                            if (whitelist.id === id) {
+                                                whitelist.claimed = true;
+                                                whitelist.claimCounts += 1
+                                            }
+                                            return whitelist;
                                         }
-                                        return whitelist;
-                                    }
-                                );
+                                    );
+                                }
+                            );
+
+                            // success!
+
+                            // setIsExploding(true);
+                            present({
+                                message:
+                                    'Whitelist claimed successfully! You are now whitelisted in ' + sourceServer.name,
+                                color: 'success',
+                                duration: 10000,
+                            });
+
+                        // if error!
+                        } catch (error) {
+                            console.error(error);
+
+                            if(isAxiosError(error) && error.response?.data){
+                                present({
+                                    message: error.response?.data.body,
+                                    color: 'danger',
+                                    duration: 5000,
+                                });
                             }
-                        );
-
-                        // setIsExploding(true);
-
-						present({
-							message:
-								'Whitelist claimed successfully! You are now whitelisted in ' + sourceServer.name,
-							color: 'success',
-							duration: 10000,
-						});
-
-					} catch (error) {
-						console.error(error);
-
-                        if(isAxiosError(error) && error.response?.data){
-                            present({
-                                message: error.response?.data.body,
-                                color: 'danger',
-                                duration: 5000,
-                            });
+                            else {
+                                present({
+                                    message: "Something went wrong",
+                                    color: 'danger',
+                                    duration: 5000,
+                                });
+                            }
+                        } finally {
+                            setClaiming(false);
                         }
-                        else {
-                            present({
-                                message: "Something went wrong",
-                                color: 'danger',
-                                duration: 5000,
-                            });
-                        }
-                    } finally {
-                        setClaiming(false)
-                    }
+                    }}
 
-                    }} disabled={expired || claiming || claimed || full || getButtonText(expired,claiming,claimed, full, claims) === 'Claimed'  }>
-                        {getButtonText(expired,claiming,claimed, full, claims)}
-                    </IonButton>}
+                     disabled={expired || claiming || claimed || full || getButtonText(expired,claiming,claimed, full, claims, sourceServer?.name) === 'Claimed'  }
+                    >
+                        {getButtonText(expired,claiming,claimed, full, claims, sourceServer?.name)}
+                    </IonButton>
+
+                }
+                {/* end button! */}
 
 				</div>
 

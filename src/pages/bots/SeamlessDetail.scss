@@ -7,6 +7,13 @@ ion-card {
             width: 100%;
             object-fit: cover;
         }
+
+        .cardNoImage{
+            height: 60px;
+            width: 100%;
+            object-fit: cover;
+        }
+
         .cardOverlay-content {
             position: absolute;
             bottom: 0;
@@ -28,7 +35,7 @@ ion-card {
     .content-extra-space {
         height: 10px;
     }
-   
+
     .greenText {
         color: rgb(44, 150, 100);
     }
