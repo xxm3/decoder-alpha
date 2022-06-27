@@ -64,7 +64,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                                                 <div className="cardImage relative">
 
-                                                    {/*image*/}
+                                                    {/* image */}
                                                     <img src={server?.icon} className={server?.icon ? 'cardMainImage' : 'cardNoImage'}  alt='' />
 
                                                     <div className="cardOverlay-content py-1 px-4">

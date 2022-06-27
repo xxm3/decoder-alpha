@@ -648,6 +648,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             <hr/>
             <br/>
 
+            {/*TODO: shows up...*/}
+            {/*TODO: sol decoder should be first*/}
             <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
                 <IonLabel className="md:text-2xl text-2xl font-semibold">
                     Seamless - New mint

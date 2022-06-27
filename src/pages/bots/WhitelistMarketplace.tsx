@@ -14,10 +14,10 @@ import { Grid } from '@material-ui/core';
 
 function WhitelistMarketplace() {
 
-    const [isLoading, setIsLoading] = React.useState(true)
+    const [isLoading, setIsLoading] = React.useState(true);
     const [showLive, setShowLive] = useState<boolean>(true);
-    const[liveWhiteList,setLiveWhiteList] = useState<IWhitelist[]>([])
-    const[expireWhiteList,setExpireWhiteList] = useState<IWhitelist[]>([])
+    const [liveWhiteList,setLiveWhiteList] = useState<IWhitelist[]>([]);
+    const [expireWhiteList,setExpireWhiteList] = useState<IWhitelist[]>([]);
 
     // get all your WL crap
     const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
@@ -28,7 +28,7 @@ function WhitelistMarketplace() {
                 let whiteListExpire:any = []
                 let whiteListLive:any = []
                 for(let i = 0; i<whitelists.length; i++){
-                    if(whitelists[i].isExpired){
+                    if(whitelists[i].isExpired || !whitelists[i].active){
                         whiteListExpire.push(whitelists[i])
                     }else{
                         whiteListLive.push(whitelists[i])
@@ -59,7 +59,6 @@ function WhitelistMarketplace() {
 
                         This is an early look at Seamless - SOL Decoder's next joint venture with Communi3. We estimate it is only 10% complete - so plenty upgrades coming.
                         <ul>
-                            <li>- You will have to copy/paste to join the new mint Discord manually - soon we'll have a link to help with this</li>
                             <li>- You will have to see which DAO the whitelist is for - soon we'll have filters to help. <span className="text-red-500">This is not only for SOL Decoder holders - other DAOs use this, so look at the "Required membership" and "Required Role" section</span></li>
                             <li>- Also coming soon is Twitter integration to make sure you're following, and built in giveaways to have more people join</li>
                         </ul>
@@ -85,12 +84,20 @@ function WhitelistMarketplace() {
                         {
                             // live
                             showLive ? liveWhiteList && liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) => (
-                                <WhitelistCard {...whitelist} key={Math.random()} showLive={showLive} />
+                                <WhitelistCard
+                                    {...whitelist}
+                                    key={Math.random()}
+                                    showLive={showLive}
+                                />
                             )) : <div className='text-xl'> There are no whitelists available</div> :
 
                             // expired
                             expireWhiteList && expireWhiteList.length > 0 ? expireWhiteList.map((whitelist:any) => (
-                                <WhitelistCard {...whitelist} key={Math.random()} showLive={showLive} />
+                                <WhitelistCard
+                                    {...whitelist}
+                                    key={Math.random()}
+                                    showLive={showLive}
+                                />
                             )) :<div className='text-xl'> There are no whitelists available</div>
                         }
                     </div>
