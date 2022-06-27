@@ -51,6 +51,18 @@ ion-card {
         --color: #fff !important;
         --background: #212838 !important;
     }
+    .select-items {
+        position: absolute;
+        background-color: DodgerBlue !important;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 99;
+      }
+}
+select option {
+    background: #2A3246;
+    color: #fff;
 }
 .cardButton {
     text-transform: capitalize;
