@@ -69,7 +69,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                                                     <div className="cardOverlay-content py-1 px-4">
 
-                                                        <div className=' text-md'>{server?.name}</div>
+                                                        <div className='text-md'>{server?.name}</div>
 
                                                         <div className="socialMediaIcon">
 

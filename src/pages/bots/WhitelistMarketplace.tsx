@@ -6,7 +6,6 @@ import { IWhitelist } from '../../types/IWhitelist';
 import Loader from '../../components/Loader';
 import {IonCol, IonGrid, IonLabel, IonRow} from '@ionic/react';
 import './SeamlessDetail.scss';
-import { Grid } from '@material-ui/core';
 
 /**
  * The page they see when they are on /seamless, and browsing for whitelists etc..
@@ -14,10 +13,13 @@ import { Grid } from '@material-ui/core';
 
 function WhitelistMarketplace() {
 
-    const [isLoading, setIsLoading] = React.useState(true);
-    const [showLive, setShowLive] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isTabButton, setIsTabButton] = useState<String>('live');
     const [liveWhiteList,setLiveWhiteList] = useState<IWhitelist[]>([]);
     const [expireWhiteList,setExpireWhiteList] = useState<IWhitelist[]>([]);
+    const [myDoaWhiteList,setMyDoaWhiteList] = useState<IWhitelist[]>([]);
+    const [myClaimWhiteList,setMyClaimWhiteList] = useState<IWhitelist[]>([]);
+
 
     // get all your WL crap
     const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
@@ -27,6 +29,8 @@ function WhitelistMarketplace() {
                 const { data: whitelists } = await instance.get<IWhitelist[]>( '/getWhitelistPartnerships/me' );
                 let whiteListExpire:any = []
                 let whiteListLive:any = []
+                let whiteListMyDoa:any = []
+                let whiteListMyClaim:any = []
                 for(let i = 0; i<whitelists.length; i++){
                     if(whitelists[i].isExpired || !whitelists[i].active){
                         whiteListExpire.push(whitelists[i])
@@ -36,6 +40,8 @@ function WhitelistMarketplace() {
                 }
                 setLiveWhiteList(whiteListLive);
                 setExpireWhiteList(whiteListExpire);
+                setMyDoaWhiteList(whiteListMyDoa)
+                setMyClaimWhiteList(whiteListMyClaim)
 
                 return whitelists;
             } catch (error) {
@@ -72,35 +78,80 @@ function WhitelistMarketplace() {
 
                     {/* tabs on the top (Live vs Expired) */}
                     <div className=' text-xl flex justify-center mt-5'>
-                        <div className={`${showLive ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive ' } w-32 h-10 `} onClick={()=>setShowLive(true)}>
-                            <p>Live ({liveWhiteList?.length})</p>
+                        <div className={`${isTabButton === 'myDoa' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive ' } w-50 h-10 `} onClick={()=>setIsTabButton('myDoa')}>
+                            {/* <p>Live - My DAO ({myDoaWhiteList?.length})</p> */}
+                            <div className="text-sm md:text-base p-2 md:px-4 w-full">Live-My DAO</div>
+                            <div className=" bg-black/[.4] py-2 px-4 ">{myDoaWhiteList?.length}</div>
+                            
                         </div>
-                        <div className={`${showLive ? 'seamless-tab-btn-deactive ' : 'seamless-tab-btn-active  '} ml-2 w-32 h-10`}onClick={()=>setShowLive(false)}>
-                            <p>Expired ({expireWhiteList?.length})</p>
+                        <div className={`${isTabButton === 'live' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive' } ml-2 w-32 h-10 `} onClick={()=>setIsTabButton('live')}>
+                            {/* <p>Live ({liveWhiteList?.length})</p> */}
+                            <div className="text-sm md:text-base p-2 md:px-4 w-full">Live</div>
+                            <div className=" bg-black/[.4] py-2 px-4 ">{liveWhiteList?.length}</div>
+                        </div>
+                        <div className={`${isTabButton === 'expire' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive'} ml-2 w-32 h-10`}onClick={()=>setIsTabButton('expire')}>
+                            {/* <p>Expired ({expireWhiteList?.length})</p> */}
+                            <div className="text-sm md:text-base p-2 md:px-4 w-full">Expired</div>
+                            <div className=" bg-black/[.4] py-2 px-4 ">{expireWhiteList?.length}</div>
                         </div>
                     </div>
 
-                    <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
-                        {
-                            // live
-                            showLive ? liveWhiteList && liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) => (
-                                <WhitelistCard
-                                    {...whitelist}
-                                    key={Math.random()}
-                                    showLive={showLive}
-                                />
-                            )) : <div className='text-xl'> There are no whitelists available</div> :
+                    {/* expire */}
+                    {isTabButton === 'expire' ||  isTabButton === 'myClaim' ?
+                        <div className='flex justify-center mt-4'>
+                            <div className={`${isTabButton === 'myClaim' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive'} ml-2 w-60 h-10 text-xl `} onClick={()=>setIsTabButton('myClaim')}>
+                                {/* <p>View my claim mints ({myClaimWhiteList?.length})</p> */}
+                                <div className="text-sm md:text-base p-2 md:px-4 w-full">View My Claim Mints</div>
+                            <div className=" bg-black/[.4] py-2 px-4 ">{myClaimWhiteList?.length}</div>
+                            </div>
+                        </div> :  ''
+                        
+                    }
 
-                            // expired
-                            expireWhiteList && expireWhiteList.length > 0 ? expireWhiteList.map((whitelist:any) => (
-                                <WhitelistCard
-                                    {...whitelist}
-                                    key={Math.random()}
-                                    showLive={showLive}
-                                />
-                            )) :<div className='text-xl'> There are no whitelists available</div>
-                        }
-                    </div>
+                    {/* my Doa live */}
+                    {isTabButton === 'myDoa' &&
+                        <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
+                            {
+                                myDoaWhiteList.length > 0 ? myDoaWhiteList.map((whitelist:any) => {
+                                    return(<WhitelistCard {...whitelist}  key={Math.random()}/>)
+                                }) : <div className='text-xl'> There are no whitelists available</div> 
+                            }
+                        </div>
+                    }
+
+                    {/* live */}
+                    {isTabButton === 'live' &&
+                        <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
+                            {
+                                liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) => {
+                                   return(<WhitelistCard {...whitelist}  key={Math.random()}/>)
+                                }) : <div className='text-xl'> There are no whitelists available</div>  
+                            }
+                        </div>
+                    }
+
+                    {/* expire */}
+                    {isTabButton === 'expire' &&
+                        <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
+                            {
+                                expireWhiteList.length > 0 ? expireWhiteList.map((whitelist:any) => {
+                                 return(<WhitelistCard {...whitelist}  key={Math.random()}/>)
+                                }) : <div className='text-xl'> There are no whitelists available</div>
+                            }
+                        </div>
+                    }
+
+                    {/* myClaim */}
+                    {isTabButton === 'myClaim' &&
+                        <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
+                            {
+                                myClaimWhiteList.length > 0 ?  myClaimWhiteList.map((whitelist:any) => {
+                                 return(<WhitelistCard {...whitelist}  key={Math.random()}/>)
+                                }) : <div className='text-xl'> There are no whitelists available</div> 
+                            }
+                        </div>
+                    }
+                 
 
                     {/* no whitelists */}
                     <div className={(whitelists?.length < 1 && !isLoading) ? "flex items-center justify-between w-full" : 'flex items-center justify-end w-full'}>

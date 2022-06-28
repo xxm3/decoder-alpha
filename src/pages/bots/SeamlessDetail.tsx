@@ -126,13 +126,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
         }
     );
-
-  
-
-    // console.log('whitelists-----------',whitelists)
-
-    console.log('//////////////',formField)
-
     // get roles for the WL role we will give to people --- new mint --- source server
     const getWhiteListRole = async() =>{
         const errMsg = () => {
@@ -144,7 +137,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         }
 
         try{
-            console.log("server id  line number 147",serverId);
+            // console.log("server id  line number 147",serverId);
             const  data = await instance.get(`/getAllRoles/${serverId}`);
             if(data?.data?.data){
                 setWhiteListRole(data.data.data);
@@ -169,7 +162,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
         try{
             console.log("discordGuildId  line number 171",server.state);
-            const data = await instance.get(`/getAllRoles/${server.state.id}`);
+            const data = await instance.get(`/getAllRoles/${server.state.discordGuildId}`);
             if(data?.data?.data){
                 setWhiteListRequireRole(data.data.data);
             }else{
@@ -197,6 +190,75 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                 <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12" />
 
                 {/* TODO: this is 100% copy/pasted from seamless.tsx (Which I heavily updated - not acceptable!!!*/}
+                <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >
+                    <IonCard className='ion-no-margin'>
+
+                        <div className="cardImage relative">
+
+                            {/* image */}
+                            <img src={server?.state?.icon} className={server?.state?.icon ? 'cardMainImage' : 'cardNoImage'}  alt='' />
+
+                            <div className="cardOverlay-content py-1 px-4">
+
+                                <div className='text-md'>{server.state.name}</div>
+
+                                <div className="socialMediaIcon">
+
+                                    {/*discord*/}
+                                    <img hidden={!discordImage} src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
+                                        event.stopPropagation();
+                                        if(server.state.discord_link){
+                                            window.open(server.state.discord_link)
+                                        }}} />
+
+                                    {/*twitter*/}
+                                    <img hidden={!twitterImage} src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
+                                        event.stopPropagation();
+                                        if(server.state.twitter_link){
+                                            window.open(server.state.twitter_link)
+                                        }}} />
+                                </div>
+                            </div>
+
+                        </div>
+                        <IonGrid className="py-4 px-4">
+                            <IonRow hidden={!server?.state?.twitter_followers}>
+                                <IonCol size="8">
+                                    <IonText className='text-white'>Twitter Followers</IonText>
+                                </IonCol>
+                                <IonCol size="4" className="ion-text-end">
+                                    <IonText className="greenText">{server?.state?.twitter_followers || 0 } </IonText>
+                                </IonCol>
+                            </IonRow>
+                            <IonRow hidden={!server?.state?.twitter_interactions}>
+                                <IonCol size="8">
+                                    <IonText className='text-white'>Twitter Interaction</IonText>
+                                </IonCol>
+                                <IonCol size="4" className="ion-text-end">
+                                    <IonText className="BlueText">{server?.state?.twitter_interactions || 0}</IonText>
+                                </IonCol>
+                            </IonRow>
+                            <div className="content-extra-space"></div>
+
+                            <IonRow hidden={!server?.state?.discord_members}>
+                                <IonCol size="8">
+                                    <IonText className='text-white'>Discord Members</IonText>
+                                </IonCol>
+                                <IonCol size="4" className="ion-text-end">
+                                    <IonText className="greenText">{server?.state?.discord_members || 0}</IonText>
+                                </IonCol>
+                            </IonRow>
+                            <IonRow hidden={!server?.state?.discord_online}>
+                                <IonCol size="8">
+                                    <IonText className='text-white'>Online</IonText>
+                                </IonCol>
+                                <IonCol size="4" className="ion-text-end">
+                                    <IonText className="BlueText">{server?.state?.discord_online || 0}</IonText>
+                                </IonCol>
+                            </IonRow>
+                        </IonGrid>
+                    </IonCard>
+                </IonCol>
 
                 <IonCol size-xl="8" size-md="6" size-sm="6" size-xs="12">
                     <form className="space-y-3"
