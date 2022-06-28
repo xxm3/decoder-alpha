@@ -161,7 +161,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         }
 
         try{
-            console.log("discordGuildId  line number 171",server.state);
+            // console.log("discordGuildId  line number 171",server.state);
             const data = await instance.get(`/getAllRoles/${server.state.discordGuildId}`);
             if(data?.data?.data){
                 setWhiteListRequireRole(data.data.data);

@@ -193,7 +193,7 @@ function WhitelistCard({
                         }
                     }}
 
-                     disabled={expired || claiming || claimed || full || !showLive || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed'  }
+                     disabled={expired || claiming || claimed || full || showLive || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed'  }
                     >
                         {getButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>

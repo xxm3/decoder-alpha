@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { instance } from '../../axios';
 import WhitelistCard from '../../components/WhitelistCard';
@@ -20,6 +20,16 @@ function WhitelistMarketplace() {
     const [myDoaWhiteList,setMyDoaWhiteList] = useState<IWhitelist[]>([]);
     const [myClaimWhiteList,setMyClaimWhiteList] = useState<IWhitelist[]>([]);
 
+    const uid = localStorage.getItem('uid')
+    let userId:any
+    useEffect(() => {
+        if(uid){
+            userId = parseInt(uid)
+        }
+    }, [])
+    
+    
+    console.log('userId---',userId)
 
     // get all your WL crap
     const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
@@ -27,14 +37,27 @@ function WhitelistMarketplace() {
             try {
                 setIsLoading(true)
                 const { data: whitelists } = await instance.get<IWhitelist[]>( '/getWhitelistPartnerships/me' );
+
+                console.log('-------------------',whitelists)
                 let whiteListExpire:any = []
                 let whiteListLive:any = []
                 let whiteListMyDoa:any = []
                 let whiteListMyClaim:any = []
-                for(let i = 0; i<whitelists.length; i++){
+                for(let i = 0; i < whitelists.length; i++){
+                    
                     if(whitelists[i].isExpired || !whitelists[i].active){
+                        console.log('55555555555')
                         whiteListExpire.push(whitelists[i])
-                    }else{
+                    }else if(whitelists[i].myLiveDAO === true){
+                        console.log('66666666')
+                        whiteListMyDoa.push(whitelists[i])
+                    }
+                    // else if( whitelists[i].claims[0].user.discordId === userId){
+                    //     console.log('77777')
+                    //     whiteListMyClaim.push(whitelists[i])
+                    // } 
+                    else{
+                        console.log('88888 ')
                         whiteListLive.push(whitelists[i])
                     }
                 }
@@ -45,6 +68,7 @@ function WhitelistMarketplace() {
 
                 return whitelists;
             } catch (error) {
+                console.log('error',error)
 
             }
             finally {
@@ -97,16 +121,15 @@ function WhitelistMarketplace() {
                     </div>
 
                     {/* expire */}
-                    {isTabButton === 'expire' ||  isTabButton === 'myClaim' ?
-                        <div className='flex justify-center mt-4'>
-                            <div className={`${isTabButton === 'myClaim' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive'} ml-2 w-60 h-10 text-xl `} onClick={()=>setIsTabButton('myClaim')}>
-                                {/* <p>View my claim mints ({myClaimWhiteList?.length})</p> */}
-                                <div className="text-sm md:text-base p-2 md:px-4 w-full">View My Claim Mints</div>
-                            <div className=" bg-black/[.4] py-2 px-4 ">{myClaimWhiteList?.length}</div>
-                            </div>
-                        </div> :  ''
+                    {/* {isTabButton === 'expire' ||  isTabButton === 'myClaim' ? */}
+                        {/* <div className='flex justify-center mt-4'> */}
+                            {/* <div className={`${isTabButton === 'myClaim' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive'} ml-2 w-60 h-10 text-xl `} onClick={()=>setIsTabButton('myClaim')}> */}
+                                {/* <div className="text-sm md:text-base p-2 md:px-4 w-full">View My Claim Mints</div> */}
+                            {/* <div className=" bg-black/[.4] py-2 px-4 ">{myClaimWhiteList?.length}</div> */}
+                            {/* </div> */}
+                        {/* </div> :  '' */}
                         
-                    }
+                    {/* } */}
 
                     {/* my Doa live */}
                     {isTabButton === 'myDoa' &&
@@ -142,7 +165,7 @@ function WhitelistMarketplace() {
                     }
 
                     {/* myClaim */}
-                    {isTabButton === 'myClaim' &&
+                    {/* {isTabButton === 'myClaim' &&
                         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                             {
                                 myClaimWhiteList.length > 0 ?  myClaimWhiteList.map((whitelist:any) => {
@@ -151,7 +174,7 @@ function WhitelistMarketplace() {
                             }
                         </div>
                     }
-                 
+                  */}
 
                     {/* no whitelists */}
                     <div className={(whitelists?.length < 1 && !isLoading) ? "flex items-center justify-between w-full" : 'flex items-center justify-end w-full'}>
