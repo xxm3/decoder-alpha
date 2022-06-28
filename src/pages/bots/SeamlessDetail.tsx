@@ -99,7 +99,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     useEffect(() => {
         getWhiteListRole()
         getWhiteListRequireRole()
-    }, [])
+    }, []);
 
     return (
         <IonGrid>
@@ -108,7 +108,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                 <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12" />
 
-                {/* TODO: this is 100% copy/pasted from seamless.tsx (Which I heavily updated - not acceptable!!!*/}
+                {/* TODO ruchita: this is 100% copy/pasted from seamless.tsx (Which I heavily updated - not acceptable!!!*/}
 
                 {/*<IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12">*/}
                 {/*    <IonCard className="ion-no-margin">*/}
@@ -229,7 +229,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     }
                                 }else{
                                     /**
-                                     * TODO: this doesn't work when there is a 400 error - need to tell the user what went wrong
+                                     * TODO ruchita: this doesn't work when there is a 400 error - need to tell the user what went wrong
                                      * get a 400 error when error like "{"errors":[{"value":"456","msg":"Invalid discord id","param":"target_server","location":"body"}]}" - so need to show this
                                      *
                                      * after fixing the error in the form - I click submit again but it doesn't work, nothing in network

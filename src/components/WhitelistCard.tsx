@@ -108,7 +108,7 @@ function WhitelistCard({
 
                     <div className="w-full">
                         <p className="text-lg font-bold">{sourceServer?.name}</p>
-                        <p className="text-sm italic">must be in "{targetServer?.name}" DAO</p>
+                        <p className="text-sm italic">must be member in "{targetServer?.name}" DAO</p>
                         <p className="text-sm italic">
                             Type: Whitelist
                         </p>
@@ -166,7 +166,8 @@ function WhitelistCard({
                         try {
 
                             // submit form!
-                            await instance.post("/whitelistClaims", {
+                            // await instance.post("/whitelistClaims", {
+                            await instance.post("/createWhitelistClaims", {
                                 whitelist_id : id
                             });
                             queryClient.setQueryData(
