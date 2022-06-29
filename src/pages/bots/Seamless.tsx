@@ -50,9 +50,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 <h2 className="ion-no-margin font-bold text-xl"> Seamless - select a DAO</h2>
                                 <p className='ion-no-margin text-sm'>A new way to Request a collaboration with one of our  partnered servers, select the server you wish to collaborate with in list below, and fill out the collaboration form on the next page.</p>
                             </div>
-                            <div className={`seamless-tab-btn-active ${selectMultiple ? 'w-10' : 'w-40'} h-10`} onClick={()=> setSelectMultiple((n)=>!n)}>
+                            {/* <div className={`seamless-tab-btn-active ${selectMultiple ? 'w-10' : 'w-40'} h-10`} onClick={()=> setSelectMultiple((n)=>!n)}>
                                 {selectMultiple ? 'X' : 'Select Multiple'}
-                            </div>
+                            </div> */}
                         </div>
                     </IonCol>
 
@@ -145,10 +145,10 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         </IonCol>
                                                         </IonRow>
                                                         <IonRow>
-                                                        <IonCol size="12">
-                                                        <IonCheckbox  onIonChange={e => console.log('eeee',e.detail.checked)} />
+                                                        {/* <IonCol size="12"> */}
+                                                        {/* <IonCheckbox  onIonChange={e => console.log('eeee',e.detail.checked)} /> */}
                                                             {/* <div className='' style={{background:'red'}}>Hello</div> */}
-                                                        </IonCol>
+                                                        {/* </IonCol> */}
                                                     </IonRow>
                                                 </IonGrid>
                                             </IonCard>
