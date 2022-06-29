@@ -166,7 +166,7 @@ function WhitelistCard({
 
                             // success!
 
-                            // setIsExploding(true);
+                            setIsExploding(true);
                             present({
                                 message: 'Whitelist claimed successfully! You are now whitelisted in ' + sourceServer.name,
                                 color: 'success',

@@ -63,19 +63,15 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     // const [server, setServer] = useState<Server | null>(null);
     const { serverId } = useParams<{serverId : string}>();
     const [addServerFlag, setAddServerFlag] = useState(false)
-
-    const [discordLink,setDiscordLink] = useState<any>()
-    const [twitterLink,setTwitterLink] = useState<any>()
-    const [description,setDescription] = useState<any>()
-    const [image,setImage] = useState<any>()
-
     const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, } = useForm<FormFields, any>();
+    const [isNoBot, setIsNoBot] = useState<boolean>(false)
 
-
+    
 
     /**
      * Use Effects
      */
+
      useEffect(() => {
         if(!localStorage.getItem('role')){
             history.push('/manageserver')
@@ -94,73 +90,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     }, [window.innerWidth]);
 
-    const submitWhitelist = () => {
-        const formData = new FormData();
-        if(image && discordLink && twitterLink && description){
-            formData.append('image', image)
-            formData.append('discordLink', discordLink)
-            formData.append('twitterLink', twitterLink)
-            formData.append('description', description)
-
-            setIsLoading(true)
-            instance .post(`/updateGuild/${serverId}`, formData, { headers: { 'Content-Type': 'application/json', }, })
-            .then(({ data }) => {
-                if(data.success){
-                    present({
-                        message: data.message,
-                        color: 'success',
-                        duration: 5000,
-                        buttons: [{ text: 'X', handler: () => dismiss() }],
-                    });
-                }else{
-                    let msg = '';
-                    if (data?.message) {
-                        msg = String(data.message);
-                    } else {
-                        msg = 'Unable to connect. Please try again later';
-                    }
-                    present({
-                        message: msg,
-                        color: 'danger',
-                        duration: 5000,
-                        buttons: [{ text: 'X', handler: () => dismiss() }],
-                    });
-                }
-            })
-            .catch((error:any) => {
-
-                let msg = '';
-                if (error?.response) {
-                    msg = String(error.response.data.message);
-                } else {
-                    msg = 'Unable to connect. Please try again later';
-                }
-                present({
-                    message: msg,
-                    color: 'danger',
-                    duration: 5000,
-                    buttons: [{ text: 'X', handler: () => dismiss() }],
-                });
-
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-
-        }else{
-            present({
-                message: 'Please fill in the above',
-                color: 'danger',
-                duration: 5000,
-                buttons: [{ text: 'X', handler: () => dismiss() }],
-            });
-        }
-        
-
-    }
+   
 
     // get guilds
     useEffect(() => {
+
+        if(location.state){
+            setIsNoBot(true)
+        }else{
+            setIsNoBot(false)
+        }
 
         if (serverId) {
             setIsLoading(true);
@@ -432,7 +371,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     {
                         showInstruction ?
                             <div>
-
                                 <b>General Instructions</b>
                                 <ul className='list-disc ml-5 leading-9'>
                                     <li>Make a new private channel in your Discord. If doing the "Mints" package, name the channel "daily-mints" or whatever you want. Optionally make "1h-mint-info" if you want that as well. Or if you are doing the "Fox token" package, make a channel for the fox token names, and another channel for where users can enter their own bot commands</li>
@@ -468,7 +406,53 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 </div>
             </div>
 
-            <div className="flex flex-row justify-center w-full mt-6">
+            { isNoBot ?  
+                <div className="my-3 relative bg-yellow-300/25 p-5 rounded-xl">
+                <div className="text-md">
+                    <div className="mb-2 flex items-center w-full justify-between">
+                        <div className="flex items-center">
+                            <span className=" bg-yellow-500 w-7 h-7 flex items-center justify-center font-bold rounded-full mr-2">
+                                !
+                            </span>
+                            <span className="text-yellow-500 text-lg font-bold"> Bot Invite </span>
+                        </div>
+                    </div>
+
+                    <p>
+                        Your server will need to first have our Discord
+                        Bot invited to it. Click one of the below links,
+                        then in the "Add to Server" on the bottom,
+                        select your server. Then click "Continue", then
+                        "Authorize"
+                    </p>
+                    <ul className="list-disc ml-8 mt-3">
+                        <li>
+                            If using the "Daily Mints", "Fox Token", or
+                            "Magic Eden" package,{' '}
+                            <a className="font-bold underline cursor-pointer" href="https://discord.com/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20applications.commands%20bot%20guilds.members.read" > then click here </a>{' '}
+                            to add the Discord Bot to your server{' '}
+                        </li>
+                        <li>
+                            If you are a new mint and are using Seamless
+                            (our whitelist bot where we will give users
+                            whitelist roles if they are in a DAO and win
+                            a fcfs/giveaway),{' '}
+                            <a
+                                className="underline cursor-pointer font-bold"
+                                href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=268437504&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=applications.commands%20guilds%20guilds.members.read%20bot%20identify"
+                            >
+                                then click here
+                            </a>{' '}
+                            to add the Discord Bot to your server. This
+                            bot also supports all of the packages from
+                            the first link
+                        </li>
+                    </ul>
+                </div>
+                </div>
+            
+            
+            : <div className="flex flex-row justify-center w-full mt-6">
                 {/*mt-6*/}
                 <div className='flex flex-col lg:flex-row gap-6 w-full'>
 
@@ -666,7 +650,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> }
+            
 
             {/*Seamless button...*/}
             <br/>
@@ -731,30 +716,29 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                             } catch (error) {
                                 console.error(error);
-
+                                
                                 if (isAxiosError(error)) {
-                                    const { response: { data } = { errors: [] } } =
-                                        error as AxiosError<{ errors: { location: string; msg: string; param: string; }[]; }>;
+                                    const { response: { data } = { errors: [] } } = error as AxiosError<{ errors: { location: string; msg: string; param: string; }[]; }>;
 
-                                    // if (!data || data.hasOwnProperty('error')) {
-                                    //     present({
-                                    //         message: ( data as unknown as { body: string } ).body,
-                                    //         color: 'danger',
-                                    //         duration: 10000,
-                                    //     });
-                                    // } else if (data.hasOwnProperty('errors')) {
-                                    //     data.errors.forEach(({ param, msg }) => {
-                                    //         if (param !== 'source_server') {
-                                    //             setError( param as keyof FormFields, { message: msg, type: 'custom',});
-                                    //         } else {
-                                    //             present({
-                                    //                 message: msg,
-                                    //                 color: 'danger',
-                                    //                 duration: 10000,
-                                    //             });
-                                    //         }
-                                    //     });
-                                    // }
+                                    if (!data || data.hasOwnProperty('error')) {
+                                        present({
+                                            message: ( data as unknown as { body: string } ).body,
+                                            color: 'danger',
+                                            duration: 10000,
+                                        });
+                                    } else if (data.hasOwnProperty('errors')) {
+                                        data.errors.forEach(({ param, msg }) => {
+                                            if (param !== 'source_server') {
+                                                setError( param as keyof FormFields, { message: msg, type: 'custom',});
+                                            } else {
+                                                present({
+                                                    message: msg,
+                                                    color: 'danger',
+                                                    duration: 10000,
+                                                });
+                                            }
+                                        });
+                                    }
                                 }else{
                                     present({
                                         message: 'An error occurred, please try again later or contact us',

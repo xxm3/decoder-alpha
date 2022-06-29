@@ -44,15 +44,15 @@ function WhitelistMarketplace() {
                         whiteListExpire.push(whitelists[i])
                     }else if(whitelists[i].myLiveDAO === true){
                         whiteListMyDoa.push(whitelists[i])
+                    }else if(!whitelists[i].isExpired){
+                        whiteListLive.push(whitelists[i])
                     } else if( whitelists[i].claims.length > 0){
                         if(whitelists[i].claims[0].user){
                             if(whitelists[i].claims[0].user.discordId === userId){
                                 whiteListMyClaim.push(whitelists[i])
                             }
                         }
-                    } else{
-                        whiteListLive.push(whitelists[i])
-                    }
+                    } 
                 }
                 setLiveWhiteList(whiteListLive);
                 setExpireWhiteList(whiteListExpire);

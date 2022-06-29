@@ -1,10 +1,8 @@
 import React, { useEffect, useMemo ,useState} from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
-import { IonLabel, IonButton, useIonToast, IonGrid, IonRow, IonCol, IonCard, IonText, IonItem, IonSelect, IonSelectOption, IonInput, IonTextarea, IonDatetime, IonSpinner, } from '@ionic/react';
+import { IonLabel, IonButton, useIonToast, IonGrid, IonRow, IonCol, IonCard, IonItem, IonSelect, IonSelectOption, IonInput, IonTextarea, IonDatetime, IonSpinner, } from '@ionic/react';
 import './SeamlessDetail.scss';
-import discordImage from '../../images/discord.png';
-import twitterImage from '../../images/twitter.png';
 import {  useHistory, useLocation, useParams } from 'react-router';
 import { Controller, FieldValues, useForm } from 'react-hook-form';
 import isAxiosError from '../../util/isAxiosError';
@@ -12,7 +10,7 @@ import { AxiosError } from 'axios';
 import { TextFieldTypes } from '@ionic/core';
 import { IWhitelist } from '../../types/IWhitelist';
 import { useQuery } from 'react-query';
-import moment from 'moment';
+import BotServerCard from './components/BotServerCard';
 
 /**
  * The page they see when they've clicked "initiate seamless" ... then clicked on a guild
@@ -41,7 +39,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const { serverId } = useParams<any>();
 
     let history = useHistory();
-    const [formField,setFromFiled] = useState<FormFields>({
+    const [formField,setFromFiled] = useState<any>({
         image: '',
         target_server:'',
         max_users: '',
@@ -52,6 +50,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         required_role: '',
         twitter: '',
         discordInvite:'',
+        magicEdenUpvoteUrl:'',
         })
     const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, } = useForm<FormFields, any>();
     const [present] = useIonToast();
@@ -60,19 +59,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [whiteListRequireRole,setWhiteListRequireRole] = useState<any>([])
     const [isLoading, setIsLoading] = useState(false);
 
-
-    // useEffect(() => {
-    //     const subscription = watch((value, { name, type }) => console.log("watch***********************",value, name, type));
-    //     return () => subscription.unsubscribe();
-    //   }, []);
-
-useEffect(() => {
-    console.log("formField*&*****************************",formField)
-    reset(formField);
-}, [formField])
-
-
-
+    useEffect(() => {
+        reset(formField);
+    }, [formField])
 
     const todayEnd = useMemo(() => {
         const date = new Date( + now + 86400 * 1000 );
@@ -94,12 +83,9 @@ useEffect(() => {
         const imgExt = getUrlExtension(imgUrl);
         const response = await fetch(imgUrl);
         const blob = await response.blob();
-        console.log("blob**********",blob)
         fileObject = new File([blob], "botProfile." + imgExt, { type: blob.type, });
         return fileObject
     }
-
-
 
     const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
         async () => {
@@ -108,17 +94,17 @@ useEffect(() => {
                 const { data: whitelists } = await instance.get<IWhitelist[]>( '/getWhitelistPartnerships/me' );
                 let imagePath = await onImageEdit(whitelists[whitelists.length-1]?.image);
                 setFromFiled({
-                    image: imagePath || '',
-                    target_server:'',
-                    max_users: whitelists[whitelists.length-1]?.max_users || '',
-                    // expiration_date: moment(whitelists[whitelists.length-1]?.expiration_date).add(1,'days').format('ll'),
+                    // image: imagePath || '',
+                    // target_server:'',
+                    // max_users: whitelists[whitelists.length-1]?.max_users || '',
                     expiration_date:whitelists[whitelists.length-1]?.expiration_date || '',
                     type:whitelists[whitelists.length-1]?.type || '',
                     whitelist_role: whitelists[whitelists.length-1]?.whitelist_role || '',
                     description: whitelists[whitelists.length-1]?.description || '',
-                    required_role: whitelists[whitelists.length-1]?.required_role || '',
+                    // required_role: whitelists[whitelists.length-1]?.required_role || '',
                     twitter: whitelists[whitelists.length-1]?.twitter?.toString() || '',
-                    discordInvite:whitelists[whitelists.length-1]?.discordInvite?.toString() || '',
+                    // discordInvite:whitelists[whitelists.length-1]?.discordInvite?.toString() || '',
+                    // magicEdenUpvoteUrl:whitelists[whitelists.length-1]?.magicEdenUpvoteUrl?.toString() || '',
                     })
                 return whitelists;
             } catch (error) {
@@ -141,7 +127,6 @@ useEffect(() => {
         }
 
         try{
-            // console.log("server id  line number 147",serverId);
             const  data = await instance.get(`/getAllRoles/${serverId}`);
             if(data?.data?.data){
                 setWhiteListRole(data.data.data);
@@ -165,7 +150,6 @@ useEffect(() => {
         }
 
         try{
-            // console.log("discordGuildId  line number 171",server.state);
             const data = await instance.get(`/getAllRoles/${server.state.discordGuildId}`);
             if(data?.data?.data){
                 setWhiteListRequireRole(data.data.data);
@@ -188,80 +172,14 @@ useEffect(() => {
 
     return (
         <IonGrid>
+            
             <IonRow>
                 <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - fill out whitelist details</h2> </IonCol>
-
+                
                 <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12" />
-
-                {/* TODO: this is 100% copy/pasted from seamless.tsx (Which I heavily updated - not acceptable!!!*/}
+                
                 <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >
-                    <IonCard className='ion-no-margin'>
-
-                        <div className="cardImage relative">
-
-                            {/* image */}
-                            <img src={server?.state?.icon} className={server?.state?.icon ? 'cardMainImage' : 'cardNoImage'}  alt='' />
-
-                            <div className="cardOverlay-content py-1 px-4">
-
-                                <div className='text-md'>{server.state.name}</div>
-
-                                <div className="socialMediaIcon">
-
-                                    {/*discord*/}
-                                    <img hidden={!discordImage} src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
-                                        event.stopPropagation();
-                                        if(server.state.discord_link){
-                                            window.open(server.state.discord_link)
-                                        }}} />
-
-                                    {/*twitter*/}
-                                    <img hidden={!twitterImage} src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
-                                        event.stopPropagation();
-                                        if(server.state.twitter_link){
-                                            window.open(server.state.twitter_link)
-                                        }}} />
-                                </div>
-                            </div>
-
-                        </div>
-                        <IonGrid className="py-4 px-4">
-                            <IonRow hidden={!server?.state?.twitter_followers}>
-                                <IonCol size="8">
-                                    <IonText className='text-white'>Twitter Followers</IonText>
-                                </IonCol>
-                                <IonCol size="4" className="ion-text-end">
-                                    <IonText className="greenText">{server?.state?.twitter_followers || 0 } </IonText>
-                                </IonCol>
-                            </IonRow>
-                            <IonRow hidden={!server?.state?.twitter_interactions}>
-                                <IonCol size="8">
-                                    <IonText className='text-white'>Twitter Interaction</IonText>
-                                </IonCol>
-                                <IonCol size="4" className="ion-text-end">
-                                    <IonText className="BlueText">{server?.state?.twitter_interactions || 0}</IonText>
-                                </IonCol>
-                            </IonRow>
-                            <div className="content-extra-space"></div>
-
-                            <IonRow hidden={!server?.state?.discord_members}>
-                                <IonCol size="8">
-                                    <IonText className='text-white'>Discord Members</IonText>
-                                </IonCol>
-                                <IonCol size="4" className="ion-text-end">
-                                    <IonText className="greenText">{server?.state?.discord_members || 0}</IonText>
-                                </IonCol>
-                            </IonRow>
-                            <IonRow hidden={!server?.state?.discord_online}>
-                                <IonCol size="8">
-                                    <IonText className='text-white'>Online</IonText>
-                                </IonCol>
-                                <IonCol size="4" className="ion-text-end">
-                                    <IonText className="BlueText">{server?.state?.discord_online || 0}</IonText>
-                                </IonCol>
-                            </IonRow>
-                        </IonGrid>
-                    </IonCard>
+                    <BotServerCard serverData={server} />
                 </IonCol>
 
                 <IonCol size-xl="8" size-md="6" size-sm="6" size-xs="12">
@@ -283,7 +201,6 @@ useEffect(() => {
 
                             try {
                                 await instance.post( '/createNewWhitelistPartnership', formData );
-
                                 history.push(`/whitelistmarketplace`);
                                 present({
                                     message: 'Whitelist partnership created successfully!',
@@ -480,7 +397,6 @@ useEffect(() => {
                                     control={control}
                                     rules={{ required: true, }}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) =>{
-                                        console.log("value",value)
                                         return(
                                             <>
                                                 <IonInput
