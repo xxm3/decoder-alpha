@@ -189,7 +189,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                 <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12" />
 
-                {/* TODO: this is 100% copy/pasted from seamless.tsx (Which I heavily updated - not acceptable!!!*/}
+                {/* TODO ruchita: this is 100% copy/pasted from seamless.tsx (Which I heavily updated - not acceptable!!!*/}
                 <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >
                     <IonCard className='ion-no-margin'>
 
@@ -200,7 +200,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                             <div className="cardOverlay-content py-1 px-4">
 
-                                <div className='text-md'>{server.state.name}</div>
+                                <div className='text-md'>{server?.state?.name}</div>
 
                                 <div className="socialMediaIcon">
 
@@ -556,7 +556,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 value={value}
                                                 onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                                 type="url"
-                                                required
+                                                // required
                                                 name={name}
                                                 ref={ref}
                                                 onIonBlur={onBlur}

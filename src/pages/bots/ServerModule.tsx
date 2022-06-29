@@ -141,7 +141,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 buttons: [{ text: 'X', handler: () => dismiss() }],
             });
         }
-        
+
 
     }
 
@@ -703,7 +703,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     <IonTextarea placeholder="Description of your DAO" onIonChange={e => setDescription(e.detail.value!)}/>
                 </IonItem>
                 <div className='mb-5 flex-row flex items-center'>
-                     {/* <IonLabel className="text-white">Image</IonLabel> */}
+                      <IonLabel className="text-white">Image to represent your DAO</IonLabel>
                     <IonItem className="ion-item-wrapper mt-2">
                         <input type="file" id="img" name="img" accept="image/png, image/gif, image/jpeg" onChange={(e)=>setImage(e.target.files?.[0])}/>
                     </IonItem>
