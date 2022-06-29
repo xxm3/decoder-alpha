@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
-import { IonButton, IonGrid, IonRow, IonCol, IonCard,  IonText,} from '@ionic/react';
+import { IonButton, IonGrid, IonRow, IonCol, IonCard,  IonText, IonCheckbox,} from '@ionic/react';
 import './ManageServer.scss';
 import { useHistory, useParams } from 'react-router';
 import Loader from '../../components/Loader';
@@ -21,6 +21,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const { serverId } = useParams<any>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [serverList, setServerList] = useState<any>([]);
+    const [selectMultiple, setSelectMultiple] = useState<boolean>(false)
 
     // this loads up all the discords etc
     const { data: servers = [] } = useQuery<any>(  ['allServers'],
@@ -44,14 +45,15 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             <IonGrid>
                 <IonRow>
                     <IonCol size="12">
-                        <h2 className="ion-no-margin font-bold text-xl"> Seamless - select a DAO</h2>
-
-                        <p className='ion-no-margin'>
-                            A new way to Request a collaboration with one of our partnered servers - select the server you wish to collaborate with in list below, and fill out the collaboration form on the next page.
-                            <br/>
-                            Please make sure that you invited the correct SOL Decoder Bot to your server! You must use the SECOND link when on the <a href="https://soldecoder.app/manageserver" className="underline cursor-pointer">Select a Server</a> page
-                        </p>
-
+                    <div className='flex flex-row justify-between items-center'>
+                            <div className='w-4/5'>
+                                <h2 className="ion-no-margin font-bold text-xl"> Seamless - select a DAO</h2>
+                                <p className='ion-no-margin text-sm'>A new way to Request a collaboration with one of our  partnered servers, select the server you wish to collaborate with in list below, and fill out the collaboration form on the next page.</p>
+                            </div>
+                            <div className={`seamless-tab-btn-active ${selectMultiple ? 'w-10' : 'w-40'} h-10`} onClick={()=> setSelectMultiple((n)=>!n)}>
+                                {selectMultiple ? 'X' : 'Select Multiple'}
+                            </div>
+                        </div>
                     </IonCol>
 
                     <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12"></IonCol>
@@ -140,6 +142,12 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                                 history.push({pathname:`/seamlessdetail/${serverId}`,state:server})} }>
                                                                 Initiate Seamless
                                                             </IonButton>
+                                                        </IonCol>
+                                                        </IonRow>
+                                                        <IonRow>
+                                                        <IonCol size="12">
+                                                        <IonCheckbox  onIonChange={e => console.log('eeee',e.detail.checked)} />
+                                                            {/* <div className='' style={{background:'red'}}>Hello</div> */}
                                                         </IonCol>
                                                     </IonRow>
                                                 </IonGrid>

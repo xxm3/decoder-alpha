@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
-import { IonItem, IonButton, IonLabel, useIonToast, IonInput, IonTextarea } from '@ionic/react';
+import { IonItem, IonButton, IonLabel, useIonToast, IonInput, IonTextarea, IonCard, IonSpinner } from '@ionic/react';
 import { Backdrop, CircularProgress, Grid, Switch, } from '@material-ui/core';
 import { Tooltip } from "react-tippy";
 import './ServerModule.scss';
@@ -11,6 +11,10 @@ import { Server } from '../../types/Server';
 import { css } from '@emotion/react';
 
 import Addserver from './components/Addserver';
+import { Controller, FieldValues, useForm } from 'react-hook-form';
+import isAxiosError from '../../util/isAxiosError';
+import { AxiosError } from 'axios';
+import { TextFieldTypes } from '@ionic/core';
 
 /**
  * The page they see when they click "Add" on one of their servers
@@ -21,6 +25,13 @@ interface LocationParams {
     state: { server: Server };
     search: string;
     hash: string;
+}
+
+interface FormFields {
+    image: File & { path: string;};
+    description: string;
+    twitterLink: string;
+    discordLink: string;
 }
 
 const ServerModule: React.FC<AppComponentProps> = () => {
@@ -57,6 +68,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [twitterLink,setTwitterLink] = useState<any>()
     const [description,setDescription] = useState<any>()
     const [image,setImage] = useState<any>()
+
+    const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, } = useForm<FormFields, any>();
+
 
 
     /**
@@ -692,32 +706,169 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             </div>
             <p>Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about.</p>
 
+            
             <div>
-                <IonItem className="ion-item-wrapper mt-1">
-                    <IonInput placeholder="Discord Invite Link (never expires, no invite limit)" onIonChange={e => setDiscordLink(e.detail.value!)}/>
-                </IonItem>
-                <IonItem className="ion-item-wrapper mt-1">
-                    <IonInput placeholder="Twitter Link" onIonChange={e => setTwitterLink(e.detail.value!)}/>
-                </IonItem>
-                <IonItem className="ion-item-wrapper mt-1">
-                    <IonTextarea placeholder="Description of your DAO" onIonChange={e => setDescription(e.detail.value!)}/>
-                </IonItem>
-                <div className='mb-5 flex-row flex items-center'>
-                     {/* <IonLabel className="text-white">Image</IonLabel> */}
-                    <IonItem className="ion-item-wrapper mt-2">
-                        <input type="file" id="img" name="img" accept="image/png, image/gif, image/jpeg" onChange={(e)=>setImage(e.target.files?.[0])}/>
-                    </IonItem>
-                </div>
-                <div className="mt-4 mb-5 w-full flex justify-center" hidden={!devMode}>
-                    <IonButton  css={css`
-                        --padding-top: 25px;
-                        --padding-bottom: 25px;
-                        --padding-end: 20px;
-                        --padding-start: 20px;
-                    `} onClick={() => submitWhitelist()}>
-                        Submit
-                    </IonButton>
-                </div>
+                <form className="space-y-3"
+                     // when submitting the form...
+                     onSubmit={  handleSubmit(async (data) => {
+                            const { image, ...rest } = data;
+                            const rawData = { ...rest, };
+                            const formData = new FormData();
+
+                            Object.entries(rawData).forEach(([key, value]) => {
+                                if (value) formData.append(key, value as string);
+                            });
+                            formData.append('image', image);
+
+                            try {
+                                await instance.post( `/updateGuild/${serverId}`, formData, { headers: { 'Content-Type': 'application/json', }, } );
+                                present({
+                                    message: 'Guild data created successfully!',
+                                    color: 'success',
+                                    duration: 10000,
+                                });
+                                reset();
+
+                            } catch (error) {
+                                console.error(error);
+
+                                if (isAxiosError(error)) {
+                                    const { response: { data } = { errors: [] } } =
+                                        error as AxiosError<{ errors: { location: string; msg: string; param: string; }[]; }>;
+
+                                    // if (!data || data.hasOwnProperty('error')) {
+                                    //     present({
+                                    //         message: ( data as unknown as { body: string } ).body,
+                                    //         color: 'danger',
+                                    //         duration: 10000,
+                                    //     });
+                                    // } else if (data.hasOwnProperty('errors')) {
+                                    //     data.errors.forEach(({ param, msg }) => {
+                                    //         if (param !== 'source_server') {
+                                    //             setError( param as keyof FormFields, { message: msg, type: 'custom',});
+                                    //         } else {
+                                    //             present({
+                                    //                 message: msg,
+                                    //                 color: 'danger',
+                                    //                 duration: 10000,
+                                    //             });
+                                    //         }
+                                    //     });
+                                    // }
+                                }else{
+                                    present({
+                                        message: 'An error occurred, please try again later or contact us',
+                                        color: 'danger',
+                                        duration: 10000,
+                                    });
+                                }
+                            }
+                        })}>
+
+                            <div className='mb-5'>
+                                <IonItem className="ion-item-wrapper mt-1">
+                                    <Controller
+                                    name="discordLink"
+                                    control={control}
+                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                        <>
+                                            <IonInput
+                                                value={value}
+                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                type="url"
+                                                required
+                                                name={name}
+                                                ref={ref}
+                                                onIonBlur={onBlur}
+                                                placeholder='Discord Invite Link (never expires, no invite limit)' />
+                                            <p className="formError"> {error?.message} </p>
+                                        </>
+                                    )} />
+                                </IonItem>
+                            </div>
+
+                            <div className='mb-5'>
+                                <IonItem className="ion-item-wrapper mt-1">
+                                    <Controller
+                                    name="twitterLink"
+                                    control={control}
+                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                        <>
+                                            <IonInput
+                                                value={value}
+                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                type="url"
+                                                required
+                                                name={name}
+                                                ref={ref}
+                                                onIonBlur={onBlur}
+                                                placeholder='Twitter Link' />
+                                            <p className="formError"> {error?.message} </p>
+                                        </>
+                                    )} />
+                                </IonItem>
+                            </div>
+                            
+
+                            <div>
+                                <IonItem className="ion-item-wrapper mt-1">
+                                    <Controller
+                                    name="description"
+                                    control={control}
+                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                        <>
+                                            <IonTextarea
+                                                value={value}
+                                                onIonChange={(e:any) => {
+                                                    ( e.target as HTMLInputElement ).value = e.detail.value as string;
+                                                     onChange(e);
+                                                    }}
+                                                required
+                                                name={name}
+                                                ref={ref}
+                                                onIonBlur={onBlur}
+                                                placeholder='Description'
+                                                />
+                                            <p className="formError"> {error?.message} </p>
+                                        </>
+                                    )}/>
+
+                                </IonItem>
+                            </div>
+                            <div className='mb-5 mt-1 w-1/2'>
+                                    <Controller
+                                    name="image"
+                                    control={control}
+                                    rules={{ required: true, }}
+                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                        <>
+                                            <IonInput
+                                                value={value as unknown as string}
+                                                onIonChange={(e) => {
+                                                    const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
+                                                    const file = target .files?.[0] as FieldValues['image'];
+                                                    if (file)
+                                                        file.path =  URL.createObjectURL(file);
+                                                    ( e.target as HTMLInputElement ).value = file as unknown as string;
+                                                    onChange(e);
+                                                }}
+                                                name={name}
+                                                ref={ref}
+                                                required
+                                                onIonBlur={onBlur}
+                                                type={'file' as TextFieldTypes}
+                                                accept="image" />
+                                            <p className="formError"> {error?.message} </p>
+                                        </>
+                                    )} />
+                              
+                            </div>
+                        <div className=' mt-4 mb-5 w-full flex justify-center' hidden={!devMode}>
+                            <IonButton className='w-32 h-12' type={'submit'} disabled={isSubmitting}>
+                                {isSubmitting ? ( <IonSpinner /> ) : ('Submit')}
+                            </IonButton>
+                        </div>
+                    </form>
             </div>
 
         </>
