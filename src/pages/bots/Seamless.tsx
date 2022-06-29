@@ -48,7 +48,12 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                     <div className='flex flex-row justify-between items-center'>
                             <div className='w-4/5'>
                                 <h2 className="ion-no-margin font-bold text-xl"> Seamless - select a DAO</h2>
-                                <p className='ion-no-margin text-sm'>A new way to Request a collaboration with one of our  partnered servers, select the server you wish to collaborate with in list below, and fill out the collaboration form on the next page.</p>
+                        <p className='ion-no-margin'>
+                            A new way to Request a collaboration with one of our partnered servers - select the server you wish to collaborate with in list below, and fill out the collaboration form on the next page.
+                            <br/>
+                            Please make sure that you invited the correct SOL Decoder Bot to your server! You must use the SECOND link when on the <a href="https://soldecoder.app/manageserver" className="underline cursor-pointer">Select a Server</a> page
+                        </p>
+
                             </div>
                             {/* <div className={`seamless-tab-btn-active ${selectMultiple ? 'w-10' : 'w-40'} h-10`} onClick={()=> setSelectMultiple((n)=>!n)}>
                                 {selectMultiple ? 'X' : 'Select Multiple'}
