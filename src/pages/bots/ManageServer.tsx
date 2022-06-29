@@ -147,7 +147,10 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                             </div>
 
                             <p>
-                                Your server will need to first have our Discord
+                                If you are an existing DAO that just wants to receive whitelists via Seamless, then click 'ADD' on your server below to fill out your profile.
+                                <br/><br/>
+                                If you are paying for our Bots, or are a new mint,
+                                your server will need to first have our Discord
                                 Bot invited to it. Click one of the below links,
                                 then in the "Add to Server" on the bottom,
                                 select your server. Then click "Continue", then
