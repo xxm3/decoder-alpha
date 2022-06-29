@@ -32,6 +32,7 @@ interface FormFields {
     description: string;
     twitterLink: string;
     discordLink: string;
+    magicEdenLink: string;
 }
 
 const ServerModule: React.FC<AppComponentProps> = () => {
@@ -817,6 +818,26 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         </>
                                     )}/>
 
+                                </IonItem>
+                            </div>
+                            <div className='mb-5'>
+                                <IonItem className="ion-item-wrapper mt-1">
+                                    <Controller
+                                    name="magicEdenLink"
+                                    control={control}
+                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                        <>
+                                            <IonInput
+                                                value={value}
+                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                type="url"
+                                                name={name}
+                                                ref={ref}
+                                                onIonBlur={onBlur}
+                                                placeholder='Magic Eden Link' />
+                                            <p className="formError"> {error?.message} </p>
+                                        </>
+                                    )} />
                                 </IonItem>
                             </div>
                             <div className='mb-5 mt-1 w-1/2'>
