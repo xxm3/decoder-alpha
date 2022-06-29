@@ -407,6 +407,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 </div>
             </div>
 
+            // TODO: remove
             { isNoBot ?  
                 <div className="my-3 relative bg-yellow-300/25 p-5 rounded-xl">
                 <div className="text-md">
