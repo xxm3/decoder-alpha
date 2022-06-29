@@ -87,9 +87,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
           .pop()
           .trim();
       }
-    
+
     const onImageEdit = async (imgUrl: any) => {
-        var imgExt = getUrlExtension(imgUrl);
+        const imgExt = getUrlExtension(imgUrl);
         const response = await fetch(imgUrl);
         const blob = await response.blob();
         fileObject = new File([blob], "botProfile." + imgExt, { type: blob.type, });
@@ -179,7 +179,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     useEffect(() => {
         getWhiteListRole();
         getWhiteListRequireRole();
-        
+
     }, [])
 
     return (
@@ -341,7 +341,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             <IonSelect   onIonChange={(e) => {
                                                  ( e.target as HTMLInputElement ).value = e.detail.value;
                                                  onChange(e);
-                                                 }} 
+                                                 }}
                                                   name={name} value={formFieldEdit.type ? value : formField.type}  onIonBlur={onBlur} ref={ref} >
                                                 <IonSelectOption value="fcfs"> FCFS </IonSelectOption>
                                                 <IonSelectOption  value="raffle" disabled  > Raffle (Coming soon) </IonSelectOption>
@@ -454,7 +454,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 ref={ref}
                                                 placeholder='Select a Required Role'
                                                 value={value}
-                                                required 
+                                                required
                                                 >
                                                     <option value=''>Select a Required Role</option>
                                                     {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{ return (<option  key={role.id}  value={role.id} > {role.name} </option>)} )}

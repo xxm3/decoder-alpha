@@ -207,7 +207,6 @@ This file will be used for keeping track of all the stuff that's tested/untested
     > A bug was encountered, `TypeError: Cannot read properties of undefined (reading 'token')`; and fixed.
 
 ### Token Alerts
-
 Token alerts were tested on:
 
 -   Test Vehn Dojo
@@ -220,7 +219,6 @@ Tests on Server didn't post any alerts. This could be due to the fact that all t
 > Further testing is recommended at a later point on a test server.
 
 ### Webhook
-
 Token related webhooks are now properly displaying the charts
 ![Screenshot of webhook message](https://cdn.discordapp.com/attachments/975811003554086933/979483567652479036/unknown.png)
 
@@ -230,9 +228,43 @@ This was tested in Test Vehn Dojo
 ## Admin & Seamless
 
 ### /manageserver
-
 -   Guilds where you're owner are being displayed properly
 -   Registering a guild as an admin works fine
 -   Fetching roles and other info for initiating whitelists is working properly
 -   Initiating whitelists is working properly
 -   `/whitelistmarketplace` page is displaying wls properly
+
+-----
+-----
+
+## Assassin Bot
+
+### What's New?
+- Endpoints for configuring assassin module
+- Message url whitelist detection
+- Logs for actions that bot takes
+- some more stuff, for more info: https://gitlab.com/nft-relay-group/discord-bots/-/issues/28
+
+### What to test/How to test?
+#### Endpoints
+Refer to `docs/URLS.md` file for how to test the endpoints
+
+- `POST /guilds/:guildId/setTimeoutDuration`
+- `POST /guilds/:guildId/updateWhitelistedDomains`
+- `POST /guilds/:guildId/updateWhitelistCheckChannels`
+- `POST /guilds/:guildId/updateSecurityMode`
+- `POST /guilds/:guildId/updateWhitelistViolentModeRole`
+- `POST /guilds/:guildId/logs`
+- `POST /guilds/:guildId/updateSimulationMode`
+
+#### Message Parser
+> Before you test this, make sure to enable simulation mode using `POST /guilds/:guildId/updateSimulationMode`
+
+Create a list of whitelisted domains (`POST /guilds/:guildId/updateWhitelistedDomains`) and configure channels to scan (`POST /guilds/:guildId/updateWhitelistCheckChannels`).
+
+Now send a message containing a url that's not whitelisted in one of the channels you added. Check `guild_logs` model to see if the action was logged - if yes; then message parser events are working fine.
+
+You can try different modes by switching between `mild`/`violent` mode using `POST /guilds/:guildId/updateSecurityMode`; If you switch to `violent` mode, make sure to set `POST /guilds/:guildId/updateWhitelistViolentModeRole`.
+
+Feel free to mention me if you have any queries regarding any of the above stuff.
+
