@@ -21,9 +21,9 @@ import moment from 'moment';
  */
 
 interface FormFields {
-    image: File & { path: string;};
-    target_server: number;
-    max_users: number;
+    image: File & { path: string;} | '';
+    target_server: number | '';
+    max_users: number | '';
     expiration_date: string;
     type: 'raffle' | 'fcfs';
     whitelist_role: string;
@@ -31,7 +31,7 @@ interface FormFields {
     required_role: string;
     twitter: string;
     discordInvite:string;
-    magicEdenUpvoteUrl:string;
+    magicEdenUpvoteUrl?:string;
 }
 const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
@@ -41,6 +41,18 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const { serverId } = useParams<any>();
 
     let history = useHistory();
+    const [formField,setFromFiled] = useState<FormFields>({
+        image: '',
+        target_server:'',
+        max_users: '',
+        expiration_date: '',
+        type:'fcfs',
+        whitelist_role: '',
+        description: '',
+        required_role: '',
+        twitter: '',
+        discordInvite:'',
+        })
     const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, } = useForm<FormFields, any>();
     const [present] = useIonToast();
     const now = useMemo(() => new Date(), []);
@@ -48,29 +60,18 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [whiteListRequireRole,setWhiteListRequireRole] = useState<any>([])
     const [isLoading, setIsLoading] = useState(false);
 
-    const [formField,setFromFiled] = useState({
-        image: '',
-        target_server:'',
-        max_users: '',
-        expiration_date: '',
-        type:'',
-        whitelist_role: '',
-        description: '',
-        required_role: '',
-        twitter: '',
-        discordInvite:'',
-        })
-    const [formFieldEdit,setFromFiledEdit] = useState({
-        image: false,
-        max_users: false,
-        expiration_date: false,
-        type:false,
-        whitelist_role: false,
-        description: false,
-        required_role: false,
-        twitter: false,
-        discordInvite:false,
-        })
+
+    // useEffect(() => {
+    //     const subscription = watch((value, { name, type }) => console.log("watch***********************",value, name, type));
+    //     return () => subscription.unsubscribe();
+    //   }, []);
+
+useEffect(() => {
+    console.log("formField*&*****************************",formField)
+    reset(formField);
+}, [formField])
+
+
 
 
     const todayEnd = useMemo(() => {
@@ -79,7 +80,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         return date;
     }, [now]);
 
-    let fileObject:any
+    
     const getUrlExtension = (url:any) => {
         return url
           .split(/[#?]/)[0]
@@ -89,10 +90,13 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
       }
 
     const onImageEdit = async (imgUrl: any) => {
+        let fileObject:any
         const imgExt = getUrlExtension(imgUrl);
         const response = await fetch(imgUrl);
         const blob = await response.blob();
+        console.log("blob**********",blob)
         fileObject = new File([blob], "botProfile." + imgExt, { type: blob.type, });
+        return fileObject
     }
 
 
@@ -102,11 +106,11 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             try {
                 setIsLoading(true)
                 const { data: whitelists } = await instance.get<IWhitelist[]>( '/getWhitelistPartnerships/me' );
-                onImageEdit(whitelists[whitelists.length-1]?.image);
+                let imagePath = await onImageEdit(whitelists[whitelists.length-1]?.image);
                 setFromFiled({
-                    image: fileObject || '',
+                    image: imagePath || '',
                     target_server:'',
-                    max_users: whitelists[whitelists.length-1]?.max_users.toString() || '',
+                    max_users: whitelists[whitelists.length-1]?.max_users || '',
                     // expiration_date: moment(whitelists[whitelists.length-1]?.expiration_date).add(1,'days').format('ll'),
                     expiration_date:whitelists[whitelists.length-1]?.expiration_date || '',
                     type:whitelists[whitelists.length-1]?.type || '',
@@ -342,7 +346,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                  ( e.target as HTMLInputElement ).value = e.detail.value;
                                                  onChange(e);
                                                  }}
-                                                  name={name} value={formFieldEdit.type ? value : formField.type}  onIonBlur={onBlur} ref={ref} >
+                                                  name={name} value={value}  onIonBlur={onBlur} ref={ref} >
                                                 <IonSelectOption value="fcfs"> FCFS </IonSelectOption>
                                                 <IonSelectOption  value="raffle" disabled  > Raffle (Coming soon) </IonSelectOption>
                                             </IonSelect>
@@ -475,27 +479,30 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     name="image"
                                     control={control}
                                     rules={{ required: true, }}
-                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
-                                            <IonInput
-                                                value={value as unknown as string}
-                                                onIonChange={(e) => {
-                                                    const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
-                                                    const file = target .files?.[0] as FieldValues['image'];
-                                                    if (file)
-                                                        file.path =  URL.createObjectURL(file);
-                                                    ( e.target as HTMLInputElement ).value = file as unknown as string;
-                                                    onChange(e);
-                                                }}
-                                                name={name}
-                                                ref={ref}
-                                                required
-                                                onIonBlur={onBlur}
-                                                type={'file' as TextFieldTypes}
-                                                accept="image" />
-                                            <p className="formError"> {error?.message} </p>
-                                        </>
-                                    )} />
+                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) =>{
+                                        console.log("value",value)
+                                        return(
+                                            <>
+                                                <IonInput
+                                                    value={value as unknown as string}
+                                                    onIonChange={(e) => {
+                                                        const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
+                                                        const file = target .files?.[0] as FieldValues['image'];
+                                                        if (file)
+                                                            file.path =  URL.createObjectURL(file);
+                                                        ( e.target as HTMLInputElement ).value = file as unknown as string;
+                                                        onChange(e);
+                                                    }}
+                                                    name={name}
+                                                    ref={ref}
+                                                    required
+                                                    onIonBlur={onBlur}
+                                                    type={'file' as TextFieldTypes}
+                                                    accept="image" />
+                                                <p className="formError"> {error?.message} </p>
+                                            </>
+                                        )
+                                    } } />
                                 </IonItem>
                             </div>
 
