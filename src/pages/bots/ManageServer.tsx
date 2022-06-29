@@ -69,7 +69,13 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                 { headers: { 'Content-Type': 'application/json' } }
             )
             .then(({ data }) => {
-                history.push({ pathname: `/servermodule/${server.id}` });
+                if(data){
+                    if(data.noBot){
+                        history.push({ pathname: `/servermodule/${server.id}`,state:data });
+                    }
+                    history.push({ pathname: `/servermodule/${server.id}`});
+                }
+                history.push({ pathname: `/servermodule/${server.id}`,state:data });
             })
             .catch((error: any) => {
                 console.log('error', error);

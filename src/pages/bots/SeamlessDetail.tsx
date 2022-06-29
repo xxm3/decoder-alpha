@@ -1,10 +1,8 @@
 import React, { useEffect, useMemo ,useState} from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
-import { IonLabel, IonButton, useIonToast, IonGrid, IonRow, IonCol, IonCard, IonText, IonItem, IonSelect, IonSelectOption, IonInput, IonTextarea, IonDatetime, IonSpinner, } from '@ionic/react';
+import { IonLabel, IonButton, useIonToast, IonGrid, IonRow, IonCol, IonCard, IonItem, IonSelect, IonSelectOption, IonInput, IonTextarea, IonDatetime, IonSpinner, } from '@ionic/react';
 import './SeamlessDetail.scss';
-import discordImage from '../../images/discord.png';
-import twitterImage from '../../images/twitter.png';
 import {  useHistory, useLocation, useParams } from 'react-router';
 import { Controller, FieldValues, useForm } from 'react-hook-form';
 import isAxiosError from '../../util/isAxiosError';
@@ -12,7 +10,7 @@ import { AxiosError } from 'axios';
 import { TextFieldTypes } from '@ionic/core';
 import { IWhitelist } from '../../types/IWhitelist';
 import { useQuery } from 'react-query';
-import moment from 'moment';
+import BotServerCard from './components/BotServerCard';
 
 /**
  * The page they see when they've clicked "initiate seamless" ... then clicked on a guild
@@ -21,9 +19,9 @@ import moment from 'moment';
  */
 
 interface FormFields {
-    image: File & { path: string;};
-    target_server: number;
-    max_users: number;
+    image: File & { path: string;} | '';
+    target_server: number | '';
+    max_users: number | '';
     expiration_date: string;
     type: 'raffle' | 'fcfs';
     whitelist_role: string;
@@ -31,7 +29,7 @@ interface FormFields {
     required_role: string;
     twitter: string;
     discordInvite:string;
-    magicEdenUpvoteUrl:string;
+    magicEdenUpvoteUrl?:string;
 }
 const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
@@ -41,6 +39,19 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const { serverId } = useParams<any>();
 
     let history = useHistory();
+    const [formField,setFromFiled] = useState<any>({
+        image: '',
+        target_server:'',
+        max_users: '',
+        expiration_date: '',
+        type:'fcfs',
+        whitelist_role: '',
+        description: '',
+        required_role: '',
+        twitter: '',
+        discordInvite:'',
+        magicEdenUpvoteUrl:'',
+        })
     const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, } = useForm<FormFields, any>();
     const [present] = useIonToast();
     const now = useMemo(() => new Date(), []);
@@ -48,30 +59,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [whiteListRequireRole,setWhiteListRequireRole] = useState<any>([])
     const [isLoading, setIsLoading] = useState(false);
 
-    const [formField,setFromFiled] = useState({
-        image: '',
-        target_server:'',
-        max_users: '',
-        expiration_date: '',
-        type:'',
-        whitelist_role: '',
-        description: '',
-        required_role: '',
-        twitter: '',
-        discordInvite:'',
-        })
-    const [formFieldEdit,setFromFiledEdit] = useState({
-        image: false,
-        max_users: false,
-        expiration_date: false,
-        type:false,
-        whitelist_role: false,
-        description: false,
-        required_role: false,
-        twitter: false,
-        discordInvite:false,
-        })
-
+    useEffect(() => {
+        reset(formField);
+    }, [formField])
 
     const todayEnd = useMemo(() => {
         const date = new Date( + now + 86400 * 1000 );
@@ -79,7 +69,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         return date;
     }, [now]);
 
-    let fileObject:any
+    
     const getUrlExtension = (url:any) => {
         return url
           .split(/[#?]/)[0]
@@ -89,32 +79,32 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
       }
 
     const onImageEdit = async (imgUrl: any) => {
+        let fileObject:any
         const imgExt = getUrlExtension(imgUrl);
         const response = await fetch(imgUrl);
         const blob = await response.blob();
         fileObject = new File([blob], "botProfile." + imgExt, { type: blob.type, });
+        return fileObject
     }
-
-
 
     const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
         async () => {
             try {
                 setIsLoading(true)
                 const { data: whitelists } = await instance.get<IWhitelist[]>( '/getWhitelistPartnerships/me' );
-                onImageEdit(whitelists[whitelists.length-1]?.image);
+                let imagePath = await onImageEdit(whitelists[whitelists.length-1]?.image);
                 setFromFiled({
-                    image: fileObject || '',
-                    target_server:'',
-                    max_users: whitelists[whitelists.length-1]?.max_users.toString() || '',
-                    // expiration_date: moment(whitelists[whitelists.length-1]?.expiration_date).add(1,'days').format('ll'),
+                    // image: imagePath || '',
+                    // target_server:'',
+                    // max_users: whitelists[whitelists.length-1]?.max_users || '',
                     expiration_date:whitelists[whitelists.length-1]?.expiration_date || '',
                     type:whitelists[whitelists.length-1]?.type || '',
                     whitelist_role: whitelists[whitelists.length-1]?.whitelist_role || '',
                     description: whitelists[whitelists.length-1]?.description || '',
-                    required_role: whitelists[whitelists.length-1]?.required_role || '',
+                    // required_role: whitelists[whitelists.length-1]?.required_role || '',
                     twitter: whitelists[whitelists.length-1]?.twitter?.toString() || '',
-                    discordInvite:whitelists[whitelists.length-1]?.discordInvite?.toString() || '',
+                    // discordInvite:whitelists[whitelists.length-1]?.discordInvite?.toString() || '',
+                    // magicEdenUpvoteUrl:whitelists[whitelists.length-1]?.magicEdenUpvoteUrl?.toString() || '',
                     })
                 return whitelists;
             } catch (error) {
@@ -137,7 +127,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         }
 
         try{
-            // console.log("server id  line number 147",serverId);
             const  data = await instance.get(`/getAllRoles/${serverId}`);
             if(data?.data?.data){
                 setWhiteListRole(data.data.data);
@@ -161,7 +150,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         }
 
         try{
-            // console.log("discordGuildId  line number 171",server.state);
             const data = await instance.get(`/getAllRoles/${server.state.discordGuildId}`);
             if(data?.data?.data){
                 setWhiteListRequireRole(data.data.data);
@@ -184,80 +172,14 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
     return (
         <IonGrid>
+            
             <IonRow>
                 <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - fill out whitelist details</h2> </IonCol>
-
+                
                 <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12" />
-
-                {/* TODO: this is 100% copy/pasted from seamless.tsx (Which I heavily updated - not acceptable!!!*/}
+                
                 <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >
-                    <IonCard className='ion-no-margin'>
-
-                        <div className="cardImage relative">
-
-                            {/* image */}
-                            <img src={server?.state?.icon} className={server?.state?.icon ? 'cardMainImage' : 'cardNoImage'}  alt='' />
-
-                            <div className="cardOverlay-content py-1 px-4">
-
-                                <div className='text-md'>{server.state.name}</div>
-
-                                <div className="socialMediaIcon">
-
-                                    {/*discord*/}
-                                    <img hidden={!discordImage} src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
-                                        event.stopPropagation();
-                                        if(server.state.discord_link){
-                                            window.open(server.state.discord_link)
-                                        }}} />
-
-                                    {/*twitter*/}
-                                    <img hidden={!twitterImage} src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
-                                        event.stopPropagation();
-                                        if(server.state.twitter_link){
-                                            window.open(server.state.twitter_link)
-                                        }}} />
-                                </div>
-                            </div>
-
-                        </div>
-                        <IonGrid className="py-4 px-4">
-                            <IonRow hidden={!server?.state?.twitter_followers}>
-                                <IonCol size="8">
-                                    <IonText className='text-white'>Twitter Followers</IonText>
-                                </IonCol>
-                                <IonCol size="4" className="ion-text-end">
-                                    <IonText className="greenText">{server?.state?.twitter_followers || 0 } </IonText>
-                                </IonCol>
-                            </IonRow>
-                            <IonRow hidden={!server?.state?.twitter_interactions}>
-                                <IonCol size="8">
-                                    <IonText className='text-white'>Twitter Interaction</IonText>
-                                </IonCol>
-                                <IonCol size="4" className="ion-text-end">
-                                    <IonText className="BlueText">{server?.state?.twitter_interactions || 0}</IonText>
-                                </IonCol>
-                            </IonRow>
-                            <div className="content-extra-space"></div>
-
-                            <IonRow hidden={!server?.state?.discord_members}>
-                                <IonCol size="8">
-                                    <IonText className='text-white'>Discord Members</IonText>
-                                </IonCol>
-                                <IonCol size="4" className="ion-text-end">
-                                    <IonText className="greenText">{server?.state?.discord_members || 0}</IonText>
-                                </IonCol>
-                            </IonRow>
-                            <IonRow hidden={!server?.state?.discord_online}>
-                                <IonCol size="8">
-                                    <IonText className='text-white'>Online</IonText>
-                                </IonCol>
-                                <IonCol size="4" className="ion-text-end">
-                                    <IonText className="BlueText">{server?.state?.discord_online || 0}</IonText>
-                                </IonCol>
-                            </IonRow>
-                        </IonGrid>
-                    </IonCard>
+                    <BotServerCard serverData={server} />
                 </IonCol>
 
                 <IonCol size-xl="8" size-md="6" size-sm="6" size-xs="12">
@@ -279,7 +201,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                             try {
                                 await instance.post( '/createNewWhitelistPartnership', formData );
-
                                 history.push(`/whitelistmarketplace`);
                                 present({
                                     message: 'Whitelist partnership created successfully!',
@@ -342,7 +263,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                  ( e.target as HTMLInputElement ).value = e.detail.value;
                                                  onChange(e);
                                                  }}
-                                                  name={name} value={formFieldEdit.type ? value : formField.type}  onIonBlur={onBlur} ref={ref} >
+                                                  name={name} value={value}  onIonBlur={onBlur} ref={ref} >
                                                 <IonSelectOption value="fcfs"> FCFS </IonSelectOption>
                                                 <IonSelectOption  value="raffle" disabled  > Raffle (Coming soon) </IonSelectOption>
                                             </IonSelect>
@@ -475,27 +396,29 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     name="image"
                                     control={control}
                                     rules={{ required: true, }}
-                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
-                                            <IonInput
-                                                value={value as unknown as string}
-                                                onIonChange={(e) => {
-                                                    const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
-                                                    const file = target .files?.[0] as FieldValues['image'];
-                                                    if (file)
-                                                        file.path =  URL.createObjectURL(file);
-                                                    ( e.target as HTMLInputElement ).value = file as unknown as string;
-                                                    onChange(e);
-                                                }}
-                                                name={name}
-                                                ref={ref}
-                                                required
-                                                onIonBlur={onBlur}
-                                                type={'file' as TextFieldTypes}
-                                                accept="image" />
-                                            <p className="formError"> {error?.message} </p>
-                                        </>
-                                    )} />
+                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) =>{
+                                        return(
+                                            <>
+                                                <IonInput
+                                                    value={value as unknown as string}
+                                                    onIonChange={(e) => {
+                                                        const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
+                                                        const file = target .files?.[0] as FieldValues['image'];
+                                                        if (file)
+                                                            file.path =  URL.createObjectURL(file);
+                                                        ( e.target as HTMLInputElement ).value = file as unknown as string;
+                                                        onChange(e);
+                                                    }}
+                                                    name={name}
+                                                    ref={ref}
+                                                    required
+                                                    onIonBlur={onBlur}
+                                                    type={'file' as TextFieldTypes}
+                                                    accept="image" />
+                                                <p className="formError"> {error?.message} </p>
+                                            </>
+                                        )
+                                    } } />
                                 </IonItem>
                             </div>
 
