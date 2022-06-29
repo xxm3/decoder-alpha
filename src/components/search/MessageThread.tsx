@@ -171,25 +171,25 @@ export default MessageThread;
 // import { io, Socket } from "socket.io-client";
 // import { DefaultEventsMap } from '@socket.io/component-emitter';
 // import Loader from '../Loader';
-//
-//
+
+
 // interface MessageThreadProps {
 //     message: Message;
 //     onClose: Function;
 //     isModalOpen:boolean;
 //     setIsModalOpen:Function;
 // }
-//
+
 // type MessageThreadQueryKey = readonly ['messageThread', string];
 // type PageParam =
 //     | { priorLimit: number; postLimit: number; messageId: string; message: any }
 //     | undefined;
-//
+
 // interface MessageThreadData {
 //     priorMsg: Message[];
 //     subsequentMsg: Message[];
 // }
-//
+
 // const MessageThread: React.FC<MessageThreadProps> = ({
 //     message,
 //     message: { id },
@@ -204,7 +204,7 @@ export default MessageThread;
 //         postLimit: 100,
 //         // #s REPEATED on MessageThread.tsx & priorAndSubsequent.js
 //     };
-//
+
 //     const mainMessageRef = useRef<HTMLDivElement>(null);
 //     const containerRef = useRef<HTMLDivElement>(null);
 //     // const [isModalOpen, setIsModalOpen] = useState(true)
@@ -218,8 +218,8 @@ export default MessageThread;
 //     const [hideMessageBtn, setHideMessageBtn] = useState<boolean>(true)
 //     const role = localStorage.getItem('role')
 //     let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
-//
-//
+
+
 //     async function fetchContext({ pageParam = defaultPageParam}: QueryFunctionContext<MessageThreadQueryKey, PageParam>) {
 //         try {
 //             console.log(pageParam);
@@ -230,28 +230,28 @@ export default MessageThread;
 //                     // @ts-expect-error
 //                     time : message.time ? message.time : message.time_stamp
 //                 }))
-//
+
 //             if (pageParam === defaultPageParam)
 //                 // return [...data.priorMsg, message, ...data.subsequentMsg];
 //                 return [message, ...data.subsequentMsg];
 //             // return [...data.priorMsg, ...data.subsequentMsg];
 //             return [...data.subsequentMsg];
-//
+
 //         } catch (e) {
 //             console.error('try/catch in MessageThread.tsx: ', e);
 //             const error = e as Error & { response?: AxiosResponse };
-//
+
 //             // if (error && error.response) {
 //             //     throw new Error(String(error.response.data.body));
 //             // } else {
 //             //     throw new Error('Unable to connect. Please try again later');
 //             // }
-//
+
 //             return [];
 //         }
 //     }
-//
-//
+
+
 //     const {
 //         data = { pages: [] },
 //         hasNextPage,
@@ -294,7 +294,7 @@ export default MessageThread;
 //             ],
 //         },
 //     });
-//
+
 //     useEffect(() => {
 //         if (window.innerWidth < 525) {
 //             setIsMobile(true)
@@ -302,11 +302,11 @@ export default MessageThread;
 //             setIsMobile(false)
 //         }
 //     }, [window.innerWidth])
-//
+
 //     // get Live messages
-//
+
 //     const viewLiveMessages = () => {
-//         // initiateSocket()
+//         initiateSocket()
 //         if(role === '3NFT'){
 //             initiateSocket()
 //             // console.log('Connect Socket------')
@@ -319,18 +319,18 @@ export default MessageThread;
 //             })
 //         }
 //     }
-//
+
 //     // Socket initial
 //     const initiateSocket = () => {
 //         setIsLoading(true)
-//         socket = io('http:/hnghhhh:5027');
-//
+//         socket = io('http://192.168.1.102:5027');
+
 //         socket.on('connect', () => {
 //             console.log('socket connect-------')
 //             setIsSocketConnected(true);
 //             setHideMessageBtn(false)
 //         })
-//
+
 //         socket.emit('getData', defaultPageParam);
 //         // socket.emit('getData', {
 //         //     "messageId": "d718001b-f2ab-4eda-958f-59647c5e87b9",
@@ -345,11 +345,11 @@ export default MessageThread;
 //         //     "postLimit": 100
 //         // }
 //         // );
-//
-//
-//
+
+
+
 //         socket.on('Data', (data) => {
-//             // console.log('socket data',data)
+//             console.log('socket data',data)
 //             setIsLoading(false)
 //             if(data.subsequentMsg.length > 0){
 //                 if(isNewData < data.subsequentMsg.length){
@@ -361,11 +361,11 @@ export default MessageThread;
 //                     setDataPages([data.subsequentMsg])
 //                 }
 //             }
-//
+
 //         })
 //         setSocketVar(socket)
 //     }
-//
+
 //     // Disconnect socket on close button
 //     const disconnectSocket = () => {
 //         socketVar.disconnect();
@@ -373,12 +373,12 @@ export default MessageThread;
 //         setIsSocketConnected(false)
 //         setHideMessageBtn(true)
 //     }
-//
+
 //     useEffect(() => {
 //         setDataPages(data.pages)
 //     }, [data])
-//
-//
+
+
 //     return (
 //         <>
 //             <IonModal isOpen = {isModalOpen} onDidDismiss={()=> {
@@ -388,22 +388,22 @@ export default MessageThread;
 //                         setIsModalOpen(false)
 //                         }}>
 //                 <div ref={containerRef} className={`${isMobile ? 'p-2' : 'p-4'} c-res-messages messages h-full w-full mx-auto`} >
-//
+
 //                     {/*TODO: damjan eventually...*/}
-//                     {/*<div className={` ${hideMessageBtn ? 'justify-between' : 'justify-end' } ${isMobile ? 'm-3' :'mb-3'} text-red-500 flex cursor-pointer items-center`}>*/}
-//                     {/*    {hideMessageBtn ? <IonButton onClick={()=>viewLiveMessages()}>View Live Messages</IonButton> : ''}*/}
-//                     {/*    <div onClick={()=> {*/}
-//                     {/*            if(isSocketConnected){*/}
-//                     {/*                disconnectSocket() */}
-//                     {/*            }*/}
-//                     {/*              setIsModalOpen(false)*/}
-//                     {/*            } */}
-//                     {/*         }>*/}
-//                     {/*        <HighlightOffIcon className='text-2xl'/>*/}
-//                     {/*    </div>*/}
-//                     {/*</div>*/}
+//                     <div className={` ${hideMessageBtn ? 'justify-between' : 'justify-end' } ${isMobile ? 'm-3' :'mb-3'} text-red-500 flex cursor-pointer items-center`}>
+//                        {hideMessageBtn ? <IonButton onClick={()=>viewLiveMessages()}>View Live Messages</IonButton> : ''}
+//                        <div onClick={()=> {
+//                                if(isSocketConnected){
+//                                    disconnectSocket()
+//                                }
+//                                  setIsModalOpen(false)
+//                                }
+//                             }>
+//                            <HighlightOffIcon className='text-2xl'/>
+//                        </div>
+//                     </div>
 //                     {isLoading ? <div className='flex justify-center'><Loader/></div> : ''}
-//
+
 //                     <div className={`overflow-y-scroll h-full w-full mx-auto ${isMobile ? 'p1' :'p-5'}`}>
 //                         { dataPages && dataPages?.length > 0 ? dataPages.map((page:any,index:number) =>{
 //                                 return <div key={index}>
@@ -432,5 +432,5 @@ export default MessageThread;
 //         </>
 //     );
 // };
-//
+
 // export default MessageThread;

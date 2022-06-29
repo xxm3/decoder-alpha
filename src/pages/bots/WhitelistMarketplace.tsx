@@ -27,46 +27,50 @@ function WhitelistMarketplace() {
             userId = parseInt(uid)
         }
     }, [])
+    const server = localStorage.getItem('servers')
+    let serverArray = server &&  JSON.parse(server)
     
     // get all your WL crap
     const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
+       
         async () => {
-            try {
-                setIsLoading(true)
-                const { data: whitelists } = await instance.get<IWhitelist[]>( '/getWhitelistPartnerships/me' );
-                let whiteListExpire:any = []
-                let whiteListLive:any = []
-                let whiteListMyDoa:any = []
-                let whiteListMyClaim:any = []
-                for(let i = 0; i < whitelists.length; i++){
-                    
-                    if(whitelists[i].isExpired || !whitelists[i].active){
-                        whiteListExpire.push(whitelists[i])
-                    }else if(whitelists[i].myLiveDAO === true){
-                        whiteListMyDoa.push(whitelists[i])
-                    } else if( whitelists[i].claims.length > 0){
-                        if(whitelists[i].claims[0].user){
-                            if(whitelists[i].claims[0].user.discordId === userId){
-                                whiteListMyClaim.push(whitelists[i])
+         
+
+                try {
+                    setIsLoading(true)
+                    const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
+                    let whiteListExpire:any = []
+                    let whiteListLive:any = []
+                    let whiteListMyDoa:any = []
+                    let whiteListMyClaim:any = []
+                    for(let i = 0; i < whitelists.length; i++){
+                        
+                        if(whitelists[i].isExpired || !whitelists[i].active){
+                            whiteListExpire.push(whitelists[i])
+                        }else if(whitelists[i].myLiveDAO === true){
+                            whiteListMyDoa.push(whitelists[i])
+                        }else if(!whitelists[i].isExpired){
+                            whiteListLive.push(whitelists[i])
+                        } else if( whitelists[i].claims.length > 0){
+                            if(whitelists[i].claims[0].user){
+                                if(whitelists[i].claims[0].user.discordId === userId){
+                                    whiteListMyClaim.push(whitelists[i])
+                                }
                             }
-                        }
-                    } else{
-                        whiteListLive.push(whitelists[i])
+                        } 
                     }
+                    setLiveWhiteList(whiteListLive);
+                    setExpireWhiteList(whiteListExpire);
+                    setMyDoaWhiteList(whiteListMyDoa)
+                    setMyClaimWhiteList(whiteListMyClaim)
+    
+                    return whitelists;
+                } catch (error) {
+    
                 }
-                setLiveWhiteList(whiteListLive);
-                setExpireWhiteList(whiteListExpire);
-                setMyDoaWhiteList(whiteListMyDoa)
-                setMyClaimWhiteList(whiteListMyClaim)
-
-                return whitelists;
-            } catch (error) {
-
-            }
-            finally {
-                setIsLoading(false)
-            }
-
+                finally {
+                    setIsLoading(false)
+                }
         }
     );
 
