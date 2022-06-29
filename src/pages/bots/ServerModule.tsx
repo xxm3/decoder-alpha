@@ -74,9 +74,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             setIsMobile(true);
         }
 
-        if (performance.navigation.type == 1) {
-            history.push('/manageserver')
-        }
+        // if (performance.navigation.type == 1) {
+        //     history.push('/manageserver')
+        // }
 
     }, [window.innerWidth]);
 

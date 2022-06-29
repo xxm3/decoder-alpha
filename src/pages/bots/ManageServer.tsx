@@ -41,9 +41,17 @@ const ManageServer: React.FC<AppComponentProps> = () => {
 
     useEffect(() => {
         let serverList: any = localStorage.getItem('servers');
+        serverList = (JSON.parse(serverList));
 
-        if (JSON.parse(serverList).length > 0) {
-            setServers(JSON.parse(serverList));
+        let adminOwnerServers = [];
+        for(let i in serverList){
+            if(serverList[i].admin || serverList[i].owner){
+                adminOwnerServers.push(serverList[i]);
+            }
+        }
+
+        if (adminOwnerServers.length > 0) {
+            setServers(adminOwnerServers);
             setNoServers(false);
         } else {
             setNoServers(true);
@@ -115,10 +123,6 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                     <br />
                     If you are one, then logout in the sidebar and try logging
                     in again.
-                    <br />
-                    Or if you are the admin of a server, then you will need to
-                    get the owner to login here, and allow you to manage the
-                    server within this site.
                 </div>
             ) : (
                 <>
@@ -274,7 +278,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                             Decoder bots on your own Discord server
                         </li>
                         <li>
-                            Pricing: Hold 3 NFTs (which unlocks all of our
+                            Pricing: Free for some bots (Seamless & Assassin bot). For others, hold 3 NFTs (which unlocks all of our
                             existing 3 NFT benefits for yourself -{' '}
                             <a
                                 href="https://docs.soldecoder.app/books/intro/page/discord-overview"
@@ -302,7 +306,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                         <li>
                             <b>#1 - Mints package</b> - Your server can have our
                             "daily-mints" feed and "1h-mint-info" and soon
-                            "tomorrows-mints"
+                            "tomorrows-mints". Read more about these in our Discord in our #faq channel.
                         </li>
                         <li>
                             <b>#2 - Fox token package</b> - Your server can have
@@ -314,15 +318,15 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                         </li>
                         <li>
                             <b>#3 - Magic Eden package</b> - (1) use the command
-                            "/fp any_magiceden_nt" and you'll get the price /
-                            listings / volume of that NFT, and (3) use the
+                            "/fp any_magiceden_nft" and you'll get the price /
+                            listings / volume of that NFT, and (2) use the
                             command "/tps" to see a live count of Solana's
                             Transactions Per Second
                         </li>
                         {/*(2) get alerted whenever a sale for your NFT occurs,*/}
                         <li>
                             <b>
-                                (Future) #4 - "Assassin" bot - Kick
+                                (Free for now - Future) #4 - "Assassin" bot - Kick
                                 bots/spammers from your server (that impersonate
                                 your team, or have Bot in their name), and
                                 automatically delete non-approved links posted
@@ -331,7 +335,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                         </li>
                         <li>
                             <b>
-                                (Free) #5 - "Seamless" package - Allow verified
+                                (Free for now) #5 - "Seamless" package - Allow verified
                                 DAO members to whitelist in less than 10
                                 seconds, with 0 work on your mods
                             </b>
