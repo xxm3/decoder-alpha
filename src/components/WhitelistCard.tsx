@@ -99,59 +99,38 @@ function WhitelistCard({
             {isExploding && expired !== undefined && <ConfettiExplosion />}
 
             <div className="relative overflow-y-hidden h-60 w-80">
-                <img
-                    src={image}
-                    className="h-full w-full object-cover object-left"
-                    alt={`${sourceServer?.name} X ${targetServer?.name}`}
-                />
+                <img src={image} className="h-full w-full object-cover object-left" alt={`${sourceServer?.name} X ${targetServer?.name}`} />
                 <div className="absolute flex bottom-0 right-0 justify-between bg-white bg-opacity-50 dark:bg-black dark:bg-opacity-50 py-2 px-5 left-0">
 
                     <div className="w-full">
                         <p className="text-lg font-bold">{sourceServer?.name}</p>
-                        <p className="text-sm italic">must be member in "{targetServer?.name}" DAO</p>
-                        <p className="text-sm italic">
-                            Type: Whitelist
-                        </p>
+                        <p className="text-sm italic">must be in "{targetServer?.name}" DAO</p>
+                        <p className="text-sm italic"> Type: Whitelist </p>
                     </div>
-
-                    {discordInvite && (
-                        <a
-                            href={discordInvite}
-                            className="self-center hover:opacity-70 mr-2"
-                            target="_blank"
-                        >
-                            <IonIcon icon={logoDiscord} className="h-7 w-7" />
-                        </a>
-
-                    )}
-
-                    {twitter && (
-                        <a
-                            href={twitter}
-                            className="self-center hover:opacity-70"
-                            target="_blank"
-                        >
-                            <IonIcon icon={logoTwitter} className="h-7 w-7" />
-                        </a>
-                    )}
+                    <div className='flex items-center flex-col justify-center mt-2'>
+                        <div>
+                            {discordInvite && ( <a href={discordInvite} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoDiscord} className="h-7 w-7" /> </a> )}
+                        </div>
+                        <div>
+                            {twitter && ( <a href={twitter} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoTwitter} className="h-7 w-7" /> </a> )}
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div
-                className="py-4 px-6 flex-col flex"
-            >
+            <div className="py-4 px-6 flex-col flex" >
 
                 <div className="mb-3">{description}</div>
 
                 <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>
-                        <p>{type.toUpperCase()}</p>
+                    <p>{type.toUpperCase()}</p>
                     <p>Slots left </p>
-                        <p>{max_users - claimCounts}/{max_users}</p>
+                    <p>{max_users - claimCounts}/{max_users}</p>
 					<p>Required Role (in "{targetServer?.name}" DAO)</p>
-					    <p>{required_role_name}</p>
+					<p>{required_role_name}</p>
 					<p className="timeLeft" hidden={!showLive}>Time left</p>
-					    <span hidden={!showLive}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
+					<span hidden={!showLive}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
                 </div>
 
                 {/* button! */}
@@ -217,7 +196,7 @@ function WhitelistCard({
                         }
                     }}
 
-                     disabled={expired || claiming || claimed || full || !showLive || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed'  }
+                     disabled={expired || claiming || claimed || full || showLive || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed'  }
                     >
                         {getButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>

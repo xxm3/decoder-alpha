@@ -82,25 +82,42 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     const submitWhitelist = () => {
         const formData = new FormData();
-        formData.append('image', image)
-        formData.append('discordLink', discordLink)
-        formData.append('twitterLink', twitterLink)
-        formData.append('description', description)
+        if(image && discordLink && twitterLink && description){
+            formData.append('image', image)
+            formData.append('discordLink', discordLink)
+            formData.append('twitterLink', twitterLink)
+            formData.append('description', description)
 
-        setIsLoading(true)
-        instance .post(`/updateGuild/${serverId}`, formData, { headers: { 'Content-Type': 'application/json', }, })
-        .then(({ data }) => {
-            if(data.success){
-                present({
-                    message: data.message,
-                    color: 'success',
-                    duration: 5000,
-                    buttons: [{ text: 'X', handler: () => dismiss() }],
-                });
-            }else{
+            setIsLoading(true)
+            instance .post(`/updateGuild/${serverId}`, formData, { headers: { 'Content-Type': 'application/json', }, })
+            .then(({ data }) => {
+                if(data.success){
+                    present({
+                        message: data.message,
+                        color: 'success',
+                        duration: 5000,
+                        buttons: [{ text: 'X', handler: () => dismiss() }],
+                    });
+                }else{
+                    let msg = '';
+                    if (data?.message) {
+                        msg = String(data.message);
+                    } else {
+                        msg = 'Unable to connect. Please try again later';
+                    }
+                    present({
+                        message: msg,
+                        color: 'danger',
+                        duration: 5000,
+                        buttons: [{ text: 'X', handler: () => dismiss() }],
+                    });
+                }
+            })
+            .catch((error:any) => {
+
                 let msg = '';
-                if (data?.message) {
-                    msg = String(data.message);
+                if (error?.response) {
+                    msg = String(error.response.data.message);
                 } else {
                     msg = 'Unable to connect. Please try again later';
                 }
@@ -110,27 +127,21 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     duration: 5000,
                     buttons: [{ text: 'X', handler: () => dismiss() }],
                 });
-            }
-        })
-        .catch((error:any) => {
 
-            let msg = '';
-            if (error?.response) {
-                msg = String(error.response.data.message);
-            } else {
-                msg = 'Unable to connect. Please try again later';
-            }
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+
+        }else{
             present({
-                message: msg,
+                message: 'Please fill in the above',
                 color: 'danger',
                 duration: 5000,
                 buttons: [{ text: 'X', handler: () => dismiss() }],
             });
-
-        })
-        .finally(() => {
-            setIsLoading(false);
-        });
+        }
+        
 
     }
 
@@ -674,40 +685,40 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
             {/*TODO ruchita/ajay: broke*/}
 
-            {/*<div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>*/}
-            {/*    <IonLabel className="md:text-2xl text-2xl font-semibold">*/}
-            {/*        Seamless - Existing DAO*/}
-            {/*    </IonLabel>*/}
-            {/*</div>*/}
-            {/*<p>Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about.</p>*/}
+            <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
+                <IonLabel className="md:text-2xl text-2xl font-semibold">
+                    Seamless - Existing DAO
+                </IonLabel>
+            </div>
+            <p>Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about.</p>
 
-            {/*<div>*/}
-            {/*    <IonItem className="ion-item-wrapper mt-1">*/}
-            {/*        <IonInput placeholder="Discord Invite Link (never expires, no invite limit)" onIonChange={e => setDiscordLink(e.detail.value!)}/>*/}
-            {/*    </IonItem>*/}
-            {/*    <IonItem className="ion-item-wrapper mt-1">*/}
-            {/*        <IonInput placeholder="Twitter Link" onIonChange={e => setTwitterLink(e.detail.value!)}/>*/}
-            {/*    </IonItem>*/}
-            {/*    <IonItem className="ion-item-wrapper mt-1">*/}
-            {/*        <IonTextarea placeholder="Description of your DAO" onIonChange={e => setDescription(e.detail.value!)}/>*/}
-            {/*    </IonItem>*/}
-            {/*    <div className='mb-5 flex-row flex items-center'>*/}
-            {/*         <IonLabel className="text-white">Image</IonLabel>*/}
-            {/*        <IonItem className="ion-item-wrapper mt-2">*/}
-            {/*            <input type="file" id="img" name="img" accept="image/png, image/gif, image/jpeg" onChange={(e)=>setImage(e.target.files?.[0])}/>*/}
-            {/*        </IonItem>*/}
-            {/*    </div>*/}
-            {/*    <div className="mt-4 mb-5 w-full flex justify-center" hidden={!devMode}>*/}
-            {/*        <IonButton  css={css`*/}
-            {/*            --padding-top: 25px;*/}
-            {/*            --padding-bottom: 25px;*/}
-            {/*            --padding-end: 20px;*/}
-            {/*            --padding-start: 20px;*/}
-            {/*        `} onClick={() => submitWhitelist()}>*/}
-            {/*            Submit*/}
-            {/*        </IonButton>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
+            <div>
+                <IonItem className="ion-item-wrapper mt-1">
+                    <IonInput placeholder="Discord Invite Link (never expires, no invite limit)" onIonChange={e => setDiscordLink(e.detail.value!)}/>
+                </IonItem>
+                <IonItem className="ion-item-wrapper mt-1">
+                    <IonInput placeholder="Twitter Link" onIonChange={e => setTwitterLink(e.detail.value!)}/>
+                </IonItem>
+                <IonItem className="ion-item-wrapper mt-1">
+                    <IonTextarea placeholder="Description of your DAO" onIonChange={e => setDescription(e.detail.value!)}/>
+                </IonItem>
+                <div className='mb-5 flex-row flex items-center'>
+                     {/* <IonLabel className="text-white">Image</IonLabel> */}
+                    <IonItem className="ion-item-wrapper mt-2">
+                        <input type="file" id="img" name="img" accept="image/png, image/gif, image/jpeg" onChange={(e)=>setImage(e.target.files?.[0])}/>
+                    </IonItem>
+                </div>
+                <div className="mt-4 mb-5 w-full flex justify-center" hidden={!devMode}>
+                    <IonButton  css={css`
+                        --padding-top: 25px;
+                        --padding-bottom: 25px;
+                        --padding-end: 20px;
+                        --padding-start: 20px;
+                    `} onClick={() => submitWhitelist()}>
+                        Submit
+                    </IonButton>
+                </div>
+            </div>
 
         </>
     );

@@ -10,6 +10,7 @@ import ReactTooltip from "react-tooltip";
 import SearchSkeleton from "./SearchSkeleton"
 import { css } from '@emotion/react';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import Loader from '../Loader';
 
 interface MessageThreadProps {
     message: Message;
@@ -17,20 +18,14 @@ interface MessageThreadProps {
 }
 
 type MessageThreadQueryKey = readonly ['messageThread', string];
-type PageParam =
-    | { priorLimit: number; postLimit: number; messageId: string; message: any }
-    | undefined;
+type PageParam = | { priorLimit: number; postLimit: number; messageId: string; message: any } | undefined;
 
 interface MessageThreadData {
     priorMsg: Message[];
     subsequentMsg: Message[];
 }
 
-const MessageThread: React.FC<MessageThreadProps> = ({
-                                                         message,
-                                                         message: { id },
-                                                         onClose,
-                                                     }) => {
+const MessageThread: React.FC<MessageThreadProps> = ({  message, message: { id }, onClose, }) => {
     const defaultPageParam: PageParam = {
         messageId: message.id,
         message: message,
@@ -38,25 +33,22 @@ const MessageThread: React.FC<MessageThreadProps> = ({
         postLimit: 100,
         // #s REPEATED on MessageThread.tsx & priorAndSubsequent.js
     };
-    async function fetchContext({
-                                    pageParam = defaultPageParam,
-                                }: QueryFunctionContext<MessageThreadQueryKey, PageParam>) {
+    const [isLoading,setIsLoading] = useState<boolean>(false);
+    async function fetchContext({ pageParam = defaultPageParam, }: QueryFunctionContext<MessageThreadQueryKey, PageParam>) {
         try {
-            const { data } = await instance.post<MessageThreadData>(
-                '/getPriorAndSubMessages',
-                pageParam
-            );
+            setIsLoading(true)
+            const { data } = await instance.post<MessageThreadData>(  '/getPriorAndSubMessages',  pageParam );
             // data.priorMsg = data.priorMsg.map(message => ({
             //     ...message,
             //     // @ts-expect-error
             //     time : message.createdAt ? message.createdAt : message.time_stamp
             // }))
-
             data.subsequentMsg = data?.subsequentMsg?.map(message => ({
                 ...message,
                 // @ts-expect-error
-                time : message ? message.createdAt : message.time_stamp
+                time : message.time_stamp
             }))
+            setIsLoading(false)
 
             if (pageParam === defaultPageParam)
                 // return [...data.priorMsg, message, ...data.subsequentMsg];
@@ -65,6 +57,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({
             return [...data.subsequentMsg];
 
         } catch (e) {
+            setIsLoading(false)
             console.error('try/catch in MessageThread.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
 
@@ -124,59 +117,27 @@ const MessageThread: React.FC<MessageThreadProps> = ({
 
     const mainMessageRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-
     const [isModalOpen, setIsModalOpen] = useState(true)
     return (
         <>
-            <IonModal
-                isOpen = {isModalOpen}
-                onDidDismiss={onClose as any}
-                // onDidPresent={() => {
-                //     if (mainMessageRef.current) {
-                //         mainMessageRef.current.scrollIntoView({
-                //             block: 'center',
-                //             inline: 'center',
-                //         });
-                //     }
-                // }}
-            >
-                <div
-                    ref={containerRef}
-                    className="p-5 c-res-messages messages h-full w-full mx-auto"
-                >
+            <IonModal isOpen = {isModalOpen} onDidDismiss={onClose as any} >
+                <div ref={containerRef} className="p-5 c-res-messages messages h-full w-full mx-auto">
                     <div onClick={()=> setIsModalOpen(false)}  className=' justify-end text-red-500 flex m-3 cursor-pointer'  >
                         <HighlightOffIcon className='text-2xl'/>
                     </div>
-                    <div className='overflow-y-scroll h-full w-full mx-auto p-5'>
-
-                        {/*<div hidden={data}>*/}
-                        {/*    Down!*/}
-                        {/*</div>*/}
-
-                        {data.pages
-                            .map((page) =>
-                                page.map((message, i) =>
-                                    message ? (
-                                        <div className="my-1.5" key={i}>
-                                            <MessageListItem
-                                                message={message}
-                                                isFromMsgThread={true}
-                                                key={message.id}
-                                                ref={
-                                                    message.id === id
-                                                        ? mainMessageRef
-                                                        : null
-                                                }
-                                            />
-                                        </div>
-                                    ) : (
-                                        <SearchSkeleton key={i}/>
-                                    )
-                                )
+                    {isLoading ? <div className='flex justify-center'><Loader/></div> :
+                        <div className='overflow-y-scroll h-full w-full mx-auto p-5'>
+                        {data.pages.map((page) =>
+                                page.map((message:any, i:number) =>{
+                                        return (<div className="my-1.5" key={i}>
+                                            <MessageListItem  message={message} isFromMsgThread={true}  key={i} ref={ message?.id === id ? mainMessageRef : null } />
+                                        </div>)
+                                } )
                             )
                             .flat(1)
                         }
-                    </div>
+                        </div>
+                    }
                 </div>
 
                 <ReactTooltip />

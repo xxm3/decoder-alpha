@@ -109,9 +109,8 @@ const Display: React.FC<{
                 }} /> */}
 
                 {/* list of messages, ie. search results */}
-                {messages.map((m, i) => (
-
-                        <MessageListItem
+                {messages.map((m, i) => {
+                        return(<MessageListItem
                             onClick={() => {
                                 setIsModalOpen(true)
                                 if (m.source === 'Twitter') {
@@ -121,8 +120,8 @@ const Display: React.FC<{
                             }}
                             message={m}
                             key={i}
-                        />
-                    )
+                        />)
+                        }
                 )}
 
                 {/*if you click on a message*/}
