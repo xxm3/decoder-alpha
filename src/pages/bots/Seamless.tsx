@@ -45,7 +45,13 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                 <IonRow>
                     <IonCol size="12">
                         <h2 className="ion-no-margin font-bold text-xl"> Seamless - select a DAO</h2>
-                        <p className='ion-no-margin text-sm'>A new way to Request a collaboration with one of our  partnered servers, select the server you wish to collaborate with in list below, and fill out the collaboration form on the next page.</p>
+
+                        <p className='ion-no-margin'>
+                            A new way to Request a collaboration with one of our partnered servers - select the server you wish to collaborate with in list below, and fill out the collaboration form on the next page.
+                            <br/>
+                            Please make sure that you invited the correct SOL Decoder Bot to your server! You must use the SECOND link when on the <a href="https://soldecoder.app/manageserver" className="underline cursor-pointer">Select a Server</a> page
+                        </p>
+
                     </IonCol>
 
                     <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12"></IonCol>
@@ -74,23 +80,25 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         <div className="socialMediaIcon">
 
                                                             {/*discord*/}
-                                                            <img hidden={!discordImage} src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
+                                                            <img hidden={!server?.discord_link} src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
                                                                 event.stopPropagation();
                                                                 if(server.discord_link){
                                                                     window.open(server?.discord_link)
                                                                 }}} />
 
                                                             {/*twitter*/}
-                                                            <img hidden={!twitterImage} src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
+                                                            <img hidden={!server?.twitter_link} src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
                                                                 event.stopPropagation();
                                                                 if(server.twitter_link){
                                                                     window.open(server?.twitter_link)
                                                                 }}} />
                                                         </div>
                                                     </div>
-
                                                 </div>
+
                                                 <IonGrid className="py-4 px-4">
+                                                    <div className='text-white'>{server?.description}</div>
+
                                                     <IonRow hidden={!server?.twitter_followers}>
                                                         <IonCol size="8">
                                                             <IonText className='text-white'>Twitter Followers</IonText>

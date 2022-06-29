@@ -145,7 +145,10 @@ function WhitelistCard({
                         try {
 
                             // submit form!
-                            await instance.post("/whitelistClaims", { whitelist_id : id });
+                            // await instance.post("/whitelistClaims", {
+                            await instance.post("/createWhitelistClaims", {
+                                whitelist_id : id
+                            });
                             queryClient.setQueryData(
                                 ['whitelistPartnerships'],
                                 (queryData) => {

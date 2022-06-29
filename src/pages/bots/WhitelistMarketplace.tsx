@@ -81,8 +81,10 @@ function WhitelistMarketplace() {
 
                         This is an early look at Seamless - SOL Decoder's next joint venture with Communi3. We estimate it is only 10% complete - so plenty upgrades coming.
                         <ul>
-                            <li>- You will have to see which DAO the whitelist is for - soon we'll have filters to help. <span className="text-red-500">This is not only for SOL Decoder holders - other DAOs use this, so look at the "Required membership" and "Required Role" section</span></li>
+                            <li>- You will have to see which DAO the whitelist is for - soon we'll have filters to help. <span className="text-red-500">This is not only for SOL Decoder holders - other DAOs use this, so look at the "Must be member in" and "Required Role" section</span></li>
                             <li>- Also coming soon is Twitter integration to make sure you're following, and built in giveaways to have more people join</li>
+                            <li>- Want to learn more? <a className="underline cursor-pointer font-bold" href="https://medium.com/@sol-decoder/sol-decoder-presents-seamless-32251a4deb43" target="_blank">
+                                Read our Medium article here</a></li>
                         </ul>
                     </div>
                 </div>

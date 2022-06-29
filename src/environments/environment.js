@@ -18,7 +18,7 @@ export const environment = {
     // damjan? - 973608903801708634
 
     // clientId: isDev ? process.env.devClientId : '927008889092857898', // client ID for our discord bot,
-    clientId: isDev ? '973441843347984424' : '927008889092857898', // client ID for our discord bot, // TODO: need someone fix this to pull from env...
+    clientId: isDev ? '861589624400904204' : '927008889092857898', // client ID for our discord bot,
 
 	ionicAppUrl : isDev ? "http://localhost:8100" : "https://soldecoder.app"
 };

@@ -33,20 +33,11 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
      * Use Effects
      */
     useEffect(() => {
-
         if (window.innerWidth < 525) {
             setIsMobile(true)
         }
     }, [window.innerWidth])
 
-
-
-    // useEffect(() => {
-    //     instance
-    //         .get(`${environment.backendApi}/recentAlerts`)
-    //         .then((res: any) => setAlerts(res.data))
-    //         .catch() // ?;
-    // }, []);
     /**
      * Functions
      */
@@ -54,12 +45,14 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
     /**
      * Renders
      */
-
     return (
         <>
             {isMobile ?
                 <>
+
                     {/*FOR MOBILE*/}
+
+                    {/*update app*/}
                     <IonModal isOpen={isHardUpdateOpen} cssClass='update-modal'  >
                         <IonContent >
                             <div className='flex flex-col mt-5'>
@@ -76,8 +69,8 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                             </div>
                         </IonContent>
                     </IonModal>
-                    {/*<Whitelist/>*/}
 
+                    {/*Recent FF Named Stuff*/}
                     <FfNamed/>
 
                     {/*<RecentAlerts/>*/}
@@ -90,35 +83,48 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                 </> : <>
 
                     {/*FOR DESKTOP*/}
-                    {/*<Whitelist />*/}
 
                     <div className='flex flex-row w-full'>
                         <div className='w-1/2 '>
 
                             {/*Recent FF Named Stuff*/}
                             <FfNamed/>
+
                         </div>
                         <div className='w-1/2'>
 
+                            {/* waiting Aries... */}
                             {/* recent alerts */}
                             {/*<RecentAlerts/>*/}
 
                         </div>
                     </div>
 
-                    {/*<div className='flex flex-row w-full'>*/}
-                    {/*    <div className='w-1/2 '>*/}
-                    {/*        /!*Top Discord Gainers*!/*/}
-                    {/*        <TopDiscordGainers/>*/}
-                    {/*    </div>*/}
-                    {/*    <div className='w-1/2'>*/}
-                    {/*        /!* Top Twitter Gainers*!/*/}
-                    {/*        <TopTwitterGainers/>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
+
+                    <div className='flex flex-row w-full'>
+                        <div className='w-1/2 '>
+
+                            {/*Top Discord Gainers*/}
+                            <TopDiscordGainers/>
+
+                        </div>
+                        <div className='w-1/2'>
+
+                            {/* Top Twitter Gainers*/}
+                            <TopTwitterGainers/>
+
+                        </div>
+                    </div>
 
                 </>
             }
+
+
+
+
+
+
+
 
            {/* Word count of yesterday, last 3 days, last 5 days */}
            {/* <div hidden={!devMode}>*/}

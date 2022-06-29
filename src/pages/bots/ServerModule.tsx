@@ -659,29 +659,31 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             <hr/>
             <br/>
 
-            {/*TODO: shows up...*/}
-            {/*TODO: sol decoder should be first*/}
-            <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
-                <IonLabel className="md:text-2xl text-2xl font-semibold">
-                    Seamless - New mint
-                </IonLabel>
-            </div>
+            {/*<div hidden={!devMode}>*/}
+                <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
+                    <IonLabel className="md:text-2xl text-2xl font-semibold">
+                        Seamless - New mint
+                    </IonLabel>
+                </div>
 
-            <p>Give your whitelist out to servers with 0 work on your mods, 0 fake DAO screenshots, and soon 100% Twitter follower verification</p>
+                <p>Give your whitelist out to servers with 0 work on your mods, 0 fake DAO screenshots, and soon 100% Twitter follower verification</p>
 
-            {/*justify-center*/}
-			<div className="mt-3 mb-10 w-full flex " hidden={!devMode}>
-            	<IonButton className="text-base" css={css`
+                {/*justify-center*/}
+                <div className="mt-3 mb-10 w-full flex ">
+                    <IonButton className="text-base" css={css`
 					--padding-top: 25px;
 					--padding-bottom: 25px;
 					--padding-end: 20px;
 					--padding-start: 20px;
 				`} onClick={() => history.push(`/seamless/${serverId}`)}>
-	                Initiate Seamless
-	            </IonButton>
-            </div>
+                        Initiate Seamless
+                    </IonButton>
+                </div>
+            {/*</div>*/}
 
-            {/*TODO - ruchita/ajay: broke*/}
+
+
+            {/*TODO ruchita/ajay: broke*/}
 
             <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
                 <IonLabel className="md:text-2xl text-2xl font-semibold">

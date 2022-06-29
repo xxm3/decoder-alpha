@@ -316,7 +316,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     }
                                 }else{
                                     /**
-                                     * TODO: this doesn't work when there is a 400 error - need to tell the user what went wrong
+                                     * TODO ruchita: this doesn't work when there is a 400 error - need to tell the user what went wrong
                                      * get a 400 error when error like "{"errors":[{"value":"456","msg":"Invalid discord id","param":"target_server","location":"body"}]}" - so need to show this
                                      *
                                      * after fixing the error in the form - I click submit again but it doesn't work, nothing in network
