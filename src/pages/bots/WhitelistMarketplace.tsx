@@ -129,6 +129,9 @@ function WhitelistMarketplace() {
                             <li>- We estimate it is only 15% complete. Coming soon is Twitter integration to make sure you're following, and built in giveaways to have more people join</li>
                             <li>- Want to learn more? <a className="underline cursor-pointer font-bold" href="https://medium.com/@sol-decoder/sol-decoder-presents-seamless-32251a4deb43" target="_blank">
                                 Read our Medium article here</a></li>
+
+                            {/*TODO - see existing dao here ... contact us here ... */}
+
                         </ul>
                     </div>
                 </div>

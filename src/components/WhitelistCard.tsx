@@ -129,8 +129,8 @@ function WhitelistCard({
                     <p>{max_users - claimCounts}/{max_users}</p>
 					<p>Required Role (in "{targetServer?.name}" DAO)</p>
 					<p>{required_role_name}</p>
-					<p className="timeLeft" hidden={!showLive}>Time left</p>
-					<span hidden={!showLive}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
+					<p className="timeLeft" hidden={expired || expired === undefined}>Time left</p>
+					<span hidden={expired || expired === undefined}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
                 </div>
 
                 {/* button! */}
