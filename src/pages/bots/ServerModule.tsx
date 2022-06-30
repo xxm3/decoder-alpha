@@ -96,12 +96,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     // get guilds
     useEffect(() => {
 
-        if(location.state){
-            setIsNoBot(true);
-        }else{
-            setIsNoBot(false);
-        }
-
+        // TODO ruchita: I clicked on my server that had the bots, and it acted like i had no bots -- this should come from backend I thought?
+        // if(location.state){
+        //     setIsNoBot(true);
+        // }else{
+        //     setIsNoBot(false);
+        // }
 
     // }
     //
@@ -342,33 +342,250 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     return (
         <>
+            {/*Loading*/}
             <Backdrop style={{ color: '#fff', zIndex: 1000, }} open={backdrop} >
                 <CircularProgress color="inherit" />
             </Backdrop>
 
+            {/*seamless new mint*/}
+            <div className="server-module-bg p-4 px-6 w-full">
+                <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
+                    <IonLabel className="md:text-2xl text-2xl font-semibold">
+                        Seamless - New mint
+                    </IonLabel>
+                </div>
+                <p>Give your whitelist out to servers with 0 work on your mods, 0 fake DAO screenshots, and soon 100% Twitter follower verification</p>
+                <div className="mt-3 mb-3 w-full flex ">
+                    <IonButton className="text-base" css={css`
+                    --padding-top: 25px;
+                    --padding-bottom: 25px;
+                    --padding-end: 20px;
+                    --padding-start: 20px;
+                `} onClick={() => history.push(`/seamless/${serverId}`)}>
+                        Initiate Seamless
+                    </IonButton>
+                </div>
+            </div>
+
+            <br/>
+
+            {/* seamless existing */}
+            <div className="server-module-bg p-4 px-6 w-full">
+                <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
+                    <IonLabel className="md:text-2xl text-2xl font-semibold">
+                        Seamless - Existing DAO Profile
+                    </IonLabel>
+                </div>
+                <p>Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about.</p>
+
+                <form className="space-y-3"
+                    // when submitting the form...
+                      onSubmit={  handleSubmit(async (data) => {
+                          const { image, ...rest } = data;
+                          const rawData = { ...rest, };
+                          const formData = new FormData();
+
+                          Object.entries(rawData).forEach(([key, value]) => {
+                              if (value) formData.append(key, value as string);
+                          });
+                          formData.append('image', image);
+
+                          try {
+                              await instance.post( `/updateGuild/${serverId}`, formData, { headers: { 'Content-Type': 'application/json', }, } );
+                              present({
+                                  message: 'Discord profile created successfully! New servers will now be able to see much more info. on your DAO',
+                                  color: 'success',
+                                  duration: 10000,
+                              });
+                              reset();
+
+                          } catch (error) {
+                              console.error(error);
+
+                              if (isAxiosError(error)) {
+                                  const { response: { data } = { errors: [] } } = error as AxiosError<{ errors: { location: string; msg: string; param: string; }[]; }>;
+
+                                  if (!data || data.hasOwnProperty('error')) {
+                                      present({
+                                          message: ( data as unknown as { body: string } ).body,
+                                          color: 'danger',
+                                          duration: 10000,
+                                      });
+                                  } else if (data.hasOwnProperty('errors')) {
+                                      data.errors.forEach(({ param, msg }) => {
+                                          if (param !== 'source_server') {
+                                              setError( param as keyof FormFields, { message: msg, type: 'custom',});
+                                          } else {
+                                              present({
+                                                  message: msg,
+                                                  color: 'danger',
+                                                  duration: 10000,
+                                              });
+                                          }
+                                      });
+                                  }
+                              }else{
+                                  present({
+                                      message: 'An error occurred, please try again later or contact us',
+                                      color: 'danger',
+                                      duration: 10000,
+                                  });
+                              }
+                          }
+                      })}>
+
+                    <div className='mb-5'>
+                        <IonItem className="ion-item-wrapper mt-1">
+                            <Controller
+                                name="discordLink"
+                                control={control}
+                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                    <>
+                                        <IonInput
+                                            value={value}
+                                            onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                            type="url"
+                                            required
+                                            name={name}
+                                            ref={ref}
+                                            onIonBlur={onBlur}
+                                            placeholder='Discord Invite Link (never expires, no invite limit)' />
+                                        <p className="formError"> {error?.message} </p>
+                                    </>
+                                )} />
+                        </IonItem>
+                    </div>
+
+                    <div className='mb-5'>
+                        <IonItem className="ion-item-wrapper mt-1">
+                            <Controller
+                                name="twitterLink"
+                                control={control}
+                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                    <>
+                                        <IonInput
+                                            value={value}
+                                            onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                            type="url"
+                                            required
+                                            name={name}
+                                            ref={ref}
+                                            onIonBlur={onBlur}
+                                            placeholder='Twitter Link' />
+                                        <p className="formError"> {error?.message} </p>
+                                    </>
+                                )} />
+                        </IonItem>
+                    </div>
+
+                    <div>
+                        <IonItem className="ion-item-wrapper mt-1">
+                            <Controller
+                                name="description"
+                                control={control}
+                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                    <>
+                                        <IonTextarea
+                                            value={value}
+                                            onIonChange={(e:any) => {
+                                                ( e.target as HTMLInputElement ).value = e.detail.value as string;
+                                                onChange(e);
+                                            }}
+                                            required
+                                            name={name}
+                                            ref={ref}
+                                            onIonBlur={onBlur}
+                                            placeholder='Description of your DAO'
+                                        />
+                                        <p className="formError"> {error?.message} </p>
+                                    </>
+                                )}/>
+
+                        </IonItem>
+                    </div>
+                    <div className='mb-5'>
+                        <IonItem className="ion-item-wrapper mt-1">
+                            <Controller
+                                name="magicEdenLink"
+                                control={control}
+                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                    <>
+                                        <IonInput
+                                            value={value}
+                                            onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                            type="url"
+                                            name={name}
+                                            ref={ref}
+                                            onIonBlur={onBlur}
+                                            placeholder='Magic Eden Link' />
+                                        <p className="formError"> {error?.message} </p>
+                                    </>
+                                )} />
+                        </IonItem>
+                    </div>
+                    <div className='mb-5 mt-1 w-1/2'>
+                        <b>Image to represent your DAO</b>
+                        <Controller
+                            name="image"
+                            control={control}
+                            rules={{ required: true, }}
+                            render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                <>
+                                    <IonInput
+                                        value={value as unknown as string}
+                                        onIonChange={(e) => {
+                                            const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
+                                            const file = target .files?.[0] as FieldValues['image'];
+                                            if (file)
+                                                file.path =  URL.createObjectURL(file);
+                                            ( e.target as HTMLInputElement ).value = file as unknown as string;
+                                            onChange(e);
+                                        }}
+                                        name={name}
+                                        ref={ref}
+                                        required
+                                        onIonBlur={onBlur}
+                                        type={'file' as TextFieldTypes}
+                                        accept="image" />
+                                    <p className="formError"> {error?.message} </p>
+                                </>
+                            )} />
+
+                    </div>
+
+                    {/*justify-center*/}
+                    <div className=' mt-4 mb-5 w-full flex '>
+                        <IonButton className='w-50 h-12' type={'submit'} disabled={isSubmitting}>
+                            {isSubmitting ? ( <IonSpinner /> ) : ('Submit DAO Profile')}
+                        </IonButton>
+                    </div>
+                </form>
+            </div>
+
+            <br/>
+            <hr/>
+            <br/>
+
+            {/* configure bot */}
             <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
                 <IonLabel className="md:text-2xl text-2xl font-semibold">
                     Configure Bot Packages
                 </IonLabel>
             </div>
+            {/* module count */}
             <div className={`text-base flex ${isMobile ? 'mt-2' :''}`}>
-
                 {/* if they can't add any packages */}
                 {authorizedModule === 0 ?
-                <>
-                    <span className="text-red-500">You don't have enough NFTs to add packages. Please purchase the appropriate amount and have your role verified in Discord. If you feel this is an error, then log out (bottom left) and log in again. If you want to give one of your admins (that have the NFTs) to manage the bots in your server, then click the 'Add Admin' button here </span>
+                    <>
+                        <span className="text-red-500">You don't have enough NFTs to add packages. Please purchase the appropriate amount and have your role verified in Discord. If you feel this is an error, then log out (bottom left) and log in again. If you want to give one of your admins (that have the NFTs) to manage the bots in your server, then click the 'Add Admin' button here </span>
 
-                </> :
+                    </> :
 
                     // else show how many packages they can add
                     <span className="text-green-500">You are authorized to add {authorizedModule} package(s)</span>}
             </div>
 
-            {/* ability for owner to add someone else */}
-            {/*<div className="float-right pb-5">*/}
-            {/*    <Addserver addServerFlag={addServerFlag} setAddServerFlag={setAddServerFlag} />*/}
-            {/*</div>*/}
-
+            {/*instructions*/}
             <div className="flex flex-row justify-center w-full mt-3">
                 <div className="server-module-bg p-4 px-6 w-full">
                     <div className='w-full flex items-center justify-between mb-3'>
@@ -414,58 +631,13 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 </div>
             </div>
 
-            // TODO: remove
+            {/*module selection*/}
             { isNoBot ?
-                <div className="my-3 relative bg-yellow-300/25 p-5 rounded-xl">
-                <div className="text-md">
-                    <div className="mb-2 flex items-center w-full justify-between">
-                        <div className="flex items-center">
-                            <span className=" bg-yellow-500 w-7 h-7 flex items-center justify-center font-bold rounded-full mr-2">
-                                !
-                            </span>
-                            <span className="text-yellow-500 text-lg font-bold"> Bot Invite </span>
-                        </div>
-                    </div>
-
-                    <p>
-                        Your server will need to first have our Discord
-                        Bot invited to it. Click one of the below links,
-                        then in the "Add to Server" on the bottom,
-                        select your server. Then click "Continue", then
-                        "Authorize"
-                    </p>
-                    <ul className="list-disc ml-8 mt-3">
-                        <li>
-                            If using the "Daily Mints", "Fox Token", or
-                            "Magic Eden" package,{' '}
-                            <a className="font-bold underline cursor-pointer" href="https://discord.com/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20applications.commands%20bot%20guilds.members.read" > then click here </a>{' '}
-                            to add the Discord Bot to your server{' '}
-                        </li>
-                        <li>
-                            If you are a new mint and are using Seamless
-                            (our whitelist bot where we will give users
-                            whitelist roles if they are in a DAO and win
-                            a fcfs/giveaway),{' '}
-                            <a
-                                className="underline cursor-pointer font-bold"
-                                href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=268437504&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=applications.commands%20guilds%20guilds.members.read%20bot%20identify"
-                            >
-                                then click here
-                            </a>{' '}
-                            to add the Discord Bot to your server. This
-                            bot also supports all of the packages from
-                            the first link
-                        </li>
-                    </ul>
-                </div>
-                </div>
-
+                <>
+                </>
 
             : <div className="flex flex-row justify-center w-full mt-6">
-                {/*mt-6*/}
                 <div className='flex flex-col lg:flex-row gap-6 w-full'>
-
-                    {/*mintInfoModule  */}
 
                     <div className='basis-1/2'>
                         <div className="server-module-bg overflow-hidden">
@@ -661,259 +833,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 </div>
             </div> }
 
-
-            {/*Seamless button...*/}
-            <br/>
-            <hr/>
-            <br/>
-
-            {/*<div hidden={!devMode}>*/}
-                <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
-                    <IonLabel className="md:text-2xl text-2xl font-semibold">
-                        Seamless - New mint
-                    </IonLabel>
-                </div>
-
-                <p>Give your whitelist out to servers with 0 work on your mods, 0 fake DAO screenshots, and soon 100% Twitter follower verification</p>
-
-                {/*justify-center*/}
-                <div className="mt-3 mb-10 w-full flex ">
-                    <IonButton className="text-base" css={css`
-					--padding-top: 25px;
-					--padding-bottom: 25px;
-					--padding-end: 20px;
-					--padding-start: 20px;
-				`} onClick={() => history.push(`/seamless/${serverId}`)}>
-                        Initiate Seamless
-                    </IonButton>
-                </div>
-            {/*</div>*/}
-
-
-
-            {/*TODO ruchita/ajay: broke*/}
-
-            <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
-                <IonLabel className="md:text-2xl text-2xl font-semibold">
-                    Seamless - Existing DAO
-                </IonLabel>
-            </div>
-            <p>Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about.</p>
-
-
-            <div>
-
-
-                {/*<IonItem className="ion-item-wrapper mt-1">*/}
-                {/*    <IonInput placeholder="Discord Invite Link (never expires, no invite limit)" onIonChange={e => setDiscordLink(e.detail.value!)}/>*/}
-                {/*</IonItem>*/}
-                {/*<IonItem className="ion-item-wrapper mt-1">*/}
-                {/*    <IonInput placeholder="Twitter Link" onIonChange={e => setTwitterLink(e.detail.value!)}/>*/}
-                {/*</IonItem>*/}
-                {/*<IonItem className="ion-item-wrapper mt-1">*/}
-                {/*    <IonTextarea placeholder="Description of your DAO" onIonChange={e => setDescription(e.detail.value!)}/>*/}
-                {/*</IonItem>*/}
-                {/*<div className='mb-5 flex-row flex items-center'>*/}
-                {/*      <IonLabel className="text-white">Image to represent your DAO</IonLabel>*/}
-                {/*    <IonItem className="ion-item-wrapper mt-2">*/}
-                {/*        <input type="file" id="img" name="img" accept="image/png, image/gif, image/jpeg" onChange={(e)=>setImage(e.target.files?.[0])}/>*/}
-                {/*    </IonItem>*/}
-                {/*</div>*/}
-                {/*<div className="mt-4 mb-5 w-full flex justify-center" hidden={!devMode}>*/}
-                {/*    <IonButton  css={css`*/}
-                {/*        --padding-top: 25px;*/}
-                {/*        --padding-bottom: 25px;*/}
-                {/*        --padding-end: 20px;*/}
-                {/*        --padding-start: 20px;*/}
-                {/*    `} onClick={() => submitWhitelist()}>*/}
-                {/*        Submit*/}
-                {/*    </IonButton>*/}
-                {/*</div>*/}
-
-
-                <form className="space-y-3"
-                     // when submitting the form...
-                     onSubmit={  handleSubmit(async (data) => {
-                            const { image, ...rest } = data;
-                            const rawData = { ...rest, };
-                            const formData = new FormData();
-
-                            Object.entries(rawData).forEach(([key, value]) => {
-                                if (value) formData.append(key, value as string);
-                            });
-                            formData.append('image', image);
-
-                            try {
-                                await instance.post( `/updateGuild/${serverId}`, formData, { headers: { 'Content-Type': 'application/json', }, } );
-                                present({
-                                    message: 'Guild data created successfully!',
-                                    color: 'success',
-                                    duration: 10000,
-                                });
-                                reset();
-
-                            } catch (error) {
-                                console.error(error);
-
-                                if (isAxiosError(error)) {
-                                    const { response: { data } = { errors: [] } } = error as AxiosError<{ errors: { location: string; msg: string; param: string; }[]; }>;
-
-                                    if (!data || data.hasOwnProperty('error')) {
-                                        present({
-                                            message: ( data as unknown as { body: string } ).body,
-                                            color: 'danger',
-                                            duration: 10000,
-                                        });
-                                    } else if (data.hasOwnProperty('errors')) {
-                                        data.errors.forEach(({ param, msg }) => {
-                                            if (param !== 'source_server') {
-                                                setError( param as keyof FormFields, { message: msg, type: 'custom',});
-                                            } else {
-                                                present({
-                                                    message: msg,
-                                                    color: 'danger',
-                                                    duration: 10000,
-                                                });
-                                            }
-                                        });
-                                    }
-                                }else{
-                                    present({
-                                        message: 'An error occurred, please try again later or contact us',
-                                        color: 'danger',
-                                        duration: 10000,
-                                    });
-                                }
-                            }
-                        })}>
-
-                            <div className='mb-5'>
-                                <IonItem className="ion-item-wrapper mt-1">
-                                    <Controller
-                                    name="discordLink"
-                                    control={control}
-                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
-                                            <IonInput
-                                                value={value}
-                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
-                                                type="url"
-                                                required
-                                                name={name}
-                                                ref={ref}
-                                                onIonBlur={onBlur}
-                                                placeholder='Discord Invite Link (never expires, no invite limit)' />
-                                            <p className="formError"> {error?.message} </p>
-                                        </>
-                                    )} />
-                                </IonItem>
-                            </div>
-
-                            <div className='mb-5'>
-                                <IonItem className="ion-item-wrapper mt-1">
-                                    <Controller
-                                    name="twitterLink"
-                                    control={control}
-                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
-                                            <IonInput
-                                                value={value}
-                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
-                                                type="url"
-                                                required
-                                                name={name}
-                                                ref={ref}
-                                                onIonBlur={onBlur}
-                                                placeholder='Twitter Link' />
-                                            <p className="formError"> {error?.message} </p>
-                                        </>
-                                    )} />
-                                </IonItem>
-                            </div>
-
-
-                            <div>
-                                <IonItem className="ion-item-wrapper mt-1">
-                                    <Controller
-                                    name="description"
-                                    control={control}
-                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
-                                            <IonTextarea
-                                                value={value}
-                                                onIonChange={(e:any) => {
-                                                    ( e.target as HTMLInputElement ).value = e.detail.value as string;
-                                                     onChange(e);
-                                                    }}
-                                                required
-                                                name={name}
-                                                ref={ref}
-                                                onIonBlur={onBlur}
-                                                placeholder='Description'
-                                                />
-                                            <p className="formError"> {error?.message} </p>
-                                        </>
-                                    )}/>
-
-                                </IonItem>
-                            </div>
-                            <div className='mb-5'>
-                                <IonItem className="ion-item-wrapper mt-1">
-                                    <Controller
-                                    name="magicEdenLink"
-                                    control={control}
-                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
-                                            <IonInput
-                                                value={value}
-                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
-                                                type="url"
-                                                name={name}
-                                                ref={ref}
-                                                onIonBlur={onBlur}
-                                                placeholder='Magic Eden Link' />
-                                            <p className="formError"> {error?.message} </p>
-                                        </>
-                                    )} />
-                                </IonItem>
-                            </div>
-                            <div className='mb-5 mt-1 w-1/2'>
-                                    <Controller
-                                    name="image"
-                                    control={control}
-                                    rules={{ required: true, }}
-                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
-                                            <IonInput
-                                                value={value as unknown as string}
-                                                onIonChange={(e) => {
-                                                    const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
-                                                    const file = target .files?.[0] as FieldValues['image'];
-                                                    if (file)
-                                                        file.path =  URL.createObjectURL(file);
-                                                    ( e.target as HTMLInputElement ).value = file as unknown as string;
-                                                    onChange(e);
-                                                }}
-                                                name={name}
-                                                ref={ref}
-                                                required
-                                                onIonBlur={onBlur}
-                                                type={'file' as TextFieldTypes}
-                                                accept="image" />
-                                            <p className="formError"> {error?.message} </p>
-                                        </>
-                                    )} />
-
-                            </div>
-                        <div className=' mt-4 mb-5 w-full flex justify-center' hidden={!devMode}>
-                            <IonButton className='w-32 h-12' type={'submit'} disabled={isSubmitting}>
-                                {isSubmitting ? ( <IonSpinner /> ) : ('Submit')}
-                            </IonButton>
-                        </div>
-                    </form>
-
-
-            </div>
 
         </>
     );

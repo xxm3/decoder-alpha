@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
 import { IonButton, IonGrid, IonRow, IonCol, IonCard,  IonText, IonCheckbox,} from '@ionic/react';
@@ -35,7 +35,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                     tmpServerArr.push(guilds[i])
                 }
             }
-            setServerList(tmpServerArr)
+            setServerList(tmpServerArr);
             return guilds;
         }
     );
@@ -78,11 +78,11 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 <div className="cardImage relative">
 
                                                     {/* image */}
-                                                    <img src={server?.icon} className={server?.icon ? 'cardMainImage' : 'cardNoImage'}  alt='' />
+                                                    <img src={server?.image} className={server?.image ? 'cardMainImage' : 'cardNoImage'}  alt='' />
 
                                                     <div className="cardOverlay-content py-1 px-4">
 
-                                                        <div className='text-md'>{server?.name}</div>
+                                                        <div className='text-lg font-bold'>{server?.name}</div>
 
                                                         <div className="socialMediaIcon">
 

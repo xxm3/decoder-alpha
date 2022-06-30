@@ -14,11 +14,18 @@ import './SeamlessDetail.scss';
 function WhitelistMarketplace() {
 
     const [isLoading, setIsLoading] = useState(true);
-    const [isTabButton, setIsTabButton] = useState<String>('live');
+    const [isTabButton, setIsTabButton] = useState<String>('myDoa');
     const [liveWhiteList,setLiveWhiteList] = useState<IWhitelist[]>([]);
     const [expireWhiteList,setExpireWhiteList] = useState<IWhitelist[]>([]);
     const [myDoaWhiteList,setMyDoaWhiteList] = useState<IWhitelist[]>([]);
     const [myClaimWhiteList,setMyClaimWhiteList] = useState<IWhitelist[]>([]);
+
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+        if (window.innerWidth < 525) {
+            setIsMobile(true);
+        }
+    }, [window.innerWidth]);
 
     const uid = localStorage.getItem('uid')
     let userId:any
@@ -29,12 +36,12 @@ function WhitelistMarketplace() {
     }, [])
     const server = localStorage.getItem('servers')
     let serverArray = server &&  JSON.parse(server)
-    
+
     // get all your WL crap
     const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
-       
+
         async () => {
-         
+
 
                 try {
                     setIsLoading(true)
@@ -44,7 +51,7 @@ function WhitelistMarketplace() {
                     let whiteListMyDoa:any = []
                     let whiteListMyClaim:any = []
                     for(let i = 0; i < whitelists.length; i++){
-                        
+
                         if(whitelists[i].isExpired || !whitelists[i].active){
                             whiteListExpire.push(whitelists[i])
                         }else if(whitelists[i].myLiveDAO === true){
@@ -57,16 +64,16 @@ function WhitelistMarketplace() {
                                     whiteListMyClaim.push(whitelists[i])
                                 }
                             }
-                        } 
+                        }
                     }
                     setLiveWhiteList(whiteListLive);
                     setExpireWhiteList(whiteListExpire);
                     setMyDoaWhiteList(whiteListMyDoa)
                     setMyClaimWhiteList(whiteListMyClaim)
-    
+
                     return whitelists;
                 } catch (error) {
-    
+
                 }
                 finally {
                     setIsLoading(false)
@@ -77,18 +84,54 @@ function WhitelistMarketplace() {
     return (
 
         <>
+
+            {/*TODO
+
+            and on the /seamless page
+            show the me link on the "new seamless" page - semkun
+
+
+            # spots given…
+
+            Add instructions to site…
+
+            sol decoder first in list!!
+
+            change log!!
+
+
+
+            ruchita...
+            Can't announce until requires role set...
+
+
+
+            damjan..
+
+            answer sentries
+
+            upwork!!!
+
+            internconnected discord chatting ... for C3 X Decoder ---- later all winter war
+
+            andrew & i on moon spaces thing
+            */}
+
             {/* introduction */}
             <div className="flex flex-row justify-center w-full mt-9">
                 <div className="server-module-bg p-4 px-6 w-full">
                     <div className='w-full  items-center  mb-3'>
-                        <div className='text-xl font-semibold mb-3'>Welcome to Seamless!</div>
+                        <div className='text-xl font-semibold mb-1'>Welcome to Seamless!</div>
 
-                        This is an early look at Seamless - SOL Decoder's next joint venture with Communi3. We estimate it is only 10% complete - so plenty upgrades coming.
+                        This is an early look at Seamless - SOL Decoder's next joint venture with Communi3
                         <ul>
-                            <li>- You will have to see which DAO the whitelist is for - soon we'll have filters to help. <span className="text-red-500">This is not only for SOL Decoder holders - other DAOs use this, so look at the "Must be member in" and "Required Role" section</span></li>
-                            <li>- Also coming soon is Twitter integration to make sure you're following, and built in giveaways to have more people join</li>
+                            {/*<li>- You will have to see which DAO the whitelist is for - soon we'll have filters to help. <span className="text-red-500">This is not only for SOL Decoder holders - other DAOs use this, so look at the "Must be member in" and "Required Role" section</span></li>*/}
+                            <li>- We estimate it is only 15% complete. Coming soon is Twitter integration to make sure you're following, and built in giveaways to have more people join</li>
                             <li>- Want to learn more? <a className="underline cursor-pointer font-bold" href="https://medium.com/@sol-decoder/sol-decoder-presents-seamless-32251a4deb43" target="_blank">
                                 Read our Medium article here</a></li>
+
+                            {/*TODO - see existing dao here ... contact us here ... */}
+
                         </ul>
                     </div>
                 </div>
@@ -101,19 +144,19 @@ function WhitelistMarketplace() {
                     {/* tabs on the top (Live vs Expired) */}
                     <div className=' text-xl flex justify-center mt-5'>
                         <div className={`${isTabButton === 'myDoa' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive ' } w-50 h-10 `} onClick={()=>setIsTabButton('myDoa')}>
-                            {/* <p>Live - My DAO ({myDoaWhiteList?.length})</p> */}
-                            <div className="text-sm md:text-base p-2 md:px-4 w-full">Live-My DAO</div>
+                            {/* <p>Live - My DAOs ({myDoaWhiteList?.length})</p> */}
+                            <div className="text-sm md:text-base p-2 md:px-4 w-full">{isMobile ? 'Mine' : 'Live - My DAOs'}</div>
                             <div className=" bg-black/[.4] py-2 px-4 ">{myDoaWhiteList?.length}</div>
-                            
+
                         </div>
-                        <div className={`${isTabButton === 'live' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive' } ml-2 w-32 h-10 `} onClick={()=>setIsTabButton('live')}>
+                        <div className={`${isTabButton === 'live' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive' } ml-2 w-46 h-10 `} onClick={()=>setIsTabButton('live')}>
                             {/* <p>Live ({liveWhiteList?.length})</p> */}
-                            <div className="text-sm md:text-base p-2 md:px-4 w-full">Live</div>
+                            <div className="text-sm md:text-base p-2 md:px-4 w-full">{isMobile ? 'Others' : 'Live - Other DAOs'}</div>
                             <div className=" bg-black/[.4] py-2 px-4 ">{liveWhiteList?.length}</div>
                         </div>
                         <div className={`${isTabButton === 'expire' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive'} ml-2 w-32 h-10`}onClick={()=>setIsTabButton('expire')}>
                             {/* <p>Expired ({expireWhiteList?.length})</p> */}
-                            <div className="text-sm md:text-base p-2 md:px-4 w-full">Expired</div>
+                            <div className="text-sm md:text-base p-2 md:px-4 w-full">{isMobile ? 'Expired' : 'Expired'}</div>
                             <div className=" bg-black/[.4] py-2 px-4 ">{expireWhiteList?.length}</div>
                         </div>
                     </div>
@@ -127,7 +170,7 @@ function WhitelistMarketplace() {
                             <div className=" bg-black/[.4] py-2 px-4 ">{myClaimWhiteList?.length}</div>
                             </div>
                         </div> :  ''
-                        
+
                     }
 
                     {/* my Doa live */}
@@ -136,7 +179,7 @@ function WhitelistMarketplace() {
                             {
                                 myDoaWhiteList.length > 0 ? myDoaWhiteList.map((whitelist:any) => {
                                     return(<WhitelistCard {...whitelist}  key={Math.random()}/>)
-                                }) : <div className='text-xl'> There are no whitelists available</div> 
+                                }) : <div className='text-xl'> There are no whitelists available</div>
                             }
                         </div>
                     }
@@ -147,7 +190,7 @@ function WhitelistMarketplace() {
                             {
                                 liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) => {
                                    return(<WhitelistCard {...whitelist}  key={Math.random()}/>)
-                                }) : <div className='text-xl'> There are no whitelists available</div>  
+                                }) : <div className='text-xl'> There are no whitelists available</div>
                             }
                         </div>
                     }
@@ -169,11 +212,11 @@ function WhitelistMarketplace() {
                             {
                                 myClaimWhiteList.length > 0 ?  myClaimWhiteList.map((whitelist:any) => {
                                  return(<WhitelistCard {...whitelist}  key={Math.random()}/>)
-                                }) : <div className='text-xl'> There are no whitelists available</div> 
+                                }) : <div className='text-xl'> There are no whitelists available</div>
                             }
                         </div>
                     }
-                 
+
 
                     {/* no whitelists */}
                     <div className={(whitelists?.length < 1 && !isLoading) ? "flex items-center justify-between w-full" : 'flex items-center justify-end w-full'}>

@@ -129,37 +129,99 @@ https://prowe214.medium.com/tip-how-to-view-localhost-web-apps-on-your-phone-ad6
 (1) Token name alerts should be sent to all of the guilds in the database. If there is a failure for a single guild then the token should not be marked as alerted (property nameAlerted=1) in the database.
 (2) The name alerts can be tested by calling the endpoint GET http://localhost:5001/nft-discord-relay/us-central1/api/receiver/alertTokenNames. In the database the tokens which have nameAlerted=0 and have a name will be alerted in the analytics channel (for vehn's dojo that is analytics-etc-test0000).
 
+
 ### 17) Seamless
 
--   Go to https://soldecoder.app/manageserver
+- Go to https://soldecoder.app/manageserver
 
--   Invite the bot to your server by looking at the top section, and using the 3rd link
+- Invite the bot to your server by looking at the top section, and using the 3rd link
 
--   Drag the role (SOL Decoder) HIGHER than your whitelist role
+- Drag the role (SOL Decoder) HIGHER than your whitelist role
 
--   In the Roles page, Right click on your whitelist role - copy the ID. If you don't see a "Copy ID", then Settings -> Advanced -> Enable Dev mode
+- In the Roles page, Right click on your whitelist role - copy the ID. If you don't see a "Copy ID", then Settings -> Advanced -> Enable Dev mode
 
--   Click Add on your server
+- Click Add on your server
 
--   In the URL - add ?devMode=true and then press enter
+- In the URL - add ?devMode=true and then press enter
 
--   On the bottom click Initiate Whitelist
+- On the bottom click Initiate Whitelist
 
--   Select server -> SOL Decoder
+- Select server -> SOL Decoder
 
--   Max users - 100
+- Max users - 100
 
--   Description - Shark Lounge Whitelist! Please join <link to your Discord>
+- Description - Shark Lounge Whitelist! Please join <link to your Discord>
 
--   Expiration date - June 28th
+- Expiration date - June 28th
 
--   WL role - the ID you copied above
+- WL role - the ID you copied above
 
--   Required role (this is the role you are requiring SOL Decoder to have, which is our 1 NFT role) - 966704866640662548
+- Required role (this is the role you are requiring SOL Decoder to have, which is our 1 NFT role) - 966704866640662548
 
--   Enter twitter / image of your NFT
+- Enter twitter / image of your NFT
 
--   Click save
+- Click save
+
+## Admin & Seamless
+
+### /manageserver
+-   Guilds where you're owner are being displayed properly
+-   Registering a guild as an admin works fine
+-   Fetching roles and other info for initiating whitelists is working properly
+-   Initiating whitelists is working properly
+-   `/whitelistmarketplace` page is displaying wls properly
+
+## Having NFTs or not, and bot modules
+
+New owner OR admin comes on ... they have no NFTs ... they register the guild .. .nothing works to enable modules because they dont have 3 NFTs
+
+so they tell an admin to come on ... he clicks add .... he sees the NEW button ... he clicks it, now its all enabled
+-- New button = guilds.js - POST /guilds/:id/nftCheckUserDiscordId
+-- An endpoint to update nftCheckUserDiscordId of a guild in the database. This updates nftCheckUserDiscordId to the ID of currently logged in user.
+
+now the owner can come back on - they can refresh the page - and he can now enable
+
+
+
+-----
+-----
+
+## Assassin Bot
+
+### What's New?
+- Endpoints for configuring assassin module
+- Message url whitelist detection
+- Logs for actions that bot takes
+- some more stuff, for more info: https://gitlab.com/nft-relay-group/discord-bots/-/issues/28
+
+### What to test/How to test?
+#### Endpoints
+Refer to `docs/URLS.md` file for how to test the endpoints
+
+- `POST /guilds/:guildId/setTimeoutDuration`
+- `POST /guilds/:guildId/updateWhitelistedDomains`
+- `POST /guilds/:guildId/updateWhitelistCheckChannels`
+- `POST /guilds/:guildId/updateSecurityMode`
+- `POST /guilds/:guildId/updateWhitelistViolentModeRole`
+- `POST /guilds/:guildId/logs`
+- `POST /guilds/:guildId/updateSimulationMode`
+
+#### Message Parser
+> Before you test this, make sure to enable simulation mode using `POST /guilds/:guildId/updateSimulationMode`
+
+Create a list of whitelisted domains (`POST /guilds/:guildId/updateWhitelistedDomains`) and configure channels to scan (`POST /guilds/:guildId/updateWhitelistCheckChannels`).
+
+Now send a message containing a url that's not whitelisted in one of the channels you added. Check `guild_logs` model to see if the action was logged - if yes; then message parser events are working fine.
+
+You can try different modes by switching between `mild`/`violent` mode using `POST /guilds/:guildId/updateSecurityMode`; If you switch to `violent` mode, make sure to set `POST /guilds/:guildId/updateWhitelistViolentModeRole`.
+
+Feel free to mention me if you have any queries regarding any of the above stuff.
+
+
+
+
+
+
 
 ---
 
@@ -225,46 +287,6 @@ Token related webhooks are now properly displaying the charts
 This was tested in Test Vehn Dojo
 [Link to message](https://discord.com/channels/739978662023135264/951666652691464202/979482863433027594)
 
-## Admin & Seamless
 
-### /manageserver
--   Guilds where you're owner are being displayed properly
--   Registering a guild as an admin works fine
--   Fetching roles and other info for initiating whitelists is working properly
--   Initiating whitelists is working properly
--   `/whitelistmarketplace` page is displaying wls properly
 
------
------
-
-## Assassin Bot
-
-### What's New?
-- Endpoints for configuring assassin module
-- Message url whitelist detection
-- Logs for actions that bot takes
-- some more stuff, for more info: https://gitlab.com/nft-relay-group/discord-bots/-/issues/28
-
-### What to test/How to test?
-#### Endpoints
-Refer to `docs/URLS.md` file for how to test the endpoints
-
-- `POST /guilds/:guildId/setTimeoutDuration`
-- `POST /guilds/:guildId/updateWhitelistedDomains`
-- `POST /guilds/:guildId/updateWhitelistCheckChannels`
-- `POST /guilds/:guildId/updateSecurityMode`
-- `POST /guilds/:guildId/updateWhitelistViolentModeRole`
-- `POST /guilds/:guildId/logs`
-- `POST /guilds/:guildId/updateSimulationMode`
-
-#### Message Parser
-> Before you test this, make sure to enable simulation mode using `POST /guilds/:guildId/updateSimulationMode`
-
-Create a list of whitelisted domains (`POST /guilds/:guildId/updateWhitelistedDomains`) and configure channels to scan (`POST /guilds/:guildId/updateWhitelistCheckChannels`).
-
-Now send a message containing a url that's not whitelisted in one of the channels you added. Check `guild_logs` model to see if the action was logged - if yes; then message parser events are working fine.
-
-You can try different modes by switching between `mild`/`violent` mode using `POST /guilds/:guildId/updateSecurityMode`; If you switch to `violent` mode, make sure to set `POST /guilds/:guildId/updateWhitelistViolentModeRole`.
-
-Feel free to mention me if you have any queries regarding any of the above stuff.
 
