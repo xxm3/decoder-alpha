@@ -162,7 +162,7 @@ function Login() {
                                             params.set('state', next);
                                                 const urlToRedirect = `https://discord.com/api/oauth2/authorize?client_id=${
                                                 environment.clientId
-                                                }&response_type=code&scope=identify+guilds&${params.toString()}`;
+                                                }&response_type=code&scope=identify+guilds+guilds.members.read&${params.toString()}`;
                                                 setError("")
                                                 if(isMobileDevice){
                                                     const browser = InAppBrowser.create(urlToRedirect, '_blank', 'location=yes');
