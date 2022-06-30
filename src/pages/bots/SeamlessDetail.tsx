@@ -8,7 +8,6 @@ import { Controller, FieldValues, useForm } from 'react-hook-form';
 import isAxiosError from '../../util/isAxiosError';
 import { AxiosError } from 'axios';
 import { TextFieldTypes } from '@ionic/core';
-import { IWhitelist } from '../../types/IWhitelist';
 import { useQuery } from 'react-query';
 import BotServerCard from './components/BotServerCard';
 
@@ -37,6 +36,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
     // new mint / source server --- comes from params
     const { serverId } = useParams<any>();
+
+    const serverObject = localStorage.getItem('servers')
+    let serverArray = serverObject &&  JSON.parse(serverObject)
 
     let history = useHistory();
     const [formField,setFromFiled] = useState<any>({
@@ -91,7 +93,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         async () => {
             try {
                 setIsLoading(true)
-                const { data: whitelists } = await instance.get<IWhitelist[]>( '/getWhitelistPartnerships/me' );
+                const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
                 let imagePath = await onImageEdit(whitelists[whitelists.length-1]?.image);
                 setFromFiled({
                     // image: imagePath || '',
@@ -250,7 +252,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
 
                 <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >
-                    <BotServerCard serverData={server} />
+                    <BotServerCard serverData={server.state} />
                 </IonCol>
 
                 <IonCol size-xl="8" size-md="6" size-sm="6" size-xs="12">
@@ -429,34 +431,60 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                                 </IonItem>
                             </div>
-
-                            <div>
-                                <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
-                                <Controller
-                                    name="required_role"
-                                    rules={{ required: true, }}
-                                    control={control}
-                                    render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
-                                        <>
-                                            <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
-                                                onChange={onChange}
-                                                name={name}
-                                                onBlur={onBlur}
-                                                ref={ref}
-                                                placeholder='Select a Required Role'
-                                                value={value}
-                                                required
-                                                >
-                                                    <option value=''>Select a Required Role</option>
-                                                    {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{ return (<option  key={role.id}  value={role.id} > {role.name} </option>)} )}
-                                            </select>
-                                            <p className="formError"> {error?.message} </p>
-                                        </>
-                                    )}
-                                />
+                            {whiteListRequireRole.length > 0 ? 
+                                <div>
+                                    <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
+                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <Controller
+                                        name="required_role"
+                                        rules={{ required: true, }}
+                                        control={control}
+                                        render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
+                                            <>
+                                                <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
+                                                    onChange={onChange}
+                                                    name={name}
+                                                    onBlur={onBlur}
+                                                    ref={ref}
+                                                    placeholder='Select a Required Role'
+                                                    value={value}
+                                                    required
+                                                    >
+                                                        <option value=''>Select a Required Role</option>
+                                                        {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{ return (<option  key={role.id}  value={role.id} > {role.name} </option>)} )}
+                                                </select>
+                                                <p className="formError"> {error?.message} </p>
+                                            </>
+                                        )}
+                                    />
+                                    </IonItem>
+                                </div>
+                            : 
+                                <div>
+                                    <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
+                                    <IonItem className="ion-item-wrapper mt-1">
+                                        <Controller
+                                        name="required_role"
+                                        control={control}
+                                        render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                            <>
+                                                <IonInput
+                                                    value={value}
+                                                    onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                    type="url"
+                                                    required
+                                                    name={name}
+                                                    ref={ref}
+                                                    onIonBlur={onBlur}
+                                                    placeholder='Required Role' />
+                                                <p className="formError"> {error?.message} </p>
+                                            </>
+                                        )} />
                                 </IonItem>
-                            </div>
+                                </div>
+                            }
+
+                            
                         </IonCard>
 
                         <IonCard className="ion-no-margin rounded-md ion-padding mb-2">

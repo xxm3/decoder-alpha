@@ -87,32 +87,47 @@ function WhitelistMarketplace() {
 
             {/*TODO
 
-            and on the /seamless page
-            show the me link on the "new seamless" page - semkun
+
+             2) Admin with NO NFTs comes on ... can't do anything (even though they should, since the server has an owner with an NFT on it)
+
+
+
+ Tell me which URL I use to populate the discord / twitter #s (in guild table) … over a cronjob
+Plan:
+- Here is a API you need to put on cronjob to populate discord and twitter #s data in guild table.
+- API: updateAllGuilds in whitelistRouter.js
+
+// CRON to cache guilds for assassin module
+router.post('/cache-assassin-guilds', async (req,
+
+
+
+
+sol decoder should be first - getAllGuildsData
+
+didnt add new discord charts :(
+
+still 10 blank user_id…
+
+if its lower role ... OR you invited the wrong bot -- does it spit out everything to console here, including the token? at least with old API
+
+
 
 
             # spots given…
 
             Add instructions to site…
 
-            sol decoder first in list!!
-
-            change log!!
-
-
 
             ruchita...
-            Can't announce until requires role set...
+            Can't announce profiles to dao until requires role set...
 
-
-
-            damjan..
-
-            answer sentries
 
             upwork!!!
 
             internconnected discord chatting ... for C3 X Decoder ---- later all winter war
+            - and later for users to post what mints they like
+            --- into task chat!
 
             andrew & i on moon spaces thing
             */}
