@@ -336,7 +336,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                  }}
                                                   name={name} value={value}  onIonBlur={onBlur} ref={ref} >
                                                 <IonSelectOption value="fcfs"> FCFS </IonSelectOption>
-                                                <IonSelectOption  value="raffle" disabled  > Raffle (Coming soon) </IonSelectOption>
+                                                <IonSelectOption  value="raffle"> Raffle </IonSelectOption>
                                             </IonSelect>
                                         </>
                                     )}  />

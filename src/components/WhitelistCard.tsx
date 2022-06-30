@@ -43,7 +43,7 @@ function WhitelistCard({
 	const [claiming, setClaiming] = useState<boolean>(false);
 	const queryClient = useQueryClient();
 	const [present] = useIonToast();
-	const full = claimCounts >= max_users;
+	const full = type==='fcfs' ? claimCounts >= max_users : false;
     const [isExploding, setIsExploding] = useState<boolean>(false);
     const uid  = localStorage.getItem('uid');
 
@@ -64,7 +64,7 @@ function WhitelistCard({
         // }
 
         if(claimed){
-            return "Claimed"
+            return type==='fcfs' ? 'Claimed' : 'Entered'
         }else if(expired){
             return "Already expired"
         }else if(full){
@@ -74,18 +74,18 @@ function WhitelistCard({
         }else if(claims[0] && claims[0].user && uid){
             // these should always match, so just returning it here. Query is on whitelistRouter.js.getQueryOptions()
             if(claims[0].user.discordId === JSON.parse(uid)){
-                return "Claimed"
+                return type==='fcfs' ? 'Claimed' : 'Entered'
             }else{
-                return "Claimed"
+                return type==='fcfs' ? 'Claimed' : 'Entered'
             }
         }else {
-            return "Obtain whitelist"
+            return type==='fcfs' ? 'Obtain whitelist' : 'Enter raffle'
          }
     }
 
     // for confetti
     useEffect(() => {
-        if(claimed) {
+        if(claimed && type==='fcfs') {
             setIsExploding(true);
         }
     },[]);
@@ -125,12 +125,24 @@ function WhitelistCard({
                 <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>
                     <p>{type.toUpperCase()}</p>
-                    <p>Slots left </p>
-                    <p>{max_users - claimCounts}/{max_users}</p>
+                    {
+                        type==="fcfs" ? 
+                        (<>
+                            <p>Slots left </p>
+                            <p>{max_users - claimCounts}/{max_users}</p>
+                        </>) :
+                        (<>
+                            <p>Winning spots </p>
+                            <p>{max_users}</p>
+                            <p>Users entered </p>
+                            <p>{claimCounts}</p>
+                        </>)
+                    }
+                    
 					<p>Required Role (in "{targetServer?.name}" DAO)</p>
 					<p>{required_role_name}</p>
-					<p className="timeLeft" hidden={!showLive}>Time left</p>
-					<span hidden={!showLive}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
+					<p className="timeLeft" hidden={expired || expired === undefined}>Time left</p>
+					<span hidden={expired || expired === undefined}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
                 </div>
 
                 {/* button! */}
@@ -147,7 +159,8 @@ function WhitelistCard({
                             // submit form!
                             // await instance.post("/whitelistClaims", {
                             await instance.post("/createWhitelistClaims", {
-                                whitelist_id : id
+                                whitelist_id : id,
+                                type: type
                             });
                             queryClient.setQueryData(
                                 ['whitelistPartnerships'],
@@ -165,8 +178,10 @@ function WhitelistCard({
                             );
 
                             // success!
-
-                            setIsExploding(true);
+                            if(type==='fcfs') {
+                                setIsExploding(true);
+                            }
+                            
                             present({
                                 message: 'Whitelist claimed successfully! You are now whitelisted in ' + sourceServer.name,
                                 color: 'success',
