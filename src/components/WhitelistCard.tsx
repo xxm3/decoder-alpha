@@ -181,9 +181,12 @@ function WhitelistCard({
                             if(type==='fcfs') {
                                 setIsExploding(true);
                             }
-                            
+
+                            const message = type==='fcfs' ? 
+                                'Whitelist claimed successfully! You are now whitelisted in ' + sourceServer.name :
+                                'Entered whitelist raffle successfully! You are now waiting for whitelist raffle in ' + sourceServer.name;
                             present({
-                                message: 'Whitelist claimed successfully! You are now whitelisted in ' + sourceServer.name,
+                                message: message,
                                 color: 'success',
                                 duration: 10000,
                             });
