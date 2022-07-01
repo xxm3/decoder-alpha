@@ -10,6 +10,7 @@ import { AxiosError } from 'axios';
 import { TextFieldTypes } from '@ionic/core';
 import { useQuery } from 'react-query';
 import BotServerCard from './components/BotServerCard';
+import Help from '../../components/Help';
 
 /**
  * The page they see when they've clicked "initiate seamless" ... then clicked on a guild
@@ -26,6 +27,7 @@ interface FormFields {
     whitelist_role: string;
     description: string;
     required_role: string;
+    verified_role: string;
     twitter: string;
     discordInvite:string;
     magicEdenUpvoteUrl?:string;
@@ -310,8 +312,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 control={control}
                                 render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => {
                                     return (
-                                        <>
+                                        <div className='flex flex-col w-full'>
                                             <IonInput
+                                                className='w-full'
                                                 onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string;  onChange(e); }}
                                                 required
                                                 type="number"
@@ -323,7 +326,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 placeholder='ie. 25'
                                             />
                                             <p className="formError"> {error?.message} </p>
-                                        </>
+                                        </div>
                                     )
                                 }} />
                                 </IonItem>
@@ -338,7 +341,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     control={control}
                                     render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) =>{
                                     return (
-                                        <>
+                                        <div className='flex flex-col w-full'>
                                             <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
                                                 onChange={onChange}
                                                 name={name}
@@ -351,6 +354,38 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 {whiteListRole && whiteListRole.map((role:any) =>{ return (<option  key={role.id} value={role.id}> {role.name} </option>)}  )}
                                             </select>
                                             <p className="formError"> {error?.message} </p>
+                                        </div>
+                                    )}}
+                                />
+
+                                </IonItem>
+                            </div>
+                            <div className='mb-5'>
+                                <IonLabel className="text-white">Verified role (a role that indicates a member of your new mint server is verified)
+                                    <Help description={`Some servers have a verification system in place to prevent their server being overpopulated with fake members.
+                                    Most systems work in a way that a member has to do a certain action like react to a message or click somewhere in order to obtain a role indicating that the user is verified in the server.
+                                    If your new mint server has a role for verified members, select it below. The verified role will be added alongside the whitelist role so that the member can get automatically verified in the server.`}/>
+                                </IonLabel>
+                                <IonItem className="ion-item-wrapper mt-1">
+                                <Controller
+                                    name="verified_role"
+                                    rules={{ required: true, }}
+                                    control={control}
+                                    render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) =>{
+                                    return (
+                                        <>
+                                            <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
+                                                onChange={onChange}
+                                                name={name}
+                                                value={value}
+                                                onBlur={onBlur}
+                                                ref={ref}
+                                                required
+                                                placeholder='Select a Verified Role' >
+                                              <option value=''>Select a Verified Role</option>
+                                                {whiteListRole && whiteListRole.map((role:any) =>{ return (<option  key={role.id} value={role.id}> {role.name} </option>)}  )}
+                                            </select>
+                                            <p className="formError"> {error?.message} </p>
                                         </>
                                     )}}
                                 />
@@ -359,14 +394,14 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
                             {whiteListRequireRole.length > 0 ?
                                 <div>
-                                    <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
+                                    <IonLabel className="text-white">Required Role Id (role required of them in the existing DAO server, to enter)</IonLabel>
                                     <IonItem className="ion-item-wrapper mt-1">
                                     <Controller
                                         name="required_role"
                                         rules={{ required: true, }}
                                         control={control}
                                         render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
-                                            <>
+                                            <div className='flex flex-col w-full'>
                                                 <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
                                                     onChange={onChange}
                                                     name={name}
@@ -380,7 +415,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{ return (<option  key={role.id}  value={role.id} > {role.name} </option>)} )}
                                                 </select>
                                                 <p className="formError"> {error?.message} </p>
-                                            </>
+                                            </div>
                                         )}
                                     />
                                     </IonItem>
@@ -393,9 +428,10 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         name="required_role"
                                         control={control}
                                         render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                            <>
+                                            <div className='flex flex-col w-full'>
                                                 <IonInput
                                                     value={value}
+                                                    className='w-full'
                                                     onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                                     type="text"
                                                     required
@@ -404,7 +440,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                     onIonBlur={onBlur}
                                                     placeholder='Required Role' />
                                                 <p className="formError"> {error?.message} </p>
-                                            </>
+                                            </div>
                                         )} />
                                 </IonItem>
                                 </div>
@@ -423,8 +459,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     rules={{ required: true, }}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) =>{
                                         return(
-                                            <>
+                                            <div className='flex flex-col w-full'>
                                                 <IonInput
+                                                    className='w-full'
                                                     value={value as unknown as string}
                                                     onIonChange={(e) => {
                                                         const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
@@ -441,7 +478,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                     type={'file' as TextFieldTypes}
                                                     accept="image" />
                                                 <p className="formError"> {error?.message} </p>
-                                            </>
+                                            </div>
                                         )
                                     } } />
                                 </IonItem>
@@ -454,8 +491,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     name="discordInvite"
                                     control={control}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
+                                        <div className='flex flex-col w-full'>
                                             <IonInput
+                                                className='w-full'
                                                 value={value}
                                                 onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                                 type="url"
@@ -465,7 +503,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 onIonBlur={onBlur}
                                                 placeholder='Discord Invite Link' />
                                             <p className="formError"> {error?.message} </p>
-                                        </>
+                                        </div>
                                     )} />
                                 </IonItem>
                             </div>
@@ -477,8 +515,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     name="twitter"
                                     control={control}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
+                                        <div className='flex flex-col w-full'>
                                             <IonInput
+                                                className='w-full'
                                                 value={value}
                                                 onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                                 type="url"
@@ -488,7 +527,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 onIonBlur={onBlur}
                                                 placeholder='Twitter Link' />
                                             <p className="formError"> {error?.message} </p>
-                                        </>
+                                        </div>
                                     )} />
                                 </IonItem>
                             </div>
@@ -499,8 +538,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     name="magicEdenUpvoteUrl"
                                     control={control}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
+                                        <div className='flex flex-col w-full'>
                                             <IonInput
+                                                className='w-full'
                                                 value={value}
                                                 onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                                 type="url"
@@ -510,7 +550,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 onIonBlur={onBlur}
                                                 placeholder='Magic Eden drops URL (to get people to upvote it)' />
                                             <p className="formError"> {error?.message} </p>
-                                        </>
+                                        </div>
                                     )} />
                                 </IonItem>
                             </div>
@@ -522,8 +562,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     name="description"
                                     control={control}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
+                                        <div className='flex flex-col w-full'>
                                             <IonTextarea
+                                                className='w-full'
                                                 value={value}
                                                 onIonChange={(e:any) => {
                                                     ( e.target as HTMLInputElement ).value = e.detail.value as string;
@@ -536,7 +577,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 placeholder='Description'
                                                 maxlength={2000} />
                                             <p className="formError"> {error?.message} </p>
-                                        </>
+                                        </div>
                                     )}/>
 
                                 </IonItem>

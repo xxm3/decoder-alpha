@@ -8,8 +8,8 @@ import isAxiosError from '../util/isAxiosError';
 import TimeAgo from './TimeAgo';
 import "./WhitelistCard.scss"
 import ConfettiExplosion from 'react-confetti-explosion';
-import { Grid } from '@material-ui/core';
 import {logoDiscord, logoTwitter} from 'ionicons/icons';
+import MagicEden from '../../src/images/me-white.png'
 
 /**
  * The page they see when they are on /seamless, and browsing for whitelists etc..
@@ -37,6 +37,7 @@ function WhitelistCard({
 	claimed,
 	claimCounts,
     claims,
+    magicEdenUpvoteUrl,
 }: IWhitelist) {
 
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
@@ -109,10 +110,13 @@ function WhitelistCard({
                     </div>
                     <div className='flex items-center flex-col justify-center mt-2'>
                         <div>
-                            {discordInvite && ( <a href={discordInvite} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoDiscord} className="h-7 w-7" /> </a> )}
+                            {discordInvite && ( <a href={discordInvite} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoDiscord} className="h-6 w-6" /> </a> )}
                         </div>
                         <div>
-                            {twitter && ( <a href={twitter} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoTwitter} className="h-7 w-7" /> </a> )}
+                            {twitter && ( <a href={twitter} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoTwitter} className="h-6 w-6" /> </a> )}
+                        </div>
+                        <div>
+                            {magicEdenUpvoteUrl && ( <a href={magicEdenUpvoteUrl} className="hover:opacity-70" target="_blank" > <img src={MagicEden} className="h-6 w-6" /> </a> )}
                         </div>
                     </div>
                 </div>

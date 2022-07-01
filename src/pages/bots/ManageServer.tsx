@@ -71,11 +71,11 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             .then(({ data }) => {
                 if(data){
                     if(data.noBot){
-                        history.push({ pathname: `/servermodule/${server.id}`,state:data });
+                        history.push({ pathname: `/servermodule/${server.id}`,search:'noBot' });
                     }
                     history.push({ pathname: `/servermodule/${server.id}`});
                 }
-                history.push({ pathname: `/servermodule/${server.id}`,state:data });
+                // history.push({ pathname: `/servermodule/${server.id}`,state:data });
             })
             .catch((error: any) => {
                 console.log('error', error);

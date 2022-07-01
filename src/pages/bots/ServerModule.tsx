@@ -15,6 +15,7 @@ import { Controller, FieldValues, useForm } from 'react-hook-form';
 import isAxiosError from '../../util/isAxiosError';
 import { AxiosError } from 'axios';
 import { TextFieldTypes } from '@ionic/core';
+import { server } from 'ionicons/icons';
 
 /**
  * The page they see when they click "Add" on one of their servers
@@ -78,6 +79,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
      * Use Effects
      */
 
+    console.log('server',location)
+
      useEffect(() => {
         if(!localStorage.getItem('role')){
             history.push('/manageserver')
@@ -96,17 +99,22 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     }, [window.innerWidth]);
 
+    // useEffect(() => {
+    //     if(location.search === 'noBot'){
+    //         setIsNoBot(true);
+    //     }else{
+    //         setIsNoBot(false);
+    //     }
+    // }, [location.search])
+    
+
 
 
     // get guilds
     useEffect(() => {
 
         // TODO ruchita: I clicked on my server that had the bots, and it acted like i had no bots -- this should come from backend I thought?
-        // if(location.state){
-        //     setIsNoBot(true);
-        // }else{
-        //     setIsNoBot(false);
-        // }
+       
 
     // }
     //
@@ -176,37 +184,44 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     }, [role]);
 
+    // get guild form data that user submit previously 
     const getGuildFormData = async() =>{
 
-        instance .get(`/getGuild/${serverId}`)
-            .then((response) => {
-                let data = response.data.data;
-                setGuildFormData({
-                    magicEdenLink:data.magiceden_link,
-                    description:data.description,
-                    twitterLink:data.twitter_link,
-                    discordLink:data.discord_link,
+        if (serverId) {
+            setIsLoading(true);
+            instance
+                .get(`/guilds/${serverId}?checkCondition=false`)
+                .then((response) => {
+                    let data = response.data.data;
+                    setGuildFormData({
+                        magicEdenLink:data.magiceden_link,
+                        description:data.description,
+                        twitterLink:data.twitter_link,
+                        discordLink:data.discord_link,
+                    })
+                
                 })
-            })
-            .catch((error: any) => {
-                let msg = '';
-                if (error && error.response) {
-                    msg = String(error.response.data.message);
-                } else {
-                    msg = 'Unable to connect. Please try again later';
-                }
+                .catch((error: any) => {
+                    let msg = '';
+                    if (error && error.response) {
+                        msg = String(error.response.data.message);
+                    } else {
+                        msg = 'Unable to connect. Please try again later';
+                    }
 
-                present({
-                    message: msg,
-                    color: 'danger',
-                    duration: 5000,
-                    buttons: [{ text: 'X', handler: () => dismiss() }],
+                    present({
+                        message: msg,
+                        color: 'danger',
+                        duration: 5000,
+                        buttons: [{ text: 'X', handler: () => dismiss() }],
+                    });
+
+                })
+                .finally(() => {
+                    setIsLoading(false);
                 });
-
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
+        }
+        
     }
 
     // update guilds modules
@@ -480,7 +495,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 name="magicEdenLink"
                                 control={control}
                                 render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                    <>
+                                    <div className='flex flex-col w-full'>
                                         <IonInput
                                             value={value}
                                             onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
@@ -490,7 +505,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             onIonBlur={onBlur}
                                             placeholder='Magic Eden Link to existing NFT' />
                                         <p className="formError"> {error?.message} </p>
-                                    </>
+                                    </div>
+
                                 )} />
                         </IonItem>
                     </div>
@@ -500,7 +516,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 name="discordLink"
                                 control={control}
                                 render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                    <>
+                                    <div className='flex flex-col w-full'>
                                         <IonInput
                                             value={value}
                                             onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
@@ -511,7 +527,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             onIonBlur={onBlur}
                                             placeholder='Discord Invite Link (never expires, no invite limit)' />
                                         <p className="formError"> {error?.message} </p>
-                                    </>
+                                    </div>
                                 )} />
                         </IonItem>
                     </div>
@@ -522,8 +538,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 name="twitterLink"
                                 control={control}
                                 render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                    <>
+                                    <div className='flex flex-col w-full'>
                                         <IonInput
+                                            
                                             value={value}
                                             onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                             type="url"
@@ -533,8 +550,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             onIonBlur={onBlur}
                                             placeholder='Twitter Link' />
                                         <p className="formError"> {error?.message} </p>
-                                    </>
+                                    </div>
                                 )} />
+                              
                         </IonItem>
                     </div>
 
@@ -544,8 +562,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 name="description"
                                 control={control}
                                 render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                    <>
+                                    <div className='flex flex-col w-full'>
                                         <IonTextarea
+                                            className='w-full'
                                             value={value}
                                             onIonChange={(e:any) => {
                                                 ( e.target as HTMLInputElement ).value = e.detail.value as string;
@@ -558,7 +577,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             placeholder='Description of your DAO'
                                         />
                                         <p className="formError"> {error?.message} </p>
-                                    </>
+                                    </div>
                                 )}/>
 
                         </IonItem>
