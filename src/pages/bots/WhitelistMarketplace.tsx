@@ -41,8 +41,6 @@ function WhitelistMarketplace() {
     const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
 
         async () => {
-
-
                 try {
                     setIsLoading(true)
                     const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
@@ -51,14 +49,15 @@ function WhitelistMarketplace() {
                     let whiteListMyDoa:any = []
                     let whiteListMyClaim:any = []
                     for(let i = 0; i < whitelists.length; i++){
-
                         if(whitelists[i].isExpired || !whitelists[i].active){
                             whiteListExpire.push(whitelists[i])
-                        }else if(whitelists[i].myLiveDAO === true){
-                            whiteListMyDoa.push(whitelists[i])
-                        }else if(!whitelists[i].isExpired){
+                        }else {
                             whiteListLive.push(whitelists[i])
-                        } else if( whitelists[i].claims.length > 0){
+                        }
+
+                        if(whitelists[i].myLiveDAO === true && !whitelists[i].isExpired){
+                            whiteListMyDoa.push(whitelists[i])
+                        }else if (whitelists[i].claims.length > 0){
                             if(whitelists[i].claims[0].user){
                                 if(whitelists[i].claims[0].user.discordId === userId){
                                     whiteListMyClaim.push(whitelists[i])
@@ -85,25 +84,17 @@ function WhitelistMarketplace() {
 
         <>
 
-            {/*TODO
+            {/*TODO !!! !!! big spam of shit
 
 
-             2) Admin with NO NFTs comes on ... can't do anything (even though they should, since the server has an owner with an NFT on it)
-
-
-
- Tell me which URL I use to populate the discord / twitter #s (in guild table) … over a cronjob
-Plan:
-- Here is a API you need to put on cronjob to populate discord and twitter #s data in guild table.
-- API: updateAllGuilds in whitelistRouter.js
-
-// CRON to cache guilds for assassin module
-router.post('/cache-assassin-guilds', async (req,
+ >>> help miss person ... more logging in /guildmodules
+ >>> 403 ERROR IN PROD IS ME LUNCHPAD NO WORK ... test out again i guess... or disable tell damjan
 
 
 
+delete ionic
 
-sol decoder should be first - getAllGuildsData
+
 
 didnt add new discord charts :(
 
@@ -119,11 +110,8 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
             Add instructions to site…
 
 
-            ruchita...
-            Can't announce profiles to dao until requires role set...
-
-
             upwork!!!
+
 
             internconnected discord chatting ... for C3 X Decoder ---- later all winter war
             - and later for users to post what mints they like
@@ -143,10 +131,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                             {/*<li>- You will have to see which DAO the whitelist is for - soon we'll have filters to help. <span className="text-red-500">This is not only for SOL Decoder holders - other DAOs use this, so look at the "Must be member in" and "Required Role" section</span></li>*/}
                             <li>- We estimate it is only 15% complete. Coming soon is Twitter integration to make sure you're following, and built in giveaways to have more people join</li>
                             <li>- Want to learn more? <a className="underline cursor-pointer font-bold" href="https://medium.com/@sol-decoder/sol-decoder-presents-seamless-32251a4deb43" target="_blank">
-                                Read our Medium article here</a></li>
-
-                            {/*TODO - see existing dao here ... contact us here ... */}
-
+                                Read our Medium article here</a>. Want to use Seamless for your new mint, or get WL spots for your existing DAO? Join our Discord and open a ticket</li>
                         </ul>
                     </div>
                 </div>
@@ -155,6 +140,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
             {/* if whitelists avail. */}
             {whitelists && whitelists.length > 0 ?
                 <div>
+
 
                     {/* tabs on the top (Live vs Expired) */}
                     <div className=' text-xl flex justify-center mt-5'>
@@ -190,7 +176,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
 
                     {/* my Doa live */}
                     {isTabButton === 'myDoa' &&
-                        <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
+                        <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 sm:grid-cols-1 gap-6 p-8">
                             {
                                 myDoaWhiteList.length > 0 ? myDoaWhiteList.map((whitelist:any) => {
                                     return(<WhitelistCard {...whitelist}  key={Math.random()}/>)

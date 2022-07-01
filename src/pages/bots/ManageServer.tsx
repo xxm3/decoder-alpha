@@ -69,32 +69,24 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                 { headers: { 'Content-Type': 'application/json' } }
             )
             .then(({ data }) => {
-                if (data) {
-                    if (data.noBot) {
-                        history.push({
-                            pathname: `/servermodule/${server.id}`,
-                            state: data,
-                        });
+                if(data){
+                    if(data.noBot){
+                        history.push({ pathname: `/servermodule/${server.id}`,search:'noBot' });
                     }
                     history.push({ pathname: `/servermodule/${server.id}` });
                 }
-                history.push({
-                    pathname: `/servermodule/${server.id}`,
-                    state: data,
-                });
+                // history.push({ pathname: `/servermodule/${server.id}`,state:data });
             })
             .catch((error: any) => {
                 console.log('error', error);
                 let msg = '';
+                console.log(error.response);
                 if (error && error.response) {
-                    msg = String(
-                        error.response.data.message
-                            ? error.response.data.message
-                            : error.response.data.body
-                    );
+                    msg = String(error.response.data.message ? error.response.data.message : error.response.data.body);
                 } else {
                     msg = 'Unable to connect. Please try again later';
                 }
+
                 present({
                     message: msg,
                     color: 'danger',
