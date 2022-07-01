@@ -3,20 +3,11 @@ import { instance } from '../../../axios';
 import { AppComponentProps } from '../../../components/Route';
 import { IonLabel, IonButton, useIonToast, IonGrid, IonRow, IonCol, IonCard, IonText, IonItem, IonSelect, IonSelectOption, IonInput, IonTextarea, IonDatetime, IonSpinner, } from '@ionic/react';
 import './multipleWhiteListAdd.scss';
-import discordImage from '../../../images/discord.png';
-import twitterImage from '../../../images/twitter.png';
 import {  useHistory, useLocation, useParams } from 'react-router';
 import { Controller, FieldValues, useFieldArray, useForm } from 'react-hook-form';
-import isAxiosError from '../../../util/isAxiosError';
-import { AxiosError } from 'axios';
 import { TextFieldTypes } from '@ionic/core';
-import { IWhitelist } from '../../../types/IWhitelist';
-import { useQuery } from 'react-query';
-import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
-import { setMultipleList } from '../../../redux/slices/whitelistSlice';
-import { async } from '@firebase/util';
 import Loader from '../../../components/Loader';
 
 /**
@@ -203,8 +194,6 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
         const { image, ...rest } = data;
             const rawData = {
                 ...rest,
-                // source_server: serverId,
-                // target_server:server.state.discordGuildId,
             };
             const formData = new FormData();
 
@@ -270,18 +259,16 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                         failedResponse.push(result)
                     }
                 })
-                // show Success Message and Error Message
                 
+                // show Success Message and Error Message
                 let failedServerDetails:any[] = []
                 if(failedResponse.length>0){
                     failedResponse.map((response:any)=>{
-                        console.log("formField.mutipleServerDetails",formField.mutipleServerDetails)
-                        console.log("response failed",response)
+                        
                         let serverDetail:any = formField.mutipleServerDetails.find((server)=>server.discordGuildId===response.server.id)
                         
                         failedServerDetails.push(serverDetail)
                         if(!response.server.name){
-                            console.log("enter else serverDetail",serverDetail)
                             response.server.name = serverDetail.name
                         }
                         present({
@@ -304,9 +291,8 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                     setFromFiled({...formField,mutipleServerDetails:failedServerDetails})
                 }
 
-                
-
             })}>
+
             <IonRow>
                 <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - fill out whitelist details</h2> </IonCol>
 
@@ -355,27 +341,49 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                 <div>
                                     <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
                                     <IonItem className="ion-item-wrapper mt-1">
+                                        {controlledField.required_role_dropdown.length>0?
+                                            <Controller
+                                            name={`mutipleServerDetails.${index}.required_role` as const}
+                                            control={control}
+                                            render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
+                                                <>
+                                                    <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
+                                                        onChange={onChange}
+                                                        name={name}
+                                                        onBlur={onBlur}
+                                                        ref={ref}
+                                                        placeholder='Select a Required Role'
+                                                        value={value}
+                                                        required
+                                                        >
+                                                            <option value=''>Select a Required Role</option>
+                                                            {controlledField.required_role_dropdown && controlledField.required_role_dropdown.map((role:any) =>{ return (<option  key={role.id}  value={role.id} > {role.name} </option>)} )}
+                                                    </select>
+                                                    <p className="formError"> {error?.message} </p>
+                                                </>
+                                            )}
+                                        />
+                                    :
                                     <Controller
                                         name={`mutipleServerDetails.${index}.required_role` as const}
                                         control={control}
-                                        render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
+                                        render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
                                             <>
-                                                <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
-                                                    onChange={onChange}
-                                                    name={name}
-                                                    onBlur={onBlur}
-                                                    ref={ref}
-                                                    placeholder='Select a Required Role'
+                                                <IonInput
                                                     value={value}
-                                                    
-                                                    >
-                                                        <option value=''>Select a Required Role</option>
-                                                        {controlledField.required_role_dropdown && controlledField.required_role_dropdown.map((role:any) =>{ return (<option  key={role.id}  value={role.id} > {role.name} </option>)} )}
-                                                </select>
+                                                    onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                    type="text"
+                                                    required
+                                                    name={name}
+                                                    ref={ref}
+                                                    onIonBlur={onBlur}
+                                                    placeholder='Id of required role' />
                                                 <p className="formError"> {error?.message} </p>
                                             </>
                                         )}
                                     />
+                                    }
+                                    
                                     </IonItem>
                                 </div>
                             </IonCard>
