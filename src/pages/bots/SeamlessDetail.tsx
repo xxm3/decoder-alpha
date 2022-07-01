@@ -10,6 +10,7 @@ import { AxiosError } from 'axios';
 import { TextFieldTypes } from '@ionic/core';
 import { useQuery } from 'react-query';
 import BotServerCard from './components/BotServerCard';
+import Help from '../../components/Help';
 
 /**
  * The page they see when they've clicked "initiate seamless" ... then clicked on a guild
@@ -26,6 +27,7 @@ interface FormFields {
     whitelist_role: string;
     description: string;
     required_role: string;
+    verified_role: string;
     twitter: string;
     discordInvite:string;
     magicEdenUpvoteUrl?:string;
@@ -348,6 +350,38 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 required
                                                 placeholder='Select a Whitelist Role' >
                                               <option value=''>Select a Whitelist Role</option>
+                                                {whiteListRole && whiteListRole.map((role:any) =>{ return (<option  key={role.id} value={role.id}> {role.name} </option>)}  )}
+                                            </select>
+                                            <p className="formError"> {error?.message} </p>
+                                        </>
+                                    )}}
+                                />
+
+                                </IonItem>
+                            </div>
+                            <div className='mb-5'>
+                                <IonLabel className="text-white">Verified role (a role that indicates a member of your new mint server is verified)
+                                    <Help description={`Some servers have a verification system in place to prevent their server being overpopulated with fake members.
+                                    Most systems work in a way that a member has to do a certain action like react to a message or click somewhere in order to obtain a role indicating that the user is verified in the server.
+                                    If your new mint server has a role for verified members, select it below. The verified role will be added alongside the whitelist role so that the member can get automatically verified in the server.`}/>
+                                </IonLabel>
+                                <IonItem className="ion-item-wrapper mt-1">
+                                <Controller
+                                    name="verified_role"
+                                    rules={{ required: true, }}
+                                    control={control}
+                                    render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) =>{
+                                    return (
+                                        <>
+                                            <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
+                                                onChange={onChange}
+                                                name={name}
+                                                value={value}
+                                                onBlur={onBlur}
+                                                ref={ref}
+                                                required
+                                                placeholder='Select a Verified Role' >
+                                              <option value=''>Select a Verified Role</option>
                                                 {whiteListRole && whiteListRole.map((role:any) =>{ return (<option  key={role.id} value={role.id}> {role.name} </option>)}  )}
                                             </select>
                                             <p className="formError"> {error?.message} </p>
