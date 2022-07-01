@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
-import { IonItem, IonButton, IonLabel, useIonToast, IonInput, IonTextarea, IonCard, IonSpinner } from '@ionic/react';
-import { Backdrop, CircularProgress, Grid, Switch, } from '@material-ui/core';
-import { Tooltip } from "react-tippy";
+import {
+    IonItem,
+    IonButton,
+    IonLabel,
+    useIonToast,
+    IonInput,
+    IonTextarea,
+    IonCard,
+    IonSpinner,
+} from '@ionic/react';
+import { Backdrop, CircularProgress, Grid, Switch } from '@material-ui/core';
+import { Tooltip } from 'react-tippy';
 import './ServerModule.scss';
 import { useHistory, useLocation, useParams } from 'react-router';
 import Loader from '../../components/Loader';
@@ -29,7 +38,7 @@ interface LocationParams {
 }
 
 interface FormFields {
-    image: File & { path: string;};
+    image: File & { path: string };
     description: string;
     twitterLink: string;
     discordLink: string;
@@ -42,16 +51,22 @@ const ServerModule: React.FC<AppComponentProps> = () => {
      */
     const useQuery = () => new URLSearchParams(useLocation().search);
     const query = useQuery();
-    const devMode = query.get('devMode') || window.location.href.indexOf('localhost') !== -1;
+    const devMode =
+        query.get('devMode') ||
+        window.location.href.indexOf('localhost') !== -1;
 
     let history = useHistory();
     const location: LocationParams = useLocation();
     const [isMobile, setIsMobile] = useState(false);
-    const [checked, setChecked] = useState<{ mintInfoModule: boolean; tokenModule: boolean; }>({ mintInfoModule: false, tokenModule: false, });
+    const [checked, setChecked] = useState<{
+        mintInfoModule: boolean;
+        tokenModule: boolean;
+    }>({ mintInfoModule: false, tokenModule: false });
     const [isLoading, setIsLoading] = useState(false);
-    const [showInstruction, setShowInstruction] = useState<boolean>(false)
-    const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(false)
-    const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] = useState<boolean>(false)
+    const [showInstruction, setShowInstruction] = useState<boolean>(false);
+    const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(false);
+    const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] =
+        useState<boolean>(false);
     const [dropdownValue, setDropdownValue] = useState({
         dailyMintsWebhookChannel: 'default',
         oneHourMintInfoWebhookChannel: 'default',
@@ -63,17 +78,24 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [role, setRole] = useState<any>(null);
     const [authorizedModule, setAuthorizedModule] = useState<any>();
     // const [server, setServer] = useState<Server | null>(null);
-    const { serverId } = useParams<{serverId : string}>();
-    const [addServerFlag, setAddServerFlag] = useState(false)
-    const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, } = useForm<FormFields, any>();
-    const [isNoBot, setIsNoBot] = useState<boolean>(false)
+    const { serverId } = useParams<{ serverId: string }>();
+    const [addServerFlag, setAddServerFlag] = useState(false);
+    const {
+        control,
+        handleSubmit,
+        watch,
+        reset,
+        setError,
+        formState: { isSubmitting },
+    } = useForm<FormFields, any>();
+    const [isNoBot, setIsNoBot] = useState<boolean>(false);
 
     const [guildFormData, setGuildFormData] = useState({
-        magicEdenLink:'',
-        description:'',
-        twitterLink:'',
-        discordLink:'',
-    })
+        magicEdenLink: '',
+        description: '',
+        twitterLink: '',
+        discordLink: '',
+    });
 
     /**
      * Use Effects
@@ -96,7 +118,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         // if (performance.navigation.type == 1) {
         //     history.push('/manageserver')
         // }
-
     }, [window.innerWidth]);
 
     // useEffect(() => {
@@ -112,15 +133,13 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
     // get guilds
     useEffect(() => {
-
         // TODO ruchita: I clicked on my server that had the bots, and it acted like i had no bots -- this should come from backend I thought?
        
 
-    // }
-    //
-    // // get guilds
-    // useEffect(() => {
-
+        // }
+        //
+        // // get guilds
+        // useEffect(() => {
 
         if (serverId) {
             setIsLoading(true);
@@ -128,7 +147,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 .get(`/guilds/${serverId}`)
                 .then((response) => {
                     let data = response.data.data;
-                    if(role ==='3NFT' || role ==='4NFT'){
+                    if (role === '3NFT' || role === '4NFT') {
                         setChecked({
                             ...checked,
                             mintInfoModule: data.mintInfoModule,
@@ -138,17 +157,23 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                     setDropdownValue({
                         ...dropdownValue,
-                        dailyMintsWebhookChannel: data.dailyMintsWebhookChannel || 'default',
-                        oneHourMintInfoWebhookChannel: data.oneHourMintInfoWebhookChannel || 'default',
-                        analyticsWebhookChannel: data.analyticsWebhookChannel || 'default',
+                        dailyMintsWebhookChannel:
+                            data.dailyMintsWebhookChannel || 'default',
+                        oneHourMintInfoWebhookChannel:
+                            data.oneHourMintInfoWebhookChannel || 'default',
+                        analyticsWebhookChannel:
+                            data.analyticsWebhookChannel || 'default',
                     });
                     setChannel(data.textChannels);
-
                 })
                 .catch((error: any) => {
                     let msg = '';
                     if (error && error.response) {
-                        msg = String(error.response.data.message);
+                        msg = String(
+                            error.response.data.message
+                                ? error.response.data.message
+                                : error.response.data.body
+                        );
                     } else {
                         msg = 'Unable to connect. Please try again later';
                     }
@@ -159,29 +184,26 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         duration: 5000,
                         buttons: [{ text: 'X', handler: () => dismiss() }],
                     });
-
                 })
                 .finally(() => {
                     setIsLoading(false);
                 });
         }
         getGuildFormData();
-
     }, [location]);
 
     useEffect(() => {
         reset(guildFormData);
-    }, [guildFormData])
+    }, [guildFormData]);
 
     useEffect(() => {
-        if(role ==='3NFT'){
+        if (role === '3NFT') {
             setAuthorizedModule(1);
-        }else if (role ==='4NFT'){
+        } else if (role === '4NFT') {
             setAuthorizedModule(10);
-        }else{
+        } else {
             setAuthorizedModule(0);
         }
-
     }, [role]);
 
     // get guild form data that user submit previously 
@@ -229,11 +251,13 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         if (serverId) {
             setBackdrop(true);
             instance
-                .post(`/guilds/${serverId}/modules`, obj, { headers: { 'Content-Type': 'application/json', }, })
+                .post(`/guilds/${serverId}/modules`, obj, {
+                    headers: { 'Content-Type': 'application/json' },
+                })
                 .then(({ data }) => {
-                    if(data.success){
+                    if (data.success) {
                         setChecked({ ...checked, [obj.module]: obj.enabled });
-                    }else{
+                    } else {
                         let msg = '';
                         if (data?.message) {
                             msg = String(data.message);
@@ -248,11 +272,14 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         });
                     }
                 })
-                .catch((error:any) => {
-
+                .catch((error: any) => {
                     let msg = '';
                     if (error?.response) {
-                        msg = String(error.response.data.message);
+                        msg = String(
+                            error.response.data.message
+                                ? error.response.data.message
+                                : error.response.data.body
+                        );
                     } else {
                         msg = 'Unable to connect. Please try again later';
                     }
@@ -262,7 +289,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         duration: 5000,
                         buttons: [{ text: 'X', handler: () => dismiss() }],
                     });
-
                 })
                 .finally(() => {
                     setIsLoading(false);
@@ -289,18 +315,21 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                     // show success
                     present({
-                        message: 'Selection saved. Messages will be sent to the channel in the future',
+                        message:
+                            'Selection saved. Messages will be sent to the channel in the future',
                         color: 'success',
                         duration: 5000,
                         buttons: [{ text: 'X', handler: () => dismiss() }],
                     });
-
                 })
-                .catch((error:any) => {
-
+                .catch((error: any) => {
                     let msg = '';
                     if (error?.response) {
-                        msg = String(error.response.data.message);
+                        msg = String(
+                            error.response.data.message
+                                ? error.response.data.message
+                                : error.response.data.body
+                        );
                     } else {
                         msg = 'Unable to connect. Please try again later';
                     }
@@ -319,28 +348,34 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     };
 
     let getOption = () => {
-        return channel?.sort((a: { name: string; },b: { name: any; })=>a.name.localeCompare(b.name)).map((obj: any, index: number) => {
-            return (
-                <option value={obj.id} key={index}>
-                    {obj.name}
-                </option>
-            );
-        });
+        return channel
+            ?.sort((a: { name: string }, b: { name: any }) =>
+                a.name.localeCompare(b.name)
+            )
+            .map((obj: any, index: number) => {
+                return (
+                    <option value={obj.id} key={index}>
+                        {obj.name}
+                    </option>
+                );
+            });
     };
 
-    let showDisableBtnMesage = (message:string) => {
+    let showDisableBtnMesage = (message: string) => {
         present({
             message: message,
             color: 'danger',
             duration: 5000,
             buttons: [{ text: 'X', handler: () => dismiss() }],
         });
-    }
+    };
 
     let disableButton = (btnType: any) => {
         if (role === 'No Roles') {
-            showDisableBtnMesage('Sorry you do not have the right number of NFTs')
-            return true
+            showDisableBtnMesage(
+                'Sorry you do not have the right number of NFTs'
+            );
+            return true;
         } else if (role === '3NFT') {
             if (checked.mintInfoModule || checked.tokenModule) {
                 if (btnType === 'mintInfoModule' && checked.mintInfoModule) {
@@ -348,8 +383,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 } else if (btnType === 'tokenModule' && checked.tokenModule) {
                     return false;
                 } else {
-                    showDisableBtnMesage('You are Authorized to edit only 1 module')
-                    return true
+                    showDisableBtnMesage(
+                        'You are Authorized to edit only 1 module'
+                    );
+                    return true;
                 }
             } else {
                 return false;
@@ -357,30 +394,42 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         } else if (role === '4NFT') {
             return false;
         } else {
-            showDisableBtnMesage('Sorry you do not have the right number of NFTs')
-            return true
+            showDisableBtnMesage(
+                'Sorry you do not have the right number of NFTs'
+            );
+            return true;
         }
-    }
+    };
 
     const sendTestWebhook = (moduleName: string) => {
         if (!serverId) return;
-        instance.post(`/guilds/${serverId}/${moduleName}`, {}, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then(() => present({
-            message: 'Message sent successfully',
-            color: 'success',
-            duration: 3000,
-            buttons: [{ text: 'X', handler: () => dismiss() }],
-        })).catch(() => present({
-            message: 'An error occurred',
-            color: 'danger',
-            duration: 3000,
-            buttons: [{ text: 'X', handler: () => dismiss() }],
-        }));
-    }
-
+        instance
+            .post(
+                `/guilds/${serverId}/${moduleName}`,
+                {},
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
+            .then(() =>
+                present({
+                    message: 'Message sent successfully',
+                    color: 'success',
+                    duration: 3000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
+                })
+            )
+            .catch(() =>
+                present({
+                    message: 'An error occurred',
+                    color: 'danger',
+                    duration: 3000,
+                    buttons: [{ text: 'X', handler: () => dismiss() }],
+                })
+            );
+    };
 
     if (isLoading) {
         return (
@@ -390,16 +439,20 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         );
     }
 
-    if(addServerFlag && serverId){
+    if (addServerFlag && serverId) {
         return (
-            <Addserver addServerFlag={addServerFlag} setAddServerFlag={setAddServerFlag} serverId={serverId} />
-        )
+            <Addserver
+                addServerFlag={addServerFlag}
+                setAddServerFlag={setAddServerFlag}
+                serverId={serverId}
+            />
+        );
     }
 
     return (
         <>
             {/*Loading*/}
-            <Backdrop style={{ color: '#fff', zIndex: 1000, }} open={backdrop} >
+            <Backdrop style={{ color: '#fff', zIndex: 1000 }} open={backdrop}>
                 <CircularProgress color="inherit" />
             </Backdrop>
 
