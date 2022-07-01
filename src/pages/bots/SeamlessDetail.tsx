@@ -128,7 +128,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             present({
                 message: 'Unable to get the roles from the new mint server. Please make sure the SOL Decoder bot is in that server!',
                 color: 'danger',
-                duration: 1000,
+                duration: 10000,
             });
         }
 
@@ -151,7 +151,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             present({
                 message: 'Unable to get the roles from the new mint server. Please make sure the SOL Decoder bot is in that server!',
                 color: 'danger',
-                duration: 1000,
+                duration: 10000,
             });
         }
 
@@ -394,7 +394,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
                             {whiteListRequireRole.length > 0 ?
                                 <div>
-                                    <IonLabel className="text-white">Required Role Id (role required of them in the existing DAO server, to enter)</IonLabel>
+                                    <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
                                     <IonItem className="ion-item-wrapper mt-1">
                                     <Controller
                                         name="required_role"
@@ -422,7 +422,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </div>
                             :
                                 <div>
-                                    <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
+                                    <IonLabel className="text-white">Required Role ID (role required of them in the existing DAO server, to enter)</IonLabel>
                                     <IonItem className="ion-item-wrapper mt-1">
                                         <Controller
                                         name="required_role"
@@ -438,7 +438,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                     name={name}
                                                     ref={ref}
                                                     onIonBlur={onBlur}
-                                                    placeholder='Required Role' />
+                                                    placeholder='Required Role ID' />
                                                 <p className="formError"> {error?.message} </p>
                                             </div>
                                         )} />
