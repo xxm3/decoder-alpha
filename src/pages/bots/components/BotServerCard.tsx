@@ -4,6 +4,7 @@ import { useEffect,useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router';
 import discordImage from '../../../images/discord.png';
 import twitterImage from '../../../images/twitter.png';
+import MagicEdenImage from '../../../images/me-black.png';
 type props = {  serverData: any; };
 
 const BotServerCard: React.FC<props> = (props) => {
@@ -39,11 +40,14 @@ const BotServerCard: React.FC<props> = (props) => {
                         <img hidden={!serverData?.discord_link} src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
                             event.stopPropagation();
                             if(serverData?.discord_link){ window.open(serverData?.discord_link) }}} />
-
                         {/*twitter*/}
                         <img hidden={!serverData?.twitter_link} src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
                             event.stopPropagation();
                             if(serverData?.twitter_link){ window.open(serverData?.twitter_link) }}} />
+                        {/* magic eden  */}
+                        <img hidden={!serverData?.magiceden_link} src={MagicEdenImage} style={{ height: '18px', }} className='cursor-pointer' onClick={(event)=>{
+                            event.stopPropagation();
+                            if(serverData?.magiceden_link){ window.open(serverData?.magiceden_link) }}} />
                     </div>
                 </div>
             </div>

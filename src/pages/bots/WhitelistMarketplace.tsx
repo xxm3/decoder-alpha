@@ -41,8 +41,6 @@ function WhitelistMarketplace() {
     const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
 
         async () => {
-
-
                 try {
                     setIsLoading(true)
                     const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
@@ -51,14 +49,15 @@ function WhitelistMarketplace() {
                     let whiteListMyDoa:any = []
                     let whiteListMyClaim:any = []
                     for(let i = 0; i < whitelists.length; i++){
-
                         if(whitelists[i].isExpired || !whitelists[i].active){
                             whiteListExpire.push(whitelists[i])
-                        }else if(whitelists[i].myLiveDAO === true){
-                            whiteListMyDoa.push(whitelists[i])
-                        }else if(!whitelists[i].isExpired){
+                        }else {
                             whiteListLive.push(whitelists[i])
-                        } else if( whitelists[i].claims.length > 0){
+                        }
+                        
+                        if(whitelists[i].myLiveDAO === true && !whitelists[i].isExpired){
+                            whiteListMyDoa.push(whitelists[i])
+                        }else if (whitelists[i].claims.length > 0){
                             if(whitelists[i].claims[0].user){
                                 if(whitelists[i].claims[0].user.discordId === userId){
                                     whiteListMyClaim.push(whitelists[i])
@@ -151,6 +150,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
             {/* if whitelists avail. */}
             {whitelists && whitelists.length > 0 ?
                 <div>
+                    
 
                     {/* tabs on the top (Live vs Expired) */}
                     <div className=' text-xl flex justify-center mt-5'>
@@ -186,7 +186,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
 
                     {/* my Doa live */}
                     {isTabButton === 'myDoa' &&
-                        <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
+                        <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 sm:grid-cols-1 gap-6 p-8">
                             {
                                 myDoaWhiteList.length > 0 ? myDoaWhiteList.map((whitelist:any) => {
                                     return(<WhitelistCard {...whitelist}  key={Math.random()}/>)
