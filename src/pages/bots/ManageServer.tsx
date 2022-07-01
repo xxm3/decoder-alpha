@@ -41,11 +41,11 @@ const ManageServer: React.FC<AppComponentProps> = () => {
 
     useEffect(() => {
         let serverList: any = localStorage.getItem('servers');
-        serverList = (JSON.parse(serverList));
+        serverList = JSON.parse(serverList);
 
         let adminOwnerServers = [];
-        for(let i in serverList){
-            if(serverList[i].admin || serverList[i].owner){
+        for (let i in serverList) {
+            if (serverList[i].admin || serverList[i].owner) {
                 adminOwnerServers.push(serverList[i]);
             }
         }
@@ -73,7 +73,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                     if(data.noBot){
                         history.push({ pathname: `/servermodule/${server.id}`,search:'noBot' });
                     }
-                    history.push({ pathname: `/servermodule/${server.id}`});
+                    history.push({ pathname: `/servermodule/${server.id}` });
                 }
                 // history.push({ pathname: `/servermodule/${server.id}`,state:data });
             })
@@ -149,14 +149,18 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                             </div>
 
                             <p>
-                                If you are an existing DAO that just wants to receive whitelists via Seamless, then click 'ADD' on your server below to fill out your profile.
-                                <br/><br/>
-                                If you are paying for our Bots, or are a new mint,
-                                your server will need to first have our Discord
-                                Bot invited to it. Click one of the below links,
-                                then in the "Add to Server" on the bottom,
-                                select your server. Then click "Continue", then
-                                "Authorize"
+                                If you are an existing DAO that just wants to
+                                receive whitelists via Seamless, then click
+                                'ADD' on your server below to fill out your
+                                profile.
+                                <br />
+                                <br />
+                                If you are paying for our Bots, or are a new
+                                mint, your server will need to first have our
+                                Discord Bot invited to it. Click one of the
+                                below links, then in the "Add to Server" on the
+                                bottom, select your server. Then click
+                                "Continue", then "Authorize"
                             </p>
                             <ul className="list-disc ml-8 mt-3">
                                 {/*<li> If using just the "Daily Mints" bots, <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20guilds.members.read%20bot">click here</a> to add the Discord Bot to your server </li>*/}
@@ -289,8 +293,9 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                             Decoder bots on your own Discord server
                         </li>
                         <li>
-                            Pricing: Free for some bots (Seamless & Assassin bot). For others, hold 3 NFTs (which unlocks all of our
-                            existing 3 NFT benefits for yourself -{' '}
+                            Pricing: Free for some bots (Seamless & Assassin
+                            bot). For others, hold 3 NFTs (which unlocks all of
+                            our existing 3 NFT benefits for yourself -{' '}
                             <a
                                 href="https://docs.soldecoder.app/books/intro/page/discord-overview"
                                 target="_blank"
@@ -317,7 +322,8 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                         <li>
                             <b>#1 - Mints package</b> - Your server can have our
                             "daily-mints" feed and "1h-mint-info" and soon
-                            "tomorrows-mints". Read more about these in our Discord in our #faq channel.
+                            "tomorrows-mints". Read more about these in our
+                            Discord in our #faq channel.
                         </li>
                         <li>
                             <b>#2 - Fox token package</b> - Your server can have
@@ -337,18 +343,18 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                         {/*(2) get alerted whenever a sale for your NFT occurs,*/}
                         <li>
                             <b>
-                                (Free for now - Future) #4 - "Assassin" bot - Kick
-                                bots/spammers from your server (that impersonate
-                                your team, or have Bot in their name), and
-                                automatically delete non-approved links posted
-                                to any channel
+                                (Free for now - Future) #4 - "Assassin" bot -
+                                Kick bots/spammers from your server (that
+                                impersonate your team, or have Bot in their
+                                name), and automatically delete non-approved
+                                links posted to any channel
                             </b>
                         </li>
                         <li>
                             <b>
-                                (Free for now) #5 - "Seamless" package - Allow verified
-                                DAO members to whitelist in less than 10
-                                seconds, with 0 work on your mods
+                                (Free for now) #5 - "Seamless" package - Allow
+                                verified DAO members to whitelist in less than
+                                10 seconds, with 0 work on your mods
                             </b>
                         </li>
                     </ul>
