@@ -87,6 +87,8 @@ function WhitelistMarketplace() {
 
             {/*TODO
 
+            put onto google doc...
+
 
              2) Admin with NO NFTs comes on ... can't do anything (even though they should, since the server has an owner with an NFT on it)
 

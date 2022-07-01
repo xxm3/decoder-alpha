@@ -37,12 +37,14 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
 
             <AppRoute {...props} component={() => <div>
 
-                <div className='text-xl'>Adding Discord Bots?</div>
-                If you are looking to add our Discord bots to your server (including giving out your whitelist to other Discords with Seamless) - then <a className='cursor-pointer underline' href='/manageserver'>click here</a>
-                <br/> <br/>
+                {/* TODO: entity needs to remake... */}
 
                 <div className='text-xl'>Get whitelisted with Seamless?</div>
                 If you are looking to get whitelisted onto a new mint - then <a className='cursor-pointer underline' href='/whitelistmarketplace'>click here</a>
+                <br/> <br/>
+
+                <div className='text-xl'>Adding Discord Bots?</div>
+                If you are looking to add our Discord bots to your server (including giving out your whitelist to other Discords with Seamless) - then <a className='cursor-pointer underline' href='/manageserver'>click here</a>
                 <br/> <br/>
 
                 <div className='text-xl'>Doing something else?</div>
