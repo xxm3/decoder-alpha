@@ -85,12 +85,9 @@ function WhitelistMarketplace() {
 
         <>
 
-            {/*TODO
+            {/*TODO !!! !!! big spam of shit
 
             put onto google doc...
-
-
-             2) Admin with NO NFTs comes on ... can't do anything (even though they should, since the server has an owner with an NFT on it)
 
 
 
@@ -145,10 +142,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                             {/*<li>- You will have to see which DAO the whitelist is for - soon we'll have filters to help. <span className="text-red-500">This is not only for SOL Decoder holders - other DAOs use this, so look at the "Must be member in" and "Required Role" section</span></li>*/}
                             <li>- We estimate it is only 15% complete. Coming soon is Twitter integration to make sure you're following, and built in giveaways to have more people join</li>
                             <li>- Want to learn more? <a className="underline cursor-pointer font-bold" href="https://medium.com/@sol-decoder/sol-decoder-presents-seamless-32251a4deb43" target="_blank">
-                                Read our Medium article here</a></li>
-
-                            {/*TODO - see existing dao here ... contact us here ... */}
-
+                                Read our Medium article here</a>. Want to use Seamless for your new mint, or get WL spots for your existing DAO? Join our Discord and open a ticket</li>
                         </ul>
                     </div>
                 </div>

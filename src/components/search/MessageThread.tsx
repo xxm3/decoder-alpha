@@ -151,9 +151,7 @@ export default MessageThread;
 
 
 
-
-
-// (confirm live discord view is working ... and clicking into a few messages updates the modal fine .. and dates show up fine when click into message ...
+// (confirm live discord view is working ... and clicking into a few messages updates the modal fine .. and dates show up fine when click into message ... and messages 'a few seconds ago' work fine (still commented out messagelistitem.tsx)
 
 // (on messagethread & display.tsx): https://discord.com/channels/925207817923743794/955986068937769050/989448949205180516
     // reverted back to https://gitlab.com/nft-relay-group/frontend-app/-/blob/24ea7c9cb6ffb2761c6eecd6e459f71ca2771ab3/src/components/search/MessageThread.tsx

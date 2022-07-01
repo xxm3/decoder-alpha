@@ -60,7 +60,7 @@ const TopDiscordGainers = () => {
      * Use Effects
      */
 
-    // TODO !!!!
+    // TODO !!! implement top gainers! -- also fix counts not working!
 
     return (
             <>
