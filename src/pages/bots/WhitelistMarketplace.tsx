@@ -89,6 +89,10 @@ function WhitelistMarketplace() {
 
             put onto google doc...
 
+>> test with 0 nft
+>> test with no bot on their server
+
+view my claim mints, on expired, doesn’t work — I’ve claimed a bunch but shows 0
 
 
  Tell me which URL I use to populate the discord / twitter #s (in guild table) … over a cronjob
