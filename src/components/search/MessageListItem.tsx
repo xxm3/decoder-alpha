@@ -85,7 +85,6 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                             <div className="text-xs text-gray-400 c-res-time-text flex justify-between items-center" // underline cursor-pointer
                                 data-tip={new Date( time as string ).toLocaleString()}
                                 >
-                                {/*TODO-ruchita: BUGGED!!! */}
                                 <div className='whitespace-nowrap' >
                                     {getDateAgo(time) === 'a few seconds ago' ? '' : getDateAgo(time)}
                                 </div>

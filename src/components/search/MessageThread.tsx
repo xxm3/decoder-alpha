@@ -153,9 +153,11 @@ export default MessageThread;
 
 
 
-// TODO -ruchita: (on messagethread & display.tsx): https://discord.com/channels/925207817923743794/955986068937769050/989448949205180516
+// (confirm live discord view is working ... and clicking into a few messages updates the modal fine .. and dates show up fine when click into message ...
+
+// (on messagethread & display.tsx): https://discord.com/channels/925207817923743794/955986068937769050/989448949205180516
     // reverted back to https://gitlab.com/nft-relay-group/frontend-app/-/blob/24ea7c9cb6ffb2761c6eecd6e459f71ca2771ab3/src/components/search/MessageThread.tsx
-// TODO: - ruchita: need loading bar when click into a message
+// need loading bar when click into a message
 
 
 // import { IonButton, IonContent, IonModal, useIonToast } from '@ionic/react';
@@ -389,7 +391,6 @@ export default MessageThread;
 //                         }}>
 //                 <div ref={containerRef} className={`${isMobile ? 'p-2' : 'p-4'} c-res-messages messages h-full w-full mx-auto`} >
 
-//                     {/*TODO: damjan eventually...*/}
 //                     <div className={` ${hideMessageBtn ? 'justify-between' : 'justify-end' } ${isMobile ? 'm-3' :'mb-3'} text-red-500 flex cursor-pointer items-center`}>
 //                        {hideMessageBtn ? <IonButton onClick={()=>viewLiveMessages()}>View Live Messages</IonButton> : ''}
 //                        <div onClick={()=> {
