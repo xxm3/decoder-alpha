@@ -62,7 +62,7 @@ function WhitelistCard({
         //     console.log(claims[0]);
         //     console.log(uid);
         // }
-
+        
         if(claimed){
             return type==='fcfs' ? 'Claimed' : 'Entered'
         }else if(expired){
@@ -80,7 +80,7 @@ function WhitelistCard({
             }
         }else {
             return type==='fcfs' ? 'Obtain whitelist' : 'Enter raffle'
-         }
+        }
     }
 
     // for confetti
@@ -126,7 +126,7 @@ function WhitelistCard({
                     <p>Type </p>
                     <p>{type.toUpperCase()}</p>
                     {
-                        type==="fcfs" ? 
+                        type==='fcfs' ? 
                         (<>
                             <p>Slots left </p>
                             <p>{max_users - claimCounts}/{max_users}</p>
@@ -211,14 +211,14 @@ function WhitelistCard({
                         }
                     }}
 
-                     disabled={expired || claiming || claimed || full || showLive || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed'  }
+                     disabled={expired || claiming || claimed || full || showLive || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed' || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Entered'  }
                     >
                         {getButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>
 
                 }
                 {/* end button! */}
-
+                
 				</div>
 
 			</div>
