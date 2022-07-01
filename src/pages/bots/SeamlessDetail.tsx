@@ -26,6 +26,7 @@ interface FormFields {
     whitelist_role: string;
     description: string;
     required_role: string;
+    verified_role: string;
     twitter: string;
     discordInvite:string;
     magicEdenUpvoteUrl?:string;
@@ -348,6 +349,34 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 required
                                                 placeholder='Select a Whitelist Role' >
                                               <option value=''>Select a Whitelist Role</option>
+                                                {whiteListRole && whiteListRole.map((role:any) =>{ return (<option  key={role.id} value={role.id}> {role.name} </option>)}  )}
+                                            </select>
+                                            <p className="formError"> {error?.message} </p>
+                                        </>
+                                    )}}
+                                />
+
+                                </IonItem>
+                            </div>
+                            <div className='mb-5'>
+                                <IonLabel className="text-white">Verified role (a role that indicates a user in your server is verified)</IonLabel>
+                                <IonItem className="ion-item-wrapper mt-1">
+                                <Controller
+                                    name="verified_role"
+                                    rules={{ required: true, }}
+                                    control={control}
+                                    render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) =>{
+                                    return (
+                                        <>
+                                            <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
+                                                onChange={onChange}
+                                                name={name}
+                                                value={value}
+                                                onBlur={onBlur}
+                                                ref={ref}
+                                                required
+                                                placeholder='Select a Verified Role' >
+                                              <option value=''>Select a Verified Role</option>
                                                 {whiteListRole && whiteListRole.map((role:any) =>{ return (<option  key={role.id} value={role.id}> {role.name} </option>)}  )}
                                             </select>
                                             <p className="formError"> {error?.message} </p>
