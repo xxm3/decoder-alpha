@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
-import { IonButton, IonGrid, IonRow, IonCol, IonCard,  IonText, IonCheckbox,} from '@ionic/react';
+import { IonButton, IonGrid, IonRow, IonCol, IonCard,  IonText, IonCheckbox, useIonToast,} from '@ionic/react';
 import './ManageServer.scss';
 import { useHistory, useParams } from 'react-router';
 import Loader from '../../components/Loader';
@@ -9,6 +9,8 @@ import './SeamlessDetail.scss';
 import discordImage from '../../images/discord.png';
 import twitterImage from '../../images/twitter.png';
 import { useQuery } from 'react-query';
+import { setMultipleList } from '../../redux/slices/whitelistSlice';
+import { useDispatch } from 'react-redux';
 
 /**
  * The page they see when they click "Initiate Seamless"
@@ -16,12 +18,21 @@ import { useQuery } from 'react-query';
  * This lists all of the discords we have. User has to click into one to proceed
  */
 
+interface selcetServer{
+    id: string
+    name: string
+     discordGuildId:string
+    }
+
 const SeamlessDetail: React.FC<AppComponentProps> = () => {
     let history = useHistory();
+    const dispatch = useDispatch()
+    const [present] = useIonToast();
     const { serverId } = useParams<any>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [serverList, setServerList] = useState<any>([]);
-    const [selectMultiple, setSelectMultiple] = useState<boolean>(false)
+    const [multipleflag, setmultipleflag] = useState<boolean>(false)
+    const [selectMultipleWhiteList, setSelectMultipleWhiteList] = useState<selcetServer[]>([])
 
     // this loads up all the discords etc
     const { data: servers = [] } = useQuery<any>(  ['allServers'],
@@ -55,9 +66,41 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                         </p>
 
                             </div>
-                            {/* <div className={`seamless-tab-btn-active ${selectMultiple ? 'w-10' : 'w-40'} h-10`} onClick={()=> setSelectMultiple((n)=>!n)}>
-                                {selectMultiple ? 'X' : 'Select Multiple'}
-                            </div> */}
+                            {!multipleflag &&  
+                            <div className={`seamless-tab-btn-active w-40 h-10`} onClick={()=> setmultipleflag((n)=>!n)}>
+                            Select Multiple
+                            </div>
+                            }
+                            {/*  */}
+                            {multipleflag &&  
+                            <div className='flex justify-between ml-2'>
+                            <div className={`seamless-tab-btn-active w-32 h-10 mr-2`} onClick={()=> {
+                                setSelectMultipleWhiteList([])
+                                setmultipleflag((n)=>!n)
+                            }}>
+                            cancel
+                            </div>
+                            <div className={`seamless-tab-btn-active w-32 h-10`} onClick={()=> {
+                                if(selectMultipleWhiteList.length===0){
+                                    present({
+                                        message: 'Please Select Atleast 1 server',
+                                        color: 'danger',
+                                        duration: 10000,
+                                    });
+                                    return
+                                }
+                                dispatch(setMultipleList(selectMultipleWhiteList))
+                                history.push({pathname:`/add_multiple_white_list`,state:serverId})
+                                setSelectMultipleWhiteList([])
+                                setmultipleflag((n)=>!n)
+                                // history.push('/add_multiple_white_list')
+
+                                // setmultipleflag((n)=>!n)
+                            }}>
+                            Submit
+                            </div>
+                            </div>
+                            }
                         </div>
                     </IonCol>
 
@@ -150,10 +193,14 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         </IonCol>
                                                         </IonRow>
                                                         <IonRow>
-                                                        {/* <IonCol size="12"> */}
-                                                        {/* <IonCheckbox  onIonChange={e => console.log('eeee',e.detail.checked)} /> */}
-                                                            {/* <div className='' style={{background:'red'}}>Hello</div> */}
-                                                        {/* </IonCol> */}
+                                                        {multipleflag && <IonCheckbox   onIonChange={e => {
+                                                            if(e.detail.checked){
+                                                                setSelectMultipleWhiteList(old=>[...old,{id:server.id,name:server.name,discordGuildId:server.discordGuildId}])
+                                                            }else{
+                                                                setSelectMultipleWhiteList(old=>old.filter(data=>data.id!==server.id))
+                                                            }
+                                                        }} />}
+                                                            
                                                     </IonRow>
                                                 </IonGrid>
                                             </IonCard>

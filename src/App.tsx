@@ -93,6 +93,7 @@ import { setHasRoles } from './redux/slices/userSlice';
 import ViewGuild from './pages/view-guild/ViewGuild';
 import SeamlessDetail from './pages/bots/SeamlessDetail';
 import Seamless from './pages/bots/Seamless';
+import AddMultipleWhiteList from './pages/bots/addMultipleWhilteList/AddMultipleWhiteList';
 
 function b64DecodeUnicode(str : string) {
     return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
@@ -510,6 +511,14 @@ const App = () => {
                                                                                     exact
                                                                                     path="/seamlessdetail/:serverId"
                                                                                     component={ SeamlessDetail }
+                                                                                />
+                                                                                {/* SeamlessServer */}
+
+                                                                                 {/* Add multiple white List */}
+                                                                                 <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/add_multiple_white_list"
+                                                                                    component={ AddMultipleWhiteList }
                                                                                 />
                                                                                 {/* SeamlessServer */}
                                                                                 <ProtectedRoute
