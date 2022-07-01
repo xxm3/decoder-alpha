@@ -22,24 +22,28 @@ const BotServerCard: React.FC<props> = (props) => {
             setInitiateButton(true)
         }
     }, [path])
-    
+
     return (
         <IonCard className='ion-no-margin'>
             <div className="cardImage relative">
+
                 {/* image */}
-                <img src={serverData?.icon} className={serverData?.icon ? 'cardMainImage' : 'cardNoImage'}  alt='' />
+                <img src={serverData?.image} className={serverData?.image ? 'cardMainImage' : 'cardNoImage'}  alt='' />
+
                 <div className="cardOverlay-content py-1 px-4">
-                    <div className='text-md'>{serverData?.name}</div>
+
+                    <div className='text-lg font-bold'>{serverData?.name}</div>
+
                     <div className="socialMediaIcon">
                         {/*discord*/}
-                        <img hidden={!discordImage} src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
+                        <img hidden={!serverData?.discord_link} src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
                             event.stopPropagation();
-                            if(serverData.iscord_link){ window.open(serverData.iscord_link) }}} />
+                            if(serverData?.discord_link){ window.open(serverData?.discord_link) }}} />
 
                         {/*twitter*/}
-                        <img hidden={!twitterImage} src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
+                        <img hidden={!serverData?.twitter_link} src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
                             event.stopPropagation();
-                            if(serverData.witter_link){ window.open(serverData.witter_link) }}} />
+                            if(serverData?.twitter_link){ window.open(serverData?.twitter_link) }}} />
                     </div>
                 </div>
             </div>
@@ -80,7 +84,7 @@ const BotServerCard: React.FC<props> = (props) => {
                         <IonText className="BlueText">{serverData?.discord_online || 0}</IonText>
                     </IonCol>
                 </IonRow>
-                {initiateButton && 
+                {initiateButton &&
                     <IonRow>
                         <IonCol size="12">
                             <IonButton className="cardButton w-full" onClick={(event) => {

@@ -89,35 +89,37 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         return fileObject
     }
 
-    const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
-        async () => {
-            try {
-                setIsLoading(true)
-                const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
-                let imagePath = await onImageEdit(whitelists[whitelists.length-1]?.image);
-                setFromFiled({
-                    // image: imagePath || '',
-                    // target_server:'',
-                    // max_users: whitelists[whitelists.length-1]?.max_users || '',
-                    expiration_date:whitelists[whitelists.length-1]?.expiration_date || '',
-                    type:whitelists[whitelists.length-1]?.type || '',
-                    whitelist_role: whitelists[whitelists.length-1]?.whitelist_role || '',
-                    description: whitelists[whitelists.length-1]?.description || '',
-                    // required_role: whitelists[whitelists.length-1]?.required_role || '',
-                    twitter: whitelists[whitelists.length-1]?.twitter?.toString() || '',
-                    // discordInvite:whitelists[whitelists.length-1]?.discordInvite?.toString() || '',
-                    // magicEdenUpvoteUrl:whitelists[whitelists.length-1]?.magicEdenUpvoteUrl?.toString() || '',
-                    })
-                return whitelists;
-            } catch (error) {
+    // TODO-ruchita: not working right - (1) this pulls from the very last WL partnership in the DB -- NOT there last WL paternership. Need to filter by source ID and use that one... (2) the whitelist_role was not being filled out ... and discordinvite /magiceden not being filled out ... image not filled out
+    // const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
+    //     async () => {
+    //         try {
+    //             setIsLoading(true)
+    //             const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
+    //             let imagePath = await onImageEdit(whitelists[whitelists.length-1]?.image);
+    //             setFromFiled({
+    //                 // image: imagePath || '',
+    //                 // target_server:'',
+    //                 // max_users: whitelists[whitelists.length-1]?.max_users || '',
+    //                 expiration_date:whitelists[whitelists.length-1]?.expiration_date || '',
+    //                 type:whitelists[whitelists.length-1]?.type || '',
+    //                 whitelist_role: whitelists[whitelists.length-1]?.whitelist_role || '',
+    //                 description: whitelists[whitelists.length-1]?.description || '',
+    //                 // required_role: whitelists[whitelists.length-1]?.required_role || '',
+    //                 twitter: whitelists[whitelists.length-1]?.twitter?.toString() || '',
+    //                 // discordInvite:whitelists[whitelists.length-1]?.discordInvite?.toString() || '',
+    //                 // magicEdenUpvoteUrl:whitelists[whitelists.length-1]?.magicEdenUpvoteUrl?.toString() || '',
+    //                 })
+    //             return whitelists;
+    //         } catch (error) {
+    //
+    //         }
+    //         finally {
+    //             setIsLoading(false)
+    //         }
+    //
+    //     }
+    // );
 
-            }
-            finally {
-                setIsLoading(false)
-            }
-
-        }
-    );
     // get roles for the WL role we will give to people --- new mint --- source server
     const getWhiteListRole = async() =>{
         const errMsg = () => {
@@ -178,78 +180,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             <IonRow>
                 <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - fill out whitelist details</h2> </IonCol>
 
-                <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12" />
-
-
-                {/*<IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >*/}
-                {/*    <IonCard className='ion-no-margin'>*/}
-
-                {/*        <div className="cardImage relative">*/}
-
-                {/*            /!* image *!/*/}
-                {/*            <img src={server?.state?.icon} className={server?.state?.icon ? 'cardMainImage' : 'cardNoImage'}  alt='' />*/}
-
-                {/*            <div className="cardOverlay-content py-1 px-4">*/}
-
-                {/*                <div className='text-md'>{server?.state?.name}</div>*/}
-
-                {/*                <div className="socialMediaIcon">*/}
-
-                {/*                    /!*discord*!/*/}
-                {/*                    <img hidden={!discordImage} src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{*/}
-                {/*                        event.stopPropagation();*/}
-                {/*                        if(server.state.discord_link){*/}
-                {/*                            window.open(server.state.discord_link)*/}
-                {/*                        }}} />*/}
-
-                {/*                    /!*twitter*!/*/}
-                {/*                    <img hidden={!twitterImage} src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{*/}
-                {/*                        event.stopPropagation();*/}
-                {/*                        if(server.state.twitter_link){*/}
-                {/*                            window.open(server.state.twitter_link)*/}
-                {/*                        }}} />*/}
-                {/*                </div>*/}
-                {/*            </div>*/}
-
-                {/*        </div>*/}
-                {/*        <IonGrid className="py-4 px-4">*/}
-                {/*            <IonRow hidden={!server?.state?.twitter_followers}>*/}
-                {/*                <IonCol size="8">*/}
-                {/*                    <IonText className='text-white'>Twitter Followers</IonText>*/}
-                {/*                </IonCol>*/}
-                {/*                <IonCol size="4" className="ion-text-end">*/}
-                {/*                    <IonText className="greenText">{server?.state?.twitter_followers || 0 } </IonText>*/}
-                {/*                </IonCol>*/}
-                {/*            </IonRow>*/}
-                {/*            <IonRow hidden={!server?.state?.twitter_interactions}>*/}
-                {/*                <IonCol size="8">*/}
-                {/*                    <IonText className='text-white'>Twitter Interaction</IonText>*/}
-                {/*                </IonCol>*/}
-                {/*                <IonCol size="4" className="ion-text-end">*/}
-                {/*                    <IonText className="BlueText">{server?.state?.twitter_interactions || 0}</IonText>*/}
-                {/*                </IonCol>*/}
-                {/*            </IonRow>*/}
-                {/*            <div className="content-extra-space"></div>*/}
-
-                {/*            <IonRow hidden={!server?.state?.discord_members}>*/}
-                {/*                <IonCol size="8">*/}
-                {/*                    <IonText className='text-white'>Discord Members</IonText>*/}
-                {/*                </IonCol>*/}
-                {/*                <IonCol size="4" className="ion-text-end">*/}
-                {/*                    <IonText className="greenText">{server?.state?.discord_members || 0}</IonText>*/}
-                {/*                </IonCol>*/}
-                {/*            </IonRow>*/}
-                {/*            <IonRow hidden={!server?.state?.discord_online}>*/}
-                {/*                <IonCol size="8">*/}
-                {/*                    <IonText className='text-white'>Online</IonText>*/}
-                {/*                </IonCol>*/}
-                {/*                <IonCol size="4" className="ion-text-end">*/}
-                {/*                    <IonText className="BlueText">{server?.state?.discord_online || 0}</IonText>*/}
-                {/*                </IonCol>*/}
-                {/*            </IonRow>*/}
-                {/*        </IonGrid>*/}
-                {/*    </IonCard>*/}
-
+                <IonCol size-xl="12" size-md="12" size-sm="12" size-xs="12" />
 
                 <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >
                     <BotServerCard serverData={server.state} />
@@ -309,12 +240,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         });
                                     }
                                 }else{
-                                    /**
-                                     * TODO ruchita: this doesn't work when there is a 400 error - need to tell the user what went wrong
-                                     * get a 400 error when error like "{"errors":[{"value":"456","msg":"Invalid discord id","param":"target_server","location":"body"}]}" - so need to show this
-                                     *
-                                     * after fixing the error in the form - I click submit again but it doesn't work, nothing in network
-                                     */
                                     present({
                                         message: 'An error occurred, please try again later or contact us',
                                         color: 'danger',
@@ -366,6 +291,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 name={name}
                                                 ref={ref}
                                                 onIonBlur={onBlur}
+                                                placeholder='When this giveaway should expire'
                                                 min={new Date(  +now + 86400 * 1000 ).toISOString()}
                                                 max={new Date(  +now + 86400 * 365 * 1000 ).toISOString()} />
                                             <p className="formError"> {error?.message} </p>
@@ -431,7 +357,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                                 </IonItem>
                             </div>
-                            {whiteListRequireRole.length > 0 ? 
+                            {whiteListRequireRole.length > 0 ?
                                 <div>
                                     <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
                                     <IonItem className="ion-item-wrapper mt-1">
@@ -459,7 +385,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     />
                                     </IonItem>
                                 </div>
-                            : 
+                            :
                                 <div>
                                     <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
                                     <IonItem className="ion-item-wrapper mt-1">
@@ -471,7 +397,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 <IonInput
                                                     value={value}
                                                     onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
-                                                    type="url"
+                                                    type="text"
                                                     required
                                                     name={name}
                                                     ref={ref}
@@ -484,7 +410,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </div>
                             }
 
-                            
+
                         </IonCard>
 
                         <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
@@ -567,7 +493,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </IonItem>
                             </div>
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Magic Eden upvote URL</IonLabel>
+                                <IonLabel className="text-white">Magic Eden drops URL</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
                                     <Controller
                                     name="magicEdenUpvoteUrl"
@@ -582,7 +508,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 name={name}
                                                 ref={ref}
                                                 onIonBlur={onBlur}
-                                                placeholder='Magic Eden upvote URL' />
+                                                placeholder='Magic Eden drops URL (to get people to upvote it)' />
                                             <p className="formError"> {error?.message} </p>
                                         </>
                                     )} />

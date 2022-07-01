@@ -479,12 +479,12 @@ const App = () => {
                                                                                 />
                                                                                 {/* view all guild */}
                                                                                 <ProtectedRoute
-                                                                                        exact
-                                                                                        path="/view-guild"
-                                                                                        component={
-                                                                                            ViewGuild
-                                                                                        }
-                                                                                        needsRole={false}
+                                                                                    exact
+                                                                                    path="/view-guild"
+                                                                                    component={
+                                                                                        ViewGuild
+                                                                                    }
+                                                                                    needsRole={false}
                                                                                 />
 
                                                                                 {/* Seamless! */}
@@ -510,12 +510,14 @@ const App = () => {
                                                                                     exact
                                                                                     path="/seamlessdetail/:serverId"
                                                                                     component={ SeamlessDetail }
+                                                                                    needsRole={false}
                                                                                 />
                                                                                 {/* SeamlessServer */}
                                                                                 <ProtectedRoute
                                                                                     exact
                                                                                     path="/seamless/:serverId"
                                                                                     component={ Seamless }
+                                                                                    needsRole={false}
                                                                                 />
 
                                                                                 {/*login button etc...*/}

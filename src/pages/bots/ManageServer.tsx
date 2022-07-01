@@ -80,11 +80,13 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             .catch((error: any) => {
                 console.log('error', error);
                 let msg = '';
+                console.log(error.response);
                 if (error && error.response) {
-                    msg = String(error.response.data.message);
+                    msg = String(error.response.data.message ? error.response.data.message : error.response.data.body);
                 } else {
                     msg = 'Unable to connect. Please try again later';
                 }
+
                 present({
                     message: msg,
                     color: 'danger',
