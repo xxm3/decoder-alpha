@@ -505,7 +505,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             value={value}
                                             onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                             type="url"
-                                            required
+                                            // required
                                             name={name}
                                             ref={ref}
                                             onIonBlur={onBlur}
@@ -626,7 +626,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         </> :
 
                         // else show how many packages they can add
-                        <span className="text-green-500">You are authorized to add {authorizedModule} package(s)</span>}
+                        <span className="text-green-500">You are authorized to add up to {authorizedModule} package(s)</span>}
                 </div>
 
                 {/*instructions*/}

@@ -102,7 +102,7 @@ router.post('/cache-assassin-guilds', async (req,
 
 
 
-sol decoder should be first - getAllGuildsData
+
 
 didnt add new discord charts :(
 
