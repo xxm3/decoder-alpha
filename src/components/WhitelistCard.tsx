@@ -1,41 +1,29 @@
 import { css } from '@emotion/react';
-import { IonButton, IonIcon, IonSpinner, useIonToast } from '@ionic/react';
-import {logoDiscord, logoTwitter} from 'ionicons/icons';
-import React, {useEffect, useState} from 'react';
+import {IonButton, IonIcon, IonSpinner, useIonToast} from '@ionic/react';
+import {useEffect, useState} from 'react';
 import { useQueryClient } from 'react-query';
 import { instance } from '../axios';
 import { IWhitelist } from '../types/IWhitelist';
 import isAxiosError from '../util/isAxiosError';
 import TimeAgo from './TimeAgo';
 import "./WhitelistCard.scss"
-import {getUrlExtension, mediaTypes, urlRegExp} from '../util/getURLs';
-import ReactMarkdown from "react-markdown";
-// import parse from 'html-react-parser';
-import reactStringReplace from 'react-string-replace';
 import ConfettiExplosion from 'react-confetti-explosion';
+import {logoDiscord, logoTwitter} from 'ionicons/icons';
+import MagicEden from '../../src/images/me-white.png'
 
-const getButtonText = (expired : boolean, claiming : boolean, claimed : boolean, full : boolean) => {
-	if(claimed){
-		return "Claimed"
-	}
-
-	if(expired){
-		return "Already expired"
-	}
-	if(full){
-		return "Full"
-	}
-	if(claiming){
-		return <IonSpinner />
-	}
-	return "Obtain whitelist"
-
-}
+/**
+ * The page they see when they are on /seamless, and browsing for whitelists etc..
+ *
+ * These are individual cards
+ *
+ * Parent is "WhitelistMarketplace.tsx"
+ */
 
 function WhitelistCard({
     image,
     max_users,
     twitter,
+    discordInvite,
     sourceServer,
     targetServer,
     type,
@@ -43,147 +31,188 @@ function WhitelistCard({
 	required_role_name,
 	expiration_date,
 	id,
+    active,
+    showLive,
+    isExpired,
 	claimed,
-	claimCounts
+	claimCounts,
+    claims,
+    magicEdenUpvoteUrl,
 }: IWhitelist) {
+
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
 	const [claiming, setClaiming] = useState<boolean>(false);
-
 	const queryClient = useQueryClient();
-
 	const [present] = useIonToast();
-
 	const full = claimCounts >= max_users;
+    const [isExploding, setIsExploding] = useState<boolean>(false);
+    const uid  = localStorage.getItem('uid');
 
-    const [isExploding, setIsExploding] = React.useState(false);
+    // what to show in each button
+    const getButtonText = (
+        expired : boolean,
+        claiming : boolean,
+        claimed : boolean, // undefined...
+        full : boolean,
+        claims:any,
+        showLive: any) => {
 
-    // useEffect(() => {
-    //     setIsExploding(true);
-    // }, []);
+        // console.log(showLive);
+        // if(name === 'Ready Set Trade'){
+        //     console.log(expired, claiming, claimed, full , claims);
+        //     console.log(claims[0]);
+        //     console.log(uid);
+        // }
+
+        if(claimed){
+            return "Claimed"
+        }else if(expired){
+            return "Already expired"
+        }else if(full){
+            return "Full"
+        }else  if(claiming){
+            return <IonSpinner />
+        }else if(claims[0] && claims[0].user && uid){
+            // these should always match, so just returning it here. Query is on whitelistRouter.js.getQueryOptions()
+            if(claims[0].user.discordId === JSON.parse(uid)){
+                return "Claimed"
+            }else{
+                return "Claimed"
+            }
+        }else {
+            return "Obtain whitelist"
+         }
+    }
+
+    // for confetti
+    useEffect(() => {
+        if(claimed) {
+            setIsExploding(true);
+        }
+    },[]);
 
     return (
+		<>
 
         <div className="border-gray-500 border-[0.5px] rounded-2xl w-80 overflow-clip">
 
-            {isExploding && <ConfettiExplosion />}
+            {/* for confetti */}
+            {isExploding && expired !== undefined && <ConfettiExplosion />}
 
             <div className="relative overflow-y-hidden h-60 w-80">
-                <img
-                    src={image}
-                    className="h-full w-full object-cover object-left"
-                    alt={`${sourceServer.name} X ${targetServer.name}`}
-                />
+                <img src={image} className="h-full w-full object-cover object-left" alt={`${sourceServer?.name} X ${targetServer?.name}`} />
                 <div className="absolute flex bottom-0 right-0 justify-between bg-white bg-opacity-50 dark:bg-black dark:bg-opacity-50 py-2 px-5 left-0">
+
                     <div className="w-full">
-                        <p className="font-bold text-lg">{sourceServer.name}</p>
-                        <p className="text-sm italic">
-                            Whitelist
-                        </p>
+                        <p className="text-lg font-bold">{sourceServer?.name}</p>
+                        <p className="text-sm italic">must be in "{targetServer?.name}" DAO</p>
+                        <p className="text-sm italic"> Type: Whitelist </p>
                     </div>
-
-                    {/*{discord && (*/}
-                    {/*    <a*/}
-                    {/*        href={discord}*/}
-                    {/*        className="self-center hover:opacity-70"*/}
-                    {/*        target="_blank"*/}
-                    {/*    >*/}
-                    {/*        <IonIcon icon={logoDiscord} className="h-5 w-5" />*/}
-                    {/*    </a>*/}
-                    {/*)}*/}
-
-                    {twitter && (
-                        <a
-                            href={twitter}
-                            className="self-center hover:opacity-70"
-                            target="_blank"
-                        >
-                            <IonIcon icon={logoTwitter} className="h-5 w-5" />
-                        </a>
-                    )}
+                    <div className='flex items-center flex-col justify-center mt-2'>
+                        <div>
+                            {discordInvite && ( <a href={discordInvite} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoDiscord} className="h-6 w-6" /> </a> )}
+                        </div>
+                        <div>
+                            {twitter && ( <a href={twitter} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoTwitter} className="h-6 w-6" /> </a> )}
+                        </div>
+                        <div>
+                            {magicEdenUpvoteUrl && ( <a href={magicEdenUpvoteUrl} className="hover:opacity-70" target="_blank" > <img src={MagicEden} className="h-6 w-6" /> </a> )}
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div
-                className="py-4 px-6 flex-col flex"
-            >
+            <div className="py-4 px-6 flex-col flex" >
 
-                {description}
-                {/*{*/}
-                {/*    reactStringReplace(description, urlRegExp, (match: any, url: any) => (*/}
-                {/*        <a href="${url}" class="underline cursor-pointer text-blue-300" target="_blank">${url.trim()}</a>;*/}
-                {/*    ))*/}
-                {/*}*/}
-
-                <br/>
+                <div className="mb-3">{description}</div>
 
                 <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>
                     <p>{type.toUpperCase()}</p>
                     <p>Slots left </p>
                     <p>{max_users - claimCounts}/{max_users}</p>
-					<p>Required Role</p>
+					<p>Required Role (in "{targetServer?.name}" DAO)</p>
 					<p>{required_role_name}</p>
-					<p className="timeLeft">Time left</p>
-					<TimeAgo setExpired={setExpired} date={expiration_date}/>
+					<p className="timeLeft" hidden={expired || expired === undefined}>Time left</p>
+					<span hidden={expired || expired === undefined}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
                 </div>
 
+                {/* button! */}
 				{expired !== undefined && <IonButton css={css`
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
-				`} className="my-2 self-center" onClick={async () => {
-					setClaiming(true);
-					try {
-						await instance.post("/whitelistClaims", {
-							whitelist_id : id
-						});
-						queryClient.setQueryData(
-                            ['whitelistPartnerships'],
-                            (queryData) => {
-                                return (queryData as IWhitelist[]).map(
-                                    (whitelist) => {
-                                        if (whitelist.id === id) {
-                                            whitelist.claimed = true;
-											whitelist.claimCounts += 1
+				`} className="my-2 self-center"
+
+                     // when you click the button!
+                     onClick={async () => {
+                        setClaiming(true);
+
+                        try {
+
+                            // submit form!
+                            // await instance.post("/whitelistClaims", {
+                            await instance.post("/createWhitelistClaims", {
+                                whitelist_id : id
+                            });
+                            queryClient.setQueryData(
+                                ['whitelistPartnerships'],
+                                (queryData) => {
+                                    return (queryData as IWhitelist[]).map(
+                                        (whitelist) => {
+                                            if (whitelist.id === id) {
+                                                whitelist.claimed = true;
+                                                whitelist.claimCounts += 1
+                                            }
+                                            return whitelist;
                                         }
-                                        return whitelist;
-                                    }
-                                );
+                                    );
+                                }
+                            );
+
+                            // success!
+
+                            setIsExploding(true);
+                            present({
+                                message: 'Whitelist claimed successfully! You are now whitelisted in ' + sourceServer.name,
+                                color: 'success',
+                                duration: 10000,
+                            });
+
+                        // if error!
+                        } catch (error) {
+                            console.error(error);
+
+                            if(isAxiosError(error) && error.response?.data){
+                                present({
+                                    message: error.response?.data.body,
+                                    color: 'danger',
+                                    duration: 5000,
+                                });
                             }
-                        );
+                            else {
+                                present({
+                                    message: "Something went wrong",
+                                    color: 'danger',
+                                    duration: 5000,
+                                });
+                            }
+                        } finally {
+                            setClaiming(false);
+                        }
+                    }}
 
-                        setIsExploding(true);
+                     disabled={expired || claiming || claimed || full || showLive || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed'  }
+                    >
+                        {getButtonText(expired,claiming,claimed, full, claims, showLive)}
+                    </IonButton>
 
-						present({
-							message:
-								'Whitelist claimed successfully! You are now whitelisted in the other Discord',
-							color: 'success',
-							duration: 10000,
-						});
+                }
+                {/* end button! */}
 
-					} catch (error) {
-						console.error(error);
+				</div>
 
-						if(isAxiosError(error) && error.response?.data){
-							present({
-								message: error.response?.data.body,
-								color: 'danger',
-								duration: 5000,
-							});
-						}
-						else {
-							present({
-								message: "Something went wrong",
-								color: 'danger',
-								duration: 5000,
-							});
-						}
-					}
-					finally {
-						setClaiming(false)
-					}
-				}} disabled={expired || claiming || claimed || full}>{getButtonText(expired,claiming,claimed, full)}</IonButton>}
+			</div>
 
-            </div>
-        </div>
+		</>
     );
 }
 

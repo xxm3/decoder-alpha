@@ -91,6 +91,8 @@ import InitiateWhitelist from './pages/bots/InitiateWhitelist';
 import WhitelistMarketplace from './pages/bots/WhitelistMarketplace';
 import { setHasRoles } from './redux/slices/userSlice';
 import ViewGuild from './pages/view-guild/ViewGuild';
+import SeamlessDetail from './pages/bots/SeamlessDetail';
+import Seamless from './pages/bots/Seamless';
 
 function b64DecodeUnicode(str : string) {
     return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
@@ -414,6 +416,7 @@ const App = () => {
                                                                                     component={
                                                                                         NftPriceTable
                                                                                     }
+                                                                                    needsRole={false}
                                                                                 />
 
                                                                                 {/* Stacked Line Search */}
@@ -448,6 +451,7 @@ const App = () => {
                                                                                     component={
                                                                                         ManageServer
                                                                                     }
+                                                                                    needsRole={false}
                                                                                 />
 
                                                                                 {/* if anyone direct access Server module  */}
@@ -455,6 +459,7 @@ const App = () => {
                                                                                     exact
                                                                                     path="/servermodule"
                                                                                     render={()=> <Redirect to={`/manageserver`} />}
+                                                                                    needsRole={false}
                                                                                 />
 
                                                                                 {/* Server module */}
@@ -462,6 +467,7 @@ const App = () => {
                                                                                     exact
                                                                                     path="/servermodule/:serverId"
                                                                                     component={ ServerModule }
+                                                                                    needsRole={false}
                                                                                 />
                                                                                 <ProtectedRoute
                                                                                     exact
@@ -469,23 +475,49 @@ const App = () => {
                                                                                     component={
                                                                                        InitiateWhitelist
                                                                                     }
+                                                                                    needsRole={false}
                                                                                 />
                                                                                 {/* view all guild */}
                                                                                 <ProtectedRoute
-                                                                                        exact
-                                                                                        path="/view-guild"
-                                                                                        component={
-                                                                                            ViewGuild
-                                                                                        }
+                                                                                    exact
+                                                                                    path="/view-guild"
+                                                                                    component={
+                                                                                        ViewGuild
+                                                                                    }
+                                                                                    needsRole={false}
                                                                                 />
-                                                                                {/*  */}
+
+                                                                                {/* Seamless! */}
                                                                                 <ProtectedRoute
                                                                                     exact
                                                                                     path="/whitelistmarketplace"
                                                                                     component={
                                                                                        WhitelistMarketplace
                                                                                     }
-																					needsRole={false}
+                                                                                    needsRole={false}
+                                                                                />
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/seamless"
+                                                                                    component={
+                                                                                        WhitelistMarketplace
+                                                                                    }
+                                                                                    needsRole={false}
+                                                                                />
+
+                                                                                {/* SeamlessServer */}
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/seamlessdetail/:serverId"
+                                                                                    component={ SeamlessDetail }
+                                                                                    needsRole={false}
+                                                                                />
+                                                                                {/* SeamlessServer */}
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/seamless/:serverId"
+                                                                                    component={ Seamless }
+                                                                                    needsRole={false}
                                                                                 />
 
                                                                                 {/*login button etc...*/}

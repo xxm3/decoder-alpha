@@ -23,7 +23,7 @@ function MintChart({eventGraphData}: any) {
     const [mintLineData, setmintLineData] = useState(defaultGraph);
     const chartsRef = useRef<HTMLDivElement | null>(null);
     const [isMobile, setIsMobile] = useState(false);
-   
+
     // for setting height of chart, depending on what width browser is
     const tableHeight = useMemo(() => {
         if (width > 1536) return 100;
@@ -36,30 +36,25 @@ function MintChart({eventGraphData}: any) {
 
     // viewing the chart for a calendar
     const viewChart = () => {
+
+        // now sort again so chart can be right
+        eventGraphData.data.data = eventGraphData.data.data.reverse();
+
         if(eventGraphData){
             setmintLineData(defaultGraph);
                 const labels = eventGraphData.data.data.map((el: { date: Date }) => {
-                    return moment(el.date,'DD MM YYYY').format('l');
+                    return moment(el.date,'MM/DD/YYYY').format('l'); // DD MM YYYY
                 });
 
                 const discordAllData = eventGraphData.data.data.map((el: { discord_all: any }) => {
                     return parseInt(el.discord_all);
                 });
-                const tweetInteractionsData = eventGraphData.data.data.map((el: { tweetInteractions: any }) =>
-                        parseInt(el.tweetInteractions)
+                const twitterFollowersData = eventGraphData.data.data.map((el: { twitter_all: any }) =>
+                        parseInt(el.twitter_all)
                 );
-
                 const discordOnlineData = eventGraphData.data.data.map((el: { discord_online: any }) =>
                         parseInt(el.discord_online)
                 );
-
-                if (discordAllData.length === 0 && tweetInteractionsData.length === 0 && discordOnlineData.length ===0) {
-                    present({
-                        message: 'Unable to get Twitter & Discord data on this!',
-                        color: 'danger',
-                        duration: 8000,
-                    });
-                }
 
                 let datasetsAry = [
                     {
@@ -87,24 +82,24 @@ function MintChart({eventGraphData}: any) {
                     {
                         type: 'line' as const,
                         yAxisID: 'y0',
-                        label: 'Tweet Interactions',
+                        label: 'Twitter Followers',
                         borderColor:'#0052FF',
-                        data:tweetInteractionsData,
+                        data: twitterFollowersData, // tweetInteractionsData
                         fill: {
                             target: 'origin',
                             above: '#0052FF05',
                         },
                     },
-                    
+
                 ];
                 setmintLineData({
                     labels: labels,
                     datasets: datasetsAry,
                 });
         }
-                
-            
-            
+
+
+
 
     };
 
@@ -158,9 +153,9 @@ function MintChart({eventGraphData}: any) {
                     />
                 </div>
                 <div className="items-center flex justify-center pt-5 flex-row pb-4">
-                    <div className='flex items-center flex-row' style={{color:'#14F195'}}><IonIcon icon={logoDiscord} className="big-emoji"/><span className='ml-1'>{isMobile ? 'All' : 'Discord All'}</span></div>
-                    <div className='flex items-center flex-row ml-4' style={{color:'#9052F8'}}><IonIcon icon={logoDiscord} className="big-emoji"/><span className='ml-1'>{isMobile ? 'Online' : 'Discord Online'}</span></div>
-                    <div className='flex items-center flex-row ml-4' style={{color:'#0052FF'}}><IonIcon icon={logoTwitter} className="big-emoji"/><span className='ml-1'>{isMobile ? 'Interactions' : 'Tweet Interactions'}</span></div>
+                    <div className='flex items-center flex-row' style={{color:'#14F195'}}><IonIcon icon={logoDiscord} className="big-emoji"/><span className='ml-1'>{isMobile ? 'Disc All' : 'Discord All'}</span></div>
+                    <div className='flex items-center flex-row ml-4' style={{color:'#9052F8'}}><IonIcon icon={logoDiscord} className="big-emoji"/><span className='ml-1'>{isMobile ? 'Disc On' : 'Discord Online'}</span></div>
+                    <div className='flex items-center flex-row ml-4' style={{color:'#0052FF'}}><IonIcon icon={logoTwitter} className="big-emoji"/><span className='ml-1'>{isMobile ? 'Twitter' : 'Twitter Followers'}</span></div>
                 </div>
             </div>
         </>

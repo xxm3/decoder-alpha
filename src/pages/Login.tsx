@@ -19,32 +19,10 @@ import {logoDiscord, logoTwitter,logoYoutube} from "ionicons/icons";
 import usePersistentState from '../hooks/usePersistentState';
 import meLogo from '../images/me.png';
 
-
-
-
 /**
  * The "Login" page to which all unauthenticated users are redirected to
  *
- * Frontend Workflow:
- * - user hits the site, and hits "ProtectedRoute.tsx" (which ignores localhost)
- * - ProctedRoute.tsx brings them to Login.tsx
- * - Login.tsx sends them to discord_auth.js, to get a token from discord
- * - discord_auth.js goes to discord and gets a token, returns it to login.tsx
- * - Login.tsx signs them in
- *
- * - also axios.ts is used for getting new tokens
- * - also environment.js sets isDev (OVERRIDES FOR LOCAL), also read from ProtectedRoute.tsx to protect our routes or not
- *
- * Backend
- * - middleware is in from verify.js
- *   - has some (OVERRIDES FOR LOCAL) to skip logging in via localhost
- *
- * If want to test stuff locally (ie. To skip over Discord ouath)
- * - ProtectedRoute.tsx - comment out the isDev
- * - verify.js
- *      - comment out -> if (process.env.TEST_VEHN_DOJO) {
- *      - comment out -> req.headers.host === 'localhost:5001'
- * - Log on the website as localhost and login wiht Discord
+ * See descriptions of our login workflow on the README.md
  */
 
 function Login() {
@@ -100,20 +78,28 @@ function Login() {
                 .then(({ data }) => {
                     // console.log(data);
 					// auth.setPersistence(browserLocalPersistence)
+
                     localStorage.setItem('servers',JSON.stringify(data.servers));
                     localStorage.setItem('roleList',JSON.stringify(data.roles));
-                    localStorage.setItem('isLogin','isLogin')
+                    localStorage.setItem('isLogin','isLogin'); // used for showing search bar or not, and stuff
 
                     // console.log('servers: ' + data.servers);
                     console.log('roles: ' + data.roles);
 
-                    return signInWithCustomToken(auth, data.body);
+                    return signInWithCustomToken(auth, data.body).then(async (userCredential: any) => {
+                        const user = userCredential.user;
+                        // console.log("user:::::::::::::", user);
+                        localStorage.setItem('uid', JSON.stringify(user.uid));
+                        // localStorage.setItem('token', JSON.stringify(user.accessToken));
+
+                    });
                 })
                 .catch((e) => {
                     console.error(e);
 
                     if (e?.response?.status === 403){
-                        setError("You need a proper role in Discord before accessing the site. Buy the NFT then go to the 'metahelix-verify' channel");
+                        // You need a proper role in Discord before accessing the site. Buy the NFT then go to the 'metahelix-verify' channel
+                        setError("An error occurred. Please try again or contact us");
                     }else {
                         setError('Something went wrong, please try again. You may also try using a VPN program, and not a VPN in your browser (as people in Russia are  currently banned by Google). Some anti-virus programs like Bullguard can block the site, so unblock it there.');
                     }
@@ -176,12 +162,12 @@ function Login() {
                                             params.set('state', next);
                                                 const urlToRedirect = `https://discord.com/api/oauth2/authorize?client_id=${
                                                 environment.clientId
-                                                }&response_type=code&scope=identify+guilds&${params.toString()}`;
+                                                }&response_type=code&scope=identify+guilds+guilds.members.read&${params.toString()}`;
                                                 setError("")
                                                 if(isMobileDevice){
                                                     const browser = InAppBrowser.create(urlToRedirect, '_blank', 'location=yes');
                                                     browser.on("beforeload")
-                                                    browser.on('loadstart').subscribe(event => {
+                                                    browser.on('loadstart').subscribe((event: { url: string; }) => {
                                                         const eventUrl = new URL(event.url)
                                                         if(eventUrl.origin === environment.ionicAppUrl && eventUrl.pathname === '/login'){
                                                             const code = eventUrl.searchParams.get('code');

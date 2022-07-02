@@ -7,7 +7,7 @@ import './Schedule.css'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment';
-import { IonButton, IonContent, IonHeader, IonIcon, IonModal, IonRippleEffect, IonSearchbar,  IonToolbar, useIonToast } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonIcon, IonModal, IonRippleEffect, IonSearchbar,  IonSpinner,  IonToolbar, useIonToast } from '@ionic/react';
 import { useHistory, useParams, useLocation } from 'react-router';
 import MintChart from './MintChart';
 import Loader from '../../components/Loader';
@@ -28,6 +28,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
     const [openEventModal, setOpenEventModal] = useState<any>(false)
     const [mints, setMints] = useState<any>([])
     const [isLoading, setIsLoading] = useState(false);
+    const [isSpinner, setIsSpinner] = useState(false);
     const [selectedEvent,setSelectedEvent] = useState<any>()
     const [showMorePopup, setShowMorePopup] = useState<boolean>(true)
     const [eventGraphData, setEventGraphData] = useState<any>()
@@ -110,10 +111,12 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
 
     // viewing the chart for a calendar
     const viewChart = async(id: any) => {
+        setIsSpinner(true)
         await instance
             .get( environment.backendApi + '/mintInfo?mintId=' + id )
             .then((res) => {
                 setEventGraphData(res)
+                setIsSpinner(false)
                 if(res.data.data.length > 1){
                     setShowGraph(true)
                 }else if (res.data.data.length === 0){
@@ -123,6 +126,7 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                 }
             })
             .catch((err) => {
+                setIsSpinner(false)
                 console.error( 'error when getting event history data: ' + err );
                 present({
                     message: 'Error - unable to load chart data. Please refresh and try again',
@@ -131,7 +135,6 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                     buttons: [{ text: 'hide', handler: () => dismiss() }],
                 });
             });
-
     };
 
      // does the search functionality
@@ -263,9 +266,9 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
                                         <IonIcon icon={close} className="h-6 w-6"/>
                                     </div>
                                     <div>
-                                        <img src={eventGraphData?.data?.data[0]?.image} className={`${isMobile ? 'h-24 w-24' : 'h-52 w-52'}`} alt=''/>
+                                        {isSpinner ? <div className={`${isMobile ? 'h-24 w-24' : 'h-52 w-52'} flex items-center justify-center`}><IonSpinner /></div> : <img src={eventGraphData?.data?.data[0]?.image} className={`${isMobile ? 'h-24 w-24' : 'h-52 w-52'}`} alt=''/> }
                                     </div>
-                                    <div className={`flex ${isMobile  ? 'items-start ml-3 mt-2 mb-3' : 'items-cente ml-6 mt-6 mb-3' } flex-col`}>
+                                    <div className={`flex ${isMobile  ? 'items-start ml-3 mt-2 mb-3' : ' ml-6 mt-6 mb-3' } flex-col`}>
                                         <div className={`items-center flex`}>
                                             <div className={`font-bold ${isMobile ? 'text-lg' : 'text-2xl' }`}>{eventGraphData?.data?.data[0]?.mintName}</div>
                                             <div className={`items-center flex justify-center pt-2 pl-2 ${isMobile ? 'ml-1' : 'ml-4'}  flex-row`}>

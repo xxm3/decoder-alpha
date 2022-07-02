@@ -58,12 +58,9 @@ function Table<RowData extends object>(
     const { options } = props;
 
     const [mode] = usePersistentState('mode', 'dark');
+
     const [isMobile, setIsMobile] = useState(false);
-    
-
-
     useEffect(() => {
-
         if (window.innerWidth < 525) {
             setIsMobile(true);
         }
@@ -212,7 +209,7 @@ function Table<RowData extends object>(
 							display:flex;
 							justify-content: isMobile ? center : "";
                         }
-						
+
 			`}
             >
                 <div className="sm:hidden">{title}</div>
@@ -232,7 +229,7 @@ function Table<RowData extends object>(
                                   .includes(column.title as string)
                             : false,
                     }))}
-                    
+
                     title={<div className="hidden sm:block">{title}</div>}
                     options={{
                         headerStyle: {

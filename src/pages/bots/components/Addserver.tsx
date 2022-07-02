@@ -79,7 +79,11 @@ const Addserver: React.FC<props> = (props) => {
                     .catch((error: any) => {
                         let msg = '';
                         if (error?.response) {
-                            msg = String(error.response.data.message);
+                            msg = String(
+                                error.response.data.message
+                                    ? error.response.data.message
+                                    : error.response.data.body
+                            );
                         } else {
                             msg = 'Unable to connect. Please try again later';
                         }
@@ -104,6 +108,52 @@ const Addserver: React.FC<props> = (props) => {
                 .post(
                     `getRoleType`,
                     { roles: roleList },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                )
+                .then(({ data }) => {
+                    if (data.roleType !== 'No Roles') {
+                        SetAdmin(id);
+                    } else {
+                        present({
+                            message: 'This admin has no NFTs available.',
+                            color: 'danger',
+                            duration: 5000,
+                            buttons: [{ text: 'X', handler: () => dismiss() }],
+                        });
+                    }
+                })
+                .catch((error: any) => {
+                    console.error('error', error);
+
+                    let msg = '';
+                    if (error && error.response) {
+                        msg = String(error.response.data.body);
+                    } else {
+                        msg = 'Unable to connect. Please try again later';
+                    }
+                    present({
+                        message: msg,
+                        color: 'danger',
+                        duration: 5000,
+                        buttons: [{ text: 'X', handler: () => dismiss() }],
+                    });
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                    // console.log("done")
+                });
+        };
+
+        let getHighestRoleType = async (id: string) => {
+            setIsLoading(true);
+            instance
+                .post(
+                    `highestRoleType`,
+                    { discordId: id },
                     {
                         headers: {
                             'Content-Type': 'application/json',
@@ -173,7 +223,11 @@ const Addserver: React.FC<props> = (props) => {
 
                     let msg = '';
                     if (error && error.response) {
-                        msg = String(error.response.data.message);
+                        msg = String(
+                            error.response.data.message
+                                ? error.response.data.message
+                                : error.response.data.body
+                        );
                     } else {
                         msg = 'Unable to connect. Please try again later';
                     }
@@ -200,6 +254,7 @@ const Addserver: React.FC<props> = (props) => {
 
         return (
             <div>
+                {/* back button */}
                 <div>
                     <IonButton
                         color="primary"
@@ -210,50 +265,80 @@ const Addserver: React.FC<props> = (props) => {
                         <p>Back</p>
                     </IonButton>
                 </div>
+
+                {/* Intro */}
+                <ul>
+                    <li>
+                        - Usage of the SOL Decoder bots require 3-4 NFTs (or an
+                        agreement to give us part of your whitelist)
+                    </li>
+                    <li>
+                        - If you are a server owner but don't have 3-4 NFTs, you
+                        may allow an admin of your server (that has 3-4 NFTs) to
+                        setup this server for you
+                    </li>
+                    <li>
+                        - Create a new role in your Discord that has a
+                        permission of "Administrator", add the user to that
+                        role, then you should see them in the list below
+                    </li>
+                    <li>
+                        - Click "Assign", then that person can login here and
+                        setup the rest of the bots for you
+                    </li>
+                </ul>
+
+                {/* list of admins */}
                 <List dense={dense}>
                     {adminsList.map((admin: any, index) => {
                         return (
                             <IonRow>
                                 <IonCol size-lg="5" size-md="9" size="12">
-                                <ListItem key={index}>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        {admin?.user?.avatar ? (
-                                            <img
-                                                src={`https://cdn.discordapp.com/icons/${admin.user.id}/${admin.user.icon}.webp`}
-                                                alt="avtar"
-                                            />
-                                        ) : (
-                                            <PersonIcon />
-                                        )}
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary={admin?.user.username}
-                                    secondary={
-                                        secondary ? 'Secondary text' : null
-                                    }
-                                />
-                                <ListItemSecondaryAction>
-                                    {!AssigenAdmin.includes(
-                                        admin?.user?.id
-                                    ) && (
-                                        <IonButton
-                                            color="primary"
-                                            className="text-sm space-x-1"
-                                            onClick={() =>
-                                                getRoleType(admin.roles,admin?.user?.id)
+                                    <ListItem key={index}>
+                                        {/*<ListItemAvatar>*/}
+                                        {/*    <Avatar>*/}
+                                        {/*        {admin?.user?.avatar ? (*/}
+                                        {/*            <img*/}
+                                        {/*                src={`https://cdn.discordapp.com/icons/${admin.user.id}/${admin.user.icon}.webp`}*/}
+                                        {/*                alt="avtar"*/}
+                                        {/*            />*/}
+                                        {/*        ) : (*/}
+                                        {/*            <PersonIcon />*/}
+                                        {/*        )}*/}
+                                        {/*    </Avatar>*/}
+                                        {/*</ListItemAvatar>*/}
+                                        <ListItemText
+                                            primary={admin?.user.username}
+                                            secondary={
+                                                secondary
+                                                    ? 'Secondary text'
+                                                    : null
                                             }
-                                        >
-                                            <p>Assign</p>
-                                        </IonButton>
-                                    )}
-                                </ListItemSecondaryAction>
-                            </ListItem>
+                                        />
+                                        <ListItemSecondaryAction>
+                                            {!AssigenAdmin.includes(
+                                                admin?.user?.id
+                                            ) && (
+                                                <IonButton
+                                                    color="primary"
+                                                    className="text-sm space-x-1"
+                                                    onClick={() =>
+                                                        getHighestRoleType(
+                                                            admin?.user?.id
+                                                        )
+                                                    }
+                                                >
+                                                    <p>
+                                                        Assign as manager of
+                                                        this server
+                                                    </p>
+                                                </IonButton>
+                                            )}
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
                                 </IonCol>
                                 <IonCol></IonCol>
-                                </IonRow>
-
+                            </IonRow>
                         );
                     })}
                 </List>

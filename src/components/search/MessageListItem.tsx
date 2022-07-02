@@ -7,7 +7,6 @@ import ReactTooltip from 'react-tooltip';
 import { getUrlExtension, mediaTypes, urlRegExp } from '../../util/getURLs';
 import ReactMarkdown from "react-markdown";
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import { css } from '@emotion/react';
 
 type MessageListItemProps =
     | {
@@ -21,8 +20,8 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
         {
             onClick,
             isFromMsgThread,
-            message: { message, time, source, author, id } = {}
             // message: { message, time, source, author, id } = {}
+            message: { message, time, source, author, id } = {}
         },
         ref
     ) => {
@@ -64,32 +63,17 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
             return moment(time).fromNow();
         };
 
+        // console.log('message---------',source)
+
         return (
             <div key={id}
-                className={`relative w-full items-start  my-2 ${
-                    onClick ? 'hover:bg-opacity-100 cursor-pointer' : ''
-                } py-1 space-x-4 rounded-xl text-lg flex`}
-                onClick={() =>
-                    onClick &&
-                    onClick({ id, source, author, time, message } as Message)
-                }
+                className={`relative w-full items-start  my-2 ${  onClick ? 'hover:bg-opacity-100 cursor-pointer' : '' } py-1 space-x-4 rounded-xl text-lg flex`}
+                onClick={() => onClick && onClick({ id, source, author, time, message } as Message) }
                 ref={ref}
             >
 
                 {/* hide this on mobile */}
-                <img
-                    className="image hidden sm:block"
-                    alt={source === 'Twitter' ? 'Twitter' : 'Discord'}
-                    src={
-                        source === 'Twitter'
-                            ? `https://unavatar.io/twitter/${
-                                  (author as string)
-                                      .split('(Twitter) ')
-                                      .slice(-1)[0]
-                              }`
-                            : '/assets/discord.ico'
-                    }
-                />
+                <img className="image hidden sm:block" alt={source === 'Twitter' ? 'Twitter' : 'Discord'} src={  source === 'Twitter' ? `https://unavatar.io/twitter/${ (author as string) .split('(Twitter) ') .slice(-1)[0] }` : '/assets/discord.ico' }  />
                 <div className="flex-grow">
                     <div className={`flex font-semibold items-center space-x-2 text-base mb-1  justify-between`} >
                         {/*source & author*/}
@@ -102,7 +86,7 @@ const MessageListItem = React.forwardRef<HTMLDivElement, MessageListItemProps>(
                                 data-tip={new Date( time as string ).toLocaleString()}
                                 >
                                 <div className='whitespace-nowrap' >
-                                    {getDateAgo(time)}
+                                    {getDateAgo(time) === 'a few seconds ago' ? '' : getDateAgo(time)}
                                 </div>
                                 <div>
                                     {isFromMsgThread ? <></> :

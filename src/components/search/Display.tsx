@@ -73,7 +73,7 @@ const Display: React.FC<{
     const [isModalOpen, setIsModalOpen] = useState(true)
 
 
-   
+
 
     /**
      * Use Effects
@@ -109,9 +109,8 @@ const Display: React.FC<{
                 }} /> */}
 
                 {/* list of messages, ie. search results */}
-                {messages.map((m, i) => (
-
-                        <MessageListItem
+                {messages.map((m, i) => {
+                        return(<MessageListItem
                             onClick={() => {
                                 setIsModalOpen(true)
                                 if (m.source === 'Twitter') {
@@ -121,13 +120,14 @@ const Display: React.FC<{
                             }}
                             message={m}
                             key={i}
-                        />
-                    )
+                        />)
+                        }
                 )}
 
                 {/*if you click on a message*/}
                 {selectedMessage && (
-                    <MessageThread onClose={() => setSelectedMessage(null)} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} message={selectedMessage} />
+                    <MessageThread onClose={() => setSelectedMessage(null)}  message={selectedMessage}  />
+                        // isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}
                 )}
             </div>
         </>

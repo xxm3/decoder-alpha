@@ -11,7 +11,7 @@ import {
     statsChartOutline,
     skullOutline, earthOutline,
     serverOutline,
-	diamondOutline
+    diamondOutline, logoDiscord, todayOutline, calendarOutline
 
 } from "ionicons/icons"
 import NavLink from "./NavLink"
@@ -77,12 +77,28 @@ function Sidebar() {
 	                    </IonButton>
                    </IonMenuToggle>
                 )}
-                <NavLink title="Home" icon={homeOutline} to="/" />
+
+                {/*<NavLink title="Home" icon={homeOutline} to="/" />*/}
+
+                <NavLink
+                    title="Seamless"
+                    icon={diamondOutline}
+                    to="/seamless"
+                    needsRole={false}
+                />
+
                 <NavLink
                     title="Today's Mints"
-                    icon={calendarClearOutline}
+                    icon={todayOutline}
                     to="/schedule"
                 />
+
+                <NavLink
+                    title="Mint Calendar"
+                    icon={calendarOutline}
+                    to="/calendar"
+                />
+
                 <NavLink
                     title="Fox Token Market"
                     icon="/assets/icons/FoxTokenLogo.svg"
@@ -99,37 +115,34 @@ function Sidebar() {
                     icon={searchOutline}
                     to="/stackedsearch"
                 />
-                {/*<NavLink*/}
-                {/*    title="Whitelist Marketplace"*/}
-                {/*    icon={diamondOutline}*/}
-                {/*    to="/whitelistmarketplace"*/}
-				{/*	needsRole={false}*/}
-                {/*/>*/}
-                <NavLink
-                    title="Alerts"
-                    icon={notificationsOutline}
-                    to="/alerts"
-                />
 
-                {/* commented out until feature is done ... you can go to http://localhost:3000/bots manually in meantime */}
-                {/* bot page hide for now do not remove */}
                 {/*<NavLink*/}
-                {/*    title="Bots"*/}
-                {/*    icon={earthOutline}*/}
-                {/*    to="/bots"*/}
+                {/*    title="Alerts"*/}
+                {/*    icon={notificationsOutline}*/}
+                {/*    to="/alerts"*/}
                 {/*/>*/}
 
-               {/*    <NavLink*/}
-               {/*         title="Add Bots"*/}
-               {/*        icon={serverOutline}*/}
-               {/*        to="/manageserver"*/}
-               {/*    />*/}
+               {/* TODO: (aries) cant show this until on manageserver ... don't show the list until they have modules -> so hide the AddServer button? */}
+               {/*<NavLink*/}
+               {/*     title="Add DAO Bots"*/}
+               {/*    icon={serverOutline}*/}
+               {/*    to="/manageserver"*/}
+               {/*/>*/}
 
                 <NavLink
                     title="Docs"
                     icon={bookOutline}
                     to="#"
                     external={'https://docs.soldecoder.app'}
+                    needsRole={false}
+                />
+
+                <NavLink
+                    title="Contact / Discord"
+                    icon={logoDiscord}
+                    to="#"
+                    external={'https://discord.com/invite/sol-decoder'}
+                    needsRole={false}
                 />
 
                 {/*<NavLink*/}

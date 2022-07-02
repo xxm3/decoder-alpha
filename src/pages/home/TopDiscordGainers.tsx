@@ -34,7 +34,7 @@ const TopDiscordGainers = () => {
                 duration: 5000,
                 buttons: [{ text: 'X', handler: () => dismiss() }],
             });
-            
+
         }
     }
 
@@ -60,9 +60,11 @@ const TopDiscordGainers = () => {
      * Use Effects
      */
 
+    // TODO !!! implement top gainers! -- also fix counts not working!
+
     return (
             <>
-                { topSearchWordsQuery?.data?.data.length > 0 ? 
+                { topSearchWordsQuery?.data?.data?.length > 0 ?
                     <div className="secondary-bg-forced m-1 p-4 rounded-xl mt-6">
                         {topSearchWordsQuery?.isFetching ?
                         <div className="flex justify-center items-center">
@@ -81,7 +83,7 @@ const TopDiscordGainers = () => {
                       </>}
                 </div>:''
                 }
-            </> 
+            </>
     )
 }
 export default TopDiscordGainers
