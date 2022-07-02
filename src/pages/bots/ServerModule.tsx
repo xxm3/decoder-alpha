@@ -101,7 +101,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
      * Use Effects
      */
 
-    console.log('server',location)
+    // console.log('server',location);
 
      useEffect(() => {
         if(!localStorage.getItem('role')){
@@ -120,26 +120,19 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         // }
     }, [window.innerWidth]);
 
-    // useEffect(() => {
-    //     if(location.search === 'noBot'){
-    //         setIsNoBot(true);
-    //     }else{
-    //         setIsNoBot(false);
-    //     }
-    // }, [location.search])
-    
+    // this gets set from manageserver.tsx
+    useEffect(() => {
+        if(location.search === 'noBot'){
+            setIsNoBot(true);
+        }else{
+            setIsNoBot(false);
+        }
+    }, [location.search]);
 
 
 
     // get guilds
     useEffect(() => {
-        // TODO ruchita: I clicked on my server that had the bots, and it acted like i had no bots -- this should come from backend I thought?
-       
-
-        // }
-        //
-        // // get guilds
-        // useEffect(() => {
 
         if (serverId) {
             setIsLoading(true);
@@ -164,7 +157,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         analyticsWebhookChannel:
                             data.analyticsWebhookChannel || 'default',
                     });
-                    setChannel(data.textChannels);
+
+                    // guilds data gets looked at, and gets their channels if bot is in it
+                    if(data.textChannels.length > 0){
+                        setChannel(data.textChannels);
+                    // if empty array - means bot isn't in there... so do this
+                    }else{
+                        setIsNoBot(true);
+                    }
+
+
                 })
                 .catch((error: any) => {
                     let msg = '';
@@ -206,7 +208,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         }
     }, [role]);
 
-    // get guild form data that user submit previously 
+    // get guild form data that user submit previously
     const getGuildFormData = async() =>{
 
         if (serverId) {
@@ -221,7 +223,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         twitterLink:data.twitter_link,
                         discordLink:data.discord_link,
                     })
-                
+
                 })
                 .catch((error: any) => {
                     let msg = '';
@@ -243,7 +245,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     setIsLoading(false);
                 });
         }
-        
+
     }
 
     // update guilds modules
@@ -593,7 +595,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
                                     <div className='flex flex-col w-full'>
                                         <IonInput
-                                            
+
                                             value={value}
                                             onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                             type="url"
@@ -605,7 +607,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         <p className="formError"> {error?.message} </p>
                                     </div>
                                 )} />
-                              
+
                         </IonItem>
                     </div>
 
@@ -673,6 +675,25 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </div>
                 </form>
             </div>
+
+
+            <br/>
+
+            <div className="server-module-bg p-4 px-6 w-full"  hidden={!isNoBot}>
+                <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
+                    <IonLabel className="md:text-2xl text-2xl font-semibold">
+                        No Bots detected in your Discord
+                    </IonLabel>
+                </div>
+                <p>
+                    We weren't able to detect our SOL Decoder bots in your Discord, so we aren't able to offer you our unique bot channels and commands.
+                    <br/>
+                    If you are interested in these bots, and you've purchased our NFTs, then click back and add the bot at the top of the page.
+                </p>
+            </div>
+
+
+
 
             <div hidden={isNoBot}>
 

@@ -91,9 +91,7 @@ function WhitelistMarketplace() {
  >>> 403 ERROR IN PROD IS ME LUNCHPAD NO WORK ... test out again i guess... or disable tell damjan
 
 
-
-delete ionic
-
+the "# claimed" isn't working..
 
 
 didnt add new discord charts :(
@@ -106,8 +104,6 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
 
 
             # spots given…
-
-            Add instructions to site…
 
 
             upwork!!!

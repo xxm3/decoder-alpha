@@ -63,52 +63,55 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div> */}
                         </div>
                     </IonCol>
-                    <IonCol size="12" className='mt-4'>
-                        <div className='flex flex-col'>
-                            <div className='text-xl'>Select Partner</div>
-                            <div className='flex flex-row w-1/2'>
-                                <IonInput
-                                    value={searchValue}
-                                    className='w-1/5 border-2 mt-2'
-                                    onIonChange={(e) => { setSearchValue( e.detail.value) }}
-                                    type="text"
-                                    placeholder='Project Name'/>
-                                    <div className='flex-row flex items-center cursor-pointer' onClick={()=>{
-                                        setDiscordSort('')
-                                        if(twitterSort === ''){
-                                            setTwitterSort('twitter Up')
-                                        }else if(twitterSort === 'twitter Up'){
-                                            setTwitterSort('twitter Down')
-                                        }else{
-                                            setTwitterSort('twitter Up')
-                                        }
-                                    }}>
-                                        <div className='flex flex-col mr-2 ml-4' >
-                                            <button className={`${twitterSort === 'twitter Up' ? 'opacity-100':'opacity-30'}`}>▲</button>
-                                            <button className={`${twitterSort === 'twitter Down' ? 'opacity-100':'opacity-30'}`}>▼</button>
-                                        </div>
-                                        <p>Twitter Followers</p>
-                                    </div>
-                                    <div className='flex-row flex items-center cursor-pointer' onClick={()=>{
-                                        setTwitterSort('')
-                                        if(discordSort === ''){
-                                            setDiscordSort('discord Up')
-                                        }else if(discordSort === 'discord Up'){
-                                            setDiscordSort('discord Down')
-                                        }else{
-                                            setDiscordSort('discord Up')
-                                        }
-                                    }}>
-                                        <div className='flex flex-col mr-2 ml-4'>
-                                            <button className={`${discordSort === 'discord Up' ? 'opacity-100':'opacity-30'}`}>▲</button>
-                                            <button className={`${discordSort === 'discord Down' ? 'opacity-100':'opacity-30'}`}>▼</button>
-                                        </div>
-                                        <p>Discord Member</p>
-                                    </div>
-                            </div>
-                            
-                        </div>
-                    </IonCol>
+
+                    {/*TODO-ruchita: this doesn't seem to work? search dont work, sort by twiteter/disc no work */}
+
+                    {/*<IonCol size="12" className='mt-4'>*/}
+                    {/*    <div className='flex flex-col'>*/}
+                    {/*        <div className='text-xl'>Select Partner</div>*/}
+                    {/*        <div className='flex flex-row w-1/2'>*/}
+                    {/*            <IonInput*/}
+                    {/*                value={searchValue}*/}
+                    {/*                className='w-1/5 border-2 mt-2'*/}
+                    {/*                onIonChange={(e) => { setSearchValue( e.detail.value) }}*/}
+                    {/*                type="text"*/}
+                    {/*                placeholder='Project Name'/>*/}
+                    {/*                <div className='flex-row flex items-center cursor-pointer' onClick={()=>{*/}
+                    {/*                    setDiscordSort('')*/}
+                    {/*                    if(twitterSort === ''){*/}
+                    {/*                        setTwitterSort('twitter Up')*/}
+                    {/*                    }else if(twitterSort === 'twitter Up'){*/}
+                    {/*                        setTwitterSort('twitter Down')*/}
+                    {/*                    }else{*/}
+                    {/*                        setTwitterSort('twitter Up')*/}
+                    {/*                    }*/}
+                    {/*                }}>*/}
+                    {/*                    <div className='flex flex-col mr-2 ml-4' >*/}
+                    {/*                        <button className={`${twitterSort === 'twitter Up' ? 'opacity-100':'opacity-30'}`}>▲</button>*/}
+                    {/*                        <button className={`${twitterSort === 'twitter Down' ? 'opacity-100':'opacity-30'}`}>▼</button>*/}
+                    {/*                    </div>*/}
+                    {/*                    <p>Twitter Followers</p>*/}
+                    {/*                </div>*/}
+                    {/*                <div className='flex-row flex items-center cursor-pointer' onClick={()=>{*/}
+                    {/*                    setTwitterSort('')*/}
+                    {/*                    if(discordSort === ''){*/}
+                    {/*                        setDiscordSort('discord Up')*/}
+                    {/*                    }else if(discordSort === 'discord Up'){*/}
+                    {/*                        setDiscordSort('discord Down')*/}
+                    {/*                    }else{*/}
+                    {/*                        setDiscordSort('discord Up')*/}
+                    {/*                    }*/}
+                    {/*                }}>*/}
+                    {/*                    <div className='flex flex-col mr-2 ml-4'>*/}
+                    {/*                        <button className={`${discordSort === 'discord Up' ? 'opacity-100':'opacity-30'}`}>▲</button>*/}
+                    {/*                        <button className={`${discordSort === 'discord Down' ? 'opacity-100':'opacity-30'}`}>▼</button>*/}
+                    {/*                    </div>*/}
+                    {/*                    <p>Discord Member</p>*/}
+                    {/*                </div>*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*</IonCol>*/}
+
 
                     <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12"></IonCol>
 

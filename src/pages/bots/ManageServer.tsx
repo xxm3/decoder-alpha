@@ -58,7 +58,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
         }
     }, []);
 
-    // when they click "Go"
+    // when they click "Add"
     let storeGuild = (server: Server) => {
         setIsLoading(true);
 
@@ -70,7 +70,9 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             )
             .then(({ data }) => {
                 if(data){
+                    // set in guilds.js
                     if(data.noBot){
+                        // gets read into servermodule.tsx
                         history.push({ pathname: `/servermodule/${server.id}`,search:'noBot' });
                     }
                     history.push({ pathname: `/servermodule/${server.id}` });
@@ -149,53 +151,37 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                             </div>
 
                             <p>
-                                If you are an existing DAO that just wants to
-                                receive whitelists via Seamless, then click
-                                'ADD' on your server below to fill out your
-                                profile.
+                                If you are an existing DAO that just wants to receive whitelists via Seamless, then click
+                                'ADD' on your server below to fill out your profile.
                                 <br />
                                 <br />
-                                If you are paying for our Bots, or are a new
-                                mint, your server will need to first have our
-                                Discord Bot invited to it. Click one of the
-                                below links, then in the "Add to Server" on the
-                                bottom, select your server. Then click
-                                "Continue", then "Authorize"
+                                If you are paying for our Bots, or are a new mint, your server will need to first have our
+                                Discord Bot invited to it. Click one of the below links, then in the "Add to Server" on the
+                                bottom, select your server. Then click "Continue", then "Authorize"
                             </p>
                             <ul className="list-disc ml-8 mt-3">
-                                {/*<li> If using just the "Daily Mints" bots, <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20guilds.members.read%20bot">click here</a> to add the Discord Bot to your server </li>*/}
                                 <li>
-                                    {' '}
-                                    If using the "Daily Mints", "Fox Token", or
-                                    "Magic Eden" package,{' '}
+                                    If using the "Daily Mints", "Fox Token", or "Magic Eden" package,
                                     <a
                                         className="font-bold underline cursor-pointer"
                                         href="https://discord.com/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20applications.commands%20bot%20guilds.members.read"
-                                    >
-                                        then click here
-                                    </a>{' '}
-                                    to add the Discord Bot to your server{' '}
+                                    >then click here</a> to add the Discord Bot to your server
                                 </li>
-                                {/* identify, guilds, guilds.members.read, bot, application.commands --- manage roles, send messages,  */}
                                 <li>
-                                    If you are a new mint and are using Seamless
-                                    (our whitelist bot where we will give users
-                                    whitelist roles if they are in a DAO and win
-                                    a fcfs/giveaway),{' '}
+                                    If you are a new mint and are using Seamless (our whitelist bot where we will give users whitelist
+                                    roles if they are in a DAO and win a fcfs/giveaway),
                                     <a
                                         className="underline cursor-pointer font-bold"
                                         href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=268437504&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=applications.commands%20guilds%20guilds.members.read%20bot%20identify"
                                     >
                                         then click here
-                                    </a>{' '}
-                                    to add the Discord Bot to your server. This
-                                    bot also supports all of the packages from
-                                    the first link
+                                    </a> to add the Discord Bot to your server.
+                                    After inviting this bot, make sure to drag the "SOL Decoder" role higher than your whitelist role.
+                                    This bot also supports all of the packages from the first link
                                 </li>
                             </ul>
                             <p className="mt-3">
-                                After the bot is invited, click "Add" on one of
-                                your servers below
+                                After the bot is invited, click "Add" on one of your servers below
                             </p>
                         </div>
                     </div>

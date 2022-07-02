@@ -160,10 +160,10 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             if(data?.data?.data){
                 setWhiteListRequireRole(data.data.data);
             }else{
-                errMsg();
+                // errMsg();
             }
         }catch(err){
-            errMsg();
+            // errMsg();
         }
 
     }
