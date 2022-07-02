@@ -43,6 +43,7 @@ interface FormFields {
     twitterLink: string;
     discordLink: string;
     magicEdenLink: string;
+    requiredRoleId: string;
 }
 
 const ServerModule: React.FC<AppComponentProps> = () => {
@@ -95,6 +96,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         description: '',
         twitterLink: '',
         discordLink: '',
+        requiredRoleId: '',
     });
 
     /**
@@ -222,6 +224,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         description:data.description,
                         twitterLink:data.twitter_link,
                         discordLink:data.discord_link,
+                        requiredRoleId:data.required_role_id,
                     })
 
                 })
@@ -558,7 +561,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             name={name}
                                             ref={ref}
                                             onIonBlur={onBlur}
-                                            placeholder='Magic Eden Link to existing NFT' />
+                                            placeholder='Magic Eden Link to existing NFT Collection' />
                                         <p className="formError"> {error?.message} </p>
                                     </div>
 
@@ -604,6 +607,30 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             ref={ref}
                                             onIonBlur={onBlur}
                                             placeholder='Twitter Link' />
+                                        <p className="formError"> {error?.message} </p>
+                                    </div>
+                                )} />
+
+                        </IonItem>
+                    </div>
+
+                    <div className='mb-5'>
+                        <IonItem className="ion-item-wrapper mt-1">
+                            <Controller
+                                name="requiredRoleId"
+                                control={control}
+                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                    <div className='flex flex-col w-full'>
+                                        <IonInput
+
+                                            value={value}
+                                            onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                            type="text"
+                                            required
+                                            name={name}
+                                            ref={ref}
+                                            onIonBlur={onBlur}
+                                            placeholder='Required Role ID' />
                                         <p className="formError"> {error?.message} </p>
                                     </div>
                                 )} />
