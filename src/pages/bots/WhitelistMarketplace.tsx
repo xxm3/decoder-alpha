@@ -54,7 +54,7 @@ function WhitelistMarketplace() {
                         }else {
                             whiteListLive.push(whitelists[i])
                         }
-                        
+
                         if(whitelists[i].myLiveDAO === true && !whitelists[i].isExpired){
                             whiteListMyDoa.push(whitelists[i])
                         }else if (whitelists[i].claims.length > 0){
@@ -86,30 +86,25 @@ function WhitelistMarketplace() {
 
             {/*TODO !!! !!! big spam of shit
 
-            put onto google doc...
 
->> test with 0 nft
->> test with no bot on their server
+- Fix calendar with graphs … recent cron messing up….
+Need “top twitter/discord 24 hrs” on mints.js to work (and home page) - had redis errors
+ announce it …
+make sure ME launchpad in there …
 
-view my claim mints, on expired, doesn’t work — I’ve claimed a bunch but shows 0
 
-
- Tell me which URL I use to populate the discord / twitter #s (in guild table) … over a cronjob
-Plan:
-- Here is a API you need to put on cronjob to populate discord and twitter #s data in guild table.
-- API: updateAllGuilds in whitelistRouter.js
-
-// CRON to cache guilds for assassin module
-router.post('/cache-assassin-guilds', async (req,
+ >>> help miss person ... more logging in /guildmodules
 
 
 
+Add signups.to seamless page ..button
 
+
+
+the "# claimed" isn't working..
 
 
 didnt add new discord charts :(
-
-still 10 blank user_id…
 
 if its lower role ... OR you invited the wrong bot -- does it spit out everything to console here, including the token? at least with old API
 
@@ -118,14 +113,9 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
 
             # spots given…
 
-            Add instructions to site…
-
-
-            ruchita...
-            Can't announce profiles to dao until requires role set...
-
 
             upwork!!!
+
 
             internconnected discord chatting ... for C3 X Decoder ---- later all winter war
             - and later for users to post what mints they like
@@ -154,7 +144,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
             {/* if whitelists avail. */}
             {whitelists && whitelists.length > 0 ?
                 <div>
-                    
+
 
                     {/* tabs on the top (Live vs Expired) */}
                     <div className=' text-xl flex justify-center mt-5'>

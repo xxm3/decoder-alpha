@@ -162,6 +162,15 @@ https://prowe214.medium.com/tip-how-to-view-localhost-web-apps-on-your-phone-ad6
 
 - Click save
 
+### 18) Bot-less NFT-less Seamless
+1) link MR for above error.response
+2) pull integration
+3) setup localhost / your discord to where you have 0 nfts (so you cant enable modules) ... and the server doesn't have the bots in it
+4) setup a new 'seamless profile for your dao' -- where you list what your required role ID is (need new field in frontend - if not already there) 
+5) give WL spots to that dao -- make sure the form has the 'required role' be a integer / text field (not drop down)
+6) obtain WL and have it work (should see it pulls your acess token from redis, to get your role in your server)
+7) write all above into testing.md
+
 ## Admin & Seamless
 
 ### /manageserver

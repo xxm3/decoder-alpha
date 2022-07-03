@@ -51,7 +51,10 @@ const BotServerCard: React.FC<props> = (props) => {
                     </div>
                 </div>
             </div>
+
             <IonGrid className="py-4 px-4">
+                <p>{serverData?.description}</p>
+
                 <IonRow hidden={!serverData?.twitter_followers}>
                     <IonCol size="8">
                         <IonText className='text-white'>Twitter Followers</IonText>
@@ -100,6 +103,7 @@ const BotServerCard: React.FC<props> = (props) => {
                     </IonRow>
                  }
             </IonGrid>
+
         </IonCard>
     );
 };
