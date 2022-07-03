@@ -405,12 +405,13 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
                                             <div className='flex flex-col w-full'>
                                                 <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
+                                                    disabled={server.state.requiredRoleId}
                                                     onChange={onChange}
                                                     name={name}
                                                     onBlur={onBlur}
                                                     ref={ref}
                                                     placeholder='Select a Required Role'
-                                                    value={value}
+                                                    value={server.state.requiredRoleId ? server.state.requiredRoleId : value}
                                                     required
                                                     >
                                                         <option value=''>Select a Required Role</option>
@@ -433,7 +434,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
                                                 <div className='flex flex-col w-full'>
                                                     <IonInput
-                                                        value={value}
+                                                        disabled={server.state.requiredRoleId}
+                                                        value={server.state.requiredRoleId ? server.state.requiredRoleId : value}
                                                         className='w-full'
                                                         onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                                         type="text"
@@ -457,7 +459,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
                                                 <div className='flex flex-col w-full'>
                                                     <IonInput
-                                                        value={value}
+                                                        disabled={server.state.requiredRoleName}
+                                                        value={server.state.requiredRoleName ? server.state.requiredRoleName : value}
                                                         className='w-full'
                                                         onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                                         type="text"
