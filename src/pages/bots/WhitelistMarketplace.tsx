@@ -87,16 +87,24 @@ function WhitelistMarketplace() {
             {/*TODO !!! !!! big spam of shit
 
 
+- Fix calendar with graphs … recent cron messing up….
+Need “top twitter/discord 24 hrs” on mints.js to work (and home page) - had redis errors
+ announce it …
+make sure ME launchpad in there …
+
+
  >>> help miss person ... more logging in /guildmodules
  >>> 403 ERROR IN PROD IS ME LUNCHPAD NO WORK ... test out again i guess... or disable tell damjan
+
+
+Add signups.to seamless page ..button
+
 
 
 the "# claimed" isn't working..
 
 
 didnt add new discord charts :(
-
-still 10 blank user_id…
 
 if its lower role ... OR you invited the wrong bot -- does it spit out everything to console here, including the token? at least with old API
 
