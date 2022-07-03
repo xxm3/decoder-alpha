@@ -44,6 +44,7 @@ interface FormFields {
     discordLink: string;
     magicEdenLink: string;
     requiredRoleId: string;
+    requiredRoleName: string;
 }
 
 const ServerModule: React.FC<AppComponentProps> = () => {
@@ -97,6 +98,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         twitterLink: '',
         discordLink: '',
         requiredRoleId: '',
+        requiredRoleName: '',
     });
 
     /**
@@ -224,7 +226,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         description:data.description,
                         twitterLink:data.twitter_link,
                         discordLink:data.discord_link,
-                        requiredRoleId:data.required_role_id,
+                        requiredRoleId:data.requiredRoleId,
+                        requiredRoleName:data.requiredRoleName,
                     })
 
                 })
@@ -631,6 +634,29 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             ref={ref}
                                             onIonBlur={onBlur}
                                             placeholder='Required Role ID (this is the Discord Role ID, ie. 966704866640662548, that holders will need to enter the whitelist)' />
+                                        <p className="formError"> {error?.message} </p>
+                                    </div>
+                                )} />
+
+                        </IonItem>
+                    </div>
+
+                    <div className='mb-5'>
+                        <IonItem className="ion-item-wrapper mt-1">
+                            <Controller
+                                name="requiredRoleName"
+                                control={control}
+                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                    <div className='flex flex-col w-full'>
+                                        <IonInput
+                                            value={value}
+                                            onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                            type="text"
+                                            required
+                                            name={name}
+                                            ref={ref}
+                                            onIonBlur={onBlur}
+                                            placeholder='Required Role Name' />
                                         <p className="formError"> {error?.message} </p>
                                     </div>
                                 )} />
