@@ -94,7 +94,7 @@ make sure ME launchpad in there …
 
 
  >>> help miss person ... more logging in /guildmodules
- >>> 403 ERROR IN PROD IS ME LUNCHPAD NO WORK ... test out again i guess... or disable tell damjan
+
 
 
 Add signups.to seamless page ..button

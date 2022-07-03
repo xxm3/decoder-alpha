@@ -489,7 +489,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         Seamless - Existing DAO Profile
                     </IonLabel>
                 </div>
-                <p>Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about.</p>
+                <p>
+                    Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about. You can then ask them to submit whitelists requests to you via Seamless. If they've never used Seamless before, have them submit a ticket to the SOL Decoder discord.
+                </p>
 
                 <form className="space-y-3"
                     // when submitting the form...
@@ -598,7 +600,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
                                     <div className='flex flex-col w-full'>
                                         <IonInput
-
                                             value={value}
                                             onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                             type="url"
@@ -622,7 +623,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
                                     <div className='flex flex-col w-full'>
                                         <IonInput
-
                                             value={value}
                                             onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                             type="text"
@@ -630,7 +630,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             name={name}
                                             ref={ref}
                                             onIonBlur={onBlur}
-                                            placeholder='Required Role ID' />
+                                            placeholder='Required Role ID (this is the Discord Role ID, ie. 966704866640662548, that holders will need to enter the whitelist)' />
                                         <p className="formError"> {error?.message} </p>
                                     </div>
                                 )} />
