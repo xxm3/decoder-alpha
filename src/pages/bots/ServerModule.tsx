@@ -45,6 +45,7 @@ interface FormFields {
     magicEdenLink: string;
     requiredRoleId: string;
     requiredRoleName: string;
+    imagePath?:string
 }
 
 const ServerModule: React.FC<AppComponentProps> = () => {
@@ -89,6 +90,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         reset,
         setError,
         formState: { isSubmitting },
+        getValues 
     } = useForm<FormFields, any>();
     const [isNoBot, setIsNoBot] = useState<boolean>(false);
 
@@ -99,6 +101,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         discordLink: '',
         requiredRoleId: '',
         requiredRoleName: '',
+        imagePath: ''
     });
 
     /**
@@ -135,15 +138,38 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
 
 
+    
+
+    useEffect(() => {
+        reset(guildFormData);
+    }, [guildFormData]);
+
+    useEffect(() => {
+        if (role === '3NFT') {
+            setAuthorizedModule(1);
+        } else if (role === '4NFT') {
+            setAuthorizedModule(10);
+        } else {
+            setAuthorizedModule(0);
+        }
+    }, [role]);
+
     // get guilds
     useEffect(() => {
+        if (serverId && role) {
+            getGuildFormData();
+        }
+    }, [location,role]);
 
+    // get guild form data that user submit previously
+    const getGuildFormData = async() =>{
         if (serverId) {
             setIsLoading(true);
             instance
-                .get(`/guilds/${serverId}`)
+                .get(`/guilds/${serverId}?checkCondition=false`)
                 .then((response) => {
                     let data = response.data.data;
+                // change
                     if (role === '3NFT' || role === '4NFT') {
                         setChecked({
                             ...checked,
@@ -169,58 +195,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     }else{
                         setIsNoBot(true);
                     }
+                    // 
 
-
-                })
-                .catch((error: any) => {
-                    let msg = '';
-                    if (error && error.response) {
-                        msg = String(
-                            error.response.data.message
-                                ? error.response.data.message
-                                : error.response.data.body
-                        );
-                    } else {
-                        msg = 'Unable to connect. Please try again later';
-                    }
-
-                    present({
-                        message: msg,
-                        color: 'danger',
-                        duration: 5000,
-                        buttons: [{ text: 'X', handler: () => dismiss() }],
-                    });
-                })
-                .finally(() => {
-                    setIsLoading(false);
-                });
-        }
-        getGuildFormData();
-    }, [location]);
-
-    useEffect(() => {
-        reset(guildFormData);
-    }, [guildFormData]);
-
-    useEffect(() => {
-        if (role === '3NFT') {
-            setAuthorizedModule(1);
-        } else if (role === '4NFT') {
-            setAuthorizedModule(10);
-        } else {
-            setAuthorizedModule(0);
-        }
-    }, [role]);
-
-    // get guild form data that user submit previously
-    const getGuildFormData = async() =>{
-
-        if (serverId) {
-            setIsLoading(true);
-            instance
-                .get(`/guilds/${serverId}?checkCondition=false`)
-                .then((response) => {
-                    let data = response.data.data;
                     setGuildFormData({
                         magicEdenLink:data.magiceden_link,
                         description:data.description,
@@ -228,6 +204,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         discordLink:data.discord_link,
                         requiredRoleId:data.requiredRoleId,
                         requiredRoleName:data.requiredRoleName,
+                        imagePath:data.image
                     })
 
                 })
@@ -499,14 +476,25 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 <form className="space-y-3"
                     // when submitting the form...
                     onSubmit={  handleSubmit(async (data) => {
+                        console.log("data",data)
+                       
                         const { image, ...rest } = data;
                         const rawData = { ...rest, };
+                        delete rawData.imagePath
                         const formData = new FormData();
 
+                        
                         Object.entries(rawData).forEach(([key, value]) => {
                             if (value) formData.append(key, value as string);
                         });
-                        formData.append('image', image);
+                        if(data.imagePath){
+                            formData.append('image', data.imagePath);
+                        }else{
+                            formData.append('image', image);
+                        }
+                        
+
+
 
                         try {
                             await instance.post( `/updateGuild/${serverId}`, formData, { headers: { 'Content-Type': 'application/json', }, } );
@@ -515,8 +503,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 color: 'success',
                                 duration: 10000,
                             });
-                            reset();
-
                         } catch (error) {
                             console.error(error);
 
@@ -695,7 +681,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         <Controller
                             name="image"
                             control={control}
-                            rules={{ required: true, }}
                             render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
                                 <>
                                     <IonInput
@@ -710,7 +695,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         }}
                                         name={name}
                                         ref={ref}
-                                        required
+                                        required = {getValues('imagePath')?false:true}
                                         onIonBlur={onBlur}
                                         type={'file' as TextFieldTypes}
                                         accept="image" />
