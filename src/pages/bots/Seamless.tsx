@@ -32,7 +32,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [serverList, setServerList] = useState<any>([]);
     const [multipleflag, setmultipleflag] = useState<boolean>(false)
     const [selectMultipleWhiteList, setSelectMultipleWhiteList] = useState<selcetServer[]>([])
-    const [selectMultiple, setSelectMultiple] = useState<boolean>(false);
     const [searchValue, setSearchValue] = useState<any>('');
     const [twitterSort, setTwitterSort] = useState<String>('');
     const [discordSort, setDiscordSort] = useState<String>('');

@@ -201,7 +201,6 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                 if (value) formData.append(key, value as string);
             });
             formData.append('image', image);
-
             try {
                 let response = await instance.post( '/createNewWhitelistPartnership', formData );
                 return response
@@ -212,14 +211,11 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
             }
     }
 
-    
-    
-
-
+    // lodaer show
     if(loaderFlag){
         return (<Loader />)
     }
-
+    // content show 
     return (
         <IonGrid>
         <form className="space-y-3"// when submitting the form...
