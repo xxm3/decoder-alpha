@@ -25,4 +25,5 @@ export interface IWhitelist {
 	claims:any;
 	myLiveDAO:boolean;
 	magicEdenUpvoteUrl:string;
+	won: boolean;
 }

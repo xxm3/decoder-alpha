@@ -38,6 +38,7 @@ function WhitelistCard({
 	claimCounts,
     claims,
     magicEdenUpvoteUrl,
+    won
 }: IWhitelist) {
 
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
@@ -63,7 +64,7 @@ function WhitelistCard({
         //     console.log(claims[0]);
         //     console.log(uid);
         // }
-        
+
         if(claimed){
             return type==='fcfs' ? 'Claimed' : 'Entered'
         }else if(expired){
@@ -72,13 +73,13 @@ function WhitelistCard({
             return "Full"
         }else  if(claiming){
             return <IonSpinner />
-        }else if(claims[0] && claims[0].user && uid){
+        // }else if(claims[0] && claims[0].user && uid){
             // these should always match, so just returning it here. Query is on whitelistRouter.js.getQueryOptions()
-            if(claims[0].user.discordId === JSON.parse(uid)){
-                return type==='fcfs' ? 'Claimed' : 'Entered'
-            }else{
-                return type==='fcfs' ? 'Claimed' : 'Entered'
-            }
+            // if(claims[0].user.discordId === JSON.parse(uid)){
+            //     return type==='fcfs' ? 'Claimed' : 'Entered'
+            // }else{
+            //     return type==='fcfs' ? 'Claimed' : 'Entered'
+            // }
         }else {
             return type==='fcfs' ? 'Obtain whitelist' : 'Enter raffle'
         }
@@ -88,6 +89,13 @@ function WhitelistCard({
     useEffect(() => {
         if(claimed && type==='fcfs') {
             setIsExploding(true);
+        } else if(won && type==='raffle') {
+            setIsExploding(true);
+            present({
+                message: 'You\'ve won whitelist raffle. You are now whitelisted in ' + sourceServer.name,
+                color: 'success',
+                duration: 10000,
+            });
         }
     },[]);
 
@@ -218,7 +226,7 @@ function WhitelistCard({
                         }
                     }}
 
-                     disabled={expired || claiming || claimed || full || showLive || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed' || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Entered'  }
+                     disabled={expired || claiming || claimed || full || showLive }
                     >
                         {getButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>
