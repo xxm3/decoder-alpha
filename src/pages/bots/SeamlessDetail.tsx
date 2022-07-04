@@ -199,6 +199,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 ...rest,
                                 source_server: serverId,
                                 target_server:server.state.discordGuildId,
+                                required_role: server.state.requiredRoleId ? server.state.requiredRoleId : rest.required_role,
+                                required_role_name: server.state.requiredRoleName ? server.state.requiredRoleName : rest.required_role_name,
                             };
                             const formData = new FormData();
 
@@ -415,7 +417,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
                                                 <div className='flex flex-col w-full'>
                                                     <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
-                                                        disabled={server.state.requiredRoleId}
                                                         onChange={onChange}
                                                         name={name}
                                                         onBlur={onBlur}
@@ -425,7 +426,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         required
                                                         >
                                                             <option value=''>Select a Required Role</option>
-                                                            {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{ return (<option  key={role.id}  value={role.id} > {role.name} </option>)} )}
+                                                            {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{ return (<option  key={role.id}  value={role.id} disabled={server.state.requiredRoleId}> {role.name} </option>)} )}
                                                     </select>
                                                     <p className="formError"> {error?.message} </p>
                                                 </div>
@@ -447,7 +448,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
                                                 <div className='flex flex-col w-full'>
                                                     <IonInput
-                                                        disabled={server.state.requiredRoleId}
+                                                        readonly={server.state.requiredRoleId}
                                                         value={server.state.requiredRoleId ? server.state.requiredRoleId : value}
                                                         className='w-full'
                                                         onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
@@ -473,7 +474,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
                                                 <div className='flex flex-col w-full'>
                                                     <IonInput
-                                                        disabled={server.state.requiredRoleName}
+                                                        readonly={server.state.requiredRoleName}
                                                         value={server.state.requiredRoleName ? server.state.requiredRoleName : value}
                                                         className='w-full'
                                                         onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
