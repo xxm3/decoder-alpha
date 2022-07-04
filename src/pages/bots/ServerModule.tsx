@@ -716,6 +716,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     We weren't able to detect our SOL Decoder bots in your Discord, so we aren't able to offer you our unique bot channels and commands.
                     <br/>
                     If you are interested in these bots, and you've purchased our NFTs, then click back and add the bot at the top of the page.
+                    <br/>
+                    See below for more information on these bots
+                    <br/>
+                    <img src="https://media.discordapp.net/attachments/973193136794910770/992844904571084882/image_4.png?width=2530&height=1193" />
                 </p>
             </div>
 

@@ -453,6 +453,14 @@ const App = () => {
                                                                                     }
                                                                                     needsRole={false}
                                                                                 />
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/bots"
+                                                                                    component={
+                                                                                        ManageServer
+                                                                                    }
+                                                                                    needsRole={false}
+                                                                                />
 
                                                                                 {/* if anyone direct access Server module  */}
                                                                                 <ProtectedRoute

@@ -126,7 +126,7 @@ function Sidebar() {
                {/*<NavLink*/}
                {/*     title="Add DAO Bots"*/}
                {/*    icon={serverOutline}*/}
-               {/*    to="/manageserver"*/}
+               {/*    to="/bots"*/}
                {/*/>*/}
 
                 <NavLink
