@@ -86,6 +86,10 @@ function WhitelistMarketplace() {
 
             {/*TODO !!! !!! big spam of shit
 
+Yellow box click here….no spaces..
+
+when we say 'click back' - dont work..vertigo...
+
 
 - Fix calendar with graphs … recent cron messing up….
 Need “top twitter/discord 24 hrs” on mints.js to work (and home page) - had redis errors
