@@ -1,17 +1,22 @@
 ion-card {
     border-radius: 10px;
     --background: #2a3246;
+    height: 100%;
     .cardImage {
         .cardMainImage {
             height: 250px;
             width: 100%;
             object-fit: cover;
+            max-height: 250px;
+            min-height: 250px;
         }
 
         .cardNoImage{
             height: 60px;
             width: 100%;
             object-fit: cover;
+            max-height: 250px;
+            min-height: 250px;
         }
 
         .cardOverlay-content {
