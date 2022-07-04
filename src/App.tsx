@@ -455,7 +455,7 @@ const App = () => {
                                                                                 />
                                                                                 <ProtectedRoute
                                                                                     exact
-                                                                                    path="/bots"
+                                                                                    path="/dao"
                                                                                     component={
                                                                                         ManageServer
                                                                                     }

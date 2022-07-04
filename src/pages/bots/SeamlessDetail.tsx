@@ -209,7 +209,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                             try {
                                 await instance.post( '/createNewWhitelistPartnership', formData );
-                                history.push(`/whitelistmarketplace`);
+
+                                history.push(`/seamless`);
+
                                 present({
                                     message: 'Whitelist partnership created successfully!',
                                     color: 'success',
@@ -232,20 +234,26 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         });
                                     } else if (data.hasOwnProperty('errors')) {
                                         data.errors.forEach(({ param, msg }) => {
-                                            if (param !== 'source_server') {
+                                            // if (param !== 'source_server') {
                                                 setError( param as keyof FormFields, { message: msg, type: 'custom',});
-                                            } else {
+                                            // } else {
                                                 present({
                                                     message: msg,
                                                     color: 'danger',
                                                     duration: 10000,
                                                 });
-                                            }
+                                            // }
+                                        });
+                                    }else{
+                                        present({
+                                            message: 'An error occurred, please look at the form above to see if you are missing something',
+                                            color: 'danger',
+                                            duration: 10000,
                                         });
                                     }
                                 }else{
                                     present({
-                                        message: 'An error occurred, please try again later or contact us',
+                                        message: 'An error occurred, please look at the form above to see if you are missing something',
                                         color: 'danger',
                                         duration: 10000,
                                     });
@@ -394,35 +402,40 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                                 </IonItem>
                             </div>
+
+                            {/* required roles filled out, so bot is in the existing DAO server */}
                             {whiteListRequireRole.length > 0 ?
                                 <div>
                                     <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
                                     <IonItem className="ion-item-wrapper mt-1">
-                                    <Controller
-                                        name="required_role"
-                                        rules={{ required: true, }}
-                                        control={control}
-                                        render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
-                                            <div className='flex flex-col w-full'>
-                                                <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
-                                                    disabled={server.state.requiredRoleId}
-                                                    onChange={onChange}
-                                                    name={name}
-                                                    onBlur={onBlur}
-                                                    ref={ref}
-                                                    placeholder='Select a Required Role'
-                                                    value={server.state.requiredRoleId ? server.state.requiredRoleId : value}
-                                                    required
-                                                    >
-                                                        <option value=''>Select a Required Role</option>
-                                                        {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{ return (<option  key={role.id}  value={role.id} > {role.name} </option>)} )}
-                                                </select>
-                                                <p className="formError"> {error?.message} </p>
-                                            </div>
-                                        )}
-                                    />
+                                        <Controller
+                                            name="required_role"
+                                            rules={{ required: true, }}
+                                            control={control}
+                                            render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
+                                                <div className='flex flex-col w-full'>
+                                                    <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
+                                                        disabled={server.state.requiredRoleId}
+                                                        onChange={onChange}
+                                                        name={name}
+                                                        onBlur={onBlur}
+                                                        ref={ref}
+                                                        placeholder='Select a Required Role'
+                                                        value={server.state.requiredRoleId ? server.state.requiredRoleId : value}
+                                                        required
+                                                        >
+                                                            <option value=''>Select a Required Role</option>
+                                                            {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{ return (<option  key={role.id}  value={role.id} > {role.name} </option>)} )}
+                                                    </select>
+                                                    <p className="formError"> {error?.message} </p>
+                                                </div>
+                                            )}
+                                        />
                                     </IonItem>
+                                    <span className="font-bold text-green-500">{server.state.requiredRoleId ? 'Note: the server you chose already filled out the Required Role ID, and name, so no need to fill these in!' : ''}</span>
                                 </div>
+
+                            // required roles ARE NOT filled out, so bot is NOT IN the existing DAO server
                             :
                                 <div>
                                     <div>
@@ -443,11 +456,12 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         name={name}
                                                         ref={ref}
                                                         onIonBlur={onBlur}
-                                                        placeholder='Required Role ID' />
+                                                        placeholder='Required Role ID (Discord Role ID, ie. 966704866640662548, that your holders will need to enter the whitelist)' />
                                                     <p className="formError"> {error?.message} </p>
                                                 </div>
                                             )} />
-                                    </IonItem>
+                                        </IonItem>
+                                        <span className="font-bold text-green-500">{server.state.requiredRoleId ? 'Note: the server you chose already filled out the Required Role, so no need to fill this in!' : ''}</span>
                                     </div>
 
                                     <div className='mt-5'>
@@ -468,7 +482,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         name={name}
                                                         ref={ref}
                                                         onIonBlur={onBlur}
-                                                        placeholder='Required Role Name' />
+                                                        placeholder='Required Role Name (ie. Verified Holder)' />
                                                     <p className="formError"> {error?.message} </p>
                                                 </div>
                                             )} />

@@ -44,7 +44,7 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
                 <br/> <br/>
 
                 <div className='text-xl'>Adding SOL Decoder Discord Bots, or setting up your DAO with Seamless?</div>
-                If you are looking to add our Discord bots to your server (including giving out your whitelist to other Discords with Seamless), or if you're looking to receive whitelist spots for your DAO - then <a className='cursor-pointer underline font-bold' href='/bots'>click here</a>
+                If you are looking to add our Discord bots to your server (including giving out your whitelist to other Discords with Seamless), or if you're looking to receive whitelist spots for your DAO - then <a className='cursor-pointer underline font-bold' href='/dao'>click here</a>
                 <br/> <br/>
 
                 <div className='text-xl'>Doing something else?</div>
