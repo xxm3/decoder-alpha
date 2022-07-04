@@ -41,8 +41,6 @@ function WhitelistMarketplace() {
     const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
 
         async () => {
-
-
                 try {
                     setIsLoading(true)
                     const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
@@ -51,14 +49,15 @@ function WhitelistMarketplace() {
                     let whiteListMyDoa:any = []
                     let whiteListMyClaim:any = []
                     for(let i = 0; i < whitelists.length; i++){
-
                         if(whitelists[i].isExpired || !whitelists[i].active){
                             whiteListExpire.push(whitelists[i])
-                        }else if(whitelists[i].myLiveDAO === true){
-                            whiteListMyDoa.push(whitelists[i])
-                        }else if(!whitelists[i].isExpired){
+                        }else {
                             whiteListLive.push(whitelists[i])
-                        } else if( whitelists[i].claims.length > 0){
+                        }
+
+                        if(whitelists[i].myLiveDAO === true && !whitelists[i].isExpired){
+                            whiteListMyDoa.push(whitelists[i])
+                        }else if (whitelists[i].claims.length > 0){
                             if(whitelists[i].claims[0].user){
                                 if(whitelists[i].claims[0].user.discordId === userId){
                                     whiteListMyClaim.push(whitelists[i])
@@ -85,34 +84,39 @@ function WhitelistMarketplace() {
 
         <>
 
-            {/*TODO
+            {/*TODO !!! !!! big spam of shit
 
-            and on the /seamless page
-            show the me link on the "new seamless" page - semkun
+
+- Fix calendar with graphs … recent cron messing up….
+Need “top twitter/discord 24 hrs” on mints.js to work (and home page) - had redis errors
+ announce it …
+make sure ME launchpad in there …
+
+
+
+Add signups.to seamless page ..button
+
+
+
+the "# claimed" isn't working..
+
+
+didnt add new discord charts :(
+
+if its lower role ... OR you invited the wrong bot -- does it spit out everything to console here, including the token? at least with old API
+
+
 
 
             # spots given…
 
-            Add instructions to site…
-
-            sol decoder first in list!!
-
-            change log!!
-
-
-
-            ruchita...
-            Can't announce until requires role set...
-
-
-
-            damjan..
-
-            answer sentries
 
             upwork!!!
 
+
             internconnected discord chatting ... for C3 X Decoder ---- later all winter war
+            - and later for users to post what mints they like
+            --- into task chat!
 
             andrew & i on moon spaces thing
             */}
@@ -121,17 +125,15 @@ function WhitelistMarketplace() {
             <div className="flex flex-row justify-center w-full mt-9">
                 <div className="server-module-bg p-4 px-6 w-full">
                     <div className='w-full  items-center  mb-3'>
-                        <div className='text-xl font-semibold mb-1'>Welcome to Seamless!</div>
+                        <div className='text-xl font-semibold mb-1'>Welcome to Seamless! SOL Decoder's next joint venture with Communi3</div>
 
-                        This is an early look at Seamless - SOL Decoder's next joint venture with Communi3
                         <ul>
-                            {/*<li>- You will have to see which DAO the whitelist is for - soon we'll have filters to help. <span className="text-red-500">This is not only for SOL Decoder holders - other DAOs use this, so look at the "Must be member in" and "Required Role" section</span></li>*/}
-                            <li>- We estimate it is only 15% complete. Coming soon is Twitter integration to make sure you're following, and built in giveaways to have more people join</li>
+                            <li>- <b>New mint giving spots?</b> Pay only a portion of your whitelist to SOL Decoder and Communi3. Open a ticket on <a href="https://discord.gg/sol-decoder" target="_blank" className="underline cursor-pointer font-bold">the SOL Decoder Discord</a> and we'll walk you through the process</li>
+                            <li>- <b>Existing DAO wanting to get spots?</b> It's free, and no bots need to be added to your server - <a className='cursor-pointer underline font-bold' href='/bots'>click here to set it up</a>. Afterwards, any mint using Seamless already can give you spots in {'<'} a minute. Mints not using Seamless can get onboarded with Seamless very quickly, then give you spots</li>
                             <li>- Want to learn more? <a className="underline cursor-pointer font-bold" href="https://medium.com/@sol-decoder/sol-decoder-presents-seamless-32251a4deb43" target="_blank">
-                                Read our Medium article here</a></li>
-
-                            {/*TODO - see existing dao here ... contact us here ... */}
-
+                                Read our Medium article here</a>
+                                {/*. Want to use Seamless for your new mint, or get WL spots for your existing DAO? Join our Discord and open a ticket*/}
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -140,6 +142,7 @@ function WhitelistMarketplace() {
             {/* if whitelists avail. */}
             {whitelists && whitelists.length > 0 ?
                 <div>
+
 
                     {/* tabs on the top (Live vs Expired) */}
                     <div className=' text-xl flex justify-center mt-5'>
@@ -175,7 +178,7 @@ function WhitelistMarketplace() {
 
                     {/* my Doa live */}
                     {isTabButton === 'myDoa' &&
-                        <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
+                        <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 sm:grid-cols-1 gap-6 p-8">
                             {
                                 myDoaWhiteList.length > 0 ? myDoaWhiteList.map((whitelist:any) => {
                                     return(<WhitelistCard {...whitelist}  key={Math.random()}/>)

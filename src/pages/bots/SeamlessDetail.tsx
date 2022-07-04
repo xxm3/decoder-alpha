@@ -8,9 +8,9 @@ import { Controller, FieldValues, useForm } from 'react-hook-form';
 import isAxiosError from '../../util/isAxiosError';
 import { AxiosError } from 'axios';
 import { TextFieldTypes } from '@ionic/core';
-import { IWhitelist } from '../../types/IWhitelist';
 import { useQuery } from 'react-query';
 import BotServerCard from './components/BotServerCard';
+import Help from '../../components/Help';
 
 /**
  * The page they see when they've clicked "initiate seamless" ... then clicked on a guild
@@ -27,6 +27,8 @@ interface FormFields {
     whitelist_role: string;
     description: string;
     required_role: string;
+    required_role_name: string;
+    verified_role: string;
     twitter: string;
     discordInvite:string;
     magicEdenUpvoteUrl?:string;
@@ -43,6 +45,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     // new mint / source server --- comes from params
     const { serverId } = useParams<any>();
 
+    const serverObject = localStorage.getItem('servers')
+    let serverArray = serverObject &&  JSON.parse(serverObject)
+
     let history = useHistory();
     const [formField,setFromFiled] = useState<any>({
         image: '',
@@ -53,6 +58,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         whitelist_role: '',
         description: '',
         required_role: '',
+        required_role_name: '',
         twitter: '',
         discordInvite:'',
         magicEdenUpvoteUrl:'',
@@ -92,42 +98,44 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         return fileObject
     }
 
-    const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
-        async () => {
-            try {
-                setIsLoading(true)
-                const { data: whitelists } = await instance.get<IWhitelist[]>( '/getWhitelistPartnerships/me' );
-                let imagePath = await onImageEdit(whitelists[whitelists.length-1]?.image);
-                setFromFiled({
-                    // image: imagePath || '',
-                    // target_server:'',
-                    // max_users: whitelists[whitelists.length-1]?.max_users || '',
-                    expiration_date:whitelists[whitelists.length-1]?.expiration_date || '',
-                    type:whitelists[whitelists.length-1]?.type || '',
-                    whitelist_role: whitelists[whitelists.length-1]?.whitelist_role || '',
-                    description: whitelists[whitelists.length-1]?.description || '',
-                    // required_role: whitelists[whitelists.length-1]?.required_role || '',
-                    twitter: whitelists[whitelists.length-1]?.twitter?.toString() || '',
-                    // discordInvite:whitelists[whitelists.length-1]?.discordInvite?.toString() || '',
-                    // magicEdenUpvoteUrl:whitelists[whitelists.length-1]?.magicEdenUpvoteUrl?.toString() || '',
-                    })
-                return whitelists;
-            } catch (error) {
+    // TODO-ruchita: not working right - (1) this pulls from the very last WL partnership in the DB -- NOT there last WL paternership. Need to filter by source ID and use that one... (2) the whitelist_role was not being filled out ... and discordinvite /magiceden not being filled out ... image not filled out
+    // const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
+    //     async () => {
+    //         try {
+    //             setIsLoading(true)
+    //             const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
+    //             let imagePath = await onImageEdit(whitelists[whitelists.length-1]?.image);
+    //             setFromFiled({
+    //                 // image: imagePath || '',
+    //                 // target_server:'',
+    //                 // max_users: whitelists[whitelists.length-1]?.max_users || '',
+    //                 expiration_date:whitelists[whitelists.length-1]?.expiration_date || '',
+    //                 type:whitelists[whitelists.length-1]?.type || '',
+    //                 whitelist_role: whitelists[whitelists.length-1]?.whitelist_role || '',
+    //                 description: whitelists[whitelists.length-1]?.description || '',
+    //                 // required_role: whitelists[whitelists.length-1]?.required_role || '',
+    //                 twitter: whitelists[whitelists.length-1]?.twitter?.toString() || '',
+    //                 // discordInvite:whitelists[whitelists.length-1]?.discordInvite?.toString() || '',
+    //                 // magicEdenUpvoteUrl:whitelists[whitelists.length-1]?.magicEdenUpvoteUrl?.toString() || '',
+    //                 })
+    //             return whitelists;
+    //         } catch (error) {
+    //
+    //         }
+    //         finally {
+    //             setIsLoading(false)
+    //         }
+    //
+    //     }
+    // );
 
-            }
-            finally {
-                setIsLoading(false)
-            }
-
-        }
-    );
     // get roles for the WL role we will give to people --- new mint --- source server
     const getWhiteListRole = async() =>{
         const errMsg = () => {
             present({
                 message: 'Unable to get the roles from the new mint server. Please make sure the SOL Decoder bot is in that server!',
                 color: 'danger',
-                duration: 1000,
+                duration: 10000,
             });
         }
 
@@ -150,7 +158,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             present({
                 message: 'Unable to get the roles from the new mint server. Please make sure the SOL Decoder bot is in that server!',
                 color: 'danger',
-                duration: 1000,
+                duration: 10000,
             });
         }
 
@@ -159,10 +167,10 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             if(data?.data?.data){
                 setWhiteListRequireRole(data.data.data);
             }else{
-                errMsg();
+                // errMsg();
             }
         }catch(err){
-            errMsg();
+            // errMsg();
         }
 
     }
@@ -181,81 +189,10 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             <IonRow>
                 <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - fill out whitelist details</h2> </IonCol>
 
-                <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12" />
-
-
-                {/*<IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >*/}
-                {/*    <IonCard className='ion-no-margin'>*/}
-
-                {/*        <div className="cardImage relative">*/}
-
-                {/*            /!* image *!/*/}
-                {/*            <img src={server?.state?.icon} className={server?.state?.icon ? 'cardMainImage' : 'cardNoImage'}  alt='' />*/}
-
-                {/*            <div className="cardOverlay-content py-1 px-4">*/}
-
-                {/*                <div className='text-md'>{server?.state?.name}</div>*/}
-
-                {/*                <div className="socialMediaIcon">*/}
-
-                {/*                    /!*discord*!/*/}
-                {/*                    <img hidden={!discordImage} src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{*/}
-                {/*                        event.stopPropagation();*/}
-                {/*                        if(server.state.discord_link){*/}
-                {/*                            window.open(server.state.discord_link)*/}
-                {/*                        }}} />*/}
-
-                {/*                    /!*twitter*!/*/}
-                {/*                    <img hidden={!twitterImage} src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{*/}
-                {/*                        event.stopPropagation();*/}
-                {/*                        if(server.state.twitter_link){*/}
-                {/*                            window.open(server.state.twitter_link)*/}
-                {/*                        }}} />*/}
-                {/*                </div>*/}
-                {/*            </div>*/}
-
-                {/*        </div>*/}
-                {/*        <IonGrid className="py-4 px-4">*/}
-                {/*            <IonRow hidden={!server?.state?.twitter_followers}>*/}
-                {/*                <IonCol size="8">*/}
-                {/*                    <IonText className='text-white'>Twitter Followers</IonText>*/}
-                {/*                </IonCol>*/}
-                {/*                <IonCol size="4" className="ion-text-end">*/}
-                {/*                    <IonText className="greenText">{server?.state?.twitter_followers || 0 } </IonText>*/}
-                {/*                </IonCol>*/}
-                {/*            </IonRow>*/}
-                {/*            <IonRow hidden={!server?.state?.twitter_interactions}>*/}
-                {/*                <IonCol size="8">*/}
-                {/*                    <IonText className='text-white'>Twitter Interaction</IonText>*/}
-                {/*                </IonCol>*/}
-                {/*                <IonCol size="4" className="ion-text-end">*/}
-                {/*                    <IonText className="BlueText">{server?.state?.twitter_interactions || 0}</IonText>*/}
-                {/*                </IonCol>*/}
-                {/*            </IonRow>*/}
-                {/*            <div className="content-extra-space"></div>*/}
-
-                {/*            <IonRow hidden={!server?.state?.discord_members}>*/}
-                {/*                <IonCol size="8">*/}
-                {/*                    <IonText className='text-white'>Discord Members</IonText>*/}
-                {/*                </IonCol>*/}
-                {/*                <IonCol size="4" className="ion-text-end">*/}
-                {/*                    <IonText className="greenText">{server?.state?.discord_members || 0}</IonText>*/}
-                {/*                </IonCol>*/}
-                {/*            </IonRow>*/}
-                {/*            <IonRow hidden={!server?.state?.discord_online}>*/}
-                {/*                <IonCol size="8">*/}
-                {/*                    <IonText className='text-white'>Online</IonText>*/}
-                {/*                </IonCol>*/}
-                {/*                <IonCol size="4" className="ion-text-end">*/}
-                {/*                    <IonText className="BlueText">{server?.state?.discord_online || 0}</IonText>*/}
-                {/*                </IonCol>*/}
-                {/*            </IonRow>*/}
-                {/*        </IonGrid>*/}
-                {/*    </IonCard>*/}
-
+                <IonCol size-xl="12" size-md="12" size-sm="12" size-xs="12" />
 
                 <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >
-                    <BotServerCard serverData={server} />
+                    <BotServerCard serverData={server.state} />
                 </IonCol>
 
                 <IonCol size-xl="8" size-md="6" size-sm="6" size-xs="12">
@@ -312,12 +249,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         });
                                     }
                                 }else{
-                                    /**
-                                     * TODO ruchita: this doesn't work when there is a 400 error - need to tell the user what went wrong
-                                     * get a 400 error when error like "{"errors":[{"value":"456","msg":"Invalid discord id","param":"target_server","location":"body"}]}" - so need to show this
-                                     *
-                                     * after fixing the error in the form - I click submit again but it doesn't work, nothing in network
-                                     */
                                     present({
                                         message: 'An error occurred, please try again later or contact us',
                                         color: 'danger',
@@ -369,6 +300,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 name={name}
                                                 ref={ref}
                                                 onIonBlur={onBlur}
+                                                placeholder='When this giveaway should expire'
                                                 min={new Date(  +now + 86400 * 1000 ).toISOString()}
                                                 max={new Date(  +now + 86400 * 365 * 1000 ).toISOString()} />
                                             <p className="formError"> {error?.message} </p>
@@ -387,8 +319,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 control={control}
                                 render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => {
                                     return (
-                                        <>
+                                        <div className='flex flex-col w-full'>
                                             <IonInput
+                                                className='w-full'
                                                 onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string;  onChange(e); }}
                                                 required
                                                 type="number"
@@ -400,7 +333,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 placeholder='ie. 25'
                                             />
                                             <p className="formError"> {error?.message} </p>
-                                        </>
+                                        </div>
                                     )
                                 }} />
                                 </IonItem>
@@ -415,7 +348,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     control={control}
                                     render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) =>{
                                     return (
-                                        <>
+                                        <div className='flex flex-col w-full'>
                                             <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
                                                 onChange={onChange}
                                                 name={name}
@@ -428,40 +361,128 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 {whiteListRole && whiteListRole.map((role:any) =>{ return (<option  key={role.id} value={role.id}> {role.name} </option>)}  )}
                                             </select>
                                             <p className="formError"> {error?.message} </p>
+                                        </div>
+                                    )}}
+                                />
+
+                                </IonItem>
+                            </div>
+                            <div className='mb-5'>
+                                <IonLabel className="text-white">Verified role (a role that indicates a member of your new mint server is verified)
+                                    <Help description={`Some servers have a verification system in place to prevent their server being overpopulated with fake members.
+                                    Most systems work in a way that a member has to do a certain action like react to a message or click somewhere in order to obtain a role indicating that the user is verified in the server.
+                                    If your new mint server has a role for verified members, select it below. The verified role will be added alongside the whitelist role so that the member can get automatically verified in the server.`}/>
+                                </IonLabel>
+                                <IonItem className="ion-item-wrapper mt-1">
+                                <Controller
+                                    name="verified_role"
+                                    rules={{ required: true, }}
+                                    control={control}
+                                    render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) =>{
+                                    return (
+                                        <>
+                                            <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
+                                                onChange={onChange}
+                                                name={name}
+                                                value={value}
+                                                onBlur={onBlur}
+                                                ref={ref}
+                                                required
+                                                placeholder='Select a Verified Role' >
+                                              <option value=''>Select a Verified Role</option>
+                                                {whiteListRole && whiteListRole.map((role:any) =>{ return (<option  key={role.id} value={role.id}> {role.name} </option>)}  )}
+                                            </select>
+                                            <p className="formError"> {error?.message} </p>
                                         </>
                                     )}}
                                 />
 
                                 </IonItem>
                             </div>
+                            {whiteListRequireRole.length > 0 ?
+                                <div>
+                                    <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
+                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <Controller
+                                        name="required_role"
+                                        rules={{ required: true, }}
+                                        control={control}
+                                        render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
+                                            <div className='flex flex-col w-full'>
+                                                <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
+                                                    disabled={server.state.requiredRoleId}
+                                                    onChange={onChange}
+                                                    name={name}
+                                                    onBlur={onBlur}
+                                                    ref={ref}
+                                                    placeholder='Select a Required Role'
+                                                    value={server.state.requiredRoleId ? server.state.requiredRoleId : value}
+                                                    required
+                                                    >
+                                                        <option value=''>Select a Required Role</option>
+                                                        {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{ return (<option  key={role.id}  value={role.id} > {role.name} </option>)} )}
+                                                </select>
+                                                <p className="formError"> {error?.message} </p>
+                                            </div>
+                                        )}
+                                    />
+                                    </IonItem>
+                                </div>
+                            :
+                                <div>
+                                    <div>
+                                        <IonLabel className="text-white">Required Role ID (role required of them in the existing DAO server, to enter)</IonLabel>
+                                        <IonItem className="ion-item-wrapper mt-1">
+                                            <Controller
+                                            name="required_role"
+                                            control={control}
+                                            render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                                <div className='flex flex-col w-full'>
+                                                    <IonInput
+                                                        disabled={server.state.requiredRoleId}
+                                                        value={server.state.requiredRoleId ? server.state.requiredRoleId : value}
+                                                        className='w-full'
+                                                        onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                        type="text"
+                                                        required
+                                                        name={name}
+                                                        ref={ref}
+                                                        onIonBlur={onBlur}
+                                                        placeholder='Required Role ID' />
+                                                    <p className="formError"> {error?.message} </p>
+                                                </div>
+                                            )} />
+                                    </IonItem>
+                                    </div>
 
-                            <div>
-                                <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
-                                <Controller
-                                    name="required_role"
-                                    rules={{ required: true, }}
-                                    control={control}
-                                    render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
-                                        <>
-                                            <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
-                                                onChange={onChange}
-                                                name={name}
-                                                onBlur={onBlur}
-                                                ref={ref}
-                                                placeholder='Select a Required Role'
-                                                value={value}
-                                                required
-                                                >
-                                                    <option value=''>Select a Required Role</option>
-                                                    {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{ return (<option  key={role.id}  value={role.id} > {role.name} </option>)} )}
-                                            </select>
-                                            <p className="formError"> {error?.message} </p>
-                                        </>
-                                    )}
-                                />
-                                </IonItem>
-                            </div>
+                                    <div className='mt-5'>
+                                        <IonLabel className="text-white">Required Role Name</IonLabel>
+                                        <IonItem className="ion-item-wrapper mt-1">
+                                            <Controller
+                                            name="required_role_name"
+                                            control={control}
+                                            render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                                <div className='flex flex-col w-full'>
+                                                    <IonInput
+                                                        disabled={server.state.requiredRoleName}
+                                                        value={server.state.requiredRoleName ? server.state.requiredRoleName : value}
+                                                        className='w-full'
+                                                        onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                        type="text"
+                                                        required
+                                                        name={name}
+                                                        ref={ref}
+                                                        onIonBlur={onBlur}
+                                                        placeholder='Required Role Name' />
+                                                    <p className="formError"> {error?.message} </p>
+                                                </div>
+                                            )} />
+                                    </IonItem>
+                                    </div>
+                                </div>
+                            }
+
+
                         </IonCard>
 
                         <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
@@ -474,8 +495,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     rules={{ required: true, }}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) =>{
                                         return(
-                                            <>
+                                            <div className='flex flex-col w-full'>
                                                 <IonInput
+                                                    className='w-full'
                                                     value={value as unknown as string}
                                                     onIonChange={(e) => {
                                                         const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
@@ -492,7 +514,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                     type={'file' as TextFieldTypes}
                                                     accept="image" />
                                                 <p className="formError"> {error?.message} </p>
-                                            </>
+                                            </div>
                                         )
                                     } } />
                                 </IonItem>
@@ -505,8 +527,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     name="discordInvite"
                                     control={control}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
+                                        <div className='flex flex-col w-full'>
                                             <IonInput
+                                                className='w-full'
                                                 value={value}
                                                 onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                                 type="url"
@@ -516,7 +539,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 onIonBlur={onBlur}
                                                 placeholder='Discord Invite Link' />
                                             <p className="formError"> {error?.message} </p>
-                                        </>
+                                        </div>
                                     )} />
                                 </IonItem>
                             </div>
@@ -528,8 +551,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     name="twitter"
                                     control={control}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
+                                        <div className='flex flex-col w-full'>
                                             <IonInput
+                                                className='w-full'
                                                 value={value}
                                                 onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                                 type="url"
@@ -539,19 +563,20 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 onIonBlur={onBlur}
                                                 placeholder='Twitter Link' />
                                             <p className="formError"> {error?.message} </p>
-                                        </>
+                                        </div>
                                     )} />
                                 </IonItem>
                             </div>
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Magic Eden upvote URL</IonLabel>
+                                <IonLabel className="text-white">Magic Eden drops URL</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
                                     <Controller
                                     name="magicEdenUpvoteUrl"
                                     control={control}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
+                                        <div className='flex flex-col w-full'>
                                             <IonInput
+                                                className='w-full'
                                                 value={value}
                                                 onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                                 type="url"
@@ -559,9 +584,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 name={name}
                                                 ref={ref}
                                                 onIonBlur={onBlur}
-                                                placeholder='Magic Eden upvote URL' />
+                                                placeholder='Magic Eden drops URL (to get people to upvote it)' />
                                             <p className="formError"> {error?.message} </p>
-                                        </>
+                                        </div>
                                     )} />
                                 </IonItem>
                             </div>
@@ -573,8 +598,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     name="description"
                                     control={control}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
+                                        <div className='flex flex-col w-full'>
                                             <IonTextarea
+                                                className='w-full'
                                                 value={value}
                                                 onIonChange={(e:any) => {
                                                     ( e.target as HTMLInputElement ).value = e.detail.value as string;
@@ -587,7 +613,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 placeholder='Description'
                                                 maxlength={2000} />
                                             <p className="formError"> {error?.message} </p>
-                                        </>
+                                        </div>
                                     )}/>
 
                                 </IonItem>

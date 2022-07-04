@@ -60,11 +60,11 @@ const TopDiscordGainers = () => {
      * Use Effects
      */
 
-    // TODO !!!!
+    // TODO !!! implement top gainers! -- also fix counts not working!
 
     return (
             <>
-                { topSearchWordsQuery?.data?.data.length > 0 ?
+                { topSearchWordsQuery?.data?.data?.length > 0 ?
                     <div className="secondary-bg-forced m-1 p-4 rounded-xl mt-6">
                         {topSearchWordsQuery?.isFetching ?
                         <div className="flex justify-center items-center">

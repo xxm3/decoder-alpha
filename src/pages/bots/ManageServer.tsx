@@ -41,11 +41,11 @@ const ManageServer: React.FC<AppComponentProps> = () => {
 
     useEffect(() => {
         let serverList: any = localStorage.getItem('servers');
-        serverList = (JSON.parse(serverList));
+        serverList = JSON.parse(serverList);
 
         let adminOwnerServers = [];
-        for(let i in serverList){
-            if(serverList[i].admin || serverList[i].owner){
+        for (let i in serverList) {
+            if (serverList[i].admin || serverList[i].owner) {
                 adminOwnerServers.push(serverList[i]);
             }
         }
@@ -58,7 +58,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
         }
     }, []);
 
-    // when they click "Go"
+    // when they click "Add"
     let storeGuild = (server: Server) => {
         setIsLoading(true);
 
@@ -70,21 +70,25 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             )
             .then(({ data }) => {
                 if(data){
+                    // set in guilds.js
                     if(data.noBot){
-                        history.push({ pathname: `/servermodule/${server.id}`,state:data });
+                        // gets read into servermodule.tsx
+                        history.push({ pathname: `/servermodule/${server.id}`,search:'noBot' });
                     }
-                    history.push({ pathname: `/servermodule/${server.id}`});
+                    history.push({ pathname: `/servermodule/${server.id}` });
                 }
-                history.push({ pathname: `/servermodule/${server.id}`,state:data });
+                // history.push({ pathname: `/servermodule/${server.id}`,state:data });
             })
             .catch((error: any) => {
                 console.log('error', error);
                 let msg = '';
+                console.log(error.response);
                 if (error && error.response) {
-                    msg = String(error.response.data.message);
+                    msg = String(error.response.data.message ? error.response.data.message : error.response.data.body);
                 } else {
                     msg = 'Unable to connect. Please try again later';
                 }
+
                 present({
                     message: msg,
                     color: 'danger',
@@ -147,49 +151,37 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                             </div>
 
                             <p>
-                                If you are an existing DAO that just wants to receive whitelists via Seamless, then click 'ADD' on your server below to fill out your profile.
-                                <br/><br/>
-                                If you are paying for our Bots, or are a new mint,
-                                your server will need to first have our Discord
-                                Bot invited to it. Click one of the below links,
-                                then in the "Add to Server" on the bottom,
-                                select your server. Then click "Continue", then
-                                "Authorize"
+                                If you are an existing DAO that just wants to receive whitelists via Seamless, then click
+                                'ADD' on your server below to fill out your profile.
+                                <br />
+                                <br />
+                                If you are paying for our Bots, or are a new mint, your server will need to first have our
+                                Discord Bot invited to it. Click one of the below links, then in the "Add to Server" on the
+                                bottom, select your server. Then click "Continue", then "Authorize"
                             </p>
                             <ul className="list-disc ml-8 mt-3">
-                                {/*<li> If using just the "Daily Mints" bots, <a className="underline cursor-pointer" href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20guilds.members.read%20bot">click here</a> to add the Discord Bot to your server </li>*/}
                                 <li>
-                                    {' '}
-                                    If using the "Daily Mints", "Fox Token", or
-                                    "Magic Eden" package,{' '}
+                                    If using the "Daily Mints", "Fox Token", or "Magic Eden" package,
                                     <a
                                         className="font-bold underline cursor-pointer"
                                         href="https://discord.com/oauth2/authorize?client_id=927008889092857898&permissions=2048&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=identify%20guilds%20applications.commands%20bot%20guilds.members.read"
-                                    >
-                                        then click here
-                                    </a>{' '}
-                                    to add the Discord Bot to your server{' '}
+                                    >then click here</a> to add the Discord Bot to your server
                                 </li>
-                                {/* identify, guilds, guilds.members.read, bot, application.commands --- manage roles, send messages,  */}
                                 <li>
-                                    If you are a new mint and are using Seamless
-                                    (our whitelist bot where we will give users
-                                    whitelist roles if they are in a DAO and win
-                                    a fcfs/giveaway),{' '}
+                                    If you are a new mint and are using Seamless (our whitelist bot where we will give users whitelist
+                                    roles if they are in a DAO and win a fcfs/giveaway),
                                     <a
                                         className="underline cursor-pointer font-bold"
                                         href="https://discord.com/api/oauth2/authorize?client_id=927008889092857898&permissions=268437504&redirect_uri=https%3A%2F%2Fsoldecoder.app%2Fmanageserver&response_type=code&scope=applications.commands%20guilds%20guilds.members.read%20bot%20identify"
                                     >
                                         then click here
-                                    </a>{' '}
-                                    to add the Discord Bot to your server. This
-                                    bot also supports all of the packages from
-                                    the first link
+                                    </a> to add the Discord Bot to your server.
+                                    After inviting this bot, make sure to drag the "SOL Decoder" role higher than your whitelist role.
+                                    This bot also supports all of the packages from the first link
                                 </li>
                             </ul>
                             <p className="mt-3">
-                                After the bot is invited, click "Add" on one of
-                                your servers below
+                                After the bot is invited, click "Add" on one of your servers below
                             </p>
                         </div>
                     </div>
@@ -287,8 +279,9 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                             Decoder bots on your own Discord server
                         </li>
                         <li>
-                            Pricing: Free for some bots (Seamless & Assassin bot). For others, hold 3 NFTs (which unlocks all of our
-                            existing 3 NFT benefits for yourself -{' '}
+                            Pricing: Free for some bots (Seamless & Assassin
+                            bot). For others, hold 3 NFTs (which unlocks all of
+                            our existing 3 NFT benefits for yourself -{' '}
                             <a
                                 href="https://docs.soldecoder.app/books/intro/page/discord-overview"
                                 target="_blank"
@@ -315,7 +308,8 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                         <li>
                             <b>#1 - Mints package</b> - Your server can have our
                             "daily-mints" feed and "1h-mint-info" and soon
-                            "tomorrows-mints". Read more about these in our Discord in our #faq channel.
+                            "tomorrows-mints". Read more about these in our
+                            Discord in our #faq channel.
                         </li>
                         <li>
                             <b>#2 - Fox token package</b> - Your server can have
@@ -335,21 +329,23 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                         {/*(2) get alerted whenever a sale for your NFT occurs,*/}
                         <li>
                             <b>
-                                (Free for now - Future) #4 - "Assassin" bot - Kick
-                                bots/spammers from your server (that impersonate
-                                your team, or have Bot in their name), and
-                                automatically delete non-approved links posted
-                                to any channel
+                                (Free for now - Future) #4 - "Assassin" bot -
+                                Kick bots/spammers from your server (that
+                                impersonate your team, or have Bot in their
+                                name), and automatically delete non-approved
+                                links posted to any channel
                             </b>
                         </li>
                         <li>
                             <b>
-                                (Free for now) #5 - "Seamless" package - Allow verified
-                                DAO members to whitelist in less than 10
-                                seconds, with 0 work on your mods
+                                (Free for now) #5 - "Seamless" package - Allow
+                                verified DAO members to whitelist in less than
+                                10 seconds, with 0 work on your mods
                             </b>
                         </li>
                     </ul>
+                    <br/>
+                    <img src="https://media.discordapp.net/attachments/973193136794910770/992844904571084882/image_4.png?width=2530&height=1193" />
                 </div>
             </div>
         </>

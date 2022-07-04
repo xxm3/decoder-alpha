@@ -126,7 +126,7 @@ function Sidebar() {
                {/*<NavLink*/}
                {/*     title="Add DAO Bots"*/}
                {/*    icon={serverOutline}*/}
-               {/*    to="/manageserver"*/}
+               {/*    to="/bots"*/}
                {/*/>*/}
 
                 <NavLink
@@ -134,6 +134,7 @@ function Sidebar() {
                     icon={bookOutline}
                     to="#"
                     external={'https://docs.soldecoder.app'}
+                    needsRole={false}
                 />
 
                 <NavLink
@@ -141,6 +142,7 @@ function Sidebar() {
                     icon={logoDiscord}
                     to="#"
                     external={'https://discord.com/invite/sol-decoder'}
+                    needsRole={false}
                 />
 
                 {/*<NavLink*/}

@@ -454,6 +454,14 @@ const App = () => {
                                                                                     }
                                                                                     needsRole={false}
                                                                                 />
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/bots"
+                                                                                    component={
+                                                                                        ManageServer
+                                                                                    }
+                                                                                    needsRole={false}
+                                                                                />
 
                                                                                 {/* if anyone direct access Server module  */}
                                                                                 <ProtectedRoute
@@ -480,12 +488,12 @@ const App = () => {
                                                                                 />
                                                                                 {/* view all guild */}
                                                                                 <ProtectedRoute
-                                                                                        exact
-                                                                                        path="/view-guild"
-                                                                                        component={
-                                                                                            ViewGuild
-                                                                                        }
-                                                                                        needsRole={false}
+                                                                                    exact
+                                                                                    path="/view-guild"
+                                                                                    component={
+                                                                                        ViewGuild
+                                                                                    }
+                                                                                    needsRole={false}
                                                                                 />
 
                                                                                 {/* Seamless! */}
@@ -511,6 +519,7 @@ const App = () => {
                                                                                     exact
                                                                                     path="/seamlessdetail/:serverId"
                                                                                     component={ SeamlessDetail }
+                                                                                    needsRole={false}
                                                                                 />
                                                                                 {/* SeamlessServer */}
 
@@ -525,6 +534,7 @@ const App = () => {
                                                                                     exact
                                                                                     path="/seamless/:serverId"
                                                                                     component={ Seamless }
+                                                                                    needsRole={false}
                                                                                 />
 
                                                                                 {/*login button etc...*/}

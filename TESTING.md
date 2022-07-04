@@ -162,6 +162,15 @@ https://prowe214.medium.com/tip-how-to-view-localhost-web-apps-on-your-phone-ad6
 
 - Click save
 
+### 18) Bot-less NFT-less Seamless
+1) link MR for above error.response
+2) pull integration
+3) setup localhost / your discord to where you have 0 nfts (so you cant enable modules) ... and the server doesn't have the bots in it
+4) setup a new 'seamless profile for your dao' -- where you list what your required role ID is (need new field in frontend - if not already there)
+5) give WL spots to that dao -- make sure the form has the 'required role' be a integer / text field (not drop down)
+6) obtain WL and have it work (should see it pulls your acess token from redis, to get your role in your server)
+7) write all above into testing.md
+
 ## Admin & Seamless
 
 ### /manageserver
@@ -205,6 +214,32 @@ Refer to `docs/URLS.md` file for how to test the endpoints
 - `POST /guilds/:guildId/updateWhitelistViolentModeRole`
 - `POST /guilds/:guildId/logs`
 - `POST /guilds/:guildId/updateSimulationMode`
+
+#### Message Parser
+> Before you test this, make sure to enable simulation mode using `POST /guilds/:guildId/updateSimulationMode`
+
+Create a list of whitelisted domains (`POST /guilds/:guildId/updateWhitelistedDomains`) and configure channels to scan (`POST /guilds/:guildId/updateWhitelistCheckChannels`).
+
+Now send a message containing a url that's not whitelisted in one of the channels you added. Check `guild_logs` model to see if the action was logged - if yes; then message parser events are working fine.
+
+You can try different modes by switching between `mild`/`violent` mode using `POST /guilds/:guildId/updateSecurityMode`; If you switch to `violent` mode, make sure to set `POST /guilds/:guildId/updateWhitelistViolentModeRole`.
+
+--
+
+### What's New?
+- Logs
+- Kicking users with suspicious names/nicknames
+
+### What to test/How to test?
+
+> Before testing, make sure you have tested and are running https://gitlab.com/nft-relay-group/functions/-/merge_requests/269
+
+To test, make sure you don't have perms to delete messages (as any user with that perm is exempt from the name checks for being a staff member).
+
+Now change your nickname/name to either `bot` (or any variation of that like `b0t`, `bOt`, etc) and try changing your name to seem similar to that of staff members (like `professor-decoder`, `professor decoder bot`, etc)
+
+Check `guild_logs` to see if a new log was created - if so, then the bot part of assassin module is working fine.
+
 
 #### Message Parser
 > Before you test this, make sure to enable simulation mode using `POST /guilds/:guildId/updateSimulationMode`

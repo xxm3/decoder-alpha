@@ -79,7 +79,11 @@ const Addserver: React.FC<props> = (props) => {
                     .catch((error: any) => {
                         let msg = '';
                         if (error?.response) {
-                            msg = String(error.response.data.message);
+                            msg = String(
+                                error.response.data.message
+                                    ? error.response.data.message
+                                    : error.response.data.body
+                            );
                         } else {
                             msg = 'Unable to connect. Please try again later';
                         }
@@ -219,7 +223,11 @@ const Addserver: React.FC<props> = (props) => {
 
                     let msg = '';
                     if (error && error.response) {
-                        msg = String(error.response.data.message);
+                        msg = String(
+                            error.response.data.message
+                                ? error.response.data.message
+                                : error.response.data.body
+                        );
                     } else {
                         msg = 'Unable to connect. Please try again later';
                     }
@@ -246,7 +254,6 @@ const Addserver: React.FC<props> = (props) => {
 
         return (
             <div>
-
                 {/* back button */}
                 <div>
                     <IonButton
@@ -261,10 +268,24 @@ const Addserver: React.FC<props> = (props) => {
 
                 {/* Intro */}
                 <ul>
-                    <li>- Usage of the SOL Decoder bots require 3-4 NFTs (or an agreement to give us part of your whitelist)</li>
-                    <li>- If you are a server owner but don't have 3-4 NFTs, you may allow an admin of your server (that has 3-4 NFTs) to setup this server for you</li>
-                    <li>- Create a new role in your Discord that has a permission of "Administrator", add the user to that role, then you should see them in the list below</li>
-                    <li>- Click "Assign", then that person can login here and setup the rest of the bots for you</li>
+                    <li>
+                        - Usage of the SOL Decoder bots require 3-4 NFTs (or an
+                        agreement to give us part of your whitelist)
+                    </li>
+                    <li>
+                        - If you are a server owner but don't have 3-4 NFTs, you
+                        may allow an admin of your server (that has 3-4 NFTs) to
+                        setup this server for you
+                    </li>
+                    <li>
+                        - Create a new role in your Discord that has a
+                        permission of "Administrator", add the user to that
+                        role, then you should see them in the list below
+                    </li>
+                    <li>
+                        - Click "Assign", then that person can login here and
+                        setup the rest of the bots for you
+                    </li>
                 </ul>
 
                 {/* list of admins */}
@@ -307,7 +328,10 @@ const Addserver: React.FC<props> = (props) => {
                                                         )
                                                     }
                                                 >
-                                                    <p>Assign as manager of this server</p>
+                                                    <p>
+                                                        Assign as manager of
+                                                        this server
+                                                    </p>
                                                 </IonButton>
                                             )}
                                         </ListItemSecondaryAction>

@@ -608,6 +608,10 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                 </div>
                             </IonCard>
                             <div className='ion-text-right'>
+                                <IonButton className="cardButton" onClick={()=> history.goBack()}>
+                                    Cancel
+                                </IonButton>
+                                {/*  */}
                                 <IonButton className="cardButton" type={'submit'} disabled={isSubmitting}>
                                     {isSubmitting ? ( <IonSpinner /> ) : ('Submit')}
                                 </IonButton>
