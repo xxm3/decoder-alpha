@@ -17,7 +17,7 @@ function WhitelistMarketplace() {
     const [isTabButton, setIsTabButton] = useState<String>('myDoa');
     const [liveWhiteList,setLiveWhiteList] = useState<IWhitelist[]>([]);
     const [expireWhiteList,setExpireWhiteList] = useState<IWhitelist[]>([]);
-    const [myDoaWhiteList,setMyDoaWhiteList] = useState<IWhitelist[]>([]);
+    const [myDoaWhiteList,setMyDaoWhiteList] = useState<IWhitelist[]>([]);
     const [myClaimWhiteList,setMyClaimWhiteList] = useState<IWhitelist[]>([]);
 
     const [isMobile, setIsMobile] = useState(false);
@@ -27,15 +27,13 @@ function WhitelistMarketplace() {
         }
     }, [window.innerWidth]);
 
-    const uid = localStorage.getItem('uid')
-    let userId:any
+    const uid = localStorage.getItem('uid');
+    let userId: string;
     useEffect(() => {
-        if(uid){
-            userId = parseInt(uid)
-        }
+        if(uid) userId = uid;
     }, [])
-    const server = localStorage.getItem('servers')
-    let serverArray = server &&  JSON.parse(server)
+    const server = localStorage.getItem('servers');
+    const serverArray = server &&  JSON.parse(server);
 
     // get all your WL crap
     const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
@@ -44,30 +42,21 @@ function WhitelistMarketplace() {
                 try {
                     setIsLoading(true)
                     const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
-                    let whiteListExpire:any = []
-                    let whiteListLive:any = []
-                    let whiteListMyDoa:any = []
-                    let whiteListMyClaim:any = []
-                    for(let i = 0; i < whitelists.length; i++){
-                        if(whitelists[i].isExpired || !whitelists[i].active){
-                            whiteListExpire.push(whitelists[i])
-                        }else {
-                            whiteListLive.push(whitelists[i])
-                        }
+                    const whiteListExpire :any[] = [];
+                    const whiteListLive: any[] = [];
+                    const whiteListMyDao: any[] = [];
+                    const whiteListMyClaim: any[] = [];
 
-                        if(whitelists[i].myLiveDAO === true && !whitelists[i].isExpired){
-                            whiteListMyDoa.push(whitelists[i])
-                        }else if (whitelists[i].claims.length > 0){
-                            if(whitelists[i].claims[0].user){
-                                if(whitelists[i].claims[0].user.discordId === userId){
-                                    whiteListMyClaim.push(whitelists[i])
-                                }
-                            }
-                        }
+                    for (const whitelist of whitelists) {
+                        if (whitelist.isExpired || !whitelist.active) { whiteListExpire.push(whitelist) }
+                        else if (whitelist.myLiveDAO) { whiteListMyDao.push(whitelist) }
+                        else whiteListLive.push(whitelist);
+
+                        if (whitelist.claims.some((cl: any) => cl.user?.discordId === userId)) whiteListMyClaim.push(whitelist);
                     }
                     setLiveWhiteList(whiteListLive);
                     setExpireWhiteList(whiteListExpire);
-                    setMyDoaWhiteList(whiteListMyDoa)
+                    setMyDaoWhiteList(whiteListMyDao)
                     setMyClaimWhiteList(whiteListMyClaim)
 
                     return whitelists;
@@ -91,9 +80,6 @@ function WhitelistMarketplace() {
 Need “top twitter/discord 24 hrs” on mints.js to work (and home page) - had redis errors
  announce it …
 make sure ME launchpad in there …
-
-
- >>> help miss person ... more logging in /guildmodules
 
 
 
@@ -128,14 +114,15 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
             <div className="flex flex-row justify-center w-full mt-9">
                 <div className="server-module-bg p-4 px-6 w-full">
                     <div className='w-full  items-center  mb-3'>
-                        <div className='text-xl font-semibold mb-1'>Welcome to Seamless!</div>
+                        <div className='text-xl font-semibold mb-1'>Welcome to Seamless! SOL Decoder's next joint venture with Communi3</div>
 
-                        This is an early look at Seamless - SOL Decoder's next joint venture with Communi3
                         <ul>
-                            {/*<li>- You will have to see which DAO the whitelist is for - soon we'll have filters to help. <span className="text-red-500">This is not only for SOL Decoder holders - other DAOs use this, so look at the "Must be member in" and "Required Role" section</span></li>*/}
-                            <li>- We estimate it is only 15% complete. Coming soon is Twitter integration to make sure you're following, and built in giveaways to have more people join</li>
+                            <li>- <b>New mint giving spots?</b> Pay only a portion of your whitelist to SOL Decoder and Communi3. Open a ticket on <a href="https://discord.gg/sol-decoder" target="_blank" className="underline cursor-pointer font-bold">the SOL Decoder Discord</a> and we'll walk you through the process</li>
+                            <li>- <b>Existing DAO wanting to get spots?</b> It's free, and no bots need to be added to your server - <a className='cursor-pointer underline font-bold' href='/bots'>click here to set it up</a>. Afterwards, any mint using Seamless already can give you spots in {'<'} a minute. Mints not using Seamless can get onboarded with Seamless very quickly, then give you spots</li>
                             <li>- Want to learn more? <a className="underline cursor-pointer font-bold" href="https://medium.com/@sol-decoder/sol-decoder-presents-seamless-32251a4deb43" target="_blank">
-                                Read our Medium article here</a>. Want to use Seamless for your new mint, or get WL spots for your existing DAO? Join our Discord and open a ticket</li>
+                                Read our Medium article here</a>
+                                {/*. Want to use Seamless for your new mint, or get WL spots for your existing DAO? Join our Discord and open a ticket*/}
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -193,9 +180,8 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                     {isTabButton === 'live' &&
                         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                             {
-                                liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) => {
-                                   return(<WhitelistCard {...whitelist}  key={Math.random()}/>)
-                                }) : <div className='text-xl'> There are no whitelists available</div>
+                                liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) =>
+                                (<WhitelistCard {...whitelist}  key={Math.random()}/>)) : <div className='text-xl'> There are no whitelists available</div>
                             }
                         </div>
                     }

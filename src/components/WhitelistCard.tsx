@@ -102,12 +102,12 @@ function WhitelistCard({
     return (
 		<>
 
-        <div className="border-gray-500 border-[0.5px] rounded-2xl w-80 overflow-clip">
+        <div className="border-gray-500 border-[0.5px] rounded-2xl  overflow-clip">
 
             {/* for confetti */}
             {isExploding && expired !== undefined && <ConfettiExplosion />}
 
-            <div className="relative overflow-y-hidden h-60 w-80">
+            <div className="relative overflow-y-hidden h-60 ">
                 <img src={image} className="h-full w-full object-cover object-left" alt={`${sourceServer?.name} X ${targetServer?.name}`} />
                 <div className="absolute flex bottom-0 right-0 justify-between bg-white bg-opacity-50 dark:bg-black dark:bg-opacity-50 py-2 px-5 left-0">
 

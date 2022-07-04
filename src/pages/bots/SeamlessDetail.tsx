@@ -27,6 +27,7 @@ interface FormFields {
     whitelist_role: string;
     description: string;
     required_role: string;
+    required_role_name: string;
     verified_role: string;
     twitter: string;
     discordInvite:string;
@@ -52,6 +53,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         whitelist_role: '',
         description: '',
         required_role: '',
+        required_role_name: '',
         twitter: '',
         discordInvite:'',
         magicEdenUpvoteUrl:'',
@@ -403,12 +405,13 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
                                             <div className='flex flex-col w-full'>
                                                 <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
+                                                    disabled={server.state.requiredRoleId}
                                                     onChange={onChange}
                                                     name={name}
                                                     onBlur={onBlur}
                                                     ref={ref}
                                                     placeholder='Select a Required Role'
-                                                    value={value}
+                                                    value={server.state.requiredRoleId ? server.state.requiredRoleId : value}
                                                     required
                                                     >
                                                         <option value=''>Select a Required Role</option>
@@ -422,27 +425,55 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </div>
                             :
                                 <div>
-                                    <IonLabel className="text-white">Required Role ID (role required of them in the existing DAO server, to enter)</IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
-                                        <Controller
-                                        name="required_role"
-                                        control={control}
-                                        render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                            <div className='flex flex-col w-full'>
-                                                <IonInput
-                                                    value={value}
-                                                    className='w-full'
-                                                    onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
-                                                    type="text"
-                                                    required
-                                                    name={name}
-                                                    ref={ref}
-                                                    onIonBlur={onBlur}
-                                                    placeholder='Required Role ID' />
-                                                <p className="formError"> {error?.message} </p>
-                                            </div>
-                                        )} />
-                                </IonItem>
+                                    <div>
+                                        <IonLabel className="text-white">Required Role ID (role required of them in the existing DAO server, to enter)</IonLabel>
+                                        <IonItem className="ion-item-wrapper mt-1">
+                                            <Controller
+                                            name="required_role"
+                                            control={control}
+                                            render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                                <div className='flex flex-col w-full'>
+                                                    <IonInput
+                                                        disabled={server.state.requiredRoleId}
+                                                        value={server.state.requiredRoleId ? server.state.requiredRoleId : value}
+                                                        className='w-full'
+                                                        onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                        type="text"
+                                                        required
+                                                        name={name}
+                                                        ref={ref}
+                                                        onIonBlur={onBlur}
+                                                        placeholder='Required Role ID' />
+                                                    <p className="formError"> {error?.message} </p>
+                                                </div>
+                                            )} />
+                                    </IonItem>
+                                    </div>
+
+                                    <div className='mt-5'>
+                                        <IonLabel className="text-white">Required Role Name</IonLabel>
+                                        <IonItem className="ion-item-wrapper mt-1">
+                                            <Controller
+                                            name="required_role_name"
+                                            control={control}
+                                            render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                                <div className='flex flex-col w-full'>
+                                                    <IonInput
+                                                        disabled={server.state.requiredRoleName}
+                                                        value={server.state.requiredRoleName ? server.state.requiredRoleName : value}
+                                                        className='w-full'
+                                                        onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                        type="text"
+                                                        required
+                                                        name={name}
+                                                        ref={ref}
+                                                        onIonBlur={onBlur}
+                                                        placeholder='Required Role Name' />
+                                                    <p className="formError"> {error?.message} </p>
+                                                </div>
+                                            )} />
+                                    </IonItem>
+                                    </div>
                                 </div>
                             }
 

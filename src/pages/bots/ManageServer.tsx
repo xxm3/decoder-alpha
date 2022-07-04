@@ -344,6 +344,8 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                             </b>
                         </li>
                     </ul>
+                    <br/>
+                    <img src="https://media.discordapp.net/attachments/973193136794910770/992844904571084882/image_4.png?width=2530&height=1193" />
                 </div>
             </div>
         </>

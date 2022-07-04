@@ -44,6 +44,8 @@ interface FormFields {
     discordLink: string;
     magicEdenLink: string;
     requiredRoleId: string;
+    requiredRoleName: string;
+    imagePath?:string
 }
 
 const ServerModule: React.FC<AppComponentProps> = () => {
@@ -88,6 +90,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         reset,
         setError,
         formState: { isSubmitting },
+        getValues 
     } = useForm<FormFields, any>();
     const [isNoBot, setIsNoBot] = useState<boolean>(false);
 
@@ -97,6 +100,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         twitterLink: '',
         discordLink: '',
         requiredRoleId: '',
+        requiredRoleName: '',
+        imagePath: ''
     });
 
     /**
@@ -133,15 +138,38 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
 
 
+    
+
+    useEffect(() => {
+        reset(guildFormData);
+    }, [guildFormData]);
+
+    useEffect(() => {
+        if (role === '3NFT') {
+            setAuthorizedModule(1);
+        } else if (role === '4NFT') {
+            setAuthorizedModule(10);
+        } else {
+            setAuthorizedModule(0);
+        }
+    }, [role]);
+
     // get guilds
     useEffect(() => {
+        if (serverId && role) {
+            getGuildFormData();
+        }
+    }, [location,role]);
 
+    // get guild form data that user submit previously
+    const getGuildFormData = async() =>{
         if (serverId) {
             setIsLoading(true);
             instance
-                .get(`/guilds/${serverId}`)
+                .get(`/guilds/${serverId}?checkCondition=false`)
                 .then((response) => {
                     let data = response.data.data;
+                // change
                     if (role === '3NFT' || role === '4NFT') {
                         setChecked({
                             ...checked,
@@ -167,64 +195,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     }else{
                         setIsNoBot(true);
                     }
+                    // 
 
-
-                })
-                .catch((error: any) => {
-                    let msg = '';
-                    if (error && error.response) {
-                        msg = String(
-                            error.response.data.message
-                                ? error.response.data.message
-                                : error.response.data.body
-                        );
-                    } else {
-                        msg = 'Unable to connect. Please try again later';
-                    }
-
-                    present({
-                        message: msg,
-                        color: 'danger',
-                        duration: 5000,
-                        buttons: [{ text: 'X', handler: () => dismiss() }],
-                    });
-                })
-                .finally(() => {
-                    setIsLoading(false);
-                });
-        }
-        getGuildFormData();
-    }, [location]);
-
-    useEffect(() => {
-        reset(guildFormData);
-    }, [guildFormData]);
-
-    useEffect(() => {
-        if (role === '3NFT') {
-            setAuthorizedModule(1);
-        } else if (role === '4NFT') {
-            setAuthorizedModule(10);
-        } else {
-            setAuthorizedModule(0);
-        }
-    }, [role]);
-
-    // get guild form data that user submit previously
-    const getGuildFormData = async() =>{
-
-        if (serverId) {
-            setIsLoading(true);
-            instance
-                .get(`/guilds/${serverId}?checkCondition=false`)
-                .then((response) => {
-                    let data = response.data.data;
                     setGuildFormData({
                         magicEdenLink:data.magiceden_link,
                         description:data.description,
                         twitterLink:data.twitter_link,
                         discordLink:data.discord_link,
-                        requiredRoleId:data.required_role_id,
+                        requiredRoleId:data.requiredRoleId,
+                        requiredRoleName:data.requiredRoleName,
+                        imagePath:data.image
                     })
 
                 })
@@ -496,14 +476,25 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 <form className="space-y-3"
                     // when submitting the form...
                     onSubmit={  handleSubmit(async (data) => {
+                        console.log("data",data)
+                       
                         const { image, ...rest } = data;
                         const rawData = { ...rest, };
+                        delete rawData.imagePath
                         const formData = new FormData();
 
+                        
                         Object.entries(rawData).forEach(([key, value]) => {
                             if (value) formData.append(key, value as string);
                         });
-                        formData.append('image', image);
+                        if(data.imagePath){
+                            formData.append('image', data.imagePath);
+                        }else{
+                            formData.append('image', image);
+                        }
+                        
+
+
 
                         try {
                             await instance.post( `/updateGuild/${serverId}`, formData, { headers: { 'Content-Type': 'application/json', }, } );
@@ -512,8 +503,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 color: 'success',
                                 duration: 10000,
                             });
-                            reset();
-
                         } catch (error) {
                             console.error(error);
 
@@ -638,6 +627,29 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         </IonItem>
                     </div>
 
+                    <div className='mb-5'>
+                        <IonItem className="ion-item-wrapper mt-1">
+                            <Controller
+                                name="requiredRoleName"
+                                control={control}
+                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                    <div className='flex flex-col w-full'>
+                                        <IonInput
+                                            value={value}
+                                            onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                            type="text"
+                                            required
+                                            name={name}
+                                            ref={ref}
+                                            onIonBlur={onBlur}
+                                            placeholder='Required Role Name' />
+                                        <p className="formError"> {error?.message} </p>
+                                    </div>
+                                )} />
+
+                        </IonItem>
+                    </div>
+
                     <div>
                         <IonItem className="ion-item-wrapper mt-1">
                             <Controller
@@ -669,7 +681,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         <Controller
                             name="image"
                             control={control}
-                            rules={{ required: true, }}
                             render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
                                 <>
                                     <IonInput
@@ -684,7 +695,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         }}
                                         name={name}
                                         ref={ref}
-                                        required
+                                        required = {getValues('imagePath')?false:true}
                                         onIonBlur={onBlur}
                                         type={'file' as TextFieldTypes}
                                         accept="image" />
@@ -716,6 +727,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     We weren't able to detect our SOL Decoder bots in your Discord, so we aren't able to offer you our unique bot channels and commands.
                     <br/>
                     If you are interested in these bots, and you've purchased our NFTs, then click back and add the bot at the top of the page.
+                    <br/>
+                    See below for more information on these bots
+                    <br/>
+                    <img src="https://media.discordapp.net/attachments/973193136794910770/992844904571084882/image_4.png?width=2530&height=1193" />
                 </p>
             </div>
 
