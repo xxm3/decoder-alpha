@@ -17,7 +17,7 @@ function WhitelistMarketplace() {
     const [isTabButton, setIsTabButton] = useState<String>('myDoa');
     const [liveWhiteList,setLiveWhiteList] = useState<IWhitelist[]>([]);
     const [expireWhiteList,setExpireWhiteList] = useState<IWhitelist[]>([]);
-    const [myDoaWhiteList,setMyDoaWhiteList] = useState<IWhitelist[]>([]);
+    const [myDoaWhiteList,setMyDaoWhiteList] = useState<IWhitelist[]>([]);
     const [myClaimWhiteList,setMyClaimWhiteList] = useState<IWhitelist[]>([]);
 
     const [isMobile, setIsMobile] = useState(false);
@@ -27,15 +27,13 @@ function WhitelistMarketplace() {
         }
     }, [window.innerWidth]);
 
-    const uid = localStorage.getItem('uid')
-    let userId:any
+    const uid = localStorage.getItem('uid');
+    let userId: string;
     useEffect(() => {
-        if(uid){
-            userId = parseInt(uid)
-        }
+        if(uid) userId = uid;
     }, [])
-    const server = localStorage.getItem('servers')
-    let serverArray = server &&  JSON.parse(server)
+    const server = localStorage.getItem('servers');
+    const serverArray = server &&  JSON.parse(server);
 
     // get all your WL crap
     const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
@@ -44,30 +42,21 @@ function WhitelistMarketplace() {
                 try {
                     setIsLoading(true)
                     const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
-                    let whiteListExpire:any = []
-                    let whiteListLive:any = []
-                    let whiteListMyDoa:any = []
-                    let whiteListMyClaim:any = []
-                    for(let i = 0; i < whitelists.length; i++){
-                        if(whitelists[i].isExpired || !whitelists[i].active){
-                            whiteListExpire.push(whitelists[i])
-                        }else {
-                            whiteListLive.push(whitelists[i])
-                        }
+                    const whiteListExpire :any[] = [];
+                    const whiteListLive: any[] = [];
+                    const whiteListMyDao: any[] = [];
+                    const whiteListMyClaim: any[] = [];
 
-                        if(whitelists[i].myLiveDAO === true && !whitelists[i].isExpired){
-                            whiteListMyDoa.push(whitelists[i])
-                        }else if (whitelists[i].claims.length > 0){
-                            if(whitelists[i].claims[0].user){
-                                if(whitelists[i].claims[0].user.discordId === userId){
-                                    whiteListMyClaim.push(whitelists[i])
-                                }
-                            }
-                        }
+                    for (const whitelist of whitelists) {
+                        if (whitelist.isExpired || !whitelist.active) { whiteListExpire.push(whitelist) }
+                        else if (whitelist.myLiveDAO) { whiteListMyDao.push(whitelist) }
+                        else whiteListLive.push(whitelist);
+
+                        if (whitelist.claims.some((cl: any) => cl.user?.discordId === userId)) whiteListMyClaim.push(whitelist);
                     }
                     setLiveWhiteList(whiteListLive);
                     setExpireWhiteList(whiteListExpire);
-                    setMyDoaWhiteList(whiteListMyDoa)
+                    setMyDaoWhiteList(whiteListMyDao)
                     setMyClaimWhiteList(whiteListMyClaim)
 
                     return whitelists;
@@ -195,9 +184,8 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                     {isTabButton === 'live' &&
                         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                             {
-                                liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) => {
-                                   return(<WhitelistCard {...whitelist}  key={Math.random()}/>)
-                                }) : <div className='text-xl'> There are no whitelists available</div>
+                                liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) =>
+                                (<WhitelistCard {...whitelist}  key={Math.random()}/>)) : <div className='text-xl'> There are no whitelists available</div>
                             }
                         </div>
                     }
