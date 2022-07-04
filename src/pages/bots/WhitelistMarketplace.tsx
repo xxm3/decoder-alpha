@@ -76,6 +76,16 @@ function WhitelistMarketplace() {
             {/*TODO !!! !!! big spam of shit
 
 
+>> get rid of +1
+>> why https://discord.com/invite/dogecapital didn't fill in
+
+>> aries fix bug x2
+
+>> look over ruchita
+
+
+
+
 - Fix calendar with graphs … recent cron messing up….
 Need “top twitter/discord 24 hrs” on mints.js to work (and home page) - had redis errors
  announce it …
