@@ -20,18 +20,16 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const { serverId } = useParams<any>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [serverList, setServerList] = useState<any>([]);
-    const [selectMultiple, setSelectMultiple] = useState<boolean>(false);
     const [searchValue, setSearchValue] = useState<any>('');
     const [twitterSort, setTwitterSort] = useState<String>('');
     const [discordSort, setDiscordSort] = useState<String>('');
-    const [sortCard,setSortCard] = useState<String>('')
 
 
     // this loads up all the discords etc
     const { data: servers = [] } = useQuery<any>(  ['allServers'],
         async () => {
             setIsLoading(true)
-            const { data: { guilds },  } = await instance.get('/getAllGuildsData');
+            const { data: { guilds },  } = await instance.get(`/getAllGuildsData?guildId=${serverId}`);
             let tmpServerArr = []
             setIsLoading(false)
             for(let i=0; i<guilds.length;i++){

@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Redirect, Route } from "react-router";
+import { Redirect, Route, useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { isDev } from "../environments/environment";
 import { RootState } from "../redux/store";
@@ -14,6 +15,8 @@ import AppRoute from "./Route";
 const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
 	needsRole ?: boolean
 }) => {
+    let history = useHistory();
+
 	const user = useUser();
 
     // all routes need a role, unless needsRole: False is set on App.tsx
@@ -40,11 +43,11 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
                 {/* TODO: entity needs to remake... */}
 
                 <div className='text-xl'>Get whitelisted with Seamless?</div>
-                If you are looking to get whitelisted onto a new mint - then <a className='cursor-pointer underline font-bold' href='/whitelistmarketplace'>click here</a>
+                If you are looking to get whitelisted onto a new mint - then <Link className='cursor-pointer underline font-bold' to='/whitelistmarketplace'>click here</Link>
                 <br/> <br/>
 
                 <div className='text-xl'>Adding SOL Decoder Discord Bots, or setting up your DAO with Seamless?</div>
-                If you are looking to add our Discord bots to your server (including giving out your whitelist to other Discords with Seamless), or if you're looking to receive whitelist spots for your DAO - then <a className='cursor-pointer underline font-bold' href='/dao'>click here</a>
+                If you are looking to add our Discord bots to your server (including giving out your whitelist to other Discords with Seamless), or if you're looking to receive whitelist spots for your DAO - then <Link className='cursor-pointer underline font-bold' to='/dao'>click here</Link>
                 <br/> <br/>
 
                 <div className='text-xl'>Doing something else?</div>

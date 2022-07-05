@@ -24,7 +24,6 @@ import { Controller, FieldValues, useForm } from 'react-hook-form';
 import isAxiosError from '../../util/isAxiosError';
 import { AxiosError } from 'axios';
 import { TextFieldTypes } from '@ionic/core';
-import { server } from 'ionicons/icons';
 
 /**
  * The page they see when they click "Add" on one of their servers
@@ -54,22 +53,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
      */
     const useQuery = () => new URLSearchParams(useLocation().search);
     const query = useQuery();
-    const devMode =
-        query.get('devMode') ||
-        window.location.href.indexOf('localhost') !== -1;
+    const devMode = query.get('devMode') || window.location.href.indexOf('localhost') !== -1;
 
     let history = useHistory();
     const location: LocationParams = useLocation();
     const [isMobile, setIsMobile] = useState(false);
-    const [checked, setChecked] = useState<{
-        mintInfoModule: boolean;
-        tokenModule: boolean;
-    }>({ mintInfoModule: false, tokenModule: false });
+    const [checked, setChecked] = useState<{ mintInfoModule: boolean;  tokenModule: boolean; }>({ mintInfoModule: false, tokenModule: false });
     const [isLoading, setIsLoading] = useState(false);
     const [showInstruction, setShowInstruction] = useState<boolean>(false);
     const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(false);
-    const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] =
-        useState<boolean>(false);
+    const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] = useState<boolean>(false);
     const [dropdownValue, setDropdownValue] = useState({
         dailyMintsWebhookChannel: 'default',
         oneHourMintInfoWebhookChannel: 'default',
@@ -83,16 +76,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     // const [server, setServer] = useState<Server | null>(null);
     const { serverId } = useParams<{ serverId: string }>();
     const [addServerFlag, setAddServerFlag] = useState(false);
-    const {
-        control,
-        handleSubmit,
-        watch,
-        reset,
-        setError,
-        formState: { isSubmitting },
-        getValues
-    } = useForm<FormFields, any>();
+    const { control,  handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, getValues } = useForm<FormFields, any>();
     const [isNoBot, setIsNoBot] = useState<boolean>(false);
+    const [requiredRole,setRequiredRole] = useState<any>([]);
+    const [isBigImage, setIsBigImage] = useState<boolean>(false);
 
     const [guildFormData, setGuildFormData] = useState({
         magicEdenLink: '',
@@ -152,6 +139,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         } else {
             setAuthorizedModule(0);
         }
+        
+        getWhiteListRole();
     }, [role]);
 
     // get guilds
@@ -434,6 +423,29 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         );
     }
 
+    const getWhiteListRole = async() =>{
+        const errMsg = () => {
+            present({
+                message: 'Unable to get the roles from the new mint server. Please make sure the SOL Decoder bot is in that server!',
+                color: 'danger',
+                duration: 10000,
+            });
+        }
+
+        try{
+            const  data = await instance.get(`/getAllRoles/${serverId}`);
+            if(data?.data?.data){
+                setRequiredRole(data.data.data)
+            }else{
+                errMsg();
+            }
+        }catch(err){
+            errMsg();
+        }
+
+    }
+
+
     return (
         <>
             {/*Loading*/}
@@ -476,8 +488,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 <form className="space-y-3"
                     // when submitting the form...
                     onSubmit={  handleSubmit(async (data) => {
-                        console.log("data",data)
-
                         const { image, ...rest } = data;
                         const rawData = { ...rest, };
                         delete rawData.imagePath
@@ -489,6 +499,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         });
 
                         formData.append('image', data.imagePath || image);
+                       
 
                         try {
                             await instance.post( `/updateGuild/${serverId}`, formData, { headers: { 'Content-Type': 'application/json', }, } );
@@ -553,6 +564,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 )} />
                         </IonItem>
                     </div>
+
                     <div className='mb-5'>
                         <IonItem className="ion-item-wrapper mt-1">
                             <Controller
@@ -598,51 +610,82 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         </IonItem>
                     </div>
 
-                    <div className='mb-5'>
-                        <IonItem className="ion-item-wrapper mt-1">
+                    {isNoBot ? 
+                        <>
+                            <div className='mb-5'>
+                                <IonItem className="ion-item-wrapper mt-1">
+                                    <Controller
+                                        name="requiredRoleId"
+                                        control={control}
+                                        render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                            <div className='flex flex-col w-full'>
+                                                <IonInput
+                                                    value={value}
+                                                    onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                    type="text"
+                                                    required
+                                                    name={name}
+                                                    ref={ref}
+                                                    onIonBlur={onBlur}
+                                                    placeholder='Required Role ID (Discord Role ID, ie. 966704866640662548, that your holders will need to enter the whitelist)' />
+                                                <p className="formError"> {error?.message} </p>
+                                            </div>
+                                        )} />
+
+                                </IonItem>
+                            </div>
+
+                            <div className='mb-5'>
+                                <IonItem className="ion-item-wrapper mt-1">
+                                    <Controller
+                                        name="requiredRoleName"
+                                        control={control}
+                                        render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                            <div className='flex flex-col w-full'>
+                                                <IonInput
+                                                    value={value}
+                                                    onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                    type="text"
+                                                    required
+                                                    name={name}
+                                                    ref={ref}
+                                                    onIonBlur={onBlur}
+                                                    placeholder='Required Role Name (ie. Verified Holder)' />
+                                                <p className="formError"> {error?.message} </p>
+                                            </div>
+                                        )} />
+
+                                </IonItem>
+                            </div>
+                        </> 
+                    : 
+                        <div className='mb-5'>
+                            <IonItem className="ion-item-wrapper mt-1">
                             <Controller
                                 name="requiredRoleId"
+                                rules={{ required: true, }}
                                 control={control}
-                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) =>{
+                                return (
                                     <div className='flex flex-col w-full'>
-                                        <IonInput
-                                            value={value}
-                                            onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
-                                            type="text"
-                                            required
+                                        <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
+                                            onChange={onChange}
                                             name={name}
+                                            value={value}
+                                            onBlur={onBlur}
                                             ref={ref}
-                                            onIonBlur={onBlur}
-                                            placeholder='Required Role ID (Discord Role ID, ie. 966704866640662548, that your holders will need to enter the whitelist)' />
+                                            required >
+                                            <option value=''>Select a Required Role</option>
+                                            {guildFormData.requiredRoleId ? <option value={guildFormData.requiredRoleId}>{guildFormData.requiredRoleName}</option> :'' }
+                                            {requiredRole && requiredRole.map((role:any) =>{ return (<option  key={role.id} value={role.id}> {role.name} </option>)}  )}
+                                        </select>
                                         <p className="formError"> {error?.message} </p>
                                     </div>
-                                )} />
-
-                        </IonItem>
-                    </div>
-
-                    <div className='mb-5'>
-                        <IonItem className="ion-item-wrapper mt-1">
-                            <Controller
-                                name="requiredRoleName"
-                                control={control}
-                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                    <div className='flex flex-col w-full'>
-                                        <IonInput
-                                            value={value}
-                                            onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
-                                            type="text"
-                                            required
-                                            name={name}
-                                            ref={ref}
-                                            onIonBlur={onBlur}
-                                            placeholder='Required Role Name (ie. Verified Holder)' />
-                                        <p className="formError"> {error?.message} </p>
-                                    </div>
-                                )} />
-
-                        </IonItem>
-                    </div>
+                                )}}
+                            />
+                            </IonItem>
+                        </div>
+                    }
 
                     <div>
                         <IonItem className="ion-item-wrapper mt-1">
@@ -670,8 +713,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                         </IonItem>
                     </div>
+
                     <div className='mb-5 mt-1 w-1/2'>
-                        <b>Image to represent your DAO</b>
+                        <b>Image to represent your DAO - Image must be less then 10MB</b>
                         <Controller
                             name="image"
                             control={control}
@@ -682,6 +726,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         onIonChange={(e) => {
                                             const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
                                             const file = target .files?.[0] as FieldValues['image'];
+                                            if(file){
+                                                let file_size = file.size;
+                                                if((file_size/1024) < 10240){
+                                                    setIsBigImage(false)
+                                                }else{
+                                                    setError('image', { type: 'custom', message: 'You upload grater then 10MB size of image' });
+                                                    setIsBigImage(true)
+                                                }
+                                            }
+                                            
                                             if (file)
                                                 file.path =  URL.createObjectURL(file);
                                             ( e.target as HTMLInputElement ).value = file as unknown as string;
@@ -696,21 +750,17 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                     <p className="formError"> {error?.message} </p>
                                 </>
                             )} />
-
                     </div>
 
                     {/*justify-center*/}
                     <div className=' mt-4 mb-5 w-full flex '>
-                        <IonButton className='w-50 h-12' type={'submit'} disabled={isSubmitting}>
+                        <IonButton className='w-50 h-12' type={'submit'} disabled={isSubmitting || isBigImage}>
                             {isSubmitting ? ( <IonSpinner /> ) : ('Submit DAO Profile')}
                         </IonButton>
                     </div>
                 </form>
             </div>
-
-
             <br/>
-
             <div className="server-module-bg p-4 px-6 w-full"  hidden={!isNoBot}>
                 <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
                     <IonLabel className="md:text-2xl text-2xl font-semibold">
