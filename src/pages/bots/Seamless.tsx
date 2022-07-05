@@ -57,28 +57,16 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
     // sorting by twitter
     useEffect(() => {
-      if(twitterSort === 'twitter Up'){
-        const twittweAscending = [...servers].sort((a, b) => b.twitter_followers - a.twitter_followers);
-        console.log(twittweAscending);
-        setServerList(twittweAscending)
-      }else if(twitterSort === 'twitter Down'){
-        const twittweAscending = [...servers].sort((a, b) => a.twitter_followers - b.twitter_followers);
-        console.log(twittweAscending);
-        setServerList(twittweAscending)
-
+      if(twitterSort){
+        const twitterSorting = [...servers].sort((a, b) =>twitterSort === 'twitter Up'? b.twitter_followers - a.twitter_followers:a.twitter_followers - b.twitter_followers);
+        setServerList(twitterSorting)
       }
     }, [twitterSort,servers])
-        // sorting by discord
+    // sorting by discord
     useEffect(() => {
-      if(discordSort === 'discord Up'){
-        const twittweAscending = [...servers].sort((a, b) => b.discord_members - a.discord_members);
-        console.log(twittweAscending);
-        setServerList(twittweAscending)
-      }else if(discordSort === 'discord Down'){
-        const twittweAscending = [...servers].sort((a, b) => a.discord_members - b.discord_members);
-        console.log(twittweAscending);
-        setServerList(twittweAscending)
-
+      if(discordSort){
+        const discordSorting = [...servers].sort((a, b) =>discordSort === 'discord Up'? b.discord_members - a.discord_members:a.discord_members - b.discord_members);
+        setServerList(discordSorting)
       }
     }, [discordSort,servers])
 

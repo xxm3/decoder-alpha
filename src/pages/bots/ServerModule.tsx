@@ -487,14 +487,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         Object.entries(rawData).forEach(([key, value]) => {
                             if (value) formData.append(key, value as string);
                         });
-                        if(data.imagePath){
-                            formData.append('image', data.imagePath);
-                        }else{
-                            formData.append('image', image);
-                        }
 
-
-
+                        formData.append('image', data.imagePath || image);
 
                         try {
                             await instance.post( `/updateGuild/${serverId}`, formData, { headers: { 'Content-Type': 'application/json', }, } );
