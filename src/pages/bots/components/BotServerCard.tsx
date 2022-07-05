@@ -1,16 +1,22 @@
 import { IonButton, IonCard, IonCheckbox, IonGrid,  IonText } from '@ionic/react';
 import { IonRow, IonCol } from '@ionic/react';
-import { Dispatch, SetStateAction, useEffect,useState } from 'react';
+import { Dispatch, memo, SetStateAction, useEffect,useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router';
 import discordImage from '../../../images/discord.png';
 import twitterImage from '../../../images/twitter.png';
 import MagicEdenImage from '../../../images/me-black.png';
 import { selcetServer } from '../Seamless';
-type props = {  serverData: any;multipleflag?:boolean,setSelectMultipleWhiteList?:Dispatch<SetStateAction<selcetServer[]>>};
+type props = {  
+    serverData: any
+    multipleflag?:boolean
+    setSelectMultipleWhiteList?:Dispatch<SetStateAction<selcetServer[]>>
+    selectMultipleWhiteList?:selcetServer[]
+    classes?:string
+}
 
 const BotServerCard: React.FC<props> = (props) => {
 
-    let { serverData,multipleflag,setSelectMultipleWhiteList } = props;
+    let { serverData,multipleflag,setSelectMultipleWhiteList,selectMultipleWhiteList,classes } = props;
     let history = useHistory();
     const { serverId } = useParams<any>();
     const path:any = useLocation();
@@ -26,30 +32,51 @@ const BotServerCard: React.FC<props> = (props) => {
     }, [path])
 
     return (
-        <IonCard className='ion-no-margin'>
+        <IonCard className={`ion-no-margin seamlessCardWrapper ${classes&&classes}`} >
             <div className="cardImage relative">
 
                 {/* image */}
-                <img src={serverData?.image} className={serverData?.image ? 'cardMainImage' : 'cardNoImage'}  alt='' />
+                <img src={serverData?.image} className={serverData?.image ? 'cardMainImage' : 'cardNoImage'}
+                alt='' 
+                onError={({ currentTarget }) => {
+                    currentTarget.onerror = null;
+                    currentTarget.style.opacity='0'
+                 }} />
+                 <div className="socialMediaIcon flex items-center justify-center mt-2 absolute top-1 right-2">
+                        {/*discord*/}
+                        <div className='inviteIconWrapper' hidden={!serverData?.discord_link}>
+                        <img  src={discordImage} className='cursor-pointer h-4' onClick={(event)=>{
+                            event.stopPropagation();
+                            if(serverData?.discord_link){ window.open(serverData?.discord_link) }}} />
+                            </div>
+                        {/*twitter*/}
+                        <div className='inviteIconWrapper' hidden={!serverData?.twitter_link}>
+                        <img  src={twitterImage} className='cursor-pointer h-4' onClick={(event)=>{
+                            event.stopPropagation();
+                            if(serverData?.twitter_link){ window.open(serverData?.twitter_link) }}} />
+                            </div>
+                        {/* magic eden  */}
+                        <div className='inviteIconWrapper' hidden={!serverData?.magiceden_link}>
+                        <img  src={MagicEdenImage} className='cursor-pointer h-4' onClick={(event)=>{
+                            event.stopPropagation();
+                            if(serverData?.magiceden_link){ window.open(serverData?.magiceden_link) }}} />
+                            </div>
+                    </div>
+                    <div className='absolute mt-2 absolute top-2 left-3'>
+                    {multipleflag && <IonCheckbox  className='checkboxWrapper' onIonChange={e => {
+                        if(e.detail.checked){
+                            setSelectMultipleWhiteList&&setSelectMultipleWhiteList((old)=>[...old,{id:serverData.id,name:serverData.name,discordGuildId:serverData.discordGuildId}])
+                        }else{
+                            setSelectMultipleWhiteList&&setSelectMultipleWhiteList(old=>old.filter(data=>data.id!==serverData.id))
+                        }
+                    }} />}
+                    </div>
 
                 <div className="cardOverlay-content py-1 px-4">
 
                     <div className='text-lg font-bold'>{serverData?.name}</div>
 
-                    <div className="socialMediaIcon">
-                        {/*discord*/}
-                        <img hidden={!serverData?.discord_link} src={discordImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
-                            event.stopPropagation();
-                            if(serverData?.discord_link){ window.open(serverData?.discord_link) }}} />
-                        {/*twitter*/}
-                        <img hidden={!serverData?.twitter_link} src={twitterImage} style={{ height: '18px' }} className='cursor-pointer' onClick={(event)=>{
-                            event.stopPropagation();
-                            if(serverData?.twitter_link){ window.open(serverData?.twitter_link) }}} />
-                        {/* magic eden  */}
-                        <img hidden={!serverData?.magiceden_link} src={MagicEdenImage} style={{ height: '18px', }} className='cursor-pointer' onClick={(event)=>{
-                            event.stopPropagation();
-                            if(serverData?.magiceden_link){ window.open(serverData?.magiceden_link) }}} />
-                    </div>
+                    
                 </div>
             </div>
 
@@ -103,20 +130,14 @@ const BotServerCard: React.FC<props> = (props) => {
                         </IonCol>
                     </IonRow>
                  }
-                 <IonRow>
-                    {multipleflag && <IonCheckbox   onIonChange={e => {
-                        if(e.detail.checked){
-                            setSelectMultipleWhiteList&&setSelectMultipleWhiteList((old)=>[...old,{id:serverData.id,name:serverData.name,discordGuildId:serverData.discordGuildId}])
-                        }else{
-                            setSelectMultipleWhiteList&&setSelectMultipleWhiteList(old=>old.filter(data=>data.id!==serverData.id))
-                        }
-                    }} />}
+                 
+                    
                         
-                </IonRow>
+                
             </IonGrid>
 
         </IonCard>
     );
 };
 
-export default BotServerCard;
+export default memo(BotServerCard)

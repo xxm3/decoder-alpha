@@ -217,6 +217,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
     }
     // content show 
     return (
+        <div className='add_multiple_whitelist_wrapper'>
         <IonGrid>
         <form className="space-y-3"// when submitting the form...
             onSubmit={  handleSubmit(async (data) => {
@@ -616,6 +617,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
             </IonRow>
         </form>
         </IonGrid>
+        </div>
     );
 };
 

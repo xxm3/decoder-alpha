@@ -1,6 +1,8 @@
-ion-card {
+.add_multiple_whitelist_wrapper{
+    ion-card {
     border-radius: 10px;
     --background: #2a3246;
+
     .cardImage {
         .cardMainImage {
             height: 250px;
@@ -95,4 +97,5 @@ select option {
     justify-content: center;
     align-items: center;
     text-align: center;
+}
 }

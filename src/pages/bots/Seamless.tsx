@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
-import { IonButton, IonGrid, IonRow, IonCol, IonCard,  IonText, IonCheckbox, useIonToast,} from '@ionic/react';
+import { IonButton, IonGrid, IonRow, IonCol, IonCard,  IonText, IonCheckbox, useIonToast, IonInput,} from '@ionic/react';
 import './ManageServer.scss';
 import { useHistory, useParams } from 'react-router';
 import Loader from '../../components/Loader';
@@ -208,9 +208,11 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             {isLoading ? <Loader/> :
                             <>
                                 {serverList && serverList.map((server: any,index:number)=>{
+                                    let selectFlag = selectMultipleWhiteList.find(data=>data.id===server.id)
+                                    server.selectFlag = selectFlag?true:false;
                                     return(
-                                        <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" key={index} >
-                                            <BotServerCard serverData={server} multipleflag={multipleflag} setSelectMultipleWhiteList={setSelectMultipleWhiteList} />
+                                        <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" key={server.id} >
+                                            <BotServerCard serverData={server} multipleflag={multipleflag} setSelectMultipleWhiteList={setSelectMultipleWhiteList} selectMultipleWhiteList={selectMultipleWhiteList} classes={`h-full ${server.selectFlag&&'activeCardWrapper'}` } />
                                         </IonCol>
                                     )
                                 })}

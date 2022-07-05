@@ -100,25 +100,30 @@ function WhitelistCard({
             {isExploding && expired !== undefined && <ConfettiExplosion />}
 
             <div className="relative overflow-y-hidden h-60 ">
-                <img src={image} className="h-full w-full object-cover object-left" alt={`${sourceServer?.name} X ${targetServer?.name}`} />
+                <img src={image} className="h-full w-full object-cover object-left" alt={`${sourceServer?.name} X ${targetServer?.name}`}  
+                onError={({ currentTarget }) => {
+                    currentTarget.onerror = null;
+                    currentTarget.style.opacity='0'
+                 }} />
+                 <div className='flex items-center justify-center mt-2 absolute top-1 right-2'>
+                        
+                            {discordInvite && (<div className='inviteIconWrapper'> <a href={discordInvite} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoDiscord} className=" " /> </a> </div>)}
+                        
+                        
+                            {twitter && (<div className='inviteIconWrapper'> <a href={twitter} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoTwitter} className="" /> </a> </div>)}
+                        
+                        
+                            {magicEdenUpvoteUrl && (<div className='inviteIconWrapper'> <a href={magicEdenUpvoteUrl} className="hover:opacity-70" target="_blank" > <img src={MagicEden} className=" " /> </a> </div>)}
+                        
+                    </div>
                 <div className="absolute flex bottom-0 right-0 justify-between bg-white bg-opacity-50 dark:bg-black dark:bg-opacity-50 py-2 px-5 left-0">
 
                     <div className="w-full">
                         <p className="text-lg font-bold">{sourceServer?.name}</p>
-                        <p className="text-sm italic">must be in "{targetServer?.name}" DAO</p>
-                        <p className="text-sm italic"> Type: Whitelist </p>
+                        <p className="text-xs italic">must be in "{targetServer?.name}" DAO</p>
+                        <p className="text-xs italic"> Type: Whitelist </p>
                     </div>
-                    <div className='flex items-center flex-col justify-center mt-2'>
-                        <div>
-                            {discordInvite && ( <a href={discordInvite} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoDiscord} className="h-6 w-6" /> </a> )}
-                        </div>
-                        <div>
-                            {twitter && ( <a href={twitter} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoTwitter} className="h-6 w-6" /> </a> )}
-                        </div>
-                        <div>
-                            {magicEdenUpvoteUrl && ( <a href={magicEdenUpvoteUrl} className="hover:opacity-70" target="_blank" > <img src={MagicEden} className="h-6 w-6" /> </a> )}
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
 
