@@ -90,7 +90,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         reset,
         setError,
         formState: { isSubmitting },
-        getValues 
+        getValues
     } = useForm<FormFields, any>();
     const [isNoBot, setIsNoBot] = useState<boolean>(false);
 
@@ -138,7 +138,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
 
 
-    
+
 
     useEffect(() => {
         reset(guildFormData);
@@ -195,7 +195,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     }else{
                         setIsNoBot(true);
                     }
-                    // 
+                    //
 
                     setGuildFormData({
                         magicEdenLink:data.magiceden_link,
@@ -477,13 +477,13 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     // when submitting the form...
                     onSubmit={  handleSubmit(async (data) => {
                         console.log("data",data)
-                       
+
                         const { image, ...rest } = data;
                         const rawData = { ...rest, };
                         delete rawData.imagePath
                         const formData = new FormData();
 
-                        
+
                         Object.entries(rawData).forEach(([key, value]) => {
                             if (value) formData.append(key, value as string);
                         });
@@ -492,7 +492,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         }else{
                             formData.append('image', image);
                         }
-                        
+
 
 
 
@@ -574,7 +574,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             name={name}
                                             ref={ref}
                                             onIonBlur={onBlur}
-                                            placeholder='Discord Invite Link (never expires, no invite limit)' />
+                                            placeholder='Discord Invite Link (never expires, no invite limit - optional)' />
                                         <p className="formError"> {error?.message} </p>
                                     </div>
                                 )} />
@@ -619,7 +619,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             name={name}
                                             ref={ref}
                                             onIonBlur={onBlur}
-                                            placeholder='Required Role ID (this is the Discord Role ID, ie. 966704866640662548, that holders will need to enter the whitelist)' />
+                                            placeholder='Required Role ID (Discord Role ID, ie. 966704866640662548, that your holders will need to enter the whitelist)' />
                                         <p className="formError"> {error?.message} </p>
                                     </div>
                                 )} />
@@ -642,7 +642,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             name={name}
                                             ref={ref}
                                             onIonBlur={onBlur}
-                                            placeholder='Required Role Name' />
+                                            placeholder='Required Role Name (ie. Verified Holder)' />
                                         <p className="formError"> {error?.message} </p>
                                     </div>
                                 )} />
@@ -726,10 +726,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 <p>
                     We weren't able to detect our SOL Decoder bots in your Discord, so we aren't able to offer you our unique bot channels and commands.
                     <br/>
-                    If you are interested in these bots, and you've purchased our NFTs, then click back and add the bot at the top of the page.
+                    If you are interested in these bots, and you've purchased our NFTs, then <a className='cursor-pointer underline font-bold' href='/dao'>click here</a> and add the bot at the top of the page.
                     <br/>
-                    See below for more information on these bots
-                    <br/>
+                    See below for more information on these bots.
+                    <br/><br/>
                     <img src="https://media.discordapp.net/attachments/973193136794910770/992844904571084882/image_4.png?width=2530&height=1193" />
                 </p>
             </div>
@@ -767,9 +767,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 {/*instructions*/}
                 <div className="flex flex-row justify-center w-full mt-3">
                     <div className="server-module-bg p-4 px-6 w-full">
-                        <div className='w-full flex items-center justify-between mb-3'>
-                            <div className='text-xl font-semibold '>Instructions</div>
-                            <img style={{color : 'red'}} src={showInstruction ?  require(`../../images/up-icon.png`) : require(`../../images/chevron-down-icon.png`)}  className='w-4 cursor-pointer' onClick={()=>setShowInstruction((e)=>!e)} />
+                        <div className='w-full flex items-center justify-between mb-3 cursor-pointer' onClick={()=>setShowInstruction((e)=>!e)}>
+                            <div className='text-xl font-semibold '>Bot Instructions (click to expand)</div>
+                            <img style={{color : 'red'}} src={showInstruction ?  require(`../../images/up-icon.png`) : require(`../../images/chevron-down-icon.png`)}  className='w-4 cursor-pointer'  />
                         </div>
                         {/* <div className='text-xl font-semibold mb-3'>Instructions</div> */}
                         {
