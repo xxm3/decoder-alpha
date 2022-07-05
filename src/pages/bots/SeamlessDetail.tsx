@@ -61,8 +61,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         type:'fcfs',
         whitelist_role: '',
         description: '',
-        required_role: '',
-        required_role_name: '',
+        required_role: server.state.requiredRoleId ? server.state.requiredRoleId : '',
+        required_role_name: server.state.requiredRoleName ? server.state.requiredRoleName : '',
         twitter: '',
         discordInvite:'',
         magicEdenUpvoteUrl:'',
@@ -206,8 +206,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 ...rest,
                                 source_server: serverId,
                                 target_server:server.state.discordGuildId,
-                                required_role: server.state.requiredRoleId ? server.state.requiredRoleId : rest.required_role,
-                                required_role_name: server.state.requiredRoleName ? server.state.requiredRoleName : rest.required_role_name,
                             };
                             const formData = new FormData();
 
@@ -452,11 +450,14 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         onBlur={onBlur}
                                                         ref={ref}
                                                         placeholder='Select a Required Role'
-                                                        value={server?.state?.requiredRoleId ? server?.state?.requiredRoleId : value}
+                                                        value={value}
                                                         required
                                                         >
+                                                            <option value=''>{server.state.requiredRoleId}</option>
                                                             <option value=''>Select a Required Role</option>
-                                                            {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{ return (<option  key={role.id}  value={role.id} disabled={server?.state?.requiredRoleId}> {role.name} </option>)} )}
+                                                            {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{
+                                                                return (<option  key={role.id}  value={role.id} selected={ server.state.requiredRoleId && role.id === server.state.requiredRoleId} > {role.name} </option>)}
+                                                            )}
                                                     </select>
                                                     <p className="formError"> {error?.message} </p>
                                                 </div>
