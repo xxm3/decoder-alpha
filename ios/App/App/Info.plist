@@ -23,7 +23,7 @@
 	<key>IonApi</key>
 	<string>https://api.ionicjs.com</string>
 	<key>IonAppId</key>
-	<string>bc1dd5e2</string>
+	<string>bc1dd5e2sol</string>
 	<key>IonChannelName</key>
 	<string>Production</string>
 	<key>IonMaxVersions</key>

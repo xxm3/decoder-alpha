@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { instance } from '../../axios';
 import { AppComponentProps } from '../../components/Route';
 import { IonButton, IonGrid, IonRow, IonCol, IonCard,  IonText, IonCheckbox, useIonToast,} from '@ionic/react';
@@ -50,10 +50,50 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                     tmpServerArr.push(guilds[i])
                 }
             }
-            setServerList(tmpServerArr);
-            return guilds;
+            // setServerList(tmpServerArr);
+            return tmpServerArr;
+            // return guilds;
         }
     );
+
+        // searching
+    useEffect(() => {
+        if(searchValue && servers){
+            const filtered = servers.filter((server:any) => Object.values(server).some(val => typeof val === "string" && val.toLowerCase().includes(searchValue.toLowerCase())));
+            setServerList(filtered)
+        }else{
+                setServerList(servers)
+        }
+    }, [searchValue,servers])
+
+    // sorting by twitter
+    useEffect(() => {
+      if(twitterSort === 'twitter Up'){
+        const twittweAscending = [...servers].sort((a, b) => b.twitter_followers - a.twitter_followers);
+        console.log(twittweAscending);
+        setServerList(twittweAscending)
+      }else if(twitterSort === 'twitter Down'){
+        const twittweAscending = [...servers].sort((a, b) => a.twitter_followers - b.twitter_followers);
+        console.log(twittweAscending);
+        setServerList(twittweAscending)
+
+      }
+    }, [twitterSort,servers])
+        // sorting by discord
+    useEffect(() => {
+      if(discordSort === 'discord Up'){
+        const twittweAscending = [...servers].sort((a, b) => b.discord_members - a.discord_members);
+        console.log(twittweAscending);
+        setServerList(twittweAscending)
+      }else if(discordSort === 'discord Down'){
+        const twittweAscending = [...servers].sort((a, b) => a.discord_members - b.discord_members);
+        console.log(twittweAscending);
+        setServerList(twittweAscending)
+
+      }
+    }, [discordSort,servers])
+
+
 
     return (
         <>
@@ -62,11 +102,13 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                     <IonCol size="12">
                         <div className='flex flex-row justify-between items-center'>
                             <div className='w-4/5'>
-                                <h2 className="ion-no-margin font-bold text-xl"> Seamless - select a DAO</h2>
+                                <h2 className="ion-no-margin font-bold text-xl"> Seamless - select a DAO to give whitelists to</h2>
                                 <p className='ion-no-margin'>
-                                    A new way to Request a collaboration with one of our partnered servers - select the server you wish to collaborate with in list below, and fill out the collaboration form on the next page.
-                                    <br/>
-                                    Please make sure that you invited the correct SOL Decoder Bot to your server! You must use the SECOND link when on the <a href="https://soldecoder.app/manageserver" className="underline cursor-pointer">Select a Server</a> page
+                                    Select the server you wish to collaborate with in list below, and fill out the collaboration form on the next page.
+                                    <br/><br/>
+                                    Please make sure that you invited the correct SOL Decoder Bot to your server! You must use the SECOND link when on the <a href="https://soldecoder.app/dao" className="underline cursor-pointer">Select a Server</a> page.
+                                    <br/><br/>
+                                    After inviting this bot, make sure to drag the "SOL Decoder" role higher than your whitelist role.
                                 </p>
                             </div>
                             {!multipleflag &&  
@@ -109,51 +151,51 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                     {/*TODO-ruchita: this doesn't seem to work? search dont work, sort by twiteter/disc no work */}
 
-                    {/*<IonCol size="12" className='mt-4'>*/}
-                    {/*    <div className='flex flex-col'>*/}
-                    {/*        <div className='text-xl'>Select Partner</div>*/}
-                    {/*        <div className='flex flex-row w-1/2'>*/}
-                    {/*            <IonInput*/}
-                    {/*                value={searchValue}*/}
-                    {/*                className='w-1/5 border-2 mt-2'*/}
-                    {/*                onIonChange={(e) => { setSearchValue( e.detail.value) }}*/}
-                    {/*                type="text"*/}
-                    {/*                placeholder='Project Name'/>*/}
-                    {/*                <div className='flex-row flex items-center cursor-pointer' onClick={()=>{*/}
-                    {/*                    setDiscordSort('')*/}
-                    {/*                    if(twitterSort === ''){*/}
-                    {/*                        setTwitterSort('twitter Up')*/}
-                    {/*                    }else if(twitterSort === 'twitter Up'){*/}
-                    {/*                        setTwitterSort('twitter Down')*/}
-                    {/*                    }else{*/}
-                    {/*                        setTwitterSort('twitter Up')*/}
-                    {/*                    }*/}
-                    {/*                }}>*/}
-                    {/*                    <div className='flex flex-col mr-2 ml-4' >*/}
-                    {/*                        <button className={`${twitterSort === 'twitter Up' ? 'opacity-100':'opacity-30'}`}>▲</button>*/}
-                    {/*                        <button className={`${twitterSort === 'twitter Down' ? 'opacity-100':'opacity-30'}`}>▼</button>*/}
-                    {/*                    </div>*/}
-                    {/*                    <p>Twitter Followers</p>*/}
-                    {/*                </div>*/}
-                    {/*                <div className='flex-row flex items-center cursor-pointer' onClick={()=>{*/}
-                    {/*                    setTwitterSort('')*/}
-                    {/*                    if(discordSort === ''){*/}
-                    {/*                        setDiscordSort('discord Up')*/}
-                    {/*                    }else if(discordSort === 'discord Up'){*/}
-                    {/*                        setDiscordSort('discord Down')*/}
-                    {/*                    }else{*/}
-                    {/*                        setDiscordSort('discord Up')*/}
-                    {/*                    }*/}
-                    {/*                }}>*/}
-                    {/*                    <div className='flex flex-col mr-2 ml-4'>*/}
-                    {/*                        <button className={`${discordSort === 'discord Up' ? 'opacity-100':'opacity-30'}`}>▲</button>*/}
-                    {/*                        <button className={`${discordSort === 'discord Down' ? 'opacity-100':'opacity-30'}`}>▼</button>*/}
-                    {/*                    </div>*/}
-                    {/*                    <p>Discord Member</p>*/}
-                    {/*                </div>*/}
-                    {/*        </div>*/}
-                    {/*    </div>*/}
-                    {/*</IonCol>*/}
+                <IonCol size="12" className='mt-4'>
+                    <div className='flex flex-col'>
+                        {/*<div className='text-xl'>Select a DAO to give whitelists to</div>*/}
+                        <div className='flex flex-row w-1/2'>
+                            <IonInput
+                                value={searchValue}
+                                className='w-1/5 border-2 mt-2'
+                                onIonChange={(e) => { setSearchValue( e.detail.value) }}
+                                type="text"
+                                placeholder='Project Name'/>
+                                <div className='flex-row flex items-center cursor-pointer' onClick={()=>{
+                                    setDiscordSort('')
+                                    if(twitterSort === ''){
+                                        setTwitterSort('twitter Up')
+                                    }else if(twitterSort === 'twitter Up'){
+                                        setTwitterSort('twitter Down')
+                                    }else{
+                                        setTwitterSort('twitter Up')
+                                    }
+                                }}>
+                                    <div className='flex flex-col mr-2 ml-4' >
+                                        <button className={`${twitterSort === 'twitter Up' ? 'opacity-100':'opacity-30'}`}>▲</button>
+                                        <button className={`${twitterSort === 'twitter Down' ? 'opacity-100':'opacity-30'}`}>▼</button>
+                                    </div>
+                                    <p>Twitter Followers</p>
+                                </div>
+                                <div className='flex-row flex items-center cursor-pointer' onClick={()=>{
+                                    setTwitterSort('')
+                                    if(discordSort === ''){
+                                        setDiscordSort('discord Up')
+                                    }else if(discordSort === 'discord Up'){
+                                        setDiscordSort('discord Down')
+                                    }else{
+                                        setDiscordSort('discord Up')
+                                    }
+                                }}>
+                                    <div className='flex flex-col mr-2 ml-4'>
+                                        <button className={`${discordSort === 'discord Up' ? 'opacity-100':'opacity-30'}`}>▲</button>
+                                        <button className={`${discordSort === 'discord Down' ? 'opacity-100':'opacity-30'}`}>▼</button>
+                                    </div>
+                                    <p>Discord Member</p>
+                                </div>
+                        </div>
+                    </div>
+                </IonCol>
 
 
                     <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12"></IonCol>

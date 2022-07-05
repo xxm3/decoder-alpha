@@ -117,7 +117,7 @@ function TargetServerCard({
     return (
     //
 
-        <div className="border-gray-500 border-[0.5px] rounded-2xl w-80 overflow-clip">
+        <div className="border-gray-500 border-[0.5px] rounded-2xl  overflow-clip">
 
     {/*//*/}
     {/*//         {isExploding && <ConfettiExplosion />}*/}

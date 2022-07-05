@@ -324,4 +324,33 @@ This was tested in Test Vehn Dojo
 
 
 
+### 18 ) if no bot in server functionality
+case 1 :
+- please select server which have no bot in the server when you are in /manageserver page
+- now after you select one of that server you will be redirect to next screen where you can see Seamless - profile form.
+- & at this page you will see one warning message that is " you can see limited form because no bot added in server "
+- after fill all form fields and click on SUBMIT DAO PROFILE system will send one web hook message that you can see on your channel
+ e.g : https://discord.com/channels/973441323250110465/973441323250110468
 
+case 2:
+- please select server which have  bot in the server when you are in /manageserver page
+-  now after you select one of that server you will be redirect to next screen where you can see above things also works fine but with initiate seamless button under section "Seamless - new mint"
+- when you click on INITIATE SEAMLESS you will be redirect to list of servers where you can select one or multiple servers.
+- but for this test case you must select server which have no bot.
+- after that you will be redirect to whitelist partnership form
+- now in that form you can see there is field named "required role" in that you will textbox you must enter ID of role because there is no bot in the server if we choose server which has bot then you will see dropdown there.
+- when you fill all the required details and submit system will send one web hook message that you can see on your channel
+ e.g : https://discord.com/channels/973441323250110465/973441323250110468
+
+### Configure bot packages
+
+ - when you enable or disable on module in server module page under the section configure bot packages at that time only once system will send one web hook message.
+ 
+### testing of multiple server select for whitelist partnership form
+- when you click on INITIATE WHITELIST you will be redirect to server list page where you can select one or multiple server
+- if you want to select multiple right corner you will see select multiple click on that button
+- you will see in all the server checkbox is appears you can select by enabling checkbox
+- right corder you will see submit button then you will be redirect to whitelist partnership form
+- for particular server max users and required roles must be entered and fill rest of the form
+- after filled form you can click on submit button and boom multiple entries are saved successfully. you will be redirect to manageserver page.
+if one of the server has something wrong and doesn't save then you will be on same page with server that are not saved yet.
