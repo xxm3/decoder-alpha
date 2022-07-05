@@ -113,16 +113,10 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             {/* header */}
             <div className="flex justify-between">
                 <IonLabel className="text-4xl font-semibold mb-3">
-                    {' '}
-                    Select a Server{' '}
+                    {' '} Select a Server{' '}
                 </IonLabel>
-                <IonButton
-                    onClick={() => {
-                        history.push('/view-guild');
-                    }}
-                >
-                    {' '}
-                    View Discords that have our bots{' '}
+                <IonButton onClick={() => { history.push('/view-guild'); }} >
+                    {' '}View Discords that have our bots{' '}
                 </IonButton>
             </div>
 

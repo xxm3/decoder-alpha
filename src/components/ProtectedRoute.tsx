@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Redirect, Route } from "react-router";
+import { Redirect, Route, useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { isDev } from "../environments/environment";
 import { RootState } from "../redux/store";
@@ -15,6 +16,8 @@ import {IonButton} from '@ionic/react';
 const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
 	needsRole ?: boolean
 }) => {
+    let history = useHistory();
+
 	const user = useUser();
 
     // all routes need a role, unless needsRole: False is set on App.tsx
@@ -41,8 +44,8 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
                 {/* TODO: entity needs to remake... */}
 
                 <div className='text-xl font-bold'>Get whitelisted with Seamless?</div>
-                Seamless offers many whitelist opportunities for existing DAOs. No screenshots, no waiting for a mod to tag you, no needing to open a ticket to get tagged. Get whitelisted in under 15 seconds. Want to learn more? <a className="underline cursor-pointer font-bold" href="https://medium.com/@sol-decoder/sol-decoder-presents-seamless-32251a4deb43" target="_blank">
-                Read our Medium article here</a>
+                Seamless offers many whitelist opportunities for existing DAOs. No screenshots, no waiting for a mod to tag you, no needing to open a ticket to get tagged. Get whitelisted in under 15 seconds. Want to learn more? <Link className="underline cursor-pointer font-bold" to="https://medium.com/@sol-decoder/sol-decoder-presents-seamless-32251a4deb43" target="_blank">
+                Read our Medium article here</Link>
 
                 <div className="mt-3" >
                     <a className='cursor-pointer underline font-bold' href='/seamless'>
@@ -52,7 +55,7 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
                 <br/><hr/><br/>
 
                 <div className='text-xl font-bold'>Setting up your new mint with Seamless?</div>
-                Pay only a portion of your whitelist to Communi3, SOL Decoder, and partnered top DAOs. Join the <a href="https://discord.gg/JvpqW7d4jE" target="_blank" className="underline cursor-pointer font-bold">the C3 Collab Discord</a> and we'll walk you through the process. Obtain all of your whitelist spots with 0 manual tagging of roles, and 100% Twitter verification
+                Pay only a portion of your whitelist to Communi3, SOL Decoder, and partnered top DAOs. Join the <Link to="https://discord.gg/JvpqW7d4jE" target="_blank" className="underline cursor-pointer font-bold">the C3 Collab Discord</Link> and we'll walk you through the process. Obtain all of your whitelist spots with 0 manual tagging of roles, and 100% Twitter verification
                 <div className="mt-3" >
                     <a className='cursor-pointer underline font-bold' href='/dao'>
                         <IonButton>Sign my new mint up!</IonButton>
