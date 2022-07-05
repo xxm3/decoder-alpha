@@ -736,7 +736,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                 if((file_size/1024) < 10240){
                                                     setIsBigImage(false)
                                                 }else{
-                                                    setError('image', { type: 'custom', message: 'You upload grater then 10MB size of image' });
+                                                    setError('image', { type: 'custom', message: 'Maximum allowed file size is 10 MB' });
                                                     setIsBigImage(true)
                                                 }
                                             }
