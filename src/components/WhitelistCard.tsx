@@ -85,19 +85,30 @@ function WhitelistCard({
         }
     }
 
-    // when the event is expired
+    // check whether current user won the whitelist in the raffle right after the event is expired
     useEffect(() => {
-        if(type === 'raffle') {
+        const updateCardState = async () => {
             try {
-                // const result = await instance.post("/getRaffledState", {
-                //     whitelist_id : id,
-                //     type: type
-                // });
-            } catch {
+                const {data: { won }} = await instance.post("/getRaffledState", {
+                    whitelist_id : id,
+                    type: type
+                });
 
+                if(won) {
+                    setIsExploding(true);
+                    present({
+                        message: 'You\'ve won whitelist raffle. You are now whitelisted in ' + sourceServer.name,
+                        color: 'success',
+                        duration: 10000,
+                    });
+                }
+            } catch {
             }
         }
-        
+
+        if(!expired && type === 'raffle') {
+            updateCardState().catch(console.error);
+        }        
     }, [expired]);
 
     // for confetti
@@ -161,7 +172,7 @@ function WhitelistCard({
                         expired ?
                         (<>
                             <p>Winners </p>
-                            <p>{claimCounts}</p>
+                            <p>{claimCounts<max_users ? claimCounts : max_users}</p>
                         </>) :
                         (<>
                             <p>Winning spots </p>
