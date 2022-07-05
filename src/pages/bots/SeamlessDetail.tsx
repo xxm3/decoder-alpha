@@ -452,18 +452,18 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         onBlur={onBlur}
                                                         ref={ref}
                                                         placeholder='Select a Required Role'
-                                                        value={server.state.requiredRoleId ? server.state.requiredRoleId : value}
+                                                        value={server?.state?.requiredRoleId ? server?.state?.requiredRoleId : value}
                                                         required
                                                         >
                                                             <option value=''>Select a Required Role</option>
-                                                            {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{ return (<option  key={role.id}  value={role.id} disabled={server.state.requiredRoleId}> {role.name} </option>)} )}
+                                                            {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{ return (<option  key={role.id}  value={role.id} disabled={server?.state?.requiredRoleId}> {role.name} </option>)} )}
                                                     </select>
                                                     <p className="formError"> {error?.message} </p>
                                                 </div>
                                             )}
                                         />
                                     </IonItem>
-                                    <span className="font-bold text-green-500">{server.state.requiredRoleId ? 'Note: the server you chose already filled out the Required Role ID, and name, so no need to fill these in!' : ''}</span>
+                                    <span className="font-bold text-green-500">{server?.state?.requiredRoleId ? 'Note: the server you chose already filled out the Required Role ID, and name, so no need to fill these in!' : ''}</span>
                                 </div>
 
                             // required roles ARE NOT filled out, so bot is NOT IN the existing DAO server
@@ -478,8 +478,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
                                                 <div className='flex flex-col w-full'>
                                                     <IonInput
-                                                        readonly={server.state.requiredRoleId}
-                                                        value={server.state.requiredRoleId ? server.state.requiredRoleId : value}
+                                                        readonly={server?.state?.requiredRoleId}
+                                                        value={server?.state?.requiredRoleId ? server?.state?.requiredRoleId : value}
                                                         className='w-full'
                                                         onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                                         type="text"
@@ -492,7 +492,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 </div>
                                             )} />
                                         </IonItem>
-                                        <span className="font-bold text-green-500">{server.state.requiredRoleId ? 'Note: the server you chose already filled out the Required Role, so no need to fill this in!' : ''}</span>
+                                        <span className="font-bold text-green-500">{server?.state?.requiredRoleId ? 'Note: the server you chose already filled out the Required Role, so no need to fill this in!' : ''}</span>
                                     </div>
 
                                     <div className='mt-5'>
@@ -504,8 +504,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
                                                 <div className='flex flex-col w-full'>
                                                     <IonInput
-                                                        readonly={server.state.requiredRoleName}
-                                                        value={server.state.requiredRoleName ? server.state.requiredRoleName : value}
+                                                        readonly={server?.state?.requiredRoleName}
+                                                        value={server?.state?.requiredRoleName ? server?.state?.requiredRoleName : value}
                                                         className='w-full'
                                                         onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                                                         type="text"
