@@ -492,6 +492,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     onSubmit={  handleSubmit(async (data) => {
                         const { image, ...rest } = data;
                         const rawData = { ...rest, };
+
+                        if(data.requiredRoleId.includes(':')) {
+                            rawData.requiredRoleId = data.requiredRoleId.split(':')[0];
+                            rawData.requiredRoleName = data.requiredRoleId.split(':')[1];
+                        }
+
                         delete rawData.imagePath
                         const formData = new FormData();
 
@@ -689,8 +695,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             ref={ref}
                                             required >
                                             <option value=''>Select a Required Role Name</option>
-                                            {guildFormData.requiredRoleId ? <option value={guildFormData.requiredRoleId}>{guildFormData.requiredRoleName}</option> :'' }
-                                            {requiredRole && requiredRole.map((role:any) =>{ return (<option  key={role.id} value={role.id}> {role.name} </option>)}  )}
+                                            {guildFormData.requiredRoleId ? <option value={`${guildFormData.requiredRoleId}:${guildFormData.requiredRoleName}`}>{guildFormData.requiredRoleName}</option> :'' }
+                                            {requiredRole && requiredRole.map((role:any) =>{ return (<option  key={role.id} value={`${role.id}:${role.name}`}> {role.name} </option>)}  )}
                                         </select>
                                         <p className="formError"> {error?.message} </p>
                                     </div>
