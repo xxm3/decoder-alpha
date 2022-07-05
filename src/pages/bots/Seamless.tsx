@@ -117,7 +117,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 className='w-1/5 border-2 mt-2'
                                 onIonChange={(e) => { setSearchValue( e.detail.value) }}
                                 type="text"
-                                placeholder='Project Name'/>
+                                placeholder='Filter by DAO Name'/>
                                 <div className='flex-row flex items-center cursor-pointer' onClick={()=>{
                                     setDiscordSort('')
                                     if(twitterSort === ''){
@@ -148,7 +148,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         <button className={`${discordSort === 'discord Up' ? 'opacity-100':'opacity-30'}`}>▲</button>
                                         <button className={`${discordSort === 'discord Down' ? 'opacity-100':'opacity-30'}`}>▼</button>
                                     </div>
-                                    <p>Discord Member</p>
+                                    <p>Discord Members</p>
                                 </div>
                         </div>
                     </div>

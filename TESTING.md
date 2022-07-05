@@ -324,7 +324,7 @@ This was tested in Test Vehn Dojo
 
 
 
-### 18 ) if no bot in server functionality
+### 18) Seamless -if no bot in server functionality
 case 1 :
 - please select server which have no bot in the server when you are in /manageserver page
 - now after you select one of that server you will be redirect to next screen where you can see Seamless - profile form.
@@ -342,10 +342,28 @@ case 2:
 - when you fill all the required details and submit system will send one web hook message that you can see on your channel
  e.g : https://discord.com/channels/973441323250110465/973441323250110468
 
+### 18) Seamless - If no bot on the server - written another way
+1) create a NEW Discord server
+2) create a new role (admin) - give it admin perms (on very bottom) - give yourself this role
+3) invite your ALT discord account to it
+4) give your alt OWNERSHIP of it (go to member list)
+5) go to seamless on your ALT (most of site should be locked down) - immediately click add - fill out your profile (include both required role things)
+6) now log back on your main ... log on website ... you should see your old server (that you originally set seamless up with ) .. and your new server you just made -- click add on OLD server
+7) click intiaite seamless
+8) click on the NEW server (you can search for it)
+9) make sure both required role fields filled out
+10) fill out rest of the form
+11) submit
+12) claim whitelist
+
+TODO: write up where the bot is in the target server, so you have a dropdown for required role
+TODO: write up where the bos is NOT in the target server, so you have a input box and dropdown for required role
+
+
 ### Configure bot packages
 
  - when you enable or disable on module in server module page under the section configure bot packages at that time only once system will send one web hook message.
- 
+
 ### testing of multiple server select for whitelist partnership form
 - when you click on INITIATE WHITELIST you will be redirect to server list page where you can select one or multiple server
 - if you want to select multiple right corner you will see select multiple click on that button
