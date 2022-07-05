@@ -25,6 +25,7 @@ import isAxiosError from '../../util/isAxiosError';
 import { AxiosError } from 'axios';
 import { TextFieldTypes } from '@ionic/core';
 import { server } from 'ionicons/icons';
+import Help from '../../components/Help';
 
 /**
  * The page they see when they click "Add" on one of their servers
@@ -470,7 +471,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </IonLabel>
                 </div>
                 <p>
-                    Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about. You can then ask them to submit whitelists requests to you via Seamless. If they've never used Seamless before, have them submit a ticket to the SOL Decoder discord.
+                    Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about. You can then ask them to submit whitelists requests to you via Seamless. If they've never used Seamless before, have them join <a href="https://discord.gg/JvpqW7d4jE" target="_blank" className="underline cursor-pointer font-bold">the C3 Collab Discord</a> and we'll walk them through the process.
                 </p>
 
                 <form className="space-y-3"
@@ -493,13 +494,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                             formData.append('image', image);
                         }
 
-
-
-
                         try {
                             await instance.post( `/updateGuild/${serverId}`, formData, { headers: { 'Content-Type': 'application/json', }, } );
                             present({
-                                message: 'Discord profile updated successfully! New servers will now be able to see much more info. on your DAO',
+                                message: 'Discord profile updated successfully! New servers will now be able to see much more info. on your DAO, and submit whitelists to you',
                                 color: 'success',
                                 duration: 10000,
                             });
@@ -538,7 +536,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         }
                     })}>
 
-                    <div className='mb-5'>
+                    <div className='mt-3 mb-5'>
+                        <label className="font-bold">Magiceden Link (optional)</label>
                         <IonItem className="ion-item-wrapper mt-1">
                             <Controller
                                 name="magicEdenLink"
@@ -560,6 +559,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         </IonItem>
                     </div>
                     <div className='mb-5'>
+                        <label className="font-bold">Discord Invite Link (optional)</label>
                         <IonItem className="ion-item-wrapper mt-1">
                             <Controller
                                 name="discordLink"
@@ -581,7 +581,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         </IonItem>
                     </div>
 
-                    <div className='mb-5'>
+                    <div className='mb-1'>
+                        <label className="font-bold">Twitter Link</label>
                         <IonItem className="ion-item-wrapper mt-1">
                             <Controller
                                 name="twitterLink"
@@ -604,7 +605,14 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         </IonItem>
                     </div>
 
-                    <div className='mb-5'>
+                    <div className='mb-1'>
+                        <label className="font-bold">
+                            Required Role ID (Discord Role ID, ie. 966704866640662548, that your holders will need to enter the whitelist)
+                            <Help description={`New mints will be giving members of your DAO whitelist spots. In order for a member of your DAO to qualify to enter, they must have a specific role. This is usually the Discord role a user gets when holding an NFT (which Metahelix or Matrica would give them). By restricting it to a specific role, only those members may enter the whitelist, instead of just anyone that joins your server being able to enter the whitelist`}/>
+                            <br/>
+                            How to get the Role ID?
+                            <Help description={`First make sure Developer mode is on in Discord. User settings > Advanced > Developer mode. In your Discord, click on yourself in chat to bring up the roles you have. Right click on the role you want to use for this. Click Copy ID.`}/>
+                        </label>
                         <IonItem className="ion-item-wrapper mt-1">
                             <Controller
                                 name="requiredRoleId"
@@ -619,7 +627,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             name={name}
                                             ref={ref}
                                             onIonBlur={onBlur}
-                                            placeholder='Required Role ID (Discord Role ID, ie. 966704866640662548, that your holders will need to enter the whitelist)' />
+                                            placeholder='Required Role ID (ie. 966704866640662548)' />
                                         <p className="formError"> {error?.message} </p>
                                     </div>
                                 )} />
@@ -627,7 +635,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         </IonItem>
                     </div>
 
-                    <div className='mb-5'>
+                    <div>
+                        <label className="font-bold">
+                            Required Role Name
+                        </label>
                         <IonItem className="ion-item-wrapper mt-1">
                             <Controller
                                 name="requiredRoleName"
@@ -651,6 +662,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </div>
 
                     <div>
+                        <label className="font-bold">
+                            Description of your DAO
+                        </label>
                         <IonItem className="ion-item-wrapper mt-1">
                             <Controller
                                 name="description"
@@ -676,6 +690,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                         </IonItem>
                     </div>
+
                     <div className='mb-5 mt-1 w-1/2'>
                         <b>Image to represent your DAO</b>
                         <Controller
