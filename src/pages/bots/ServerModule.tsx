@@ -141,7 +141,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         } else {
             setAuthorizedModule(0);
         }
-        
+
         getWhiteListRole();
     }, [role]);
 
@@ -439,10 +439,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             if(data?.data?.data){
                 setRequiredRole(data.data.data)
             }else{
-                errMsg();
+                // errMsg();
             }
         }catch(err){
-            errMsg();
+            // errMsg();
         }
 
     }
@@ -612,9 +612,16 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         </IonItem>
                     </div>
 
-                    {isNoBot ? 
+                    {isNoBot ?
                         <>
                             <div className='mb-5'>
+                                <label className="font-bold">
+                                    Required Role ID (Discord Role ID, ie. 966704866640662548, that your holders will need to enter the whitelist)
+                                    <Help description={`New mints will be giving members of your DAO whitelist spots. In order for a member of your DAO to qualify to enter, they must have a specific role. This is usually the Discord role a user gets when holding an NFT (which Metahelix or Matrica would give them). By restricting it to a specific role, only those members may enter the whitelist, instead of just anyone that joins your server being able to enter the whitelist`}/>
+                                    <br/>
+                                    How to get the Role ID?
+                                    <Help description={`First make sure Developer mode is on in Discord. User settings > Advanced > Developer mode. In your Discord, click on yourself in chat to bring up the roles you have. Right click on the role you want to use for this. Click Copy ID.`}/>
+                                </label>
                                 <IonItem className="ion-item-wrapper mt-1">
                                     <Controller
                                         name="requiredRoleId"
@@ -629,7 +636,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                     name={name}
                                                     ref={ref}
                                                     onIonBlur={onBlur}
-                                                    placeholder='Required Role ID (Discord Role ID, ie. 966704866640662548, that your holders will need to enter the whitelist)' />
+                                                    placeholder='Required Role ID (ie. 966704866640662548)' />
                                                 <p className="formError"> {error?.message} </p>
                                             </div>
                                         )} />
@@ -638,6 +645,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                             </div>
 
                             <div className='mb-5'>
+                                <label className="font-bold">
+                                    Required Role Name
+                                </label>
                                 <IonItem className="ion-item-wrapper mt-1">
                                     <Controller
                                         name="requiredRoleName"
@@ -659,9 +669,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                                 </IonItem>
                             </div>
-                        </> 
-                    : 
+                        </>
+                    :
                         <div className='mb-5'>
+                            <label className="font-bold">Required Role</label>
                             <IonItem className="ion-item-wrapper mt-1">
                             <Controller
                                 name="requiredRoleId"
@@ -677,7 +688,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             onBlur={onBlur}
                                             ref={ref}
                                             required >
-                                            <option value=''>Select a Required Role</option>
+                                            <option value=''>Select a Required Role Name</option>
                                             {guildFormData.requiredRoleId ? <option value={guildFormData.requiredRoleId}>{guildFormData.requiredRoleName}</option> :'' }
                                             {requiredRole && requiredRole.map((role:any) =>{ return (<option  key={role.id} value={role.id}> {role.name} </option>)}  )}
                                         </select>
@@ -740,7 +751,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                     setIsBigImage(true)
                                                 }
                                             }
-                                            
+
                                             if (file)
                                                 file.path =  URL.createObjectURL(file);
                                             ( e.target as HTMLInputElement ).value = file as unknown as string;
