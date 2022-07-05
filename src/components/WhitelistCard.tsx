@@ -85,6 +85,21 @@ function WhitelistCard({
         }
     }
 
+    // when the event is expired
+    useEffect(() => {
+        if(type === 'raffle') {
+            try {
+                // const result = await instance.post("/getRaffledState", {
+                //     whitelist_id : id,
+                //     type: type
+                // });
+            } catch {
+
+            }
+        }
+        
+    }, [expired]);
+
     // for confetti
     useEffect(() => {
         if(claimed && type==='fcfs') {
@@ -142,6 +157,11 @@ function WhitelistCard({
                         (<>
                             <p>Slots left </p>
                             <p>{max_users - claimCounts}/{max_users}</p>
+                        </>) :
+                        expired ?
+                        (<>
+                            <p>Winners </p>
+                            <p>{claimCounts}</p>
                         </>) :
                         (<>
                             <p>Winning spots </p>
