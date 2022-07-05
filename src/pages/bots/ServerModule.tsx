@@ -24,6 +24,8 @@ import { Controller, FieldValues, useForm } from 'react-hook-form';
 import isAxiosError from '../../util/isAxiosError';
 import { AxiosError } from 'axios';
 import { TextFieldTypes } from '@ionic/core';
+import { server } from 'ionicons/icons';
+import Help from '../../components/Help';
 
 /**
  * The page they see when they click "Add" on one of their servers
@@ -482,7 +484,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </IonLabel>
                 </div>
                 <p>
-                    Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about. You can then ask them to submit whitelists requests to you via Seamless. If they've never used Seamless before, have them submit a ticket to the SOL Decoder discord.
+                    Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about. You can then ask them to submit whitelists requests to you via Seamless. If they've never used Seamless before, have them join <a href="https://discord.gg/JvpqW7d4jE" target="_blank" className="underline cursor-pointer font-bold">the C3 Collab Discord</a> and we'll walk them through the process.
                 </p>
 
                 <form className="space-y-3"
@@ -497,14 +499,11 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         Object.entries(rawData).forEach(([key, value]) => {
                             if (value) formData.append(key, value as string);
                         });
-
                         formData.append('image', data.imagePath || image);
-                       
-
                         try {
                             await instance.post( `/updateGuild/${serverId}`, formData, { headers: { 'Content-Type': 'application/json', }, } );
                             present({
-                                message: 'Discord profile updated successfully! New servers will now be able to see much more info. on your DAO',
+                                message: 'Discord profile updated successfully! New servers will now be able to see much more info. on your DAO, and submit whitelists to you',
                                 color: 'success',
                                 duration: 10000,
                             });
@@ -543,7 +542,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         }
                     })}>
 
-                    <div className='mb-5'>
+                    <div className='mt-3 mb-5'>
+                        <label className="font-bold">Magiceden Link (optional)</label>
                         <IonItem className="ion-item-wrapper mt-1">
                             <Controller
                                 name="magicEdenLink"
@@ -566,6 +566,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </div>
 
                     <div className='mb-5'>
+                        <label className="font-bold">Discord Invite Link (optional)</label>
                         <IonItem className="ion-item-wrapper mt-1">
                             <Controller
                                 name="discordLink"
@@ -587,7 +588,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         </IonItem>
                     </div>
 
-                    <div className='mb-5'>
+                    <div className='mb-1'>
+                        <label className="font-bold">Twitter Link</label>
                         <IonItem className="ion-item-wrapper mt-1">
                             <Controller
                                 name="twitterLink"
@@ -688,6 +690,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     }
 
                     <div>
+                        <label className="font-bold">
+                            Description of your DAO
+                        </label>
                         <IonItem className="ion-item-wrapper mt-1">
                             <Controller
                                 name="description"

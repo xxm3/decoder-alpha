@@ -122,12 +122,11 @@ function Sidebar() {
                 {/*    to="/alerts"*/}
                 {/*/>*/}
 
-               {/* TODO: (aries) cant show this until on manageserver ... don't show the list until they have modules -> so hide the AddServer button? */}
-               {/*<NavLink*/}
-               {/*     title="Add DAO Bots"*/}
-               {/*    icon={serverOutline}*/}
-               {/*    to="/dao"*/}
-               {/*/>*/}
+               <NavLink
+                    title="Add DAO Bots"
+                   icon={serverOutline}
+                   to="/dao"
+               />
 
                 <NavLink
                     title="Docs"
