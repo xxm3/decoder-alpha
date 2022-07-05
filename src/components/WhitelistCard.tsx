@@ -38,7 +38,8 @@ function WhitelistCard({
 	claimCounts,
     claims,
     magicEdenUpvoteUrl,
-    won
+    won,
+    myLiveDAO
 }: IWhitelist) {
 
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
@@ -106,7 +107,7 @@ function WhitelistCard({
             }
         }
 
-        if(!expired && type === 'raffle') {
+        if(!expired && myLiveDAO && type === 'raffle') {
             updateCardState().catch(console.error);
         }        
     }, [expired]);
