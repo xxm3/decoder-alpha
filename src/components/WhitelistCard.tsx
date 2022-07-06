@@ -38,6 +38,7 @@ function WhitelistCard({
 	claimCounts,
     claims,
     magicEdenUpvoteUrl,
+    isMod
 }: IWhitelist) {
 
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
@@ -205,6 +206,51 @@ function WhitelistCard({
                         {getButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>
 
+                }
+
+                {!expired && isMod && <IonButton css={css`
+					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
+				`} className="my-2 self-center"
+                     onClick={async () => {
+                        setClaiming(true);
+
+                        try {
+                            await instance.post("/guilds/setInitiateApproved", {
+                                guild_id: sourceServer?.discordGuildId
+                            });
+
+                            // success!
+                            present({
+                                message: 'Whitelist approved. This will be automatically approved later on',
+                                color: 'success',
+                                duration: 10000,
+                            });
+
+                        // if error!
+                        } catch (error) {
+                            console.error(error);
+
+                            if(isAxiosError(error) && error.response?.data){
+                                present({
+                                    message: error.response?.data.body,
+                                    color: 'danger',
+                                    duration: 5000,
+                                });
+                            }
+                            else {
+                                present({
+                                    message: "Something went wrong",
+                                    color: 'danger',
+                                    duration: 5000,
+                                });
+                            }
+                        } finally {
+                            setClaiming(false);
+                        }
+                    }}
+                    >
+                        Approve
+                    </IonButton>
                 }
                 {/* end button! */}
 
