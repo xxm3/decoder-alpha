@@ -11,6 +11,8 @@ import { RootState } from '../../../redux/store';
 import Loader from '../../../components/Loader';
 import Help from '../../../components/Help';
 import moment from 'moment';
+import isAxiosError from '../../../util/isAxiosError';
+import { AxiosError } from 'axios';
 
 /**
  * The page they see when they've clicked "initiate seamless" ... then clicked on a guild
@@ -216,11 +218,52 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
             formData.append('image', image);
             try {
                 let response = await instance.post( '/createWhitelistPartnerships', formData );
-                return response
+                present({
+                    message: 'Whitelist partnership created successfully!',
+                    color: 'success',
+                    duration: 10000,
+                });
+                history.goBack()
 
-            } catch (error:any) {
-                let {response} = error
-                return {...response.data,status:response.status}
+            } catch (error) {
+                console.error(error);
+
+                if (isAxiosError(error)) {
+                    const { response: { data } = { errors: [] } } =
+                        error as AxiosError<{ errors: { location: string; msg: string; param: string; }[]; }>;
+
+                    if (!data || data.hasOwnProperty('error')) {
+                        present({
+                            message: ( data as unknown as { body: string } ).body,
+                            color: 'danger',
+                            duration: 10000,
+                        });
+                    } else if (data.hasOwnProperty('errors')) {
+                        data.errors.forEach(({ param, msg }) => {
+                            // if (param !== 'source_server') {
+                                setError( param as keyof FormFields, { message: msg, type: 'custom',});
+                            // } else {
+                                present({
+                                    message: msg,
+                                    color: 'danger',
+                                    duration: 10000,
+                                });
+                            // }
+                        });
+                    }else{
+                        present({
+                            message: 'An error occurred, please look at the form above to see if you are missing something',
+                            color: 'danger',
+                            duration: 10000,
+                        });
+                    }
+                }else{
+                    present({
+                        message: 'An error occurred, please look at the form above to see if you are missing something',
+                        color: 'danger',
+                        duration: 10000,
+                    });
+                }
             }
     }
 
@@ -258,22 +301,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                 }
 
                 console.log("createObj",createObj)
-                let response = await mutipleWhiteListServerAdd(createObj)
-                if(response.status===200){
-                    present({
-                                message: 'Whitelist partnership created successfully!',
-                                color: 'success',
-                                duration: 10000,
-                            });
-                            history.goBack()
-
-                }else{
-                    present({
-                                message: `Something went wrong. Please try again.`,
-                                color: 'danger',
-                                duration: 10000,
-                            });
-                }
+                 await mutipleWhiteListServerAdd(createObj)
             })}>
 
             <IonRow>
