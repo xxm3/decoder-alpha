@@ -76,16 +76,14 @@ function WhitelistMarketplace() {
             {/*TODO !!! !!! big spam of shit
 
 
->> get rid of +1
+-- no alerts when no discord link???
+-- why else didnt' solful alert???
 >> why https://discord.com/invite/dogecapital didn't fill in
 
->> aries fix bug x2
-
->> look over ruchita
 
 
 
-
+!!! !!! !!!
 - Fix calendar with graphs … recent cron messing up….
 Need “top twitter/discord 24 hrs” on mints.js to work (and home page) - had redis errors
  announce it …
@@ -117,8 +115,10 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                         <div className='text-xl font-semibold mb-1'>Welcome to Seamless! SOL Decoder's next joint venture with Communi3</div>
 
                         <ul>
-                            <li>- <b>New mint giving spots?</b> Pay only a portion of your whitelist to SOL Decoder and Communi3. Open a ticket on <a href="https://discord.gg/sol-decoder" target="_blank" className="underline cursor-pointer font-bold">the SOL Decoder Discord</a> and we'll walk you through the process</li>
+                            <li>- <b>New mint giving spots?</b> Pay only a portion of your whitelist to Communi3, SOL Decoder, and partnered top DAOs. Join the <a href="https://discord.gg/JvpqW7d4jE" target="_blank" className="underline cursor-pointer font-bold">the C3 Collab Discord</a> and we'll walk you through the process</li>
+
                             <li>- <b>Existing DAO wanting to get spots?</b> It's free, and no bots need to be added to your server - <a className='cursor-pointer underline font-bold' href='/dao'>click here to set it up</a>. Afterwards, any mint using Seamless already can give you spots in {'<'} a minute. Mints not using Seamless can get onboarded with Seamless very quickly, then give you spots</li>
+
                             <li>- Want to learn more? <a className="underline cursor-pointer font-bold" href="https://medium.com/@sol-decoder/sol-decoder-presents-seamless-32251a4deb43" target="_blank">
                                 Read our Medium article here</a>
                                 {/*. Want to use Seamless for your new mint, or get WL spots for your existing DAO? Join our Discord and open a ticket*/}
@@ -154,18 +154,18 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                     </div>
 
                     {/* expire */}
-                    {isTabButton === 'expire' ||  isTabButton === 'myClaim' ?
-                        <div className='flex justify-center mt-4'>
-                            <div className={`${isTabButton === 'myClaim' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive'} ml-2 w-60 h-10 text-xl `} onClick={()=>setIsTabButton('myClaim')}>
-                                {/* <p>View my claim mints ({myClaimWhiteList?.length})</p> */}
-                                <div className="text-sm md:text-base p-2 md:px-4 w-full">View My Claim Mints</div>
-                            <div className=" bg-black/[.4] py-2 px-4 ">{myClaimWhiteList?.length}</div>
-                            </div>
-                        </div> :  ''
+                    {/*{isTabButton === 'expire' ||  isTabButton === 'myClaim' ?*/}
+                    {/*    <div className='flex justify-center mt-4'>*/}
+                    {/*        <div className={`${isTabButton === 'myClaim' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive'} ml-2 w-60 h-10 text-xl `} onClick={()=>setIsTabButton('myClaim')}>*/}
+                    {/*            /!* <p>View my claim mints ({myClaimWhiteList?.length})</p> *!/*/}
+                    {/*            <div className="text-sm md:text-base p-2 md:px-4 w-full">View My Claimed Mints</div>*/}
+                    {/*        <div className=" bg-black/[.4] py-2 px-4 ">{myClaimWhiteList?.length}</div>*/}
+                    {/*        </div>*/}
+                    {/*    </div> :  ''*/}
 
-                    }
+                    {/*}*/}
 
-                    {/* my Doa live */}
+                    {/* my DAO live */}
                     {isTabButton === 'myDoa' &&
                         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 sm:grid-cols-1 gap-6 p-8">
                             {

@@ -35,14 +35,13 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [searchValue, setSearchValue] = useState<any>('');
     const [twitterSort, setTwitterSort] = useState<String>('');
     const [discordSort, setDiscordSort] = useState<String>('');
-    const [sortCard,setSortCard] = useState<String>('')
 
 
     // this loads up all the discords etc
     const { data: servers = [] } = useQuery<any>(  ['allServers'],
         async () => {
             setIsLoading(true)
-            const { data: { guilds },  } = await instance.get('/getAllGuildsData');
+            const { data: { guilds },  } = await instance.get(`/getAllGuildsData?guildId=${serverId}`);
             let tmpServerArr = []
             setIsLoading(false)
             for(let i=0; i<guilds.length;i++){
@@ -68,28 +67,16 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
     // sorting by twitter
     useEffect(() => {
-      if(twitterSort === 'twitter Up'){
-        const twittweAscending = [...servers].sort((a, b) => b.twitter_followers - a.twitter_followers);
-        console.log(twittweAscending);
-        setServerList(twittweAscending)
-      }else if(twitterSort === 'twitter Down'){
-        const twittweAscending = [...servers].sort((a, b) => a.twitter_followers - b.twitter_followers);
-        console.log(twittweAscending);
-        setServerList(twittweAscending)
-
+      if(twitterSort){
+        const twitterSorting = [...servers].sort((a, b) =>twitterSort === 'twitter Up'? b.twitter_followers - a.twitter_followers:a.twitter_followers - b.twitter_followers);
+        setServerList(twitterSorting)
       }
     }, [twitterSort,servers])
-        // sorting by discord
+    // sorting by discord
     useEffect(() => {
-      if(discordSort === 'discord Up'){
-        const twittweAscending = [...servers].sort((a, b) => b.discord_members - a.discord_members);
-        console.log(twittweAscending);
-        setServerList(twittweAscending)
-      }else if(discordSort === 'discord Down'){
-        const twittweAscending = [...servers].sort((a, b) => a.discord_members - b.discord_members);
-        console.log(twittweAscending);
-        setServerList(twittweAscending)
-
+      if(discordSort){
+        const discordSorting = [...servers].sort((a, b) =>discordSort === 'discord Up'? b.discord_members - a.discord_members:a.discord_members - b.discord_members);
+        setServerList(discordSorting)
       }
     }, [discordSort,servers])
 
@@ -160,7 +147,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 className='w-1/5 border-2 mt-2'
                                 onIonChange={(e) => { setSearchValue( e.detail.value) }}
                                 type="text"
-                                placeholder='Project Name'/>
+                                placeholder='Filter by DAO Name'/>
                                 <div className='flex-row flex items-center cursor-pointer' onClick={()=>{
                                     setDiscordSort('')
                                     if(twitterSort === ''){
@@ -191,7 +178,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         <button className={`${discordSort === 'discord Up' ? 'opacity-100':'opacity-30'}`}>▲</button>
                                         <button className={`${discordSort === 'discord Down' ? 'opacity-100':'opacity-30'}`}>▼</button>
                                     </div>
-                                    <p>Discord Member</p>
+                                    <p>Discord Members</p>
                                 </div>
                         </div>
                     </div>

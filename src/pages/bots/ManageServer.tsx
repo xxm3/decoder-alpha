@@ -113,16 +113,10 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             {/* header */}
             <div className="flex justify-between">
                 <IonLabel className="text-4xl font-semibold mb-3">
-                    {' '}
-                    Select a Server{' '}
+                    {' '} Select a Server{' '}
                 </IonLabel>
-                <IonButton
-                    onClick={() => {
-                        history.push('/view-guild');
-                    }}
-                >
-                    {' '}
-                    View Discords that have our bots{' '}
+                <IonButton onClick={() => { history.push('/view-guild'); }} >
+                    {' '}View Discords that have our bots{' '}
                 </IonButton>
             </div>
 
@@ -183,7 +177,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                 </li>
                             </ul>
                             <p className="mt-3">
-                                After the bot is invited, click "Add" on one of your servers below
+                                After the bot is invited, click "Add" on one of your servers below. If your role was recently changed on the server and you don't see it on the list, click "Log Out" on the bottom left of this page, then log back in
                             </p>
                         </div>
                     </div>
