@@ -23,6 +23,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [searchValue, setSearchValue] = useState<any>('');
     const [twitterSort, setTwitterSort] = useState<String>('');
     const [discordSort, setDiscordSort] = useState<String>('');
+    const [isMobile, setIsMobile] = useState<boolean>(false);
+
 
 
     // this loads up all the discords etc
@@ -67,6 +69,11 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         setServerList(discordSorting)
       }
     }, [discordSort,servers])
+    useEffect(() => {
+        if (window.innerWidth < 525) {
+            setIsMobile(true)
+        }
+    }, [window.innerWidth])
 
 
 
@@ -94,16 +101,17 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                     {/*TODO-ruchita: this doesn't seem to work? search dont work, sort by twiteter/disc no work */}
 
-                <IonCol size="12" className='mt-4'>
-                    <div className='flex flex-col'>
+                    
                         {/*<div className='text-xl'>Select a DAO to give whitelists to</div>*/}
-                        <div className='flex flex-row w-1/2'>
+                        <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'}`}>
                             <IonInput
                                 value={searchValue}
-                                className='w-1/5 border-2 mt-2'
+                                className=' border-2 mt-2 pl-2 w-full'
                                 onIonChange={(e) => { setSearchValue( e.detail.value) }}
                                 type="text"
-                                placeholder='Filter by DAO Name'/>
+                                placeholder='Filter by DAO Name'>
+                            </IonInput>
+                            <div className={`flex flex-row`}>
                                 <div className='flex-row flex items-center cursor-pointer' onClick={()=>{
                                     setDiscordSort('')
                                     if(twitterSort === ''){
@@ -114,7 +122,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         setTwitterSort('twitter Up')
                                     }
                                 }}>
-                                    <div className='flex flex-col mr-2 ml-4' >
+                                    <div className={`flex flex-col mr-2 ${isMobile ? '' :'ml-4'} `} >
                                         <button className={`${twitterSort === 'twitter Up' ? 'opacity-100':'opacity-30'}`}>▲</button>
                                         <button className={`${twitterSort === 'twitter Down' ? 'opacity-100':'opacity-30'}`}>▼</button>
                                     </div>
@@ -136,9 +144,10 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     </div>
                                     <p>Discord Members</p>
                                 </div>
+                            </div>
                         </div>
-                    </div>
-                </IonCol>
+                    
+                
 
 
                     <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12"></IonCol>

@@ -117,12 +117,14 @@ const ScheduleCalendar: React.FC<AppComponentProps> = () => {
             .then((res) => {
                 setEventGraphData(res)
                 setIsSpinner(false)
-                if(res.data.data.length > 1){
-                    setShowGraph(true)
-                }else if (res.data.data.length === 0){
-                    setShowGraph(false)
-                }else{
-                    setShowGraph(false)
+                if(res.data.data){
+                    if(res.data.data.length > 1){
+                        setShowGraph(true)
+                    }else if (res.data.data.length === 0){
+                        setShowGraph(false)
+                    }else{
+                        setShowGraph(false)
+                    }
                 }
             })
             .catch((err) => {

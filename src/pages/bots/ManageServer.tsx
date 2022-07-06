@@ -111,7 +111,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             </Backdrop>
 
             {/* header */}
-            <div className="flex justify-between">
+            <div className={`flex ${isMobile ? 'flex-col items-center' : 'justify-between'}`}>
                 <IonLabel className="text-4xl font-semibold mb-3">
                     {' '} Select a Server{' '}
                 </IonLabel>
@@ -184,32 +184,17 @@ const ManageServer: React.FC<AppComponentProps> = () => {
 
                     {/* list of servers */}
                     <div className="flex flex-row justify-center w-full mt-8">
-                        <Grid
-                            container
-                            spacing={4}
-                            className="flex justify-self-center items-center mx-auto"
-                        >
+                        <Grid container spacing={4} className="flex justify-self-center items-center mx-auto" >
                             {servers
                                 ? servers.map(
                                       (server: Server, index: number) => {
                                           if (server.owner || server.admin) {
                                               return (
-                                                  <Grid
-                                                      item
-                                                      lg={3}
-                                                      key={index}
-                                                      className="mx-auto"
-                                                  >
+                                                  <Grid item lg={3} key={index} className="mx-auto" >
                                                       <div className=" rounded-xl c-card-bg overflow-hidden mx-auto">
                                                           <div
                                                               className="bg-image-wrapper"
-                                                              style={{
-                                                                  backgroundImage:
-                                                                      server.icon
-                                                                          ? `url(https://cdn.discordapp.com/icons/${server.id}/${server.icon}.webp)`
-                                                                          : '',
-                                                              }}
-                                                          >
+                                                              style={{ backgroundImage: server.icon ? `url(https://cdn.discordapp.com/icons/${server.id}/${server.icon}.webp)` : '', }} >
                                                               <div className="server-profile-bg">
                                                                   <div className="rounded-full">
                                                                       <img
@@ -241,11 +226,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                                               </div>
                                                               <div
                                                                   className="p-3 py-1 ml-2 text-md rounded-lg add-button cursor-pointer text-white mb-4"
-                                                                  onClick={() => {
-                                                                      storeGuild(
-                                                                          server
-                                                                      );
-                                                                  }}
+                                                                  onClick={() => { storeGuild( server ); }}
                                                               >
                                                                   {' '}
                                                                   ADD{' '}

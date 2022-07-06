@@ -14,7 +14,10 @@ const BotServerCard: React.FC<props> = (props) => {
     const { serverId } = useParams<any>();
     const path:any = useLocation();
     const [initiateButton, setInitiateButton] = useState<boolean>(false)
+    const [showMore, setShowMore] = useState<boolean>(false);
 
+    let str = 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32. Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.'
+   
     useEffect(() => {
         let pathSlice = path.pathname.slice(1, 15)
         if(pathSlice === 'seamlessdetail'){
@@ -53,7 +56,10 @@ const BotServerCard: React.FC<props> = (props) => {
             </div>
 
             <IonGrid className="py-4 px-4">
-                <p  className='text-white'>{serverData?.description}</p>
+                {/* show more buttons */}
+                {showMore ? <p  className='text-white'>{serverData?.description}</p> : <p className='text-white'>{serverData?.description?.substring(0, 400)}</p>}
+                {serverData?.description?.length > 400 ? <button className="text-sky-500" onClick={()=> setShowMore((n)=>!n)}>{showMore ? 'Show Less'  : 'Show More'}</button> : ''}
+                {/* <p  className='text-white'>{serverData?.description}</p> */}
 
                 <IonRow hidden={!serverData?.twitter_followers}>
                     <IonCol size="8">

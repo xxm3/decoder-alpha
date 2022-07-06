@@ -111,9 +111,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             setIsMobile(true);
         }
 
-        // if (performance.navigation.type == 1) {
-        //     history.push('/manageserver')
-        // }
+        if (performance.navigation.type === 1) {
+            history.push('/manageserver')
+        }
     }, [window.innerWidth]);
 
     // this gets set from manageserver.tsx
@@ -124,10 +124,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             setIsNoBot(false);
         }
     }, [location.search]);
-
-
-
-
 
     useEffect(() => {
         reset(guildFormData);
@@ -767,7 +763,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         }}
                                         name={name}
                                         ref={ref}
-                                        required = {getValues('imagePath')?false:true}
+                                        required = {getValues('imagePath') ? false : true}
                                         onIonBlur={onBlur}
                                         type={'file' as TextFieldTypes}
                                         accept="image" />
