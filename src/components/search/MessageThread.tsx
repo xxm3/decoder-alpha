@@ -39,17 +39,16 @@ const MessageThread: React.FC<MessageThreadProps> = ({  message, message: { id }
             setIsLoading(true)
             const { data } = await instance.post<MessageThreadData>(  '/getPriorAndSubMessagesRDS',  pageParam );
 
-            console.log('**********',data)
-            data.priorMsg = data.priorMsg.map(message => ({
-                ...message,
-                // @ts-expect-error
-                time : message.createdAt ? message.createdAt : message.time_stamp
-            }))
-            // data.subsequentMsg = data?.subsequentMsg?.map(message => ({
+            // data.priorMsg = data.priorMsg.map(message => ({
             //     ...message,
             //     // @ts-expect-error
-            //     time : message.time_stamp ?  message.time_stamp : message.createdAt
+            //     time : message.createdAt ? message.createdAt : message.time_stamp
             // }))
+            data.subsequentMsg = data?.subsequentMsg?.map(message => ({
+                ...message,
+                // @ts-expect-error
+                time : message.time_stamp ?  message.time_stamp : message.createdAt
+            }))
             setIsLoading(false)
 
             if (pageParam === defaultPageParam)
@@ -131,7 +130,6 @@ const MessageThread: React.FC<MessageThreadProps> = ({  message, message: { id }
                         <div className='overflow-y-scroll h-full w-full mx-auto p-5'>
                             
                         {data.pages.map((page) =>{
-                        console.log('------------',page)
                         return(
 
                                 page.map((message:any, i:number) =>{

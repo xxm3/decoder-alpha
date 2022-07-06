@@ -111,10 +111,15 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             setIsMobile(true);
         }
 
-        if (performance.navigation.type === 1) {
+    }, [window.innerWidth]);
+
+    // refresh page 
+    useEffect(() => {
+      if (performance.navigation.type === 1) {
             history.push('/manageserver')
         }
-    }, [window.innerWidth]);
+    }, [])
+    
 
     // this gets set from manageserver.tsx
     useEffect(() => {
@@ -126,7 +131,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     }, [location.search]);
 
     useEffect(() => {
-        console.log("guildFormData",guildFormData)
         reset(guildFormData);
     }, [guildFormData]);
 
@@ -157,7 +161,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 .get(`/guilds/${serverId}?checkCondition=false`)
                 .then((response) => {
                     let data = response.data.data;
-                    console.log("data",data)
+                    // console.log("data",data)
                 // change
                     if (role === '3NFT' || role === '4NFT') {
                         setChecked({
