@@ -46,6 +46,7 @@ function WhitelistCard({
 	const isDemo:any = useSelector<RootState>(state => state.demo.demo);
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
 	const [claiming, setClaiming] = useState<boolean>(false);
+    const [showMore, setShowMore] = useState<boolean>(false);
 	const queryClient = useQueryClient();
 	const [present] = useIonToast();
 	const full = claimCounts >= max_users;
@@ -125,7 +126,10 @@ function WhitelistCard({
 
             <div className="py-4 px-6 flex-col flex" >
 
-                <div className="mb-3">{description}</div>
+                {showMore ? <div  className='mb-3'>{description}</div> : <div className='mb-3'>{description?.substring(0, 400)}</div>}
+                {description?.length > 400 ? <button className="text-sky-500" onClick={()=> setShowMore((n)=>!n)}>{showMore ? 'Show Less'  : 'Show More'}</button> : ''}
+
+                {/* <div className="mb-3">{description}</div> */}
 
                 <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>

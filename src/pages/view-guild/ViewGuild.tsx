@@ -43,9 +43,9 @@ function ViewGuild() {
     const columns: Column<guildData>[] =
         isModeGuild ? [
             {
-            title: 'Name',
-            customSort: (a: any, b: any) => a.name - b.name,
-            render: (record) => <span>{record?.name ? record?.name : '-'}</span>,
+                title: 'Name',
+                customSort: (a: any, b: any) => a.name - b.name,
+                render: (record) => <span>{record?.name ? record?.name : '-'}</span>,
             },
             {
                 title: 'Created At',
@@ -66,14 +66,14 @@ function ViewGuild() {
             title: 'Created At',
             render: (record) => <span>{ record?.createdAt ?  moment(record?.createdAt).fromNow() : '-'}</span>,
         },
-            {
-                title: 'Discord ID',
-                render: (record) => <span>{ record?.discordGuildId }</span>,
-            },
-            {
-                title: 'Owner / Admin ID',
-                render: (record) => <span>{ record?.guildOwnerDiscordId }</span>,
-            },
+        {
+            title: 'Discord ID',
+            render: (record) => <span>{ record?.discordGuildId }</span>,
+        },
+        {
+            title: 'Owner / Admin ID',
+            render: (record) => <span>{ record?.guildOwnerDiscordId }</span>,
+        },
         {
             title: 'Analytics Webhook Channel',
             render: (record) => <span>{record?.analyticsWebhookChannel ? record?.analyticsWebhookChannel : '-'}</span>,
