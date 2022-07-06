@@ -618,6 +618,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         </IonItem>
                     </div>
 
+                    {/* no bot! */}
                     {isNoBot ?
                         <>
                             <div className='mb-5'>
@@ -677,8 +678,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                             </div>
                         </>
                     :
+                        // has bot!
                         <div className='mb-5'>
-                            <label className="font-bold">Required Role</label>
+                            <label className="font-bold">Required Role Name</label>
                             <IonItem className="ion-item-wrapper mt-1">
                             <Controller
                                 name="requiredRoleId"

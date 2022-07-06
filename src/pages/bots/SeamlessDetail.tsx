@@ -45,7 +45,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     let serverArray = serverObject &&  JSON.parse(serverObject)
 
     let history = useHistory();
-    
+
     const now = useMemo(() => new Date(), []);
     const todayEnd = useMemo(() => {
         const date = new Date( + now + 86400 * 1000 );
@@ -61,15 +61,15 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         type:'fcfs',
         whitelist_role: '',
         description: '',
-        required_role: server.state.requiredRoleId ? server.state.requiredRoleId : '',
-        required_role_name: server.state.requiredRoleName ? server.state.requiredRoleName : '',
+        required_role: server?.state?.requiredRoleId ? server.state.requiredRoleId : '',
+        required_role_name: server?.state?.requiredRoleName ? server.state.requiredRoleName : '',
         twitter: '',
         discordInvite:'',
         magicEdenUpvoteUrl:'',
         })
     const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting },setValue } = useForm<FormFields, any>();
     const [present] = useIonToast();
-   
+
     const [whiteListRole,setWhiteListRole] = useState<any>([])
     const [whiteListRequireRole,setWhiteListRequireRole] = useState<any>([])
     const [isLoading, setIsLoading] = useState(false);
@@ -80,7 +80,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         reset(formField);
     }, [formField])
 
-   
+
 
 
     const getUrlExtension = (url:any) => {
@@ -201,7 +201,20 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                     <form className="space-y-3"
                      // when submitting the form...
                      onSubmit={  handleSubmit(async (data) => {
+
+                            try{
+                                data.expiration_date = moment(data.expiration_date).format(); // "YYYY-MM-DD HH:MM:SS"
+                            }catch(err){
+                                present({
+                                    message: 'Invalid Expiration Date',
+                                    color: 'danger',
+                                    duration: 10000,
+                                });
+                                return;
+                            }
+
                             const { image, ...rest } = data;
+
                             const rawData = {
                                 ...rest,
                                 source_server: serverId,
@@ -436,6 +449,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             {/* required roles filled out, so bot is in the existing DAO server */}
                             {whiteListRequireRole.length > 0 ?
                                 <div>
+                                    {/*-{server?.state?.requiredRoleId}-*/}
                                     <IonLabel className="text-white">Required Role (role required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
                                     <IonItem className="ion-item-wrapper mt-1">
                                         <Controller
@@ -453,10 +467,10 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         value={value}
                                                         required
                                                         >
-                                                            <option value=''>{server.state.requiredRoleId}</option>
+                                                            <option value=''>{server?.state?.requiredRoleId}</option>
                                                             <option value=''>Select a Required Role</option>
                                                             {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{
-                                                                return (<option  key={role.id}  value={role.id} selected={ server.state.requiredRoleId && role.id === server.state.requiredRoleId} > {role.name} </option>)}
+                                                                return (<option  key={role.id}  value={role.id} selected={ server?.state?.requiredRoleId && role.id === server?.state?.requiredRoleId} > {role.name} </option>)}
                                                             )}
                                                     </select>
                                                     <p className="formError"> {error?.message} </p>
