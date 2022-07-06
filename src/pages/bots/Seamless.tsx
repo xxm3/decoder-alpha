@@ -107,7 +107,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
                             <div className={`${isMobile ? 'mt-2' : ''}`}>
                                 {!multipleflag &&  
-                                <div className={`seamless-tab-btn-active w-40 h-10`} onClick={()=> setmultipleflag((n)=>!n)}>
+                                <div className={`seamless-tab-btn-active-colored w-40 h-10`} onClick={()=> setmultipleflag((n)=>!n)}>
                                 Select Multiple
                                 </div>
                                 }
@@ -120,7 +120,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 }}>
                                 cancel
                                 </div>
-                                <div className={`seamless-tab-btn-active w-32 h-10`} onClick={()=> {
+                                <div className={`seamless-tab-btn-active-colored w-32 h-10`} onClick={()=> {
                                     if(selectMultipleWhiteList.length===0){
                                         present({
                                             message: 'Please Select Atleast 1 server',
@@ -137,7 +137,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                                     // setmultipleflag((n)=>!n)
                                 }}>
-                                Submit
+                                Next
                                 </div>
                                 </div>
                                 }
