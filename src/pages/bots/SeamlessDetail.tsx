@@ -62,15 +62,15 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         image: '',
         target_server:'',
         max_users: '',
-        expiration_date: todayEnd,
+        expiration_date: todayEnd.toISOString(),
         type:'fcfs',
         whitelist_role: '',
-        description: '',
+        description: 'test2',
         required_role: server.state.requiredRoleId ? server.state.requiredRoleId : '',
         required_role_name: server.state.requiredRoleName ? server.state.requiredRoleName : '',
-        twitter: '',
-        discordInvite:'',
-        magicEdenUpvoteUrl:'',
+        twitter: 'https://twitter.com/CryptoFrogs_NFT',
+        discordInvite:'https://discord.gg/7buMeNpwpv',
+        magicEdenUpvoteUrl:'https://magiceden.io/drops/',
         })
     const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting },setValue } = useForm<FormFields, any>();
     const [present] = useIonToast();
@@ -84,8 +84,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     useEffect(() => {
         reset(formField);
     }, [formField])
-
-
 
 
     const getUrlExtension = (url:any) => {
@@ -206,18 +204,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                     <form className="space-y-3"
                      // when submitting the form...
                      onSubmit={  handleSubmit(async (data) => {
-
-                            try{
-                                data.expiration_date = moment(data.expiration_date).format("YYYY-MM-DD HH:MM:SS");
-                            }catch(err){
-                                present({
-                                    message: 'Invalid Expiration Date',
-                                    color: 'danger',
-                                    duration: 10000,
-                                });
-                                return;
-                            }
-
                             const { image, ...rest } = data;
 
                             const rawData = {
@@ -314,7 +300,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     name="expiration_date"
                                     control={control}
                                     rules={{  required: true, }}
-                                    defaultValue={todayEnd.toISOString()}
+                                    defaultValue={todayEnd}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => {
                                         return (
                                             <div className='flex flex-col w-full'>
@@ -329,7 +315,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 onChange={(e) => {
                                                     const value = new Date(e.target.value as string);
                                                     value.setHours(23,59,59,999)
-                                                    setValue('expiration_date',value)
+                                                    console.log(value.toISOString())
+                                                    setValue('expiration_date',value.toISOString())
                                                     }}
                                                 min={new Date(  +now + 86400 * 1000 ).toISOString()}
                                                 max={new Date(  +now + 86400 * 365 * 1000 ).toISOString()}
@@ -337,25 +324,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 <p className="formError"> {error?.message} </p>
                                             </div>
                                         )
-                                        // return(
-                                        //     <>
-                                        //         <IonDatetime
-                                        //             value={value}
-                                        //             onIonChange={(e) => {
-                                        //                 const value = new Date(e.detail.value as string);
-                                        //                 value.setHours(23,59,59,999);
-                                        //                 ( e.target as HTMLInputElement ).value =  value.toISOString();
-                                        //                 onChange(e);
-                                        //             }}
-                                        //             name={name}
-                                        //             ref={ref}
-                                        //             onIonBlur={onBlur}
-                                        //             placeholder='When this giveaway should expire'
-                                        //             min={new Date(  +now + 86400 * 1000 ).toISOString()}
-                                        //             max={new Date(  +now + 86400 * 365 * 1000 ).toISOString()} />
-                                        //         <p className="formError"> {error?.message} </p>
-                                        //     </>
-                                        // )
                                     }} />
                                 </IonItem>
                             </div>

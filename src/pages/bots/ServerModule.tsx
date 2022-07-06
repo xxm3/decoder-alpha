@@ -130,6 +130,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
 
     useEffect(() => {
+        console.log("guildFormData",guildFormData)
         reset(guildFormData);
     }, [guildFormData]);
 
@@ -160,6 +161,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 .get(`/guilds/${serverId}?checkCondition=false`)
                 .then((response) => {
                     let data = response.data.data;
+                    console.log("data",data)
                 // change
                     if (role === '3NFT' || role === '4NFT') {
                         setChecked({
@@ -193,7 +195,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         description:data.description,
                         twitterLink:data.twitter_link,
                         discordLink:data.discord_link,
-                        requiredRoleId:data.requiredRoleId,
+                        requiredRoleId: `${data.requiredRoleId}:${data.requiredRoleName}`,
                         requiredRoleName:data.requiredRoleName,
                         imagePath:data.image
                     })
