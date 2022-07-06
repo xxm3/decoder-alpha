@@ -41,7 +41,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     // useEffect(() => {
     // console.log("server",server)
     // }, [server])
-    
+
 
     // new mint / source server --- comes from params
     const { serverId } = useParams<any>();
@@ -103,7 +103,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         return fileObject
     }
 
-    // TODO-ruchita: not working right - (1) this pulls from the very last WL partnership in the DB -- NOT there last WL paternership. Need to filter by source ID and use that one... (2) the whitelist_role was not being filled out ... and discordinvite /magiceden not being filled out ... image not filled out
     // const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
     //     async () => {
     //         try {
