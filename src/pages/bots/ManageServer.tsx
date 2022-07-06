@@ -177,7 +177,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                 </li>
                             </ul>
                             <p className="mt-3">
-                                After the bot is invited, click "Add" on one of your servers below. If your role was recently changed on the server and you don't see it on the list, click "Log Out" on the bottom left of this page, then log back in
+                                After the bot is invited, click "Add" on one of your servers below. If your role was recently changed on the server and you don't see it on the list, click "Log Out" on the bottom left of this page, then log back in. Note you must have Owner, Admin (have the "Administrator" permission) or Manager (have the "Manage Server" permission) to see your server in the below list.
                             </p>
                         </div>
                     </div>
