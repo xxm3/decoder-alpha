@@ -125,7 +125,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                 <div className="text-xl text-red-500">
                     {' '}
                     {/* text-center */}
-                    Unable to find any servers you are the owner or admin of.
+                    Unable to find any servers you are the owner, admin or manager of.
                     <br />
                     If you are one, then logout in the sidebar and try logging
                     in again.
