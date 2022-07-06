@@ -149,18 +149,18 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
 
                     {/* tabs on the top (Live vs Expired) */}
                     <div className=' text-xl flex justify-center mt-5'>
-                        <div className={`${isTabButton === 'myDoa' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive ' } w-50 h-10 `} onClick={()=>setIsTabButton('myDoa')}>
+                        <div className={`${isTabButton === 'myDoa' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive ' } w-50 h-10 `} onClick={()=>setIsTabButton('myDoa')}>
                             {/* <p>Live - My DAOs ({myDoaWhiteList?.length})</p> */}
                             <div className="text-sm md:text-base p-2 md:px-4 w-full">{isMobile ? 'Mine' : 'Live - My DAOs'}</div>
                             <div className=" bg-black/[.4] py-2 px-4 ">{myDoaWhiteList?.length}</div>
 
                         </div>
-                        <div className={`${isTabButton === 'live' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive' } ml-2 w-46 h-10 `} onClick={()=>setIsTabButton('live')}>
+                        <div className={`${isTabButton === 'live' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive' } ml-2 w-46 h-10 `} onClick={()=>setIsTabButton('live')}>
                             {/* <p>Live ({liveWhiteList?.length})</p> */}
                             <div className="text-sm md:text-base p-2 md:px-4 w-full">{isMobile ? 'Others' : 'Live - Other DAOs'}</div>
                             <div className=" bg-black/[.4] py-2 px-4 ">{liveWhiteList?.length}</div>
                         </div>
-                        <div className={`${isTabButton === 'expire' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive'} ml-2 w-32 h-10`}onClick={()=>setIsTabButton('expire')}>
+                        <div className={`${isTabButton === 'expire' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive'} ml-2 w-32 h-10`}onClick={()=>setIsTabButton('expire')}>
                             {/* <p>Expired ({expireWhiteList?.length})</p> */}
                             <div className="text-sm md:text-base p-2 md:px-4 w-full">{isMobile ? 'Expired' : 'Expired'}</div>
                             <div className=" bg-black/[.4] py-2 px-4 ">{expireWhiteList?.length}</div>
@@ -170,7 +170,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                     {/* expire */}
                     {isTabButton === 'expire' ||  isTabButton === 'myClaim' ?
                         <div className='flex justify-center mt-4'>
-                            <div className={`${isTabButton === 'myClaim' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive'} ml-2 w-60 h-10 text-xl `} onClick={()=>setIsTabButton('myClaim')}>
+                            <div className={`${isTabButton === 'myClaim' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive'} ml-2 w-60 h-10 text-xl `} onClick={()=>setIsTabButton('myClaim')}>
                                 {/*  <p>View my claim mints ({myClaimWhiteList?.length})</p>  */}
                                 {/* <div className="text-sm md:text-base p-2 md:px-4 w-full">View My Claimed Mints</div> */}
                                 <div className="text-sm md:text-base p-2 w-full">View My Claimed Mints</div>
