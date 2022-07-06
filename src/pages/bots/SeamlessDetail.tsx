@@ -38,9 +38,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
     const server:any = useLocation();
 
-    useEffect(() => {
-    console.log("server",server)
-    }, [server])
+    // useEffect(() => {
+    // console.log("server",server)
+    // }, [server])
     
 
     // new mint / source server --- comes from params

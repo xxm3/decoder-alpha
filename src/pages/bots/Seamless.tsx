@@ -94,7 +94,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             <IonGrid>
                 <IonRow>
                     <IonCol size="12">
-                        <div className='flex flex-row justify-between items-center'>
+                        <div className={`flex ${isMobile ? 'flex-col' : 'flex-row items-center' } justify-between `}>
                             <div className='w-4/5'>
                                 <h2 className="ion-no-margin font-bold text-xl"> Seamless - select a DAO to give whitelists to</h2>
                                 <p className='ion-no-margin'>
@@ -105,42 +105,45 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     After inviting this bot, make sure to drag the "SOL Decoder" role higher than your whitelist role.
                                 </p>
                             </div>
-                            {!multipleflag &&  
-                            <div className={`seamless-tab-btn-active w-40 h-10`} onClick={()=> setmultipleflag((n)=>!n)}>
-                            Select Multiple
-                            </div>
-                            }
-                            {/*  */}
-                            {multipleflag &&  
-                            <div className='flex justify-between ml-2'>
-                            <div className={`seamless-tab-btn-active w-32 h-10 mr-2`} onClick={()=> {
-                                setSelectMultipleWhiteList([])
-                                setmultipleflag((n)=>!n)
-                            }}>
-                            cancel
-                            </div>
-                            <div className={`seamless-tab-btn-active w-32 h-10`} onClick={()=> {
-                                if(selectMultipleWhiteList.length===0){
-                                    present({
-                                        message: 'Please Select Atleast 1 server',
-                                        color: 'danger',
-                                        duration: 10000,
-                                    });
-                                    return
+                            <div className={`${isMobile ? 'mt-2' : ''}`}>
+                                {!multipleflag &&  
+                                <div className={`seamless-tab-btn-active w-40 h-10`} onClick={()=> setmultipleflag((n)=>!n)}>
+                                Select Multiple
+                                </div>
                                 }
-                                dispatch(setMultipleList(selectMultipleWhiteList))
-                                history.push({pathname:`/add_multiple_white_list`,state:serverId})
-                                setSelectMultipleWhiteList([])
-                                setmultipleflag((n)=>!n)
-                                // history.push('/add_multiple_white_list')
+                                {/*  */}
+                                {multipleflag &&  
+                                <div className={`flex justify-between ${isMobile ? '' :' ml-2'}`}>
+                                <div className={`seamless-tab-btn-active w-32 h-10 mr-2`} onClick={()=> {
+                                    setSelectMultipleWhiteList([])
+                                    setmultipleflag((n)=>!n)
+                                }}>
+                                cancel
+                                </div>
+                                <div className={`seamless-tab-btn-active w-32 h-10`} onClick={()=> {
+                                    if(selectMultipleWhiteList.length===0){
+                                        present({
+                                            message: 'Please Select Atleast 1 server',
+                                            color: 'danger',
+                                            duration: 10000,
+                                        });
+                                        return
+                                    }
+                                    dispatch(setMultipleList(selectMultipleWhiteList))
+                                    history.push({pathname:`/add_multiple_white_list`,state:serverId})
+                                    setSelectMultipleWhiteList([])
+                                    setmultipleflag((n)=>!n)
+                                    // history.push('/add_multiple_white_list')
 
-                                // setmultipleflag((n)=>!n)
-                            }}>
-                            Submit
+                                    // setmultipleflag((n)=>!n)
+                                }}>
+                                Submit
+                                </div>
+                                </div>
+                                }
                             </div>
-                            </div>
-                            }
                         </div>
+                        
                     </IonCol>
 
                     {/*TODO-ruchita: this doesn't seem to work? search dont work, sort by twiteter/disc no work */}
