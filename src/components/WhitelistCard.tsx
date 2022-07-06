@@ -10,6 +10,8 @@ import "./WhitelistCard.scss"
 import ConfettiExplosion from 'react-confetti-explosion';
 import {logoDiscord, logoTwitter} from 'ionicons/icons';
 import MagicEden from '../../src/images/me-white.png'
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 /**
  * The page they see when they are on /seamless, and browsing for whitelists etc..
@@ -38,14 +40,15 @@ function WhitelistCard({
 	claimCounts,
     claims,
     magicEdenUpvoteUrl,
+    isExploding,
+    setIsExploding
 }: IWhitelist) {
-
+	const isDemo:any = useSelector<RootState>(state => state.demo.demo);
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
 	const [claiming, setClaiming] = useState<boolean>(false);
 	const queryClient = useQueryClient();
 	const [present] = useIonToast();
 	const full = claimCounts >= max_users;
-    const [isExploding, setIsExploding] = useState<boolean>(false);
     const uid  = localStorage.getItem('uid');
 
     // what to show in each button
@@ -84,20 +87,13 @@ function WhitelistCard({
          }
     }
 
-    // for confetti
-    useEffect(() => {
-        if(claimed) {
-            setIsExploding(true);
-        }
-    },[]);
-
     return (
 		<>
 
         <div className="border-gray-500 border-[0.5px] rounded-2xl  overflow-clip">
 
             {/* for confetti */}
-            {isExploding && expired !== undefined && <ConfettiExplosion />}
+            {isExploding && claimed &&  <ConfettiExplosion />}
 
             <div className="relative overflow-y-hidden h-60 ">
                 <img src={image} className="h-full w-full object-cover object-left" alt={`${sourceServer?.name} X ${targetServer?.name}`}  
@@ -158,6 +154,7 @@ function WhitelistCard({
                             await instance.post("/createWhitelistClaims", {
                                 whitelist_id : id
                             });
+                            setIsExploding&&setIsExploding(true)
                             queryClient.setQueryData(
                                 ['whitelistPartnerships'],
                                 (queryData) => {
@@ -174,8 +171,6 @@ function WhitelistCard({
                             );
 
                             // success!
-
-                            setIsExploding(true);
                             present({
                                 message: 'Whitelist claimed successfully! You are now whitelisted in ' + sourceServer.name,
                                 color: 'success',
@@ -205,7 +200,7 @@ function WhitelistCard({
                         }
                     }}
 
-                     disabled={expired || claiming || claimed || full || showLive || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed'  }
+                     disabled={expired || claiming || claimed || full || showLive || isDemo || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed'}
                     >
                         {getButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>
