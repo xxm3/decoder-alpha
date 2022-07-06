@@ -61,8 +61,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         type:'fcfs',
         whitelist_role: '',
         description: '',
-        required_role: server.state.requiredRoleId ? server.state.requiredRoleId : '',
-        required_role_name: server.state.requiredRoleName ? server.state.requiredRoleName : '',
+        required_role: server?.state?.requiredRoleId ? server.state.requiredRoleId : '',
+        required_role_name: server?.state?.requiredRoleName ? server.state.requiredRoleName : '',
         twitter: '',
         discordInvite:'',
         magicEdenUpvoteUrl:'',
@@ -203,7 +203,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                      onSubmit={  handleSubmit(async (data) => {
 
                             try{
-                                data.expiration_date = moment(data.expiration_date).format("YYYY-MM-DD HH:MM:SS");
+                                data.expiration_date = moment(data.expiration_date).format(); // "YYYY-MM-DD HH:MM:SS"
                             }catch(err){
                                 present({
                                     message: 'Invalid Expiration Date',
@@ -449,6 +449,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             {/* required roles filled out, so bot is in the existing DAO server */}
                             {whiteListRequireRole.length > 0 ?
                                 <div>
+                                    {/*-{server?.state?.requiredRoleId}-*/}
                                     <IonLabel className="text-white">Required Role (role required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
                                     <IonItem className="ion-item-wrapper mt-1">
                                         <Controller
@@ -466,10 +467,10 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         value={value}
                                                         required
                                                         >
-                                                            <option value=''>{server.state.requiredRoleId}</option>
+                                                            <option value=''>{server?.state?.requiredRoleId}</option>
                                                             <option value=''>Select a Required Role</option>
                                                             {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{
-                                                                return (<option  key={role.id}  value={role.id} selected={ server.state.requiredRoleId && role.id === server.state.requiredRoleId} > {role.name} </option>)}
+                                                                return (<option  key={role.id}  value={role.id} selected={ server?.state?.requiredRoleId && role.id === server?.state?.requiredRoleId} > {role.name} </option>)}
                                                             )}
                                                     </select>
                                                     <p className="formError"> {error?.message} </p>
