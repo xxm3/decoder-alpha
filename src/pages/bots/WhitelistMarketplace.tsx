@@ -77,17 +77,13 @@ function WhitelistMarketplace() {
 
 
 -- no alerts when no discord link???
-
-
->> get rid of +1
+-- why else didnt' solful alert???
 >> why https://discord.com/invite/dogecapital didn't fill in
 
 
->> look over ruchita
 
 
-
-
+!!! !!! !!!
 - Fix calendar with graphs … recent cron messing up….
 Need “top twitter/discord 24 hrs” on mints.js to work (and home page) - had redis errors
  announce it …

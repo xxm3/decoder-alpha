@@ -11,6 +11,7 @@ import { TextFieldTypes } from '@ionic/core';
 import { useQuery } from 'react-query';
 import BotServerCard from './components/BotServerCard';
 import Help from '../../components/Help';
+import moment from 'moment';
 
 /**
  * The page they see when they've clicked "initiate seamless" ... then clicked on a guild
@@ -22,7 +23,7 @@ interface FormFields {
     image: File & { path: string;} | '';
     target_server: number | '';
     max_users: number | '';
-    expiration_date: string;
+    expiration_date: any;
     type: 'raffle' | 'fcfs';
     whitelist_role: string;
     description: string;
@@ -44,36 +45,42 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     let serverArray = serverObject &&  JSON.parse(serverObject)
 
     let history = useHistory();
-    const [formField,setFromFiled] = useState<any>({
-        image: '',
-        target_server:'',
-        max_users: '',
-        expiration_date: '',
-        type:'fcfs',
-        whitelist_role: '',
-        description: '',
-        required_role: '',
-        required_role_name: '',
-        twitter: '',
-        discordInvite:'',
-        magicEdenUpvoteUrl:'',
-        })
-    const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, } = useForm<FormFields, any>();
-    const [present] = useIonToast();
+
     const now = useMemo(() => new Date(), []);
-    const [whiteListRole,setWhiteListRole] = useState<any>([])
-    const [whiteListRequireRole,setWhiteListRequireRole] = useState<any>([])
-    const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        reset(formField);
-    }, [formField])
-
     const todayEnd = useMemo(() => {
         const date = new Date( + now + 86400 * 1000 );
         date.setHours(23,59,59,999);
         return date;
     }, [now]);
+
+    const [formField,setFromFiled] = useState<any>({
+        image: '',
+        target_server:'',
+        max_users: '',
+        expiration_date: todayEnd,
+        type:'fcfs',
+        whitelist_role: '',
+        description: '',
+        required_role: server.state.requiredRoleId ? server.state.requiredRoleId : '',
+        required_role_name: server.state.requiredRoleName ? server.state.requiredRoleName : '',
+        twitter: '',
+        discordInvite:'',
+        magicEdenUpvoteUrl:'',
+        })
+    const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting },setValue } = useForm<FormFields, any>();
+    const [present] = useIonToast();
+
+    const [whiteListRole,setWhiteListRole] = useState<any>([])
+    const [whiteListRequireRole,setWhiteListRequireRole] = useState<any>([])
+    const [isLoading, setIsLoading] = useState(false);
+    const [isBigImage, setIsBigImage] = useState<boolean>(false);
+
+
+    useEffect(() => {
+        reset(formField);
+    }, [formField])
+
+
 
 
     const getUrlExtension = (url:any) => {
@@ -194,13 +201,24 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                     <form className="space-y-3"
                      // when submitting the form...
                      onSubmit={  handleSubmit(async (data) => {
+
+                            try{
+                                data.expiration_date = moment(data.expiration_date).format("YYYY-MM-DD HH:MM:SS");
+                            }catch(err){
+                                present({
+                                    message: 'Invalid Expiration Date',
+                                    color: 'danger',
+                                    duration: 10000,
+                                });
+                                return;
+                            }
+
                             const { image, ...rest } = data;
+
                             const rawData = {
                                 ...rest,
                                 source_server: serverId,
                                 target_server:server.state.discordGuildId,
-                                required_role: server.state.requiredRoleId ? server.state.requiredRoleId : rest.required_role,
-                                required_role_name: server.state.requiredRoleName ? server.state.requiredRoleName : rest.required_role_name,
                             };
                             const formData = new FormData();
 
@@ -292,25 +310,48 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     control={control}
                                     rules={{  required: true, }}
                                     defaultValue={todayEnd.toISOString()}
-                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                        <>
-                                            <IonDatetime
-                                                value={value}
-                                                onIonChange={(e) => {
-                                                    const value = new Date(e.detail.value as string);
-                                                    value.setHours(23,59,59,999);
-                                                    ( e.target as HTMLInputElement ).value =  value.toISOString();
-                                                    onChange(e);
-                                                }}
+                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => {
+                                        return (
+                                            <div className='flex flex-col w-full'>
+                                                <input type="date"
+                                                className='w-full h-10 '
+                                                style={{backgroundColor : 'transparent'}}
                                                 name={name}
+                                                value={moment(new Date(value)).format('yyyy-MM-DD')}
+                                                onBlur={onBlur}
+                                                required
                                                 ref={ref}
-                                                onIonBlur={onBlur}
-                                                placeholder='When this giveaway should expire'
+                                                onChange={(e) => {
+                                                    const value = new Date(e.target.value as string);
+                                                    value.setHours(23,59,59,999)
+                                                    setValue('expiration_date',value)
+                                                    }}
                                                 min={new Date(  +now + 86400 * 1000 ).toISOString()}
-                                                max={new Date(  +now + 86400 * 365 * 1000 ).toISOString()} />
-                                            <p className="formError"> {error?.message} </p>
-                                        </>
-                                    )} />
+                                                max={new Date(  +now + 86400 * 365 * 1000 ).toISOString()}
+                                                />
+                                                <p className="formError"> {error?.message} </p>
+                                            </div>
+                                        )
+                                        // return(
+                                        //     <>
+                                        //         <IonDatetime
+                                        //             value={value}
+                                        //             onIonChange={(e) => {
+                                        //                 const value = new Date(e.detail.value as string);
+                                        //                 value.setHours(23,59,59,999);
+                                        //                 ( e.target as HTMLInputElement ).value =  value.toISOString();
+                                        //                 onChange(e);
+                                        //             }}
+                                        //             name={name}
+                                        //             ref={ref}
+                                        //             onIonBlur={onBlur}
+                                        //             placeholder='When this giveaway should expire'
+                                        //             min={new Date(  +now + 86400 * 1000 ).toISOString()}
+                                        //             max={new Date(  +now + 86400 * 365 * 1000 ).toISOString()} />
+                                        //         <p className="formError"> {error?.message} </p>
+                                        //     </>
+                                        // )
+                                    }} />
                                 </IonItem>
                             </div>
                         </IonCard>
@@ -422,15 +463,14 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         onBlur={onBlur}
                                                         ref={ref}
                                                         placeholder='Select a Required Role'
-                                                        // value={server.state.requiredRoleId ? server.state.requiredRoleId : value}
                                                         value={value}
                                                         required
                                                         >
+                                                            <option value=''>{server.state.requiredRoleId}</option>
                                                             <option value=''>Select a Required Role</option>
                                                             {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{
-                                                                return (<option  key={role.id}  value={role.id} > {role.name} </option>)}
+                                                                return (<option  key={role.id}  value={role.id} selected={ server.state.requiredRoleId && role.id === server.state.requiredRoleId} > {role.name} </option>)}
                                                             )}
-                                                        {/*disabled={server.state.requiredRoleId}*/}
                                                     </select>
                                                     <p className="formError"> {error?.message} </p>
                                                 </div>
@@ -510,7 +550,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                         <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Image to represent your DAO</IonLabel>
+                                <IonLabel className="text-white">Image to represent your DAO - Image must be less then 10MB</IonLabel>
                                 <IonItem className="ion-item-wrapper mt-1">
                                     <Controller
                                     name="image"
@@ -525,6 +565,15 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                     onIonChange={(e) => {
                                                         const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
                                                         const file = target .files?.[0] as FieldValues['image'];
+                                                        if(file){
+                                                            let file_size = file.size;
+                                                            if((file_size/1024) < 10240){
+                                                                setIsBigImage(false)
+                                                            }else{
+                                                                setError('image', { type: 'custom', message: 'Maximum allowed file size is 10 MB' });
+                                                                setIsBigImage(true)
+                                                            }
+                                                        }
                                                         if (file)
                                                             file.path =  URL.createObjectURL(file);
                                                         ( e.target as HTMLInputElement ).value = file as unknown as string;
@@ -644,7 +693,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
                         </IonCard>
                         <div className='ion-text-right'>
-                            <IonButton className="cardButton" type={'submit'} disabled={isSubmitting}>
+                            <IonButton className="cardButton" type={'submit'} disabled={isSubmitting || isBigImage}>
                                 {isSubmitting ? ( <IonSpinner /> ) : ('Submit')}
                             </IonButton>
                         </div>
