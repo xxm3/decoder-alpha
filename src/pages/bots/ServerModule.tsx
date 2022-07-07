@@ -82,7 +82,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [isNoBot, setIsNoBot] = useState<boolean>(false);
     const [requiredRole,setRequiredRole] = useState<any>([]);
     const [isBigImage, setIsBigImage] = useState<boolean>(false);
-
+    const [isValidImage, setIsValidImage] = useState<boolean>(false);
     const [guildFormData, setGuildFormData] = useState({
         magicEdenLink: '',
         description: '',
@@ -753,6 +753,12 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
                                             const file = target .files?.[0] as FieldValues['image'];
                                             if(file){
+                                                if(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpeg' ){
+                                                    setIsValidImage(false)
+                                                }else{
+                                                    setError('image', { type: 'custom', message: 'Please upload a valid Image' });
+                                                    setIsValidImage(true)
+                                                }
                                                 let file_size = file.size;
                                                 if((file_size/1024) < 10240){
                                                     setIsBigImage(false)
@@ -780,7 +786,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                     {/*justify-center*/}
                     <div className=' mt-4 mb-5 w-full flex '>
-                        <IonButton className='w-50 h-12' type={'submit'} disabled={isSubmitting || isBigImage}>
+                        <IonButton className='w-50 h-12' type={'submit'} disabled={isSubmitting || isBigImage || isValidImage}>
                             {isSubmitting ? ( <IonSpinner /> ) : ('Submit DAO Profile')}
                         </IonButton>
                     </div>

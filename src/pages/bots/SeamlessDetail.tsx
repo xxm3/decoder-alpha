@@ -79,7 +79,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [whiteListRequireRole,setWhiteListRequireRole] = useState<any>([])
     const [isLoading, setIsLoading] = useState(false);
     const [isBigImage, setIsBigImage] = useState<boolean>(false);
-
+    const [isValidImage, setIsValidImage] = useState<boolean>(false);
 
     useEffect(() => {
         reset(formField);
@@ -450,7 +450,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         value={value}
                                                         required
                                                         >
-                                                            <option value=''>{server?.state?.requiredRoleId}</option>
+                                                            {server?.state?.requiredRoleId ? <option value={server?.state?.requiredRoleId}>{server?.state?.requiredRoleId}</option> : '' }
                                                             <option value=''>Select a Required Role</option>
                                                             {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{
                                                                 return (<option  key={role.id}  value={role.id} selected={ server?.state?.requiredRoleId && role.id === server?.state?.requiredRoleId} > {role.name} </option>)}
@@ -550,6 +550,13 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
                                                         const file = target .files?.[0] as FieldValues['image'];
                                                         if(file){
+                                                            if(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpeg' ){
+                                                                setIsValidImage(false)
+                                                            }else{
+                                                                setError('image', { type: 'custom', message: 'Please upload a valid Image' });
+                                                                setIsValidImage(true)
+                                                            }
+                                                            
                                                             let file_size = file.size;
                                                             if((file_size/1024) < 10240){
                                                                 setIsBigImage(false)
@@ -677,7 +684,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
                         </IonCard>
                         <div className='ion-text-right'>
-                            <IonButton className="cardButton" type={'submit'} disabled={isSubmitting || isBigImage}>
+                            <IonButton className="cardButton" type={'submit'} disabled={isSubmitting || isBigImage  || isValidImage}>
                                 {isSubmitting ? ( <IonSpinner /> ) : ('Submit')}
                             </IonButton>
                         </div>
