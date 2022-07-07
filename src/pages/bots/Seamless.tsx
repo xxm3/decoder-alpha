@@ -100,13 +100,11 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 <p className='ion-no-margin'>
                                     Select the server you wish to collaborate with in list below, and fill out the collaboration form on the next page.
                                     <br/><br/>
-                                    Please make sure that you invited the correct SOL Decoder Bot to your server! You must use the SECOND link when on the <a href="https://soldecoder.app/dao" className="underline cursor-pointer">Select a Server</a> page.
-                                    <br/><br/>
-                                    After inviting this bot, make sure to drag the "SOL Decoder" role higher than your whitelist role.
+                                    Please make sure that you invited the correct SOL Decoder Bot to your server! You must use the SECOND link when on the <a href="https://soldecoder.app/dao" className="underline cursor-pointer">Select a Server</a> page.   After inviting this bot, make sure to drag the "SOL Decoder" role higher than your whitelist role.
                                 </p>
                             </div>
                             <div className={`${isMobile ? 'mt-2' : ''}`}>
-                                {!multipleflag &&  
+                                {!multipleflag &&
                                 <div className={`seamless-tab-btn-active-colored w-40 h-10`} onClick={()=> {
                                     setmultipleflag((n)=>!n);
 
@@ -115,13 +113,13 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         color: 'primary',
                                         duration: 10000,
                                     });
-                                    
+
                                     }}>
                                 Select Multiple
                                 </div>
                                 }
                                 {/*  */}
-                                {multipleflag &&  
+                                {multipleflag &&
                                 <div className={`flex justify-between ${isMobile ? '' :' ml-2'}`}>
                                 <div className={`seamless-tab-btn-active w-32 h-10 mr-2`} onClick={()=> {
                                     setSelectMultipleWhiteList([])
@@ -152,12 +150,12 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 }
                             </div>
                         </div>
-                        
+
                     </IonCol>
 
                     {/*TODO-ruchita: this doesn't seem to work? search dont work, sort by twiteter/disc no work */}
 
-                    
+
                         {/*<div className='text-xl'>Select a DAO to give whitelists to</div>*/}
                         <div className='flex  w-full items-center' style={{ justifyContent: isMobile ? 'flex-start'  : 'flex-end'}}>
                             <div className={`flex  ${isMobile ? 'flex-col  ' : 'flex-wrap'} `}>
@@ -204,8 +202,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </div>
                             </div>
                         </div>
-                    
-                
+
+
 
 
                     <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12"></IonCol>
