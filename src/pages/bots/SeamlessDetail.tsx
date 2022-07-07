@@ -195,7 +195,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                 <IonCol size-xl="12" size-md="12" size-sm="12" size-xs="12" />
 
                 <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >
-                    <BotServerCard serverData={server.state} />
+                    <BotServerCard serverData={server.state} classes={`semless-light-card` }/>
                 </IonCol>
 
                 <IonCol size-xl="8" size-md="6" size-sm="6" size-xs="12">
@@ -282,11 +282,11 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             }
                         })}>
 
-                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
+                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card">
 
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Giveaway Type</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Giveaway Type</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                     <Controller name="type" rules={{ required: true, }} defaultValue="fcfs" control={control}
                                     render={({  field: { onChange, onBlur, value, name, ref, }, fieldState: { error }, }) => (
                                         <>
@@ -304,8 +304,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
 
                             <div>
-                                <IonLabel className="text-white">Expiration Date</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Expiration Date</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name="expiration_date"
                                     control={control}
@@ -339,10 +339,10 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
                         </IonCard>
 
-                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
+                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card">
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Max Users</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Max Users</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                 <Controller
                                 name="max_users"
                                 control={control}
@@ -369,8 +369,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
 
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Whitelist Role (role they will get once Whitelisted in your new mint server)</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Whitelist Role (role they will get once Whitelisted in your new mint server)</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                 <Controller
                                     name="whitelist_role"
                                     rules={{ required: true, }}
@@ -397,12 +397,12 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </IonItem>
                             </div>
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Verified role (a role that indicates a member of your new mint server is verified)
+                                <IonLabel className="card-detail-wrapper">Verified role (a role that indicates a member of your new mint server is verified)
                                     <Help description={`Some servers have a verification system in place to prevent their server being overpopulated with fake members.
                                     Most systems work in a way that a member has to do a certain action like react to a message or click somewhere in order to obtain a role indicating that the user is verified in the server.
                                     If your new mint server has a role for verified members, select it below. The verified role will be added alongside the whitelist role so that the member can get automatically verified in the server.`}/>
                                 </IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonItem className="c-item-wrapper mt-1">
                                 <Controller
                                     name="verified_role"
                                     rules={{ required: true, }}
@@ -433,8 +433,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             {whiteListRequireRole.length > 0 ?
                                 <div>
                                     {/*-{server?.state?.requiredRoleId}-*/}
-                                    <IonLabel className="text-white">Required Role (role required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <IonLabel className="card-detail-wrapper">Required Role (role required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
+                                    <IonItem className="c-item-wrapper mt-1">
                                         <Controller
                                             name="required_role"
                                             rules={{ required: true, }}
@@ -470,8 +470,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             :
                                 <div>
                                     <div>
-                                        <IonLabel className="text-white">Required Role ID (Discord Role ID required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
-                                        <IonItem className="ion-item-wrapper mt-1">
+                                        <IonLabel className="card-detail-wrapper">Required Role ID (Discord Role ID required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
+                                        <IonItem className="c-item-wrapper mt-1">
                                             <Controller
                                             name="required_role"
                                             control={control}
@@ -499,8 +499,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     </div>
 
                                     <div className='mt-5'>
-                                        <IonLabel className="text-white">Required Role Name (Discord Role ID required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
-                                        <IonItem className="ion-item-wrapper mt-1">
+                                        <IonLabel className="card-detail-wrapper">Required Role Name (Discord Role ID required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
+                                        <IonItem className="c-item-wrapper mt-1">
                                             <Controller
                                             name="required_role_name"
                                             control={control}
@@ -532,10 +532,10 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                         </IonCard>
 
-                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
+                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card">
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Image to represent your DAO - Image must be less then 10MB</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Image to represent your DAO - Image must be less then 10MB</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name="image"
                                     control={control}
@@ -584,8 +584,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
 
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Discord Invite Link (never expires, no invite limit)</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Discord Invite Link (never expires, no invite limit)</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name="discordInvite"
                                     control={control}
@@ -608,8 +608,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
 
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Twitter Link</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Twitter Link</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name="twitter"
                                     control={control}
@@ -631,8 +631,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </IonItem>
                             </div>
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Magic Eden drops URL</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Magic Eden drops URL</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name="magicEdenUpvoteUrl"
                                     control={control}
@@ -655,8 +655,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
 
                             <div>
-                                <IonLabel className="text-white">Description</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Description</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name="description"
                                     control={control}

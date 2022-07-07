@@ -35,7 +35,7 @@ const BotServerCard: React.FC<props> = (props) => {
     }, [path])
 
     return (
-        <IonCard className={`ion-no-margin seamlessCardWrapper ${classes&&classes}`} >
+        <IonCard className={`ion-no-margin multipleWhite-light-card seamlessCardWrapper ${classes&&classes}` } >
             <div className="cardImage relative">
 
                 {/* image */}
@@ -88,7 +88,7 @@ const BotServerCard: React.FC<props> = (props) => {
                 {initiateButton &&
                     <IonRow>
                         <IonCol size="12">
-                            <IonButton disabled={multipleflag} className="cardButton w-full" onClick={(event) => {
+                            <IonButton className="cardButton w-full" onClick={(event) => {
                                 event.stopPropagation()
                                 history.push({pathname:`/seamlessdetail/${serverId}`,state:serverData})} }>
                                 Initiate Seamless

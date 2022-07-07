@@ -110,7 +110,7 @@ select option {
         --background: #212838 !important;
     }
     ::-webkit-calendar-picker-indicator {
-        filter: invert(1);
+        filter: invert(1) !important;
     }
 }
 .light{
