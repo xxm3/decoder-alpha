@@ -111,7 +111,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             </Backdrop>
 
             {/* header */}
-            <div className={`flex ${isMobile ? 'flex-col items-center' : 'justify-between'}`}>
+            <div className={`flex flex-wrap ${isMobile ? 'flex-col items-center' : 'justify-between'}`}>
                 <IonLabel className="text-4xl font-semibold mb-3">
                     {' '} Select a Server{' '}
                 </IonLabel>

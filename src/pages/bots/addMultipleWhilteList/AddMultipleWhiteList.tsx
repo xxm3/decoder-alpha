@@ -315,14 +315,14 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                             {/*  maultiple server maping */}
                             {controlledFields.map((controlledField,index)=>{
                                     return(
-                                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2" key={index}> 
+                                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card" key={index}> 
                                             <div className='mb-5'>
-                                            <IonLabel className="text-white">{controlledField.name}</IonLabel>
+                                            <IonLabel className="card-detail-wrapper">{controlledField.name}</IonLabel>
                                             </div>
                                             {/* max users */}
                                             <div>
-                                                <IonLabel className="text-white">Max Users</IonLabel>
-                                                <IonItem className="ion-item-wrapper mt-1">
+                                                <IonLabel className="card-detail-wrapper">Max Users</IonLabel>
+                                                <IonItem className="c-item-wrapper mt-1">
                                                 <Controller
                                                 name={`servers.${index}.max_users` as const}
                                                 control={control}
@@ -348,8 +348,8 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                             </div>
 
                                             <div>
-                                                <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
-                                                <IonItem className="ion-item-wrapper mt-1">
+                                                <IonLabel className="card-detail-wrapper">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
+                                                <IonItem className="c-item-wrapper mt-1">
                                                     {controlledField.required_role_dropdown.length>0?
                                                         <Controller
                                                         name={`servers.${index}.required_role` as const}
@@ -399,14 +399,12 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                     })}
                         </IonCol>
 
-
-
                         <IonCol size-xl="8" size-md="6" size-sm="6" size-xs="12">
-                            <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
+                            <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card">
                                 {/* type */}
                                 <div className='mb-5'>
-                                    <IonLabel className="text-white">Giveaway Type</IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <IonLabel className="card-detail-wrapper">Giveaway Type</IonLabel>
+                                    <IonItem className="c-item-wrapper mt-1">
                                         <Controller name="type" rules={{ required: true, }} defaultValue="fcfs" control={control}
                                         render={({  field: { onChange, onBlur, value, name, ref, }, fieldState: { error }, }) => (
                                             <>
@@ -424,8 +422,8 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                 </div>
                                 {/* Expiration Date */}
                                 <div  className='mb-5'>
-                                    <IonLabel className="text-white">Expiration Date</IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <IonLabel className="card-detail-wrapper">Expiration Date</IonLabel>
+                                    <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name="expiration_date"
                                     control={control}
@@ -458,13 +456,11 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                 </IonItem>
                                 </div>
                             </IonCard>
-
-
-                            <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
+                            <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card">
                                 {/* whitelist_role */}
                                 <div className='mb-5'>
-                                    <IonLabel className="text-white">Whitelist Role (role they will get once Whitelisted in your new mint server)</IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <IonLabel className="card-detail-wrapper">Whitelist Role (role they will get once Whitelisted in your new mint server)</IonLabel>
+                                    <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                         name='whitelist_role'
                                         rules={{ required: true}}
@@ -494,12 +490,12 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
                                 {/* Verified role */}
                                 <div className='mb-5'>
-                                    <IonLabel className="text-white">Verified role (a role that indicates a member of your new mint server is verified)
+                                    <IonLabel className="card-detail-wrapper">Verified role (a role that indicates a member of your new mint server is verified)
                                         <Help description={`Some servers have a verification system in place to prevent their server being overpopulated with fake members.
                                         Most systems work in a way that a member has to do a certain action like react to a message or click somewhere in order to obtain a role indicating that the user is verified in the server.
                                         If your new mint server has a role for verified members, select it below. The verified role will be added alongside the whitelist role so that the member can get automatically verified in the server.`}/>
                                     </IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                         name="verified_role"
                                         rules={{ required: true, }}
@@ -527,8 +523,8 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
                                 {/* Image Upload */}
                                 <div className='mb-5'>
-                                    <IonLabel className="text-white">Image to represent your DAO</IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <IonLabel className="card-detail-wrapper">Image to represent your DAO</IonLabel>
+                                    <IonItem className="c-item-wrapper mt-1">
                                         <Controller
                                         name="image"
                                         control={control}
@@ -560,8 +556,8 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                 </div>
                                 {/* Discord Invite Link */}
                                 <div className='mb-5'>
-                                    <IonLabel className="text-white">Discord Invite Link (never expires, no invite limit)</IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <IonLabel className="card-detail-wrapper">Discord Invite Link (never expires, no invite limit)</IonLabel>
+                                    <IonItem className="c-item-wrapper mt-1">
                                         <Controller
                                         name="discordInvite"
                                         control={control}
@@ -583,8 +579,8 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                 </div>
                                 {/* Twitter Link */}
                                 <div className='mb-5'>
-                                    <IonLabel className="text-white">Twitter Link</IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <IonLabel className="card-detail-wrapper">Twitter Link</IonLabel>
+                                    <IonItem className="c-item-wrapper mt-1">
                                         <Controller
                                         name="twitter"
                                         control={control}
@@ -606,8 +602,8 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                 </div>
                                 {/*  Magic Eden upvote URL */}
                                 <div className='mb-5'>
-                                    <IonLabel className="text-white">Magic Eden upvote URL</IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <IonLabel className="card-detail-wrapper">Magic Eden upvote URL</IonLabel>
+                                    <IonItem className="c-item-wrapper mt-1">
                                         <Controller
                                         name="magicEdenUpvoteUrl"
                                         control={control}
@@ -630,8 +626,8 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
                                 {/* Expiration Date */}
                                 <div  className='mb-5'>
-                                    <IonLabel className="text-white">Mint Date</IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <IonLabel className="card-detail-wrapper">Mint Date</IonLabel>
+                                    <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name="mintDate"
                                     control={control}
@@ -661,8 +657,8 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
                                 {/*  mintSupply */}
                                 <div className='mb-5'>
-                                    <IonLabel className="text-white">Mint Supply</IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <IonLabel className="card-detail-wrapper">Mint Supply</IonLabel>
+                                    <IonItem className="c-item-wrapper mt-1">
                                         <Controller
                                         name="mintSupply"
                                         control={control}
@@ -684,8 +680,8 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                 </div>
                                 {/* mint Price */}
                                 <div>
-                                    <IonLabel className="text-white">Mint Price</IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <IonLabel className="card-detail-wrapper">Mint Price</IonLabel>
+                                    <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name='mintPrice'
                                     control={control}
@@ -714,8 +710,8 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
                                 {/* description */}
                                 <div>
-                                    <IonLabel className="text-white">Description</IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <IonLabel className="card-detail-wrapper">Description</IonLabel>
+                                    <IonItem className="c-item-wrapper mt-1">
                                         <Controller
                                         name="description"
                                         control={control}

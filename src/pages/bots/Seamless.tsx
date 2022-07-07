@@ -94,8 +94,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             <IonGrid>
                 <IonRow>
                     <IonCol size="12">
-                        <div className={`flex ${isMobile ? 'flex-col' : 'flex-row items-center' } justify-between `}>
-                            <div className='w-4/5'>
+                        <div className={`flex ${isMobile ? 'flex-col' : 'flex-wrap items-center' } justify-between `}>
+                            <div className='w-4/5 pb-3'>
                                 <h2 className="ion-no-margin font-bold text-xl"> Seamless - select a DAO to give whitelists to</h2>
                                 <p className='ion-no-margin'>
                                     Select the server you wish to collaborate with in list below, and fill out the collaboration form on the next page.
@@ -160,7 +160,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                     
                         {/*<div className='text-xl'>Select a DAO to give whitelists to</div>*/}
                         <div className='flex  w-full items-center' style={{ justifyContent: isMobile ? 'flex-start'  : 'flex-end'}}>
-                            <div className={`flex ${isMobile ? 'flex-col w-full' : 'flex-row'} `}>
+                            <div className={`flex  ${isMobile ? 'flex-col  ' : 'flex-wrap'} `}>
                                 <IonInput
                                     value={searchValue}
                                     className=' border-2 mt-2 pl-2 w-full'
@@ -222,7 +222,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     server.selectFlag = selectFlag?true:false;
                                     return(
                                         <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" key={server.id} >
-                                            <BotServerCard serverData={server} multipleflag={multipleflag} setSelectMultipleWhiteList={setSelectMultipleWhiteList} selectMultipleWhiteList={selectMultipleWhiteList} classes={`h-full ${server.selectFlag&&'activeCardWrapper'}` } />
+                                            <BotServerCard serverData={server} multipleflag={multipleflag} setSelectMultipleWhiteList={setSelectMultipleWhiteList} selectMultipleWhiteList={selectMultipleWhiteList} classes={`h-full ${server.selectFlag&&'activeCardWrapper'} semless-light-card` } />
                                         </IonCol>
                                     )
                                 })}

@@ -97,11 +97,11 @@ const BotServerCard: React.FC<props> = (props) => {
                     </IonRow>
                 }
 
-                <p  className='text-white'>{serverData?.description}</p>
+                <p  className='card-detail-wrapper'>{serverData?.description}</p>
 
                 <IonRow hidden={!serverData?.twitter_followers}>
                     <IonCol size="8">
-                        <IonText className='text-white'>Twitter Followers</IonText>
+                        <IonText className='card-detail-wrapper'>Twitter Followers</IonText>
                     </IonCol>
                     <IonCol size="4" className="ion-text-end">
                         <IonText className="greenText">{serverData?.twitter_followers || 0 } </IonText>
@@ -110,7 +110,7 @@ const BotServerCard: React.FC<props> = (props) => {
 
                 <IonRow hidden={!serverData?.twitter_interactions}>
                     <IonCol size="8">
-                        <IonText className='text-white'>Twitter Interaction</IonText>
+                        <IonText className='card-detail-wrapper'>Twitter Interaction</IonText>
                     </IonCol>
                     <IonCol size="4" className="ion-text-end">
                         <IonText className="BlueText">{serverData?.twitter_interactions || 0}</IonText>
@@ -120,7 +120,7 @@ const BotServerCard: React.FC<props> = (props) => {
 
                 <IonRow hidden={!serverData?.discord_members}>
                     <IonCol size="8">
-                        <IonText className='text-white'>Discord Members</IonText>
+                        <IonText className='card-detail-wrapper'>Discord Members</IonText>
                     </IonCol>
                     <IonCol size="4" className="ion-text-end">
                         <IonText className="greenText">{serverData?.discord_members || 0}</IonText>
@@ -129,7 +129,7 @@ const BotServerCard: React.FC<props> = (props) => {
 
                 <IonRow hidden={!serverData?.discord_online}>
                     <IonCol size="8">
-                        <IonText className='text-white'>Online</IonText>
+                        <IonText className='card-detail-wrapper'>Online</IonText>
                     </IonCol>
                     <IonCol size="4" className="ion-text-end">
                         <IonText className="BlueText">{serverData?.discord_online || 0}</IonText>

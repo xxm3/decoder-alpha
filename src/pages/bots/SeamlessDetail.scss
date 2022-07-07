@@ -1,6 +1,5 @@
 ion-card {
     border-radius: 10px;
-    --background: #2a3246;
     .cardImage {
         .cardMainImage {
             height: 250px;
@@ -111,3 +110,20 @@ select option {
     align-items: center;
     text-align: center;
 }
+.dark{
+    .semless-light-card{
+        --background: #212838 !important;
+    }
+    .card-detail-wrapper{
+        color: #fff !important;
+    }
+}
+.light{
+    .semless-light-card{
+        --background: #e5e7eb!important;
+    }
+    .card-detail-wrapper{
+        color: #212838 !important;
+    }
+}
+
