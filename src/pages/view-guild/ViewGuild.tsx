@@ -66,14 +66,14 @@ function ViewGuild() {
             title: 'Created At',
             render: (record) => <span>{ record?.createdAt ?  moment(record?.createdAt).fromNow() : '-'}</span>,
         },
-        {
-            title: 'Discord ID',
-            render: (record) => <span>{ record?.discordGuildId }</span>,
-        },
-        {
-            title: 'Owner / Admin ID',
-            render: (record) => <span>{ record?.guildOwnerDiscordId }</span>,
-        },
+            {
+                title: 'Discord ID',
+                render: (record) => <span>{ record?.discordGuildId }</span>,
+            },
+            {
+                title: 'Owner / Admin / Manager ID',
+                render: (record) => <span>{ record?.guildOwnerDiscordId }</span>,
+            },
         {
             title: 'Analytics Webhook Channel',
             render: (record) => <span>{record?.analyticsWebhookChannel ? record?.analyticsWebhookChannel : '-'}</span>,

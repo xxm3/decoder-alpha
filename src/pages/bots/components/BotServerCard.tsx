@@ -84,10 +84,20 @@ const BotServerCard: React.FC<props> = (props) => {
             </div>
 
             <IonGrid className="py-4 px-4">
-                {/* show more buttons */}
-                {showMore ? <p  className='text-white'>{serverData?.description}</p> : <p className='text-white'>{serverData?.description?.substring(0, 400)}</p>}
-                {serverData?.description?.length > 400 ? <button className="text-sky-500" onClick={()=> setShowMore((n)=>!n)}>{showMore ? 'Show Less'  : 'Show More'}</button> : ''}
-                {/* <p  className='text-white'>{serverData?.description}</p> */}
+
+                {initiateButton &&
+                    <IonRow>
+                        <IonCol size="12">
+                            <IonButton className="cardButton w-full" onClick={(event) => {
+                                event.stopPropagation()
+                                history.push({pathname:`/seamlessdetail/${serverId}`,state:serverData})} }>
+                                Initiate Seamless
+                            </IonButton>
+                        </IonCol>
+                    </IonRow>
+                }
+
+                <p  className='text-white'>{serverData?.description}</p>
 
                 <IonRow hidden={!serverData?.twitter_followers}>
                     <IonCol size="8">
@@ -125,21 +135,6 @@ const BotServerCard: React.FC<props> = (props) => {
                         <IonText className="BlueText">{serverData?.discord_online || 0}</IonText>
                     </IonCol>
                 </IonRow>
-                {initiateButton &&
-                    <IonRow>
-                        <IonCol size="12">
-                            <IonButton className="cardButton w-full" onClick={(event) => {
-                                event.stopPropagation()
-                                history.push({pathname:`/seamlessdetail/${serverId}`,state:serverData})} }>
-                                Initiate Seamless
-                            </IonButton>
-                        </IonCol>
-                    </IonRow>
-                 }
-                 
-                    
-                        
-                
             </IonGrid>
 
         </IonCard>

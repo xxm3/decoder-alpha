@@ -351,7 +351,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     let disableButton = (btnType: any) => {
         if (role === 'No Roles') {
             showDisableBtnMesage(
-                'Sorry you do not have the right number of NFTs'
+                'Sorry you do not have the right number of NFTs. If you feel this is a mistake, log out on the bottom left and log back in'
             );
             return true;
         } else if (role === '3NFT') {
@@ -373,7 +373,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             return false;
         } else {
             showDisableBtnMesage(
-                'Sorry you do not have the right number of NFTs'
+                'Sorry you do not have the right number of NFTs. If you feel this is a mistake, log out on the bottom left and log back in'
             );
             return true;
         }

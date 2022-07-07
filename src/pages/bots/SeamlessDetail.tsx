@@ -66,8 +66,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         type:'fcfs',
         whitelist_role: '',
         description: '',
-        required_role: server?.state?.requiredRoleId ? server?.state?.requiredRoleId : '',
-        required_role_name: server?.state?.requiredRoleName ? server?.state?.requiredRoleName : '',
+        required_role: server?.state?.requiredRoleId ? server.state.requiredRoleId : '',
+        required_role_name: server?.state?.requiredRoleName ? server.state.requiredRoleName : '',
         twitter: '',
         discordInvite:'',
         magicEdenUpvoteUrl:'',
@@ -203,6 +203,18 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                     <form className="space-y-3"
                      // when submitting the form...
                      onSubmit={  handleSubmit(async (data) => {
+
+                            try{
+                                data.expiration_date = moment(data.expiration_date).format(); // "YYYY-MM-DD HH:MM:SS"
+                            }catch(err){
+                                present({
+                                    message: 'Invalid Expiration Date',
+                                    color: 'danger',
+                                    duration: 10000,
+                                });
+                                return;
+                            }
+
                             const { image, ...rest } = data;
 
                             const rawData = {
@@ -421,6 +433,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             {/* required roles filled out, so bot is in the existing DAO server */}
                             {whiteListRequireRole.length > 0 ?
                                 <div>
+                                    {/*-{server?.state?.requiredRoleId}-*/}
                                     <IonLabel className="text-white">Required Role (role required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
                                     <IonItem className="ion-item-wrapper mt-1">
                                         <Controller
