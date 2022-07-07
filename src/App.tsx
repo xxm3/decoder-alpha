@@ -417,7 +417,7 @@ const App = () => {
                                                                                     component={
                                                                                         NftPriceTable
                                                                                     }
-                                                                                    needsRole={false}
+                                                                                    // needsRole={false}
                                                                                 />
 
                                                                                 {/* Stacked Line Search */}
