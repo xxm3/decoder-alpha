@@ -275,134 +275,133 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
     return (
         <div className='add_multiple_whitelist_wrapper'>
         <IonGrid>
-        <form className="space-y-3"// when submitting the form...
-            onSubmit={  handleSubmit(async (data) => {
-                                // create server object
-                let serverObj = data.servers.map(server=>{
-                    return {max_users:server.max_users,required_role:server.required_role,target_server:server.target_server}
-                })
-                console.log("serverObj",serverObj)
-                // create obj for Api
-                let createObj = {
-                    expiration_date: data.expiration_date,
-                    type: data.type,
-                    whitelist_role:data.whitelist_role,
-                    description: data.description,
-                    twitter: data.twitter,
-                    discordInvite: data.discordInvite,
-                    magicEdenUpvoteUrl:data.magicEdenUpvoteUrl || '',
-                    verified_role: data.verified_role,
-                    source_server: getserver.state,
-                    image: data.image,
-                    servers:JSON.stringify(serverObj),
-                    mintDate:data.mintDate,
-                    mintSupply:data.mintSupply,
-                    mintPrice:data.mintPrice
-                }
+            <form className="space-y-3"// when submitting the form...
+                onSubmit={  handleSubmit(async (data) => {
+                                    // create server object
+                    let serverObj = data.servers.map(server=>{
+                        return {max_users:server.max_users,required_role:server.required_role,target_server:server.target_server}
+                    })
+                    console.log("serverObj",serverObj)
+                    // create obj for Api
+                    let createObj = {
+                        expiration_date: data.expiration_date,
+                        type: data.type,
+                        whitelist_role:data.whitelist_role,
+                        description: data.description,
+                        twitter: data.twitter,
+                        discordInvite: data.discordInvite,
+                        magicEdenUpvoteUrl:data.magicEdenUpvoteUrl || '',
+                        verified_role: data.verified_role,
+                        source_server: getserver.state,
+                        image: data.image,
+                        servers:JSON.stringify(serverObj),
+                        mintDate:data.mintDate,
+                        mintSupply:data.mintSupply,
+                        mintPrice:data.mintPrice
+                    }
 
-                console.log("createObj",createObj)
-                 await mutipleWhiteListServerAdd(createObj)
-            })}>
+                    console.log("createObj",createObj)
+                    await mutipleWhiteListServerAdd(createObj)
+                })}>
 
-            <IonRow>
-                <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - fill out whitelist details</h2> </IonCol>
+                <IonRow>
+                    <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - fill out whitelist details</h2> </IonCol>
 
-                <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12" />
+                    <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12" />
 
-                        
+                            
 
-                    <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >
-                        {/*  maultiple server maping */}
-                        {controlledFields.map((controlledField,index)=>{
-                                return(
-                                    <IonCard className="ion-no-margin rounded-md ion-padding mb-2" key={index}> 
-                                        <div className='mb-5'>
-                                        <IonLabel className="text-white">{controlledField.name}</IonLabel>
-                                        </div>
-                                        {/* max users */}
-                                        <div>
-                                            <IonLabel className="text-white">Max Users</IonLabel>
-                                            <IonItem className="ion-item-wrapper mt-1">
-                                            <Controller
-                                            name={`servers.${index}.max_users` as const}
-                                            control={control}
-                                            render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => {
-                                                return (
-                                                    <>
-                                                        <IonInput
-                                                            onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string;  onChange(e); }}
-                                                            required
-                                                            type="number"
-                                                            min="1"
-                                                            name={name}
-                                                            value={value}
-                                                            onIonBlur={onBlur}
-                                                            ref={ref}
-                                                            placeholder='ie. 25'
-                                                        />
-                                                        <p className="formError"> {error?.message} </p>
-                                                    </>
-                                                )
-                                            }} />
-                                            </IonItem>
-                                        </div>
+                        <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >
+                            {/*  maultiple server maping */}
+                            {controlledFields.map((controlledField,index)=>{
+                                    return(
+                                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2" key={index}> 
+                                            <div className='mb-5'>
+                                            <IonLabel className="text-white">{controlledField.name}</IonLabel>
+                                            </div>
+                                            {/* max users */}
+                                            <div>
+                                                <IonLabel className="text-white">Max Users</IonLabel>
+                                                <IonItem className="ion-item-wrapper mt-1">
+                                                <Controller
+                                                name={`servers.${index}.max_users` as const}
+                                                control={control}
+                                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => {
+                                                    return (
+                                                        <>
+                                                            <IonInput
+                                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string;  onChange(e); }}
+                                                                required
+                                                                type="number"
+                                                                min="1"
+                                                                name={name}
+                                                                value={value}
+                                                                onIonBlur={onBlur}
+                                                                ref={ref}
+                                                                placeholder='ie. 25'
+                                                            />
+                                                            <p className="formError"> {error?.message} </p>
+                                                        </>
+                                                    )
+                                                }} />
+                                                </IonItem>
+                                            </div>
 
-                                        <div>
-                                            <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
-                                            <IonItem className="ion-item-wrapper mt-1">
-                                                {controlledField.required_role_dropdown.length>0?
-                                                    <Controller
+                                            <div>
+                                                <IonLabel className="text-white">Required Role (role required of them in the existing DAO server, to enter)</IonLabel>
+                                                <IonItem className="ion-item-wrapper mt-1">
+                                                    {controlledField.required_role_dropdown.length>0?
+                                                        <Controller
+                                                        name={`servers.${index}.required_role` as const}
+                                                        control={control}
+                                                        render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
+                                                            <>
+                                                                <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
+                                                                    onChange={onChange}
+                                                                    name={name}
+                                                                    onBlur={onBlur}
+                                                                    ref={ref}
+                                                                    placeholder='Select a Required Role'
+                                                                    value={value}
+                                                                    required
+                                                                    >
+                                                                        <option value=''>Select a Required Role</option>
+                                                                        {controlledField.required_role_dropdown && controlledField.required_role_dropdown.map((role:any) =>{ return (<option  key={role.id}  value={role.id} > {role.name} </option>)} )}
+                                                                </select>
+                                                                <p className="formError"> {error?.message} </p>
+                                                            </>
+                                                        )}
+                                                    />
+                                                :
+                                                <Controller
                                                     name={`servers.${index}.required_role` as const}
                                                     control={control}
-                                                    render={({ field: { onChange, onBlur, value, name, ref },  fieldState: { error }, }) => (
+                                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
                                                         <>
-                                                            <select className='w-full h-10 ' style={{backgroundColor : 'transparent'}}
-                                                                onChange={onChange}
-                                                                name={name}
-                                                                onBlur={onBlur}
-                                                                ref={ref}
-                                                                placeholder='Select a Required Role'
+                                                            <IonInput
                                                                 value={value}
+                                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                                type="text"
                                                                 required
-                                                                >
-                                                                    <option value=''>Select a Required Role</option>
-                                                                    {controlledField.required_role_dropdown && controlledField.required_role_dropdown.map((role:any) =>{ return (<option  key={role.id}  value={role.id} > {role.name} </option>)} )}
-                                                            </select>
+                                                                name={name}
+                                                                ref={ref}
+                                                                onIonBlur={onBlur}
+                                                                placeholder='Id of required role' />
                                                             <p className="formError"> {error?.message} </p>
                                                         </>
                                                     )}
                                                 />
-                                            :
-                                            <Controller
-                                                name={`servers.${index}.required_role` as const}
-                                                control={control}
-                                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
-                                                    <>
-                                                        <IonInput
-                                                            value={value}
-                                                            onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
-                                                            type="text"
-                                                            required
-                                                            name={name}
-                                                            ref={ref}
-                                                            onIonBlur={onBlur}
-                                                            placeholder='Id of required role' />
-                                                        <p className="formError"> {error?.message} </p>
-                                                    </>
-                                                )}
-                                            />
-                                            }
-                                            
-                                            </IonItem>
-                                        </div>
-                                    </IonCard>
-                                        )
-                                })}
-                    </IonCol>
+                                                }
+                                                
+                                                </IonItem>
+                                            </div>
+                                        </IonCard> )
+                                    })}
+                        </IonCol>
 
 
 
-                    <IonCol size-xl="8" size-md="6" size-sm="6" size-xs="12">
+                        <IonCol size-xl="8" size-md="6" size-sm="6" size-xs="12">
                             <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
                                 {/* type */}
                                 <div className='mb-5'>
@@ -462,7 +461,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
 
                             <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
-                            {/* whitelist_role */}
+                                {/* whitelist_role */}
                                 <div className='mb-5'>
                                     <IonLabel className="text-white">Whitelist Role (role they will get once Whitelisted in your new mint server)</IonLabel>
                                     <IonItem className="ion-item-wrapper mt-1">
@@ -552,7 +551,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                                         required
                                                         onIonBlur={onBlur}
                                                         type={'file' as TextFieldTypes}
-                                                        accept="image" />
+                                                        accept="image/png, image/gif, image/jpeg" />
                                                     <p className="formError"> {error?.message} </p>
                                                 </>
                                             )
@@ -677,7 +676,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                                     name={name}
                                                     ref={ref}
                                                     onIonBlur={onBlur}
-                                                    placeholder='mintSupply' />
+                                                    placeholder='Add Mint Supply' />
                                                 <p className="formError"> {error?.message} </p>
                                             </>
                                         )} />
@@ -752,9 +751,9 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                     {isSubmitting ? ( <IonSpinner /> ) : ('Submit')}
                                 </IonButton>
                             </div>
-                    </IonCol>
-            </IonRow>
-        </form>
+                        </IonCol>
+                </IonRow>
+            </form>
         </IonGrid>
         </div>
     );

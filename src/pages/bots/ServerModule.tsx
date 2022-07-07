@@ -772,7 +772,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         required = {getValues('imagePath') ? false : true}
                                         onIonBlur={onBlur}
                                         type={'file' as TextFieldTypes}
-                                        accept="image" />
+                                        accept="image/png, image/gif, image/jpeg" />
                                     <p className="formError"> {error?.message} </p>
                                 </>
                             )} />

@@ -184,7 +184,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     useEffect(() => {
         getWhiteListRole();
         getWhiteListRequireRole();
-
     }, [])
 
     return (
@@ -242,7 +241,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 reset();
 
                             } catch (error) {
-                                console.error(error);
+                                // console.error(error);
 
                                 if (isAxiosError(error)) {
                                     const { response: { data } = { errors: [] } } =
@@ -326,7 +325,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 onChange={(e) => {
                                                     const value = new Date(e.target.value as string);
                                                     value.setHours(23,59,59,999)
-                                                    console.log(value.toISOString())
+                                                    // console.log(value.toISOString())
                                                     setValue('expiration_date',value.toISOString())
                                                     }}
                                                 min={new Date(  +now + 86400 * 1000 ).toISOString()}
@@ -569,7 +568,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                     required
                                                     onIonBlur={onBlur}
                                                     type={'file' as TextFieldTypes}
-                                                    accept="image" />
+                                                    accept="image/png, image/gif, image/jpeg" />
                                                 <p className="formError"> {error?.message} </p>
                                             </div>
                                         )
