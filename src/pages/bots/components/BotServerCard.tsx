@@ -88,7 +88,7 @@ const BotServerCard: React.FC<props> = (props) => {
                 {initiateButton &&
                     <IonRow>
                         <IonCol size="12">
-                            <IonButton className="cardButton w-full" onClick={(event) => {
+                            <IonButton disabled={multipleflag} className="cardButton w-full" onClick={(event) => {
                                 event.stopPropagation()
                                 history.push({pathname:`/seamlessdetail/${serverId}`,state:serverData})} }>
                                 Initiate Seamless
