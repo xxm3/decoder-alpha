@@ -191,6 +191,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             <IonRow>
                 <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - fill out whitelist details</h2> </IonCol>
 
+                <p>Note it is expected that you reach out to the DAOs before hand, and have them agree on receiving these spots</p>
+
                 <IonCol size-xl="12" size-md="12" size-sm="12" size-xs="12" />
 
                 <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >
