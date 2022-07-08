@@ -100,36 +100,52 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         return fileObject
     }
 
-    // TODO-ruchita: not working right - (1) this pulls from the very last WL partnership in the DB -- NOT there last WL paternership. Need to filter by source ID and use that one... (2) the whitelist_role was not being filled out ... and discordinvite /magiceden not being filled out ... image not filled out
-    // const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
-    //     async () => {
-    //         try {
-    //             setIsLoading(true)
-    //             const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
-    //             let imagePath = await onImageEdit(whitelists[whitelists.length-1]?.image);
-    //             setFromFiled({
-    //                 // image: imagePath || '',
-    //                 // target_server:'',
-    //                 // max_users: whitelists[whitelists.length-1]?.max_users || '',
-    //                 expiration_date:whitelists[whitelists.length-1]?.expiration_date || '',
-    //                 type:whitelists[whitelists.length-1]?.type || '',
-    //                 whitelist_role: whitelists[whitelists.length-1]?.whitelist_role || '',
-    //                 description: whitelists[whitelists.length-1]?.description || '',
-    //                 // required_role: whitelists[whitelists.length-1]?.required_role || '',
-    //                 twitter: whitelists[whitelists.length-1]?.twitter?.toString() || '',
-    //                 // discordInvite:whitelists[whitelists.length-1]?.discordInvite?.toString() || '',
-    //                 // magicEdenUpvoteUrl:whitelists[whitelists.length-1]?.magicEdenUpvoteUrl?.toString() || '',
-    //                 })
-    //             return whitelists;
-    //         } catch (error) {
-    //
-    //         }
-    //         finally {
-    //             setIsLoading(false)
-    //         }
-    //
-    //     }
-    // );
+    const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
+        async () => {
+            try {
+                setIsLoading(true)
+                const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
+
+                let last_wl_i = "none";
+                for(let i in whitelists){
+                    if(whitelists[i]?.sourceServer?.discordGuildId === serverId){
+                        last_wl_i = i;
+                        break;
+                    }
+                }
+
+                if(last_wl_i !== 'none'){
+                    let imagePath;
+                    try{
+                        imagePath = await onImageEdit(whitelists[last_wl_i]?.image);
+                    }catch(err){ }
+                    // console.log(imagePath);
+                    setFromFiled({
+                        image: imagePath || '',
+                        // target_server:'',
+                        // max_users: whitelists[last_wl_i]?.max_users || '',
+                        expiration_date:whitelists[last_wl_i]?.expiration_date || '',
+                        type:whitelists[last_wl_i]?.type || '',
+                        // whitelist_role: whitelists[last_wl_i]?.whitelist_role || '',
+                        // verified_role: whitelists[last_wl_i]?.verified_role || '',
+                        description: whitelists[last_wl_i]?.description || '',
+                        // required_role: whitelists[last_wl_i]?.required_role || '',
+                        twitter: whitelists[last_wl_i]?.twitter?.toString() || '',
+                        discordInvite:whitelists[last_wl_i]?.discordInvite?.toString() || '',
+                        magicEdenUpvoteUrl:whitelists[last_wl_i]?.magicEdenUpvoteUrl?.toString() || '',
+                    })
+                }
+
+                return whitelists;
+            } catch (error) {
+
+            }
+            finally {
+                setIsLoading(false)
+            }
+
+        }
+    );
 
     // get roles for the WL role we will give to people --- new mint --- source server
     const getWhiteListRole = async() =>{
@@ -191,7 +207,10 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             <IonRow>
                 <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - fill out whitelist details</h2> </IonCol>
 
-                <p>Note it is expected that you reach out to the DAOs before hand, and have them agree on receiving these spots</p>
+                <p className="font-bold text-red-500">
+                    Note it is expected that you reach out to the DAOs before hand, and have them agree on receiving these spots.
+                    You must also ask for their "Required Role" (ie. DAO holder role), if they haven't set one - if you set the wrong role then nothing will work!
+                </p>
 
                 <IonCol size-xl="12" size-md="12" size-sm="12" size-xs="12" />
 
