@@ -97,7 +97,10 @@ select option {
     align-items: center;
     text-align: center;
 }
+
 }
+
+
 .dark{
     .multipleWhite-light-card{
         --background: #212838 !important;
@@ -109,9 +112,7 @@ select option {
         color : #e5e7eb!important;
         --background: #212838 !important;
     }
-    ::-webkit-calendar-picker-indicator {
-        filter: invert(1) !important;
-    }
+    
 }
 .light{
     .multipleWhite-light-card{
@@ -124,4 +125,18 @@ select option {
         --background: #e5e7eb!important;
         color: #212838 !important;
     }
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+    filter: invert(1);
 }

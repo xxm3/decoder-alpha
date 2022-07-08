@@ -18,7 +18,7 @@ export const whiteListSlice = createSlice({
   name: 'multipalServer',
   initialState,
   reducers: {
-    setMultipleList: (state, action: PayloadAction<selcetServer[]>) => {
+    setMultipleList: (state:any, action: PayloadAction<selcetServer[]>) => {
 		state.selectMultipleServerList = action.payload
 	}
   },

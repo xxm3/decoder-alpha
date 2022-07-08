@@ -95,7 +95,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                 <IonRow>
                     <IonCol size="12">
                         <div className={`flex ${isMobile ? 'flex-col' : 'flex-wrap items-center' } justify-between `}>
-                            <div className='w-4/5 pb-3'>
+                            <div className={`${isMobile ? 'w-full' : 'w-3/4'} pb-3`}>
                                 <h2 className="ion-no-margin font-bold text-xl"> Seamless - select a DAO to give whitelists to</h2>
                                 <p className='ion-no-margin'>
                                     Select the server you wish to collaborate with in list below, and fill out the collaboration form on the next page.
@@ -120,32 +120,27 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 }
                                 {/*  */}
                                 {multipleflag &&
-                                <div className={`flex justify-between ${isMobile ? '' :' ml-2'}`}>
-                                <div className={`seamless-tab-btn-active w-32 h-10 mr-2`} onClick={()=> {
-                                    setSelectMultipleWhiteList([])
-                                    setmultipleflag((n)=>!n)
-                                }}>
-                                cancel
-                                </div>
-                                <div className={`seamless-tab-btn-active-colored w-32 h-10`} onClick={()=> {
-                                    if(selectMultipleWhiteList.length===0){
-                                        present({
-                                            message: 'Please Select Atleast 1 server',
-                                            color: 'danger',
-                                            duration: 10000,
-                                        });
-                                        return
-                                    }
-                                    dispatch(setMultipleList(selectMultipleWhiteList))
-                                    history.push({pathname:`/add_multiple_white_list`,state:serverId})
-                                    setSelectMultipleWhiteList([])
-                                    setmultipleflag((n)=>!n)
-                                    // history.push('/add_multiple_white_list')
-
-                                    // setmultipleflag((n)=>!n)
-                                }}>
-                                Next
-                                </div>
+                                <div className={`flex  ${isMobile ? 'justify-start' :' justify-between ml-2'}`}>
+                                    <div className={`seamless-tab-btn-active w-32 h-10 mr-2`} onClick={()=> {
+                                        setSelectMultipleWhiteList([])
+                                        setmultipleflag((n)=>!n)
+                                    }}> cancel </div>
+                                    <div className={`seamless-tab-btn-active-colored w-32 h-10`} onClick={()=> {
+                                        if(selectMultipleWhiteList.length===0){
+                                            present({
+                                                message: 'Please Select Atleast 1 server',
+                                                color: 'danger',
+                                                duration: 10000,
+                                            });
+                                            return
+                                        }
+                                        console.log('selectMultipleWhiteList------',selectMultipleWhiteList)
+                                        dispatch(setMultipleList(selectMultipleWhiteList))
+                                        // history.push({pathname:`/seamlessdetail`,state:serverId})
+                                        history.push({pathname:`/seamlessdetail/${serverId}`,state:serverId})
+                                        setSelectMultipleWhiteList([])
+                                        setmultipleflag((n)=>!n)
+                                    }}> Next </div>
                                 </div>
                                 }
                             </div>

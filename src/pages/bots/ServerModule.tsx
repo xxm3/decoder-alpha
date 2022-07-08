@@ -755,6 +755,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             if(file){
                                                 if(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpeg' ){
                                                     setIsValidImage(false)
+                                                    setError('image', { type: 'custom', message: '' });
                                                 }else{
                                                     setError('image', { type: 'custom', message: 'Please upload a valid Image' });
                                                     setIsValidImage(true)

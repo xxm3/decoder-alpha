@@ -6,6 +6,8 @@ import discordImage from '../../../images/discord.png';
 import twitterImage from '../../../images/twitter.png';
 import MagicEdenImage from '../../../images/me-black.png';
 import { selcetServer } from '../Seamless';
+import { useDispatch } from 'react-redux';
+import { setMultipleList } from '../../../redux/slices/whitelistSlice';
 type props = {  
     serverData: any
     multipleflag?:boolean
@@ -19,6 +21,7 @@ const BotServerCard: React.FC<props> = (props) => {
     let { serverData,multipleflag,setSelectMultipleWhiteList,selectMultipleWhiteList,classes } = props;
     let history = useHistory();
     const { serverId } = useParams<any>();
+    const dispatch = useDispatch()
     const path:any = useLocation();
     const [initiateButton, setInitiateButton] = useState<boolean>(false)
     const [showMore, setShowMore] = useState<boolean>(false);
@@ -90,7 +93,12 @@ const BotServerCard: React.FC<props> = (props) => {
                         <IonCol size="12">
                             <IonButton disabled={multipleflag} className="cardButton w-full" onClick={(event) => {
                                 event.stopPropagation()
-                                history.push({pathname:`/seamlessdetail/${serverId}`,state:serverData})} }>
+                                let obj =[{id:serverData.id,name:serverData.name,discordGuildId:serverData.discordGuildId}]
+                                dispatch(setMultipleList(obj))
+                                // history.push({pathname:`/seamlessdetail/${serverId}`,state:serverData})
+                                // console.log('server id',serverId)
+                                history.push({pathname:`/seamlessdetail/${serverId}`,state:serverData})
+                            }}>
                                 Initiate Seamless
                             </IonButton>
                         </IonCol>
