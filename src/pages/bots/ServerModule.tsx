@@ -621,7 +621,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </div>
 
                     {/* no bot! */}
-                    {isNoBot ?
+                    {isNoBot || requiredRole.length === 0 ?
                         <>
                             <div className='mb-5'>
                                 <label className="font-bold">

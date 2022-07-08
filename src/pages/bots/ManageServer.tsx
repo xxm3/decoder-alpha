@@ -113,10 +113,10 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             {/* header */}
             <div className={`flex flex-wrap ${isMobile ? 'flex-col items-center' : 'justify-between'}`}>
                 <IonLabel className="text-4xl font-semibold mb-3">
-                    {' '} Select a Server{' '}
+                    Select a Server
                 </IonLabel>
                 <IonButton onClick={() => { history.push('/view-guild'); }} >
-                    {' '}View Discords that have our bots{' '}
+                    View DAOs accepting WL spots
                 </IonButton>
             </div>
 
