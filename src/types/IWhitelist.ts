@@ -28,4 +28,5 @@ export interface IWhitelist {
 	magicEdenUpvoteUrl:string;
 	setIsExploding?:Dispatch<SetStateAction<boolean>>;
 	isExploding?:boolean;
+	tabButton?:string;
 }

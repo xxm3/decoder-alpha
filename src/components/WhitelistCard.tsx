@@ -41,7 +41,8 @@ function WhitelistCard({
     claims,
     magicEdenUpvoteUrl,
     isExploding,
-    setIsExploding
+    setIsExploding,
+    tabButton
 }: IWhitelist) {
 	const isDemo:any = useSelector<RootState>(state => state.demo.demo);
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
@@ -51,7 +52,6 @@ function WhitelistCard({
 	const [present] = useIonToast();
 	const full = claimCounts >= max_users;
     const uid  = localStorage.getItem('uid');
-
     // what to show in each button
     const getButtonText = (
         expired : boolean,
@@ -204,7 +204,7 @@ function WhitelistCard({
                         }
                     }}
 
-                     disabled={expired || claiming || claimed || full || showLive || isDemo || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed'}
+                     disabled={expired || claiming || claimed || full || showLive || isDemo||tabButton == 'live' || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed'}
                     >
                         {getButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>

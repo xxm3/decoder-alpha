@@ -185,7 +185,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 sm:grid-cols-1 gap-6 p-8">
                             {
                                 myDoaWhiteList.length > 0 ? myDoaWhiteList.map((whitelist:any) => {
-                                    return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding}  key={whitelist.id}/>)
+                                    return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelist.id}/>)
                                 }) : <div className='text-xl'> There are no whitelists available</div>
                             }
                         </div>
@@ -196,7 +196,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                             {
                                 liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) =>
-                                (<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding}   key={whitelist.id}/>)) : <div className='text-xl'> There are no whitelists available</div>
+                                (<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding}  tabButton={isTabButton} key={whitelist.id}/>)) : <div className='text-xl'> There are no whitelists available</div>
                             }
                         </div>
                     }
@@ -206,7 +206,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                             {
                                 expireWhiteList.length > 0 ? expireWhiteList.map((whitelist:any) => {
-                                    return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding}  key={whitelist.id}/>)
+                                    return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton}  key={whitelist.id}/>)
                                 }) : <div className='text-xl'> There are no whitelists available</div>
                             }
                         </div>
@@ -217,7 +217,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                             {
                                 myClaimWhiteList.length > 0 ?  myClaimWhiteList.map((whitelist:any) => {
-                                    return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding}  key={whitelist.id}/>)
+                                    return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton}  key={whitelist.id}/>)
                                 }) : <div className='text-xl'> There are no whitelists available</div>
                             }
                         </div>
