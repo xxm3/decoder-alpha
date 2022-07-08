@@ -60,15 +60,17 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     let history = useHistory();
     const location: LocationParams = useLocation();
     const [isMobile, setIsMobile] = useState(false);
-    const [checked, setChecked] = useState<{ mintInfoModule: boolean;  tokenModule: boolean; }>({ mintInfoModule: false, tokenModule: false });
+    const [checked, setChecked] = useState<{ mintInfoModule: boolean;  tokenModule: boolean; magicedenSolModule:boolean }>({ mintInfoModule: false, tokenModule: false, magicedenSolModule:false });
     const [isLoading, setIsLoading] = useState(false);
     const [showInstruction, setShowInstruction] = useState<boolean>(false);
     const [mintMoreInfoShow, setMintMoreInfoShow] = useState<boolean>(false);
     const [foxTokenMoreInfoShow, setFoxTokenMoreInfoShow] = useState<boolean>(false);
+    const [magicEdenInfoShow, setMagicEdenInfoShow] = useState<boolean>(false);
     const [dropdownValue, setDropdownValue] = useState({
         dailyMintsWebhookChannel: 'default',
         oneHourMintInfoWebhookChannel: 'default',
         analyticsWebhookChannel: 'default',
+        tomorrowMintsWebhookChannel:'default'
     });
     const [channel, setChannel] = useState<any>(null);
     const [backdrop, setBackdrop] = useState(false);
@@ -177,6 +179,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                             data.oneHourMintInfoWebhookChannel || 'default',
                         analyticsWebhookChannel:
                             data.analyticsWebhookChannel || 'default',
+                        tomorrowMintsWebhookChannel:
+                            data.tomorrowMintsWebhookChannel || 'default'
                     });
 
                     // guilds data gets looked at, and gets their channels if bot is in it
@@ -1073,9 +1077,95 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 </div>
                             </div>
                         </div>
+                        {/* Magic Eden */}
+                        <div className='basis-1/2'>
+                            <div className="server-module-bg overflow-hidden">
+                                <div className="flex flex-row justify-between w-full">
+                                    <div className='card-bg-blur-magic-eden flex justify-center items-center w-full'>
+                                        <div className="module-icon-wrapper w-full">
+                                            <img src={require('../../images/me.png')} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col mt-4 p-2">
+                                    <div className='flex justify-between items-center w-full'>
+                                        <IonLabel className="ml-3 text-xl">
+                                            "Magic Eden" package
+                                        </IonLabel>
+                                        <Switch
+                                            checked={checked.magicedenSolModule}
+                                            onChange={( e: React.ChangeEvent<HTMLInputElement> ) => {
+                                                if (disableButton('magicedenSolModule')) {
+                                                    return
+                                                }
+                                                enableModule({
+                                                    module: 'magicedenSolModule',
+                                                    enabled: e.target.checked,
+                                                });
+                                            }}
+                                        // disabled={disableButton('magicedenSolModule')}
+                                        />
+                                    </div>
+
+                                    {/* Hide show channels list of magic eden module */}
+                                    {checked.magicedenSolModule && (
+                                        <>
+                                            <div className="flex w-full">
+                                                <div className="server-module-bg p-2 mt-2 w-full">
+                                                    {/* <div className="text-xl font-semibold flex mt-8 mb-8">
+                                                        "Magic Eden" package
+                                                    </div> */}
+
+                                                    <div className="text-lg font-semibold">
+                                                        "Magic Eden" channel
+                                                    </div>
+                                                    <div className="flex flex-row justify-between my-2 ">
+                                                        <select value={ dropdownValue.tomorrowMintsWebhookChannel } className="server-channel-dropdown"
+                                                            onChange={(event: any) => {
+                                                                updateWebHooks({
+                                                                    webhook: 'tomorrowMintsWebhookChannel',
+                                                                    channel: event.target.value,
+                                                                });
+                                                            }}
+                                                        >
+                                                            <option value="default">
+                                                                Please Select the Magic Eden channel
+                                                            </option>
+                                                            {getOption()}
+                                                        </select>
+                                                    </div>
+
+                                                    <div className='italic text-sm'>
+                                                    (Automated posts about tomorrow's mints, along with Twitter/Discord stats) {' '}
+                                                    </div>
+                                                    {dropdownValue.tomorrowMintsWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendAnalytics')}>Send a test message</IonButton>}
+
+
+                                                    {/* Choose a channel above, then click the button below to make sure it worked
+                                                    <br />
+                                                    <IonButton onClick={() => sendTestWebhook('sendAnalytics')}>Send a test message</IonButton> */}
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
+
+                                    <div className="text-sm mt-2 p-2 border-t-2">
+                                        <div className='w-full flex items-center justify-between'>
+                                            <div className='text-base my-2 '> More information </div>
+                                            <img src={magicEdenInfoShow ?  require(`../../images/up-icon.png`) : require(`../../images/chevron-down-icon.png`) } className='w-4 cursor-pointer' onClick={()=> setMagicEdenInfoShow((open)=>!open)} />
+                                        </div>
+                                        { magicEdenInfoShow ?
+                                            (<ul className='list-disc ml-5 leading-7'>
+                                                <li>Your server can have the "daily-mints" and "1h-mint-info" feed, and soon "tomorrows-mints". Enable this to learn more about each</li>
+                                                <li>Hold and you get lifetime access, and get free upgrades to existing packages such as getting daily summaries of NFTs coming out in a few weeks, when they they get a bump in their twitter / discord numbers</li>
+                                            </ul>): ''
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
 
         </>
