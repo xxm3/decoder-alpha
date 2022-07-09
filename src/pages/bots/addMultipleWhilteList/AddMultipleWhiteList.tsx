@@ -65,10 +65,10 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
         target_server:'',
         expiration_date: todayEnd.toISOString(),
         type:'fcfs',
-        description: 's',
-        twitter: 'https://twitter.com/CryptoFrogs_NFT',
-        discordInvite:'https://discord.gg/7buMeNpwpv',
-        magicEdenUpvoteUrl:'https://magiceden.io/drops/',
+        description: '',
+        twitter: '',
+        discordInvite:'',
+        magicEdenUpvoteUrl:'',
         mutipleServerDetails:[],
         mintDate:new Date().toISOString(),
         mintSupply:'',
@@ -85,6 +85,8 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
    
     const [whiteListRole,setWhiteListRole] = useState<any>([]) // Whitelist Role dropdown value
     const [loaderFlag, setLoaderFlag] = useState(false) //loader flag
+    const [isBigImage, setIsBigImage] = useState<boolean>(false);
+    const [isValidImage, setIsValidImage] = useState<boolean>(false);
     let [whiteListServer, setWhiteListServer] = useState<mutipleServerDetails[]>([]) //selected server state
 
     // create serverarray filed
@@ -577,12 +579,11 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                 {/*  */}
                                  {/* Image Upload */}
                                 <div className='mb-5'>
-                                    <IonLabel className="card-detail-wrapper">Image to represent your DAO</IonLabel>
+                                    <IonLabel className="card-detail-wrapper">Image to represent your DAO - Image must be less then 10MB</IonLabel>
                                     <IonItem className="ion-item-wrapper mt-1">
                                         <Controller
                                         name="image"
                                         control={control}
-                                        rules={{ required: true, }}
                                         render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) =>{
                                             return(
                                                 <>
@@ -591,6 +592,24 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                                         onIonChange={(e) => {
                                                             const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
                                                             const file = target .files?.[0] as FieldValues['image'];
+                                                            if(file){
+                                                                if(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpeg' ){
+                                                                    setError('image', { type: 'custom', message: '' });
+                                                                    setIsValidImage(false)
+                                                                }else{
+                                                                    setError('image', { type: 'custom', message: 'Please upload a valid Image' });
+                                                                    setIsValidImage(true)
+                                                                }
+                                                                
+                                                                let file_size = file.size;
+                                                                if((file_size/1024) < 10240){
+                                                                    setIsBigImage(false)
+                                                                    setError('image', { type: 'custom', message: '' });
+                                                                }else{
+                                                                    setError('image', { type: 'custom', message: 'Maximum allowed file size is 10 MB' });
+                                                                    setIsBigImage(true)
+                                                                }
+                                                            }
                                                             if (file)
                                                                 file.path =  URL.createObjectURL(file);
                                                             ( e.target as HTMLInputElement ).value = file as unknown as string;
@@ -601,7 +620,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                                         required
                                                         onIonBlur={onBlur}
                                                         type={'file' as TextFieldTypes}
-                                                        accept="image" />
+                                                        accept="image/png, image/gif, image/jpeg" />
                                                     <p className="formError"> {error?.message} </p>
                                                 </>
                                             )
@@ -792,7 +811,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                     Cancel
                                 </IonButton>
                                 {/*  */}
-                                <IonButton className="cardButton" type={'submit'} disabled={isSubmitting}>
+                                <IonButton className="cardButton" type={'submit'} disabled={isSubmitting || isValidImage || isBigImage}>
                                     {isSubmitting ? ( <IonSpinner /> ) : ('Submit')}
                                 </IonButton>
                             </div>

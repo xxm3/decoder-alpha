@@ -561,7 +561,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     <Controller
                                     name="image"
                                     control={control}
-                                    rules={{ required: true, }}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) =>{
                                         return(
                                             <div className='flex flex-col w-full'>
@@ -574,17 +573,19 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         if(file){
                                                             if(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpeg' ){
                                                                 setIsValidImage(false)
+                                                                setError('image', { type: 'custom', message: '' });
                                                             }else{
-                                                                setError('image', { type: 'custom', message: 'Please upload a valid Image' });
                                                                 setIsValidImage(true)
+                                                                setError('image', { type: 'custom', message: 'Please upload a valid Image' });
                                                             }
                                                             
                                                             let file_size = file.size;
                                                             if((file_size/1024) < 10240){
                                                                 setIsBigImage(false)
+                                                                setError('image', { type: 'custom', message: '' });
                                                             }else{
-                                                                setError('image', { type: 'custom', message: 'Maximum allowed file size is 10 MB' });
                                                                 setIsBigImage(true)
+                                                                setError('image', { type: 'custom', message: 'Maximum allowed file size is 10 MB' });
                                                             }
                                                         }
                                                         if (file)
