@@ -38,11 +38,12 @@ function WhitelistCard({
 	claimCounts,
     claims,
     magicEdenUpvoteUrl,
-    isMod
+    iMod
 }: IWhitelist) {
 
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
 	const [claiming, setClaiming] = useState<boolean>(false);
+    const [approving, setApproving] = useState<boolean>(false);
 	const queryClient = useQueryClient();
 	const [present] = useIonToast();
 	const full = claimCounts >= max_users;
@@ -50,7 +51,7 @@ function WhitelistCard({
     const uid  = localStorage.getItem('uid');
 
     // what to show in each button
-    const getButtonText = (
+    const getClaimButtonText = (
         expired : boolean,
         claiming : boolean,
         claimed : boolean, // undefined...
@@ -83,6 +84,20 @@ function WhitelistCard({
         }else {
             return "Obtain whitelist"
          }
+    }
+
+    const getApproveButtonText = (
+        iMod : boolean,
+        approving : boolean) => {
+        console.log(approving);
+
+        if(approving){
+            return <IonSpinner />;
+        } else if(iMod){
+            return 'Approve';
+        } else {
+            return 'Approved';
+        } 
     }
 
     // for confetti
@@ -139,7 +154,7 @@ function WhitelistCard({
                 </div>
 
                 {/* button! */}
-				{expired !== undefined && <IonButton css={css`
+				{expired !== undefined && !iMod && <IonButton css={css`
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
 				`} className="my-2 self-center"
 
@@ -200,24 +215,22 @@ function WhitelistCard({
                             setClaiming(false);
                         }
                     }}
-
-                     disabled={expired || claiming || claimed || full || showLive || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed'  }
+                    hidden={iMod}
+                     disabled={expired || claiming || claimed || full || showLive || getClaimButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed'  }
                     >
-                        {getButtonText(expired,claiming,claimed, full, claims, showLive)}
+                        {getClaimButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>
 
                 }
 
-                {!expired && isMod && <IonButton css={css`
+                {!expired && iMod && <IonButton css={css`
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
 				`} className="my-2 self-center"
                      onClick={async () => {
-                        setClaiming(true);
+                        setApproving(true);
 
                         try {
-                            await instance.post("/guilds/setInitiateApproved", {
-                                guild_id: sourceServer?.discordGuildId
-                            });
+                            await instance.post(`/guilds/${sourceServer?.discordGuildId}/setInitiateApproved`, {});
 
                             // success!
                             present({
@@ -225,6 +238,20 @@ function WhitelistCard({
                                 color: 'success',
                                 duration: 10000,
                             });
+
+                            queryClient.setQueryData(
+                                ['whitelistPartnerships'],
+                                (queryData) => {
+                                    return (queryData as IWhitelist[]).map(
+                                        (whitelist) => {
+                                            if (whitelist.id === id) {
+                                                whitelist.iMod = false;
+                                            }
+                                            return whitelist;
+                                        }
+                                    );
+                                }
+                            );
 
                         // if error!
                         } catch (error) {
@@ -245,11 +272,12 @@ function WhitelistCard({
                                 });
                             }
                         } finally {
-                            setClaiming(false);
+                            setApproving(false);
                         }
                     }}
+                    hidden={!approving && (!iMod || expired)}
                     >
-                        Approve
+                        {getApproveButtonText(iMod, approving)}
                     </IonButton>
                 }
                 {/* end button! */}
