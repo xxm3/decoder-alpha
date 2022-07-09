@@ -94,9 +94,9 @@ const BotServerCard: React.FC<props> = (props) => {
                             <IonButton disabled={multipleflag} className="cardButton w-full" onClick={(event) => {
                                 event.stopPropagation()
                                 let obj =[{id:serverData.id,name:serverData.name,discordGuildId:serverData.discordGuildId}]
-                                dispatch(setMultipleList(obj))
-                                // history.push({pathname:`/seamlessdetail/${serverId}`,state:serverData})
+                                // dispatch(setMultipleList(obj))
                                 // console.log('server id',serverId)
+                                // history.push({pathname:`/seamlessdetail/${serverId}`,state:serverData})
                                 history.push({pathname:`/seamlessdetail/${serverId}`,state:serverData})
                             }}>
                                 Initiate Seamless

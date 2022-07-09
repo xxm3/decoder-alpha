@@ -136,8 +136,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         }
                                         console.log('selectMultipleWhiteList------',selectMultipleWhiteList)
                                         dispatch(setMultipleList(selectMultipleWhiteList))
-                                        // history.push({pathname:`/seamlessdetail`,state:serverId})
-                                        history.push({pathname:`/seamlessdetail/${serverId}`,state:serverId})
+                                        history.push({pathname:`/add_multiple_white_list`,state:serverId})
+                                        // history.push({pathname:`/seamlessdetail/${serverId}`,state:serverId})
                                         setSelectMultipleWhiteList([])
                                         setmultipleflag((n)=>!n)
                                     }}> Next </div>

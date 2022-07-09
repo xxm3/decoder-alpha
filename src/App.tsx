@@ -529,12 +529,6 @@ const App = () => {
                                                                                     path="/add_multiple_white_list"
                                                                                     component={ AddMultipleWhiteList }
                                                                                 />
-                                                                                 {/* Add multiple white List */}
-                                                                                 <ProtectedRoute
-                                                                                    exact
-                                                                                    path="/seamlessdetail/:serverId"
-                                                                                    component={ AddMultipleWhiteList }
-                                                                                />
                                                                                 {/* SeamlessServer */}
                                                                                 <ProtectedRoute
                                                                                     exact
