@@ -33,6 +33,9 @@ interface FormFields {
     twitter: string;
     discordInvite:string;
     magicEdenUpvoteUrl?:string;
+    mintDate:any;
+    mintSupply:any;
+    mintPrice:any;
 }
 const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
@@ -202,6 +205,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         getWhiteListRole();
         getWhiteListRequireRole();
     }, [])
+
 
     return (
         <IonGrid>
@@ -676,8 +680,87 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     )} />
                                 </IonItem>
                             </div>
+                            <div  className='mb-5'>
+                                <IonLabel className="card-detail-wrapper">Mint Date</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
+                                <Controller
+                                name="mintDate"
+                                control={control}
+                                rules={{  required: true, }}
+                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => {
+                                    return (
+                                        <div className='flex flex-col w-full'>
+                                            <input type="date"
+                                            className='w-full h-10 '
+                                            style={{backgroundColor : 'transparent'}}
+                                            name={name}
+                                            value={moment(new Date(value)).format('yyyy-MM-DD')}
+                                            onBlur={onBlur}
+                                            required
+                                            ref={ref}
+                                            onChange={(e) => {
+                                                const value = new Date(e.target.value as string);
+                                                setValue('mintDate',value.toISOString())
+                                                }}
+                                            />
+                                            <p className="formError"> {error?.message} </p>
+                                        </div>
+                                    )
+                                }} />
+                                </IonItem>
+                            </div>
+                                    {/*  mintSupply */}
+                            <div className='mb-5'>
+                                <IonLabel className="card-detail-wrapper">Mint Supply</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
+                                    <Controller
+                                    name="mintSupply"
+                                    control={control}
+                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                        <>
+                                            <IonInput
+                                                value={value}
+                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                type="text"
+                                                required
+                                                name={name}
+                                                ref={ref}
+                                                onIonBlur={onBlur}
+                                                placeholder='Add Mint Supply' />
+                                            <p className="formError"> {error?.message} </p>
+                                        </>
+                                    )} />
+                                </IonItem>
+                            </div>
+                                    {/* mint Price */}
+                            <div className='mb-5'>
+                                <IonLabel className="card-detail-wrapper">Mint Price</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
+                                <Controller
+                                name='mintPrice'
+                                control={control}
+                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => {
+                                    return (
+                                        <>
+                                            <IonInput
+                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                required
+                                                type="number"
+                                                name={name}
+                                                step="0.01"
+                                                value={ value}
+                                                onIonBlur={onBlur}
+                                                ref={ref}
+                                                placeholder='99.50'
+                                            />
+                                            <p className="formError"> {error?.message} </p>
+                                        </>
+                                    )
+                                }} />
+                                </IonItem>
+                            </div>
 
-                            <div>
+                            <div className='mb-5'>
                                 <IonLabel className="card-detail-wrapper">Description</IonLabel>
                                 <IonItem className="c-item-wrapper mt-1">
                                     <Controller

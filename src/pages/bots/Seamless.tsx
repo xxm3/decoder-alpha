@@ -56,7 +56,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             // return guilds;
         }
     );
-
+    let role = localStorage.getItem('role')
         // searching
     useEffect(() => {
         if(searchValue && servers){
@@ -134,12 +134,17 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             });
                                             return
                                         }
-                                        console.log('selectMultipleWhiteList------',selectMultipleWhiteList)
-                                        dispatch(setMultipleList(selectMultipleWhiteList))
-                                        history.push({pathname:`/add_multiple_white_list`,state:serverId})
-                                        // history.push({pathname:`/seamlessdetail/${serverId}`,state:serverId})
-                                        setSelectMultipleWhiteList([])
-                                        setmultipleflag((n)=>!n)
+                                        // console.log('selectMultipleWhiteList------',selectMultipleWhiteList)
+                                        if(role === 'No Roles'){
+                                            history.push(`/`)
+                                        }else{
+                                            dispatch(setMultipleList(selectMultipleWhiteList))
+                                            history.push({pathname:`/add_multiple_white_list`,state:serverId})
+                                            // history.push({pathname:`/seamlessdetail/${serverId}`,state:serverId})
+                                            setSelectMultipleWhiteList([])
+                                            setmultipleflag((n)=>!n)
+                                        }
+                                        
                                     }}> Next </div>
                                 </div>
                                 }

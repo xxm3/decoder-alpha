@@ -42,7 +42,7 @@ interface FormFields {
     magicEdenUpvoteUrl?:string;
     mintDate:string;
     mintSupply:string;
-    mintPrice:number | ''
+    mintPrice:any | ''
 }
 const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
     const getserver:any = useLocation();
@@ -766,6 +766,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                                         min="1"
                                                         name={name}
                                                         value={value}
+                                                        step="0.01"
                                                         onIonBlur={onBlur}
                                                         ref={ref}
                                                         placeholder='99.50'
