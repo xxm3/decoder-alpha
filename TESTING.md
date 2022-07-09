@@ -162,6 +162,15 @@ https://prowe214.medium.com/tip-how-to-view-localhost-web-apps-on-your-phone-ad6
 
 - Click save
 
+### 18) Bot-less NFT-less Seamless
+1) link MR for above error.response
+2) pull integration
+3) setup localhost / your discord to where you have 0 nfts (so you cant enable modules) ... and the server doesn't have the bots in it
+4) setup a new 'seamless profile for your dao' -- where you list what your required role ID is (need new field in frontend - if not already there)
+5) give WL spots to that dao -- make sure the form has the 'required role' be a integer / text field (not drop down)
+6) obtain WL and have it work (should see it pulls your acess token from redis, to get your role in your server)
+7) write all above into testing.md
+
 ## Admin & Seamless
 
 ### /manageserver
@@ -205,6 +214,32 @@ Refer to `docs/URLS.md` file for how to test the endpoints
 - `POST /guilds/:guildId/updateWhitelistViolentModeRole`
 - `POST /guilds/:guildId/logs`
 - `POST /guilds/:guildId/updateSimulationMode`
+
+#### Message Parser
+> Before you test this, make sure to enable simulation mode using `POST /guilds/:guildId/updateSimulationMode`
+
+Create a list of whitelisted domains (`POST /guilds/:guildId/updateWhitelistedDomains`) and configure channels to scan (`POST /guilds/:guildId/updateWhitelistCheckChannels`).
+
+Now send a message containing a url that's not whitelisted in one of the channels you added. Check `guild_logs` model to see if the action was logged - if yes; then message parser events are working fine.
+
+You can try different modes by switching between `mild`/`violent` mode using `POST /guilds/:guildId/updateSecurityMode`; If you switch to `violent` mode, make sure to set `POST /guilds/:guildId/updateWhitelistViolentModeRole`.
+
+--
+
+### What's New?
+- Logs
+- Kicking users with suspicious names/nicknames
+
+### What to test/How to test?
+
+> Before testing, make sure you have tested and are running https://gitlab.com/nft-relay-group/functions/-/merge_requests/269
+
+To test, make sure you don't have perms to delete messages (as any user with that perm is exempt from the name checks for being a staff member).
+
+Now change your nickname/name to either `bot` (or any variation of that like `b0t`, `bOt`, etc) and try changing your name to seem similar to that of staff members (like `professor-decoder`, `professor decoder bot`, etc)
+
+Check `guild_logs` to see if a new log was created - if so, then the bot part of assassin module is working fine.
+
 
 #### Message Parser
 > Before you test this, make sure to enable simulation mode using `POST /guilds/:guildId/updateSimulationMode`
@@ -289,4 +324,51 @@ This was tested in Test Vehn Dojo
 
 
 
+### 18) Seamless -if no bot in server functionality
+case 1 :
+- please select server which have no bot in the server when you are in /manageserver page
+- now after you select one of that server you will be redirect to next screen where you can see Seamless - profile form.
+- & at this page you will see one warning message that is " you can see limited form because no bot added in server "
+- after fill all form fields and click on SUBMIT DAO PROFILE system will send one web hook message that you can see on your channel
+ e.g : https://discord.com/channels/973441323250110465/973441323250110468
 
+case 2:
+- please select server which have  bot in the server when you are in /manageserver page
+-  now after you select one of that server you will be redirect to next screen where you can see above things also works fine but with initiate seamless button under section "Seamless - new mint"
+- when you click on INITIATE SEAMLESS you will be redirect to list of servers where you can select one or multiple servers.
+- but for this test case you must select server which have no bot.
+- after that you will be redirect to whitelist partnership form
+- now in that form you can see there is field named "required role" in that you will textbox you must enter ID of role because there is no bot in the server if we choose server which has bot then you will see dropdown there.
+- when you fill all the required details and submit system will send one web hook message that you can see on your channel
+ e.g : https://discord.com/channels/973441323250110465/973441323250110468
+
+### 18) Seamless - If no bot on the server - written another way
+1) create a NEW Discord server
+2) create a new role (admin) - give it admin perms (on very bottom) - give yourself this role
+3) invite your ALT discord account to it
+4) give your alt OWNERSHIP of it (go to member list)
+5) go to seamless on your ALT (most of site should be locked down) - immediately click add - fill out your profile (include both required role things)
+6) now log back on your main ... log on website ... you should see your old server (that you originally set seamless up with ) .. and your new server you just made -- click add on OLD server
+7) click intiaite seamless
+8) click on the NEW server (you can search for it)
+9) make sure both required role fields filled out
+10) fill out rest of the form
+11) submit
+12) claim whitelist
+
+TODO: write up where the bot is in the target server, so you have a dropdown for required role
+TODO: write up where the bos is NOT in the target server, so you have a input box and dropdown for required role
+
+
+### Configure bot packages
+
+ - when you enable or disable on module in server module page under the section configure bot packages at that time only once system will send one web hook message.
+
+### testing of multiple server select for whitelist partnership form
+- when you click on INITIATE WHITELIST you will be redirect to server list page where you can select one or multiple server
+- if you want to select multiple right corner you will see select multiple click on that button
+- you will see in all the server checkbox is appears you can select by enabling checkbox
+- right corder you will see submit button then you will be redirect to whitelist partnership form
+- for particular server max users and required roles must be entered and fill rest of the form
+- after filled form you can click on submit button and boom multiple entries are saved successfully. you will be redirect to manageserver page.
+if one of the server has something wrong and doesn't save then you will be on same page with server that are not saved yet.

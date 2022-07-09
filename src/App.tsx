@@ -453,6 +453,14 @@ const App = () => {
                                                                                     }
                                                                                     needsRole={false}
                                                                                 />
+                                                                                <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/dao"
+                                                                                    component={
+                                                                                        ManageServer
+                                                                                    }
+                                                                                    needsRole={false}
+                                                                                />
 
                                                                                 {/* if anyone direct access Server module  */}
                                                                                 <ProtectedRoute

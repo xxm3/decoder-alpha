@@ -51,7 +51,23 @@ const BotServerCard: React.FC<props> = (props) => {
                     </div>
                 </div>
             </div>
+
             <IonGrid className="py-4 px-4">
+
+                {initiateButton &&
+                    <IonRow>
+                        <IonCol size="12">
+                            <IonButton className="cardButton w-full" onClick={(event) => {
+                                event.stopPropagation()
+                                history.push({pathname:`/seamlessdetail/${serverId}`,state:serverData})} }>
+                                Initiate Seamless
+                            </IonButton>
+                        </IonCol>
+                    </IonRow>
+                }
+
+                <p  className='text-white'>{serverData?.description}</p>
+
                 <IonRow hidden={!serverData?.twitter_followers}>
                     <IonCol size="8">
                         <IonText className='text-white'>Twitter Followers</IonText>
@@ -88,18 +104,9 @@ const BotServerCard: React.FC<props> = (props) => {
                         <IonText className="BlueText">{serverData?.discord_online || 0}</IonText>
                     </IonCol>
                 </IonRow>
-                {initiateButton &&
-                    <IonRow>
-                        <IonCol size="12">
-                            <IonButton className="cardButton w-full" onClick={(event) => {
-                                event.stopPropagation()
-                                history.push({pathname:`/seamlessdetail/${serverId}`,state:serverData})} }>
-                                Initiate Seamless
-                            </IonButton>
-                        </IonCol>
-                    </IonRow>
-                 }
+
             </IonGrid>
+
         </IonCard>
     );
 };

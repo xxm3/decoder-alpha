@@ -71,7 +71,7 @@ function ViewGuild() {
                 render: (record) => <span>{ record?.discordGuildId }</span>,
             },
             {
-                title: 'Owner / Admin ID',
+                title: 'Owner / Admin / Manager ID',
                 render: (record) => <span>{ record?.guildOwnerDiscordId }</span>,
             },
         {

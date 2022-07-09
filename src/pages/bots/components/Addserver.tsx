@@ -43,7 +43,7 @@ const Addserver: React.FC<props> = (props) => {
                     setAddServerFlag(!addServerFlag);
                 }}
             >
-                Add Admin for Your Server
+                Add Admin/Manager for Your Server
             </IonButton>
         );
     }
@@ -119,7 +119,7 @@ const Addserver: React.FC<props> = (props) => {
                         SetAdmin(id);
                     } else {
                         present({
-                            message: 'This admin has no NFTs available.',
+                            message: 'This admin/manager has no NFTs available.',
                             color: 'danger',
                             duration: 5000,
                             buttons: [{ text: 'X', handler: () => dismiss() }],
@@ -165,7 +165,7 @@ const Addserver: React.FC<props> = (props) => {
                         SetAdmin(id);
                     } else {
                         present({
-                            message: 'This admin has no NFTS available.',
+                            message: 'This admin/manager has no NFTS available.',
                             color: 'danger',
                             duration: 5000,
                             buttons: [{ text: 'X', handler: () => dismiss() }],
