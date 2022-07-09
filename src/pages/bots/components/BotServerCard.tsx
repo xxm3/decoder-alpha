@@ -105,7 +105,10 @@ const BotServerCard: React.FC<props> = (props) => {
                     </IonRow>
                 }
 
-                <p  className='card-detail-wrapper'>{serverData?.description}</p>
+                {showMore ? <div  className='mb-3 card-detail-wrapper'>{serverData?.description}</div> : <div className='mb-3 card-detail-wrapper'>{serverData?.description?.substring(0, 400)}</div>}
+                {serverData?.description?.length > 200 ? <button className="text-sky-500" onClick={()=> setShowMore((n)=>!n)}>{showMore ? 'Show Less'  : 'Show More'}</button> : ''}
+
+                {/* <p  className='card-detail-wrapper'>{serverData?.description}</p> */}
 
                 <IonRow hidden={!serverData?.twitter_followers}>
                     <IonCol size="8">
