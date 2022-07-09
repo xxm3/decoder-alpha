@@ -161,7 +161,7 @@ function WhitelistCard({
                         isFcfs ?
                         (<>
                             <p>Slots left </p>
-                            <p>{max_users - claimCounts}/{max_users}</p>
+                            <p>{(max_users - claimCounts) < 0 ? 0 : (max_users - claimCounts)}/{max_users}</p>
                         </>) :
                         expired ?
                         (<>

@@ -58,13 +58,20 @@ ion-toggle {
 
 .card-bg-blur {
     height: 100px;
-    background-image: url('../../images/me_bg.png');
+    background-image: url('../../images/calendar-bg.png');
     background-position: center center;
     background-size: cover;
 }
 .card-bg-blur-fox {
     height: 100px;
     background-image: url('../../images/fox_bg.png');
+    background-position: center center;
+    background-size: cover;
+}
+
+.card-bg-blur-magic-eden {
+    height: 100px;
+    background-image: url('../../images/me_bg.png');
     background-position: center center;
     background-size: cover;
 }
