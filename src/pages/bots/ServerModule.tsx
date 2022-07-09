@@ -484,7 +484,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </IonLabel>
                 </div>
                 <p>
-                    Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about. You can then ask them to submit whitelists requests to you via Seamless. If they've never used Seamless before, have them join <a href="https://discord.gg/JvpqW7d4jE" target="_blank" className="underline cursor-pointer font-bold">the C3 Collab Discord</a> and we'll walk them through the process.
+                    Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about. You can then ask them to submit whitelists requests to you via Seamless. If they've never used Seamless before, have them <a href="https://discord.gg/s4ne34TrUC" target="_blank" className="underline cursor-pointer font-bold">join our Discord</a> and we'll walk them through the process.
                 </p>
 
                 <form className="space-y-3"

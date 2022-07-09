@@ -130,7 +130,7 @@ function WhitelistCard({
                     <p>Type </p>
                     <p>{type.toUpperCase()}</p>
                     <p>Slots left </p>
-                    <p>{max_users - claimCounts}/{max_users}</p>
+                    <p>{(max_users - claimCounts) < 0 ? 0 : (max_users - claimCounts)}/{max_users}</p>
 					<p>Required Role (in "{targetServer?.name}" DAO)</p>
 					<p>{required_role_name}</p>
 					<p className="timeLeft" hidden={expired || expired === undefined}>Time left</p>
