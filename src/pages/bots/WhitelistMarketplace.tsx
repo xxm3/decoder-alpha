@@ -4,7 +4,7 @@ import { instance } from '../../axios';
 import WhitelistCard from '../../components/WhitelistCard';
 import { IWhitelist } from '../../types/IWhitelist';
 import Loader from '../../components/Loader';
-import {IonButton, IonCol, IonContent, IonGrid, IonLabel, IonModal, IonRow} from '@ionic/react';
+import {IonButton, IonCol, IonContent, IonGrid, IonLabel, IonModal, IonRow, useIonToast} from '@ionic/react';
 import './SeamlessDetail.scss';
 import { queryClient } from '../../queryClient';
 import { async } from '@firebase/util';
@@ -31,6 +31,7 @@ function WhitelistMarketplace() {
         show:false,
         id:null
     })
+    const [present] = useIonToast();
 
     const [isMobile, setIsMobile] = useState(false);
     useEffect(() => {
@@ -90,6 +91,11 @@ function WhitelistMarketplace() {
         setIsLoading(true)
         try{
           let response =   await instance.delete( `/deleteWhitelistPartnership/${modelConfirmation.id}`)
+          present({
+            message: 'Whitelist details deleted sucessfully.',
+            color: 'success',
+            duration: 10000,
+        });
           getAllWhiteList()
         }catch(error){
 
