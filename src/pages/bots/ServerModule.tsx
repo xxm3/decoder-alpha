@@ -70,7 +70,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         dailyMintsWebhookChannel: 'default',
         oneHourMintInfoWebhookChannel: 'default',
         analyticsWebhookChannel: 'default',
-        tomorrowMintsWebhookChannel:'default'
+        tomorrowMintsWebhookChannel:'default',
+        walletWatchWebhookChannel: 'default'
     });
     const [channel, setChannel] = useState<any>(null);
     const [backdrop, setBackdrop] = useState(false);
@@ -180,7 +181,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         analyticsWebhookChannel:
                             data.analyticsWebhookChannel || 'default',
                         tomorrowMintsWebhookChannel:
-                            data.tomorrowMintsWebhookChannel || 'default'
+                            data.tomorrowMintsWebhookChannel || 'default',
+                        walletWatchWebhookChannel:
+                            data.walletWatchWebhookChannel || 'default'
                     });
 
                     // guilds data gets looked at, and gets their channels if bot is in it
@@ -895,7 +898,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 <div className="flex flex-row justify-center w-full">
                                     <div className='card-bg-blur flex justify-center items-center w-full'>
                                         <div className="module-icon-wrapper w-full">
-                                            <img src={require('../../images/me.png')} />
+                                            <img src={require('../../images/calendar.png')} />
                                         </div>
                                     </div>
                                 </div>
@@ -939,11 +942,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                     </div>
                                                     <div className='italic text-sm'>(Automated posts about today's mints, along with Twitter/Discord stats)</div>
                                                     { dropdownValue.dailyMintsWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendDailyMints')}>Send a test message</IonButton>}
-                                                    {/*
-                                                    Choose a channel above, then click the button below to make sure it worked
-                                                    <br /> */}
 
-                                                    {/* <IonButton onClick={() => sendTestWebhook('sendDailyMints')}>Send a test message</IonButton> */}
                                                     <div className="text-lg font-semibold mt-6">
                                                         "One Hour Mint Info" Channel
                                                     </div>
@@ -967,9 +966,32 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                     </div>
                                                     {dropdownValue.oneHourMintInfoWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendOneHourMints')}>Send a test message</IonButton>}
 
-                                                    {/* Choose a channel above, then click the button below to make sure it worked
-                                                    <br /> */}
-                                                    {/* <IonButton onClick={() => sendTestWebhook('sendOneHourMints')}>Send a test message</IonButton> */}
+                                                    <br/><br/>
+
+                                                    <div className="text-lg font-semibold">
+                                                        "Tomorrow's Mints" channel
+                                                    </div>
+                                                    <div className="flex flex-row justify-between my-2 ">
+                                                        <select value={ dropdownValue.tomorrowMintsWebhookChannel } className="server-channel-dropdown"
+                                                                onChange={(event: any) => {
+                                                                    updateWebHooks({
+                                                                        webhook: 'tomorrowMintsWebhookChannel',
+                                                                        channel: event.target.value,
+                                                                    });
+                                                                }}
+                                                        >
+                                                            <option value="default">
+                                                                Please Select the Tomorrow's Mints channel
+                                                            </option>
+                                                            {getOption()}
+                                                        </select>
+                                                    </div>
+
+                                                    <div className='italic text-sm'>
+                                                        (Automated posts about tomorrow's mints, along with Twitter/Discord stats)
+                                                    </div>
+                                                    {/*{dropdownValue.tomorrowMintsWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendAnalytics')}>Send a test message</IonButton>}*/}
+
                                                 </div>
                                             </div>
                                         </>
@@ -984,7 +1006,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             <img src={mintMoreInfoShow ?  require(`../../images/up-icon.png`) : require(`../../images/chevron-down-icon.png`)} className='w-4 cursor-pointer' onClick={()=> setMintMoreInfoShow((e)=>!e)} />
                                         </div>
                                         {mintMoreInfoShow ? <ul className='list-disc ml-5 leading-7'>
-                                            <li>Your server can have the "daily-mints" and "1h-mint-info" feed, and soon "tomorrows-mints". Enable this to learn more about each</li>
+                                            <li>Your server can have the "daily-mints" and "1h-mint-info" feed, and "tomorrows-mints". Enable this to learn more about each</li>
                                             <li>Hold and you get lifetime access, and get free upgrades to existing packages such as getting daily summaries of NFTs coming out in a few weeks, when they they get a bump in their twitter / discord numbers</li>
                                         </ul> : '' }
 
@@ -1116,38 +1138,40 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         <>
                                             <div className="flex w-full">
                                                 <div className="server-module-bg p-2 mt-2 w-full">
-                                                    {/* <div className="text-xl font-semibold flex mt-8 mb-8">
-                                                        "Magic Eden" package
-                                                    </div> */}
 
                                                     <div className="text-lg font-semibold">
-                                                        "Magic Eden" channel
+                                                        "Wallet Watch" channel
                                                     </div>
                                                     <div className="flex flex-row justify-between my-2 ">
-                                                        <select value={ dropdownValue.tomorrowMintsWebhookChannel } className="server-channel-dropdown"
-                                                            onChange={(event: any) => {
-                                                                updateWebHooks({
-                                                                    webhook: 'tomorrowMintsWebhookChannel',
-                                                                    channel: event.target.value,
-                                                                });
-                                                            }}
+                                                        <select value={ dropdownValue.walletWatchWebhookChannel } className="server-channel-dropdown"
+                                                                onChange={(event: any) => {
+                                                                    updateWebHooks({
+                                                                        webhook: 'walletWatchWebhookChannel',
+                                                                        channel: event.target.value,
+                                                                    });
+                                                                }}
                                                         >
                                                             <option value="default">
-                                                                Please Select the Magic Eden channel
+                                                                Please Select the Wallet Watch channel
                                                             </option>
                                                             {getOption()}
                                                         </select>
                                                     </div>
-
                                                     <div className='italic text-sm'>
-                                                    (Automated posts about tomorrow's mints, along with Twitter/Discord stats) {' '}
+                                                        (Used with /watch_wallet command, to show activity on a wallet. Use it to monitor whales or your own wallet(s). Max 30 wallets per Discord server)
                                                     </div>
-                                                    {dropdownValue.tomorrowMintsWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendAnalytics')}>Send a test message</IonButton>}
+                                                    {/*{dropdownValue.walletWatchWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendAnalytics')}>Send a test message</IonButton>}*/}
 
+                                                    <br/>
+                                                    <b>User Commands Unlocked:</b>
+                                                    <ul className='list-disc ml-5 leading-7'>
+                                                        <li>/fp - Users can get the price/volume/listings of any Magic Eden NFT</li>
+                                                        <li>/watch_wallet - Users can track the buys/sells (limit of 30 per Discord)</li>
+                                                        <li>/tps - Users can get a live count of Solana's Transactions Per Second</li>
+                                                    </ul>
 
-                                                    {/* Choose a channel above, then click the button below to make sure it worked
-                                                    <br />
-                                                    <IonButton onClick={() => sendTestWebhook('sendAnalytics')}>Send a test message</IonButton> */}
+                                                    Please contact us after enabling this, so we can enable the bot commands in your server
+
                                                 </div>
                                             </div>
                                         </>
@@ -1160,8 +1184,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         </div>
                                         { magicEdenInfoShow ?
                                             (<ul className='list-disc ml-5 leading-7'>
-                                                <li>Your server can have the "daily-mints" and "1h-mint-info" feed, and soon "tomorrows-mints". Enable this to learn more about each</li>
-                                                <li>Hold and you get lifetime access, and get free upgrades to existing packages such as getting daily summaries of NFTs coming out in a few weeks, when they they get a bump in their twitter / discord numbers</li>
+                                                <li>/fp - Users can get the price/volume/listings of any Magic Eden NFT</li>
+                                                <li>/watch_wallet - Users can track the buys/sells (limit of 30 per Discord)</li>
+                                                <li>/tps - Users can get a live count of Solana's Transactions Per Second</li>
                                             </ul>): ''
                                         }
                                     </div>
