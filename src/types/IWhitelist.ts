@@ -29,4 +29,5 @@ export interface IWhitelist {
 	setIsExploding?:Dispatch<SetStateAction<boolean>>;
 	isExploding?:boolean;
 	tabButton?:string;
+	deleteWhiteList?:any
 }

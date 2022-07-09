@@ -12,7 +12,8 @@ import {logoDiscord, logoTwitter} from 'ionicons/icons';
 import MagicEden from '../../src/images/me-white.png'
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-
+import { useHistory } from 'react-router';
+import { createOutline,trashOutline } from "ionicons/icons";
 /**
  * The page they see when they are on /seamless, and browsing for whitelists etc..
  *
@@ -30,20 +31,22 @@ function WhitelistCard({
     targetServer,
     type,
     description,
-	required_role_name,
-	expiration_date,
-	id,
+    required_role_name,
+    expiration_date,
+    id,
     active,
     showLive,
     isExpired,
-	claimed,
-	claimCounts,
+    claimed,
+    claimCounts,
     claims,
     magicEdenUpvoteUrl,
     isExploding,
     setIsExploding,
-    tabButton
+    tabButton,
+    deleteWhiteList
 }: IWhitelist) {
+    const history = useHistory()
 	const isDemo:any = useSelector<RootState>(state => state.demo.demo);
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
 	const [claiming, setClaiming] = useState<boolean>(false);
@@ -88,6 +91,7 @@ function WhitelistCard({
          }
     }
 
+
     return (
 		<>
 
@@ -127,7 +131,7 @@ function WhitelistCard({
             <div className="py-4 px-6 flex-col flex" >
 
                 {showMore ? <div  className='mb-3'>{description}</div> : <div className='mb-3'>{description?.substring(0, 400)}</div>}
-                {description?.length > 400 ? <button className="text-sky-500" onClick={()=> setShowMore((n)=>!n)}>{showMore ? 'Show Less'  : 'Show More'}</button> : ''}
+                {description?.length > 200 ? <button className="text-sky-500" onClick={()=> setShowMore((n)=>!n)}>{showMore ? 'Show Less'  : 'Show More'}</button> : ''}
 
                 {/* <div className="mb-3">{description}</div> */}
 
@@ -141,7 +145,22 @@ function WhitelistCard({
 					<p className="timeLeft" hidden={expired || expired === undefined}>Time left</p>
 					<span hidden={expired || expired === undefined}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
                 </div>
+                {tabButton == 'myDoa' &&
+                <div className=' text-xl flex justify-center mt-5'>
+                        <div className={`seamless-tab-btn-active-colored edit-btn w-50 h-10 `}  onClick={()=>{
+                    history.replace({pathname:`seamlessdetail/${sourceServer?.discordGuildId}`,state:{id:id,editForm:true,discordGuildId:targetServer?.discordGuildId,sourceServer:sourceServer}})
+                }}>
+                            <div className="text-sm md:text-base p-2 md:px-4 w-full">EDIT</div>
+                            <div className=" bg-black/[.4] py-2 px-4 "><IonIcon icon={createOutline}></IonIcon></div>
 
+                        </div>
+                        <div className={`seamless-tab-btn-active-colored danger-btn w-50 h-10 ml-3 `} onClick={()=>{
+                    deleteWhiteList(id)
+                }}>
+                            <div className="text-sm md:text-base p-2 md:px-4 w-full">DELETE</div>
+                            <div className=" bg-black/[.4] py-2 px-4 "><IonIcon icon={trashOutline}></IonIcon></div>
+                        </div>
+                 </div> }
                 {/* button! */}
 				{expired !== undefined && <IonButton css={css`
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
@@ -209,8 +228,31 @@ function WhitelistCard({
                         {getButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>
 
+
                 }
                 {/* end button! */}
+               
+                {/* <IonButton css={css`
+                --background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
+                `} className="my-2 self-center"
+                onClick={()=>{
+                    history.replace({pathname:`seamlessdetail/${sourceServer?.discordGuildId}`,state:{id:id,editForm:true,discordGuildId:targetServer?.discordGuildId}})
+                }}
+                >
+                Edit WhiteList  
+                </IonButton>
+
+
+                <IonButton css={css`
+                --background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
+                `} className="my-2 self-center"
+                onClick={()=>{
+                    deleteWhiteList(id)
+                }}
+                >
+                Delete WhiteList  
+                </IonButton> */}
+
 
 				</div>
 

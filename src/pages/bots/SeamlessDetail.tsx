@@ -12,6 +12,7 @@ import { useQuery } from 'react-query';
 import BotServerCard from './components/BotServerCard';
 import Help from '../../components/Help';
 import moment from 'moment';
+import { queryClient } from '../../queryClient';
 
 /**
  * The page they see when they've clicked "initiate seamless" ... then clicked on a guild
@@ -32,7 +33,9 @@ interface FormFields {
     verified_role: string;
     twitter: string;
     discordInvite:string;
+    imagePath?:string;
     magicEdenUpvoteUrl?:string;
+    id?:string;
     mintDate:any;
     mintSupply:any;
     mintPrice:any;
@@ -74,8 +77,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         twitter: '',
         discordInvite:'',
         magicEdenUpvoteUrl:'',
+        imagePath:''
         })
-    const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting },setValue } = useForm<FormFields, any>();
+    const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting },setValue,getValues } = useForm<FormFields, any>();
     const [present] = useIonToast();
 
     const [whiteListRole,setWhiteListRole] = useState<any>([])
@@ -83,10 +87,28 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isBigImage, setIsBigImage] = useState<boolean>(false);
     const [isValidImage, setIsValidImage] = useState<boolean>(false);
+    const [formSubmit, setformSubmit] = useState<boolean>(false)
+
 
     useEffect(() => {
+        console.log("server",server)
+    if(server?.state?.editForm){
+        console.log("server",server)
+        fetchServerDetail()
+    }
+    }, [server])
+
+
+    useEffect(() => {
+        console.log("formField&&&&&&&&&&&&&&&&&&&&&&&&",formField)
         reset(formField);
     }, [formField])
+
+    let fetchServerDetail = async() =>{
+        const { data }:any = await instance.get( `/getWhitelistPartnership/${server?.state?.id}`);
+        console.log("Data",data)
+        setFromFiled({...data.data,imagePath:data.data.image})
+    }
 
 
     const getUrlExtension = (url:any) => {
@@ -106,52 +128,52 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         return fileObject
     }
 
-    const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
-        async () => {
-            try {
-                setIsLoading(true)
-                const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
+    // const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
+    //     async () => {
+    //         try {
+    //             setIsLoading(true)
+    //             const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
 
-                let last_wl_i = "none";
-                for(let i in whitelists){
-                    if(whitelists[i]?.sourceServer?.discordGuildId === serverId){
-                        last_wl_i = i;
-                        break;
-                    }
-                }
+    //             let last_wl_i = "none";
+    //             for(let i in whitelists){
+    //                 if(whitelists[i]?.sourceServer?.discordGuildId === serverId){
+    //                     last_wl_i = i;
+    //                     break;
+    //                 }
+    //             }
 
-                if(last_wl_i !== 'none'){
-                    let imagePath;
-                    try{
-                        imagePath = await onImageEdit(whitelists[last_wl_i]?.image);
-                    }catch(err){ }
-                    // console.log(imagePath);
-                    setFromFiled({
-                        image: imagePath || '',
-                        // target_server:'',
-                        // max_users: whitelists[last_wl_i]?.max_users || '',
-                        expiration_date:whitelists[last_wl_i]?.expiration_date || '',
-                        type:whitelists[last_wl_i]?.type || '',
-                        // whitelist_role: whitelists[last_wl_i]?.whitelist_role || '',
-                        // verified_role: whitelists[last_wl_i]?.verified_role || '',
-                        description: whitelists[last_wl_i]?.description || '',
-                        // required_role: whitelists[last_wl_i]?.required_role || '',
-                        twitter: whitelists[last_wl_i]?.twitter?.toString() || '',
-                        discordInvite:whitelists[last_wl_i]?.discordInvite?.toString() || '',
-                        magicEdenUpvoteUrl:whitelists[last_wl_i]?.magicEdenUpvoteUrl?.toString() || '',
-                    })
-                }
+    //             if(last_wl_i !== 'none'){
+    //                 let imagePath;
+    //                 try{
+    //                     imagePath = await onImageEdit(whitelists[last_wl_i]?.image);
+    //                 }catch(err){ }
+    //                 // console.log(imagePath);
+    //                 setFromFiled({
+    //                     image: imagePath || '',
+    //                     // target_server:'',
+    //                     // max_users: whitelists[last_wl_i]?.max_users || '',
+    //                     expiration_date:whitelists[last_wl_i]?.expiration_date || '',
+    //                     type:whitelists[last_wl_i]?.type || '',
+    //                     // whitelist_role: whitelists[last_wl_i]?.whitelist_role || '',
+    //                     // verified_role: whitelists[last_wl_i]?.verified_role || '',
+    //                     description: whitelists[last_wl_i]?.description || '',
+    //                     // required_role: whitelists[last_wl_i]?.required_role || '',
+    //                     twitter: whitelists[last_wl_i]?.twitter?.toString() || '',
+    //                     discordInvite:whitelists[last_wl_i]?.discordInvite?.toString() || '',
+    //                     magicEdenUpvoteUrl:whitelists[last_wl_i]?.magicEdenUpvoteUrl?.toString() || '',
+    //                 })
+    //             }
 
-                return whitelists;
-            } catch (error) {
+    //             return whitelists;
+    //         } catch (error) {
 
-            }
-            finally {
-                setIsLoading(false)
-            }
+    //         }
+    //         finally {
+    //             setIsLoading(false)
+    //         }
 
-        }
-    );
+    //     }
+    // );
 
     // get roles for the WL role we will give to people --- new mint --- source server
     const getWhiteListRole = async() =>{
@@ -200,12 +222,93 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     }
 
 
+    let createNewWhitelistPartnership = async(formData:any) =>{
+        setformSubmit(true)
+        try {
+            await instance.post( '/createNewWhitelistPartnership', formData );
+
+            history.push(`/seamless`);
+
+            present({
+                message: 'New Seamless partnership created successfully!',
+                color: 'success',
+                duration: 10000,
+            });
+            reset();
+
+        } catch (error) {
+            showError(error)
+        }finally{
+            setformSubmit(false)
+        }
+    }
+
+    let updateWhitelistPartnership = async(id:string,formData:any) =>{
+        setformSubmit(true)
+        try {
+            await instance.post( `/updateWhitelistPartnership/${id}`, formData );
+            history.push(`/seamless`);
+
+            present({
+                message: 'Seamless partnership updated successfully!',
+                color: 'success',
+                duration: 10000,
+            });
+            reset();
+
+        } catch (error) {
+            showError(error)
+        }finally{
+            setformSubmit(false)
+        }
+
+    }
+
+    let showError = (error:any) =>{
+        if (isAxiosError(error)) {
+            const { response: { data } = { errors: [] } } =
+                error as AxiosError<{ errors: { location: string; msg: string; param: string; }[]; }>;
+
+            if (!data || data.hasOwnProperty('error')) {
+                present({
+                    message: ( data as unknown as { body: string } ).body,
+                    color: 'danger',
+                    duration: 10000,
+                });
+            } else if (data.hasOwnProperty('errors')) {
+                data.errors.forEach(({ param, msg }) => {
+                    // if (param !== 'source_server') {
+                        setError( param as keyof FormFields, { message: msg, type: 'custom',});
+                    // } else {
+                        present({
+                            message: msg,
+                            color: 'danger',
+                            duration: 10000,
+                        });
+                    // }
+                });
+            }else{
+                present({
+                    message: 'An error occurred, please look at the form above to see if you are missing something',
+                    color: 'danger',
+                    duration: 10000,
+                });
+            }
+        }else{
+            present({
+                message: 'An error occurred, please look at the form above to see if you are missing something',
+                color: 'danger',
+                duration: 10000,
+            });
+        }
+    }
+
+
     // load it on load...
     useEffect(() => {
         getWhiteListRole();
         getWhiteListRequireRole();
     }, [])
-
 
     return (
         <IonGrid>
@@ -221,13 +324,14 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                 <IonCol size-xl="12" size-md="12" size-sm="12" size-xs="12" />
 
                 <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >
-                    <BotServerCard serverData={server.state} classes={`semless-light-card` }/>
+                    <BotServerCard serverData={server.state?.sourceServer || server.state} classes={`semless-light-card` }/>
                 </IonCol>
 
                 <IonCol size-xl="8" size-md="6" size-sm="6" size-xs="12">
                     <form className="space-y-3"
                      // when submitting the form...
                      onSubmit={  handleSubmit(async (data) => {
+                        console.log("data",data)
 
                             try{
                                 data.expiration_date = moment(data.expiration_date).format(); // "YYYY-MM-DD HH:MM:SS"
@@ -247,65 +351,25 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 source_server: serverId,
                                 target_server:server.state.discordGuildId,
                             };
+                            delete rawData.id
+                            delete rawData.imagePath
                             const formData = new FormData();
 
                             Object.entries(rawData).forEach(([key, value]) => {
                                 if (value) formData.append(key, value as string);
                             });
-                            formData.append('image', image);
+                            formData.append('image', data.imagePath || image);
+                            // formData.append('image', image);
 
-                            try {
-                                await instance.post( '/createNewWhitelistPartnership', formData );
-
-                                history.push(`/seamless`);
-
-                                present({
-                                    message: 'New Seamless partnership created successfully!',
-                                    color: 'success',
-                                    duration: 10000,
-                                });
-                                reset();
-
-                            } catch (error) {
-                                // console.error(error);
-
-                                if (isAxiosError(error)) {
-                                    const { response: { data } = { errors: [] } } =
-                                        error as AxiosError<{ errors: { location: string; msg: string; param: string; }[]; }>;
-
-                                    if (!data || data.hasOwnProperty('error')) {
-                                        present({
-                                            message: ( data as unknown as { body: string } ).body,
-                                            color: 'danger',
-                                            duration: 10000,
-                                        });
-                                    } else if (data.hasOwnProperty('errors')) {
-                                        data.errors.forEach(({ param, msg }) => {
-                                            // if (param !== 'source_server') {
-                                                setError( param as keyof FormFields, { message: msg, type: 'custom',});
-                                            // } else {
-                                                present({
-                                                    message: msg,
-                                                    color: 'danger',
-                                                    duration: 10000,
-                                                });
-                                            // }
-                                        });
-                                    }else{
-                                        present({
-                                            message: 'An error occurred, please look at the form above to see if you are missing something',
-                                            color: 'danger',
-                                            duration: 10000,
-                                        });
-                                    }
-                                }else{
-                                    present({
-                                        message: 'An error occurred, please look at the form above to see if you are missing something',
-                                        color: 'danger',
-                                        duration: 10000,
-                                    });
-                                }
+                            if(data.id){
+                                updateWhitelistPartnership(data.id,formData)
+                            }else{
+                                createNewWhitelistPartnership(formData)
                             }
+
+
+
+                            
                         })}>
 
                         <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card">
@@ -599,7 +663,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                     }}
                                                     name={name}
                                                     ref={ref}
-                                                    required
+                                                    required = {getValues('imagePath') ? false : true}
                                                     onIonBlur={onBlur}
                                                     type={'file' as TextFieldTypes}
                                                     accept="image/png, image/gif, image/jpeg" />
@@ -791,7 +855,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                         </IonCard>
                         <div className='ion-text-right'>
                             <IonButton className="cardButton" type={'submit'} disabled={isSubmitting || isBigImage  || isValidImage}>
-                                {isSubmitting ? ( <IonSpinner /> ) : ('Submit')}
+                                {isSubmitting || formSubmit ? ( <IonSpinner /> ) : ('Submit')}
                             </IonButton>
                         </div>
                     </form>
