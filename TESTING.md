@@ -359,6 +359,15 @@ case 2:
 TODO: write up where the bot is in the target server, so you have a dropdown for required role
 TODO: write up where the bos is NOT in the target server, so you have a input box and dropdown for required role
 
+### Seamless - Approve option for Mod on initiated Seamless created by newly added server
+- set your server's "initateApproved" value to "0"(fale) in guilds table.
+This lets the app know your server hasn't initiated any Seamless yet.
+- set other's role to "modRole" in constants
+- go to /manageserver and add that server of yours, and then initiate a Seamless
+- You can't see the created Seamless on /seamless page because it's not approved yet
+- set your role to "modRole" in constants
+- You can see now the created Seamless since you are Mod. Click on "Approve". It approves Seamless.
+- If you logs in with other users, you can see that Seamless.
 
 ### Configure bot packages
 
