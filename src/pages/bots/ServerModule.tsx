@@ -462,7 +462,11 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         Seamless - New mint
                     </IonLabel>
                 </div>
-                <p>Give your whitelist out to servers with 0 work on your mods, 0 fake DAO screenshots, and soon 100% Twitter follower verification</p>
+                <p>
+                    Give your whitelist out to servers with 0 work on your mods, 0 fake DAO screenshots, and soon 100% Twitter follower verification.
+                    <br/>
+                    <a href="https://docs.soldecoder.app/books/intro/page/seamless" target="_blank" className="font-bold cursor-pointer underline mt-5">Follow a step-by-step guide on this here.</a>
+                </p>
                 <div className="mt-3 mb-3 w-full flex ">
                     <IonButton className="text-base" css={css`
                     --padding-top: 25px;
