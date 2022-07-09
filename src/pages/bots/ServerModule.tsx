@@ -101,7 +101,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
      useEffect(() => {
         if(!localStorage.getItem('role')){
-            history.push('/manageserver')
+            history.push('/dao')
             return
         }else{
             setRole(localStorage.getItem('role'))
@@ -116,7 +116,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     // refresh page 
     useEffect(() => {
       if (performance.navigation.type === 1) {
-            history.push('/manageserver')
+            history.push('/dao')
         }
     }, [])
     
