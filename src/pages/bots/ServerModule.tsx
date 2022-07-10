@@ -1119,7 +1119,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 <div className="flex flex-col mt-4 p-2">
                                     <div className='flex justify-between items-center w-full'>
                                         <IonLabel className="ml-3 text-xl">
-                                            "Magic Eden" package
+                                            "Magic Eden & SOL" package
                                         </IonLabel>
                                         <Switch
                                             checked={checked.magicedenSolModule}
@@ -1161,7 +1161,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                         </select>
                                                     </div>
                                                     <div className='italic text-sm'>
-                                                        (Used with /watch_wallet command, to show activity on a wallet. Use it to monitor whales or your own wallet(s). Max 30 wallets per Discord server)
+                                                        (Used with /watch_wallet command, to show activity on a wallet. Use it to monitor whales or your own wallet(s). Max 40 wallets per Discord server)
                                                     </div>
                                                     {/*{dropdownValue.walletWatchWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendAnalytics')}>Send a test message</IonButton>}*/}
 
