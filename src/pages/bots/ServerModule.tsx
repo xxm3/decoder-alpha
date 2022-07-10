@@ -968,28 +968,31 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                                                     <br/><br/>
 
-                                                    <div className="text-lg font-semibold">
-                                                        "Tomorrow's Mints" channel
-                                                    </div>
-                                                    <div className="flex flex-row justify-between my-2 ">
-                                                        <select value={ dropdownValue.tomorrowMintsWebhookChannel } className="server-channel-dropdown"
-                                                                onChange={(event: any) => {
-                                                                    updateWebHooks({
-                                                                        webhook: 'tomorrowMintsWebhookChannel',
-                                                                        channel: event.target.value,
-                                                                    });
-                                                                }}
-                                                        >
-                                                            <option value="default">
-                                                                Please Select the Tomorrow's Mints channel
-                                                            </option>
-                                                            {getOption()}
-                                                        </select>
-                                                    </div>
+                                                    {/* TODO: vishwas bugged... */}
+                                                    {/*<div className="text-lg font-semibold">*/}
+                                                    {/*    "Tomorrow's Mints" channel*/}
+                                                    {/*</div>*/}
+                                                    {/*<div className="flex flex-row justify-between my-2 ">*/}
+                                                    {/*    <select value={ dropdownValue.tomorrowMintsWebhookChannel } className="server-channel-dropdown"*/}
+                                                    {/*            onChange={(event: any) => {*/}
+                                                    {/*                updateWebHooks({*/}
+                                                    {/*                    webhook: 'tomorrowMintsWebhookChannel',*/}
+                                                    {/*                    channel: event.target.value,*/}
+                                                    {/*                });*/}
+                                                    {/*            }}*/}
+                                                    {/*    >*/}
+                                                    {/*        <option value="default">*/}
+                                                    {/*            Please Select the Tomorrow's Mints channel*/}
+                                                    {/*        </option>*/}
+                                                    {/*        {getOption()}*/}
+                                                    {/*    </select>*/}
+                                                    {/*</div>*/}
+                                                    {/*<div className='italic text-sm'>*/}
+                                                    {/*    (Automated posts about tomorrow's mints, along with Twitter/Discord stats)*/}
+                                                    {/*</div>*/}
 
-                                                    <div className='italic text-sm'>
-                                                        (Automated posts about tomorrow's mints, along with Twitter/Discord stats)
-                                                    </div>
+
+
                                                     {/*{dropdownValue.tomorrowMintsWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendAnalytics')}>Send a test message</IonButton>}*/}
 
                                                 </div>
