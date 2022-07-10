@@ -30,4 +30,5 @@ export interface IWhitelist {
 	isExploding?:boolean;
 	tabButton?:string;
 	deleteWhiteList?:any
+	won: boolean;
 }

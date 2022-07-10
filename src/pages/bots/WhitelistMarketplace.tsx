@@ -166,7 +166,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                         <div className='text-xl font-semibold mb-1'>Welcome to Seamless! SOL Decoder's next joint venture with Communi3</div>
 
                         <ul>
-                            <li>- <b>New mint giving spots?</b> Pay only a portion of your whitelist to Communi3, SOL Decoder, and partnered top DAOs. Join the <a href="https://discord.gg/JvpqW7d4jE" target="_blank" className="underline cursor-pointer font-bold">the C3 Collab Discord</a> and we'll walk you through the process</li>
+                            <li>- <b>New mint giving spots?</b> Pay only a portion of your whitelist to Communi3, SOL Decoder, and partnered top DAOs. <a href="https://discord.gg/s4ne34TrUC" target="_blank" className="underline cursor-pointer font-bold">Join our Discord</a> and we'll walk you through the process</li>
 
                             <li>- <b>Existing DAO wanting to get spots?</b> It's free, and no bots need to be added to your server - <a className='cursor-pointer underline font-bold' href='/dao'>click here to set it up</a>. Afterwards, any mint using Seamless already can give you spots in {'<'} a minute. Mints not using Seamless can get onboarded with Seamless very quickly, then give you spots</li>
 

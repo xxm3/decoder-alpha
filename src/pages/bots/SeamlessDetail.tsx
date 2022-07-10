@@ -317,8 +317,11 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                 <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - fill out whitelist details</h2> </IonCol>
 
                 <p className="font-bold text-red-500">
-                    Note it is expected that you reach out to the DAOs before hand, and have them agree on receiving these spots.
-                    You must also ask for their "Required Role" (ie. DAO holder role), if they haven't set one - if you set the wrong role then nothing will work!
+                    <ul>
+                        <li>- Note it is expected that you reach out to the DAOs before hand, and have them agree on receiving these spots. </li>
+                        <li>- You must also ask for their "Required Role" (ie. DAO holder role), if they haven't set one - if you set the wrong role then nothing will work! </li>
+                        <li>- You must also reach out to the SOL Decoder team to obtain a special role, in order to submit Seamless requests. </li>
+                    </ul>
                 </p>
 
                 <IonCol size-xl="12" size-md="12" size-sm="12" size-xs="12" />
@@ -386,7 +389,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                  }}
                                                   name={name} value={value}  onIonBlur={onBlur} ref={ref} >
                                                 <IonSelectOption value="fcfs"> FCFS </IonSelectOption>
-                                                <IonSelectOption  value="raffle" disabled  > Raffle (Coming soon) </IonSelectOption>
+                                                <IonSelectOption  value="raffle"> Raffle </IonSelectOption>
                                             </IonSelect>
                                         </>
                                     )}  />

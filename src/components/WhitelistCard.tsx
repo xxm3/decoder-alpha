@@ -44,7 +44,9 @@ function WhitelistCard({
     isExploding,
     setIsExploding,
     tabButton,
-    deleteWhiteList
+    deleteWhiteList,
+    won,
+    myLiveDAO
 }: IWhitelist) {
     const history = useHistory()
 	const isDemo:any = useSelector<RootState>(state => state.demo.demo);
@@ -53,7 +55,9 @@ function WhitelistCard({
     const [showMore, setShowMore] = useState<boolean>(false);
 	const queryClient = useQueryClient();
 	const [present] = useIonToast();
-	const full = claimCounts >= max_users;
+    const isFcfs = type === 'fcfs';
+    const isRaffle = type === 'raffle';
+	const full = isFcfs ? claimCounts >= max_users : false;
     const uid  = localStorage.getItem('uid');
     // what to show in each button
     const getButtonText = (
@@ -64,38 +68,68 @@ function WhitelistCard({
         claims:any,
         showLive: any) => {
 
-        // console.log(showLive);
-        // if(name === 'Ready Set Trade'){
-        //     console.log(expired, claiming, claimed, full , claims);
-        //     console.log(claims[0]);
-        //     console.log(uid);
-        // }
-
         if(claimed){
-            return "Claimed"
+            return isFcfs ? 'Claimed' : 'Entered'
         }else if(expired){
             return "Already expired"
         }else if(full){
             return "Full"
         }else  if(claiming){
             return <IonSpinner />
-        }else if(claims[0] && claims[0].user && uid){
+        // }else if(claims[0] && claims[0].user && uid){
             // these should always match, so just returning it here. Query is on whitelistRouter.js.getQueryOptions()
-            if(claims[0].user.discordId === JSON.parse(uid)){
-                return "Claimed"
-            }else{
-                return "Claimed"
-            }
+            // if(claims[0].user.discordId === JSON.parse(uid)){
+            //     return isFcfs ? 'Claimed' : 'Entered'
+            // }else{
+            //     return isFcfs ? 'Claimed' : 'Entered'
+            // }
         }else {
-            return "Obtain whitelist"
-         }
+            return isFcfs ? 'Obtain whitelist' : 'Enter raffle'
+        }
     }
 
+    // check whether current user won the whitelist in the raffle right after the event is expired
+    useEffect(() => {
+        const updateCardState = async () => {
+            try {
+                const {data: { won }} = await instance.post("/getRaffledState", {
+                    whitelist_id : id,
+                    type
+                });
+
+                if(won) {
+                    setIsExploding && setIsExploding(true);
+                    present({
+                        message: `You've won whitelist raffle. You are now whitelisted in ${sourceServer.name}`,
+                        color: 'success',
+                        duration: 10_000,
+                    });
+                }
+            } catch {
+            }
+        }
+
+        if(!expired && myLiveDAO && isRaffle) {
+            updateCardState().catch(console.error);
+        }
+    }, [expired]);
+
+    // for confetti
+    useEffect(() => {
+        if(claimed && isFcfs) {
+            setIsExploding && setIsExploding(true);
+        } else if(won && isRaffle) {
+            setIsExploding && setIsExploding(true);
+            present({
+                message: `You've won whitelist raffle. You are now whitelisted in ${sourceServer.name}`,
+                color: 'success',
+                duration: 10_000,
+            });
+        }
+    },[]);
 
     return (
-		<>
-
-        <div className="border-gray-500 border-[0.5px] rounded-2xl  overflow-clip">
+		<div className="border-gray-500 border-[0.5px] rounded-2xl  overflow-clip">
 
             {/* for confetti */}
             {isExploding && claimed &&  <ConfettiExplosion />}
@@ -138,12 +172,29 @@ function WhitelistCard({
                 <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>
                     <p>{type.toUpperCase()}</p>
-                    <p>Slots left </p>
-                    <p>{max_users - claimCounts}/{max_users}</p>
-					<p>Required Role (in "{targetServer?.name}" DAO)</p>
-					<p>{required_role_name}</p>
-					<p className="timeLeft" hidden={expired || expired === undefined}>Time left</p>
-					<span hidden={expired || expired === undefined}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
+                    {
+                        isFcfs ?
+                        (<>
+                            <p>Slots left </p>
+                            <p>{(max_users - claimCounts) < 0 ? 0 : (max_users - claimCounts)}/{max_users}</p>
+                        </>) :
+                        expired ?
+                        (<>
+                            <p>Winners </p>
+                            <p>{claimCounts<max_users ? claimCounts : max_users}</p>
+                        </>) :
+                        (<>
+                            <p>Winning spots </p>
+                            <p>{max_users}</p>
+                            <p>Users entered </p>
+                            <p>{claimCounts}</p>
+                        </>)
+                    }
+
+    	<p>Required Role (in "{targetServer?.name}" DAO)</p>
+    	<p>{required_role_name}</p>
+    	<p className="timeLeft" hidden={expired || expired === undefined}>Time left</p>
+    	<span hidden={expired || expired === undefined}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
                 </div>
                 {tabButton == 'myDoa' &&
                 <div className=' text-xl flex justify-center mt-5'>
@@ -162,7 +213,7 @@ function WhitelistCard({
                         </div>
                  </div> }
                 {/* button! */}
-				{expired !== undefined && <IonButton css={css`
+    {expired !== undefined && <IonButton css={css`
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
 				`} className="my-2 self-center"
 
@@ -175,29 +226,35 @@ function WhitelistCard({
                             // submit form!
                             // await instance.post("/whitelistClaims", {
                             await instance.post("/createWhitelistClaims", {
-                                whitelist_id : id
+                                whitelist_id : id,
+                                type
                             });
                             setIsExploding&&setIsExploding(true)
                             queryClient.setQueryData(
                                 ['whitelistPartnerships'],
-                                (queryData) => {
-                                    return (queryData as IWhitelist[]).map(
-                                        (whitelist) => {
-                                            if (whitelist.id === id) {
-                                                whitelist.claimed = true;
-                                                whitelist.claimCounts += 1
-                                            }
-                                            return whitelist;
+                                (queryData) => (queryData as IWhitelist[]).map(
+                                    (whitelist) => {
+                                        if (whitelist.id === id) {
+                                            whitelist.claimed = true;
+                                            whitelist.claimCounts += 1
                                         }
-                                    );
-                                }
+                                        return whitelist;
+                                    }
+                                )
                             );
 
                             // success!
+                            if(isFcfs) {
+                                setIsExploding && setIsExploding(true);
+                            }
+
+                            const message = isFcfs ?
+                                `Whitelist claimed successfully! You are now whitelisted in ${sourceServer.name}` :
+                                `Entered whitelist raffle successfully! You are now waiting for whitelist raffle in ${sourceServer.name}`;
                             present({
-                                message: 'Whitelist claimed successfully! You are now whitelisted in ' + sourceServer.name,
+                                message,
                                 color: 'success',
-                                duration: 10000,
+                                duration: 10_000,
                             });
 
                         // if error!
@@ -223,7 +280,7 @@ function WhitelistCard({
                         }
                     }}
 
-                     disabled={expired || claiming || claimed || full || showLive || isDemo||tabButton == 'live' || getButtonText(expired,claiming,claimed, full, claims, showLive) === 'Claimed'}
+                     disabled={expired || claiming || claimed || full || showLive || isDemo||tabButton == 'live'}
                     >
                         {getButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>
@@ -254,11 +311,9 @@ function WhitelistCard({
                 </IonButton> */}
 
 
-				</div>
+    </div>
 
 			</div>
-
-		</>
     );
 }
 
