@@ -154,50 +154,51 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                     </IonCol>
 
-                <IonCol size="12" className='mt-4'>
-                    <div className='flex flex-col'>
-                        {/*<div className='text-xl'>Select a DAO to give whitelists to</div>*/}
-                        <div className='flex  w-full items-center' style={{ justifyContent: isMobile ? 'flex-start'  : 'flex-end'}}>
-                            <div className={`flex  ${isMobile ? 'flex-col  ' : 'flex-wrap'} `}>
-                                <IonInput
-                                    value={searchValue}
-                                    className=' border-2 mt-2 pl-2 w-full'
-                                    onIonChange={(e) => { setSearchValue( e.detail.value) }}
-                                    type="text"
-                                    placeholder='Filter by DAO Name'>
-                                </IonInput>
-                                <div className={`flex flex-row ${isMobile ? 'mt-2 w-full justify-between' : 'mr-2'}`}>
-                                    <div className='flex-row flex items-center cursor-pointer' onClick={()=>{
-                                        setDiscordSort('')
-                                        if(twitterSort === ''){
-                                            setTwitterSort('twitter Up')
-                                        }else if(twitterSort === 'twitter Up'){
-                                            setTwitterSort('twitter Down')
-                                        }else{
-                                            setTwitterSort('twitter Up')
-                                        }
-                                    }}>
-                                        <div className={`flex flex-col mr-2 ${isMobile ? '' :'ml-4'} `} >
-                                            <button className={`${twitterSort === 'twitter Up' ? 'opacity-100':'opacity-30'}`}>▲</button>
-                                            <button className={`${twitterSort === 'twitter Down' ? 'opacity-100':'opacity-30'}`}>▼</button>
+                    <IonCol size="12" className='mt-4'>
+                        <div className='flex flex-col'>
+                            {/*<div className='text-xl'>Select a DAO to give whitelists to</div>*/}
+                            <div className='flex  w-full items-center' style={{ justifyContent: isMobile ? 'flex-start'  : 'flex-end'}}>
+                                <div className={`flex  ${isMobile ? 'flex-col  ' : 'flex-wrap'} `}>
+                                    <IonInput
+                                        value={searchValue}
+                                        className=' border-2 mt-2 pl-2 w-full'
+                                        onIonChange={(e) => { setSearchValue( e.detail.value) }}
+                                        type="text"
+                                        placeholder='Filter by DAO Name'>
+                                    </IonInput>
+                                    <div className={`flex flex-row ${isMobile ? 'mt-2 w-full justify-between' : 'mr-2'}`}>
+                                        <div className='flex-row flex items-center cursor-pointer' onClick={()=>{
+                                            setDiscordSort('')
+                                            if(twitterSort === ''){
+                                                setTwitterSort('twitter Up')
+                                            }else if(twitterSort === 'twitter Up'){
+                                                setTwitterSort('twitter Down')
+                                            }else{
+                                                setTwitterSort('twitter Up')
+                                            }
+                                        }}>
+                                            <div className={`flex flex-col mr-2 ${isMobile ? '' :'ml-4'} `} >
+                                                <button className={`${twitterSort === 'twitter Up' ? 'opacity-100':'opacity-30'}`}>▲</button>
+                                                <button className={`${twitterSort === 'twitter Down' ? 'opacity-100':'opacity-30'}`}>▼</button>
+                                            </div>
+                                            <p>Twitter Followers</p>
                                         </div>
-                                        <p>Twitter Followers</p>
-                                    </div>
-                                    <div className={`flex-row flex items-center cursor-pointer ${isMobile ? 'mr-2' : ''}`} onClick={()=>{
-                                        setTwitterSort('')
-                                        if(discordSort === ''){
-                                            setDiscordSort('discord Up')
-                                        }else if(discordSort === 'discord Up'){
-                                            setDiscordSort('discord Down')
-                                        }else{
-                                            setDiscordSort('discord Up')
-                                        }
-                                    }}>
-                                        <div className='flex flex-col mr-2 ml-4'>
-                                            <button className={`${discordSort === 'discord Up' ? 'opacity-100':'opacity-30'}`}>▲</button>
-                                            <button className={`${discordSort === 'discord Down' ? 'opacity-100':'opacity-30'}`}>▼</button>
+                                        <div className={`flex-row flex items-center cursor-pointer ${isMobile ? 'mr-2' : ''}`} onClick={()=>{
+                                            setTwitterSort('')
+                                            if(discordSort === ''){
+                                                setDiscordSort('discord Up')
+                                            }else if(discordSort === 'discord Up'){
+                                                setDiscordSort('discord Down')
+                                            }else{
+                                                setDiscordSort('discord Up')
+                                            }
+                                        }}>
+                                            <div className='flex flex-col mr-2 ml-4'>
+                                                <button className={`${discordSort === 'discord Up' ? 'opacity-100':'opacity-30'}`}>▲</button>
+                                                <button className={`${discordSort === 'discord Down' ? 'opacity-100':'opacity-30'}`}>▼</button>
+                                            </div>
+                                            <p>Discord Members</p>
                                         </div>
-                                        <p>Discord Members</p>
                                     </div>
                                 </div>
                             </div>
