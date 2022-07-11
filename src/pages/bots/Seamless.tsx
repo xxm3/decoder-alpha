@@ -203,7 +203,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </IonCol>
 
 
