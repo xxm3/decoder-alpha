@@ -202,14 +202,14 @@ function WhitelistCard({
                     history.replace({pathname:`seamlessdetail/${sourceServer?.discordGuildId}`,state:{id:id,editForm:true,discordGuildId:targetServer?.discordGuildId,sourceServer:sourceServer}})
                 }}>
                             <div className="text-sm md:text-base p-2 md:px-4 w-full">EDIT</div>
-                            <div className=" bg-black/[.4] py-2 px-4 "><IonIcon icon={createOutline}></IonIcon></div>
+                            <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={createOutline}></IonIcon></div>
 
                         </div>
                         <div className={`seamless-tab-btn-active-colored danger-btn w-50 h-10 ml-3 `} onClick={()=>{
                     deleteWhiteList(id)
                 }}>
                             <div className="text-sm md:text-base p-2 md:px-4 w-full">DELETE</div>
-                            <div className=" bg-black/[.4] py-2 px-4 "><IonIcon icon={trashOutline}></IonIcon></div>
+                            <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={trashOutline}></IonIcon></div>
                         </div>
                  </div> }
                 {/* button! */}

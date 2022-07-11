@@ -116,5 +116,16 @@ select option {
     align-items: center;
     text-align: center;
 }
+.light{
+    .c-res-bg-white{
+        background-color: rgb(255 255 255 / 40%); 
+        ion-icon {
+            color: #212838;
+        }
+    }
+    .seamless-tab-btn-deactive{
+        border: 2px solid #2A3246
+    }
+}
 
 

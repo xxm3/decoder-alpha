@@ -171,7 +171,7 @@ function Sidebar() {
             </IonContent>
 
             <IonModal isOpen={logoutPopupOpen} onDidDismiss={() => setLogoutPopupOpen(false)} cssClass={isMobile ? 'logout-modal-mobile' :'logout-modal-web'} >
-                <IonContent className="flex items-center">
+                <IonContent className="flex items-center" scroll-y="false">
                     <div className='text-xl font-bold text-center w-full mt-5'>
                         Logout?
                     </div>
