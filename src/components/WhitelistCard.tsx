@@ -41,6 +41,7 @@ function WhitelistCard({
     claimCounts,
     claims,
     magicEdenUpvoteUrl,
+    iMod,
     isExploding,
     setIsExploding,
     tabButton,
@@ -52,6 +53,7 @@ function WhitelistCard({
 	const isDemo:any = useSelector<RootState>(state => state.demo.demo);
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
 	const [claiming, setClaiming] = useState<boolean>(false);
+    const [approving, setApproving] = useState<boolean>(false);
     const [showMore, setShowMore] = useState<boolean>(false);
 	const queryClient = useQueryClient();
 	const [present] = useIonToast();
@@ -60,7 +62,7 @@ function WhitelistCard({
 	const full = isFcfs ? claimCounts >= max_users : false;
     const uid  = localStorage.getItem('uid');
     // what to show in each button
-    const getButtonText = (
+    const getClaimButtonText = (
         expired : boolean,
         claiming : boolean,
         claimed : boolean, // undefined...
@@ -86,6 +88,20 @@ function WhitelistCard({
         }else {
             return isFcfs ? 'Obtain whitelist' : 'Enter raffle'
         }
+    }
+
+    const getApproveButtonText = (
+        iMod : boolean,
+        approving : boolean) => {
+        console.log(approving);
+
+        if(approving){
+            return <IonSpinner />;
+        } else if(iMod){
+            return 'Approve';
+        } else {
+            return 'Approved';
+        } 
     }
 
     // check whether current user won the whitelist in the raffle right after the event is expired
@@ -213,7 +229,7 @@ function WhitelistCard({
                         </div>
                  </div> }
                 {/* button! */}
-    {expired !== undefined && <IonButton css={css`
+				{expired !== undefined && !iMod && <IonButton css={css`
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
 				`} className="my-2 self-center"
 
@@ -279,13 +295,71 @@ function WhitelistCard({
                             setClaiming(false);
                         }
                     }}
-
+                    hidden={iMod}
                      disabled={expired || claiming || claimed || full || showLive || isDemo||tabButton == 'live'}
                     >
-                        {getButtonText(expired,claiming,claimed, full, claims, showLive)}
+                        {getClaimButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>
 
 
+                }
+
+                {!expired && iMod && <IonButton css={css`
+					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
+				`} className="my-2 self-center"
+                     onClick={async () => {
+                        setApproving(true);
+
+                        try {
+                            await instance.post(`/guilds/${sourceServer?.discordGuildId}/setInitiateApproved`, {});
+
+                            // success!
+                            present({
+                                message: 'Whitelist approved. This will be automatically approved later on',
+                                color: 'success',
+                                duration: 10000,
+                            });
+
+                            queryClient.setQueryData(
+                                ['whitelistPartnerships'],
+                                (queryData) => {
+                                    return (queryData as IWhitelist[]).map(
+                                        (whitelist) => {
+                                            if (whitelist.id === id) {
+                                                whitelist.iMod = false;
+                                            }
+                                            return whitelist;
+                                        }
+                                    );
+                                }
+                            );
+
+                        // if error!
+                        } catch (error) {
+                            console.error(error);
+
+                            if(isAxiosError(error) && error.response?.data){
+                                present({
+                                    message: error.response?.data.body,
+                                    color: 'danger',
+                                    duration: 5000,
+                                });
+                            }
+                            else {
+                                present({
+                                    message: "Something went wrong",
+                                    color: 'danger',
+                                    duration: 5000,
+                                });
+                            }
+                        } finally {
+                            setApproving(false);
+                        }
+                    }}
+                    hidden={!approving && (!iMod || expired)}
+                    >
+                        {getApproveButtonText(iMod, approving)}
+                    </IonButton>
                 }
                 {/* end button! */}
                

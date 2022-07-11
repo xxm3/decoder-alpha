@@ -26,6 +26,7 @@ export interface IWhitelist {
 	claims:any;
 	myLiveDAO:boolean;
 	magicEdenUpvoteUrl:string;
+	iMod: boolean;
 	setIsExploding?:Dispatch<SetStateAction<boolean>>;
 	isExploding?:boolean;
 	tabButton?:string;
