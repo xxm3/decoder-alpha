@@ -189,18 +189,18 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                         <div className={`${isTabButton === 'myDoa' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive ' } w-50 h-10 `} onClick={()=>setIsTabButton('myDoa')}>
                             {/* <p>Live - My DAOs ({myDoaWhiteList?.length})</p> */}
                             <div className="text-sm md:text-base p-2 md:px-4 w-full">{isMobile ? 'Mine' : 'Live - My DAOs'}</div>
-                            <div className=" bg-black/[.4] py-2 px-4 ">{myDoaWhiteList?.length}</div>
+                            <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white">{myDoaWhiteList?.length}</div>
 
                         </div>
                         <div className={`${isTabButton === 'live' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive' } ml-2 w-46 h-10 `} onClick={()=>setIsTabButton('live')}>
                             {/* <p>Live ({liveWhiteList?.length})</p> */}
                             <div className="text-sm md:text-base p-2 md:px-4 w-full">{isMobile ? 'Others' : 'Live - Other DAOs'}</div>
-                            <div className=" bg-black/[.4] py-2 px-4 ">{liveWhiteList?.length}</div>
+                            <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white">{liveWhiteList?.length}</div>
                         </div>
                         <div className={`${isTabButton === 'expire' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive'} ml-2 w-32 h-10`}onClick={()=>setIsTabButton('expire')}>
                             {/* <p>Expired ({expireWhiteList?.length})</p> */}
                             <div className="text-sm md:text-base p-2 md:px-4 w-full">{isMobile ? 'Expired' : 'Expired'}</div>
-                            <div className=" bg-black/[.4] py-2 px-4 ">{expireWhiteList?.length}</div>
+                            <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white">{expireWhiteList?.length}</div>
                         </div>
                     </div>
 
@@ -233,7 +233,6 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                             {
                                 liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) =>{
-                                    console.log("whitelist",whitelist)
                                     return (<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding}  tabButton={isTabButton} key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
                                 }): <div className='text-xl'> There are no whitelists available</div>
                             }
@@ -283,7 +282,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
 
 
                 <IonModal isOpen={modelConfirmation.show} onDidDismiss={() => setModelConfirmation({...modelConfirmation,show:false,id:null})} cssClass={isMobile ? 'logout-modal-mobile' :'logout-modal-web'} >
-                <IonContent className="flex items-center">
+                <IonContent className="flex items-center" scroll-y="false">
                     <div className='text-xl font-bold text-center w-full mt-5'>
                         Confirm !
                     </div>

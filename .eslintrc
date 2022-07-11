@@ -3,6 +3,7 @@
     "extends": [
       "plugin:@typescript-eslint/recommended"
     ],
+    "plugins": ["react", "react-hooks"],
     "parserOptions": {
       "parser": "babel-eslint"
     },

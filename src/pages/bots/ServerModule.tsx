@@ -95,7 +95,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         requiredRoleName: '',
         imagePath: ''
     });
-
+const [serverName, setServerName] = useState('')
     /**
      * Use Effects
      */
@@ -164,7 +164,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 .get(`/guilds/${serverId}?checkCondition=false`)
                 .then((response) => {
                     let data = response.data.data;
-                    // console.log("data",data)
+                    setServerName(data.name)
                 // change
                     if (role === '3NFT' || role === '4NFT') {
                         setChecked({
@@ -465,6 +465,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             </Backdrop>
 
             {/*seamless new mint*/}
+            <div className="server-module-bg p-4 px-6 w-full mb-5">
+                {serverName}
+            </div>
             <div className="server-module-bg p-4 px-6 w-full" hidden={isNoBot}>
                 <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
                     <IonLabel className="md:text-2xl text-2xl font-semibold">

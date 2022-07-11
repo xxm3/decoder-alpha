@@ -36,7 +36,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [twitterSort, setTwitterSort] = useState<String>('');
     const [discordSort, setDiscordSort] = useState<String>('');
     const [isMobile, setIsMobile] = useState<boolean>(false);
-
+    const [role] = useState(localStorage.getItem('role'))
+    
 
 
     // this loads up all the discords etc
@@ -56,7 +57,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             // return guilds;
         }
     );
-    let role = localStorage.getItem('role')
+  
         // searching
     useEffect(() => {
         if(searchValue && servers){
@@ -65,7 +66,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         }else{
                 setServerList(servers)
         }
-    }, [searchValue,servers])
+    }, [searchValue,servers.length])
 
     // sorting by twitter
     useEffect(() => {
@@ -73,14 +74,14 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         const twitterSorting = [...servers].sort((a, b) =>twitterSort === 'twitter Up'? b.twitter_followers - a.twitter_followers:a.twitter_followers - b.twitter_followers);
         setServerList(twitterSorting)
       }
-    }, [twitterSort,servers])
+    }, [twitterSort,servers.length])
     // sorting by discord
     useEffect(() => {
       if(discordSort){
         const discordSorting = [...servers].sort((a, b) =>discordSort === 'discord Up'? b.discord_members - a.discord_members:a.discord_members - b.discord_members);
         setServerList(discordSorting)
       }
-    }, [discordSort,servers])
+    }, [discordSort,servers.length])
     useEffect(() => {
         if (window.innerWidth < 525) {
             setIsMobile(true)
@@ -202,32 +203,35 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </div>
                             </div>
                         </div>
-                    </IonCol>
+                    </div>
+                </IonCol>
 
 
 
-                    <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12"></IonCol>
+                <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12"></IonCol>
 
                     {/*<IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12">*/}
                     {/*    <div className='font-bold text-xl'>Select a DAO to give whitelists to</div>*/}
                     {/*</IonCol>*/}
 
-                    {isLoading ? <Loader/> :
-                    <>
-                        {serverList && serverList.map((server: any,index:number)=>{
-                            let selectFlag = selectMultipleWhiteList.find(data=>data.id===server.id)
-                            server.selectFlag = selectFlag?true:false;
-                            return(
-                                <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" key={server.id} >
-                                    <BotServerCard serverData={server} multipleflag={multipleflag} setSelectMultipleWhiteList={setSelectMultipleWhiteList} selectMultipleWhiteList={selectMultipleWhiteList} classes={`h-full ${server.selectFlag&&'activeCardWrapper'} semless-light-card` } />
-                                </IonCol>
-                            )
-                        })}
-                    </>}
+                       
+                            {isLoading ? <Loader/> :
+                            <>
+                                {serverList && serverList.map((server: any,index:number)=>{
+                                    let selectFlag = selectMultipleWhiteList.find(data=>data.id===server.id)
+                                    server.selectFlag = selectFlag?true:false;
+                                    return(
+                                        <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" key={server.id} >
+                                            <BotServerCard serverData={server} multipleflag={multipleflag} setSelectMultipleWhiteList={setSelectMultipleWhiteList} selectMultipleWhiteList={selectMultipleWhiteList} classes={`h-full ${server.selectFlag&&'activeCardWrapper'} semless-light-card` } />
+                                        </IonCol>
+                                    )
+                                })}
+                            </>}
+                        
                 </IonRow>
             </IonGrid>
         </>
     );
 };
-// @ts-ignore
+{/* // @ts-ignore */}
 export default SeamlessDetail;
