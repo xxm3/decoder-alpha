@@ -446,14 +446,14 @@ const App = () => {
                                                                                 />
 
                                                                                 {/* manage server */}
-                                                                                {/* <ProtectedRoute
+                                                                                <ProtectedRoute
                                                                                     exact
                                                                                     path="/manageserver"
                                                                                     component={
                                                                                         ManageServer
                                                                                     }
                                                                                     needsRole={false}
-                                                                                /> */}
+                                                                                />
                                                                                 
                                                                                 {/* manage server now dao */}
                                                                                 <ProtectedRoute
