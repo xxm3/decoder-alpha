@@ -12,7 +12,7 @@ interface imgeFieldProps{
     getValues:UseFormGetValues<any>
     setIsBigImage:Dispatch<SetStateAction<boolean>>
 }
-  
+
 interface props{
     fieldLable:string
     control:Control<any>
@@ -52,7 +52,7 @@ let FieldContainer = (props:containerProps) =>{
             </IonSelect>
             )
     }else if(fieldName==='expiration_date'){
-        return( 
+        return(
             <div className='flex flex-col w-full'>
                 <input type="date"
                 className='w-full h-10 '
@@ -181,7 +181,7 @@ let FieldContainer = (props:containerProps) =>{
                             imageFieldProps?.setIsValidImage(true)
                             imageFieldProps?.setError('image', { type: 'custom', message: 'Please upload a valid Image' });
                         }
-                        
+
                         let file_size = file.size;
                         if((file_size/1024) < 10240){
                             imageFieldProps?.setIsBigImage(false)
@@ -262,7 +262,7 @@ let FieldContainer = (props:containerProps) =>{
                 name={name}
                 value={value?moment(new Date(value)).format('yyyy-MM-DD'):''}
                 onBlur={onBlur}
-                required
+                // required
                 ref={ref}
                 onChange={(e) => {
                     const value = new Date(e.target.value as string);
@@ -279,11 +279,11 @@ let FieldContainer = (props:containerProps) =>{
                     value={value}
                     onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
                     type="text"
-                    required
+                    // required
                     name={name}
                     ref={ref}
                     onIonBlur={onBlur}
-                    placeholder='Add Mint Supply' />
+                    placeholder='Enter your Mint Supply (ie. 1000)' />
                 <p className="formError"> {error?.message} </p>
             </>
         )
@@ -292,14 +292,14 @@ let FieldContainer = (props:containerProps) =>{
             <>
                 <IonInput
                     onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
-                    required
+                    // required
                     type="number"
                     name={name}
                     step="0.01"
                     value={ value}
                     onIonBlur={onBlur}
                     ref={ref}
-                    placeholder='99.50'
+                    placeholder='Enter your Mint Price (ie. 2 SOL)'
                 />
                 <p className="formError"> {error?.message} </p>
             </>
@@ -318,7 +318,7 @@ let FieldContainer = (props:containerProps) =>{
                     name={name}
                     ref={ref}
                     onIonBlur={onBlur}
-                    placeholder='Description'
+                    placeholder='Description of your mint'
                     maxlength={2000} />
                 <p className="formError"> {error?.message} </p>
             </div>

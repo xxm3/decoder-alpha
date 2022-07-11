@@ -37,7 +37,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [discordSort, setDiscordSort] = useState<String>('');
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const [role] = useState(localStorage.getItem('role'))
-    
+
 
 
     // this loads up all the discords etc
@@ -57,7 +57,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             // return guilds;
         }
     );
-  
+
         // searching
     useEffect(() => {
         if(searchValue && servers){
@@ -118,6 +118,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     }}>
                                 Select Multiple
                                 </div>
+
                                 }
                                 {/*  */}
                                 {multipleflag &&
@@ -145,7 +146,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             setSelectMultipleWhiteList([])
                                             setmultipleflag((n)=>!n)
                                         }
-                                        
+
                                     }}> Next </div>
                                 </div>
                                 }
@@ -202,7 +203,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                        {/*</div>*/}
+
                     </div>
                 </IonCol>
 
@@ -214,7 +217,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                     {/*    <div className='font-bold text-xl'>Select a DAO to give whitelists to</div>*/}
                     {/*</IonCol>*/}
 
-                       
+
                             {isLoading ? <Loader/> :
                             <>
                                 {serverList && serverList.map((server: any,index:number)=>{
@@ -227,7 +230,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     )
                                 })}
                             </>}
-                        
+
                 </IonRow>
             </IonGrid>
         </>
