@@ -73,13 +73,18 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                     {/*Recent FF Named Stuff*/}
                     <FfNamed/>
 
+                    {/* Top search words of past day */}
+                    <TopSearchWords/>
+
                     {/*<RecentAlerts/>*/}
 
                     {/*Top Discord Gainers*/}
-                    <TopDiscordGainers/>
+                    {/* <TopDiscordGainers/> */}
 
                     {/* Top Twitter Gainers*/}
-                    <TopTwitterGainers/>
+                    {/* <TopTwitterGainers/> */}
+
+                    
                 </> : <>
 
                     {/*FOR DESKTOP*/}
@@ -92,29 +97,36 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
                         </div>
                         <div className='w-1/2'>
-
                             {/* waiting Aries... */}
                             {/* recent alerts */}
                             {/*<RecentAlerts/>*/}
 
                         </div>
                     </div>
-
+                    <div className='flex flex-row w-full'>
+                        <div className='w-1/2 '>
+                            {/* Top search words of past day */}
+                                <TopSearchWords/>
+                        </div>
+                        <div className='w-1/2'>
+                        </div>
+                    </div>
 
                     <div className='flex flex-row w-full'>
                         <div className='w-1/2 '>
 
                             {/*Top Discord Gainers*/}
-                            <TopDiscordGainers/>
+                            {/* <TopDiscordGainers/> */}
 
                         </div>
                         <div className='w-1/2'>
 
                             {/* Top Twitter Gainers*/}
-                            <TopTwitterGainers/>
+                            {/* <TopTwitterGainers/> */}
 
                         </div>
                     </div>
+                    
 
                 </>
             }

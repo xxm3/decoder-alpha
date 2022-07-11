@@ -111,7 +111,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
             </Backdrop>
 
             {/* header */}
-            <div className="flex justify-between">
+            <div className={`flex flex-wrap ${isMobile ? 'flex-col items-center' : 'justify-between'}`}>
                 <IonLabel className="text-4xl font-semibold mb-3">
                     Select a Server
                 </IonLabel>
@@ -125,7 +125,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                 <div className="text-xl text-red-500">
                     {' '}
                     {/* text-center */}
-                    Unable to find any Discord servers that you are the Owner, Admin (have the "Administrator" permission) or Manager (have the "Manage Server" permission) of.
+                    Unable to find any servers you are the owner or admin of.
                     <br />
                     If you are one, then logout in the sidebar and try logging
                     in again.
@@ -177,39 +177,24 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                 </li>
                             </ul>
                             <p className="mt-3">
-                                After the bot is invited, click "Add" on one of your servers below. If your role was recently changed on the server and you don't see it on the list, click "Log Out" on the bottom left of this page, then log back in. Note you must have Owner, Admin (have the "Administrator" permission) or Manager (have the "Manage Server" permission) to see your server in the below list.
+                                After the bot is invited, click "Add" on one of your servers below. If your role was recently changed on the server and you don't see it on the list, click "Log Out" on the bottom left of this page, then log back in
                             </p>
                         </div>
                     </div>
 
                     {/* list of servers */}
                     <div className="flex flex-row justify-center w-full mt-8">
-                        <Grid
-                            container
-                            spacing={4}
-                            className="flex justify-self-center items-center mx-auto"
-                        >
+                        <Grid container spacing={4} className="flex justify-self-center items-center mx-auto" >
                             {servers
                                 ? servers.map(
                                       (server: Server, index: number) => {
                                           if (server.owner || server.admin) {
                                               return (
-                                                  <Grid
-                                                      item
-                                                      lg={3}
-                                                      key={index}
-                                                      className="mx-auto"
-                                                  >
+                                                  <Grid item lg={3} key={index} className="mx-auto" >
                                                       <div className=" rounded-xl c-card-bg overflow-hidden mx-auto">
                                                           <div
                                                               className="bg-image-wrapper"
-                                                              style={{
-                                                                  backgroundImage:
-                                                                      server.icon
-                                                                          ? `url(https://cdn.discordapp.com/icons/${server.id}/${server.icon}.webp)`
-                                                                          : '',
-                                                              }}
-                                                          >
+                                                              style={{ backgroundImage: server.icon ? `url(https://cdn.discordapp.com/icons/${server.id}/${server.icon}.webp)` : '', }} >
                                                               <div className="server-profile-bg">
                                                                   <div className="rounded-full">
                                                                       <img
@@ -241,11 +226,7 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                                               </div>
                                                               <div
                                                                   className="p-3 py-1 ml-2 text-md rounded-lg add-button cursor-pointer text-white mb-4"
-                                                                  onClick={() => {
-                                                                      storeGuild(
-                                                                          server
-                                                                      );
-                                                                  }}
+                                                                  onClick={() => { storeGuild( server ); }}
                                                               >
                                                                   {' '}
                                                                   ADD{' '}
