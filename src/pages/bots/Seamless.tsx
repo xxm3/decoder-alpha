@@ -153,9 +153,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                     </IonCol>
 
-                    {/*TODO-ruchita: this doesn't seem to work? search dont work, sort by twiteter/disc no work */}
-
-
+                <IonCol size="12" className='mt-4'>
+                    <div className='flex flex-col'>
                         {/*<div className='text-xl'>Select a DAO to give whitelists to</div>*/}
                         <div className='flex  w-full items-center' style={{ justifyContent: isMobile ? 'flex-start'  : 'flex-end'}}>
                             <div className={`flex  ${isMobile ? 'flex-col  ' : 'flex-wrap'} `}>

@@ -977,28 +977,31 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                                                     <br/><br/>
 
-                                                    <div className="text-lg font-semibold">
-                                                        "Tomorrow's Mints" channel
-                                                    </div>
-                                                    <div className="flex flex-row justify-between my-2 ">
-                                                        <select value={ dropdownValue.tomorrowMintsWebhookChannel } className="server-channel-dropdown"
-                                                                onChange={(event: any) => {
-                                                                    updateWebHooks({
-                                                                        webhook: 'tomorrowMintsWebhookChannel',
-                                                                        channel: event.target.value,
-                                                                    });
-                                                                }}
-                                                        >
-                                                            <option value="default">
-                                                                Please Select the Tomorrow's Mints channel
-                                                            </option>
-                                                            {getOption()}
-                                                        </select>
-                                                    </div>
+                                                    {/* TODO: vishwas bugged... */}
+                                                    {/*<div className="text-lg font-semibold">*/}
+                                                    {/*    "Tomorrow's Mints" channel*/}
+                                                    {/*</div>*/}
+                                                    {/*<div className="flex flex-row justify-between my-2 ">*/}
+                                                    {/*    <select value={ dropdownValue.tomorrowMintsWebhookChannel } className="server-channel-dropdown"*/}
+                                                    {/*            onChange={(event: any) => {*/}
+                                                    {/*                updateWebHooks({*/}
+                                                    {/*                    webhook: 'tomorrowMintsWebhookChannel',*/}
+                                                    {/*                    channel: event.target.value,*/}
+                                                    {/*                });*/}
+                                                    {/*            }}*/}
+                                                    {/*    >*/}
+                                                    {/*        <option value="default">*/}
+                                                    {/*            Please Select the Tomorrow's Mints channel*/}
+                                                    {/*        </option>*/}
+                                                    {/*        {getOption()}*/}
+                                                    {/*    </select>*/}
+                                                    {/*</div>*/}
+                                                    {/*<div className='italic text-sm'>*/}
+                                                    {/*    (Automated posts about tomorrow's mints, along with Twitter/Discord stats)*/}
+                                                    {/*</div>*/}
 
-                                                    <div className='italic text-sm'>
-                                                        (Automated posts about tomorrow's mints, along with Twitter/Discord stats)
-                                                    </div>
+
+
                                                     {/*{dropdownValue.tomorrowMintsWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendAnalytics')}>Send a test message</IonButton>}*/}
 
                                                 </div>
@@ -1125,7 +1128,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                 <div className="flex flex-col mt-4 p-2">
                                     <div className='flex justify-between items-center w-full'>
                                         <IonLabel className="ml-3 text-xl">
-                                            "Magic Eden" package
+                                            "Magic Eden & SOL" package
                                         </IonLabel>
                                         <Switch
                                             checked={checked.magicedenSolModule}
@@ -1167,7 +1170,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                         </select>
                                                     </div>
                                                     <div className='italic text-sm'>
-                                                        (Used with /watch_wallet command, to show activity on a wallet. Use it to monitor whales or your own wallet(s). Max 30 wallets per Discord server)
+                                                        (Used with /watch_wallet command, to show activity on a wallet. Use it to monitor whales or your own wallet(s). Max 40 wallets per Discord server)
                                                     </div>
                                                     {/*{dropdownValue.walletWatchWebhookChannel === 'default' ? '' : <IonButton className={`mt-2 ${isMobile ? 'flex self-center' :''}`} onClick={() => sendTestWebhook('sendAnalytics')}>Send a test message</IonButton>}*/}
 
@@ -1175,7 +1178,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                     <b>User Commands Unlocked:</b>
                                                     <ul className='list-disc ml-5 leading-7'>
                                                         <li>/fp - Users can get the price/volume/listings of any Magic Eden NFT</li>
-                                                        <li>/watch_wallet - Users can track the buys/sells (limit of 30 per Discord)</li>
+                                                        <li>/watch_wallet - Users can track the buys/sells (limit of 30 per Discord). Recommend you lock this down to certain roles. Have a mod right click on the SOL Decoder bot within your Discord. Manage Integration. Commands - /watch_wallet. Click on it. @everyone - denied. Add roles or members - choose a role that can manage this.</li>
                                                         <li>/tps - Users can get a live count of Solana's Transactions Per Second</li>
                                                     </ul>
 
