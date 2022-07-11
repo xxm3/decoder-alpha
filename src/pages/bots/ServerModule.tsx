@@ -1169,7 +1169,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                     <b>User Commands Unlocked:</b>
                                                     <ul className='list-disc ml-5 leading-7'>
                                                         <li>/fp - Users can get the price/volume/listings of any Magic Eden NFT</li>
-                                                        <li>/watch_wallet - Users can track the buys/sells (limit of 30 per Discord). Recommend you lock this down to certain roles. Have a mod right click on the SOL Decoder bot within your Discord. Manage Integration. Commands - /watch_wallet. Click on it. @everyone - denied. Add roles or members - choose a role that can manage this.</li>
+                                                        <li>
+                                                            /watch_wallet - Users can track the buys/sells (limit of 30 per Discord).
+                                                            {/*Recommend you lock this down to certain roles. Have a mod right click on the SOL Decoder bot within your Discord. Manage Integration. Commands - /watch_wallet. Click on it. @everyone - denied. Add roles or members - choose a role that can manage this.*/}
+                                                        </li>
                                                         <li>/tps - Users can get a live count of Solana's Transactions Per Second</li>
                                                     </ul>
 
