@@ -253,9 +253,14 @@ You can try different modes by switching between `mild`/`violent` mode using `PO
 Feel free to mention me if you have any queries regarding any of the above stuff.
 
 
+#### Testing the whale wallet bot
 
-
-
+- If not set already, do /watch_wallet ...
+- If not set already, go to the UI - Add DAO bots - Add - enable ME module - choose a wallet channel
+- Run the discord-bots repo
+- Make sure it says the "... checking whale wallets"
+- List something on ME (or buy https://magiceden.io/marketplace/ousamadao)
+- Make sure shows up in the channel, in under 2 minutes
 
 
 ---
@@ -368,6 +373,20 @@ This lets the app know your server hasn't initiated any Seamless yet.
 - set your role to "modRole" in constants
 - You can see now the created Seamless since you are Mod. Click on "Approve". It approves Seamless.
 - If you logs in with other users, you can see that Seamless.
+
+### Seamless - Initiate raffle-type Seamless
+- go to /manageserver and add one of your servers
+- go to "initiate seamless" and choose "raffle" for giveaway type
+- now login with other users that have required roles in target server
+- you can see the created Seamless and click on "enter raffle"
+- Do this for several more users so that "users entered" can exceed "winning spots".
+This can be tested by manually adding rows in whitelistClaims table directly. 
+ex. INSERT INTO whitelistClaims(id, createdAt, updatedAt, whitelist_id, user_id, state) VALUES('2b2e2668-ea75-4512-ad1e-8b83ec57d3d4', '2022-07-08 10:29:32', '2022-07-08 10:29:32', 'd501a370-3a55-4b8d-8673-ce3f76750083', '15dc1f47-05b5-4744-b679-1e23140ea139', 'REQUESTED')
+- Modify "expiration date" value in whitelistPartnerships table to already past date.
+This needs to be done because raffling can only occur after it is expired. Or you can comment out "expiration_date" filter at models.whitelists.findAll inside /raffleWhitelists endpoint
+- Run "http://localhost:5001/nft-discord-relay/us-central1/api/raffleWhitelists" on browser to simulate cron job
+- Now for winners, roles are added to discords. For failed users, they are removed from the claims table
+- When you go to /seamless page, you can see notification and confetti in case you've won in the raffle.
 
 ### Configure bot packages
 

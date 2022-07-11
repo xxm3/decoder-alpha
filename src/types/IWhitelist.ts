@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import { ServerModel } from "./Server";
 
 export interface IWhitelist {
@@ -26,4 +27,9 @@ export interface IWhitelist {
 	myLiveDAO:boolean;
 	magicEdenUpvoteUrl:string;
 	iMod: boolean;
+	setIsExploding?:Dispatch<SetStateAction<boolean>>;
+	isExploding?:boolean;
+	tabButton?:string;
+	deleteWhiteList?:any
+	won: boolean;
 }

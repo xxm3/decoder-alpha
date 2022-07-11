@@ -12,6 +12,7 @@ import { useQuery } from 'react-query';
 import BotServerCard from './components/BotServerCard';
 import Help from '../../components/Help';
 import moment from 'moment';
+import { queryClient } from '../../queryClient';
 
 /**
  * The page they see when they've clicked "initiate seamless" ... then clicked on a guild
@@ -32,11 +33,21 @@ interface FormFields {
     verified_role: string;
     twitter: string;
     discordInvite:string;
+    imagePath?:string;
     magicEdenUpvoteUrl?:string;
+    id?:string;
+    mintDate:any;
+    mintSupply:any;
+    mintPrice:any;
 }
 const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
     const server:any = useLocation();
+
+    // useEffect(() => {
+    // console.log("server",server)
+    // }, [server])
+
 
     // new mint / source server --- comes from params
     const { serverId } = useParams<any>();
@@ -57,7 +68,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         image: '',
         target_server:'',
         max_users: '',
-        expiration_date: todayEnd,
+        expiration_date: todayEnd.toISOString(),
         type:'fcfs',
         whitelist_role: '',
         description: '',
@@ -66,21 +77,38 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         twitter: '',
         discordInvite:'',
         magicEdenUpvoteUrl:'',
+        imagePath:''
         })
-    const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting },setValue } = useForm<FormFields, any>();
+    const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting },setValue,getValues } = useForm<FormFields, any>();
     const [present] = useIonToast();
 
     const [whiteListRole,setWhiteListRole] = useState<any>([])
     const [whiteListRequireRole,setWhiteListRequireRole] = useState<any>([])
     const [isLoading, setIsLoading] = useState(false);
     const [isBigImage, setIsBigImage] = useState<boolean>(false);
+    const [isValidImage, setIsValidImage] = useState<boolean>(false);
+    const [formSubmit, setformSubmit] = useState<boolean>(false)
 
 
     useEffect(() => {
+        console.log("server",server)
+    if(server?.state?.editForm){
+        console.log("server",server)
+        fetchServerDetail()
+    }
+    }, [server])
+
+
+    useEffect(() => {
+        console.log("formField&&&&&&&&&&&&&&&&&&&&&&&&",formField)
         reset(formField);
     }, [formField])
 
-
+    let fetchServerDetail = async() =>{
+        const { data }:any = await instance.get( `/getWhitelistPartnership/${server?.state?.id}`);
+        console.log("Data",data)
+        setFromFiled({...data.data,imagePath:data.data.image})
+    }
 
 
     const getUrlExtension = (url:any) => {
@@ -100,52 +128,52 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         return fileObject
     }
 
-    const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
-        async () => {
-            try {
-                setIsLoading(true)
-                const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
+    // const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
+    //     async () => {
+    //         try {
+    //             setIsLoading(true)
+    //             const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
 
-                let last_wl_i = "none";
-                for(let i in whitelists){
-                    if(whitelists[i]?.sourceServer?.discordGuildId === serverId){
-                        last_wl_i = i;
-                        break;
-                    }
-                }
+    //             let last_wl_i = "none";
+    //             for(let i in whitelists){
+    //                 if(whitelists[i]?.sourceServer?.discordGuildId === serverId){
+    //                     last_wl_i = i;
+    //                     break;
+    //                 }
+    //             }
 
-                if(last_wl_i !== 'none'){
-                    let imagePath;
-                    try{
-                        imagePath = await onImageEdit(whitelists[last_wl_i]?.image);
-                    }catch(err){ }
-                    // console.log(imagePath);
-                    setFromFiled({
-                        image: imagePath || '',
-                        // target_server:'',
-                        // max_users: whitelists[last_wl_i]?.max_users || '',
-                        expiration_date:whitelists[last_wl_i]?.expiration_date || '',
-                        type:whitelists[last_wl_i]?.type || '',
-                        // whitelist_role: whitelists[last_wl_i]?.whitelist_role || '',
-                        // verified_role: whitelists[last_wl_i]?.verified_role || '',
-                        description: whitelists[last_wl_i]?.description || '',
-                        // required_role: whitelists[last_wl_i]?.required_role || '',
-                        twitter: whitelists[last_wl_i]?.twitter?.toString() || '',
-                        discordInvite:whitelists[last_wl_i]?.discordInvite?.toString() || '',
-                        magicEdenUpvoteUrl:whitelists[last_wl_i]?.magicEdenUpvoteUrl?.toString() || '',
-                    })
-                }
+    //             if(last_wl_i !== 'none'){
+    //                 let imagePath;
+    //                 try{
+    //                     imagePath = await onImageEdit(whitelists[last_wl_i]?.image);
+    //                 }catch(err){ }
+    //                 // console.log(imagePath);
+    //                 setFromFiled({
+    //                     image: imagePath || '',
+    //                     // target_server:'',
+    //                     // max_users: whitelists[last_wl_i]?.max_users || '',
+    //                     expiration_date:whitelists[last_wl_i]?.expiration_date || '',
+    //                     type:whitelists[last_wl_i]?.type || '',
+    //                     // whitelist_role: whitelists[last_wl_i]?.whitelist_role || '',
+    //                     // verified_role: whitelists[last_wl_i]?.verified_role || '',
+    //                     description: whitelists[last_wl_i]?.description || '',
+    //                     // required_role: whitelists[last_wl_i]?.required_role || '',
+    //                     twitter: whitelists[last_wl_i]?.twitter?.toString() || '',
+    //                     discordInvite:whitelists[last_wl_i]?.discordInvite?.toString() || '',
+    //                     magicEdenUpvoteUrl:whitelists[last_wl_i]?.magicEdenUpvoteUrl?.toString() || '',
+    //                 })
+    //             }
 
-                return whitelists;
-            } catch (error) {
+    //             return whitelists;
+    //         } catch (error) {
 
-            }
-            finally {
-                setIsLoading(false)
-            }
+    //         }
+    //         finally {
+    //             setIsLoading(false)
+    //         }
 
-        }
-    );
+    //     }
+    // );
 
     // get roles for the WL role we will give to people --- new mint --- source server
     const getWhiteListRole = async() =>{
@@ -194,11 +222,92 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     }
 
 
+    let createNewWhitelistPartnership = async(formData:any) =>{
+        setformSubmit(true)
+        try {
+            await instance.post( '/createNewWhitelistPartnership', formData );
+
+            history.push(`/seamless`);
+
+            present({
+                message: 'New Seamless partnership created successfully!',
+                color: 'success',
+                duration: 10000,
+            });
+            reset();
+
+        } catch (error) {
+            showError(error)
+        }finally{
+            setformSubmit(false)
+        }
+    }
+
+    let updateWhitelistPartnership = async(id:string,formData:any) =>{
+        setformSubmit(true)
+        try {
+            await instance.post( `/updateWhitelistPartnership/${id}`, formData );
+            history.push(`/seamless`);
+
+            present({
+                message: 'Seamless partnership updated successfully!',
+                color: 'success',
+                duration: 10000,
+            });
+            reset();
+
+        } catch (error) {
+            showError(error)
+        }finally{
+            setformSubmit(false)
+        }
+
+    }
+
+    let showError = (error:any) =>{
+        if (isAxiosError(error)) {
+            const { response: { data } = { errors: [] } } =
+                error as AxiosError<{ errors: { location: string; msg: string; param: string; }[]; }>;
+
+            if (!data || data.hasOwnProperty('error')) {
+                present({
+                    message: ( data as unknown as { body: string } ).body,
+                    color: 'danger',
+                    duration: 10000,
+                });
+            } else if (data.hasOwnProperty('errors')) {
+                data.errors.forEach(({ param, msg }) => {
+                    // if (param !== 'source_server') {
+                        setError( param as keyof FormFields, { message: msg, type: 'custom',});
+                    // } else {
+                        present({
+                            message: msg,
+                            color: 'danger',
+                            duration: 10000,
+                        });
+                    // }
+                });
+            }else{
+                present({
+                    message: 'An error occurred, please look at the form above to see if you are missing something',
+                    color: 'danger',
+                    duration: 10000,
+                });
+            }
+        }else{
+            present({
+                message: 'An error occurred, please look at the form above to see if you are missing something',
+                color: 'danger',
+                duration: 10000,
+            });
+        }
+    }
+
+
     // load it on load...
     useEffect(() => {
         getWhiteListRole();
         getWhiteListRequireRole();
-
     }, [])
 
     return (
@@ -208,20 +317,24 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                 <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - fill out whitelist details</h2> </IonCol>
 
                 <p className="font-bold text-red-500">
-                    Note it is expected that you reach out to the DAOs before hand, and have them agree on receiving these spots.
-                    You must also ask for their "Required Role" (ie. DAO holder role), if they haven't set one - if you set the wrong role then nothing will work!
+                    <ul>
+                        <li>- Note it is expected that you reach out to the DAOs before hand, and have them agree on receiving these spots. </li>
+                        <li>- You must also ask for their "Required Role" (ie. DAO holder role), if they haven't set one - if you set the wrong role then nothing will work! </li>
+                        <li>- You must also reach out to the SOL Decoder team to obtain a special role, in order to submit Seamless requests. </li>
+                    </ul>
                 </p>
 
                 <IonCol size-xl="12" size-md="12" size-sm="12" size-xs="12" />
 
                 <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >
-                    <BotServerCard serverData={server.state} />
+                    <BotServerCard serverData={server.state?.sourceServer || server.state} classes={`semless-light-card` }/>
                 </IonCol>
 
                 <IonCol size-xl="8" size-md="6" size-sm="6" size-xs="12">
                     <form className="space-y-3"
                      // when submitting the form...
                      onSubmit={  handleSubmit(async (data) => {
+                        console.log("data",data)
 
                             try{
                                 data.expiration_date = moment(data.expiration_date).format(); // "YYYY-MM-DD HH:MM:SS"
@@ -241,72 +354,32 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 source_server: serverId,
                                 target_server:server.state.discordGuildId,
                             };
+                            delete rawData.id
+                            delete rawData.imagePath
                             const formData = new FormData();
 
                             Object.entries(rawData).forEach(([key, value]) => {
                                 if (value) formData.append(key, value as string);
                             });
-                            formData.append('image', image);
+                            formData.append('image', data.imagePath || image);
+                            // formData.append('image', image);
 
-                            try {
-                                await instance.post( '/createNewWhitelistPartnership', formData );
-
-                                history.push(`/seamless`);
-
-                                present({
-                                    message: 'New Seamless partnership created successfully!',
-                                    color: 'success',
-                                    duration: 10000,
-                                });
-                                reset();
-
-                            } catch (error) {
-                                console.error(error);
-
-                                if (isAxiosError(error)) {
-                                    const { response: { data } = { errors: [] } } =
-                                        error as AxiosError<{ errors: { location: string; msg: string; param: string; }[]; }>;
-
-                                    if (!data || data.hasOwnProperty('error')) {
-                                        present({
-                                            message: ( data as unknown as { body: string } ).body,
-                                            color: 'danger',
-                                            duration: 10000,
-                                        });
-                                    } else if (data.hasOwnProperty('errors')) {
-                                        data.errors.forEach(({ param, msg }) => {
-                                            // if (param !== 'source_server') {
-                                                setError( param as keyof FormFields, { message: msg, type: 'custom',});
-                                            // } else {
-                                                present({
-                                                    message: msg,
-                                                    color: 'danger',
-                                                    duration: 10000,
-                                                });
-                                            // }
-                                        });
-                                    }else{
-                                        present({
-                                            message: 'An error occurred, please look at the form above to see if you are missing something',
-                                            color: 'danger',
-                                            duration: 10000,
-                                        });
-                                    }
-                                }else{
-                                    present({
-                                        message: 'An error occurred, please look at the form above to see if you are missing something',
-                                        color: 'danger',
-                                        duration: 10000,
-                                    });
-                                }
+                            if(data.id){
+                                updateWhitelistPartnership(data.id,formData)
+                            }else{
+                                createNewWhitelistPartnership(formData)
                             }
+
+
+
+                            
                         })}>
 
-                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
+                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card">
 
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Giveaway Type</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Giveaway Type</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                     <Controller name="type" rules={{ required: true, }} defaultValue="fcfs" control={control}
                                     render={({  field: { onChange, onBlur, value, name, ref, }, fieldState: { error }, }) => (
                                         <>
@@ -316,7 +389,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                  }}
                                                   name={name} value={value}  onIonBlur={onBlur} ref={ref} >
                                                 <IonSelectOption value="fcfs"> FCFS </IonSelectOption>
-                                                <IonSelectOption  value="raffle" disabled  > Raffle (Coming soon) </IonSelectOption>
+                                                <IonSelectOption  value="raffle"> Raffle </IonSelectOption>
                                             </IonSelect>
                                         </>
                                     )}  />
@@ -324,13 +397,13 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
 
                             <div>
-                                <IonLabel className="text-white">Expiration Date</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Expiration Date</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name="expiration_date"
                                     control={control}
                                     rules={{  required: true, }}
-                                    defaultValue={todayEnd.toISOString()}
+                                    defaultValue={todayEnd}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => {
                                         return (
                                             <div className='flex flex-col w-full'>
@@ -345,7 +418,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 onChange={(e) => {
                                                     const value = new Date(e.target.value as string);
                                                     value.setHours(23,59,59,999)
-                                                    setValue('expiration_date',value)
+                                                    // console.log(value.toISOString())
+                                                    setValue('expiration_date',value.toISOString())
                                                     }}
                                                 min={new Date(  +now + 86400 * 1000 ).toISOString()}
                                                 max={new Date(  +now + 86400 * 365 * 1000 ).toISOString()}
@@ -353,34 +427,15 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                 <p className="formError"> {error?.message} </p>
                                             </div>
                                         )
-                                        // return(
-                                        //     <>
-                                        //         <IonDatetime
-                                        //             value={value}
-                                        //             onIonChange={(e) => {
-                                        //                 const value = new Date(e.detail.value as string);
-                                        //                 value.setHours(23,59,59,999);
-                                        //                 ( e.target as HTMLInputElement ).value =  value.toISOString();
-                                        //                 onChange(e);
-                                        //             }}
-                                        //             name={name}
-                                        //             ref={ref}
-                                        //             onIonBlur={onBlur}
-                                        //             placeholder='When this giveaway should expire'
-                                        //             min={new Date(  +now + 86400 * 1000 ).toISOString()}
-                                        //             max={new Date(  +now + 86400 * 365 * 1000 ).toISOString()} />
-                                        //         <p className="formError"> {error?.message} </p>
-                                        //     </>
-                                        // )
                                     }} />
                                 </IonItem>
                             </div>
                         </IonCard>
 
-                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
+                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card">
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Max Users</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Max Users</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                 <Controller
                                 name="max_users"
                                 control={control}
@@ -407,8 +462,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
 
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Whitelist Role (role they will get once Whitelisted in your new mint server)</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Whitelist Role (role they will get once Whitelisted in your new mint server)</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                 <Controller
                                     name="whitelist_role"
                                     rules={{ required: true, }}
@@ -435,12 +490,12 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </IonItem>
                             </div>
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Verified role (a role that indicates a member of your new mint server is verified)
+                                <IonLabel className="card-detail-wrapper">Verified role (a role that indicates a member of your new mint server is verified)
                                     <Help description={`Some servers have a verification system in place to prevent their server being overpopulated with fake members.
                                     Most systems work in a way that a member has to do a certain action like react to a message or click somewhere in order to obtain a role indicating that the user is verified in the server.
                                     If your new mint server has a role for verified members, select it below. The verified role will be added alongside the whitelist role so that the member can get automatically verified in the server.`}/>
                                 </IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonItem className="c-item-wrapper mt-1">
                                 <Controller
                                     name="verified_role"
                                     rules={{ required: true, }}
@@ -471,8 +526,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             {whiteListRequireRole.length > 0 ?
                                 <div>
                                     {/*-{server?.state?.requiredRoleId}-*/}
-                                    <IonLabel className="text-white">Required Role (role required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
-                                    <IonItem className="ion-item-wrapper mt-1">
+                                    <IonLabel className="card-detail-wrapper">Required Role (role required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
+                                    <IonItem className="c-item-wrapper mt-1">
                                         <Controller
                                             name="required_role"
                                             rules={{ required: true, }}
@@ -488,7 +543,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         value={value}
                                                         required
                                                         >
-                                                            <option value=''>{server?.state?.requiredRoleId}</option>
+                                                            {server?.state?.requiredRoleId ? <option value={server?.state?.requiredRoleId}>{server?.state?.requiredRoleId}</option> : '' }
                                                             <option value=''>Select a Required Role</option>
                                                             {whiteListRequireRole && whiteListRequireRole.map((role:any) =>{
                                                                 return (<option  key={role.id}  value={role.id} selected={ server?.state?.requiredRoleId && role.id === server?.state?.requiredRoleId} > {role.name} </option>)}
@@ -508,8 +563,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             :
                                 <div>
                                     <div>
-                                        <IonLabel className="text-white">Required Role ID (Discord Role ID required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
-                                        <IonItem className="ion-item-wrapper mt-1">
+                                        <IonLabel className="card-detail-wrapper">Required Role ID (Discord Role ID required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
+                                        <IonItem className="c-item-wrapper mt-1">
                                             <Controller
                                             name="required_role"
                                             control={control}
@@ -537,8 +592,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     </div>
 
                                     <div className='mt-5'>
-                                        <IonLabel className="text-white">Required Role Name (Discord Role ID required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
-                                        <IonItem className="ion-item-wrapper mt-1">
+                                        <IonLabel className="card-detail-wrapper">Required Role Name (Discord Role ID required of them in '{server?.state?.name}' to enter the giveaway)</IonLabel>
+                                        <IonItem className="c-item-wrapper mt-1">
                                             <Controller
                                             name="required_role_name"
                                             control={control}
@@ -570,14 +625,13 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                         </IonCard>
 
-                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2">
+                        <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card">
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Image to represent your DAO - Image must be less then 10MB</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Image to represent your DAO - Image must be less then 10MB</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name="image"
                                     control={control}
-                                    rules={{ required: true, }}
                                     render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) =>{
                                         return(
                                             <div className='flex flex-col w-full'>
@@ -588,12 +642,21 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                         const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
                                                         const file = target .files?.[0] as FieldValues['image'];
                                                         if(file){
+                                                            if(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpeg' ){
+                                                                setIsValidImage(false)
+                                                                setError('image', { type: 'custom', message: '' });
+                                                            }else{
+                                                                setIsValidImage(true)
+                                                                setError('image', { type: 'custom', message: 'Please upload a valid Image' });
+                                                            }
+                                                            
                                                             let file_size = file.size;
                                                             if((file_size/1024) < 10240){
                                                                 setIsBigImage(false)
+                                                                setError('image', { type: 'custom', message: '' });
                                                             }else{
-                                                                setError('image', { type: 'custom', message: 'Maximum allowed file size is 10 MB' });
                                                                 setIsBigImage(true)
+                                                                setError('image', { type: 'custom', message: 'Maximum allowed file size is 10 MB' });
                                                             }
                                                         }
                                                         if (file)
@@ -603,10 +666,10 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                                     }}
                                                     name={name}
                                                     ref={ref}
-                                                    required
+                                                    required = {getValues('imagePath') ? false : true}
                                                     onIonBlur={onBlur}
                                                     type={'file' as TextFieldTypes}
-                                                    accept="image" />
+                                                    accept="image/png, image/gif, image/jpeg" />
                                                 <p className="formError"> {error?.message} </p>
                                             </div>
                                         )
@@ -615,8 +678,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
 
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Discord Invite Link (never expires, no invite limit)</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Discord Invite Link (never expires, no invite limit)</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name="discordInvite"
                                     control={control}
@@ -639,8 +702,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
 
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Twitter Link</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Twitter Link</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name="twitter"
                                     control={control}
@@ -662,8 +725,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </IonItem>
                             </div>
                             <div className='mb-5'>
-                                <IonLabel className="text-white">Magic Eden drops URL</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                                <IonLabel className="card-detail-wrapper">Magic Eden drops URL</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name="magicEdenUpvoteUrl"
                                     control={control}
@@ -684,10 +747,89 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     )} />
                                 </IonItem>
                             </div>
+                            <div  className='mb-5'>
+                                <IonLabel className="card-detail-wrapper">Mint Date</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
+                                <Controller
+                                name="mintDate"
+                                control={control}
+                                rules={{  required: true, }}
+                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => {
+                                    return (
+                                        <div className='flex flex-col w-full'>
+                                            <input type="date"
+                                            className='w-full h-10 '
+                                            style={{backgroundColor : 'transparent'}}
+                                            name={name}
+                                            value={moment(new Date(value)).format('yyyy-MM-DD')}
+                                            onBlur={onBlur}
+                                            required
+                                            ref={ref}
+                                            onChange={(e) => {
+                                                const value = new Date(e.target.value as string);
+                                                setValue('mintDate',value.toISOString())
+                                                }}
+                                            />
+                                            <p className="formError"> {error?.message} </p>
+                                        </div>
+                                    )
+                                }} />
+                                </IonItem>
+                            </div>
+                                    {/*  mintSupply */}
+                            <div className='mb-5'>
+                                <IonLabel className="card-detail-wrapper">Mint Supply</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
+                                    <Controller
+                                    name="mintSupply"
+                                    control={control}
+                                    render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => (
+                                        <>
+                                            <IonInput
+                                                value={value}
+                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                type="text"
+                                                required
+                                                name={name}
+                                                ref={ref}
+                                                onIonBlur={onBlur}
+                                                placeholder='Add Mint Supply' />
+                                            <p className="formError"> {error?.message} </p>
+                                        </>
+                                    )} />
+                                </IonItem>
+                            </div>
+                                    {/* mint Price */}
+                            <div className='mb-5'>
+                                <IonLabel className="card-detail-wrapper">Mint Price</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
+                                <Controller
+                                name='mintPrice'
+                                control={control}
+                                render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { error }, }) => {
+                                    return (
+                                        <>
+                                            <IonInput
+                                                onIonChange={(e) => { ( e.target as HTMLInputElement ).value = e.detail.value as string; onChange(e); }}
+                                                required
+                                                type="number"
+                                                name={name}
+                                                step="0.01"
+                                                value={ value}
+                                                onIonBlur={onBlur}
+                                                ref={ref}
+                                                placeholder='99.50'
+                                            />
+                                            <p className="formError"> {error?.message} </p>
+                                        </>
+                                    )
+                                }} />
+                                </IonItem>
+                            </div>
 
-                            <div>
-                                <IonLabel className="text-white">Description</IonLabel>
-                                <IonItem className="ion-item-wrapper mt-1">
+                            <div className='mb-5'>
+                                <IonLabel className="card-detail-wrapper">Description</IonLabel>
+                                <IonItem className="c-item-wrapper mt-1">
                                     <Controller
                                     name="description"
                                     control={control}
@@ -715,8 +857,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
                         </IonCard>
                         <div className='ion-text-right'>
-                            <IonButton className="cardButton" type={'submit'} disabled={isSubmitting || isBigImage}>
-                                {isSubmitting ? ( <IonSpinner /> ) : ('Submit')}
+                            <IonButton className="cardButton" type={'submit'} disabled={isSubmitting || isBigImage  || isValidImage}>
+                                {isSubmitting || formSubmit ? ( <IonSpinner /> ) : ('Submit')}
                             </IonButton>
                         </div>
                     </form>

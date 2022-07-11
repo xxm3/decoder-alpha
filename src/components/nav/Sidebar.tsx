@@ -88,6 +88,13 @@ function Sidebar() {
                 />
 
                 <NavLink
+                    title="Add Bots / Seamless"
+                    icon={serverOutline}
+                    to="/dao"
+                    needsRole={false}
+                />
+
+                <NavLink
                     title="Today's Mints"
                     icon={todayOutline}
                     to="/schedule"
@@ -121,12 +128,6 @@ function Sidebar() {
                 {/*    icon={notificationsOutline}*/}
                 {/*    to="/alerts"*/}
                 {/*/>*/}
-
-               <NavLink
-                    title="Add DAO Bots"
-                   icon={serverOutline}
-                   to="/dao"
-               />
 
                 <NavLink
                     title="Docs"
