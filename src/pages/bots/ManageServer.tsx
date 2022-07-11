@@ -317,9 +317,9 @@ const ManageServer: React.FC<AppComponentProps> = () => {
                                         for all tokens in an address)
                                     </li>
                                     <li>
-                                        <b>#3 - Magic Eden package</b> - (1) use the command
+                                        <b>#3 - Magic Eden & SOL package</b> - (1) use the command
                                         "/fp any_magiceden_nft" and you'll get the price /
-                                        listings / volume of that NFT, and (2) use the
+                                        listings / volume of that NFT, (2) track activities of any wallet you enter in your Discord, and (3) use the
                                         command "/tps" to see a live count of Solana's
                                         Transactions Per Second
                                     </li>

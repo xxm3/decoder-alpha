@@ -41,8 +41,6 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
 
             <AppRoute {...props} component={() => <div>
 
-                {/* TODO: entity needs to remake... */}
-
                 <div className='text-xl font-bold'>Get whitelisted with Seamless?</div>
                 Seamless offers many whitelist opportunities for existing DAOs. No screenshots, no waiting for a mod to tag you, no needing to open a ticket to get tagged. Get whitelisted in under 15 seconds. Want to learn more? <Link className="underline cursor-pointer font-bold" to="https://medium.com/@sol-decoder/sol-decoder-presents-seamless-32251a4deb43" target="_blank">
                 Read our Medium article here</Link>
