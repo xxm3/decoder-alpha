@@ -253,9 +253,14 @@ You can try different modes by switching between `mild`/`violent` mode using `PO
 Feel free to mention me if you have any queries regarding any of the above stuff.
 
 
+#### Testing the whale wallet bot
 
-
-
+- If not set already, do /watch_wallet ...
+- If not set already, go to the UI - Add DAO bots - Add - enable ME module - choose a wallet channel
+- Run the discord-bots repo
+- Make sure it says the "... checking whale wallets"
+- List something on ME (or buy https://magiceden.io/marketplace/ousamadao)
+- Make sure shows up in the channel, in under 2 minutes
 
 
 ---
