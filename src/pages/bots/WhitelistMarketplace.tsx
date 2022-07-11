@@ -233,7 +233,6 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                             {
                                 liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) =>{
-                                    console.log("whitelist",whitelist)
                                     return (<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding}  tabButton={isTabButton} key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
                                 }): <div className='text-xl'> There are no whitelists available</div>
                             }

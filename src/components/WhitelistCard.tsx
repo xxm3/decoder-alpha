@@ -115,24 +115,24 @@ function WhitelistCard({
     }, [expired]);
 
     // for confetti
-    useEffect(() => {
-        if(claimed && isFcfs) {
-            setIsExploding && setIsExploding(true);
-        } else if(won && isRaffle) {
-            setIsExploding && setIsExploding(true);
-            present({
-                message: `You've won whitelist raffle. You are now whitelisted in ${sourceServer.name}`,
-                color: 'success',
-                duration: 10_000,
-            });
-        }
-    },[]);
+    // useEffect(() => {
+    //     if(claimed && isFcfs) {
+    //         setIsExploding && setIsExploding(true);
+    //     } else if(won && isRaffle) {
+    //         setIsExploding && setIsExploding(true);
+    //         present({
+    //             message: `You've won whitelist raffle. You are now whitelisted in ${sourceServer.name}`,
+    //             color: 'success',
+    //             duration: 10_000,
+    //         });
+    //     }
+    // },[]);
 
     return (
 		<div className="border-gray-500 border-[0.5px] rounded-2xl  overflow-clip">
 
             {/* for confetti */}
-            {isExploding && claimed &&  <ConfettiExplosion />}
+            {isExploding && claimed && isFcfs &&  <ConfettiExplosion />}
 
             <div className="relative overflow-y-hidden h-60 ">
                 <img src={image} className="h-full w-full object-cover object-left" alt={`${sourceServer?.name} X ${targetServer?.name}`}  
