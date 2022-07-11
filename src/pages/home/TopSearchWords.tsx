@@ -22,12 +22,10 @@ const TopSearchWords = () => {
                     'Content-Type': 'application/json',
                 },
             })
-
+            console.log('data---------',data)
             return data;
         } catch (e) {
-            console.error('try/catch in Search.tsx: ', e);
             const error = e as Error & { response?: AxiosResponse };
-
             let msg = '';
             if (error?.response) {
                 msg = String(error.response.data.body);
@@ -77,21 +75,12 @@ const TopSearchWords = () => {
                     <div className={`font-bold pb-1 tracking-wider text-xl`}>Top searches of past day</div>
                     <div>
                     <ul style={{listStyle: 'disc'}}>
-                        <li  className="ml-8">
-                            Word 1
-                        </li>
-                        <li  className="ml-8">
-                            Word 2
-                        </li>
-                        <li  className="ml-8">
-                            Word 3
-                        </li>
-                        <li  className="ml-8">
-                            Word 4
-                        </li>
-                        <li  className="ml-8">
-                            Word 5
-                        </li>
+                    {topSearchWordsQuery?.data?.data?.map((word: any, index:number) => {
+                        return(
+                            <li  key={index} className="ml-8">{word.searchterm}</li>
+                        )
+                    })}
+                        
                     </ul>
 
                     </div>

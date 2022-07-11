@@ -4,12 +4,19 @@ import { instance } from '../../axios';
 import WhitelistCard from '../../components/WhitelistCard';
 import { IWhitelist } from '../../types/IWhitelist';
 import Loader from '../../components/Loader';
-import {IonCol, IonGrid, IonLabel, IonRow} from '@ionic/react';
+import {IonButton, IonCol, IonContent, IonGrid, IonLabel, IonModal, IonRow, useIonToast} from '@ionic/react';
 import './SeamlessDetail.scss';
+import { queryClient } from '../../queryClient';
+import { async } from '@firebase/util';
 
 /**
  * The page they see when they are on /seamless, and browsing for whitelists etc..
  */
+
+interface modelType{
+    show:boolean,
+    id:string | null
+}
 
 function WhitelistMarketplace() {
 
@@ -19,6 +26,12 @@ function WhitelistMarketplace() {
     const [expireWhiteList,setExpireWhiteList] = useState<IWhitelist[]>([]);
     const [myDoaWhiteList,setMyDaoWhiteList] = useState<IWhitelist[]>([]);
     const [myClaimWhiteList,setMyClaimWhiteList] = useState<IWhitelist[]>([]);
+    const [isExploding, setIsExploding] = useState<boolean>(false);
+    const [modelConfirmation,setModelConfirmation ] = useState<modelType>({
+        show:false,
+        id:null
+    })
+    const [present] = useIonToast();
 
     const [isMobile, setIsMobile] = useState(false);
     useEffect(() => {
@@ -36,8 +49,8 @@ function WhitelistMarketplace() {
     const serverArray = server &&  JSON.parse(server);
 
     // get all your WL crap
-    const { data: whitelists = []  } = useQuery( ['whitelistPartnerships'],
-
+    
+   const { data: whitelists = [], refetch: getAllWhiteList   } = useQuery( ['whitelistPartnerships'],
         async () => {
                 try {
                     setIsLoading(true)
@@ -51,7 +64,6 @@ function WhitelistMarketplace() {
                         if (whitelist.isExpired || !whitelist.active) { whiteListExpire.push(whitelist) }
                         else if (whitelist.myLiveDAO) { whiteListMyDao.push(whitelist) }
                         else whiteListLive.push(whitelist);
-
                         if (whitelist.claims.some((cl: any) => cl.user?.discordId === userId)) whiteListMyClaim.push(whitelist);
                     }
                     setLiveWhiteList(whiteListLive);
@@ -67,7 +79,46 @@ function WhitelistMarketplace() {
                     setIsLoading(false)
                 }
         }
+        
     );
+
+
+    let deleteWhiteList=async(id:string)=>{
+        setModelConfirmation({...modelConfirmation,id:id,show:true})
+    }
+
+    let DeleteWhiteListHandler = async() =>{
+        setIsLoading(true)
+        try{
+          let response =   await instance.delete( `/deleteWhitelistPartnership/${modelConfirmation.id}`)
+          present({
+            message: 'Whitelist details deleted sucessfully.',
+            color: 'success',
+            duration: 10000,
+        });
+          getAllWhiteList()
+        }catch(error){
+
+
+        }finally{
+            setModelConfirmation({...modelConfirmation,show:false,id:null})
+            setIsLoading(false)
+        }
+    }
+
+    //  exploding hide on tab change
+    useEffect(() => {
+        isExploding&&setIsExploding(false)
+    }, [isTabButton])
+    
+    // 5 second after hide exploding
+    useEffect(() => {
+    isExploding&&setTimeout(() => {
+        setIsExploding(false)
+    }, 1000);
+      
+    }, [isExploding])
+    
 
     return (
 
@@ -135,18 +186,18 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
 
                     {/* tabs on the top (Live vs Expired) */}
                     <div className=' text-xl flex justify-center mt-5'>
-                        <div className={`${isTabButton === 'myDoa' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive ' } w-50 h-10 `} onClick={()=>setIsTabButton('myDoa')}>
+                        <div className={`${isTabButton === 'myDoa' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive ' } w-50 h-10 `} onClick={()=>setIsTabButton('myDoa')}>
                             {/* <p>Live - My DAOs ({myDoaWhiteList?.length})</p> */}
                             <div className="text-sm md:text-base p-2 md:px-4 w-full">{isMobile ? 'Mine' : 'Live - My DAOs'}</div>
                             <div className=" bg-black/[.4] py-2 px-4 ">{myDoaWhiteList?.length}</div>
 
                         </div>
-                        <div className={`${isTabButton === 'live' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive' } ml-2 w-46 h-10 `} onClick={()=>setIsTabButton('live')}>
+                        <div className={`${isTabButton === 'live' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive' } ml-2 w-46 h-10 `} onClick={()=>setIsTabButton('live')}>
                             {/* <p>Live ({liveWhiteList?.length})</p> */}
                             <div className="text-sm md:text-base p-2 md:px-4 w-full">{isMobile ? 'Others' : 'Live - Other DAOs'}</div>
                             <div className=" bg-black/[.4] py-2 px-4 ">{liveWhiteList?.length}</div>
                         </div>
-                        <div className={`${isTabButton === 'expire' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive'} ml-2 w-32 h-10`}onClick={()=>setIsTabButton('expire')}>
+                        <div className={`${isTabButton === 'expire' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive'} ml-2 w-32 h-10`}onClick={()=>setIsTabButton('expire')}>
                             {/* <p>Expired ({expireWhiteList?.length})</p> */}
                             <div className="text-sm md:text-base p-2 md:px-4 w-full">{isMobile ? 'Expired' : 'Expired'}</div>
                             <div className=" bg-black/[.4] py-2 px-4 ">{expireWhiteList?.length}</div>
@@ -154,23 +205,24 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                     </div>
 
                     {/* expire */}
-                    {/*{isTabButton === 'expire' ||  isTabButton === 'myClaim' ?*/}
-                    {/*    <div className='flex justify-center mt-4'>*/}
-                    {/*        <div className={`${isTabButton === 'myClaim' ? 'seamless-tab-btn-active' : 'seamless-tab-btn-deactive'} ml-2 w-60 h-10 text-xl `} onClick={()=>setIsTabButton('myClaim')}>*/}
-                    {/*            /!* <p>View my claim mints ({myClaimWhiteList?.length})</p> *!/*/}
-                    {/*            <div className="text-sm md:text-base p-2 md:px-4 w-full">View My Claimed Mints</div>*/}
-                    {/*        <div className=" bg-black/[.4] py-2 px-4 ">{myClaimWhiteList?.length}</div>*/}
-                    {/*        </div>*/}
-                    {/*    </div> :  ''*/}
+                    {isTabButton === 'expire' ||  isTabButton === 'myClaim' ?
+                        <div className='flex justify-center mt-4'>
+                            <div className={`${isTabButton === 'myClaim' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive'} ml-2 w-60 h-10 text-xl `} onClick={()=>setIsTabButton('myClaim')}>
+                                {/*  <p>View my claim mints ({myClaimWhiteList?.length})</p>  */}
+                                {/* <div className="text-sm md:text-base p-2 md:px-4 w-full">View My Claimed Mints</div> */}
+                                <div className="text-sm md:text-base p-2 w-full">View My Claimed Mints</div>
+                            <div className=" bg-black/[.4] py-2 px-4 ">{myClaimWhiteList?.length}</div>
+                            </div>
+                        </div> :  ''
 
-                    {/*}*/}
+                    }
 
                     {/* my DAO live */}
                     {isTabButton === 'myDoa' &&
                         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 sm:grid-cols-1 gap-6 p-8">
                             {
                                 myDoaWhiteList.length > 0 ? myDoaWhiteList.map((whitelist:any) => {
-                                    return(<WhitelistCard {...whitelist}  key={Math.random()}/>)
+                                    return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
                                 }) : <div className='text-xl'> There are no whitelists available</div>
                             }
                         </div>
@@ -180,8 +232,10 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                     {isTabButton === 'live' &&
                         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                             {
-                                liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) =>
-                                (<WhitelistCard {...whitelist}  key={Math.random()}/>)) : <div className='text-xl'> There are no whitelists available</div>
+                                liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) =>{
+                                    console.log("whitelist",whitelist)
+                                    return (<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding}  tabButton={isTabButton} key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
+                                }): <div className='text-xl'> There are no whitelists available</div>
                             }
                         </div>
                     }
@@ -191,7 +245,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                             {
                                 expireWhiteList.length > 0 ? expireWhiteList.map((whitelist:any) => {
-                                 return(<WhitelistCard {...whitelist}  key={Math.random()}/>)
+                                    return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton}  key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
                                 }) : <div className='text-xl'> There are no whitelists available</div>
                             }
                         </div>
@@ -202,7 +256,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                         <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                             {
                                 myClaimWhiteList.length > 0 ?  myClaimWhiteList.map((whitelist:any) => {
-                                 return(<WhitelistCard {...whitelist}  key={Math.random()}/>)
+                                    return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton}  key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
                                 }) : <div className='text-xl'> There are no whitelists available</div>
                             }
                         </div>
@@ -217,11 +271,31 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                     </div>
                 </div>
 
+                
+
+            
+
                 // if loading
             :   <>{ isLoading ? <div className='flex justify-center'> <Loader /> </div>
                     // no whitelists
                      : <div className='text-center text-xl mt-6'>There are no whitelists available</div> }
                 </> }
+
+
+                <IonModal isOpen={modelConfirmation.show} onDidDismiss={() => setModelConfirmation({...modelConfirmation,show:false,id:null})} cssClass={isMobile ? 'logout-modal-mobile' :'logout-modal-web'} >
+                <IonContent className="flex items-center">
+                    <div className='text-xl font-bold text-center w-full mt-5'>
+                        Confirm !
+                    </div>
+                    <div className=' text-center w-full mt-8'>
+                        Are you sure want to delete this whitelist ?
+                    </div>
+                    <div className="flex flex-row mt-10">
+                        <IonButton onClick={() => DeleteWhiteListHandler()} color="primary" className="px-2 mx-0 w-full"> Delete </IonButton>
+                        <IonButton onClick={() => setModelConfirmation({...modelConfirmation,show:false,id:null})} color="medium" className="px-2 mx-0 w-full"> Cancel </IonButton>
+                    </div>
+                </IonContent>
+            </IonModal>
         </>
     );
 

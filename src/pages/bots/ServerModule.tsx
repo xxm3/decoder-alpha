@@ -85,7 +85,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [isNoBot, setIsNoBot] = useState<boolean>(false);
     const [requiredRole,setRequiredRole] = useState<any>([]);
     const [isBigImage, setIsBigImage] = useState<boolean>(false);
-
+    const [isValidImage, setIsValidImage] = useState<boolean>(false);
     const [guildFormData, setGuildFormData] = useState({
         magicEdenLink: '',
         description: '',
@@ -104,7 +104,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
      useEffect(() => {
         if(!localStorage.getItem('role')){
-            history.push('/manageserver')
+            history.push('/dao')
             return
         }else{
             setRole(localStorage.getItem('role'))
@@ -114,10 +114,15 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             setIsMobile(true);
         }
 
-        // if (performance.navigation.type == 1) {
-        //     history.push('/manageserver')
-        // }
     }, [window.innerWidth]);
+
+    // refresh page 
+    useEffect(() => {
+      if (performance.navigation.type === 1) {
+            history.push('/dao')
+        }
+    }, [])
+    
 
     // this gets set from manageserver.tsx
     useEffect(() => {
@@ -127,10 +132,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             setIsNoBot(false);
         }
     }, [location.search]);
-
-
-
-
 
     useEffect(() => {
         reset(guildFormData);
@@ -163,6 +164,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 .get(`/guilds/${serverId}?checkCondition=false`)
                 .then((response) => {
                     let data = response.data.data;
+                    // console.log("data",data)
                 // change
                     if (role === '3NFT' || role === '4NFT') {
                         setChecked({
@@ -200,7 +202,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         description:data.description,
                         twitterLink:data.twitter_link,
                         discordLink:data.discord_link,
-                        requiredRoleId:data.requiredRoleId,
+                        requiredRoleId: `${data.requiredRoleId}:${data.requiredRoleName}`,
                         requiredRoleName:data.requiredRoleName,
                         imagePath:data.image
                     })
@@ -762,6 +764,13 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                             const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
                                             const file = target .files?.[0] as FieldValues['image'];
                                             if(file){
+                                                if(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpeg' ){
+                                                    setIsValidImage(false)
+                                                    setError('image', { type: 'custom', message: '' });
+                                                }else{
+                                                    setError('image', { type: 'custom', message: 'Please upload a valid Image' });
+                                                    setIsValidImage(true)
+                                                }
                                                 let file_size = file.size;
                                                 if((file_size/1024) < 10240){
                                                     setIsBigImage(false)
@@ -778,10 +787,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         }}
                                         name={name}
                                         ref={ref}
-                                        required = {getValues('imagePath')?false:true}
+                                        required = {getValues('imagePath') ? false : true}
                                         onIonBlur={onBlur}
                                         type={'file' as TextFieldTypes}
-                                        accept="image" />
+                                        accept="image/png, image/gif, image/jpeg" />
                                     <p className="formError"> {error?.message} </p>
                                 </>
                             )} />
@@ -789,7 +798,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                     {/*justify-center*/}
                     <div className=' mt-4 mb-5 w-full flex '>
-                        <IonButton className='w-50 h-12' type={'submit'} disabled={isSubmitting || isBigImage}>
+                        <IonButton className='w-50 h-12' type={'submit'} disabled={isSubmitting || isBigImage || isValidImage}>
                             {isSubmitting ? ( <IonSpinner /> ) : ('Submit DAO Profile')}
                         </IonButton>
                     </div>

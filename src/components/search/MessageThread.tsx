@@ -37,7 +37,8 @@ const MessageThread: React.FC<MessageThreadProps> = ({  message, message: { id }
     async function fetchContext({ pageParam = defaultPageParam, }: QueryFunctionContext<MessageThreadQueryKey, PageParam>) {
         try {
             setIsLoading(true)
-            const { data } = await instance.post<MessageThreadData>(  '/getPriorAndSubMessages',  pageParam );
+            const { data } = await instance.post<MessageThreadData>(  '/getPriorAndSubMessagesRDS',  pageParam );
+
             // data.priorMsg = data.priorMsg.map(message => ({
             //     ...message,
             //     // @ts-expect-error
@@ -46,7 +47,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({  message, message: { id }
             data.subsequentMsg = data?.subsequentMsg?.map(message => ({
                 ...message,
                 // @ts-expect-error
-                time : message.time_stamp
+                time : message.time_stamp ?  message.time_stamp : message.createdAt
             }))
             setIsLoading(false)
 
@@ -127,12 +128,15 @@ const MessageThread: React.FC<MessageThreadProps> = ({  message, message: { id }
                     </div>
                     {isLoading ? <div className='flex justify-center'><Loader/></div> :
                         <div className='overflow-y-scroll h-full w-full mx-auto p-5'>
-                        {data.pages.map((page) =>
+                            
+                        {data.pages.map((page) =>{
+                        return(
+
                                 page.map((message:any, i:number) =>{
                                         return (<div className="my-1.5" key={i}>
                                             <MessageListItem  message={message} isFromMsgThread={true}  key={i} ref={ message?.id === id ? mainMessageRef : null } />
                                         </div>)
-                                } )
+                                } ))}
                             )
                             .flat(1)
                         }
