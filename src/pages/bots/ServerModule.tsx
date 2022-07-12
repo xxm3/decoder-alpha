@@ -117,11 +117,22 @@ const [serverName, setServerName] = useState('')
     }, [window.innerWidth]);
 
     // refresh page 
+    // useEffect(() => {
+    //   if (performance.navigation.type === 1) {
+    //         history.push('/dao')
+    //     }
+    // }, [])
+
+    // refresh page  fixed when sometime not redirect to server module
+    let refreshCount = localStorage.getItem('refresh')
+    
     useEffect(() => {
-      if (performance.navigation.type === 1) {
-            history.push('/dao')
-        }
+     if(refreshCount === 'two'){
+        history.push('/dao')
+     }
     }, [])
+
+    localStorage.setItem('refresh' ,'two')
     
 
     // this gets set from manageserver.tsx

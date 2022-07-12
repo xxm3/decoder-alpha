@@ -138,6 +138,11 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         // console.log('selectMultipleWhiteList------',selectMultipleWhiteList)
                                         if(role === 'No Roles'){
                                             history.push(`/`)
+                                            present({
+                                                message: 'You have not enough NFT to submit multiple whitelist',
+                                                color: 'primary',
+                                                duration: 10000,
+                                            });
                                         }else{
                                             dispatch(setMultipleList(selectMultipleWhiteList))
                                             history.push({pathname:`/add_multiple_white_list`,state:serverId})
