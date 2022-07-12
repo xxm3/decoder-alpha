@@ -49,7 +49,7 @@ function WhitelistMarketplace() {
     const serverArray = server &&  JSON.parse(server);
 
     // get all your WL crap
-    
+
    const { data: whitelists = [], refetch: getAllWhiteList   } = useQuery( ['whitelistPartnerships'],
         async () => {
                 try {
@@ -79,7 +79,7 @@ function WhitelistMarketplace() {
                     setIsLoading(false)
                 }
         }
-        
+
     );
 
 
@@ -110,28 +110,21 @@ function WhitelistMarketplace() {
     useEffect(() => {
         isExploding&&setIsExploding(false)
     }, [isTabButton])
-    
+
     // 5 second after hide exploding
     useEffect(() => {
     isExploding&&setTimeout(() => {
         setIsExploding(false)
     }, 1000);
-      
+
     }, [isExploding])
-    
+
 
     return (
 
         <>
 
             {/*TODO !!! !!! big spam of shit
-
-
--- no alerts when no discord link???
--- why else didnt' solful alert???
->> why https://discord.com/invite/dogecapital didn't fill in
-
-
 
 
 !!! !!! !!!
@@ -270,9 +263,9 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                     </div>
                 </div>
 
-                
 
-            
+
+
 
                 // if loading
             :   <>{ isLoading ? <div className='flex justify-center'> <Loader /> </div>
