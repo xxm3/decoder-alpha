@@ -36,7 +36,7 @@ interface containerProps extends props{
     }
 }
 let FieldContainer = (props:containerProps) =>{
-    let {fieldProps,fieldName,setValue,dropdownOption,requiredRoleId,imageFieldProps}=props
+    let {fieldProps, fieldName, setValue, dropdownOption, requiredRoleId, requiredRoleName, imageFieldProps}=props
     let { field: { onChange, onBlur, value, name, ref }, fieldState: { error }, } = fieldProps
     const now = useMemo(() => new Date(), []);
 
@@ -122,7 +122,6 @@ let FieldContainer = (props:containerProps) =>{
                     value={value}
                     required
                     >
-                        {requiredRoleId ? <option value={requiredRoleId}>{requiredRoleId}</option> : '' }
                         <option value=''>Select a Required Role</option>
                         {dropdownOption && dropdownOption.map((role:any) =>{
                             return (<option  key={role.id}  value={role.id} selected={ requiredRoleId ? role.id === requiredRoleId :false} > {role.name} </option>)}
