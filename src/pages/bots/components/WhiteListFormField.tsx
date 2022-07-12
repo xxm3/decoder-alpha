@@ -334,7 +334,7 @@ function WhiteListFormField(props:props) {
             <div className={classes}>
                 <IonLabel className="card-detail-wrapper">{fieldLable} {showHelp&&showHelp}</IonLabel>
                 <IonItem className="c-item-wrapper mt-1">
-                    <Controller name={multipleFieldName || fieldName} rules={{ required: true, }}  control={control}
+                    <Controller name={multipleFieldName || fieldName} control={control}
                     render={(fieldProps) => (
                         <FieldContainer {...props} fieldProps={fieldProps}  />
                     )}  />
