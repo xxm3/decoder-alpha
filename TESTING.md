@@ -398,5 +398,8 @@ This needs to be done because raffling can only occur after it is expired. Or yo
 - you will see in all the server checkbox is appears you can select by enabling checkbox
 - right corder you will see submit button then you will be redirect to whitelist partnership form
 - for particular server max users and required roles must be entered and fill rest of the form
-- after filled form you can click on submit button and boom multiple entries are saved successfully. you will be redirect to manageserver page.
-if one of the server has something wrong and doesn't save then you will be on same page with server that are not saved yet.
+- after filled form you can click on submit button and boom multiple entries are saved successfully. you will be redirect to dao page.
+- if one of the server has something wrong and doesn't save then you will be on same page with server that are not saved yet.
+- If user role is "no Role" then user can submit only single white list if user try multiple at that time user redirect to home page 
+- if user already have required roll at then auto fill field required role and show a drop down to select role
+- if user have no required role then its show a text input for required role id and required role name
