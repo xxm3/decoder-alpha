@@ -386,6 +386,6 @@ if one of the server has something wrong and doesn't save then you will be on sa
  - Test enbaling and disabling the Magic eden package.
  - Select the wallet watch channel after selecting channel it should send message to that channel and you can able to see the success popup.
  [Image_url](https://screenrec.com/share/CYXQ4i5g9m)
-
+- TODO: above needs major revisions. Doesn't explain how to do things with the wallet watch (which Prof Decoder already wrote elsewhere). This is SUPPOSED To explain how to test the tomorrows-mints.
  
 
