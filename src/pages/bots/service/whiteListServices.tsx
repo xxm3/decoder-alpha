@@ -7,7 +7,6 @@ let createNewWhitelistPartnership = (formData:any) => new Promise(function(resol
         resolve(result)
     }).catch((error)=>{
         reject(error)
-
     })
 });
 
@@ -16,27 +15,26 @@ let updateWhitelistPartnership = (id:string,formData:any) => new Promise(functio
         resolve(result)
     }).catch((error)=>{
         reject(error)
-
     })
 });
 
 
 let setWhiteListFormData = (data:any,serverId?:string,discordGuildId?:string)=>new Promise(function(resolve, reject){
-        const { image, ...rest } = data;
-        const rawData = {
-                ...rest,
-                source_server: data.source_server || serverId,
-                target_server:data.source_server || discordGuildId,
-            };
-            delete rawData.id
-            delete rawData.imagePath
-            const formData = new FormData();
+    const { image, ...rest } = data;
+    const rawData = {
+        ...rest,
+        source_server: data.source_server || serverId,
+        target_server:data.source_server || discordGuildId,
+    };
+    delete rawData.id
+    delete rawData.imagePath
+    const formData = new FormData();
 
-            Object.entries(rawData).forEach(([key, value]) => {
-                if (value) formData.append(key, value as string);
-            });
-            formData.append('image', data.imagePath || image);
-            resolve(formData)
+    Object.entries(rawData).forEach(([key, value]) => {
+        if (value) formData.append(key, value as string);
+    });
+    formData.append('image', data.imagePath || image);
+    resolve(formData)
 })
 
 let getAllRoles = (serverId:string,present:any)=>new Promise(function(resolve,reject){
@@ -53,8 +51,7 @@ let getAllRoles = (serverId:string,present:any)=>new Promise(function(resolve,re
         }else{
             errMsg()
             reject([])
-        }
-            
+        }            
     }).catch((error)=>{
         errMsg()
         reject(error)
