@@ -377,3 +377,15 @@ TODO: write up where the bos is NOT in the target server, so you have a input bo
 - for particular server max users and required roles must be entered and fill rest of the form
 - after filled form you can click on submit button and boom multiple entries are saved successfully. you will be redirect to manageserver page.
 if one of the server has something wrong and doesn't save then you will be on same page with server that are not saved yet.
+
+### Magic eden package
+
+ - When click on Add bots/ Seamless menu item it will navigate to BASE_URL/dao.
+ - Click 'ADD' on your server below to fill out your profile.
+ - There you can see new Magic eden package.
+ - Test enbaling and disabling the Magic eden package.
+ - Select the wallet watch channel after selecting channel it should send message to that channel and you can able to see the success popup.
+ [Image_url](https://screenrec.com/share/CYXQ4i5g9m)
+- TODO: above needs major revisions. Doesn't explain how to do things with the wallet watch (which Prof Decoder already wrote elsewhere). This is SUPPOSED To explain how to test the tomorrows-mints.
+ 
+
