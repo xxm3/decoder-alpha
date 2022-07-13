@@ -50,14 +50,14 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
     // get selected server list from redux store
     const multipleServerList:any = useSelector<RootState>(state => state.whiteList.selectMultipleServerList);
 
-// 
+//
     const now = useMemo(() => new Date(), []);
     const todayEnd = useMemo(() => {
         const date = new Date( + now + 86400 * 1000 );
         date.setHours(23,59,59,999);
         return date;
     }, [now]);
-    
+
     // create form data
     const [formField,setFromFiled] = useState<FormFields>({
         whitelist_role:'',
@@ -76,7 +76,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
         mintPrice:'',
         })
     const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, setValue,getValues} = useForm<FormFields, any>();
-    
+
     const { fields, append } = useFieldArray({
         control,
         name: "mutipleServerDetails"
@@ -110,8 +110,6 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
         getWhiteListRole()
     }, [])
 
-
-    
     // check multiple server List and set list in whiteListServer state
     useEffect(() => {
         if(multipleServerList.length>0){
@@ -129,7 +127,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                     required_role_name:element.requiredRoleName ? element.requiredRoleName : requiredRoleForUser.requiredRoleName ,
                 })
             }
-            
+
             setWhiteListServer([...arr])
         }else{
             history.goBack()
@@ -142,7 +140,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
     useEffect(() => {
 
     if(whiteListServer.length>0){
-        
+
     let fetchRequiredRoleByDiscordGuildId = async() =>{
         setLoaderFlag(true)
         let results = await Promise.all(whiteListServer.map(async (server): Promise<any> => {
@@ -165,7 +163,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
     }, [formField])
 
 
-    
+
 // get roles for the WL role we will give to people --- new mint --- source server
       const getWhiteListRole = () =>{
         getAllRoles(getserver.state,present).then((response:any)=>{
@@ -200,7 +198,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
     if(loaderFlag){
         return (<Loader />)
     }
-    // content show 
+    // content show
     return (
         <div className='add_multiple_whitelist_wrapper'>
         <IonGrid>
@@ -244,7 +242,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                     return response
                 }));
 
-                
+
                 let successResponse:any = [] //successed response
                 let failedResponse:any = [] // failed response
                 // check How many response success and failed
@@ -255,14 +253,14 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                         failedResponse.push(result)
                     }
                 })
-                
+
                 // show Success Message and Error Message
                 let failedServerDetails:any[] = []
                 if(failedResponse.length>0){
                     failedResponse.map((response:any)=>{
-                        
+
                         let serverDetail:any = formField.mutipleServerDetails.find((server)=>server.discordGuildId===response.server.id)
-                        
+
                         failedServerDetails.push(serverDetail)
                         if(!response.server.name){
                             response.server.name = serverDetail.name
@@ -294,29 +292,29 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
                 <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12" />
 
-                        
+
 
                     <IonCol size-xl="4" size-md="6" size-sm="6" size-xs="12" >
                         {/*  maultiple server maping */}
                         {controlledFields.map((controlledField,index)=>{
                                 return(
-                                    <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card" key={index}> 
+                                    <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card" key={index}>
                                         <div className='mb-5'>
                                         <IonLabel className="card-detail-wrapper">{controlledField.name}</IonLabel>
                                         </div>
                                         {/* Max Users */}
                                         <WhiteListFormField fieldLable={'Max Users'} multipleFieldName={`mutipleServerDetails.${index}.max_users` as const} fieldName={'max_users'} control={control} classes='mb-5' />
-                                        
-                                        {controlledField.required_role_dropdown.length>0?
+
+                                        {controlledField?.required_role_dropdown?.length>0?
                                         <WhiteListFormField fieldLable={'Whitelist Role (role they will get once Whitelisted in your new mint server)'}
                                         multipleFieldName={`mutipleServerDetails.${index}.required_role` as const}
                                             fieldName={'required_role'}
                                             control={control}
                                             classes='mb-5'
-                                            dropdownOption={controlledField.required_role_dropdown}
+                                            dropdownOption={controlledField?.required_role_dropdown}
                                             ShowMessage={
                                                 <span className="font-bold text-green-500">
-                                                    {controlledField.required_role && controlledField?.required_role_name ? `'${controlledField?.name}' recommends a Required Role of ${controlledField?.required_role_name}` : ''}
+                                                    {controlledField?.required_role && controlledField?.required_role_name ? `'${controlledField?.name}' recommends a Required Role of ${controlledField?.required_role_name}` : ''}
                                                 </span>
                                             }
                                             requiredRoleId={controlledField.required_role}
@@ -348,7 +346,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                                 {controlledField?.required_role_name ? `'${controlledField?.name}' recommends a Required Role Name of ${controlledField?.required_role_name}` : `${requiredRoleForUser?.name}' recommends a Required Role Name of ${requiredRoleForUser?.requiredRoleName}`}
                                             </span>
                                           }
-        
+
                                           />
                                         </>
                                         }
@@ -367,7 +365,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                  <WhiteListFormField fieldLable={'Expiration Date'} fieldName={'expiration_date'} control={control} setValue={setValue} />
                             </IonCard>
 
-                            
+
 
                             <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card">
                             {/* whitelist_role */}
@@ -377,7 +375,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                             classes='mb-5'
                             dropdownOption={whiteListRole}
                             />
-                        
+
                             {/* verified_role */}
                             <WhiteListFormField fieldLable={'Verified role (a role that indicates a member of your new mint server is verified)'}
                             fieldName={'verified_role'}
@@ -388,7 +386,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                             Most systems work in a way that a member has to do a certain action like react to a message or click somewhere in order to obtain a role indicating that the user is verified in the server.
                             If your new mint server has a role for verified members, select it below. The verified role will be added alongside the whitelist role so that the member can get automatically verified in the server.`}/>}
                             />
-                              
+
                             {/* Image Upload */}
                             <WhiteListFormField fieldLable={'Image to represent your DAO - Image must be less then 10MB'}
                             fieldName={'image'}

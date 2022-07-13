@@ -492,8 +492,7 @@ const [serverName, setServerName] = useState('')
             </Backdrop>
 
             {/*seamless new mint*/}
-            {/*server-module-bg*/}
-            <div className="text-xl p-4 px-6 w-full font-bold">
+            <div className="md:text-2xl text-2xl p-4 px-6 w-full">
                 {serverName}
             </div>
             <div className="server-module-bg p-4 px-6 w-full" hidden={isNoBot}>
@@ -544,7 +543,7 @@ const [serverName, setServerName] = useState('')
                     </IonLabel>
                 </div>
                 <p>
-                    Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about. You can then ask them to submit whitelists requests to you via Seamless. If they've never used Seamless before, have them <a href="https://discord.gg/s4ne34TrUC" target="_blank" className="underline cursor-pointer font-bold">join our Discord</a> and we'll walk them through the process.
+                    Want to receive whitelists from new mints, absolutely free? Fill out the below to help new mints see what you're about. You can then ask them to submit whitelists requests to you via Seamless. If they've never used Seamless before, have them <a href="https://discord.gg/s4ne34TrUC" target="_blank" className="underline cursor-pointer font-bold">join our Discord</a> and we'll walk them through the process.
                 </p>
 
                 <form className="space-y-3"
