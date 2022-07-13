@@ -6,10 +6,8 @@ import { IWhitelist } from '../../types/IWhitelist';
 import Loader from '../../components/Loader';
 import {IonButton, IonCol, IonContent, IonGrid, IonItem, IonLabel, IonModal, IonRow, IonSkeletonText, useIonToast} from '@ionic/react';
 import './SeamlessDetail.scss';
-import { queryClient } from '../../queryClient';
-import { async } from '@firebase/util';
 import InfiniteScroll from "react-infinite-scroll-component";
-import SearchSkeleton from '../../components/search/SearchSkeleton';
+
 
 
 /**
@@ -22,7 +20,6 @@ interface modelType{
 }
 
 function WhitelistMarketplace() {
-
     const [isLoading, setIsLoading] = useState(true);
     const [isTabButton, setIsTabButton] = useState<String>('myDoa');
     const [liveWhiteList,setLiveWhiteList] = useState<IWhitelist[]>([]);
