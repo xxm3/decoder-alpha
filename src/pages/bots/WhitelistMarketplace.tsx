@@ -124,34 +124,6 @@ function WhitelistMarketplace() {
 
         <>
 
-            {/*TODO !!! !!! big spam of shit
-
-
-!!! !!! !!!
-- Fix calendar with graphs … recent cron messing up….
-Need “top twitter/discord 24 hrs” on mints.js to work (and home page) - had redis errors
- announce it …
-make sure ME launchpad in there …
-
-
-
-the "# claimed" isn't working..
-
-
-re-enable update-guilds... make sure works...
-
-
-if its lower role ... OR you invited the wrong bot -- does it spit out everything to console here, including the token? at least with old API
-
-
-            # spots given…
-
-
-
-
-            andrew & i on moon spaces thing
-            */}
-
             {/* introduction */}
             <div className="flex flex-row justify-center w-full mt-9">
                 <div className="server-module-bg p-4 px-6 w-full">

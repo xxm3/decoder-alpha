@@ -116,7 +116,7 @@ const [serverName, setServerName] = useState('')
 
     }, [window.innerWidth]);
 
-    // refresh page 
+    // refresh page
     // useEffect(() => {
     //   if (performance.navigation.type === 1) {
     //         history.push('/dao')
@@ -125,7 +125,7 @@ const [serverName, setServerName] = useState('')
 
     // refresh page  fixed when sometime not redirect to server module
     let refreshCount = localStorage.getItem('refresh')
-    
+
     useEffect(() => {
      if(refreshCount === 'two'){
         history.push('/dao')
@@ -133,7 +133,7 @@ const [serverName, setServerName] = useState('')
     }, [])
 
     localStorage.setItem('refresh' ,'two')
-    
+
 
     // this gets set from manageserver.tsx
     useEffect(() => {
@@ -991,7 +991,7 @@ const [serverName, setServerName] = useState('')
 
                                                     <br/><br/>
 
-                                                    {/* TODO: vishwas bugged... */}
+                                                    {/* TODO: vishwas bugged tmrw mint... */}
                                                     {/*<div className="text-lg font-semibold">*/}
                                                     {/*    "Tomorrow's Mints" channel*/}
                                                     {/*</div>*/}
