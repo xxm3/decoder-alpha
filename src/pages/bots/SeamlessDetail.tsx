@@ -61,7 +61,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         type:'fcfs',
         whitelist_role: '',
         description: '',
-        required_role: server?.state?.requiredRoleId ? server.state.requiredRoleId : '',
+        required_role: server?.state?.requiredRoleId ? server?.state?.requiredRoleId : '',
         required_role_name: server?.state?.requiredRoleName ? server.state.requiredRoleName : '',
         twitter: '',
         discordInvite:'',
@@ -76,21 +76,20 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [isBigImage, setIsBigImage] = useState<boolean>(false);
     const [isValidImage, setIsValidImage] = useState<boolean>(false);
     const [formSubmit, setformSubmit] = useState<boolean>(false)
-
+    const [sourceServerDetail, setSourceServerDetail] = useState<any>(null)
 
     useEffect(() => {
         console.log("server",server)
-    if(server?.state?.editForm){
-        console.log("server",server)
-        fetchServerDetail()
-    }
+        if(server?.state?.editForm){
+            console.log("server",server)
+            fetchServerDetail()
+        }
     }, [server])
-
 
     useEffect(() => {
         console.log("formField&&&&&&&&&&&&&&&&&&&&&&&&",formField)
         reset(formField);
-    }, [formField])
+    }, [formField,server])
 
     let fetchServerDetail = () =>{
         getWhitelistPartnership(server?.state?.id).then((response:any)=>{
@@ -103,16 +102,16 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     // get roles for the WL role we will give to people --- new mint --- source server
     const getWhiteListRole = () =>{
         getAllRoles(serverId,present).then((response:any)=>{
+            setSourceServerDetail(response.data.sourceServer);
             setWhiteListRole(response.data.data);
-          })
+        })
     }
 
     // get roles for what is required to enter the collab
     const getWhiteListRequireRole = () =>{
         getAllRoles(server?.state?.discordGuildId,present).then((response:any)=>{
             setWhiteListRequireRole(response.data.data);
-          })
-
+        })
     }
 
     let showError = (error:any) =>{
@@ -161,17 +160,23 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
     return (
         <IonGrid>
-
+            {sourceServerDetail&&
+                <IonCol size="12">
+                <div className='server-module-bg p-4 px-6 w-full mb-5'>
+                    {sourceServerDetail?.name}
+                </div>
+                </IonCol>
+            }
             <IonRow>
                 <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - fill out whitelist details</h2> </IonCol>
 
-                <p className="font-bold text-red-500">
+                <div className="font-bold text-red-500">
                     <ul>
                         <li>- Note it is expected that you reach out to the DAOs before hand, and have them agree on receiving these spots. </li>
                         <li>- You must also ask for their "Required Role" (ie. DAO holder role), if they haven't set one - if you set the wrong role then nothing will work! </li>
                         <li>- You must also reach out to the SOL Decoder team to obtain a special role, in order to submit Seamless requests. </li>
                     </ul>
-                </p>
+                </div>
 
                 <IonCol size-xl="12" size-md="12" size-sm="12" size-xs="12" />
 
@@ -183,32 +188,32 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                     <form className="space-y-3"
                      // when submitting the form...
                      onSubmit={handleSubmit(async (data) => {
-                            let formData = await setWhiteListFormData(data,serverId,server.state.discordGuildId)
-                                try{
-                                    setformSubmit(true)
-                                    if(data.id){
-                                        let response = await updateWhitelistPartnership(data.id,formData)
-                                        present({
-                                            message: 'Seamless partnership updated successfully!',
-                                            color: 'success',
-                                            duration: 10000,
-                                        });
-                                    }else{
-                                        let response = await createNewWhitelistPartnership(formData)
-                                        present({
-                                            message: 'New Seamless partnership created successfully!',
-                                            color: 'success',
-                                            duration: 10000,
-                                        });
-                                    }
-                                    history.push(`/seamless`);
-                                    reset();
-                                }catch(error){
-                                    showError(error)
-                                }finally{
-                                    setformSubmit(false)
-                                }
-                        })}>
+                        let formData = await setWhiteListFormData(data,serverId,server.state.discordGuildId)
+                        try{
+                            setformSubmit(true)
+                            if(data.id){
+                                let response = await updateWhitelistPartnership(data.id,formData)
+                                present({
+                                    message: 'Seamless partnership updated successfully!',
+                                    color: 'success',
+                                    duration: 10000,
+                                });
+                            }else{
+                                let response = await createNewWhitelistPartnership(formData)
+                                present({
+                                    message: 'New Seamless partnership created successfully!',
+                                    color: 'success',
+                                    duration: 10000,
+                                });
+                            }
+                            history.push(`/seamless`);
+                            reset();                                   
+                        }catch(error){
+                            showError(error)
+                        }finally{
+                            setformSubmit(false)
+                        }
+                    })}>
 
                         <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card">
                             {/* type */}
@@ -220,14 +225,14 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                         <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card">
                             {/* max_users */}
                             <WhiteListFormField fieldLable={'Max Users'} fieldName={'max_users'} control={control} classes='mb-5' />
-                                {/* whitelist_role */}
+                            {/* whitelist_role */}
                             <WhiteListFormField fieldLable={'Whitelist Role (role they will get once Whitelisted in your new mint server)'}
                             fieldName={'whitelist_role'}
                             control={control}
                             classes='mb-5'
                             dropdownOption={whiteListRole}
                             />
-                        {/* verified_role */}
+                            {/* verified_role */}
                             <WhiteListFormField fieldLable={'Verified role (a role that indicates a member of your new mint server is verified)'}
                             fieldName={'verified_role'}
                             control={control}
@@ -240,7 +245,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                             {/* required_role */}
                             {whiteListRequireRole.length>0?
-                                <WhiteListFormField fieldLable={'Whitelist Role (role they will get once Whitelisted in your new mint server)'}
+                                <WhiteListFormField fieldLable={'Required Role (Discord Role ID required to enter the giveaway)'}
                                 fieldName={'required_role'}
                                 control={control}
                                 classes='mb-5'
@@ -269,19 +274,18 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     requiredRoleId={server?.state?.requiredRoleId}
                                     requiredRoleName={server?.state?.requiredRoleName}
                                     />
-                                 {/* input required_role_name */}
-                                 <WhiteListFormField fieldLable={`Required Role Name (Discord Role ID required of them in ${server?.state?.name} to enter the giveaway)`} fieldName={'required_role_name'}
-                                  control={control}
-                                  ShowMessage={
+                                    {/* input required_role_name */}
+                                    <WhiteListFormField fieldLable={`Required Role Name (Discord Role ID required of them in ${server?.state?.name} to enter the giveaway)`} fieldName={'required_role_name'}
+                                    control={control}
+                                    ShowMessage={
                                     <span className="font-bold text-green-500">
                                         {server?.state?.requiredRoleName ? `'${server?.state?.name}' recommends a Required Role Name of ${server?.state?.requiredRoleName}` : ''}
                                     </span>
-                                  }
+                                    }
 
-                                  />
+                                    />
                                 </>
-                            }
-
+                            }                        
                         </IonCard>
 
                         <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card">

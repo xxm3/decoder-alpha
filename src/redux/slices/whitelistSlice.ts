@@ -7,25 +7,29 @@ interface selcetServer{
 }
 
 export interface whiteListState {
-  selectMultipleServerList :selcetServer[]
+  selectMultipleServerList :selcetServer[],
+  isEditWhitelist:boolean,
+  requiredRoleForUser:any
 }
 
 const initialState: whiteListState = {
-	selectMultipleServerList : []
+	selectMultipleServerList : [],
+  isEditWhitelist:false,
+  requiredRoleForUser:null
 }
 
 export const whiteListSlice = createSlice({
   name: 'multipalServer',
   initialState,
   reducers: {
-    setMultipleList: (state:any, action: PayloadAction<selcetServer[]>) => {
-		state.selectMultipleServerList = action.payload
-	}
+    setMultipleList: (state:any, action: PayloadAction<selcetServer[]>) => { state.selectMultipleServerList = action.payload },
+    isEditWhitelist: (state:any, action:any) => { state.isEditWhitelist = action.payload },
+    requiredRoleForUser: (state:any, action:any) => { state.requiredRoleForUser = action.payload },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setMultipleList } = whiteListSlice.actions
+export const { setMultipleList,isEditWhitelist,requiredRoleForUser } = whiteListSlice.actions
 
 const whiteListReducer = whiteListSlice.reducer;
 export default whiteListReducer;

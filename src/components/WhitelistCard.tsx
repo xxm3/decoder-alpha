@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { useHistory } from 'react-router';
 import { createOutline,trashOutline } from "ionicons/icons";
+import { whiteListState } from '../redux/slices/whitelistSlice';
 /**
  * The page they see when they are on /seamless, and browsing for whitelists etc..
  *
@@ -41,17 +42,20 @@ function WhitelistCard({
     claimCounts,
     claims,
     magicEdenUpvoteUrl,
+    iMod,
     isExploding,
     setIsExploding,
     tabButton,
     deleteWhiteList,
     won,
-    myLiveDAO
+    myLiveDAO,
+    
 }: IWhitelist) {
     const history = useHistory()
 	const isDemo:any = useSelector<RootState>(state => state.demo.demo);
 	const [expired, setExpired] = useState<boolean | undefined>(undefined);
 	const [claiming, setClaiming] = useState<boolean>(false);
+    const [approving, setApproving] = useState<boolean>(false);
     const [showMore, setShowMore] = useState<boolean>(false);
 	const queryClient = useQueryClient();
 	const [present] = useIonToast();
@@ -60,8 +64,9 @@ function WhitelistCard({
 	const full = isFcfs ? claimCounts >= max_users : false;
     const uid  = localStorage.getItem('uid');
 
+    const isEditWhitelist = useSelector( (state:RootState) => state.whiteList.isEditWhitelist )
     // what to show in each button
-    const getButtonText = (
+    const getClaimButtonText = (
         expired : boolean,
         claiming : boolean,
         claimed : boolean, // undefined...
@@ -87,6 +92,20 @@ function WhitelistCard({
         }else {
             return isFcfs ? 'Obtain whitelist' : 'Enter raffle'
         }
+    }
+
+    const getApproveButtonText = (
+        iMod : boolean,
+        approving : boolean) => {
+        console.log(approving);
+
+        if(approving){
+            return <IonSpinner />;
+        } else if(iMod){
+            return 'Approve';
+        } else {
+            return 'Approved';
+        } 
     }
 
     // check whether current user won the whitelist in the raffle right after the event is expired
@@ -128,6 +147,8 @@ function WhitelistCard({
     //         });
     //     }
     // },[]);
+
+    
 
     return (
 		<div className="border-gray-500 border-[0.5px] rounded-2xl  overflow-clip">
@@ -203,26 +224,25 @@ function WhitelistCard({
     	<p className="timeLeft" hidden={expired || expired === undefined}>Time left</p>
     	<span hidden={expired || expired === undefined}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
                 </div>
+                {(tabButton === 'myDoa' || tabButton === 'live')  && isEditWhitelist  &&
+                    <div className=' text-xl flex justify-center mt-5'>
+                            <div className={`seamless-tab-btn-active-colored edit-btn w-50 h-10 `}  onClick={()=>{
+                        history.replace({pathname:`seamlessdetail/${sourceServer?.discordGuildId}`,state:{id:id,editForm:true,discordGuildId:targetServer?.discordGuildId,sourceServer:sourceServer}})
+                    }}>
+                                <div className="text-sm md:text-base p-2 md:px-4 w-full">EDIT</div>
+                                <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={createOutline}></IonIcon></div>
 
-                {/*{tabButton == 'myDoa' &&*/}
-                {/*<div className=' text-xl flex justify-center mt-5'>*/}
-                {/*        <div className={`seamless-tab-btn-active-colored edit-btn w-50 h-10 `}  onClick={()=>{*/}
-                {/*    history.replace({pathname:`seamlessdetail/${sourceServer?.discordGuildId}`,state:{id:id,editForm:true,discordGuildId:targetServer?.discordGuildId,sourceServer:sourceServer}})*/}
-                {/*}}>*/}
-                {/*            <div className="text-sm md:text-base p-2 md:px-4 w-full">EDIT</div>*/}
-                {/*            <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={createOutline}></IonIcon></div>*/}
-
-                {/*        </div>*/}
-                {/*        <div className={`seamless-tab-btn-active-colored danger-btn w-50 h-10 ml-3 `} onClick={()=>{*/}
-                {/*    deleteWhiteList(id)*/}
-                {/*}}>*/}
-                {/*            <div className="text-sm md:text-base p-2 md:px-4 w-full">DELETE</div>*/}
-                {/*            <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={trashOutline}></IonIcon></div>*/}
-                {/*        </div>*/}
-                {/*</div> }*/}
-
+                            </div>
+                            <div className={`seamless-tab-btn-active-colored danger-btn w-50 h-10 ml-3 `} onClick={()=>{
+                        deleteWhiteList(id)
+                    }}>
+                                <div className="text-sm md:text-base p-2 md:px-4 w-full">DELETE</div>
+                                <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={trashOutline}></IonIcon></div>
+                            </div>
+                    </div> 
+                 }
                 {/* button! */}
-    {expired !== undefined && <IonButton css={css`
+				{expired !== undefined && !iMod && <IonButton css={css`
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
 				`} className="my-2 self-center"
 
@@ -288,13 +308,71 @@ function WhitelistCard({
                             setClaiming(false);
                         }
                     }}
-
+                    hidden={iMod}
                      disabled={expired || claiming || claimed || full || showLive || isDemo||tabButton == 'live'}
                     >
-                        {getButtonText(expired,claiming,claimed, full, claims, showLive)}
+                        {getClaimButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>
 
 
+                }
+
+                {!expired && iMod && <IonButton css={css`
+					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
+				`} className="my-2 self-center"
+                     onClick={async () => {
+                        setApproving(true);
+
+                        try {
+                            await instance.post(`/guilds/${sourceServer?.discordGuildId}/setInitiateApproved`, {});
+
+                            // success!
+                            present({
+                                message: 'Whitelist approved. This will be automatically approved later on',
+                                color: 'success',
+                                duration: 10000,
+                            });
+
+                            queryClient.setQueryData(
+                                ['whitelistPartnerships'],
+                                (queryData:any) => {
+                                    return (queryData as IWhitelist[]).map(
+                                        (whitelist) => {
+                                            if (whitelist.id === id) {
+                                                whitelist.iMod = false;
+                                            }
+                                            return whitelist;
+                                        }
+                                    );
+                                }
+                            );
+
+                        // if error!
+                        } catch (error) {
+                            console.error(error);
+
+                            if(isAxiosError(error) && error.response?.data){
+                                present({
+                                    message: error.response?.data.body,
+                                    color: 'danger',
+                                    duration: 5000,
+                                });
+                            }
+                            else {
+                                present({
+                                    message: "Something went wrong",
+                                    color: 'danger',
+                                    duration: 5000,
+                                });
+                            }
+                        } finally {
+                            setApproving(false);
+                        }
+                    }}
+                    hidden={!approving && (!iMod || expired)}
+                    >
+                        {getApproveButtonText(iMod, approving)}
+                    </IonButton>
                 }
                 {/* end button! */}
 

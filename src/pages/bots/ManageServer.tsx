@@ -32,6 +32,8 @@ const ManageServer: React.FC<AppComponentProps> = () => {
 
     const [showInstruction, setShowInstruction] = useState<boolean>(false);
 
+    localStorage.setItem('refresh','one')
+
     /**
      * Use Effects
      */

@@ -4,10 +4,13 @@ import { instance } from '../../axios';
 import WhitelistCard from '../../components/WhitelistCard';
 import { IWhitelist } from '../../types/IWhitelist';
 import Loader from '../../components/Loader';
-import {IonButton, IonCol, IonContent, IonGrid, IonLabel, IonModal, IonRow, useIonToast} from '@ionic/react';
+import {IonButton, IonCol, IonContent, IonGrid, IonItem, IonLabel, IonModal, IonRow, IonSkeletonText, useIonToast} from '@ionic/react';
 import './SeamlessDetail.scss';
-import { queryClient } from '../../queryClient';
-import { async } from '@firebase/util';
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+
+
 
 /**
  * The page they see when they are on /seamless, and browsing for whitelists etc..
@@ -19,7 +22,6 @@ interface modelType{
 }
 
 function WhitelistMarketplace() {
-
     const [isLoading, setIsLoading] = useState(true);
     const [isTabButton, setIsTabButton] = useState<String>('myDoa');
     const [liveWhiteList,setLiveWhiteList] = useState<IWhitelist[]>([]);
@@ -31,6 +33,8 @@ function WhitelistMarketplace() {
         show:false,
         id:null
     })
+    const [rowsPerPage, setRowsPerPage] = useState(8)
+    const [hasMore, setHasMore] = useState(true)
     const [present] = useIonToast();
 
     const [isMobile, setIsMobile] = useState(false);
@@ -47,14 +51,16 @@ function WhitelistMarketplace() {
     }, [])
     const server = localStorage.getItem('servers');
     const serverArray = server &&  JSON.parse(server);
+    const isEditWhitelist = useSelector( (state:RootState) => state.whiteList.isEditWhitelist )
+
 
     // get all your WL crap
-    
+
    const { data: whitelists = [], refetch: getAllWhiteList   } = useQuery( ['whitelistPartnerships'],
         async () => {
                 try {
                     setIsLoading(true)
-                    const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
+                    const { data: whitelists } = await instance.post( `/getWhitelistPartnerships/me?isAdmin=${isEditWhitelist ? true : false}`,{servers: serverArray});
                     const whiteListExpire :any[] = [];
                     const whiteListLive: any[] = [];
                     const whiteListMyDao: any[] = [];
@@ -79,7 +85,7 @@ function WhitelistMarketplace() {
                     setIsLoading(false)
                 }
         }
-        
+
     );
 
 
@@ -109,55 +115,34 @@ function WhitelistMarketplace() {
     //  exploding hide on tab change
     useEffect(() => {
         isExploding&&setIsExploding(false)
+        setRowsPerPage(8)
+        setHasMore(true)
+
     }, [isTabButton])
-    
+
     // 5 second after hide exploding
     useEffect(() => {
     isExploding&&setTimeout(() => {
         setIsExploding(false)
     }, 1000);
-      
-    }, [isExploding])
-    
 
+    }, [isExploding])
+
+    let fetchMoreData=(state:any)=>{
+       if(state.slice(0,rowsPerPage).length>=state.length){
+            setHasMore(false)
+            return
+        }
+        setTimeout(() => {
+            setRowsPerPage(old=>old+8)
+        }, 2000);
+   	}
+    
+ 
+    
     return (
 
-        <>
-
-            {/*TODO !!! !!! big spam of shit
-
-
--- no alerts when no discord link???
--- why else didnt' solful alert???
->> why https://discord.com/invite/dogecapital didn't fill in
-
-
-
-
-!!! !!! !!!
-- Fix calendar with graphs … recent cron messing up….
-Need “top twitter/discord 24 hrs” on mints.js to work (and home page) - had redis errors
- announce it …
-make sure ME launchpad in there …
-
-
-
-the "# claimed" isn't working..
-
-
-re-enable update-guilds... make sure works...
-
-
-if its lower role ... OR you invited the wrong bot -- does it spit out everything to console here, including the token? at least with old API
-
-
-            # spots given…
-
-
-
-
-            andrew & i on moon spaces thing
-            */}
+        <div id="scrollableDiv" style={{ height: 'calc(100vh - 150px)', overflow: "auto" }}>
 
             {/* introduction */}
             <div className="flex flex-row justify-center w-full mt-9">
@@ -217,49 +202,121 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
 
                     }
 
+                    <div >
                     {/* my DAO live */}
-                    {isTabButton === 'myDoa' &&
-                        <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 sm:grid-cols-1 gap-6 p-8">
-                            {
-                                myDoaWhiteList.length > 0 ? myDoaWhiteList.map((whitelist:any) => {
-                                    return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
-                                }) : <div className='text-xl'> There are no whitelists available</div>
-                            }
-                        </div>
-                    }
+                        {isTabButton === 'myDoa' &&
+                                <InfiniteScroll
+                                    dataLength={myDoaWhiteList.slice(0,rowsPerPage).length}
+                                    next={()=>fetchMoreData(myDoaWhiteList)}
+                                    hasMore={hasMore}
+                                    loader={
+                                        <div className='mb-5'>
+                                            <h6>Loading...</h6>
+                                        </div>
+                                        }
+                                    scrollableTarget="scrollableDiv"
+                                    endMessage={
+                                        <p style={{ textAlign: "center" }}>
+                                        <b>Yay! You have seen it all</b>
+                                        </p>
+                                    }
+                                >
+                                    <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 sm:grid-cols-1 gap-6 p-8">
+                                    {
+                                        myDoaWhiteList.length > 0 ? myDoaWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) => {
+                                            return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelist.id} deleteWhiteList={deleteWhiteList} />
+                                            )
+                                        }) : <div className='text-xl'> There are no whitelists available</div>
+                                    }
+                                   </div>
+                                </InfiniteScroll>
+                        } 
 
-                    {/* live */}
-                    {isTabButton === 'live' &&
-                        <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
-                            {
-                                liveWhiteList.length > 0 ? liveWhiteList.map((whitelist:any) =>{
-                                    return (<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding}  tabButton={isTabButton} key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
-                                }): <div className='text-xl'> There are no whitelists available</div>
-                            }
-                        </div>
-                    }
+                        {/* live */}
+                        {isTabButton === 'live' &&
+                                <InfiniteScroll
+                                    dataLength={liveWhiteList.slice(0,rowsPerPage).length}
+                                    next={()=>fetchMoreData(liveWhiteList)}
+                                    hasMore={hasMore}
+                                    loader={
+                                        <div className='mb-5'>
+                                            <h6>Loading...</h6>
+                                        </div>
+                                        }
+                                    scrollableTarget="scrollableDiv"
+                                    endMessage={
+                                        <p style={{ textAlign: "center" }}>
+                                        <b>Yay! You have seen it all</b>
+                                        </p>
+                                    }
+                                >
+                                    <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
+                                        {
+                                            liveWhiteList.length > 0 ? liveWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) =>{
+                                                return (<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding}  tabButton={isTabButton} key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
+                                            }): <div className='text-xl'> There are no whitelists available</div>
+                                        }
+                                    </div>
+                            </InfiniteScroll>
+                        }
 
-                    {/* expire */}
-                    {isTabButton === 'expire' &&
-                        <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
-                            {
-                                expireWhiteList.length > 0 ? expireWhiteList.map((whitelist:any) => {
-                                    return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton}  key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
-                                }) : <div className='text-xl'> There are no whitelists available</div>
+                        {/* expire */}
+                        {isTabButton === 'expire' &&
+                        <InfiniteScroll
+                            dataLength={expireWhiteList.slice(0,rowsPerPage).length}
+                            next={()=>fetchMoreData(expireWhiteList)}
+                            hasMore={hasMore}
+                            loader={
+                                <div className='mb-5'>
+                                    <h6>Loading...</h6>
+                                </div>
+                                }
+                            scrollableTarget="scrollableDiv"
+                            endMessage={
+                                <p style={{ textAlign: "center" }}>
+                                <b>Yay! You have seen it all</b>
+                                </p>
                             }
-                        </div>
-                    }
+                        >  
+                            <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
+                                {
+                                    expireWhiteList.length > 0 ? expireWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) => {
+                                        return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton}  key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
+                                    }) : <div className='text-xl'> There are no whitelists available</div>
+                                }
+                            </div>
+                        </InfiniteScroll>
+                        }
 
-                    {/* myClaim */}
-                    {isTabButton === 'myClaim' &&
-                        <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
-                            {
-                                myClaimWhiteList.length > 0 ?  myClaimWhiteList.map((whitelist:any) => {
-                                    return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton}  key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
-                                }) : <div className='text-xl'> There are no whitelists available</div>
+                        {/* myClaim */}
+                        {isTabButton === 'myClaim' &&
+                        <InfiniteScroll
+                            dataLength={myClaimWhiteList.slice(0,rowsPerPage).length}
+                            next={()=>fetchMoreData(myClaimWhiteList)}
+                            hasMore={hasMore}
+                            loader={
+                                <div className='mb-5'>
+                                    <h6>Loading...</h6>
+                                </div>
+                                }
+                            scrollableTarget="scrollableDiv"
+                            endMessage={
+                                <p style={{ textAlign: "center" }}>
+                                <b>Yay! You have seen it all</b>
+                                </p>
                             }
-                        </div>
-                    }
+                        >
+                            <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
+                                {
+                                    myClaimWhiteList.length > 0 ?  myClaimWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) => {
+                                        return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton}  key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
+                                    }) : <div className='text-xl'> There are no whitelists available</div>
+                                }
+                            </div>
+                        </InfiniteScroll>  
+                        }
+                        {/*  */}
+                    </div>
 
 
                     {/* no whitelists */}
@@ -270,9 +327,9 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                     </div>
                 </div>
 
-                
 
-            
+
+
 
                 // if loading
             :   <>{ isLoading ? <div className='flex justify-center'> <Loader /> </div>
@@ -295,7 +352,7 @@ if its lower role ... OR you invited the wrong bot -- does it spit out everythin
                     </div>
                 </IonContent>
             </IonModal>
-        </>
+        </div>
     );
 
 }
