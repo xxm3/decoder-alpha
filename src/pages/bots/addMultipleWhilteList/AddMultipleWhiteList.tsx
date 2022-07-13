@@ -93,6 +93,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
     const [isBigImage, setIsBigImage] = useState<boolean>(false);
     const [isValidImage, setIsValidImage] = useState<boolean>(false);
     let [whiteListServer, setWhiteListServer] = useState<mutipleServerDetails[]>([]) //selected server state
+    const [sourceServerDetail, setSourceServerDetail] = useState<any>(null)
 
     // create serverarray filed
     const watchFieldArray = watch("mutipleServerDetails");
@@ -168,6 +169,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 // get roles for the WL role we will give to people --- new mint --- source server
       const getWhiteListRole = () =>{
         getAllRoles(getserver.state,present).then((response:any)=>{
+                setSourceServerDetail(response.data.sourceServer);
                 setWhiteListRole(response.data.data);
         })
     }
@@ -202,6 +204,15 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
     return (
         <div className='add_multiple_whitelist_wrapper'>
         <IonGrid>
+
+        {sourceServerDetail&&
+            <IonCol size="12">
+            <div className='server-module-bg p-4 px-6 w-full mb-5'>
+                {sourceServerDetail?.name}
+            </div>
+            </IonCol>
+        }
+        
         <form className="space-y-3"// when submitting the form...
             onSubmit={  handleSubmit(async (data) => {
                 let WhiteListFomrArray = data.mutipleServerDetails.map((server)=>{

@@ -37,6 +37,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [discordSort, setDiscordSort] = useState<String>('');
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const [role] = useState(localStorage.getItem('role'))
+    const [sourceServerDetail, setSourceServerDetail] = useState<any>(null)
     
 
 
@@ -44,7 +45,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const { data: servers = [] } = useQuery<any>(  ['allServers'],
         async () => {
             setIsLoading(true)
-            const { data: { guilds },  } = await instance.get(`/getAllGuildsData?guildId=${serverId}`);
+            const { data: { guilds,sourceServer },  } = await instance.get(`/getAllGuildsData?guildId=${serverId}`);
+            setSourceServerDetail(sourceServer)
             let tmpServerArr = []
             setIsLoading(false)
             for(let i=0; i<guilds.length;i++){
@@ -94,6 +96,15 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         <>
             <IonGrid>
                 <IonRow>
+                   
+                    {sourceServerDetail&&
+                        <IonCol size="12">
+                        <div className='server-module-bg p-4 px-6 w-full mb-5'>
+                            {sourceServerDetail?.name}
+                        </div>
+                        </IonCol>
+                    }
+
                     <IonCol size="12">
                         <div className={`flex ${isMobile ? 'flex-col' : 'flex-wrap items-center' } justify-between `}>
                             <div className={`${isMobile ? 'w-full' : 'w-3/4'} pb-3`}>
