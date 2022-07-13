@@ -24,7 +24,7 @@ let setWhiteListFormData = (data:any,serverId?:string,discordGuildId?:string)=>n
     const rawData = {
         ...rest,
         source_server: data.source_server || serverId,
-        target_server:data.source_server || discordGuildId,
+        target_server:data.target_server || discordGuildId,
     };
     delete rawData.id
     delete rawData.imagePath
