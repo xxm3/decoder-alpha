@@ -303,7 +303,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             {/* magicEden Linik */}
                             <WhiteListFormField fieldLable={'Magic Eden drops URL'} fieldName={'magicEdenUpvoteUrl'} control={control} classes='mb-5' />
                             {/* Mint Date */}
-                            <WhiteListFormField fieldLable={'Mint Date'} fieldName={'mintDate'} control={control} setValue={setValue} />
+                            {/*TODO: can't get this to be optional ... dates still messed up for me (choose 11th, shows 10th) */}
+                            {/*<WhiteListFormField fieldLable={'Mint Date'} fieldName={'mintDate'} control={control} setValue={setValue} />*/}
                             {/* mint supply */}
                             <WhiteListFormField fieldLable={'Mint Supply'} fieldName={'mintSupply'} control={control} classes='mb-5' />
                             {/* mint Price */}
