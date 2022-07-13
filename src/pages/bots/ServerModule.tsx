@@ -160,8 +160,9 @@ const [serverName, setServerName] = useState('')
         } else {
             setAuthorizedModule(0);
         }
-
-        getWhiteListRole();
+        if(refreshCount !== 'two'){
+            getWhiteListRole();
+        }
     }, [role]);
 
     // get guilds
@@ -208,7 +209,9 @@ const [serverName, setServerName] = useState('')
                         setChannel(data.textChannels);
                     // if empty array - means bot isn't in there... so do this
                     }else{
-                        setIsNoBot(true);
+                        if(refreshCount !== 'two'){
+                            setIsNoBot(true);
+                        }
                     }
                     //
 

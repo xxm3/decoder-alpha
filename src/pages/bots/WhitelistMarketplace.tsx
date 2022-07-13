@@ -7,6 +7,8 @@ import Loader from '../../components/Loader';
 import {IonButton, IonCol, IonContent, IonGrid, IonItem, IonLabel, IonModal, IonRow, IonSkeletonText, useIonToast} from '@ionic/react';
 import './SeamlessDetail.scss';
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 
 
@@ -49,6 +51,8 @@ function WhitelistMarketplace() {
     }, [])
     const server = localStorage.getItem('servers');
     const serverArray = server &&  JSON.parse(server);
+    const isEditWhitelist = useSelector( (state:RootState) => state.whiteList.isEditWhitelist )
+
 
     // get all your WL crap
 
@@ -56,7 +60,7 @@ function WhitelistMarketplace() {
         async () => {
                 try {
                     setIsLoading(true)
-                    const { data: whitelists } = await instance.post( '/getWhitelistPartnerships/me',{servers: serverArray});
+                    const { data: whitelists } = await instance.post( `/getWhitelistPartnerships/me?isAdmin=${isEditWhitelist ? true : false}`,{servers: serverArray});
                     const whiteListExpire :any[] = [];
                     const whiteListLive: any[] = [];
                     const whiteListMyDao: any[] = [];

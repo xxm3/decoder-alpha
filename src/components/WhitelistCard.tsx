@@ -218,7 +218,7 @@ function WhitelistCard({
     	<p className="timeLeft" hidden={expired || expired === undefined}>Time left</p>
     	<span hidden={expired || expired === undefined}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
                 </div>
-                {tabButton == 'myDoa' && isEditWhitelist &&
+                {(tabButton === 'myDoa' || tabButton === 'live')  && isEditWhitelist  &&
                     <div className=' text-xl flex justify-center mt-5'>
                             <div className={`seamless-tab-btn-active-colored edit-btn w-50 h-10 `}  onClick={()=>{
                         history.replace({pathname:`seamlessdetail/${sourceServer?.discordGuildId}`,state:{id:id,editForm:true,discordGuildId:targetServer?.discordGuildId,sourceServer:sourceServer}})
