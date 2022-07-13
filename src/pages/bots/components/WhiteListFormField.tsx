@@ -12,7 +12,7 @@ interface imgeFieldProps{
     getValues:UseFormGetValues<any>
     setIsBigImage:Dispatch<SetStateAction<boolean>>
 }
-  
+
 interface props{
     fieldLable:string
     control:Control<any>
@@ -52,7 +52,7 @@ let FieldContainer = (props:containerProps) =>{
             </IonSelect>
             )
     }else if(fieldName==='expiration_date'){
-        return( 
+        return(
             <div className='flex flex-col w-full'>
                 <input type="date"
                 className='w-full h-10 '
@@ -180,7 +180,7 @@ let FieldContainer = (props:containerProps) =>{
                             imageFieldProps?.setIsValidImage(true)
                             imageFieldProps?.setError('image', { type: 'custom', message: 'Please upload a valid Image' });
                         }
-                        
+
                         let file_size = file.size;
                         if((file_size/1024) < 10240){
                             imageFieldProps?.setIsBigImage(false)

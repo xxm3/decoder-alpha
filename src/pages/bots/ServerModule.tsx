@@ -492,7 +492,8 @@ const [serverName, setServerName] = useState('')
             </Backdrop>
 
             {/*seamless new mint*/}
-            <div className="server-module-bg p-4 px-6 w-full mb-5">
+            {/*server-module-bg*/}
+            <div className="text-xl p-4 px-6 w-full font-bold">
                 {serverName}
             </div>
             <div className="server-module-bg p-4 px-6 w-full" hidden={isNoBot}>
@@ -514,7 +515,7 @@ const [serverName, setServerName] = useState('')
                         --padding-end: 20px;
                         --padding-start: 20px;
                     `} onClick={() => history.push(`/seamless/${serverId}`)}>
-                            Initiate Seamless
+                            Initiate a New Seamless
                         </IonButton>
                     </div>
                     <div className={`mt-3 mb-3 flex ${isMobile ? '' : 'ml-3'}`}>
@@ -528,7 +529,7 @@ const [serverName, setServerName] = useState('')
                         dispatch(isEditWhitelist(true))
                          history.push({pathname:`/seamless`})
                          }}>
-                            Edit/Delete my Seamless
+                            Edit/Delete an existing Seamless
                         </IonButton>
                     </div>
                 </div>
