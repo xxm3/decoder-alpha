@@ -61,7 +61,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         type:'fcfs',
         whitelist_role: '',
         description: '',
-        required_role: server?.state?.requiredRoleId ? server.state.requiredRoleId : '',
+        required_role: server?.state?.requiredRoleId ? server?.state?.requiredRoleId : '',
         required_role_name: server?.state?.requiredRoleName ? server.state.requiredRoleName : '',
         twitter: '',
         discordInvite:'',
@@ -88,7 +88,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     useEffect(() => {
         console.log("formField&&&&&&&&&&&&&&&&&&&&&&&&",formField)
         reset(formField);
-    }, [formField])
+    }, [formField,server])
 
     let fetchServerDetail = () =>{
         getWhitelistPartnership(server?.state?.id).then((response:any)=>{
