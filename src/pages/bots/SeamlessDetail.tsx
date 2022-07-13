@@ -61,7 +61,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         type:'fcfs',
         whitelist_role: '',
         description: '',
-        required_role: server?.state?.requiredRoleId ? server.state.requiredRoleId : '',
+        required_role: server?.state?.requiredRoleId ? server?.state?.requiredRoleId : '',
         required_role_name: server?.state?.requiredRoleName ? server.state.requiredRoleName : '',
         twitter: '',
         discordInvite:'',
@@ -76,6 +76,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [isBigImage, setIsBigImage] = useState<boolean>(false);
     const [isValidImage, setIsValidImage] = useState<boolean>(false);
     const [formSubmit, setformSubmit] = useState<boolean>(false)
+    const [sourceServerDetail, setSourceServerDetail] = useState<any>(null)
 
     useEffect(() => {
         console.log("server",server)
@@ -88,7 +89,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     useEffect(() => {
         console.log("formField&&&&&&&&&&&&&&&&&&&&&&&&",formField)
         reset(formField);
-    }, [formField])
+    }, [formField,server])
 
     let fetchServerDetail = () =>{
         getWhitelistPartnership(server?.state?.id).then((response:any)=>{
@@ -101,6 +102,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     // get roles for the WL role we will give to people --- new mint --- source server
     const getWhiteListRole = () =>{
         getAllRoles(serverId,present).then((response:any)=>{
+            setSourceServerDetail(response.data.sourceServer);
             setWhiteListRole(response.data.data);
         })
     }
@@ -158,6 +160,13 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
     return (
         <IonGrid>
+            {sourceServerDetail&&
+                <IonCol size="12">
+                <div className='server-module-bg p-4 px-6 w-full mb-5'>
+                    {sourceServerDetail?.name}
+                </div>
+                </IonCol>
+            }
             <IonRow>
                 <IonCol size="12"><h2 className="ion-no-margin font-bold text-xl"> Seamless - fill out whitelist details</h2> </IonCol>
 

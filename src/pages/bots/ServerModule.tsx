@@ -26,7 +26,8 @@ import { AxiosError } from 'axios';
 import { TextFieldTypes } from '@ionic/core';
 import { server } from 'ionicons/icons';
 import Help from '../../components/Help';
-
+import { useDispatch } from 'react-redux';
+import { isEditWhitelist, requiredRoleForUser } from '../../redux/slices/whitelistSlice';
 /**
  * The page they see when they click "Add" on one of their servers
  */
@@ -53,6 +54,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     /**
      * States & Variables
      */
+     const dispatch = useDispatch()
+
     const useQuery = () => new URLSearchParams(useLocation().search);
     const query = useQuery();
     const devMode = query.get('devMode') || window.location.href.indexOf('localhost') !== -1;
@@ -96,6 +99,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         imagePath: ''
     });
 const [serverName, setServerName] = useState('')
+
     /**
      * Use Effects
      */
@@ -156,8 +160,9 @@ const [serverName, setServerName] = useState('')
         } else {
             setAuthorizedModule(0);
         }
-
-        getWhiteListRole();
+        if(refreshCount !== 'two'){
+            getWhiteListRole();
+        }
     }, [role]);
 
     // get guilds
@@ -204,7 +209,9 @@ const [serverName, setServerName] = useState('')
                         setChannel(data.textChannels);
                     // if empty array - means bot isn't in there... so do this
                     }else{
-                        setIsNoBot(true);
+                        if(refreshCount !== 'two'){
+                            setIsNoBot(true);
+                        }
                     }
                     //
 
@@ -217,6 +224,15 @@ const [serverName, setServerName] = useState('')
                         requiredRoleName:data.requiredRoleName,
                         imagePath:data.image
                     })
+                    if(data){
+
+                        let botData:any = {
+                            requiredRoleId: data.requiredRoleId,
+                            requiredRoleName:data.requiredRoleName,
+                            name:serverName
+                        }
+                        localStorage.setItem('requiredBotData', JSON.stringify(botData))
+                    }
 
                 })
                 .catch((error: any) => {
@@ -490,15 +506,31 @@ const [serverName, setServerName] = useState('')
                     <br/>
                     <a href="https://docs.soldecoder.app/books/intro/page/seamless" target="_blank" className="font-bold cursor-pointer underline mt-5">Follow a step-by-step guide on this here.</a>
                 </p>
-                <div className="mt-3 mb-3 w-full flex ">
-                    <IonButton className="text-base" css={css`
-                    --padding-top: 25px;
-                    --padding-bottom: 25px;
-                    --padding-end: 20px;
-                    --padding-start: 20px;
-                `} onClick={() => history.push(`/seamless/${serverId}`)}>
-                        Initiate Seamless
-                    </IonButton>
+                <div className={`flex  ${isMobile ? 'flex-col items-center' : 'flex-row'}`}>
+                    <div className="mt-3 mb-3 flex ">
+                        <IonButton className="text-base" css={css`
+                        --padding-top: 25px;
+                        --padding-bottom: 25px;
+                        --padding-end: 20px;
+                        --padding-start: 20px;
+                    `} onClick={() => history.push(`/seamless/${serverId}`)}>
+                            Initiate Seamless
+                        </IonButton>
+                    </div>
+                    <div className={`mt-3 mb-3 flex ${isMobile ? '' : 'ml-3'}`}>
+                        <IonButton className="text-base" css={css`
+                        --padding-top: 25px;
+                        --padding-bottom: 25px;
+                        --padding-end: 20px;
+                        --padding-start: 20px;
+                    `} onClick={() =>{
+                        let editSeamless = 'true'
+                        dispatch(isEditWhitelist(true))
+                         history.push({pathname:`/seamless`})
+                         }}>
+                            Edit/Delete my Seamless
+                        </IonButton>
+                    </div>
                 </div>
             </div>
             <br/>

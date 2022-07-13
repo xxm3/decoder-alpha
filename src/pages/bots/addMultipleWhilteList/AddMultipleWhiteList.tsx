@@ -82,12 +82,18 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
         name: "mutipleServerDetails"
       });
 
+    
+    let botData:any = localStorage.getItem('requiredBotData')
+    // console.log('requiredUserRole:',JSON.parse (botData))
+    let requiredRoleForUser = JSON.parse (botData)
+
     const [present] = useIonToast();
     const [whiteListRole,setWhiteListRole] = useState<any>([]) // Whitelist Role dropdown value
     const [loaderFlag, setLoaderFlag] = useState(false) //loader flag
     const [isBigImage, setIsBigImage] = useState<boolean>(false);
     const [isValidImage, setIsValidImage] = useState<boolean>(false);
     let [whiteListServer, setWhiteListServer] = useState<mutipleServerDetails[]>([]) //selected server state
+    const [sourceServerDetail, setSourceServerDetail] = useState<any>(null)
 
     // create serverarray filed
     const watchFieldArray = watch("mutipleServerDetails");
@@ -98,10 +104,13 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
         };
       });
 
+
     //   get Whitelist Role dropdown value
     useEffect(() => {
         getWhiteListRole()
     }, [])
+
+
     
     // check multiple server List and set list in whiteListServer state
     useEffect(() => {
@@ -112,11 +121,12 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                 const element = multipleServerList[index];
                 arr.push({
                     max_users:'',
-                    required_role:"",
+                    required_role:element.requiredRoleId ? element.requiredRoleId : requiredRoleForUser.requiredRoleId,
                     id:element.id,
                     name:element.name,
                     discordGuildId:element.discordGuildId,
-                    required_role_dropdown:[]
+                    required_role_dropdown:[],
+                    required_role_name:element.requiredRoleName ? element.requiredRoleName : requiredRoleForUser.requiredRoleName ,
                 })
             }
             
@@ -140,6 +150,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
             server.required_role_dropdown = RequiredRoles
             return server
         }));
+
         setFromFiled({...formField,mutipleServerDetails:results})
         setLoaderFlag(false)
     }
@@ -158,6 +169,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 // get roles for the WL role we will give to people --- new mint --- source server
       const getWhiteListRole = () =>{
         getAllRoles(getserver.state,present).then((response:any)=>{
+                setSourceServerDetail(response.data.sourceServer);
                 setWhiteListRole(response.data.data);
         })
     }
@@ -192,6 +204,15 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
     return (
         <div className='add_multiple_whitelist_wrapper'>
         <IonGrid>
+
+        {sourceServerDetail&&
+            <IonCol size="12">
+            <div className='server-module-bg p-4 px-6 w-full mb-5'>
+                {sourceServerDetail?.name}
+            </div>
+            </IonCol>
+        }
+        
         <form className="space-y-3"// when submitting the form...
             onSubmit={  handleSubmit(async (data) => {
                 let WhiteListFomrArray = data.mutipleServerDetails.map((server)=>{
@@ -312,7 +333,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                             dropdownOption={controlledField.required_role_dropdown}
                                             ShowMessage={
                                                 <span className="font-bold text-green-500">
-                                                    {controlledField.required_role ? `'${controlledField?.name}' recommends a Required Role ID of ${controlledField?.required_role_name}` : ''}
+                                                    {controlledField.required_role ? `'${controlledField?.name}' recommends a Required Role ID of ${controlledField?.required_role}` : `${requiredRoleForUser?.name}' recommends a Required Role ID of ${requiredRoleForUser?.requiredRoleId}`}
                                                 </span>
                                             }
                                             requiredRoleId={controlledField.required_role}
@@ -324,7 +345,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                           control={control}
                                           ShowMessage={
                                             <span className="font-bold text-green-500">
-                                                {controlledField?.required_role_name ? `'${controlledField?.name}' recommends a Required Role Name of ${controlledField?.required_role_name}` : ''}
+                                                {controlledField?.required_role_name ? `'${controlledField?.name}' recommends a Required Role Name of ${controlledField?.required_role_name}` : `${requiredRoleForUser?.name}' recommends a Required Role Name of ${requiredRoleForUser?.requiredRoleName}`}
                                             </span>
                                           }
         
