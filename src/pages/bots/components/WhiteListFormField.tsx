@@ -330,16 +330,20 @@ let FieldContainer = (props:containerProps) =>{
 
 
 function WhiteListFormField(props:props) {
+
     let {classes,control,fieldName,fieldLable,showHelp,ShowMessage,multipleFieldName} = props
         return (
             <div className={classes}>
                 <IonLabel className="card-detail-wrapper">{fieldLable} {showHelp&&showHelp}</IonLabel>
                 <IonItem className="c-item-wrapper mt-1">
                     <Controller name={multipleFieldName || fieldName} control={control}
-                    render={(fieldProps) => (
-                        render={(fieldProps) => (
-                        <FieldContainer {...props} fieldProps={fieldProps}  />
-                    )}  />
+                    render={(fieldProps) => {
+                        let { field: { onChange, onBlur, value, name, ref }, fieldState: { error }, } = fieldProps
+                        // fieldName
+                        return (
+                            <FieldContainer {...props} fieldProps={fieldProps}  />
+                        )}
+                    }  />
                 </IonItem>
                {ShowMessage&&ShowMessage}
             </div>

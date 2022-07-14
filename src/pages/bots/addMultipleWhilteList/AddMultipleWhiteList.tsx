@@ -159,6 +159,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
 // reset form value
     useEffect(() => {
+        console.log('formField',formField)
         reset(formField)
     }, [formField])
 
@@ -270,8 +271,9 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                         response.errors?.map((err:any)=>{
                             if(err.param==='required_role'){
                                 setError(`mutipleServerDetails.${index}.required_role`, { type: 'custom', message: err.msg })
+                            }else{
+                                setError(err.param, { type: 'custom', message: err.msg })
                             }
-                            setError(err.param, { type: 'custom', message: err.msg })
                         })
 
                         present({
