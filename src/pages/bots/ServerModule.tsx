@@ -524,8 +524,11 @@ const [serverName, setServerName] = useState('')
                         --padding-end: 20px;
                         --padding-start: 20px;
                     `} onClick={() =>{
-                        let editSeamless = 'true'
-                        dispatch(isEditWhitelist(true))
+                        let obj =  {
+                            isEditWhitelist :true,
+                            sourceServer : serverId
+                        } 
+                        dispatch(isEditWhitelist(obj))
                          history.push({pathname:`/seamless`})
                          }}>
                             Edit/Delete an existing Seamless
