@@ -205,9 +205,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 });
                             }
                             history.push(`/seamless`);
-                            reset(data);                                   
+                            reset(data);
                         }catch(error){
-                            reset(data);  
+                            reset(data);
                             showError(error)
                         }finally{
                             setformSubmit(false)
@@ -284,7 +284,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
                                     />
                                 </>
-                            }                        
+                            }
                         </IonCard>
 
                         <IonCard className="ion-no-margin rounded-md ion-padding mb-2 multipleWhite-light-card">
@@ -302,7 +302,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             {/* magicEden Linik */}
                             <WhiteListFormField fieldLable={'Magic Eden drops URL'} fieldName={'magicEdenUpvoteUrl'} control={control} classes='mb-5' />
                             {/* Mint Date */}
-                            {/*TODO: can't get this to be optional ... dates still messed up for me (choose 11th, shows 10th) */}
+                            {/*TODO-freelance: can't get this to be optional ... dates still messed up for me (choose 11th, shows 10th) */}
                             {/*<WhiteListFormField fieldLable={'Mint Date'} fieldName={'mintDate'} control={control} setValue={setValue} />*/}
                             {/* mint supply */}
                             <WhiteListFormField fieldLable={'Mint Supply'} fieldName={'mintSupply'} control={control} classes='mb-5' />
