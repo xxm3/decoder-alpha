@@ -808,7 +808,7 @@ const [serverName, setServerName] = useState('')
                                         value={value as unknown as string}
                                         onIonChange={(e) => {
                                             const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
-                                            const file = target .files?.[0] as FieldValues['image'];
+                                            const file = target.files?.[0] as FieldValues['image'];
                                             if(file){
                                                 if(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpeg' ){
                                                     setIsValidImage(false)
