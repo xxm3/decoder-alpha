@@ -3,8 +3,10 @@ import { useQuery } from 'react-query';
 import { instance } from '../../axios';
 import WhitelistCard from '../../components/WhitelistCard';
 import { IWhitelist } from '../../types/IWhitelist';
+import usePersistentState from '../../hooks/usePersistentState';
 import Loader from '../../components/Loader';
-import {IonButton, IonCol, IonContent, IonGrid, IonItem, IonLabel, IonModal, IonRow, IonSkeletonText, useIonToast} from '@ionic/react';
+import {IonButton, IonCol, IonContent, IonGrid, IonItem, IonLabel, IonModal, IonRow, IonSkeletonText, useIonToast, IonIcon} from '@ionic/react';
+import { logoTwitter } from "ionicons/icons";
 import './SeamlessDetail.scss';
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector } from 'react-redux';
@@ -22,6 +24,12 @@ interface modelType{
 }
 
 function WhitelistMarketplace() {
+
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code') || '';
+    // const discordId = params.get('state');
+
+    const [twitterId, setTwitterId] = useState(' ');
     const [isLoading, setIsLoading] = useState(true);
     const [isTabButton, setIsTabButton] = useState<String>('myDoa');
     const [liveWhiteList,setLiveWhiteList] = useState<IWhitelist[]>([]);
@@ -36,6 +44,7 @@ function WhitelistMarketplace() {
     const [rowsPerPage, setRowsPerPage] = useState(8)
     const [hasMore, setHasMore] = useState(true)
     const [present] = useIonToast();
+    const [mode] = usePersistentState("mode", "dark");
 
     const [isMobile, setIsMobile] = useState(false);
     useEffect(() => {
@@ -48,7 +57,48 @@ function WhitelistMarketplace() {
     let userId: string;
     useEffect(() => {
         if(uid) userId = uid;
-    }, [])
+
+        // if opened as a twitter login callback, store twitterId
+        if(code?.length > 0) {
+            instance
+                .post(
+                    '/twitter-auth-callback',
+                    {code},
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    }
+                )
+                .then(({ data }) => {
+                    present({
+                        message: data.message,
+                        color: 'success',
+                        duration: 10000,
+                    });
+                })
+                .catch((e) => {
+                    console.error(e);
+                    present({
+                        message: 'Twitter login failed',
+                        color: 'error',
+                        duration: 10000,
+                    });
+                })
+        }
+
+        // if already logged in twitter
+        instance.get('/currentUser')
+            .then(({data}) => {
+                if(data.user.twitterId) {
+                    setTwitterId(data.user.twitterId);
+                }
+            })
+            .catch((e) => {
+                console.error(e);
+            });        
+    }, []);
+
     const server = localStorage.getItem('servers');
     const serverArray = server &&  JSON.parse(server);
     const isEditWhitelist = useSelector( (state:RootState) => state.whiteList.isEditWhitelist )
@@ -57,7 +107,7 @@ function WhitelistMarketplace() {
 
     // get all your WL crap
 
-   const { data: whitelists = [], refetch: getAllWhiteList   } = useQuery( ['whitelistPartnerships'],
+    const { data: whitelists = [], refetch: getAllWhiteList   } = useQuery( ['whitelistPartnerships'],
         async () => {
                 try {
                     setIsLoading(true)
@@ -161,6 +211,35 @@ function WhitelistMarketplace() {
                                 {/*. Want to use Seamless for your new mint, or get WL spots for your existing DAO? Join our Discord and open a ticket*/}
                             </li>
                         </ul>
+
+                        {/* show twitter login button only when never logged in yet */}
+                        <div hidden={code?.length > 0 || twitterId?.length > 0}>
+                            <IonButton className='mb-4 h-11' color={ mode === 'dark' ? '' : "dark"}
+                                onClick={() => {
+                                    instance
+                                        .post(
+                                            '/twitter-auth-url',
+                                            {
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                },
+                                            }
+                                        )
+                                        .then(({ data }) => {
+                                            window.location.href = data.authUrl;
+                                        })
+                                        .catch((e) => {
+                                            console.error(e);
+                                            present({
+                                                message: 'Twitter login failed',
+                                                color: 'error',
+                                                duration: 10000,
+                                            });
+                                        })
+                                }} >
+                                <IonIcon icon={logoTwitter} className="big-emoji mr-3"/> Login with Twitter
+                            </IonButton>
+                        </div>
                     </div>
                 </div>
             </div>

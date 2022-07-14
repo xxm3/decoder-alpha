@@ -388,6 +388,13 @@ This needs to be done because raffling can only occur after it is expired. Or yo
 - Now for winners, roles are added to discords. For failed users, they are removed from the claims table
 - When you go to /seamless page, you can see notification and confetti in case you've won in the raffle.
 
+### Seamless - Login with Twitter
+- go to /seamless
+- if you haven't logged in with Twitter yet, you can see "Twitter Login" button
+- When you click on it, you will be redirected to Twitter login page
+- After you authorize, you are redirected to /seamless page again. Now you can't see "Twitter Login" button anymore.
+- If you check users table in DB, you will be able to see that relevant twitterId is added for you
+
 ### Configure bot packages
 
  - when you enable or disable on module in server module page under the section configure bot packages at that time only once system will send one web hook message.
