@@ -61,7 +61,7 @@ const TopDiscordGainers = () => {
      */
 
     /*
-            TODO !!!
+            TODO !!! calendar
 
              implement top gainers! -- also fix counts not working! ----- Need “top twitter/discord 24 hrs” on mints.js to work (and home page) - had redis errors
 

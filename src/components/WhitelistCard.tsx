@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { useHistory } from 'react-router';
 import { createOutline,trashOutline } from "ionicons/icons";
+import { whiteListState } from '../redux/slices/whitelistSlice';
 /**
  * The page they see when they are on /seamless, and browsing for whitelists etc..
  *
@@ -47,7 +48,8 @@ function WhitelistCard({
     tabButton,
     deleteWhiteList,
     won,
-    myLiveDAO
+    myLiveDAO,
+    
 }: IWhitelist) {
     const history = useHistory()
 	const isDemo:any = useSelector<RootState>(state => state.demo.demo);
@@ -61,6 +63,8 @@ function WhitelistCard({
     const isRaffle = type === 'raffle';
 	const full = isFcfs ? claimCounts >= max_users : false;
     const uid  = localStorage.getItem('uid');
+
+    const isEditWhitelist = useSelector( (state:RootState) => state.whiteList.isEditWhitelist )
     // what to show in each button
     const getClaimButtonText = (
         expired : boolean,
@@ -144,6 +148,8 @@ function WhitelistCard({
     //     }
     // },[]);
 
+    
+
     return (
 		<div className="border-gray-500 border-[0.5px] rounded-2xl  overflow-clip">
 
@@ -151,21 +157,21 @@ function WhitelistCard({
             {isExploding && claimed && isFcfs &&  <ConfettiExplosion />}
 
             <div className="relative overflow-y-hidden h-60 ">
-                <img src={image} className="h-full w-full object-cover object-left" alt={`${sourceServer?.name} X ${targetServer?.name}`}  
+                <img src={image} className="h-full w-full object-cover object-left" alt={`${sourceServer?.name} X ${targetServer?.name}`}
                 onError={({ currentTarget }) => {
                     currentTarget.onerror = null;
                     currentTarget.style.opacity='0'
                  }} />
                  <div className='flex items-center justify-center mt-2 absolute top-1 right-2'>
-                        
+
                             {discordInvite && (<div className='inviteIconWrapper'> <a href={discordInvite} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoDiscord} className=" " /> </a> </div>)}
-                        
-                        
+
+
                             {twitter && (<div className='inviteIconWrapper'> <a href={twitter} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoTwitter} className="" /> </a> </div>)}
-                        
-                        
+
+
                             {magicEdenUpvoteUrl && (<div className='inviteIconWrapper'> <a href={magicEdenUpvoteUrl} className="hover:opacity-70" target="_blank" > <img src={MagicEden} className=" " /> </a> </div>)}
-                        
+
                     </div>
                 <div className="absolute flex bottom-0 right-0 justify-between bg-white bg-opacity-50 dark:bg-black dark:bg-opacity-50 py-2 px-5 left-0">
 
@@ -174,16 +180,22 @@ function WhitelistCard({
                         <p className="text-xs italic">must be in "{targetServer?.name}" DAO</p>
                         <p className="text-xs italic"> Type: Whitelist </p>
                     </div>
-                    
+
                 </div>
             </div>
 
             <div className="py-4 px-6 flex-col flex" >
 
-                {showMore ? <div  className='mb-3'>{description}</div> : <div className='mb-3'>{description?.substring(0, 400)}</div>}
-                {description?.length > 200 ? <button className="text-sky-500" onClick={()=> setShowMore((n)=>!n)}>{showMore ? 'Show Less'  : 'Show More'}</button> : ''}
-
-                {/* <div className="mb-3">{description}</div> */}
+                {showMore ?
+                    <span className='mb-3'>
+                        {description}
+                        {description?.length > 200 ? <span className="ml-2 text-sky-500 cursor-pointer" onClick={()=> setShowMore((n)=>!n)}>{showMore ? '(Show Less)'  : '(Show More)'}</span> : ''}
+                    </span> :
+                    <span className='mb-3'>
+                        {description?.substring(0, 400)}
+                        {description?.length > 200 ? <span className="ml-2 text-sky-500 cursor-pointer" onClick={()=> setShowMore((n)=>!n)}>{showMore ? '(Show Less)'  : '(Show More)'}</span> : ''}
+                    </span>
+                }
 
                 <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>
@@ -212,22 +224,23 @@ function WhitelistCard({
     	<p className="timeLeft" hidden={expired || expired === undefined}>Time left</p>
     	<span hidden={expired || expired === undefined}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
                 </div>
-                {tabButton == 'myDoa' &&
-                <div className=' text-xl flex justify-center mt-5'>
-                        <div className={`seamless-tab-btn-active-colored edit-btn w-50 h-10 `}  onClick={()=>{
-                    history.replace({pathname:`seamlessdetail/${sourceServer?.discordGuildId}`,state:{id:id,editForm:true,discordGuildId:targetServer?.discordGuildId,sourceServer:sourceServer}})
-                }}>
-                            <div className="text-sm md:text-base p-2 md:px-4 w-full">EDIT</div>
-                            <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={createOutline}></IonIcon></div>
+                {(tabButton === 'myDoa' || tabButton === 'live')  && isEditWhitelist  &&
+                    <div className=' text-xl flex justify-center mt-5'>
+                            <div className={`seamless-tab-btn-active-colored edit-btn w-50 h-10 `}  onClick={()=>{
+                        history.replace({pathname:`seamlessdetail/${sourceServer?.discordGuildId}`,state:{id:id,editForm:true,discordGuildId:targetServer?.discordGuildId,sourceServer:sourceServer}})
+                    }}>
+                                <div className="text-sm md:text-base p-2 md:px-4 w-full">EDIT</div>
+                                <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={createOutline}></IonIcon></div>
 
-                        </div>
-                        <div className={`seamless-tab-btn-active-colored danger-btn w-50 h-10 ml-3 `} onClick={()=>{
-                    deleteWhiteList(id)
-                }}>
-                            <div className="text-sm md:text-base p-2 md:px-4 w-full">DELETE</div>
-                            <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={trashOutline}></IonIcon></div>
-                        </div>
-                 </div> }
+                            </div>
+                            <div className={`seamless-tab-btn-active-colored danger-btn w-50 h-10 ml-3 `} onClick={()=>{
+                        deleteWhiteList(id)
+                    }}>
+                                <div className="text-sm md:text-base p-2 md:px-4 w-full">DELETE</div>
+                                <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={trashOutline}></IonIcon></div>
+                            </div>
+                    </div> 
+                 }
                 {/* button! */}
 				{expired !== undefined && !iMod && <IonButton css={css`
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
@@ -322,7 +335,7 @@ function WhitelistCard({
 
                             queryClient.setQueryData(
                                 ['whitelistPartnerships'],
-                                (queryData) => {
+                                (queryData:any) => {
                                     return (queryData as IWhitelist[]).map(
                                         (whitelist) => {
                                             if (whitelist.id === id) {
@@ -362,7 +375,7 @@ function WhitelistCard({
                     </IonButton>
                 }
                 {/* end button! */}
-               
+
                 {/* <IonButton css={css`
                 --background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
                 `} className="my-2 self-center"
@@ -370,7 +383,7 @@ function WhitelistCard({
                     history.replace({pathname:`seamlessdetail/${sourceServer?.discordGuildId}`,state:{id:id,editForm:true,discordGuildId:targetServer?.discordGuildId}})
                 }}
                 >
-                Edit WhiteList  
+                Edit WhiteList
                 </IonButton>
 
 
@@ -381,7 +394,7 @@ function WhitelistCard({
                     deleteWhiteList(id)
                 }}
                 >
-                Delete WhiteList  
+                Delete WhiteList
                 </IonButton> */}
 
 

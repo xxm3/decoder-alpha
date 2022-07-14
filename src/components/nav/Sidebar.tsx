@@ -16,12 +16,13 @@ import {
 } from "ionicons/icons"
 import NavLink from "./NavLink"
 import WalletButton from '../WalletButton';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { auth } from "../../firebase";
 import { VERSION_CODE } from '../../environments/environment'
 import { useState,useEffect } from "react";
 import './Sidebar.css'
+import { isEditWhitelist } from "../../redux/slices/whitelistSlice";
 
 
 
@@ -31,6 +32,7 @@ function Sidebar() {
     const [isMobile,setIsMobile] = useState(false)
     const isLogin = localStorage.getItem('isLogin')
     const [logoutPopupOpen, setLogoutPopupOpen] = useState<boolean>(false)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if (window.innerWidth < 525){
@@ -79,13 +81,14 @@ function Sidebar() {
                 )}
 
                 {/*<NavLink title="Home" icon={homeOutline} to="/" />*/}
-
+                <div onClick={()=> dispatch(isEditWhitelist(false))}>
                 <NavLink
                     title="Seamless"
                     icon={diamondOutline}
                     to="/seamless"
                     needsRole={false}
                 />
+                </div>
 
                 <NavLink
                     title="Add Bots / Seamless"

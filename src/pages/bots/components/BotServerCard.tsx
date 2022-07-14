@@ -26,8 +26,6 @@ const BotServerCard: React.FC<props> = (props) => {
     const [initiateButton, setInitiateButton] = useState<boolean>(false)
     const [showMore, setShowMore] = useState<boolean>(false);
 
-    let str = 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32. Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.'
-   
     useEffect(() => {
         let pathSlice = path.pathname.slice(1, 15)
         if(pathSlice === 'seamlessdetail'){
@@ -36,6 +34,8 @@ const BotServerCard: React.FC<props> = (props) => {
             setInitiateButton(true)
         }
     }, [path])
+
+    // console.log('serverData--------',serverData)
 
     return (
         <IonCard className={`ion-no-margin multipleWhite-light-card seamlessCardWrapper ${classes&&classes}` } >
@@ -71,7 +71,7 @@ const BotServerCard: React.FC<props> = (props) => {
                     <div className='absolute mt-2 absolute top-2 left-3'>
                     {multipleflag && <IonCheckbox  className='checkboxWrapper' onIonChange={e => {
                         if(e.detail.checked){
-                            setSelectMultipleWhiteList&&setSelectMultipleWhiteList((old)=>[...old,{id:serverData.id,name:serverData.name,discordGuildId:serverData.discordGuildId}])
+                            setSelectMultipleWhiteList&&setSelectMultipleWhiteList((old)=>[...old,{id:serverData.id,name:serverData.name,discordGuildId:serverData.discordGuildId,requiredRoleId:serverData.requiredRoleId, requiredRoleName:serverData.requiredRoleName}])
                         }else{
                             setSelectMultipleWhiteList&&setSelectMultipleWhiteList(old=>old.filter(data=>data.id!==serverData.id))
                         }

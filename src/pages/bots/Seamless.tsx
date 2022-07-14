@@ -10,6 +10,7 @@ import { useQuery } from 'react-query';
 import { setMultipleList } from '../../redux/slices/whitelistSlice';
 import { useDispatch } from 'react-redux';
 import BotServerCard from './components/BotServerCard';
+import InfiniteScroll from "react-infinite-scroll-component";
 
 /**
  * The page they see when they click "Initiate Seamless"
@@ -37,6 +38,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [discordSort, setDiscordSort] = useState<String>('');
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const [role] = useState(localStorage.getItem('role'))
+    const [sourceServerDetail, setSourceServerDetail] = useState<any>(null)
+    const [rowsPerPage, setRowsPerPage] = useState(6)
+    const [hasMore, setHasMore] = useState(true)
     
 
 
@@ -44,7 +48,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const { data: servers = [] } = useQuery<any>(  ['allServers'],
         async () => {
             setIsLoading(true)
-            const { data: { guilds },  } = await instance.get(`/getAllGuildsData?guildId=${serverId}`);
+            const { data: { guilds,sourceServer },  } = await instance.get(`/getAllGuildsData?guildId=${serverId}`);
+            setSourceServerDetail(sourceServer)
             let tmpServerArr = []
             setIsLoading(false)
             for(let i=0; i<guilds.length;i++){
@@ -57,7 +62,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             // return guilds;
         }
     );
-  
+
         // searching
     useEffect(() => {
         if(searchValue && servers){
@@ -88,12 +93,30 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         }
     }, [window.innerWidth])
 
+    let fetchMoreData=()=>{
+        if(serverList.slice(0,rowsPerPage).length>=serverList.length){
+             setHasMore(false)
+             return
+         }
+         setTimeout(() => {
+             setRowsPerPage(old=>old+6)
+         }, 2000);
+        }
 
 
     return (
-        <>
+        <div id="scrollableDiv" style={{ height: 'calc(100vh - 150px)', overflow: "auto" }}>
             <IonGrid>
                 <IonRow>
+                   
+                    {sourceServerDetail&&
+                        <IonCol size="12">
+                        <div className='server-module-bg p-4 px-6 w-full mb-5'>
+                            {sourceServerDetail?.name}
+                        </div>
+                        </IonCol>
+                    }
+
                     <IonCol size="12">
                         <div className={`flex ${isMobile ? 'flex-col' : 'flex-wrap items-center' } justify-between `}>
                             <div className={`${isMobile ? 'w-full' : 'w-3/4'} pb-3`}>
@@ -118,6 +141,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     }}>
                                 Select Multiple
                                 </div>
+
                                 }
                                 {/*  */}
                                 {multipleflag &&
@@ -150,7 +174,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             setSelectMultipleWhiteList([])
                                             setmultipleflag((n)=>!n)
                                         }
-                                        
+
                                     }}> Next </div>
                                 </div>
                                 }
@@ -213,15 +237,32 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
 
                 <IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12"></IonCol>
-
+                </IonRow>
                     {/*<IonCol ize-xl="12" size-md="12" size-sm="12" size-xs="12">*/}
                     {/*    <div className='font-bold text-xl'>Select a DAO to give whitelists to</div>*/}
                     {/*</IonCol>*/}
 
-                       
+
                             {isLoading ? <Loader/> :
                             <>
-                                {serverList && serverList.map((server: any,index:number)=>{
+                            <InfiniteScroll
+                                dataLength={serverList.slice(0,rowsPerPage).length}
+                                next={()=>fetchMoreData()}
+                                hasMore={hasMore}
+                                loader={
+                                    <div className='mb-5'>
+                                        <h6>Loading...</h6>
+                                    </div>
+                                    }
+                                scrollableTarget="scrollableDiv"
+                                endMessage={
+                                    <p style={{ textAlign: "center" }}>
+                                    <b>Yay! You have seen it all</b>
+                                    </p>
+                                }
+                            >
+                                <IonRow>
+                                {serverList && serverList.slice(0 ,rowsPerPage).map((server: any,index:number)=>{
                                     let selectFlag = selectMultipleWhiteList.find(data=>data.id===server.id)
                                     server.selectFlag = selectFlag?true:false;
                                     return(
@@ -230,11 +271,13 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                         </IonCol>
                                     )
                                 })}
+                                </IonRow>
+                            </InfiniteScroll>
                             </>}
                         
-                </IonRow>
+                
             </IonGrid>
-        </>
+        </div>
     );
 };
 {/* // @ts-ignore */}
