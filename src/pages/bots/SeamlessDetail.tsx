@@ -79,15 +79,13 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [sourceServerDetail, setSourceServerDetail] = useState<any>(null)
 
     useEffect(() => {
-        console.log("server",server)
         if(server?.state?.editForm){
-            console.log("server",server)
             fetchServerDetail()
         }
     }, [server])
 
     useEffect(() => {
-        console.log("formField&&&&&&&&&&&&&&&&&&&&&&&&",formField)
+        // console.log("formField&&&&&&&&&&&&&&&&&&&&&&&&",formField)
         reset(formField);
     }, [formField,server])
 
@@ -207,8 +205,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 });
                             }
                             history.push(`/seamless`);
-                            reset();                                   
+                            reset(data);                                   
                         }catch(error){
+                            reset(data);  
                             showError(error)
                         }finally{
                             setformSubmit(false)

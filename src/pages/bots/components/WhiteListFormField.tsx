@@ -5,6 +5,7 @@ import moment from 'moment';
 import React, { Dispatch, memo, SetStateAction, useMemo } from 'react'
 import { Controller,Control, UseFormReturn, UseFormSetValue, ControllerRenderProps, ControllerFieldState, UseFormStateReturn, FieldValues, FieldError, UseFormSetError, UseFormGetValues,  } from 'react-hook-form';
 import { TextFieldTypes } from '@ionic/core';
+import { useLocation } from 'react-router';
 
 interface imgeFieldProps{
     setIsValidImage:Dispatch<SetStateAction<boolean>>
@@ -36,6 +37,7 @@ interface containerProps extends props{
     }
 }
 let FieldContainer = (props:containerProps) =>{
+
     let {fieldProps, fieldName, setValue, dropdownOption, requiredRoleId, requiredRoleName, imageFieldProps}=props
     let { field: { onChange, onBlur, value, name, ref }, fieldState: { error }, } = fieldProps
     const now = useMemo(() => new Date(), []);
@@ -122,9 +124,9 @@ let FieldContainer = (props:containerProps) =>{
                     value={value}
                     required
                     >
-                        <option value=''>Select a Required Role</option>
-                        {dropdownOption && dropdownOption.map((role:any) =>{
-                            return (<option  key={role.id}  value={role.id} selected={ requiredRoleId ? role.id === requiredRoleId :false} > {role.name} </option>)}
+                        <option value='0'>Select a Required Role</option>
+                        {dropdownOption && dropdownOption.map((role:any,index:number) =>{
+                            return (<option  key={index}  value={role.id} defaultChecked={requiredRoleId ? role.id === requiredRoleId :false}  > {role.name} </option>)}
                         )}
                 </select>
                 <p className="formError"> {error?.message} </p>
@@ -328,15 +330,20 @@ let FieldContainer = (props:containerProps) =>{
 
 
 function WhiteListFormField(props:props) {
+
     let {classes,control,fieldName,fieldLable,showHelp,ShowMessage,multipleFieldName} = props
         return (
             <div className={classes}>
                 <IonLabel className="card-detail-wrapper">{fieldLable} {showHelp&&showHelp}</IonLabel>
                 <IonItem className="c-item-wrapper mt-1">
                     <Controller name={multipleFieldName || fieldName} control={control}
-                    render={(fieldProps) => (
-                        <FieldContainer {...props} fieldProps={fieldProps}  />
-                    )}  />
+                    render={(fieldProps) => {
+                        let { field: { onChange, onBlur, value, name, ref }, fieldState: { error }, } = fieldProps
+                        // fieldName
+                        return (
+                            <FieldContainer {...props} fieldProps={fieldProps}  />
+                        )}
+                    }  />
                 </IonItem>
                {ShowMessage&&ShowMessage}
             </div>

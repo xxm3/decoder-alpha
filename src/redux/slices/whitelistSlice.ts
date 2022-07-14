@@ -8,13 +8,13 @@ interface selcetServer{
 
 export interface whiteListState {
   selectMultipleServerList :selcetServer[],
-  isEditWhitelist:boolean,
+  isEditWhitelist:any,
   requiredRoleForUser:any
 }
 
 const initialState: whiteListState = {
 	selectMultipleServerList : [],
-  isEditWhitelist:false,
+  isEditWhitelist:null,
   requiredRoleForUser:null
 }
 

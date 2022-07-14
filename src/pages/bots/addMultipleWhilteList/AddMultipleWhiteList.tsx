@@ -159,6 +159,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
 // reset form value
     useEffect(() => {
+        console.log('formField',formField)
         reset(formField)
     }, [formField])
 
@@ -193,6 +194,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                 return {...response.data,status:response.status}
             }
     }
+
 
     // lodaer show
     if(loaderFlag){
@@ -242,8 +244,9 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                     return response
                 }));
 
+                
 
-                let successResponse:any = [] //successed response
+                let successResponse:any = [] //successes response
                 let failedResponse:any = [] // failed response
                 // check How many response success and failed
                 results.map((result)=>{
@@ -257,14 +260,22 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                 // show Success Message and Error Message
                 let failedServerDetails:any[] = []
                 if(failedResponse.length>0){
-                    failedResponse.map((response:any)=>{
-
+                    
+                    failedResponse.map((response:any,index:number)=>{
                         let serverDetail:any = formField.mutipleServerDetails.find((server)=>server.discordGuildId===response.server.id)
-
                         failedServerDetails.push(serverDetail)
                         if(!response.server.name){
                             response.server.name = serverDetail.name
                         }
+
+                        response.errors?.map((err:any)=>{
+                            if(err.param==='required_role'){
+                                setError(`mutipleServerDetails.${index}.required_role`, { type: 'custom', message: err.msg })
+                            }else{
+                                setError(err.param, { type: 'custom', message: err.msg })
+                            }
+                        })
+
                         present({
                             message: `Couldn't create whitelist partnership for ${response.server.name} server.`,
                             color: 'danger',
@@ -282,7 +293,16 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                 }
 
                 if(failedServerDetails.length>0){
-                    setFromFiled({...formField,mutipleServerDetails:failedServerDetails})
+                    let values = getValues()
+                    let mutipleServerDetails:mutipleServerDetails[] =[]
+                     values.mutipleServerDetails.forEach((server:any,index:number)=>{
+                        failedServerDetails.map((faieldServer:any)=>{
+                            if(server.discordGuildId===faieldServer.discordGuildId){
+                                mutipleServerDetails.push(server)
+                            }
+                        })
+                    })
+                    setFromFiled({...values,mutipleServerDetails:mutipleServerDetails})
                 }
 
             })}>

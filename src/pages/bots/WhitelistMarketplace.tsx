@@ -52,6 +52,7 @@ function WhitelistMarketplace() {
     const server = localStorage.getItem('servers');
     const serverArray = server &&  JSON.parse(server);
     const isEditWhitelist = useSelector( (state:RootState) => state.whiteList.isEditWhitelist )
+   
 
 
     // get all your WL crap
@@ -60,7 +61,7 @@ function WhitelistMarketplace() {
         async () => {
                 try {
                     setIsLoading(true)
-                    const { data: whitelists } = await instance.post( `/getWhitelistPartnerships/me?isAdmin=${isEditWhitelist ? true : false}`,{servers: serverArray});
+                    const { data: whitelists } = await instance.post( `${isEditWhitelist ? `/getWhitelistPartnerships/me?isAdmin=${isEditWhitelist.isEditWhitelist ? true : false}&sourceServer=${isEditWhitelist?.sourceServer}` :'/getWhitelistPartnerships/me?isAdmin=false'}`,{servers: serverArray});
                     const whiteListExpire :any[] = [];
                     const whiteListLive: any[] = [];
                     const whiteListMyDao: any[] = [];
