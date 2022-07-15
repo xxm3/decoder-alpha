@@ -410,3 +410,15 @@ This needs to be done because raffling can only occur after it is expired. Or yo
 - If user role is "no Role" then user can submit only single white list if user try multiple at that time user redirect to home page 
 - if user already have required roll at then auto fill field required role and show a drop down to select role
 - if user have no required role then its show a text input for required role id and required role name
+
+### Magic eden package
+
+ - When click on Add bots/ Seamless menu item it will navigate to BASE_URL/dao.
+ - Click 'ADD' on your server below to fill out your profile.
+ - There you can see new Magic eden package.
+ - Test enbaling and disabling the Magic eden package.
+ - Select the wallet watch channel after selecting channel it should send message to that channel and you can able to see the success popup.
+ [Image_url](https://screenrec.com/share/CYXQ4i5g9m)
+- TODO: above needs major revisions. Doesn't explain how to do things with the wallet watch (which Prof Decoder already wrote elsewhere). This is SUPPOSED To explain how to test the tomorrows-mints.
+ 
+
