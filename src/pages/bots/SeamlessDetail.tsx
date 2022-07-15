@@ -8,8 +8,9 @@ import isAxiosError from '../../util/isAxiosError';
 import { AxiosError } from 'axios';
 import BotServerCard from './components/BotServerCard';
 import Help from '../../components/Help';
-import { createNewWhitelistPartnership, getAllRoles, getWhitelistPartnership, setWhiteListFormData, updateWhitelistPartnership } from './service/whiteListServices';
+import { createNewWhitelistPartnership, getAllRoles, getLastWhitelistPartnerShip, getWhitelistPartnership, setWhiteListFormData, updateWhitelistPartnership, whitelistFormState } from './service/whiteListServices';
 import WhiteListFormField from './components/WhiteListFormField';
+import { whiteListFormField } from './service/whiteListModalType';
 
 /**
  * The page they see when they've clicked "initiate seamless" ... then clicked on a guild
@@ -17,60 +18,21 @@ import WhiteListFormField from './components/WhiteListFormField';
  * This lists the form for them to fill out
  */
 
-interface FormFields {
-    image: File & { path: string;} | '';
-    target_server: number | '';
-    max_users: number | '';
-    expiration_date: any;
-    type: 'raffle' | 'fcfs';
-    whitelist_role: string;
-    description: string;
-    required_role: string;
-    required_role_name: string;
-    verified_role: string;
-    twitter: string;
-    discordInvite:string;
-    imagePath?:string;
-    magicEdenUpvoteUrl?:string;
-    id?:string;
-    mintDate:any;
-    mintSupply:any;
-    mintPrice:any;
-}
 const SeamlessDetail: React.FC<AppComponentProps> = () => {
-
     // TODO: I guess you are using 13.5 font size. I would say it is little big. I would prefer 10.5
-
     const server:any = useLocation();
-
     // new mint / source server --- comes from params
     const { serverId } = useParams<any>();
 
     let history = useHistory();
 
-    const now = useMemo(() => new Date(), []);
-    const todayEnd = useMemo(() => {
-        const date = new Date( + now + 86400 * 1000 );
-        date.setHours(23,59,59,999);
-        return date;
-    }, [now]);
-
-    const [formField,setFromFiled] = useState<any>({
-        image: '',
-        target_server:'',
+    const [formField,setFormField] = useState<whiteListFormField>({
+        ...whitelistFormState,
         max_users: '',
-        expiration_date: todayEnd.toISOString(),
-        type:'fcfs',
-        whitelist_role: '',
-        description: '',
         required_role: server?.state?.requiredRoleId ? server?.state?.requiredRoleId : '',
         required_role_name: server?.state?.requiredRoleName ? server.state.requiredRoleName : '',
-        twitter: '',
-        discordInvite:'',
-        magicEdenUpvoteUrl:'',
-        imagePath:''
         })
-    const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting },setValue,getValues } = useForm<FormFields, any>();
+    const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting },setValue,getValues } = useForm<whiteListFormField, any>();
     const [present, dismiss] = useIonToast();
 
     const [whiteListRole,setWhiteListRole] = useState<any>([])
@@ -79,6 +41,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [isValidImage, setIsValidImage] = useState<boolean>(false);
     const [formSubmit, setformSubmit] = useState<boolean>(false)
     const [sourceServerDetail, setSourceServerDetail] = useState<any>(null)
+
+    const serverObject = localStorage.getItem('servers')
+    let serverArray = serverObject &&  JSON.parse(serverObject)
 
     useEffect(() => {
         if(server?.state?.editForm){
@@ -92,7 +57,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
     let fetchServerDetail = () =>{
         getWhitelistPartnership(server?.state?.id).then((response:any)=>{
-            setFromFiled({...response.data.data,imagePath:response.data.data.image})
+            setFormField({...response.data.data,imagePath:response.data.data.image})
         }).catch((error)=>{
             console.log("error",error)
         })
@@ -103,6 +68,17 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         getAllRoles(serverId,present).then((response:any)=>{
             setSourceServerDetail(response.data.sourceServer);
             setWhiteListRole(response.data.data);
+        })
+    }
+
+    // get last submitted whitelist partnership
+    const getLastPartnership = async() =>{
+        await getLastWhitelistPartnerShip(serverArray).then((response:any)=>{
+            if(response.data){
+                let lastData = {...response.data[response.data.length-1]}
+                delete lastData.id
+                setFormField({...lastData,imagePath:lastData.image})
+            }
         })
     }
 
@@ -127,7 +103,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
             } else if (data.hasOwnProperty('errors')) {
                 data.errors.forEach(({ param, msg }) => {
                     // if (param !== 'source_server') {
-                        setError( param as keyof FormFields, { message: msg, type: 'custom',});
+                        setError( param as keyof whiteListFormField, { message: msg, type: 'custom',});
                     // } else {
                         present({
                             message: msg,
@@ -155,6 +131,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     useEffect(() => {
         getWhiteListRole();
         getWhiteListRequireRole();
+        getLastPartnership()
     }, [])
 
     return (
