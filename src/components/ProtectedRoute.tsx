@@ -14,7 +14,8 @@ import {IonButton} from '@ionic/react';
 
 // a route to be used to protect pages against unauthenticated users
 const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
-	needsRole ?: boolean
+	needsRole ?: boolean,
+    computedMatch?:any
 }) => {
     let history = useHistory();
 
@@ -90,7 +91,7 @@ const ProtectedRoute = (props: Parameters<typeof AppRoute>[0] & {
 			{...props}
 			render={() => (
 				// if user is not authenticated redirect user to login page
-			<Redirect to={`/login?next=${props.path}`} />
+			<Redirect to={`/login?next=${props?.computedMatch?.url || props.path}`} />
 			)}
 			component={undefined}
 			children={undefined}
