@@ -1,6 +1,30 @@
 import { error } from "console";
 import { resolve } from "dns";
 import { instance } from "../../../axios";
+import { FormFields } from "./whiteListModalType";
+
+
+const todayEnd = (now:Date) => {
+    const date = new Date( + now + 86400 * 1000 );
+    date.setHours(23,59,59,999);
+    return date;
+};
+
+let whitelistFormState:FormFields = {
+    whitelist_role:'',
+    image:'',
+    target_server:'',
+    expiration_date: todayEnd(new Date()).toISOString(),
+    type:'fcfs',
+    description:'',
+    twitter: '',
+    discordInvite:'',
+    magicEdenUpvoteUrl:'',
+    mintDate:new Date().toISOString(),
+    mintSupply:'',
+    mintPrice:'',
+    verified_role:'',
+}
 
 let createNewWhitelistPartnership = (formData:any) => new Promise(function(resolve, reject) {    
     instance.post( '/createNewWhitelistPartnership', formData ).then((result)=>{
@@ -23,8 +47,8 @@ let setWhiteListFormData = (data:any,serverId?:string,discordGuildId?:string)=>n
     const { image, ...rest } = data;
     const rawData = {
         ...rest,
-        source_server: data.source_server || serverId,
-        target_server:data.target_server || discordGuildId,
+        source_server:serverId || data.source_server,
+        target_server:discordGuildId ||data.target_server ,
     };
     delete rawData.id
     delete rawData.imagePath
@@ -67,4 +91,15 @@ let getWhitelistPartnership = (id:string)=>new Promise(function (resolve,reject)
     })
 })
 
-export {createNewWhitelistPartnership, updateWhitelistPartnership,setWhiteListFormData,getAllRoles,getWhitelistPartnership}
+
+let getLastWhitelistPartnerShip = (serverArray:any) => new Promise(function(resolve,reject){
+
+    instance.post( '/getWhitelistPartnerships/me',{servers: serverArray}).then((result)=>{
+        resolve(result)
+    }).catch((error)=>{
+        reject(error)
+    })
+
+})
+
+export {getLastWhitelistPartnerShip,createNewWhitelistPartnership, updateWhitelistPartnership,setWhiteListFormData,getAllRoles,getWhitelistPartnership,whitelistFormState}

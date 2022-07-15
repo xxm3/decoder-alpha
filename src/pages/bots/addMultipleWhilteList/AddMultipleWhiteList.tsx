@@ -8,78 +8,34 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import Loader from '../../../components/Loader';
 import Help from '../../../components/Help';
-import { createNewWhitelistPartnership, getAllRoles, setWhiteListFormData } from '../service/whiteListServices';
+import { createNewWhitelistPartnership, getAllRoles, getLastWhitelistPartnerShip, setWhiteListFormData, whitelistFormState } from '../service/whiteListServices';
 import WhiteListFormField from '../components/WhiteListFormField';
+import { FormFields, multipleField, multipleServerDetails } from '../service/whiteListModalType';
 
 /**
  * The page they see when they've clicked "initiate seamless" ... then clicked on a guild
  *
  * This lists the form for them to fill out
  */
-
-interface mutipleServerDetails{
-    max_users: number | '';
-    required_role:string;
-    required_role_name?: string;
-    id:string;
-    name:string;
-    discordGuildId:string;
-    required_role_dropdown:any[] ;
-}
-
-interface FormFields {
-    whitelist_role:string;
-    image: File & { path: string;} | '';
-    target_server: number | '';
-    verified_role: string;
-    expiration_date: string;
-    type: 'raffle' | 'fcfs';
-    description: string;
-    twitter: string;
-    discordInvite:string;
-    mutipleServerDetails:mutipleServerDetails[];
-    magicEdenUpvoteUrl?:string;
-    mintDate:string;
-    mintSupply:string;
-    mintPrice:any | ''
-}
 const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
-    const getserver:any = useLocation();
+    const getServer:any = useLocation();
 
     let history = useHistory();
     // get selected server list from redux store
     const multipleServerList:any = useSelector<RootState>(state => state.whiteList.selectMultipleServerList);
 
-//
-    const now = useMemo(() => new Date(), []);
-    const todayEnd = useMemo(() => {
-        const date = new Date( + now + 86400 * 1000 );
-        date.setHours(23,59,59,999);
-        return date;
-    }, [now]);
 
     // create form data
-    const [formField,setFromFiled] = useState<FormFields>({
-        whitelist_role:'',
-        verified_role:'',
-        image: '',
-        target_server:'',
-        expiration_date: todayEnd.toISOString(),
-        type:'fcfs',
-        description: '',
-        twitter: '',
-        discordInvite:'',
-        magicEdenUpvoteUrl:'',
-        mutipleServerDetails:[],
-        mintDate:new Date().toISOString(),
-        mintSupply:'',
-        mintPrice:'',
+    const [formField,setFormField] = useState<multipleField>({
+        ...whitelistFormState,
+        multipleServerDetails:[],
         })
-    const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, setValue,getValues} = useForm<FormFields, any>();
+
+    const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, setValue,getValues} = useForm<multipleField, any>();
 
     const { fields, append } = useFieldArray({
         control,
-        name: "mutipleServerDetails"
+        name: "multipleServerDetails"
       });
 
     let botData:any = localStorage.getItem('requiredBotData')
@@ -91,11 +47,14 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
     const [loaderFlag, setLoaderFlag] = useState(false) //loader flag
     const [isBigImage, setIsBigImage] = useState<boolean>(false);
     const [isValidImage, setIsValidImage] = useState<boolean>(false);
-    let [whiteListServer, setWhiteListServer] = useState<mutipleServerDetails[]>([]) //selected server state
+    let [whiteListServer, setWhiteListServer] = useState<multipleServerDetails[]>([]) //selected server state
     const [sourceServerDetail, setSourceServerDetail] = useState<any>(null)
 
+    const serverObject = localStorage.getItem('servers')
+    let serverArray = serverObject &&  JSON.parse(serverObject)
+
     // create serverarray filed
-    const watchFieldArray = watch("mutipleServerDetails");
+    const watchFieldArray = watch("multipleServerDetails");
     const controlledFields = fields.map((field, index) => {
         return {
           ...field,
@@ -112,7 +71,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
     // check multiple server List and set list in whiteListServer state
     useEffect(() => {
         if(multipleServerList.length>0){
-        let arr:mutipleServerDetails[] =[];
+        let arr:multipleServerDetails[] =[];
         // error solved ( Cannot assign to read only property) and create obj for serverDetails
             for (let index = 0; index < multipleServerList.length; index++) {
                 const element = multipleServerList[index];
@@ -142,13 +101,22 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
     let fetchRequiredRoleByDiscordGuildId = async() =>{
         setLoaderFlag(true)
+        let lastSubmitData:any ={}
+
+        await getLastWhitelistPartnerShip(serverArray).then((response:any)=>{
+            if(response.data){
+                 let lastData = {...response.data[response.data.length-1]}
+                delete lastData.id
+                lastSubmitData = lastData
+            }
+        })
+
         let results = await Promise.all(whiteListServer.map(async (server): Promise<any> => {
             let RequiredRoles:any = await getWhiteListRequireRole(server.discordGuildId);
             server.required_role_dropdown = RequiredRoles
             return server
         }));
-
-        setFromFiled({...formField,mutipleServerDetails:results})
+        setFormField({...formField,...lastSubmitData,multipleServerDetails:results})
         setLoaderFlag(false)
     }
     fetchRequiredRoleByDiscordGuildId()
@@ -158,15 +126,13 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
 // reset form value
     useEffect(() => {
-        console.log('formField',formField)
         reset(formField)
     }, [formField])
 
 
-
 // get roles for the WL role we will give to people --- new mint --- source server
-      const getWhiteListRole = () =>{
-        getAllRoles(getserver.state,present).then((response:any)=>{
+      const getWhiteListRole = async() =>{
+       await getAllRoles(getServer.state,present).then((response:any)=>{
                 setSourceServerDetail(response.data.sourceServer);
                 setWhiteListRole(response.data.data);
         })
@@ -174,16 +140,13 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
     // get roles for what is required to enter the collab
     const getWhiteListRequireRole = async(discordGuildId:string) =>{
-        let response:any[] = []
-        getAllRoles(getserver.state,present).then((response:any)=>{
-            response=response.data.data
-        })
-        return response
+        let response:any = await getAllRoles(getServer.state,present)
+        return response.data.data
     }
 
 
 // add whiteList Server
-    let mutipleWhiteListServerAdd = async(data:any) =>{
+    let multipleWhiteListServerAdd = async(data:any) =>{
         let formData = await setWhiteListFormData(data)
             try {
                 let response = await createNewWhitelistPartnership(formData)
@@ -214,11 +177,11 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
         <form className="space-y-3"// when submitting the form...
             onSubmit={  handleSubmit(async (data) => {
-                let WhiteListFomrArray = data.mutipleServerDetails.map((server)=>{
+                let WhiteListFomrArray = data.multipleServerDetails.map((server)=>{
                     let createObj = {
                         image: data.image,
                         target_server: server.discordGuildId,
-                        source_server: getserver.state,
+                        source_server: getServer.state,
                         max_users: server.max_users ,
                         expiration_date: data.expiration_date,
                         type: data.type,
@@ -239,7 +202,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
                 // call multiple Time Api
                 let results = await Promise.all(WhiteListFomrArray.map(async (server): Promise<any> => {
-                    let response = await mutipleWhiteListServerAdd(server)
+                    let response = await multipleWhiteListServerAdd(server)
                     return response
                 }));
 
@@ -261,7 +224,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                 if(failedResponse.length>0){
 
                     failedResponse.map((response:any,index:number)=>{
-                        let serverDetail:any = formField.mutipleServerDetails.find((server)=>server.discordGuildId===response.server.id)
+                        let serverDetail:any = formField.multipleServerDetails.find((server)=>server.discordGuildId===response.server.id)
                         failedServerDetails.push(serverDetail)
                         if(!response.server.name){
                             response.server.name = serverDetail.name
@@ -269,7 +232,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
                         response.errors?.map((err:any)=>{
                             if(err.param==='required_role'){
-                                setError(`mutipleServerDetails.${index}.required_role`, { type: 'custom', message: err.msg })
+                                setError(`multipleServerDetails.${index}.required_role`, { type: 'custom', message: err.msg })
                             }else{
                                 setError(err.param, { type: 'custom', message: err.msg })
                             }
@@ -295,15 +258,15 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
                 if(failedServerDetails.length>0){
                     let values = getValues()
-                    let mutipleServerDetails:mutipleServerDetails[] =[]
-                     values.mutipleServerDetails.forEach((server:any,index:number)=>{
+                    let multipleServerDetails:multipleServerDetails[] =[]
+                     values.multipleServerDetails.forEach((server:any,index:number)=>{
                         failedServerDetails.map((faieldServer:any)=>{
                             if(server.discordGuildId===faieldServer.discordGuildId){
-                                mutipleServerDetails.push(server)
+                                multipleServerDetails.push(server)
                             }
                         })
                     })
-                    setFromFiled({...values,mutipleServerDetails:mutipleServerDetails})
+                    setFormField({...values,multipleServerDetails:multipleServerDetails})
                 }
 
             })}>
@@ -324,11 +287,11 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                         <IonLabel className="card-detail-wrapper">{controlledField.name}</IonLabel>
                                         </div>
                                         {/* Max Users */}
-                                        <WhiteListFormField fieldLable={'Max Users'} multipleFieldName={`mutipleServerDetails.${index}.max_users` as const} fieldName={'max_users'} control={control} classes='mb-5' />
+                                        <WhiteListFormField fieldLable={'Max Users'} multipleFieldName={`multipleServerDetails.${index}.max_users` as const} fieldName={'max_users'} control={control} classes='mb-5' />
 
                                         {controlledField?.required_role_dropdown?.length>0?
                                         <WhiteListFormField fieldLable={'Whitelist Role (role they will get once Whitelisted in your new mint server)'}
-                                        multipleFieldName={`mutipleServerDetails.${index}.required_role` as const}
+                                        multipleFieldName={`multipleServerDetails.${index}.required_role` as const}
                                             fieldName={'required_role'}
                                             control={control}
                                             classes='mb-5'
@@ -345,7 +308,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                         <>
                                         {/* input required_role */}
                                             <WhiteListFormField fieldLable={`Required Role ID (Discord Role ID required of them in ${controlledField?.name} to enter the giveaway)`}
-                                            multipleFieldName={`mutipleServerDetails.${index}.required_role` as const}
+                                            multipleFieldName={`multipleServerDetails.${index}.required_role` as const}
                                             fieldName={'required_role'}
                                             control={control}
                                             classes='mb-5'
@@ -360,7 +323,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                                             />
                                          {/* input required_role_name */}
                                          <WhiteListFormField fieldLable={`Required Role Name (Discord Role ID required of them in ${controlledField?.name} to enter the giveaway)`} fieldName={'required_role_name'}
-                                          multipleFieldName={`mutipleServerDetails.${index}.required_role_name` as const}
+                                          multipleFieldName={`multipleServerDetails.${index}.required_role_name` as const}
                                           control={control}
                                           ShowMessage={
                                             <span className="font-bold text-green-500">

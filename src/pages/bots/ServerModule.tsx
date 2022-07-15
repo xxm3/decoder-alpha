@@ -220,7 +220,7 @@ const [serverName, setServerName] = useState('')
                         description:data.description,
                         twitterLink:data.twitter_link,
                         discordLink:data.discord_link,
-                        requiredRoleId: `${data.requiredRoleId}:${data.requiredRoleName}`,
+                        requiredRoleId: `${data.requiredRoleId}`,
                         requiredRoleName:data.requiredRoleName,
                         imagePath:data.image
                     })
@@ -523,14 +523,7 @@ const [serverName, setServerName] = useState('')
                         --padding-bottom: 25px;
                         --padding-end: 20px;
                         --padding-start: 20px;
-                    `} onClick={() =>{
-                        let obj =  {
-                            isEditWhitelist :true,
-                            sourceServer : serverId
-                        } 
-                        dispatch(isEditWhitelist(obj))
-                         history.push({pathname:`/seamless`})
-                         }}>
+                    `} onClick={() =>{ history.push({pathname:`/seamless`,search:`sourceId=${serverId}`}) }}>
                             Edit/Delete an existing Seamless
                         </IonButton>
                     </div>
@@ -555,10 +548,10 @@ const [serverName, setServerName] = useState('')
                         const { image, ...rest } = data;
                         const rawData = { ...rest, };
 
-                        if(data.requiredRoleId.includes(':')) {
-                            rawData.requiredRoleId = data.requiredRoleId.split(':')[0];
-                            rawData.requiredRoleName = data.requiredRoleId.split(':')[1];
-                        }
+                        // if(data.requiredRoleId.includes(':')) {
+                        //     rawData.requiredRoleId = data.requiredRoleId.split(':')[0];
+                        //     rawData.requiredRoleName = data.requiredRoleId.split(':')[1];
+                        // }
 
                         delete rawData.imagePath
                         const formData = new FormData();

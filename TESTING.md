@@ -410,6 +410,10 @@ This needs to be done because raffling can only occur after it is expired. Or yo
 - If user role is "no Role" then user can submit only single white list if user try multiple at that time user redirect to home page 
 - if user already have required roll at then auto fill field required role and show a drop down to select role
 - if user have no required role then its show a text input for required role id and required role name
+- user initiate new whitelist then autofill form with past data that user previously added
+- user now add with bot server then required role have drop down to select required role
+- fixed bug edit whitelist when in path you can check server id as sourceId
+
 
 ### Magic eden package
 
@@ -422,3 +426,13 @@ This needs to be done because raffling can only occur after it is expired. Or yo
 - TODO: above needs major revisions. Doesn't explain how to do things with the wallet watch (which Prof Decoder already wrote elsewhere). This is SUPPOSED To explain how to test the tomorrows-mints.
  
 
+### Auto join a discord when user claim the whitelist with the source server in which he/she not joined.
+- Create a new whitelist with the source server in which user who going to claim that whitelist is not joined.
+- Make sure we are creating whitelist with proper data that we required to claim that whitelist i.e: required role, etc.
+- Then Approve that source server from DB in guilds table to display that whitelist for claim.
+- Then login with the user who going to claim that whitelist.
+	- Here make sure user is not joined to the source server that he/she going to claim.
+	- If he/she already joined that server then need to leave that server.
+- Now Claim that whitelist and see that you are joined to that source server.
+
+Note: Here make sure the user data we are getting from res.locale is for the user who try to cliam that whitelist then only our join server API works.
