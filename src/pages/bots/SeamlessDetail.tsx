@@ -74,8 +74,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const getLastPartnership = async() =>{
         await getLastWhitelistPartnerShip(serverArray).then((response:any)=>{
             if(response.data){
-                let len = response.data.length-1
-                setFormField({...response.data[len],imagePath:response.data[len].image})
+                let lastData = {...response.data[response.data.length-1]}
+                delete lastData.id
+                setFormField({...lastData,imagePath:lastData.image})
             }
         })
     }

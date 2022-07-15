@@ -105,8 +105,9 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
         await getLastWhitelistPartnerShip(serverArray).then((response:any)=>{
             if(response.data){
-                let len = response.data.length-1
-                lastSubmitData = response.data[len]
+                 let lastData = {...response.data[response.data.length-1]}
+                delete lastData.id
+                lastSubmitData = lastData
             }
         })
 

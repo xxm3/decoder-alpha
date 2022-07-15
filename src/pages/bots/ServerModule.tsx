@@ -523,14 +523,7 @@ const [serverName, setServerName] = useState('')
                         --padding-bottom: 25px;
                         --padding-end: 20px;
                         --padding-start: 20px;
-                    `} onClick={() =>{
-                        let obj =  {
-                            isEditWhitelist :true,
-                            sourceServer : serverId
-                        } 
-                        dispatch(isEditWhitelist(obj))
-                         history.push({pathname:`/seamless`,search:`sourceId=${serverId}`})
-                         }}>
+                    `} onClick={() =>{ history.push({pathname:`/seamless`,search:`sourceId=${serverId}`}) }}>
                             Edit/Delete an existing Seamless
                         </IonButton>
                     </div>
