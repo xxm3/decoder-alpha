@@ -1,6 +1,30 @@
 import { error } from "console";
 import { resolve } from "dns";
 import { instance } from "../../../axios";
+import { FormFields } from "./whiteListModalType";
+
+
+const todayEnd = (now:any) => {
+    const date = new Date( + now + 86400 * 1000 );
+    date.setHours(23,59,59,999);
+    return date;
+};
+
+let whitelistFormState:FormFields = {
+    whitelist_role:'',
+    image:'',
+    target_server:'',
+    expiration_date: todayEnd(new Date()).toISOString(),
+    type:'fcfs',
+    description:'',
+    twitter: '',
+    discordInvite:'',
+    magicEdenUpvoteUrl:'',
+    mintDate:new Date().toISOString(),
+    mintSupply:'',
+    mintPrice:'',
+    verified_role:'',
+}
 
 let createNewWhitelistPartnership = (formData:any) => new Promise(function(resolve, reject) {    
     instance.post( '/createNewWhitelistPartnership', formData ).then((result)=>{
@@ -67,4 +91,5 @@ let getWhitelistPartnership = (id:string)=>new Promise(function (resolve,reject)
     })
 })
 
-export {createNewWhitelistPartnership, updateWhitelistPartnership,setWhiteListFormData,getAllRoles,getWhitelistPartnership}
+
+export {createNewWhitelistPartnership, updateWhitelistPartnership,setWhiteListFormData,getAllRoles,getWhitelistPartnership,whitelistFormState}

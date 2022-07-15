@@ -8,41 +8,15 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import Loader from '../../../components/Loader';
 import Help from '../../../components/Help';
-import { createNewWhitelistPartnership, getAllRoles, setWhiteListFormData } from '../service/whiteListServices';
+import { createNewWhitelistPartnership, getAllRoles, setWhiteListFormData, whitelistFormState } from '../service/whiteListServices';
 import WhiteListFormField from '../components/WhiteListFormField';
+import { FormFields, multipleField, mutipleServerDetails } from '../service/whiteListModalType';
 
 /**
  * The page they see when they've clicked "initiate seamless" ... then clicked on a guild
  *
  * This lists the form for them to fill out
  */
-
-interface mutipleServerDetails{
-    max_users: number | '';
-    required_role:string;
-    required_role_name?: string;
-    id:string;
-    name:string;
-    discordGuildId:string;
-    required_role_dropdown:any[] ;
-}
-
-interface FormFields {
-    whitelist_role:string;
-    image: File & { path: string;} | '';
-    target_server: number | '';
-    verified_role: string;
-    expiration_date: string;
-    type: 'raffle' | 'fcfs';
-    description: string;
-    twitter: string;
-    discordInvite:string;
-    mutipleServerDetails:mutipleServerDetails[];
-    magicEdenUpvoteUrl?:string;
-    mintDate:string;
-    mintSupply:string;
-    mintPrice:any | ''
-}
 const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
     const getserver:any = useLocation();
 
@@ -50,32 +24,14 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
     // get selected server list from redux store
     const multipleServerList:any = useSelector<RootState>(state => state.whiteList.selectMultipleServerList);
 
-//
-    const now = useMemo(() => new Date(), []);
-    const todayEnd = useMemo(() => {
-        const date = new Date( + now + 86400 * 1000 );
-        date.setHours(23,59,59,999);
-        return date;
-    }, [now]);
 
     // create form data
-    const [formField,setFromFiled] = useState<FormFields>({
-        whitelist_role:'',
-        verified_role:'',
-        image: '',
-        target_server:'',
-        expiration_date: todayEnd.toISOString(),
-        type:'fcfs',
-        description: '',
-        twitter: '',
-        discordInvite:'',
-        magicEdenUpvoteUrl:'',
+    const [formField,setFromFiled] = useState<multipleField>({
+        ...whitelistFormState,
         mutipleServerDetails:[],
-        mintDate:new Date().toISOString(),
-        mintSupply:'',
-        mintPrice:'',
         })
-    const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, setValue,getValues} = useForm<FormFields, any>();
+
+    const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting }, setValue,getValues} = useForm<multipleField, any>();
 
     const { fields, append } = useFieldArray({
         control,
