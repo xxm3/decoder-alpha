@@ -426,3 +426,13 @@ This needs to be done because raffling can only occur after it is expired. Or yo
 - TODO: above needs major revisions. Doesn't explain how to do things with the wallet watch (which Prof Decoder already wrote elsewhere). This is SUPPOSED To explain how to test the tomorrows-mints.
  
 
+### Auto join a discord when user claim the whitelist with the source server in which he/she not joined.
+- Create a new whitelist with the source server in which user who going to claim that whitelist is not joined.
+- Make sure we are creating whitelist with proper data that we required to claim that whitelist i.e: required role, etc.
+- Then Approve that source server from DB in guilds table to display that whitelist for claim.
+- Then login with the user who going to claim that whitelist.
+	- Here make sure user is not joined to the source server that he/she going to claim.
+	- If he/she already joined that server then need to leave that server.
+- Now Claim that whitelist and see that you are joined to that source server.
+
+Note: Here make sure the user data we are getting from res.locale is for the user who try to cliam that whitelist then only our join server API works.
