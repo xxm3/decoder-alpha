@@ -60,7 +60,15 @@ const TopDiscordGainers = () => {
      * Use Effects
      */
 
-    // TODO !!! implement top gainers! -- also fix counts not working!
+    /*
+            TODO !!! calendar
+
+             implement top gainers! -- also fix counts not working! ----- Need “top twitter/discord 24 hrs” on mints.js to work (and home page) - had redis errors
+
+             - Fix calendar with graphs … recent cron messing up….
+                 announce it …
+                make sure ME launchpad in there …
+     */
 
     return (
             <>
@@ -72,11 +80,11 @@ const TopDiscordGainers = () => {
                         </div>
                     : <>
                             <div className={`font-bold pb-1 tracking-wider text-xl`}>Top Discord Gainers - 24h</div>
-                            {topSearchWordsQuery?.data?.data?.map((item:any,index:number)=>{
+                            { topSearchWordsQuery?.data?.data?.map((item:any,index:number)=>{
                                 return (
                                     <div className='flex flex-row justify-between' key={index}>
-                                        <div>{item.mint_detail.name}</div>
-                                    <div>+{formatNumber(item.discord_all)}</div>
+                                        <div>{item.mint_detail?.name}</div>
+                                    <div>+{formatNumber(item?.discord_all)}</div>
                             </div>
                                 )
                             })}

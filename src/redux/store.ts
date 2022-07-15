@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import walletReducer from './slices/walletSlice'
 import demoReducer from './slices/demoSlice'
 import userReducer from './slices/userSlice'
+import whiteListReducer from './slices/whitelistSlice'
 
 export const store = configureStore({
   reducer: {
     wallet : walletReducer,
-	demo : demoReducer,
-	user : userReducer
+    demo : demoReducer,
+    user : userReducer,
+    whiteList:whiteListReducer
   },
 })
 

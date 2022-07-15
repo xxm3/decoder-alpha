@@ -26,7 +26,8 @@ import { AxiosError } from 'axios';
 import { TextFieldTypes } from '@ionic/core';
 import { server } from 'ionicons/icons';
 import Help from '../../components/Help';
-
+import { useDispatch } from 'react-redux';
+import { isEditWhitelist, requiredRoleForUser } from '../../redux/slices/whitelistSlice';
 /**
  * The page they see when they click "Add" on one of their servers
  */
@@ -53,6 +54,8 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     /**
      * States & Variables
      */
+     const dispatch = useDispatch()
+
     const useQuery = () => new URLSearchParams(useLocation().search);
     const query = useQuery();
     const devMode = query.get('devMode') || window.location.href.indexOf('localhost') !== -1;
@@ -85,7 +88,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
     const [isNoBot, setIsNoBot] = useState<boolean>(false);
     const [requiredRole,setRequiredRole] = useState<any>([]);
     const [isBigImage, setIsBigImage] = useState<boolean>(false);
-
+    const [isValidImage, setIsValidImage] = useState<boolean>(false);
     const [guildFormData, setGuildFormData] = useState({
         magicEdenLink: '',
         description: '',
@@ -95,6 +98,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         requiredRoleName: '',
         imagePath: ''
     });
+const [serverName, setServerName] = useState('')
 
     /**
      * Use Effects
@@ -104,7 +108,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
      useEffect(() => {
         if(!localStorage.getItem('role')){
-            history.push('/manageserver')
+            history.push('/dao')
             return
         }else{
             setRole(localStorage.getItem('role'))
@@ -114,10 +118,26 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             setIsMobile(true);
         }
 
-        // if (performance.navigation.type == 1) {
-        //     history.push('/manageserver')
-        // }
     }, [window.innerWidth]);
+
+    // refresh page
+    // useEffect(() => {
+    //   if (performance.navigation.type === 1) {
+    //         history.push('/dao')
+    //     }
+    // }, [])
+
+    // refresh page  fixed when sometime not redirect to server module
+    let refreshCount = localStorage.getItem('refresh')
+
+    useEffect(() => {
+     if(refreshCount === 'two'){
+        history.push('/dao')
+     }
+    }, [])
+
+    localStorage.setItem('refresh' ,'two')
+
 
     // this gets set from manageserver.tsx
     useEffect(() => {
@@ -127,10 +147,6 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             setIsNoBot(false);
         }
     }, [location.search]);
-
-
-
-
 
     useEffect(() => {
         reset(guildFormData);
@@ -144,8 +160,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
         } else {
             setAuthorizedModule(0);
         }
-
-        getWhiteListRole();
+        if(refreshCount !== 'two'){
+            getWhiteListRole();
+        }
     }, [role]);
 
     // get guilds
@@ -163,6 +180,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                 .get(`/guilds/${serverId}?checkCondition=false`)
                 .then((response) => {
                     let data = response.data.data;
+                    setServerName(data.name)
                 // change
                     if (role === '3NFT' || role === '4NFT') {
                         setChecked({
@@ -191,7 +209,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         setChannel(data.textChannels);
                     // if empty array - means bot isn't in there... so do this
                     }else{
-                        setIsNoBot(true);
+                        if(refreshCount !== 'two'){
+                            setIsNoBot(true);
+                        }
                     }
                     //
 
@@ -200,10 +220,19 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                         description:data.description,
                         twitterLink:data.twitter_link,
                         discordLink:data.discord_link,
-                        requiredRoleId:data.requiredRoleId,
+                        requiredRoleId: `${data.requiredRoleId}:${data.requiredRoleName}`,
                         requiredRoleName:data.requiredRoleName,
                         imagePath:data.image
                     })
+                    if(data){
+
+                        let botData:any = {
+                            requiredRoleId: data.requiredRoleId,
+                            requiredRoleName:data.requiredRoleName,
+                            name:serverName
+                        }
+                        localStorage.setItem('requiredBotData', JSON.stringify(botData))
+                    }
 
                 })
                 .catch((error: any) => {
@@ -463,6 +492,9 @@ const ServerModule: React.FC<AppComponentProps> = () => {
             </Backdrop>
 
             {/*seamless new mint*/}
+            <div className="md:text-2xl text-2xl p-4 px-6 w-full">
+                {serverName}
+            </div>
             <div className="server-module-bg p-4 px-6 w-full" hidden={isNoBot}>
                 <div className={isMobile ? 'flex-col items-center flex ':'flex justify-between flex-row items-center'}>
                     <IonLabel className="md:text-2xl text-2xl font-semibold">
@@ -474,15 +506,34 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     <br/>
                     <a href="https://docs.soldecoder.app/books/intro/page/seamless" target="_blank" className="font-bold cursor-pointer underline mt-5">Follow a step-by-step guide on this here.</a>
                 </p>
-                <div className="mt-3 mb-3 w-full flex ">
-                    <IonButton className="text-base" css={css`
-                    --padding-top: 25px;
-                    --padding-bottom: 25px;
-                    --padding-end: 20px;
-                    --padding-start: 20px;
-                `} onClick={() => history.push(`/seamless/${serverId}`)}>
-                        Initiate Seamless
-                    </IonButton>
+                <div className={`flex  ${isMobile ? 'flex-col items-center' : 'flex-row'}`}>
+                    <div className="mt-3 mb-3 flex ">
+                        <IonButton className="text-base" css={css`
+                        --padding-top: 25px;
+                        --padding-bottom: 25px;
+                        --padding-end: 20px;
+                        --padding-start: 20px;
+                    `} onClick={() => history.push(`/seamless/${serverId}`)}>
+                            Initiate a New Seamless
+                        </IonButton>
+                    </div>
+                    <div className={`mt-3 mb-3 flex ${isMobile ? '' : 'ml-3'}`}>
+                        <IonButton className="text-base" css={css`
+                        --padding-top: 25px;
+                        --padding-bottom: 25px;
+                        --padding-end: 20px;
+                        --padding-start: 20px;
+                    `} onClick={() =>{
+                        let obj =  {
+                            isEditWhitelist :true,
+                            sourceServer : serverId
+                        } 
+                        dispatch(isEditWhitelist(obj))
+                         history.push({pathname:`/seamless`})
+                         }}>
+                            Edit/Delete an existing Seamless
+                        </IonButton>
+                    </div>
                 </div>
             </div>
             <br/>
@@ -495,7 +546,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                     </IonLabel>
                 </div>
                 <p>
-                    Want to receive whitelists from new mints? Fill out the below to help new mints see what you're about. You can then ask them to submit whitelists requests to you via Seamless. If they've never used Seamless before, have them <a href="https://discord.gg/s4ne34TrUC" target="_blank" className="underline cursor-pointer font-bold">join our Discord</a> and we'll walk them through the process.
+                    Want to receive whitelists from new mints, absolutely free? Fill out the below to help new mints see what you're about. You can then ask them to submit whitelists requests to you via Seamless. If they've never used Seamless before, have them <a href="https://discord.gg/s4ne34TrUC" target="_blank" className="underline cursor-pointer font-bold">join our Discord</a> and we'll walk them through the process.
                 </p>
 
                 <form className="space-y-3"
@@ -760,8 +811,15 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         value={value as unknown as string}
                                         onIonChange={(e) => {
                                             const target = ( e.target as HTMLIonInputElement ).getElementsByTagName('input')[0];
-                                            const file = target .files?.[0] as FieldValues['image'];
+                                            const file = target.files?.[0] as FieldValues['image'];
                                             if(file){
+                                                if(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpeg' ){
+                                                    setIsValidImage(false)
+                                                    setError('image', { type: 'custom', message: '' });
+                                                }else{
+                                                    setError('image', { type: 'custom', message: 'Please upload a valid Image' });
+                                                    setIsValidImage(true)
+                                                }
                                                 let file_size = file.size;
                                                 if((file_size/1024) < 10240){
                                                     setIsBigImage(false)
@@ -778,10 +836,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                         }}
                                         name={name}
                                         ref={ref}
-                                        required = {getValues('imagePath')?false:true}
+                                        required = {getValues('imagePath') ? false : true}
                                         onIonBlur={onBlur}
                                         type={'file' as TextFieldTypes}
-                                        accept="image" />
+                                        accept="image/png, image/gif, image/jpeg" />
                                     <p className="formError"> {error?.message} </p>
                                 </>
                             )} />
@@ -789,7 +847,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                     {/*justify-center*/}
                     <div className=' mt-4 mb-5 w-full flex '>
-                        <IonButton className='w-50 h-12' type={'submit'} disabled={isSubmitting || isBigImage}>
+                        <IonButton className='w-50 h-12' type={'submit'} disabled={isSubmitting || isBigImage || isValidImage}>
                             {isSubmitting ? ( <IonSpinner /> ) : ('Submit DAO Profile')}
                         </IonButton>
                     </div>
@@ -968,7 +1026,7 @@ const ServerModule: React.FC<AppComponentProps> = () => {
 
                                                     <br/><br/>
 
-                                                    {/* TODO: vishwas bugged... */}
+                                                    {/* TODO: vishwas bugged tmrw mint... */}
                                                     {/*<div className="text-lg font-semibold">*/}
                                                     {/*    "Tomorrow's Mints" channel*/}
                                                     {/*</div>*/}
@@ -1169,7 +1227,10 @@ const ServerModule: React.FC<AppComponentProps> = () => {
                                                     <b>User Commands Unlocked:</b>
                                                     <ul className='list-disc ml-5 leading-7'>
                                                         <li>/fp - Users can get the price/volume/listings of any Magic Eden NFT</li>
-                                                        <li>/watch_wallet - Users can track the buys/sells (limit of 30 per Discord). Recommend you lock this down to certain roles. Have a mod right click on the SOL Decoder bot within your Discord. Manage Integration. Commands - /watch_wallet. Click on it. @everyone - denied. Add roles or members - choose a role that can manage this.</li>
+                                                        <li>
+                                                            /watch_wallet - Users can track the buys/sells (limit of 30 per Discord).
+                                                            {/*Recommend you lock this down to certain roles. Have a mod right click on the SOL Decoder bot within your Discord. Manage Integration. Commands - /watch_wallet. Click on it. @everyone - denied. Add roles or members - choose a role that can manage this.*/}
+                                                        </li>
                                                         <li>/tps - Users can get a live count of Solana's Transactions Per Second</li>
                                                     </ul>
 

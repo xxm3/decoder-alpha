@@ -50,7 +50,6 @@ import Login from './pages/Login';
 import Schedule from './pages/schedule/Schedule';
 import Bots from './pages/bots/Bots';
 import ManageServer from './pages/bots/ManageServer';
-import ServerModule from './pages/bots/ServerModule';
 import ScheduleCalendar from './pages/schedule/Calendar';
 import StakingLayout from './pages/staking/StakingLayout';
 import MarketPlace from './pages/marketplace/MarketPlacePage';
@@ -93,6 +92,8 @@ import { setHasRoles } from './redux/slices/userSlice';
 import ViewGuild from './pages/view-guild/ViewGuild';
 import SeamlessDetail from './pages/bots/SeamlessDetail';
 import Seamless from './pages/bots/Seamless';
+import AddMultipleWhiteList from './pages/bots/addMultipleWhilteList/AddMultipleWhiteList';
+import ServerModule from './pages/bots/ServerModule';
 
 function b64DecodeUnicode(str : string) {
     return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
@@ -416,7 +417,7 @@ const App = () => {
                                                                                     component={
                                                                                         NftPriceTable
                                                                                     }
-                                                                                    needsRole={false}
+                                                                                    // needsRole={false}
                                                                                 />
 
                                                                                 {/* Stacked Line Search */}
@@ -453,6 +454,8 @@ const App = () => {
                                                                                     }
                                                                                     needsRole={false}
                                                                                 />
+                                                                                
+                                                                                {/* manage server now dao */}
                                                                                 <ProtectedRoute
                                                                                     exact
                                                                                     path="/dao"
@@ -466,7 +469,7 @@ const App = () => {
                                                                                 <ProtectedRoute
                                                                                     exact
                                                                                     path="/servermodule"
-                                                                                    render={()=> <Redirect to={`/manageserver`} />}
+                                                                                    render={()=> <Redirect to={`/dao`} />}
                                                                                     needsRole={false}
                                                                                 />
 
@@ -519,6 +522,14 @@ const App = () => {
                                                                                     path="/seamlessdetail/:serverId"
                                                                                     component={ SeamlessDetail }
                                                                                     needsRole={false}
+                                                                                />
+                                                                                {/* SeamlessServer */}
+
+                                                                                 {/* Add multiple white List */}
+                                                                                 <ProtectedRoute
+                                                                                    exact
+                                                                                    path="/add_multiple_white_list"
+                                                                                    component={ AddMultipleWhiteList }
                                                                                 />
                                                                                 {/* SeamlessServer */}
                                                                                 <ProtectedRoute

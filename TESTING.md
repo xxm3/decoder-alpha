@@ -364,6 +364,36 @@ case 2:
 TODO: write up where the bot is in the target server, so you have a dropdown for required role
 TODO: write up where the bos is NOT in the target server, so you have a input box and dropdown for required role
 
+### Seamless - Approve option for Mod on initiated Seamless created by newly added server
+- set your server's "initateApproved" value to "0"(fale) in guilds table.
+This lets the app know your server hasn't initiated any Seamless yet.
+- set other's role to "modRole" in constants
+- go to /manageserver and add that server of yours, and then initiate a Seamless
+- You can't see the created Seamless on /seamless page because it's not approved yet
+- set your role to "modRole" in constants
+- You can see now the created Seamless since you are Mod. Click on "Approve". It approves Seamless.
+- If you logs in with other users, you can see that Seamless.
+
+### Seamless - Initiate raffle-type Seamless
+- go to /manageserver and add one of your servers
+- go to "initiate seamless" and choose "raffle" for giveaway type
+- now login with other users that have required roles in target server
+- you can see the created Seamless and click on "enter raffle"
+- Do this for several more users so that "users entered" can exceed "winning spots".
+This can be tested by manually adding rows in whitelistClaims table directly. 
+ex. INSERT INTO whitelistClaims(id, createdAt, updatedAt, whitelist_id, user_id, state) VALUES('2b2e2668-ea75-4512-ad1e-8b83ec57d3d4', '2022-07-08 10:29:32', '2022-07-08 10:29:32', 'd501a370-3a55-4b8d-8673-ce3f76750083', '15dc1f47-05b5-4744-b679-1e23140ea139', 'REQUESTED')
+- Modify "expiration date" value in whitelistPartnerships table to already past date.
+This needs to be done because raffling can only occur after it is expired. Or you can comment out "expiration_date" filter at models.whitelists.findAll inside /raffleWhitelists endpoint
+- Run "http://localhost:5001/nft-discord-relay/us-central1/api/raffleWhitelists" on browser to simulate cron job
+- Now for winners, roles are added to discords. For failed users, they are removed from the claims table
+- When you go to /seamless page, you can see notification and confetti in case you've won in the raffle.
+
+### Seamless - Login with Twitter
+- go to /seamless
+- if you haven't logged in with Twitter yet, you can see "Twitter Login" button
+- When you click on it, you will be redirected to Twitter login page
+- After you authorize, you are redirected to /seamless page again. Now you can't see "Twitter Login" button anymore.
+- If you check users table in DB, you will be able to see that relevant twitterId is added for you
 
 ### Configure bot packages
 
@@ -375,8 +405,11 @@ TODO: write up where the bos is NOT in the target server, so you have a input bo
 - you will see in all the server checkbox is appears you can select by enabling checkbox
 - right corder you will see submit button then you will be redirect to whitelist partnership form
 - for particular server max users and required roles must be entered and fill rest of the form
-- after filled form you can click on submit button and boom multiple entries are saved successfully. you will be redirect to manageserver page.
-if one of the server has something wrong and doesn't save then you will be on same page with server that are not saved yet.
+- after filled form you can click on submit button and boom multiple entries are saved successfully. you will be redirect to dao page.
+- if one of the server has something wrong and doesn't save then you will be on same page with server that are not saved yet.
+- If user role is "no Role" then user can submit only single white list if user try multiple at that time user redirect to home page 
+- if user already have required roll at then auto fill field required role and show a drop down to select role
+- if user have no required role then its show a text input for required role id and required role name
 
 ### Magic eden package
 

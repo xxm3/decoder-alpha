@@ -16,12 +16,13 @@ import {
 } from "ionicons/icons"
 import NavLink from "./NavLink"
 import WalletButton from '../WalletButton';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { auth } from "../../firebase";
 import { VERSION_CODE } from '../../environments/environment'
 import { useState,useEffect } from "react";
 import './Sidebar.css'
+import { isEditWhitelist } from "../../redux/slices/whitelistSlice";
 
 
 
@@ -31,6 +32,7 @@ function Sidebar() {
     const [isMobile,setIsMobile] = useState(false)
     const isLogin = localStorage.getItem('isLogin')
     const [logoutPopupOpen, setLogoutPopupOpen] = useState<boolean>(false)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if (window.innerWidth < 525){
@@ -79,11 +81,19 @@ function Sidebar() {
                 )}
 
                 {/*<NavLink title="Home" icon={homeOutline} to="/" />*/}
-
+                <div onClick={()=> dispatch(isEditWhitelist(false))}>
                 <NavLink
                     title="Seamless"
                     icon={diamondOutline}
                     to="/seamless"
+                    needsRole={false}
+                />
+                </div>
+
+                <NavLink
+                    title="Add Bots / Seamless"
+                    icon={serverOutline}
+                    to="/dao"
                     needsRole={false}
                 />
 
@@ -121,12 +131,6 @@ function Sidebar() {
                 {/*    icon={notificationsOutline}*/}
                 {/*    to="/alerts"*/}
                 {/*/>*/}
-
-               <NavLink
-                    title="Add DAO Bots"
-                   icon={serverOutline}
-                   to="/dao"
-               />
 
                 <NavLink
                     title="Docs"
@@ -170,7 +174,7 @@ function Sidebar() {
             </IonContent>
 
             <IonModal isOpen={logoutPopupOpen} onDidDismiss={() => setLogoutPopupOpen(false)} cssClass={isMobile ? 'logout-modal-mobile' :'logout-modal-web'} >
-                <IonContent className="flex items-center">
+                <IonContent className="flex items-center" scroll-y="false">
                     <div className='text-xl font-bold text-center w-full mt-5'>
                         Logout?
                     </div>

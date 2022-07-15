@@ -1,8 +1,8 @@
 .logout-modal-web .modal-wrapper {
-    --width: 25vw;
-    --height: 24%;
+    --width: 400px;
+    --height: 210px;
 }
 .logout-modal-mobile .modal-wrapper {
     --width: 90vw;
-    --height: 27%;
+    --height: 235px;
 }
