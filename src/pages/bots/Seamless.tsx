@@ -37,7 +37,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [twitterSort, setTwitterSort] = useState<String>('');
     const [discordSort, setDiscordSort] = useState<String>('');
     const [isMobile, setIsMobile] = useState<boolean>(false);
-    const [role] = useState(localStorage.getItem('role'))
     const [sourceServerDetail, setSourceServerDetail] = useState<any>(null)
     const [rowsPerPage, setRowsPerPage] = useState(6)
     const [hasMore, setHasMore] = useState(true)
@@ -159,21 +158,11 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             });
                                             return
                                         }
-                                        // console.log('selectMultipleWhiteList------',selectMultipleWhiteList)
-                                        if(role === 'No Roles'){
-                                            history.push(`/`)
-                                            present({
-                                                message: 'You have not enough NFT to submit multiple whitelist',
-                                                color: 'primary',
-                                                duration: 10000,
-                                            });
-                                        }else{
-                                            dispatch(setMultipleList(selectMultipleWhiteList))
-                                            history.push({pathname:`/add_multiple_white_list`,state:serverId})
-                                            // history.push({pathname:`/seamlessdetail/${serverId}`,state:serverId})
-                                            setSelectMultipleWhiteList([])
-                                            setmultipleflag((n)=>!n)
-                                        }
+                                      
+                                        dispatch(setMultipleList(selectMultipleWhiteList))
+                                        history.push({pathname:`/add_multiple_white_list`,state:serverId})
+                                        setSelectMultipleWhiteList([])
+                                        setmultipleflag((n)=>!n)
 
                                     }}> Next </div>
                                 </div>
@@ -249,10 +238,10 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 dataLength={serverList.slice(0,rowsPerPage).length}
                                 next={()=>fetchMoreData()}
                                 hasMore={hasMore}
-                                loader={
-                                    <div className='mb-5'>
-                                        <h6>Loading...</h6>
-                                    </div>
+                                loader={ serverList ? 
+                                    <div className='mb-5 flex justify-center'>
+                                        <Loader/>
+                                    </div> : ''
                                     }
                                 scrollableTarget="scrollableDiv"
                                 endMessage={

@@ -28,6 +28,7 @@ function WhitelistMarketplace() {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code') || '';
     // const discordId = params.get('state');
+ let searchParam = window.location.search.slice(10,28)
 
     const [twitterId, setTwitterId] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -101,9 +102,6 @@ function WhitelistMarketplace() {
 
     const server = localStorage.getItem('servers');
     const serverArray = server &&  JSON.parse(server);
-    const isEditWhitelist = useSelector( (state:RootState) => state.whiteList.isEditWhitelist )
-
-
 
     // get all your WL crap
 
@@ -111,7 +109,7 @@ function WhitelistMarketplace() {
         async () => {
                 try {
                     setIsLoading(true)
-                    const { data: whitelists } = await instance.post( `${isEditWhitelist ? `/getWhitelistPartnerships/me?isAdmin=${isEditWhitelist.isEditWhitelist ? true : false}&sourceServer=${isEditWhitelist?.sourceServer}` :'/getWhitelistPartnerships/me?isAdmin=false'}`,{servers: serverArray});
+                    const { data: whitelists } = await instance.post( `${searchParam ? `/getWhitelistPartnerships/me?isAdmin=true&sourceServer=${searchParam}` :'/getWhitelistPartnerships/me?isAdmin=false'}`,{servers: serverArray});
                     const whiteListExpire :any[] = [];
                     const whiteListLive: any[] = [];
                     const whiteListMyDao: any[] = [];
@@ -292,10 +290,10 @@ function WhitelistMarketplace() {
                                     dataLength={myDoaWhiteList.slice(0,rowsPerPage).length}
                                     next={()=>fetchMoreData(myDoaWhiteList)}
                                     hasMore={hasMore}
-                                    loader={
-                                        <div className='mb-5'>
-                                            <h6>Loading...</h6>
-                                        </div>
+                                    loader={ myDoaWhiteList.length > 0 ?
+                                        <div className='mb-5 flex justify-center'>
+                                            <Loader/>
+                                        </div> : ''
                                         }
                                     scrollableTarget="scrollableDiv"
                                     endMessage={
@@ -321,10 +319,10 @@ function WhitelistMarketplace() {
                                     dataLength={liveWhiteList.slice(0,rowsPerPage).length}
                                     next={()=>fetchMoreData(liveWhiteList)}
                                     hasMore={hasMore}
-                                    loader={
-                                        <div className='mb-5'>
-                                            <h6>Loading...</h6>
-                                        </div>
+                                    loader={  liveWhiteList.length > 0 ?
+                                        <div className='mb-5 flex justify-center'>
+                                           <Loader/>
+                                        </div>  : ''
                                         }
                                     scrollableTarget="scrollableDiv"
                                     endMessage={
@@ -349,10 +347,10 @@ function WhitelistMarketplace() {
                             dataLength={expireWhiteList.slice(0,rowsPerPage).length}
                             next={()=>fetchMoreData(expireWhiteList)}
                             hasMore={hasMore}
-                            loader={
-                                <div className='mb-5'>
-                                    <h6>Loading...</h6>
-                                </div>
+                            loader={ expireWhiteList.length > 0 ? 
+                                <div className='mb-5 flex justify-center'>
+                                    <Loader/>
+                                </div> :''
                                 }
                             scrollableTarget="scrollableDiv"
                             endMessage={
@@ -377,10 +375,10 @@ function WhitelistMarketplace() {
                             dataLength={myClaimWhiteList.slice(0,rowsPerPage).length}
                             next={()=>fetchMoreData(myClaimWhiteList)}
                             hasMore={hasMore}
-                            loader={
-                                <div className='mb-5'>
-                                    <h6>Loading...</h6>
-                                </div>
+                            loader={ myClaimWhiteList.length > 0 ?
+                                <div className='mb-5 flex justify-center'>
+                                    <Loader/>
+                                </div> :''
                                 }
                             scrollableTarget="scrollableDiv"
                             endMessage={

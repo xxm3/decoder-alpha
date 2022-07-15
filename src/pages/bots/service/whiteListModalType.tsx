@@ -14,7 +14,7 @@ export interface FormFields {
     verified_role: string;
 }
 
-export interface mutipleServerDetails{
+export interface multipleServerDetails{
     max_users: number | '';
     required_role:string;
     required_role_name?: string;
@@ -26,7 +26,7 @@ export interface mutipleServerDetails{
 
 
 export interface multipleField extends FormFields {
-    mutipleServerDetails:mutipleServerDetails[];
+    multipleServerDetails:multipleServerDetails[];
 }
 export interface whiteListFormField extends FormFields {
         max_users: string,

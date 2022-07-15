@@ -8,7 +8,7 @@ import isAxiosError from '../../util/isAxiosError';
 import { AxiosError } from 'axios';
 import BotServerCard from './components/BotServerCard';
 import Help from '../../components/Help';
-import { createNewWhitelistPartnership, getAllRoles, getWhitelistPartnership, setWhiteListFormData, updateWhitelistPartnership, whitelistFormState } from './service/whiteListServices';
+import { createNewWhitelistPartnership, getAllRoles, getLastWhitelistPartnerShip, getWhitelistPartnership, setWhiteListFormData, updateWhitelistPartnership, whitelistFormState } from './service/whiteListServices';
 import WhiteListFormField from './components/WhiteListFormField';
 import { whiteListFormField } from './service/whiteListModalType';
 
@@ -25,7 +25,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
     let history = useHistory();
 
-    const [formField,setFromFiled] = useState<whiteListFormField>({
+    const [formField,setFormField] = useState<whiteListFormField>({
         ...whitelistFormState,
         max_users: '',
         required_role: server?.state?.requiredRoleId ? server?.state?.requiredRoleId : '',
@@ -41,6 +41,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [formSubmit, setformSubmit] = useState<boolean>(false)
     const [sourceServerDetail, setSourceServerDetail] = useState<any>(null)
 
+    const serverObject = localStorage.getItem('servers')
+    let serverArray = serverObject &&  JSON.parse(serverObject)
+
     useEffect(() => {
         if(server?.state?.editForm){
             fetchServerDetail()
@@ -53,7 +56,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
     let fetchServerDetail = () =>{
         getWhitelistPartnership(server?.state?.id).then((response:any)=>{
-            setFromFiled({...response.data.data,imagePath:response.data.data.image})
+            setFormField({...response.data.data,imagePath:response.data.data.image})
         }).catch((error)=>{
             console.log("error",error)
         })
@@ -64,6 +67,16 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         getAllRoles(serverId,present).then((response:any)=>{
             setSourceServerDetail(response.data.sourceServer);
             setWhiteListRole(response.data.data);
+        })
+    }
+
+    // get last submitted whitelist partnership
+    const getLastPartnership = async() =>{
+        await getLastWhitelistPartnerShip(serverArray).then((response:any)=>{
+            if(response.data){
+                let len = response.data.length-1
+                setFormField({...response.data[len],imagePath:response.data[len].image})
+            }
         })
     }
 
@@ -116,6 +129,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     useEffect(() => {
         getWhiteListRole();
         getWhiteListRequireRole();
+        getLastPartnership()
     }, [])
 
     return (

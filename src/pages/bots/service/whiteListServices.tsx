@@ -4,7 +4,7 @@ import { instance } from "../../../axios";
 import { FormFields } from "./whiteListModalType";
 
 
-const todayEnd = (now:any) => {
+const todayEnd = (now:Date) => {
     const date = new Date( + now + 86400 * 1000 );
     date.setHours(23,59,59,999);
     return date;
@@ -47,8 +47,8 @@ let setWhiteListFormData = (data:any,serverId?:string,discordGuildId?:string)=>n
     const { image, ...rest } = data;
     const rawData = {
         ...rest,
-        source_server: data.source_server || serverId,
-        target_server:data.target_server || discordGuildId,
+        source_server:serverId || data.source_server,
+        target_server:discordGuildId ||data.target_server ,
     };
     delete rawData.id
     delete rawData.imagePath
@@ -92,4 +92,14 @@ let getWhitelistPartnership = (id:string)=>new Promise(function (resolve,reject)
 })
 
 
-export {createNewWhitelistPartnership, updateWhitelistPartnership,setWhiteListFormData,getAllRoles,getWhitelistPartnership,whitelistFormState}
+let getLastWhitelistPartnerShip = (serverArray:any) => new Promise(function(resolve,reject){
+
+    instance.post( '/getWhitelistPartnerships/me',{servers: serverArray}).then((result)=>{
+        resolve(result)
+    }).catch((error)=>{
+        reject(error)
+    })
+
+})
+
+export {getLastWhitelistPartnerShip,createNewWhitelistPartnership, updateWhitelistPartnership,setWhiteListFormData,getAllRoles,getWhitelistPartnership,whitelistFormState}
