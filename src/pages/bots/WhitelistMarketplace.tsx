@@ -196,22 +196,29 @@ function WhitelistMarketplace() {
             {/* introduction */}
             <div className="flex flex-row justify-center w-full mt-9">
                 <div className="server-module-bg p-4 px-6 w-full">
-                    <div className='w-full  items-center  mb-3'>
+                    <div className='w-full  items-center  mb-0'>
                         <div className='text-xl font-semibold mb-1'>Welcome to Seamless! SOL Decoder's next joint venture with Communi3</div>
 
                         <ul>
-                            <li>- <b>New mint giving spots?</b> Pay only a portion of your whitelist to Communi3, SOL Decoder, and partnered top DAOs. <a href="https://discord.gg/s4ne34TrUC" target="_blank" className="underline cursor-pointer font-bold">Join our Discord</a> and we'll walk you through the process</li>
-
-                            <li>- <b>Existing DAO wanting to get spots?</b> It's free, and no bots need to be added to your server - <a className='cursor-pointer underline font-bold' href='/dao'>click here to set it up</a>. Afterwards, any mint using Seamless already can give you spots in {'<'} a minute. Mints not using Seamless can get onboarded with Seamless very quickly, then give you spots</li>
-
-                            <li>- Want to learn more? <a className="underline cursor-pointer font-bold" href="https://medium.com/@sol-decoder/sol-decoder-presents-seamless-32251a4deb43" target="_blank">
-                                Read our Medium article here</a>
-                                {/*. Want to use Seamless for your new mint, or get WL spots for your existing DAO? Join our Discord and open a ticket*/}
+                            <li>- <b>New mint giving spots?</b> Pay only a portion of your whitelist to Communi3, SOL Decoder, and partnered top DAOs.&nbsp;
+                                <a href="https://discord.gg/s4ne34TrUC" target="_blank" className="underline cursor-pointer font-bold">Join our Discord</a>&nbsp;
+                                and we'll walk you through the process. And read more&nbsp;
+                                <a className='cursor-pointer underline font-bold' href=' https://docs.soldecoder.app/books/intro/page/seamless'>instructions about it here</a>.
                             </li>
+
+                            <li>- <b>Existing DAO wanting to get spots?</b> It's free, and no bots need to be added to your server -&nbsp;
+                                <a className='cursor-pointer underline font-bold' href='/dao'>click here to set it up</a>,
+                                and read more&nbsp;
+                                <a className='cursor-pointer underline font-bold' href=' https://docs.soldecoder.app/books/intro/page/seamless#bkmrk-existing-dao'>instructions about it here</a>.
+                                Afterwards, any mint using Seamless already can give you spots in {'<'} a minute. Mints not using Seamless can get onboarded with Seamless very quickly, then give you spots</li>
+
+                            {/*<li>- Want to learn more? <a className="underline cursor-pointer font-bold" href="https://medium.com/@sol-decoder/sol-decoder-presents-seamless-32251a4deb43" target="_blank">*/}
+                            {/*    Read our Medium article here</a>*/}
+                            {/*</li>*/}
                         </ul>
 
                         {/* show twitter login button only when never logged in yet */}
-                        {/*TODO: aries...*/}
+                        {/*TODO: !!! TWITTER BROKE - aries...*/}
                         {/*<div hidden={code?.length > 0 || twitterId?.length > 0}>*/}
                         {/*    <br/>*/}
                         {/*    <IonButton className='mb-0 h-11' color={ mode === 'dark' ? '' : "dark"}*/}
@@ -347,7 +354,7 @@ function WhitelistMarketplace() {
                             dataLength={expireWhiteList.slice(0,rowsPerPage).length}
                             next={()=>fetchMoreData(expireWhiteList)}
                             hasMore={hasMore}
-                            loader={ expireWhiteList.length > 0 ? 
+                            loader={ expireWhiteList.length > 0 ?
                                 <div className='mb-5 flex justify-center'>
                                     <Loader/>
                                 </div> :''

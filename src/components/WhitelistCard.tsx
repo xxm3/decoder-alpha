@@ -64,7 +64,8 @@ function WhitelistCard({
 	const full = isFcfs ? claimCounts >= max_users : false;
     const uid  = localStorage.getItem('uid');
 
-    const isEditWhitelist = useSelector( (state:RootState) => state.whiteList.isEditWhitelist )
+    const isEditWhitelist = useSelector( (state:RootState) => state.whiteList.isEditWhitelist );
+
     // what to show in each button
     const getClaimButtonText = (
         expired : boolean,
@@ -219,11 +220,12 @@ function WhitelistCard({
                         </>)
                     }
 
-    	<p>Required Role (in "{targetServer?.name}" DAO)</p>
-    	<p>{required_role_name}</p>
-    	<p className="timeLeft" hidden={expired || expired === undefined}>Time left</p>
-    	<span hidden={expired || expired === undefined}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
+                    <p>Required Role (in "{targetServer?.name}" DAO)</p>
+                    <p>{required_role_name}</p>
+                    <p className="timeLeft" hidden={expired || expired === undefined}>Time left</p>
+                    <span hidden={expired || expired === undefined}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
                 </div>
+
                 {(tabButton === 'myDoa' || tabButton === 'live')  && isEditWhitelist  &&
                     <div className=' text-xl flex justify-center mt-5'>
                             <div className={`seamless-tab-btn-active-colored edit-btn w-50 h-10 `}  onClick={()=>{
@@ -241,6 +243,7 @@ function WhitelistCard({
                             </div>
                     </div>
                  }
+
                 {/* button! */}
 				{expired !== undefined && !iMod && <IonButton css={css`
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);

@@ -128,18 +128,21 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             </div>
                             <div className={`${isMobile ? 'mt-2' : ''}`}>
                                 {!multipleflag &&
-                                <div className={`seamless-tab-btn-active-colored w-40 h-10`} onClick={()=> {
-                                    setmultipleflag((n)=>!n);
 
-                                    present({
-                                        message: 'Click multiple checkboxes on the top left of each Discord. After you’ve chose them all, click Next on the very top right',
-                                        color: 'primary',
-                                        duration: 10000,
-                                    });
-
-                                    }}>
-                                Select Multiple
-                                </div>
+                                    <></>
+                                    // TODO: ruchita !!! MULTI SELECT BROKE : messed up with no bot
+                                // <div className={`seamless-tab-btn-active-colored w-40 h-10`} onClick={()=> {
+                                //     setmultipleflag((n)=>!n);
+                                //
+                                //     present({
+                                //         message: 'Click multiple checkboxes on the top left of each Discord. After you’ve chose them all, click Next on the very top right',
+                                //         color: 'primary',
+                                //         duration: 10000,
+                                //     });
+                                //
+                                //     }}>
+                                // Select Multiple
+                                // </div>
 
                                 }
                                 {/*  */}
@@ -158,7 +161,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                             });
                                             return
                                         }
-                                      
+
                                         dispatch(setMultipleList(selectMultipleWhiteList))
                                         history.push({pathname:`/add_multiple_white_list`,state:serverId})
                                         setSelectMultipleWhiteList([])
@@ -238,7 +241,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 dataLength={serverList.slice(0,rowsPerPage).length}
                                 next={()=>fetchMoreData()}
                                 hasMore={hasMore}
-                                loader={ serverList ? 
+                                loader={ serverList ?
                                     <div className='mb-5 flex justify-center'>
                                         <Loader/>
                                     </div> : ''

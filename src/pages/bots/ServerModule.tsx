@@ -517,16 +517,19 @@ const [serverName, setServerName] = useState('')
                             Initiate a New Seamless
                         </IonButton>
                     </div>
-                    <div className={`mt-3 mb-3 flex ${isMobile ? '' : 'ml-3'}`}>
-                        <IonButton className="text-base" css={css`
-                        --padding-top: 25px;
-                        --padding-bottom: 25px;
-                        --padding-end: 20px;
-                        --padding-start: 20px;
-                    `} onClick={() =>{ history.push({pathname:`/seamless`,search:`sourceId=${serverId}`}) }}>
-                            Edit/Delete an existing Seamless
-                        </IonButton>
-                    </div>
+
+                    {/*TODO: !!! EDIT DELETE BROKE - ruchita all bugged*/}
+                    {/*<div className={`mt-3 mb-3 flex ${isMobile ? '' : 'ml-3'}`}>*/}
+                    {/*    <IonButton className="text-base" css={css`*/}
+                    {/*    --padding-top: 25px;*/}
+                    {/*    --padding-bottom: 25px;*/}
+                    {/*    --padding-end: 20px;*/}
+                    {/*    --padding-start: 20px;*/}
+                    {/*`} onClick={() =>{ history.push({pathname:`/seamless`,search:`sourceId=${serverId}`}) }}>*/}
+                    {/*        Edit/Delete an existing Seamless*/}
+                    {/*    </IonButton>*/}
+                    {/*</div>*/}
+
                 </div>
             </div>
             <br/>

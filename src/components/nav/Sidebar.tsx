@@ -82,12 +82,12 @@ function Sidebar() {
 
                 {/*<NavLink title="Home" icon={homeOutline} to="/" />*/}
                 <div onClick={()=> dispatch(isEditWhitelist(false))}>
-                <NavLink
-                    title="Seamless"
-                    icon={diamondOutline}
-                    to="/seamless"
-                    needsRole={false}
-                />
+                    <NavLink
+                        title="Seamless"
+                        icon={diamondOutline}
+                        to="/seamless"
+                        needsRole={false}
+                    />
                 </div>
 
                 <NavLink
