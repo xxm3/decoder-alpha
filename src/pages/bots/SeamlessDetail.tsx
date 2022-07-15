@@ -69,7 +69,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         imagePath:''
         })
     const { control, handleSubmit,  watch, reset,  setError, formState: { isSubmitting },setValue,getValues } = useForm<FormFields, any>();
-    const [present] = useIonToast();
+    const [present, dismiss] = useIonToast();
 
     const [whiteListRole,setWhiteListRole] = useState<any>([])
     const [whiteListRequireRole,setWhiteListRequireRole] = useState<any>([])
@@ -85,7 +85,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     }, [server])
 
     useEffect(() => {
-        // console.log("formField&&&&&&&&&&&&&&&&&&&&&&&&",formField)
         reset(formField);
     }, [formField,server])
 
@@ -160,7 +159,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         <IonGrid>
             {sourceServerDetail&&
                 <IonCol size="12">
-                <div className='server-module-bg p-4 px-6 w-full mb-5'>
+                <div className='server-module-bg p-4 px-6 w-full mb-1'>
                     {sourceServerDetail?.name}
                 </div>
                 </IonCol>
@@ -172,7 +171,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                     <ul>
                         <li>- Note it is expected that you reach out to the DAOs before hand, and have them agree on receiving these spots. </li>
                         <li>- You must also ask for their "Required Role" (ie. DAO holder role), if they haven't set one - if you set the wrong role then nothing will work! </li>
-                        <li>- You must also reach out to the SOL Decoder team to obtain a special role, in order to submit Seamless requests. </li>
+                        <li>- You must also reach out to the SOL Decoder team to obtain a special role, in order to submit Seamless requests, and must get your very first Seamless approved before it shows up for everyone else </li>
                     </ul>
                 </div>
 
@@ -199,9 +198,11 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             }else{
                                 let response = await createNewWhitelistPartnership(formData)
                                 present({
-                                    message: 'New Seamless partnership created successfully!',
+                                    // message repeated 2x in code
+                                    message: 'New Seamless created! Note: if this is your first Seamless, it will NOT show up for others until approved. Let the SOL Decoder team know, so they can approve your first Seamless',
                                     color: 'success',
-                                    duration: 10000,
+                                    buttons: [{ text: 'Got it!', handler: () => dismiss() }],
+                                    // duration: 10000,
                                 });
                             }
                             history.push(`/seamless`);

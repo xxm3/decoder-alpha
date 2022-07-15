@@ -29,7 +29,7 @@ function WhitelistMarketplace() {
     const code = params.get('code') || '';
     // const discordId = params.get('state');
 
-    const [twitterId, setTwitterId] = useState(' ');
+    const [twitterId, setTwitterId] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isTabButton, setIsTabButton] = useState<String>('myDoa');
     const [liveWhiteList,setLiveWhiteList] = useState<IWhitelist[]>([]);
@@ -96,13 +96,13 @@ function WhitelistMarketplace() {
             })
             .catch((e) => {
                 console.error(e);
-            });        
+            });
     }, []);
 
     const server = localStorage.getItem('servers');
     const serverArray = server &&  JSON.parse(server);
     const isEditWhitelist = useSelector( (state:RootState) => state.whiteList.isEditWhitelist )
-   
+
 
 
     // get all your WL crap
@@ -188,9 +188,9 @@ function WhitelistMarketplace() {
             setRowsPerPage(old=>old+8)
         }, 2000);
    	}
-    
- 
-    
+
+
+
     return (
 
         <div id="scrollableDiv" style={{ height: 'calc(100vh - 150px)', overflow: "auto" }}>
@@ -213,33 +213,36 @@ function WhitelistMarketplace() {
                         </ul>
 
                         {/* show twitter login button only when never logged in yet */}
-                        <div hidden={code?.length > 0 || twitterId?.length > 0}>
-                            <IonButton className='mb-4 h-11' color={ mode === 'dark' ? '' : "dark"}
-                                onClick={() => {
-                                    instance
-                                        .post(
-                                            '/twitter-auth-url',
-                                            {
-                                                headers: {
-                                                    'Content-Type': 'application/json',
-                                                },
-                                            }
-                                        )
-                                        .then(({ data }) => {
-                                            window.location.href = data.authUrl;
-                                        })
-                                        .catch((e) => {
-                                            console.error(e);
-                                            present({
-                                                message: 'Twitter login failed',
-                                                color: 'error',
-                                                duration: 10000,
-                                            });
-                                        })
-                                }} >
-                                <IonIcon icon={logoTwitter} className="big-emoji mr-3"/> Login with Twitter
-                            </IonButton>
-                        </div>
+                        {/*TODO: aries...*/}
+                        {/*<div hidden={code?.length > 0 || twitterId?.length > 0}>*/}
+                        {/*    <br/>*/}
+                        {/*    <IonButton className='mb-0 h-11' color={ mode === 'dark' ? '' : "dark"}*/}
+                        {/*        onClick={() => {*/}
+                        {/*            instance*/}
+                        {/*                .post(*/}
+                        {/*                    '/twitter-auth-url',*/}
+                        {/*                    {*/}
+                        {/*                        headers: {*/}
+                        {/*                            'Content-Type': 'application/json',*/}
+                        {/*                        },*/}
+                        {/*                    }*/}
+                        {/*                )*/}
+                        {/*                .then(({ data }) => {*/}
+                        {/*                    window.location.href = data.authUrl;*/}
+                        {/*                })*/}
+                        {/*                .catch((e) => {*/}
+                        {/*                    console.error(e);*/}
+                        {/*                    present({*/}
+                        {/*                        message: 'Twitter login failed',*/}
+                        {/*                        color: 'error',*/}
+                        {/*                        duration: 10000,*/}
+                        {/*                    });*/}
+                        {/*                })*/}
+                        {/*        }} >*/}
+                        {/*        <IonIcon icon={logoTwitter} className="big-emoji mr-3"/> Login with Twitter*/}
+                        {/*    </IonButton>*/}
+                        {/*</div>*/}
+
                     </div>
                 </div>
             </div>
@@ -297,7 +300,7 @@ function WhitelistMarketplace() {
                                     scrollableTarget="scrollableDiv"
                                     endMessage={
                                         <p style={{ textAlign: "center" }}>
-                                        <b>Yay! You have seen it all</b>
+                                        <b>You've reached the end of the whitelists</b>
                                         </p>
                                     }
                                 >
@@ -310,7 +313,7 @@ function WhitelistMarketplace() {
                                     }
                                    </div>
                                 </InfiniteScroll>
-                        } 
+                        }
 
                         {/* live */}
                         {isTabButton === 'live' &&
@@ -326,7 +329,7 @@ function WhitelistMarketplace() {
                                     scrollableTarget="scrollableDiv"
                                     endMessage={
                                         <p style={{ textAlign: "center" }}>
-                                        <b>Yay! You have seen it all</b>
+                                        <b>You've reached the end of the whitelists</b>
                                         </p>
                                     }
                                 >
@@ -354,10 +357,10 @@ function WhitelistMarketplace() {
                             scrollableTarget="scrollableDiv"
                             endMessage={
                                 <p style={{ textAlign: "center" }}>
-                                <b>Yay! You have seen it all</b>
+                                <b>You've reached the end of the whitelists</b>
                                 </p>
                             }
-                        >  
+                        >
                             <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                                 {
                                     expireWhiteList.length > 0 ? expireWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) => {
@@ -382,7 +385,7 @@ function WhitelistMarketplace() {
                             scrollableTarget="scrollableDiv"
                             endMessage={
                                 <p style={{ textAlign: "center" }}>
-                                <b>Yay! You have seen it all</b>
+                                <b>You've reached the end of the whitelists</b>
                                 </p>
                             }
                         >
@@ -393,7 +396,7 @@ function WhitelistMarketplace() {
                                     }) : <div className='text-xl'> There are no whitelists available</div>
                                 }
                             </div>
-                        </InfiniteScroll>  
+                        </InfiniteScroll>
                         }
                         {/*  */}
                     </div>

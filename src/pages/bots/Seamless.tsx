@@ -41,7 +41,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const [sourceServerDetail, setSourceServerDetail] = useState<any>(null)
     const [rowsPerPage, setRowsPerPage] = useState(6)
     const [hasMore, setHasMore] = useState(true)
-    
+
 
 
     // this loads up all the discords etc
@@ -108,7 +108,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
         <div id="scrollableDiv" style={{ height: 'calc(100vh - 150px)', overflow: "auto" }}>
             <IonGrid>
                 <IonRow>
-                   
+
                     {sourceServerDetail&&
                         <IonCol size="12">
                         <div className='server-module-bg p-4 px-6 w-full mb-5'>
@@ -257,7 +257,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 scrollableTarget="scrollableDiv"
                                 endMessage={
                                     <p style={{ textAlign: "center" }}>
-                                    <b>Yay! You have seen it all</b>
+                                    <b>You've reached the end of the whitelists</b>
                                     </p>
                                 }
                             >
@@ -274,8 +274,8 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 </IonRow>
                             </InfiniteScroll>
                             </>}
-                        
-                
+
+
             </IonGrid>
         </div>
     );

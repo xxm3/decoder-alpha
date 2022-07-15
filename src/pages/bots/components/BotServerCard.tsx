@@ -8,7 +8,7 @@ import MagicEdenImage from '../../../images/me-black.png';
 import { selcetServer } from '../Seamless';
 import { useDispatch } from 'react-redux';
 import { setMultipleList } from '../../../redux/slices/whitelistSlice';
-type props = {  
+type props = {
     serverData: any
     multipleflag?:boolean
     setSelectMultipleWhiteList?:Dispatch<SetStateAction<selcetServer[]>>
@@ -43,7 +43,7 @@ const BotServerCard: React.FC<props> = (props) => {
 
                 {/* image */}
                 <img src={serverData?.image} className={serverData?.image ? 'cardMainImage' : 'cardNoImage'}
-                alt='' 
+                alt=''
                 onError={({ currentTarget }) => {
                     currentTarget.onerror = null;
                     currentTarget.style.opacity='0'
@@ -82,7 +82,7 @@ const BotServerCard: React.FC<props> = (props) => {
 
                     <div className='text-lg font-bold'>{serverData?.name}</div>
 
-                    
+
                 </div>
             </div>
 
@@ -105,8 +105,8 @@ const BotServerCard: React.FC<props> = (props) => {
                     </IonRow>
                 }
 
-                {showMore ? <div  className='mb-3 card-detail-wrapper'>{serverData?.description}</div> : <div className='mb-3 card-detail-wrapper'>{serverData?.description?.substring(0, 400)}</div>}
-                {serverData?.description?.length > 200 ? <button className="text-sky-500" onClick={()=> setShowMore((n)=>!n)}>{showMore ? 'Show Less'  : 'Show More'}</button> : ''}
+                {showMore ? <div  className='mb-3 card-detail-wrapper'>{serverData?.description}</div> : <div className='mb-3 card-detail-wrapper'>{serverData?.description?.substring(0, 100)}</div>}
+                {serverData?.description?.length > 100 ? <button className="text-sky-500" onClick={()=> setShowMore((n)=>!n)}>{showMore ? 'Show Less'  : 'Show More'}</button> : ''}
 
                 {/* <p  className='card-detail-wrapper'>{serverData?.description}</p> */}
 

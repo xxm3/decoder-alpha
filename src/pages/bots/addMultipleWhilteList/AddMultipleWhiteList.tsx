@@ -82,12 +82,11 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
         name: "mutipleServerDetails"
       });
 
-    
     let botData:any = localStorage.getItem('requiredBotData')
     // console.log('requiredUserRole:',JSON.parse (botData))
     let requiredRoleForUser = JSON.parse (botData)
 
-    const [present] = useIonToast();
+    const [present, dismiss] = useIonToast();
     const [whiteListRole,setWhiteListRole] = useState<any>([]) // Whitelist Role dropdown value
     const [loaderFlag, setLoaderFlag] = useState(false) //loader flag
     const [isBigImage, setIsBigImage] = useState<boolean>(false);
@@ -212,7 +211,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
             </div>
             </IonCol>
         }
-        
+
         <form className="space-y-3"// when submitting the form...
             onSubmit={  handleSubmit(async (data) => {
                 let WhiteListFomrArray = data.mutipleServerDetails.map((server)=>{
@@ -244,7 +243,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                     return response
                 }));
 
-                
+
 
                 let successResponse:any = [] //successes response
                 let failedResponse:any = [] // failed response
@@ -260,7 +259,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                 // show Success Message and Error Message
                 let failedServerDetails:any[] = []
                 if(failedResponse.length>0){
-                    
+
                     failedResponse.map((response:any,index:number)=>{
                         let serverDetail:any = formField.mutipleServerDetails.find((server)=>server.discordGuildId===response.server.id)
                         failedServerDetails.push(serverDetail)
@@ -285,9 +284,11 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
 
                 }else{
                     present({
-                        message: 'Whitelist partnership created successfully!',
+                        // message repeated 2x in code
+                        message: 'New Seamless created! Note: if this is your first Seamless, it will NOT show up for others until approved. Let the SOL Decoder team know, so they can approve your first Seamless',
                         color: 'success',
-                        duration: 10000,
+                        buttons: [{ text: 'Got it!', handler: () => dismiss() }],
+                        // duration: 20000,
                     });
                     history.goBack()
                 }

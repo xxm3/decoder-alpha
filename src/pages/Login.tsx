@@ -152,6 +152,8 @@ function Login() {
                                     </IonLabel>
                                 </div>
                                 <div className={`flex flex-col mr-2 ${isMobileDevice ? "mt-6 mr-0" : 'mt-10'}`}>
+
+                                    {/* REPEATED TWICE ON THIS PAGE - DIFFERING SCOPES */}
                                     <IonButton className='mb-4 h-11' color={ mode === 'dark' ? '' : "dark"}
                                         onClick={() => {
                                             const params = new URLSearchParams();
@@ -162,8 +164,9 @@ function Login() {
                                             params.set('state', next);
                                                 const urlToRedirect = `https://discord.com/api/oauth2/authorize?client_id=${
                                                 environment.clientId
-                                                }&response_type=code&scope=identify+guilds+guilds.join+guilds.members.read&${params.toString()}`;
+                                                }&response_type=code&scope=identify+guilds+guilds.members.read&${params.toString()}`;
                                                 setError("")
+
                                                 if(isMobileDevice){
                                                     const browser = InAppBrowser.create(urlToRedirect, '_blank', 'location=yes');
                                                     browser.on("beforeload")
@@ -227,11 +230,46 @@ function Login() {
                                         <IonButton className='h-11 w-48' color="dark" onClick={() => {signInAnonymously(auth)}}>
                                             Try our demo
                                         </IonButton>
-
-                                        {/*<IonButton className={`buy-nft-btn h-11 w-48 ${isMobileDevice ? '' : 'ml-4'}`} color='medium' onClick={()=> window.open('https://docs.soldecoder.app', "_blank")}>*/}
-                                        {/*    Documentation*/}
-                                        {/*</IonButton>*/}
                                     </div>
+
+                                    <hr/>
+                                    <br/>
+
+                                    Using Seamless and want it to auto join Discords for you? Login with the below button.
+
+                                    {/* REPEATED TWICE ON THIS PAGE - DIFFERING SCOPES */}
+                                    <IonButton className='mb-4 h-11' color={ mode === 'dark' ? '' : "dark"}
+                                               onClick={() => {
+                                                   const params = new URLSearchParams();
+                                                   params.set(
+                                                       'redirect_uri',
+                                                       `${!isMobileDevice ? window.location.origin : environment.ionicAppUrl}/login`
+                                                   );
+                                                   params.set('state', next);
+                                                   const urlToRedirect = `https://discord.com/api/oauth2/authorize?client_id=${
+                                                       environment.clientId
+                                                   }&response_type=code&scope=identify+guilds+guilds.join+guilds.members.read&${params.toString()}`;
+                                                   setError("")
+
+                                                   if(isMobileDevice){
+                                                       const browser = InAppBrowser.create(urlToRedirect, '_blank', 'location=yes');
+                                                       browser.on("beforeload")
+                                                       browser.on('loadstart').subscribe((event: { url: string; }) => {
+                                                           const eventUrl = new URL(event.url)
+                                                           if(eventUrl.origin === environment.ionicAppUrl && eventUrl.pathname === '/login'){
+                                                               const code = eventUrl.searchParams.get('code');
+                                                               if(code){ setCode(code); setLoading(true) };
+                                                               setNext(eventUrl.searchParams.get("next") || eventUrl.searchParams.get('state') || "/");
+                                                               browser.close();
+                                                           }
+                                                       })
+                                                   }
+                                                   else { window.location.href = urlToRedirect; }
+                                               }} >
+                                        { <IonIcon icon={logoDiscord} className="big-emoji mr-3"/>} Login with Discord (allowing Seamless to auto join Discords for you)
+                                    </IonButton>
+
+
                                 </div>
                             </div>
                     </div>

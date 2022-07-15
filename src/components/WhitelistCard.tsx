@@ -49,7 +49,7 @@ function WhitelistCard({
     deleteWhiteList,
     won,
     myLiveDAO,
-    
+
 }: IWhitelist) {
     const history = useHistory()
 	const isDemo:any = useSelector<RootState>(state => state.demo.demo);
@@ -105,7 +105,7 @@ function WhitelistCard({
             return 'Approve';
         } else {
             return 'Approved';
-        } 
+        }
     }
 
     // check whether current user won the whitelist in the raffle right after the event is expired
@@ -148,7 +148,7 @@ function WhitelistCard({
     //     }
     // },[]);
 
-    
+
 
     return (
 		<div className="border-gray-500 border-[0.5px] rounded-2xl  overflow-clip">
@@ -189,11 +189,11 @@ function WhitelistCard({
                 {showMore ?
                     <span className='mb-3'>
                         {description}
-                        {description?.length > 200 ? <span className="ml-2 text-sky-500 cursor-pointer" onClick={()=> setShowMore((n)=>!n)}>{showMore ? '(Show Less)'  : '(Show More)'}</span> : ''}
+                        {description?.length > 100 ? <span className="ml-2 text-sky-500 cursor-pointer" onClick={()=> setShowMore((n)=>!n)}>{showMore ? '(Show Less)'  : '(Show More)'}</span> : ''}
                     </span> :
                     <span className='mb-3'>
-                        {description?.substring(0, 400)}
-                        {description?.length > 200 ? <span className="ml-2 text-sky-500 cursor-pointer" onClick={()=> setShowMore((n)=>!n)}>{showMore ? '(Show Less)'  : '(Show More)'}</span> : ''}
+                        {description?.substring(0, 100)}
+                        {description?.length > 100 ? <span className="ml-2 text-sky-500 cursor-pointer" onClick={()=> setShowMore((n)=>!n)}>{showMore ? '(Show Less)'  : '(Show More)'}</span> : ''}
                     </span>
                 }
 
@@ -239,7 +239,7 @@ function WhitelistCard({
                                 <div className="text-sm md:text-base p-2 md:px-4 w-full">DELETE</div>
                                 <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={trashOutline}></IonIcon></div>
                             </div>
-                    </div> 
+                    </div>
                  }
                 {/* button! */}
 				{expired !== undefined && !iMod && <IonButton css={css`
