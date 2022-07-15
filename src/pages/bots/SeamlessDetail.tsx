@@ -39,6 +39,8 @@ interface FormFields {
 }
 const SeamlessDetail: React.FC<AppComponentProps> = () => {
 
+    // TODO: I guess you are using 13.5 font size. I would say it is little big. I would prefer 10.5
+
     const server:any = useLocation();
 
     // new mint / source server --- comes from params
