@@ -108,8 +108,10 @@ function WhitelistMarketplace() {
     const { data: whitelists = [], refetch: getAllWhiteList   } = useQuery( ['whitelistPartnerships'],
         async () => {
                 try {
-                    setIsLoading(true)
-                    const { data: whitelists } = await instance.post( `${searchParam ? `/getWhitelistPartnerships/me?isAdmin=true&sourceServer=${searchParam}` :'/getWhitelistPartnerships/me?isAdmin=false'}`,{servers: serverArray});
+                    setIsLoading(true);
+
+                    const { data: whitelists } = await instance.post( `${searchParam ? `/getWhitelistPartnerships/me?isAdmin=true&sourceServer=${searchParam}` :'/getWhitelistPartnerships/me'}`,{servers: serverArray});
+
                     const whiteListExpire :any[] = [];
                     const whiteListLive: any[] = [];
                     const whiteListMyDao: any[] = [];
@@ -119,8 +121,10 @@ function WhitelistMarketplace() {
                         if (whitelist.isExpired || !whitelist.active) { whiteListExpire.push(whitelist) }
                         else if (whitelist.myLiveDAO) { whiteListMyDao.push(whitelist) }
                         else whiteListLive.push(whitelist);
-                        if (whitelist.claims.some((cl: any) => cl.user?.discordId === userId)) whiteListMyClaim.push(whitelist);
+
+                        if (whitelist.claims?.some((cl: any) => cl.user?.discordId === userId)) whiteListMyClaim.push(whitelist);
                     }
+
                     setLiveWhiteList(whiteListLive);
                     setExpireWhiteList(whiteListExpire);
                     setMyDaoWhiteList(whiteListMyDao)

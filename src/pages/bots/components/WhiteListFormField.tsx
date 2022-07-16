@@ -50,7 +50,7 @@ let FieldContainer = (props:containerProps) =>{
                     }}
                     name={name} value={value}  onIonBlur={onBlur} ref={ref} >
                 <IonSelectOption value="fcfs"> FCFS </IonSelectOption>
-                {/*TODO @@@@@@ : isDev -- changelog */}
+                {/*TODO @@@@@@ : isDev -- ---- BazingaHeHe#5460  */}
                 {/*<IonSelectOption  value="raffle"> Raffle </IonSelectOption>*/}
             </IonSelect>
             )

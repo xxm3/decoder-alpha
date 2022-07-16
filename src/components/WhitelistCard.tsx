@@ -201,7 +201,10 @@ function WhitelistCard({
                 <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>
                     <p>{type.toUpperCase()}</p>
-                    {
+
+
+                    {/*TODO: ---- ADDED myLiveDAO to only show spots left*/}
+                    {  myLiveDAO ?
                         isFcfs ?
                         (<>
                             <p>Slots left </p>
@@ -217,8 +220,9 @@ function WhitelistCard({
                             <p>{max_users}</p>
                             <p>Users entered </p>
                             <p>{claimCounts}</p>
-                        </>)
+                        </>) : ''
                     }
+
 
                     <p>Required Role (in "{targetServer?.name}" DAO)</p>
                     <p>{required_role_name}</p>
@@ -311,9 +315,8 @@ function WhitelistCard({
                             setClaiming(false);
                         }
                     }}
-                    hidden={iMod}
-                      // TODO @@@@@ OMG
-                     // disabled={expired || claiming || claimed || full || showLive || isDemo||tabButton == 'live'}
+                    hidden={iMod || !myLiveDAO}
+                     disabled={ expired || claiming || claimed || full || showLive || isDemo||tabButton == 'live'}
                     >
                         {getClaimButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>
