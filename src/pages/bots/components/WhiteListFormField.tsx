@@ -44,14 +44,14 @@ let FieldContainer = (props:containerProps) =>{
 
     if(fieldName==='type'){
         return(
-            <IonSelect   onIonChange={(e) => {
+            <IonSelect onIonChange={(e) => {
                     ( e.target as HTMLInputElement ).value = e.detail.value;
                     onChange(e);
                     }}
                     name={name} value={value}  onIonBlur={onBlur} ref={ref} >
                 <IonSelectOption value="fcfs"> FCFS </IonSelectOption>
-                {/*TODO !!!!!!!!!!! : isDev -- changelog */}
-                <IonSelectOption  value="raffle"> Raffle </IonSelectOption>
+                {/*TODO @@@@@@ : isDev -- changelog */}
+                {/*<IonSelectOption  value="raffle"> Raffle </IonSelectOption>*/}
             </IonSelect>
             )
     }else if(fieldName==='expiration_date'){

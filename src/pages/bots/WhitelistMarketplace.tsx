@@ -278,17 +278,17 @@ function WhitelistMarketplace() {
                     </div>
 
                     {/* expire */}
-                    {isTabButton === 'expire' ||  isTabButton === 'myClaim' ?
-                        <div className='flex justify-center mt-4'>
-                            <div className={`${isTabButton === 'myClaim' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive'} ml-2 w-60 h-10 text-xl `} onClick={()=>setIsTabButton('myClaim')}>
-                                {/*  <p>View my claim mints ({myClaimWhiteList?.length})</p>  */}
-                                {/* <div className="text-sm md:text-base p-2 md:px-4 w-full">View My Claimed Mints</div> */}
-                                <div className="text-sm md:text-base p-2 w-full">View My Claimed Mints</div>
-                            <div className=" bg-black/[.4] py-2 px-4 ">{myClaimWhiteList?.length}</div>
-                            </div>
-                        </div> :  ''
-
-                    }
+                    {/*TODO: bugged*/}
+                    {/*{isTabButton === 'expire' ||  isTabButton === 'myClaim' ?*/}
+                    {/*    <div className='flex justify-center mt-4'>*/}
+                    {/*        <div className={`${isTabButton === 'myClaim' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive'} ml-2 w-60 h-10 text-xl `} onClick={()=>setIsTabButton('myClaim')}>*/}
+                    {/*            /!*  <p>View my claim mints ({myClaimWhiteList?.length})</p>  *!/*/}
+                    {/*            /!* <div className="text-sm md:text-base p-2 md:px-4 w-full">View My Claimed Mints</div> *!/*/}
+                    {/*            <div className="text-sm md:text-base p-2 w-full">View My Claimed Mints</div>*/}
+                    {/*        <div className=" bg-black/[.4] py-2 px-4 ">{myClaimWhiteList?.length}</div>*/}
+                    {/*        </div>*/}
+                    {/*    </div> :  ''*/}
+                    {/*}*/}
 
                     <div >
                     {/* my DAO live */}

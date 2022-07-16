@@ -312,11 +312,11 @@ function WhitelistCard({
                         }
                     }}
                     hidden={iMod}
-                     disabled={expired || claiming || claimed || full || showLive || isDemo||tabButton == 'live'}
+                      // TODO @@@@@ OMG
+                     // disabled={expired || claiming || claimed || full || showLive || isDemo||tabButton == 'live'}
                     >
                         {getClaimButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>
-
 
                 }
 
