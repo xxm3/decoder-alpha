@@ -190,11 +190,11 @@ function WhitelistCard({
                 {showMore ?
                     <span className='mb-3'>
                         {description}
-                        {description?.length > 100 ? <span className="ml-2 text-sky-500 cursor-pointer" onClick={()=> setShowMore((n)=>!n)}>{showMore ? '(Show Less)'  : '(Show More)'}</span> : ''}
+                        {description?.length > 100 ? <span className="ml-2 text-sky-500 cursor-pointer" onClick={()=> setShowMore((n)=>!n)}>{showMore ? '(Less)'  : '(More)'}</span> : ''}
                     </span> :
                     <span className='mb-3'>
                         {description?.substring(0, 100)}
-                        {description?.length > 100 ? <span className="ml-2 text-sky-500 cursor-pointer" onClick={()=> setShowMore((n)=>!n)}>{showMore ? '(Show Less)'  : '(Show More)'}</span> : ''}
+                        {description?.length > 100 ? <span className="ml-2 text-sky-500 cursor-pointer" onClick={()=> setShowMore((n)=>!n)}>{showMore ? '(Less)'  : '(More)'}</span> : ''}
                     </span>
                 }
 

@@ -106,7 +106,7 @@ const BotServerCard: React.FC<props> = (props) => {
                 }
 
                 {showMore ? <div  className='mb-3 card-detail-wrapper'>{serverData?.description}</div> : <div className='mb-3 card-detail-wrapper'>{serverData?.description?.substring(0, 100)}</div>}
-                {serverData?.description?.length > 100 ? <button className="text-sky-500" onClick={()=> setShowMore((n)=>!n)}>{showMore ? 'Show Less'  : 'Show More'}</button> : ''}
+                {serverData?.description?.length > 100 ? <button className="text-sky-500" onClick={()=> setShowMore((n)=>!n)}>{showMore ? 'Less'  : 'More'}</button> : ''}
 
                 {/* <p  className='card-detail-wrapper'>{serverData?.description}</p> */}
 
