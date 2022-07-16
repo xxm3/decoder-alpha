@@ -50,6 +50,7 @@ let FieldContainer = (props:containerProps) =>{
                     }}
                     name={name} value={value}  onIonBlur={onBlur} ref={ref} >
                 <IonSelectOption value="fcfs"> FCFS </IonSelectOption>
+                {/*TODO !!!!!!!!!!! : isDev -- changelog */}
                 <IonSelectOption  value="raffle"> Raffle </IonSelectOption>
             </IonSelect>
             )
@@ -144,7 +145,7 @@ let FieldContainer = (props:containerProps) =>{
                     name={name}
                     ref={ref}
                     onIonBlur={onBlur}
-                    placeholder='Required Role ID (ie. 966704866640662548)' />
+                    placeholder='Required Role ID (ie. 966704866640662541)' />
                 <p className="formError"> {error?.message} </p>
             </div>
             )

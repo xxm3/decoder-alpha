@@ -73,8 +73,9 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                     {/*Recent FF Named Stuff*/}
                     <FfNamed/>
 
+                    {/* TODO !!!!!!!!!!!  top words */}
                     {/* Top search words of past day */}
-                    <TopSearchWords/>
+                    {/*<TopSearchWords/>*/}
 
                     {/*<RecentAlerts/>*/}
 
@@ -84,7 +85,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                     {/* Top Twitter Gainers*/}
                     {/* <TopTwitterGainers/> */}
 
-                    
+
                 </> : <>
 
                     {/*FOR DESKTOP*/}
@@ -106,7 +107,8 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                     <div className='flex flex-row w-full'>
                         <div className='w-1/2 '>
                             {/* Top search words of past day */}
-                                <TopSearchWords/>
+                            {/* TODO !!!!!!!!!!!  top words */}
+                            {/*    <TopSearchWords/>*/}
                         </div>
                         <div className='w-1/2'>
                         </div>
@@ -126,7 +128,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
 
                         </div>
                     </div>
-                    
+
 
                 </>
             }

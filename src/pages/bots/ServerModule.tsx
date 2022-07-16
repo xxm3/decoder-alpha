@@ -681,7 +681,7 @@ const [serverName, setServerName] = useState('')
                         <>
                             <div className='mb-5'>
                                 <label className="font-bold">
-                                    Required Role ID (Discord Role ID, ie. 966704866640662548, that your holders will need to enter the whitelist)
+                                    Required Role ID (Discord Role ID, ie. 966704866640662541, that your holders will need to enter the whitelist)
                                     <Help description={`New mints will be giving members of your DAO whitelist spots. In order for a member of your DAO to qualify to enter, they must have a specific role. This is usually the Discord role a user gets when holding an NFT (which Metahelix or Matrica would give them). By restricting it to a specific role, only those members may enter the whitelist, instead of just anyone that joins your server being able to enter the whitelist`}/>
                                     <br/>
                                     How to get the Role ID?
@@ -701,7 +701,7 @@ const [serverName, setServerName] = useState('')
                                                     name={name}
                                                     ref={ref}
                                                     onIonBlur={onBlur}
-                                                    placeholder='Required Role ID (ie. 966704866640662548)' />
+                                                    placeholder='Required Role ID (ie. 966704866640662541)' />
                                                 <p className="formError"> {error?.message} </p>
                                             </div>
                                         )} />
@@ -1022,28 +1022,28 @@ const [serverName, setServerName] = useState('')
 
                                                     <br/><br/>
 
-                                                    {/* TODO: vishwas bugged tmrw mint... */}
-                                                    {/*<div className="text-lg font-semibold">*/}
-                                                    {/*    "Tomorrow's Mints" channel*/}
-                                                    {/*</div>*/}
-                                                    {/*<div className="flex flex-row justify-between my-2 ">*/}
-                                                    {/*    <select value={ dropdownValue.tomorrowMintsWebhookChannel } className="server-channel-dropdown"*/}
-                                                    {/*            onChange={(event: any) => {*/}
-                                                    {/*                updateWebHooks({*/}
-                                                    {/*                    webhook: 'tomorrowMintsWebhookChannel',*/}
-                                                    {/*                    channel: event.target.value,*/}
-                                                    {/*                });*/}
-                                                    {/*            }}*/}
-                                                    {/*    >*/}
-                                                    {/*        <option value="default">*/}
-                                                    {/*            Please Select the Tomorrow's Mints channel*/}
-                                                    {/*        </option>*/}
-                                                    {/*        {getOption()}*/}
-                                                    {/*    </select>*/}
-                                                    {/*</div>*/}
-                                                    {/*<div className='italic text-sm'>*/}
-                                                    {/*    (Automated posts about tomorrow's mints, along with Twitter/Discord stats)*/}
-                                                    {/*</div>*/}
+
+                                                    <div className="text-lg font-semibold">
+                                                        "Tomorrow's Mints" channel
+                                                    </div>
+                                                    <div className="flex flex-row justify-between my-2 ">
+                                                        <select value={ dropdownValue.tomorrowMintsWebhookChannel } className="server-channel-dropdown"
+                                                                onChange={(event: any) => {
+                                                                    updateWebHooks({
+                                                                        webhook: 'tomorrowMintsWebhookChannel',
+                                                                        channel: event.target.value,
+                                                                    });
+                                                                }}
+                                                        >
+                                                            <option value="default">
+                                                                Please Select the Tomorrow's Mints channel
+                                                            </option>
+                                                            {getOption()}
+                                                        </select>
+                                                    </div>
+                                                    <div className='italic text-sm'>
+                                                        (Automated posts about tomorrow's mints, along with Twitter/Discord stats)
+                                                    </div>
 
 
 
