@@ -203,7 +203,7 @@ function WhitelistCard({
                     <p>{type.toUpperCase()}</p>
 
 
-                    {/*TODO: ---- ADDED myLiveDAO to only show spots left*/}
+                    {/* #391: ---- ADDED myLiveDAO to only show spots left*/}
                     {  myLiveDAO ?
                         isFcfs ?
                         (<>

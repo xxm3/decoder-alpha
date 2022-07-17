@@ -73,7 +73,6 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                     {/*Recent FF Named Stuff*/}
                     <FfNamed/>
 
-                    {/* TODO !!!!!!!!!!!  top words */}
                     {/* Top search words of past day */}
                     {/*<TopSearchWords/>*/}
 
@@ -107,7 +106,7 @@ const Home: React.FC<AppComponentProps> = ({contentRef}) => {
                     <div className='flex flex-row w-full'>
                         <div className='w-1/2 '>
                             {/* Top search words of past day */}
-                            {/* TODO !!!!!!!!!!!  top words */}
+                            {/* TODO !!!!!!!!!!!  top words (TopSearchWords x2 on the page) */}
                             {/*    <TopSearchWords/>*/}
                         </div>
                         <div className='w-1/2'>

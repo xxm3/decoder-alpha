@@ -98,9 +98,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
              return
          }
          setTimeout(() => {
-             setRowsPerPage(old=>old+6)
-         }, 2000);
-        }
+             setRowsPerPage(old=>old+12)
+         }, 100);
+    }
 
 
     return (
@@ -130,7 +130,7 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                 {!multipleflag &&
 
                                     <></>
-                                    // TODO: ruchita !!! MULTI SELECT BROKE : messed up with no bot
+                                    // TO.DO: ruchita !!! MULTI SELECT BROKE : messed up with no bot
                                 // <div className={`seamless-tab-btn-active-colored w-40 h-10`} onClick={()=> {
                                 //     setmultipleflag((n)=>!n);
                                 //

@@ -175,11 +175,10 @@ function WhitelistMarketplace() {
 
     // 5 second after hide exploding
     useEffect(() => {
-    isExploding&&setTimeout(() => {
-        setIsExploding(false)
-    }, 1000);
-
-    }, [isExploding])
+        isExploding&&setTimeout(() => {
+            setIsExploding(false)
+        }, 5000);
+    }, [isExploding]);
 
     let fetchMoreData=(state:any)=>{
        if(state.slice(0,rowsPerPage).length>=state.length){
@@ -187,8 +186,8 @@ function WhitelistMarketplace() {
             return
         }
         setTimeout(() => {
-            setRowsPerPage(old=>old+8)
-        }, 2000);
+            setRowsPerPage(old=>old+12)
+        }, 100);
    	}
 
 
@@ -282,7 +281,6 @@ function WhitelistMarketplace() {
                     </div>
 
                     {/* expire */}
-                    {/*TODO: bugged*/}
                     {/*{isTabButton === 'expire' ||  isTabButton === 'myClaim' ?*/}
                     {/*    <div className='flex justify-center mt-4'>*/}
                     {/*        <div className={`${isTabButton === 'myClaim' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive'} ml-2 w-60 h-10 text-xl `} onClick={()=>setIsTabButton('myClaim')}>*/}

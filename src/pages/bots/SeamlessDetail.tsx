@@ -19,7 +19,6 @@ import { whiteListFormField } from './service/whiteListModalType';
  */
 
 const SeamlessDetail: React.FC<AppComponentProps> = () => {
-    // TODO: I guess you are using 13.5 font size. I would say it is little big. I would prefer 10.5
     const server:any = useLocation();
     // new mint / source server --- comes from params
     const { serverId } = useParams<any>();
@@ -75,15 +74,25 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
     const getLastPartnership = async() =>{
         await getLastWhitelistPartnerShip(serverArray).then((response:any)=>{
             if(response.data){
-                let lastData = {...response.data[response.data.length-1]}
-                delete lastData.id;
-                delete lastData.required_role_name;
-                delete lastData.required_role;
-                delete lastData.expiration_date;
-                delete lastData.max_users;
-                // delete lastData.type;
 
-                setFormField({...lastData,imagePath:lastData.image})
+                for(let i in response.data){
+
+                    if(response.data[i].sourceServer.discordGuildId === serverId){
+                        let lastData = {...response.data[i]};
+
+                        delete lastData.id;
+                        delete lastData.required_role_name;
+                        delete lastData.required_role;
+                        delete lastData.expiration_date;
+                        delete lastData.max_users;
+                        // delete lastData.type;
+
+                        setFormField({...lastData,imagePath:lastData.image})
+
+                        break;
+                    }
+                }
+
             }
         })
     }
@@ -288,7 +297,6 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                             {/* magicEden Linik */}
                             <WhiteListFormField fieldLable={'Magic Eden drops URL'} fieldName={'magicEdenUpvoteUrl'} control={control} classes='mb-5' />
                             {/* Mint Date */}
-                            {/*TODO-freelance: can't get this to be optional ... dates still messed up for me (choose 11th, shows 10th) */}
                             {/*<WhiteListFormField fieldLable={'Mint Date'} fieldName={'mintDate'} control={control} setValue={setValue} />*/}
                             {/* mint supply */}
                             <WhiteListFormField fieldLable={'Mint Supply'} fieldName={'mintSupply'} control={control} classes='mb-5' />

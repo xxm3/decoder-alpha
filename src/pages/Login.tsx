@@ -236,7 +236,7 @@ function Login() {
                                     <br/>
 
                                     {/* REPEATED TWICE ON THIS PAGE - DIFFERING SCOPES */}
-                                    {/* TODO AJAY !!! - auto join discord BROKE */}
+                                    {/* TO.DO AJAY !!! - auto join discord BROKE */}
                                     {/*Using Seamless and want it to auto join Discords for you? Login with the below button.*/}
                                     {/*<IonButton className='mb-4 h-11' color={ mode === 'dark' ? '' : "dark"}*/}
                                     {/*           onClick={() => {*/}
