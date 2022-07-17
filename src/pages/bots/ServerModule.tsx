@@ -1153,7 +1153,7 @@ const [serverName, setServerName] = useState('')
                                             (<ul className='list-disc ml-5 leading-7'>
                                                 <li>Your server can have our "analytics" feed (where we show when tokens get new names from the Fox Token team), and users can use our bot's slash commands of /token_name and /token and /wallet_tokens </li>
                                                 <li>Hold and you get lifetime access, and get free upgrades to existing packages such as getting alerts for Fox Token price/listings data (ie. alerted when any fox token with a name & greater than 1 sol price & greater than 10 listings is out) </li>
-                                                <li>Please contact us after enabling this, so we can enable the bot commands (/token, /token_name, /wallet_tokens) in your server</li>
+                                                {/*<li>Please contact us after enabling this, so we can enable the bot commands (/token, /token_name, /wallet_tokens) in your server</li>*/}
                                             </ul>): ''
                                         }
                                     </div>
@@ -1230,7 +1230,7 @@ const [serverName, setServerName] = useState('')
                                                         <li>/tps - Users can get a live count of Solana's Transactions Per Second</li>
                                                     </ul>
 
-                                                    Please contact us after enabling this, so we can enable the bot commands in your server
+                                                    {/*Please contact us after enabling this, so we can enable the bot commands in your server*/}
 
                                                 </div>
                                             </div>
