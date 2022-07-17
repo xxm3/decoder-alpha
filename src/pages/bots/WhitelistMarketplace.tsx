@@ -28,7 +28,7 @@ function WhitelistMarketplace() {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code') || '';
     // const discordId = params.get('state');
- let searchParam = window.location.search.slice(10,28)
+    let searchParam = ''; // window.location.search.slice(10,28);
 
     const [twitterId, setTwitterId] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -221,35 +221,34 @@ function WhitelistMarketplace() {
                         </ul>
 
                         {/* show twitter login button only when never logged in yet */}
-                        {/*TODO: !!! TWITTER BROKE -@@@@  aries...*/}
-                        {/*<div hidden={code?.length > 0 || twitterId?.length > 0}>*/}
-                        {/*    <br/>*/}
-                        {/*    <IonButton className='mb-0 h-11' color={ mode === 'dark' ? '' : "dark"}*/}
-                        {/*        onClick={() => {*/}
-                        {/*            instance*/}
-                        {/*                .post(*/}
-                        {/*                    '/twitter-auth-url',*/}
-                        {/*                    {*/}
-                        {/*                        headers: {*/}
-                        {/*                            'Content-Type': 'application/json',*/}
-                        {/*                        },*/}
-                        {/*                    }*/}
-                        {/*                )*/}
-                        {/*                .then(({ data }) => {*/}
-                        {/*                    window.location.href = data.authUrl;*/}
-                        {/*                })*/}
-                        {/*                .catch((e) => {*/}
-                        {/*                    console.error(e);*/}
-                        {/*                    present({*/}
-                        {/*                        message: 'Twitter login failed',*/}
-                        {/*                        color: 'error',*/}
-                        {/*                        duration: 10000,*/}
-                        {/*                    });*/}
-                        {/*                })*/}
-                        {/*        }} >*/}
-                        {/*        <IonIcon icon={logoTwitter} className="big-emoji mr-3"/> Login with Twitter*/}
-                        {/*    </IonButton>*/}
-                        {/*</div>*/}
+                        <div hidden={code?.length > 0 || twitterId?.length > 0}>
+                            <br/>
+                            <IonButton className='mb-0 h-11' color={ mode === 'dark' ? '' : "dark"}
+                                onClick={() => {
+                                    instance
+                                        .post(
+                                            '/twitter-auth-url',
+                                            {
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                },
+                                            }
+                                        )
+                                        .then(({ data }) => {
+                                            window.location.href = data.authUrl;
+                                        })
+                                        .catch((e) => {
+                                            console.error(e);
+                                            present({
+                                                message: 'Twitter login failed',
+                                                color: 'error',
+                                                duration: 10000,
+                                            });
+                                        })
+                                }} >
+                                <IonIcon icon={logoTwitter} className="big-emoji mr-3"/> Login with Twitter
+                            </IonButton>
+                        </div>
 
                     </div>
                 </div>

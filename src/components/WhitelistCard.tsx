@@ -202,8 +202,6 @@ function WhitelistCard({
                     <p>Type </p>
                     <p>{type.toUpperCase()}</p>
 
-
-                    {/* #391: ---- ADDED myLiveDAO to only show spots left*/}
                     {  myLiveDAO ?
                         isFcfs ?
                         (<>
@@ -315,7 +313,7 @@ function WhitelistCard({
                             setClaiming(false);
                         }
                     }}
-                    hidden={iMod || !myLiveDAO}
+                     hidden={iMod || !myLiveDAO}
                      disabled={ expired || claiming || claimed || full || showLive || isDemo||tabButton == 'live'}
                     >
                         {getClaimButtonText(expired,claiming,claimed, full, claims, showLive)}
