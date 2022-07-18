@@ -220,35 +220,37 @@ function WhitelistMarketplace() {
                             {/*</li>*/}
                         </ul>
 
+                        {/* TODO: broke prod */}
+
                         {/* show twitter login button only when never logged in yet */}
-                        <div hidden={code?.length > 0 || twitterId?.length > 0}>
-                            <br/>
-                            <IonButton className='mb-0 h-11' color={ mode === 'dark' ? '' : "dark"}
-                                onClick={() => {
-                                    instance
-                                        .post(
-                                            '/twitter-auth-url',
-                                            {
-                                                headers: {
-                                                    'Content-Type': 'application/json',
-                                                },
-                                            }
-                                        )
-                                        .then(({ data }) => {
-                                            window.location.href = data.authUrl;
-                                        })
-                                        .catch((e) => {
-                                            console.error(e);
-                                            present({
-                                                message: 'Twitter login failed',
-                                                color: 'error',
-                                                duration: 10000,
-                                            });
-                                        })
-                                }} >
-                                <IonIcon icon={logoTwitter} className="big-emoji mr-3"/> Login with Twitter
-                            </IonButton>
-                        </div>
+                        {/*<div hidden={code?.length > 0 || twitterId?.length > 0}>*/}
+                        {/*    <br/>*/}
+                        {/*    <IonButton className='mb-0 h-11' color={ mode === 'dark' ? '' : "dark"}*/}
+                        {/*        onClick={() => {*/}
+                        {/*            instance*/}
+                        {/*                .post(*/}
+                        {/*                    '/twitter-auth-url',*/}
+                        {/*                    {*/}
+                        {/*                        headers: {*/}
+                        {/*                            'Content-Type': 'application/json',*/}
+                        {/*                        },*/}
+                        {/*                    }*/}
+                        {/*                )*/}
+                        {/*                .then(({ data }) => {*/}
+                        {/*                    window.location.href = data.authUrl;*/}
+                        {/*                })*/}
+                        {/*                .catch((e) => {*/}
+                        {/*                    console.error(e);*/}
+                        {/*                    present({*/}
+                        {/*                        message: 'Twitter login failed',*/}
+                        {/*                        color: 'error',*/}
+                        {/*                        duration: 10000,*/}
+                        {/*                    });*/}
+                        {/*                })*/}
+                        {/*        }} >*/}
+                        {/*        <IonIcon icon={logoTwitter} className="big-emoji mr-3"/> Login with Twitter*/}
+                        {/*    </IonButton>*/}
+                        {/*</div>*/}
 
                     </div>
                 </div>

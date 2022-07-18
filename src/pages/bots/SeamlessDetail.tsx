@@ -199,7 +199,9 @@ const SeamlessDetail: React.FC<AppComponentProps> = () => {
                                     // duration: 10000,
                                 });
                             }
-                            history.push(`/seamless`);
+                            // history.push(`/seamless`);
+                            history.goBack();
+
                             reset(data);
                         }catch(error){
                             reset(data);

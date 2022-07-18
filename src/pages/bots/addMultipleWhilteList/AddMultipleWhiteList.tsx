@@ -253,7 +253,7 @@ const AddMultipleWhiteList: React.FC<AppComponentProps> = () => {
                         buttons: [{ text: 'Got it!', handler: () => dismiss() }],
                         // duration: 20000,
                     });
-                    history.goBack()
+                    history.goBack();
                 }
 
                 if(failedServerDetails.length>0){
