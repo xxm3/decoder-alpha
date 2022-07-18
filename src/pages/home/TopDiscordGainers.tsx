@@ -60,16 +60,6 @@ const TopDiscordGainers = () => {
      * Use Effects
      */
 
-    /*
-            TODO !!! calendar
-
-             implement top gainers! -- also fix counts not working! ----- Need “top twitter/discord 24 hrs” on mints.js to work (and home page) - had redis errors
-
-             - Fix calendar with graphs … recent cron messing up….
-                 announce it …
-                make sure ME launchpad in there …
-     */
-
     return (
             <>
                 { topSearchWordsQuery?.data?.data?.length > 0 ?

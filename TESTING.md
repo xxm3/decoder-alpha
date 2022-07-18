@@ -375,17 +375,17 @@ This lets the app know your server hasn't initiated any Seamless yet.
 - If you logs in with other users, you can see that Seamless.
 
 ### Seamless - Initiate raffle-type Seamless
-- go to /manageserver and add one of your servers
-- go to "initiate seamless" and choose "raffle" for giveaway type
+- go to /dao and add one of your servers
+- go to "initiate seamless" and choose "raffle" for giveaway type. Submit it, then Enter the raffle
 - now login with other users that have required roles in target server
 - you can see the created Seamless and click on "enter raffle"
 - Do this for several more users so that "users entered" can exceed "winning spots".
-This can be tested by manually adding rows in whitelistClaims table directly. 
+This can be tested by manually adding rows in whitelistClaims table directly.
 ex. INSERT INTO whitelistClaims(id, createdAt, updatedAt, whitelist_id, user_id, state) VALUES('2b2e2668-ea75-4512-ad1e-8b83ec57d3d4', '2022-07-08 10:29:32', '2022-07-08 10:29:32', 'd501a370-3a55-4b8d-8673-ce3f76750083', '15dc1f47-05b5-4744-b679-1e23140ea139', 'REQUESTED')
-- Modify "expiration date" value in whitelistPartnerships table to already past date.
-This needs to be done because raffling can only occur after it is expired. Or you can comment out "expiration_date" filter at models.whitelists.findAll inside /raffleWhitelists endpoint
-- Run "http://localhost:5001/nft-discord-relay/us-central1/api/raffleWhitelists" on browser to simulate cron job
-- Now for winners, roles are added to discords. For failed users, they are removed from the claims table
+
+- Modify "expiration date" value in whitelistPartnerships table to an already past date. This needs to be done because raffling can only occur after it is expired.
+- Run "http://localhost:5001/nft-discord-relay/us-central1/api/raffleWhitelists" on your browser to simulate cron job
+- Now for winners, roles are added to the discord. For failed users, they are removed from the claims table
 - When you go to /seamless page, you can see notification and confetti in case you've won in the raffle.
 
 ### Seamless - Login with Twitter
@@ -407,7 +407,7 @@ This needs to be done because raffling can only occur after it is expired. Or yo
 - for particular server max users and required roles must be entered and fill rest of the form
 - after filled form you can click on submit button and boom multiple entries are saved successfully. you will be redirect to dao page.
 - if one of the server has something wrong and doesn't save then you will be on same page with server that are not saved yet.
-- If user role is "no Role" then user can submit only single white list if user try multiple at that time user redirect to home page 
+- If user role is "no Role" then user can submit only single white list if user try multiple at that time user redirect to home page
 - if user already have required roll at then auto fill field required role and show a drop down to select role
 - if user have no required role then its show a text input for required role id and required role name
 - user initiate new whitelist then autofill form with past data that user previously added
@@ -424,7 +424,7 @@ This needs to be done because raffling can only occur after it is expired. Or yo
  - Select the wallet watch channel after selecting channel it should send message to that channel and you can able to see the success popup.
  [Image_url](https://screenrec.com/share/CYXQ4i5g9m)
 - TODO: above needs major revisions. Doesn't explain how to do things with the wallet watch (which Prof Decoder already wrote elsewhere). This is SUPPOSED To explain how to test the tomorrows-mints.
- 
+
 
 ### Auto join a discord when user claim the whitelist with the source server in which he/she not joined.
 - Create a new whitelist with the source server in which user who going to claim that whitelist is not joined.

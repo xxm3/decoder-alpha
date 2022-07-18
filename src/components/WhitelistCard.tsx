@@ -121,7 +121,7 @@ function WhitelistCard({
                 if(won) {
                     setIsExploding && setIsExploding(true);
                     present({
-                        message: `You've won whitelist raffle. You are now whitelisted in ${sourceServer.name}`,
+                        message: `You've won a whitelist raffle. You are now whitelisted in ${sourceServer.name}`,
                         color: 'success',
                         duration: 10_000,
                     });
@@ -284,7 +284,7 @@ function WhitelistCard({
 
                             const message = isFcfs ?
                                 `Whitelist claimed successfully! You are now whitelisted in ${sourceServer.name}` :
-                                `Entered whitelist raffle successfully! You are now waiting for whitelist raffle in ${sourceServer.name}`;
+                                `Entered whitelist raffle successfully! You are now waiting for the results in ${sourceServer.name}`;
                             present({
                                 message,
                                 color: 'success',
