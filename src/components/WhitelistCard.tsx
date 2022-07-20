@@ -221,30 +221,30 @@ function WhitelistCard({
                         </>) : ''
                     }
 
-
                     <p>Required Role (in "{targetServer?.name}" DAO)</p>
                     <p>{required_role_name}</p>
                     <p className="timeLeft" hidden={expired || expired === undefined}>Time left</p>
-                    <span hidden={expired || expired === undefined}><TimeAgo setExpired={setExpired} date={expiration_date}/> </span>
+                    <div hidden={expired || expired === undefined}>
+                        <TimeAgo setExpired={setExpired} date={expiration_date}/> 
+                    </div>
                 </div>
 
                 {(tabButton === 'myDoa' || tabButton === 'live')  && isEditWhitelist  &&
                     <div className=' text-xl flex justify-center mt-5'>
-                            <div className={`seamless-tab-btn-active-colored edit-btn w-50 h-10 `}  onClick={()=>{
-                        history.replace({pathname:`seamlessdetail/${sourceServer?.discordGuildId}`,state:{id:id,editForm:true,discordGuildId:targetServer?.discordGuildId,sourceServer:sourceServer}})
-                    }}>
-                                <div className="text-sm md:text-base p-2 md:px-4 w-full">EDIT</div>
-                                <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={createOutline}></IonIcon></div>
-
-                            </div>
-                            <div className={`seamless-tab-btn-active-colored danger-btn w-50 h-10 ml-3 `} onClick={()=>{
-                        deleteWhiteList(id)
-                    }}>
-                                <div className="text-sm md:text-base p-2 md:px-4 w-full">DELETE</div>
-                                <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={trashOutline}></IonIcon></div>
-                            </div>
+                        <div className={`seamless-tab-btn-active-colored edit-btn w-50 h-10 `}  onClick={()=>{
+                            history.replace({pathname:`seamlessdetail/${sourceServer?.discordGuildId}`,state:{id:id,editForm:true,discordGuildId:targetServer?.discordGuildId,sourceServer:sourceServer}})
+                        }}>
+                            <div className="text-sm md:text-base p-2 md:px-4 w-full">EDIT</div>
+                            <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={createOutline}></IonIcon></div>
+                        </div>
+                        <div className={`seamless-tab-btn-active-colored danger-btn w-50 h-10 ml-3 `} onClick={()=>{
+                            deleteWhiteList(id)
+                        }}>
+                            <div className="text-sm md:text-base p-2 md:px-4 w-full">DELETE</div>
+                            <div className=" bg-black/[.4] py-2 px-4 c-res-bg-white"><IonIcon icon={trashOutline}></IonIcon></div>
+                        </div>
                     </div>
-                 }
+                }
 
                 {/* button! */}
 				{expired !== undefined && !iMod && <IonButton css={css`

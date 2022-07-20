@@ -28,7 +28,7 @@ function WhitelistMarketplace() {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code') || '';
     // const discordId = params.get('state');
-    let searchParam = ''; // window.location.search.slice(10,28);
+    let searchParam = window.location.search.slice(10,28);
 
     const [twitterId, setTwitterId] = useState('');
     const [isLoading, setIsLoading] = useState(true);
