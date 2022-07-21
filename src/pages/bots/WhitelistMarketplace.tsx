@@ -480,7 +480,7 @@ function WhitelistMarketplace() {
 
             <IonModal isOpen={modalWhitelist.length>0} onDidDismiss={() => setSourceServerData({id: '', category:''})} >
                 <IonContent className="flex items-center">
-                    <div id="scrollableDiv" style={{ height: 'calc(100vh - 150px)', overflow: "auto" }}>
+                    <div id="scrollableDiv" style={{ height: '100%', overflow: "auto" }}>
                         <div className="flex flex-row justify-center w-full mt-9">
                             {modalWhitelist[0] && <span className='text-xl font-semibold mb-1'>Whitelists for "{modalWhitelist[0].sourceServer?.name}"</span>}
                         </div>
