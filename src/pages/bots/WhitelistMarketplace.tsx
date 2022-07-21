@@ -131,13 +131,10 @@ function WhitelistMarketplace() {
                         if (whitelist.claims?.some((cl: any) => cl.user?.discordId === userId)) whiteListMyClaim.push(whitelist);
                     }
 
-                    let aaa = getGroupFromList(whiteListMyDao);
-                    console.log('-----------------aaa');
-                    console.log(aaa);
-                    // setLiveWhiteList(getGroupFromList(whiteListLive));
-                    // setExpireWhiteList(getGroupFromList(whiteListExpire));
+                    setLiveWhiteList(getGroupFromList(whiteListLive));
+                    setExpireWhiteList(getGroupFromList(whiteListExpire));
                     setMyDaoWhiteList(getGroupFromList(whiteListMyDao));
-                    // setMyClaimWhiteList(getGroupFromList(whiteListMyClaim));
+                    setMyClaimWhiteList(getGroupFromList(whiteListMyClaim));
 
                     return whitelists;
                 } catch (error) {
@@ -276,8 +273,6 @@ function WhitelistMarketplace() {
             {/* if whitelists avail. */}
             {whitelists && whitelists.length > 0 ?
                 <div>
-
-
                     {/* tabs on the top (Live vs Expired) */}
                     <div className=' text-xl flex justify-center mt-5'>
                         <div className={`${isTabButton === 'myDoa' ? 'seamless-tab-btn-active-colored' : 'seamless-tab-btn-deactive ' } w-50 h-10 `} onClick={()=>setIsTabButton('myDoa')}>
@@ -361,9 +356,14 @@ function WhitelistMarketplace() {
                                 >
                                     <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                                         {
-                                            liveWhiteList.length > 0 ? liveWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) =>{
-                                                return (<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding}  tabButton={isTabButton} key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
-                                            }): <div className='text-xl'> There are no whitelists available</div>
+                                            // liveWhiteList.length > 0 ? liveWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) =>{
+                                            //     return (<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding}  tabButton={isTabButton} key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
+                                            // }): <div className='text-xl'> There are no whitelists available</div>
+                                            liveWhiteList.length > 0 ? liveWhiteList.slice(0 ,rowsPerPage).map((whitelistArray:any) => {
+                                                return whitelistArray.length>1
+                                                    ? (<WhitelistCard {...whitelistArray[0]} numOfElements={whitelistArray.length} setSourceServerId={setSourceServerId} tabButton={isTabButton} key={whitelistArray[0].sourceServer.id} deleteWhiteList={deleteWhiteList} />)
+                                                    : (<WhitelistCard {...whitelistArray[0]} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelistArray[0].id} deleteWhiteList={deleteWhiteList} />)
+                                            }) : <div className='text-xl'> There are no whitelists available</div>
                                         }
                                     </div>
                             </InfiniteScroll>
@@ -389,8 +389,10 @@ function WhitelistMarketplace() {
                         >
                             <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                                 {
-                                    expireWhiteList.length > 0 ? expireWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) => {
-                                        return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton}  key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
+                                    expireWhiteList.length > 0 ? expireWhiteList.slice(0 ,rowsPerPage).map((whitelistArray:any) => {
+                                        return whitelistArray.length>1
+                                            ? (<WhitelistCard {...whitelistArray[0]} numOfElements={whitelistArray.length} setSourceServerId={setSourceServerId} tabButton={isTabButton} key={whitelistArray[0].sourceServer.id} deleteWhiteList={deleteWhiteList} />)
+                                            : (<WhitelistCard {...whitelistArray[0]} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelistArray[0].id} deleteWhiteList={deleteWhiteList} />)
                                     }) : <div className='text-xl'> There are no whitelists available</div>
                                 }
                             </div>
@@ -417,8 +419,13 @@ function WhitelistMarketplace() {
                         >
                             <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                                 {
-                                    myClaimWhiteList.length > 0 ?  myClaimWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) => {
-                                        return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton}  key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
+                                    // myClaimWhiteList.length > 0 ?  myClaimWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) => {
+                                    //     return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton}  key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
+                                    // }) : <div className='text-xl'> There are no whitelists available</div>
+                                    myClaimWhiteList.length > 0 ? myClaimWhiteList.slice(0 ,rowsPerPage).map((whitelistArray:any) => {
+                                        return whitelistArray.length>1
+                                            ? (<WhitelistCard {...whitelistArray[0]} numOfElements={whitelistArray.length} setSourceServerId={setSourceServerId} tabButton={isTabButton} key={whitelistArray[0].sourceServer.id} deleteWhiteList={deleteWhiteList} />)
+                                            : (<WhitelistCard {...whitelistArray[0]} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelistArray[0].id} deleteWhiteList={deleteWhiteList} />)
                                     }) : <div className='text-xl'> There are no whitelists available</div>
                                 }
                             </div>
@@ -436,18 +443,13 @@ function WhitelistMarketplace() {
                     </div>
                 </div>
 
-
-
-
-
                 // if loading
             :   <>{ isLoading ? <div className='flex justify-center'> <Loader /> </div>
                     // no whitelists
                      : <div className='text-center text-xl mt-6'>There are no whitelists available</div> }
                 </> }
 
-
-            <IonModal isOpen={modelConfirmation.show} onDidDismiss={() => setModelConfirmation({...modelConfirmation,show:false,id:null})} >
+            <IonModal isOpen={modelConfirmation.show} onDidDismiss={() => setModelConfirmation({...modelConfirmation,show:false,id:null})} cssClass={isMobile ? 'logout-modal-mobile' :'logout-modal-web'} >
                 <IonContent className="flex items-center" scroll-y="false">
                     <div className='text-xl font-bold text-center w-full mt-5'>
                         Confirm !
@@ -462,7 +464,7 @@ function WhitelistMarketplace() {
                 </IonContent>
             </IonModal>
 
-            <IonModal isOpen={sourceServerId.length>0} onDidDismiss={() => setSourceServerId('')} cssClass={isMobile ? 'logout-modal-mobile' :'logout-modal-web'} >
+            <IonModal isOpen={sourceServerId.length>0} onDidDismiss={() => setSourceServerId('')} >
                 <IonContent className="flex items-center">
                 {
                     myDoaWhiteList.find((arr) => arr[0].sourceServer.id === sourceServerId)?.map((whitelist:any) => {

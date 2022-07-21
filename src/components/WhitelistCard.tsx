@@ -182,7 +182,7 @@ function WhitelistCard({
 
                     <div className="w-full">
                         <p className="text-lg font-bold">{sourceServer?.name}</p>
-                        <p className="text-xs italic">must be in "{targetServer?.name}" DAO</p>
+                        {!numOfElements && <p className="text-xs italic">must be in "{targetServer?.name}" DAO</p>}
                         <p className="text-xs italic"> Type: Whitelist </p>
                     </div>
 
@@ -190,19 +190,18 @@ function WhitelistCard({
             </div>
 
             <div className="py-4 px-6 flex-col flex" >
-
-                {showMore ?
+                {!numOfElements && (showMore ?
                     <span className='mb-3'>
                         {description}
                         {description?.length > 100 ? <span className="ml-2 text-sky-500 cursor-pointer" onClick={()=> setShowMore((n)=>!n)}>{showMore ? '(Less)'  : '(More)'}</span> : ''}
                     </span> :
                     <span className='mb-3'>
                         {description?.substring(0, 100)}
-                        {description?.length > 100 ? <span className="ml-2 text-sky-500 cursor-pointer" onClick={()=> setShowMore((n)=>!n)}>{showMore ? '(Less)'  : '(More)'}</span> : ''}
-                    </span>
+                        {description?.length > 100 ? <span className="ml-2 text-sky-500 cursor-pointer" onClick={()=> setShowMore((n)=>!n)}>{showMore ? '(Show Less)'  : '(Show More)'}</span> : ''}
+                    </span>)
                 }
 
-                <div className="whitelistInfo grid grid-cols-2">
+                {!numOfElements && <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>
                     <p>{type.toUpperCase()}</p>
 
@@ -231,9 +230,9 @@ function WhitelistCard({
                     <div hidden={expired || expired === undefined}>
                         <TimeAgo setExpired={setExpired} date={expiration_date}/> 
                     </div>
-                </div>
+                </div>}
 
-                {(tabButton === 'myDoa' || tabButton === 'live')  && isEditWhitelist  &&
+                {!numOfElements && (tabButton === 'myDoa' || tabButton === 'live')  && isEditWhitelist  &&
                     <div className=' text-xl flex justify-center mt-5'>
                         <div className={`seamless-tab-btn-active-colored edit-btn w-50 h-10 `}  onClick={()=>{
                             history.replace({pathname:`seamlessdetail/${sourceServer?.discordGuildId}`,state:{id:id,editForm:true,discordGuildId:targetServer?.discordGuildId,sourceServer:sourceServer}})
@@ -251,7 +250,7 @@ function WhitelistCard({
                 }
 
                 {/* button! */}
-				{expired !== undefined && !iMod && <IonButton css={css`
+				{!numOfElements && expired !== undefined && !iMod && <IonButton css={css`
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
 				`} className="my-2 self-center"
 
@@ -406,9 +405,9 @@ function WhitelistCard({
                 </IonButton> */}
 
 
-    </div>
+            </div>
 
-			</div>
+        </div>
     );
 }
 
