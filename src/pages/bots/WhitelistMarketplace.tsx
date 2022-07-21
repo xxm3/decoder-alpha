@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { instance } from '../../axios';
+import { constants } from "../../util/constants";
 import WhitelistCard from '../../components/WhitelistCard';
-import { IWhitelist } from '../../types/IWhitelist';
+import { IWhitelist, sourceServerData } from '../../types/IWhitelist';
 import usePersistentState from '../../hooks/usePersistentState';
 import Loader from '../../components/Loader';
 import {IonButton, IonCol, IonContent, IonGrid, IonItem, IonLabel, IonModal, IonRow, IonSkeletonText, useIonToast, IonIcon} from '@ionic/react';
@@ -11,8 +12,6 @@ import './SeamlessDetail.scss';
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-
-
 
 /**
  * The page they see when they are on /seamless, and browsing for whitelists etc..
@@ -42,7 +41,11 @@ function WhitelistMarketplace() {
         show:false,
         id:null
     });
-    const [sourceServerId, setSourceServerId ] = useState('');
+    const [sourceServerData, setSourceServerData ] = useState<sourceServerData>({
+        id: '',
+        category: ''
+    });
+    const [modalWhitelist, setModalWhitelist] = useState<IWhitelist[]>([]);
     const [rowsPerPage, setRowsPerPage] = useState(8)
     const [hasMore, setHasMore] = useState(true)
     const [present] = useIonToast();
@@ -56,9 +59,23 @@ function WhitelistMarketplace() {
     }, [window.innerWidth]);
 
     useEffect(() => {
-        console.log('------inside useeeffect');
-        console.log(sourceServerId);
-    }, [sourceServerId]);
+        switch(sourceServerData.category) {
+            case constants().whitelistGroupCategory.mydao:
+                setModalWhitelist(myDoaWhiteList.find((arr) => arr[0].sourceServer.id === sourceServerData.id) || []);
+                break;
+            case constants().whitelistGroupCategory.live:
+                setModalWhitelist(liveWhiteList.find((arr) => arr[0].sourceServer.id === sourceServerData.id) || []);
+                break;
+            case constants().whitelistGroupCategory.expired:
+                setModalWhitelist(expireWhiteList.find((arr) => arr[0].sourceServer.id === sourceServerData.id) || []);
+                break;
+            case constants().whitelistGroupCategory.myclaim:
+                setModalWhitelist(myClaimWhiteList.find((arr) => arr[0].sourceServer.id === sourceServerData.id) || []);
+                break;
+            default:
+                setModalWhitelist([]);
+        }        
+    }, [sourceServerData]);
 
     const uid = localStorage.getItem('uid');
     let userId: string;
@@ -328,7 +345,7 @@ function WhitelistMarketplace() {
                                     {
                                         myDoaWhiteList.length > 0 ? myDoaWhiteList.slice(0 ,rowsPerPage).map((whitelistArray:any) => {
                                             return whitelistArray.length>1
-                                                ? (<WhitelistCard {...whitelistArray[0]} numOfElements={whitelistArray.length} setSourceServerId={setSourceServerId} tabButton={isTabButton} key={whitelistArray[0].sourceServer.id} deleteWhiteList={deleteWhiteList} />)
+                                                ? (<WhitelistCard {...whitelistArray[0]} numOfElements={whitelistArray.length} setSourceServerData={setSourceServerData} category={constants().whitelistGroupCategory.mydao} tabButton={isTabButton} key={whitelistArray[0].sourceServer.id} deleteWhiteList={deleteWhiteList} />)
                                                 : (<WhitelistCard {...whitelistArray[0]} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelistArray[0].id} deleteWhiteList={deleteWhiteList} />)
                                         }) : <div className='text-xl'> There are no whitelists available</div>
                                     }
@@ -361,7 +378,7 @@ function WhitelistMarketplace() {
                                             // }): <div className='text-xl'> There are no whitelists available</div>
                                             liveWhiteList.length > 0 ? liveWhiteList.slice(0 ,rowsPerPage).map((whitelistArray:any) => {
                                                 return whitelistArray.length>1
-                                                    ? (<WhitelistCard {...whitelistArray[0]} numOfElements={whitelistArray.length} setSourceServerId={setSourceServerId} tabButton={isTabButton} key={whitelistArray[0].sourceServer.id} deleteWhiteList={deleteWhiteList} />)
+                                                    ? (<WhitelistCard {...whitelistArray[0]} numOfElements={whitelistArray.length} setSourceServerData={setSourceServerData} category={constants().whitelistGroupCategory.live} tabButton={isTabButton} key={whitelistArray[0].sourceServer.id} deleteWhiteList={deleteWhiteList} />)
                                                     : (<WhitelistCard {...whitelistArray[0]} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelistArray[0].id} deleteWhiteList={deleteWhiteList} />)
                                             }) : <div className='text-xl'> There are no whitelists available</div>
                                         }
@@ -391,7 +408,7 @@ function WhitelistMarketplace() {
                                 {
                                     expireWhiteList.length > 0 ? expireWhiteList.slice(0 ,rowsPerPage).map((whitelistArray:any) => {
                                         return whitelistArray.length>1
-                                            ? (<WhitelistCard {...whitelistArray[0]} numOfElements={whitelistArray.length} setSourceServerId={setSourceServerId} tabButton={isTabButton} key={whitelistArray[0].sourceServer.id} deleteWhiteList={deleteWhiteList} />)
+                                            ? (<WhitelistCard {...whitelistArray[0]} numOfElements={whitelistArray.length} setSourceServerData={setSourceServerData} category={constants().whitelistGroupCategory.expired} tabButton={isTabButton} key={whitelistArray[0].sourceServer.id} deleteWhiteList={deleteWhiteList} />)
                                             : (<WhitelistCard {...whitelistArray[0]} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelistArray[0].id} deleteWhiteList={deleteWhiteList} />)
                                     }) : <div className='text-xl'> There are no whitelists available</div>
                                 }
@@ -419,12 +436,9 @@ function WhitelistMarketplace() {
                         >
                             <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3  sm:grid-cols-2 gap-6 p-8">
                                 {
-                                    // myClaimWhiteList.length > 0 ?  myClaimWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) => {
-                                    //     return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton}  key={whitelist.id} deleteWhiteList={deleteWhiteList} />)
-                                    // }) : <div className='text-xl'> There are no whitelists available</div>
                                     myClaimWhiteList.length > 0 ? myClaimWhiteList.slice(0 ,rowsPerPage).map((whitelistArray:any) => {
                                         return whitelistArray.length>1
-                                            ? (<WhitelistCard {...whitelistArray[0]} numOfElements={whitelistArray.length} setSourceServerId={setSourceServerId} tabButton={isTabButton} key={whitelistArray[0].sourceServer.id} deleteWhiteList={deleteWhiteList} />)
+                                            ? (<WhitelistCard {...whitelistArray[0]} numOfElements={whitelistArray.length} setSourceServerData={setSourceServerData} category={constants().whitelistGroupCategory.myclaim} tabButton={isTabButton} key={whitelistArray[0].sourceServer.id} deleteWhiteList={deleteWhiteList} />)
                                             : (<WhitelistCard {...whitelistArray[0]} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelistArray[0].id} deleteWhiteList={deleteWhiteList} />)
                                     }) : <div className='text-xl'> There are no whitelists available</div>
                                 }
@@ -464,13 +478,37 @@ function WhitelistMarketplace() {
                 </IonContent>
             </IonModal>
 
-            <IonModal isOpen={sourceServerId.length>0} onDidDismiss={() => setSourceServerId('')} >
+            <IonModal isOpen={modalWhitelist.length>0} onDidDismiss={() => setSourceServerData({id: '', category:''})} >
                 <IonContent className="flex items-center">
-                {
-                    myDoaWhiteList.find((arr) => arr[0].sourceServer.id === sourceServerId)?.map((whitelist:any) => {
-                        return (<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelist.id} />)
-                    })
-                }
+                    <div id="scrollableDiv" style={{ height: 'calc(100vh - 150px)', overflow: "auto" }}>
+                        <div className="flex flex-row justify-center w-full mt-9">
+                            {modalWhitelist[0] && <span className='text-xl font-semibold mb-1'>Whitelists for "{modalWhitelist[0].sourceServer?.name}"</span>}
+                        </div>
+                        <InfiniteScroll
+                            dataLength={modalWhitelist.slice(0,rowsPerPage).length}
+                            next={()=>fetchMoreData(modalWhitelist)}
+                            hasMore={hasMore}
+                            loader={ modalWhitelist.length > 0 ?
+                                <div className='mb-5 flex justify-center'>
+                                    <Loader/>
+                                </div> : ''
+                                }
+                            scrollableTarget="scrollableDiv"
+                            endMessage={
+                                <p style={{ textAlign: "center" }}>
+                                <b>You've reached the end of the whitelists</b>
+                                </p>
+                            }
+                        >
+                            <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 sm:grid-cols-1 gap-6 p-8">
+                            {
+                                modalWhitelist.length > 0 ? modalWhitelist.slice(0 ,rowsPerPage).map((whitelist:any) => {
+                                    return (<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelist.id} />)
+                                }) : <div className='text-xl'> There are no whitelists available</div>
+                            }
+                            </div>
+                        </InfiniteScroll>
+                    </div>
                 </IonContent>
             </IonModal>
         </div>

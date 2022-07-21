@@ -28,10 +28,16 @@ export interface IWhitelist {
 	magicEdenUpvoteUrl:string;
 	iMod: boolean;
 	setIsExploding?:Dispatch<SetStateAction<boolean>>;
-	setSourceServerId?:Dispatch<SetStateAction<string>>;
+	setSourceServerData?:Dispatch<SetStateAction<sourceServerData>>;
 	isExploding?:boolean;
 	tabButton?:string;
 	deleteWhiteList?:any;
 	won: boolean;
 	numOfElements: number;
+	category: string;
+}
+
+export interface sourceServerData {
+	id: string | '',
+	category: string
 }
