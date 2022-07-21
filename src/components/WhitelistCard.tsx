@@ -50,7 +50,7 @@ function WhitelistCard({
     deleteWhiteList,
     won,
     myLiveDAO,
-    groupContents
+    numOfElements
 }: IWhitelist) {
     const history = useHistory()
 	const isDemo:any = useSelector<RootState>(state => state.demo.demo);
@@ -167,7 +167,7 @@ function WhitelistCard({
                  <div className='flex items-center justify-center mt-2 absolute top-1 right-2'>
 
                  {/* <div className='inviteIconWrapper'> <a onClick={()=> console.log(setSourceServerId)} className="hover:opacity-70" target="_blank" > 3 </a> </div> */}
-                    <div className='inviteIconWrapper'> <a onClick={()=> setSourceServerId && setSourceServerId(sourceServer.id)} className="hover:opacity-70" target="_blank" > 3 </a> </div>
+                    {numOfElements && (<div className='inviteIconWrapper'> <span onClick={()=> setSourceServerId && setSourceServerId(sourceServer.id)} className="hover:opacity-70 cursor-pointer"> {numOfElements} </span> </div>)}
 
                     {discordInvite && (<div className='inviteIconWrapper'> <a href={discordInvite} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoDiscord} className=" " /> </a> </div>)}
 

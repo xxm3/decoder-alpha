@@ -331,10 +331,10 @@ function WhitelistMarketplace() {
                                 >
                                     <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 sm:grid-cols-1 gap-6 p-8">
                                     {
-                                        myDoaWhiteList.length > 0 ? myDoaWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) => {
-                                            return whitelist.length>1
-                                                ? (<WhitelistCard {...whitelist[0]} groupContents={whitelist} isExploding={isExploding} setIsExploding={setIsExploding} setSourceServerId={setSourceServerId} tabButton={isTabButton} key={whitelist[0].id} deleteWhiteList={deleteWhiteList} />)
-                                                : (<WhitelistCard {...whitelist[0]} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelist[0].id} deleteWhiteList={deleteWhiteList} />)
+                                        myDoaWhiteList.length > 0 ? myDoaWhiteList.slice(0 ,rowsPerPage).map((whitelistArray:any) => {
+                                            return whitelistArray.length>1
+                                                ? (<WhitelistCard {...whitelistArray[0]} numOfElements={whitelistArray.length} setSourceServerId={setSourceServerId} tabButton={isTabButton} key={whitelistArray[0].sourceServer.id} deleteWhiteList={deleteWhiteList} />)
+                                                : (<WhitelistCard {...whitelistArray[0]} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelistArray[0].id} deleteWhiteList={deleteWhiteList} />)
                                         }) : <div className='text-xl'> There are no whitelists available</div>
                                     }
                                    </div>
@@ -447,7 +447,7 @@ function WhitelistMarketplace() {
                 </> }
 
 
-            <IonModal isOpen={modelConfirmation.show} onDidDismiss={() => setModelConfirmation({...modelConfirmation,show:false,id:null})} cssClass={isMobile ? 'logout-modal-mobile' :'logout-modal-web'} >
+            <IonModal isOpen={modelConfirmation.show} onDidDismiss={() => setModelConfirmation({...modelConfirmation,show:false,id:null})} >
                 <IonContent className="flex items-center" scroll-y="false">
                     <div className='text-xl font-bold text-center w-full mt-5'>
                         Confirm !
@@ -463,9 +463,9 @@ function WhitelistMarketplace() {
             </IonModal>
 
             <IonModal isOpen={sourceServerId.length>0} onDidDismiss={() => setSourceServerId('')} cssClass={isMobile ? 'logout-modal-mobile' :'logout-modal-web'} >
-                <IonContent className="flex items-center" scroll-y="false">
+                <IonContent className="flex items-center">
                 {
-                    myDoaWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) => {
+                    myDoaWhiteList.find((arr) => arr[0].sourceServer.id === sourceServerId)?.map((whitelist:any) => {
                         return (<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelist.id} />)
                     })
                 }

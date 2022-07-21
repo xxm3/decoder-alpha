@@ -10,7 +10,7 @@ export interface IWhitelist {
 	expiration_date : string;
 	image : string;
 	twitter : string | null;
-    discordInvite : string | null;
+	discordInvite : string | null;
 	type : "raffle" | "fcfs";
 	description : string;
 	required_role : string;
@@ -33,5 +33,5 @@ export interface IWhitelist {
 	tabButton?:string;
 	deleteWhiteList?:any;
 	won: boolean;
-	groupContents:IWhitelist[];
+	numOfElements: number;
 }
