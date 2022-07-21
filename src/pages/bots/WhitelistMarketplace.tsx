@@ -33,15 +33,16 @@ function WhitelistMarketplace() {
     const [twitterId, setTwitterId] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isTabButton, setIsTabButton] = useState<String>('myDoa');
-    const [liveWhiteList,setLiveWhiteList] = useState<IWhitelist[]>([]);
-    const [expireWhiteList,setExpireWhiteList] = useState<IWhitelist[]>([]);
-    const [myDoaWhiteList,setMyDaoWhiteList] = useState<IWhitelist[]>([]);
-    const [myClaimWhiteList,setMyClaimWhiteList] = useState<IWhitelist[]>([]);
+    const [liveWhiteList,setLiveWhiteList] = useState<IWhitelist[][]>([]);
+    const [expireWhiteList,setExpireWhiteList] = useState<IWhitelist[][]>([]);
+    const [myDoaWhiteList,setMyDaoWhiteList] = useState<IWhitelist[][]>([]);
+    const [myClaimWhiteList,setMyClaimWhiteList] = useState<IWhitelist[][]>([]);
     const [isExploding, setIsExploding] = useState<boolean>(false);
     const [modelConfirmation,setModelConfirmation ] = useState<modelType>({
         show:false,
         id:null
-    })
+    });
+    const [sourceServerId, setSourceServerId ] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(8)
     const [hasMore, setHasMore] = useState(true)
     const [present] = useIonToast();
@@ -53,6 +54,11 @@ function WhitelistMarketplace() {
             setIsMobile(true);
         }
     }, [window.innerWidth]);
+
+    useEffect(() => {
+        console.log('------inside useeeffect');
+        console.log(sourceServerId);
+    }, [sourceServerId]);
 
     const uid = localStorage.getItem('uid');
     let userId: string;
@@ -125,10 +131,13 @@ function WhitelistMarketplace() {
                         if (whitelist.claims?.some((cl: any) => cl.user?.discordId === userId)) whiteListMyClaim.push(whitelist);
                     }
 
-                    setLiveWhiteList(whiteListLive);
-                    setExpireWhiteList(whiteListExpire);
-                    setMyDaoWhiteList(whiteListMyDao)
-                    setMyClaimWhiteList(whiteListMyClaim)
+                    let aaa = getGroupFromList(whiteListMyDao);
+                    console.log('-----------------aaa');
+                    console.log(aaa);
+                    // setLiveWhiteList(getGroupFromList(whiteListLive));
+                    // setExpireWhiteList(getGroupFromList(whiteListExpire));
+                    setMyDaoWhiteList(getGroupFromList(whiteListMyDao));
+                    // setMyClaimWhiteList(getGroupFromList(whiteListMyClaim));
 
                     return whitelists;
                 } catch (error) {
@@ -190,7 +199,17 @@ function WhitelistMarketplace() {
         }, 100);
    	}
 
-
+    const getGroupFromList = (lists: Array<IWhitelist>) => {
+        const newList: any = {};
+        for (const whitelist of lists) {
+            if(whitelist.source_server in newList) {
+                newList[whitelist.source_server].push(whitelist);
+            } else {
+                newList[whitelist.source_server] = [whitelist];
+            }
+        }
+        return Object.values(newList)  as Array<IWhitelist>[];
+    }
 
     return (
 
@@ -313,8 +332,9 @@ function WhitelistMarketplace() {
                                     <div className="grid justify-center 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 sm:grid-cols-1 gap-6 p-8">
                                     {
                                         myDoaWhiteList.length > 0 ? myDoaWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) => {
-                                            return(<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelist.id} deleteWhiteList={deleteWhiteList} />
-                                            )
+                                            return whitelist.length>1
+                                                ? (<WhitelistCard {...whitelist[0]} groupContents={whitelist} isExploding={isExploding} setIsExploding={setIsExploding} setSourceServerId={setSourceServerId} tabButton={isTabButton} key={whitelist[0].id} deleteWhiteList={deleteWhiteList} />)
+                                                : (<WhitelistCard {...whitelist[0]} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelist[0].id} deleteWhiteList={deleteWhiteList} />)
                                         }) : <div className='text-xl'> There are no whitelists available</div>
                                     }
                                    </div>
@@ -427,7 +447,7 @@ function WhitelistMarketplace() {
                 </> }
 
 
-                <IonModal isOpen={modelConfirmation.show} onDidDismiss={() => setModelConfirmation({...modelConfirmation,show:false,id:null})} cssClass={isMobile ? 'logout-modal-mobile' :'logout-modal-web'} >
+            <IonModal isOpen={modelConfirmation.show} onDidDismiss={() => setModelConfirmation({...modelConfirmation,show:false,id:null})} cssClass={isMobile ? 'logout-modal-mobile' :'logout-modal-web'} >
                 <IonContent className="flex items-center" scroll-y="false">
                     <div className='text-xl font-bold text-center w-full mt-5'>
                         Confirm !
@@ -439,6 +459,16 @@ function WhitelistMarketplace() {
                         <IonButton onClick={() => DeleteWhiteListHandler()} color="primary" className="px-2 mx-0 w-full"> Delete </IonButton>
                         <IonButton onClick={() => setModelConfirmation({...modelConfirmation,show:false,id:null})} color="medium" className="px-2 mx-0 w-full"> Cancel </IonButton>
                     </div>
+                </IonContent>
+            </IonModal>
+
+            <IonModal isOpen={sourceServerId.length>0} onDidDismiss={() => setSourceServerId('')} cssClass={isMobile ? 'logout-modal-mobile' :'logout-modal-web'} >
+                <IonContent className="flex items-center" scroll-y="false">
+                {
+                    myDoaWhiteList.slice(0 ,rowsPerPage).map((whitelist:any) => {
+                        return (<WhitelistCard {...whitelist} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelist.id} />)
+                    })
+                }
                 </IonContent>
             </IonModal>
         </div>

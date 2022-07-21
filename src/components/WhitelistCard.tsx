@@ -45,11 +45,12 @@ function WhitelistCard({
     iMod,
     isExploding,
     setIsExploding,
+    setSourceServerId,
     tabButton,
     deleteWhiteList,
     won,
     myLiveDAO,
-
+    groupContents
 }: IWhitelist) {
     const history = useHistory()
 	const isDemo:any = useSelector<RootState>(state => state.demo.demo);
@@ -165,13 +166,16 @@ function WhitelistCard({
                  }} />
                  <div className='flex items-center justify-center mt-2 absolute top-1 right-2'>
 
-                            {discordInvite && (<div className='inviteIconWrapper'> <a href={discordInvite} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoDiscord} className=" " /> </a> </div>)}
+                 {/* <div className='inviteIconWrapper'> <a onClick={()=> console.log(setSourceServerId)} className="hover:opacity-70" target="_blank" > 3 </a> </div> */}
+                    <div className='inviteIconWrapper'> <a onClick={()=> setSourceServerId && setSourceServerId(sourceServer.id)} className="hover:opacity-70" target="_blank" > 3 </a> </div>
+
+                    {discordInvite && (<div className='inviteIconWrapper'> <a href={discordInvite} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoDiscord} className=" " /> </a> </div>)}
 
 
-                            {twitter && (<div className='inviteIconWrapper'> <a href={twitter} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoTwitter} className="" /> </a> </div>)}
+                    {twitter && (<div className='inviteIconWrapper'> <a href={twitter} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoTwitter} className="" /> </a> </div>)}
 
 
-                            {magicEdenUpvoteUrl && (<div className='inviteIconWrapper'> <a href={magicEdenUpvoteUrl} className="hover:opacity-70" target="_blank" > <img src={MagicEden} className=" " /> </a> </div>)}
+                    {magicEdenUpvoteUrl && (<div className='inviteIconWrapper'> <a href={magicEdenUpvoteUrl} className="hover:opacity-70" target="_blank" > <img src={MagicEden} className=" " /> </a> </div>)}
 
                     </div>
                 <div className="absolute flex bottom-0 right-0 justify-between bg-white bg-opacity-50 dark:bg-black dark:bg-opacity-50 py-2 px-5 left-0">
