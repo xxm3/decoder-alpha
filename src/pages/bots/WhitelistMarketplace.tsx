@@ -222,7 +222,11 @@ function WhitelistMarketplace() {
                 newList[whitelist.source_server] = [whitelist];
             }
         }
-        return Object.values(newList)  as Array<IWhitelist>[];
+        const whitelistArray: Array<IWhitelist>[] = Object.values(newList);
+        for (const arr of whitelistArray) {
+            arr.sort((a, b) => a.expiration_date < b.expiration_date ? -1 : 1);
+        }
+        return whitelistArray;
     }
 
     return (

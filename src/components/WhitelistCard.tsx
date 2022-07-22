@@ -165,15 +165,13 @@ function WhitelistCard({
                     currentTarget.style.opacity='0'
                  }} />
                  <div className='flex items-center justify-center mt-2 absolute top-1 right-2'>
-                    {numOfElements>0 
-                    ? (<div className='inviteIconWrapper cursor-pointer' onClick={()=> setSourceServerData && setSourceServerData({id: sourceServer.id, category})}> 
-                            <span className="hover:opacity-70"> {numOfElements} </span> 
-                        </div>) 
-                    : (<>
-                        {discordInvite && (<div className='inviteIconWrapper'> <a href={discordInvite} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoDiscord} className=" " /> </a> </div>)}
-                        {twitter && (<div className='inviteIconWrapper'> <a href={twitter} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoTwitter} className="" /> </a> </div>)}
-                        {magicEdenUpvoteUrl && (<div className='inviteIconWrapper'> <a href={magicEdenUpvoteUrl} className="hover:opacity-70" target="_blank" > <img src={MagicEden} className=" " /> </a> </div>)}
-                    </>)}
+                    {numOfElements && 
+                    (<div className='inviteIconWrapper cursor-pointer' onClick={()=> setSourceServerData && setSourceServerData({id: sourceServer.id, category})}> 
+                        <span className="hover:opacity-70"> {numOfElements} </span> 
+                    </div>)}
+                    {discordInvite && (<div className='inviteIconWrapper'> <a href={discordInvite} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoDiscord} className=" " /> </a> </div>)}
+                    {twitter && (<div className='inviteIconWrapper'> <a href={twitter} className="hover:opacity-70" target="_blank" > <IonIcon icon={logoTwitter} className="" /> </a> </div>)}
+                    {magicEdenUpvoteUrl && (<div className='inviteIconWrapper'> <a href={magicEdenUpvoteUrl} className="hover:opacity-70" target="_blank" > <img src={MagicEden} className=" " /> </a> </div>)}
                 </div>
                 <div className="absolute flex bottom-0 right-0 justify-between bg-white bg-opacity-50 dark:bg-black dark:bg-opacity-50 py-2 px-5 left-0">
 
@@ -187,7 +185,7 @@ function WhitelistCard({
             </div>
 
             <div className="py-4 px-6 flex-col flex" >
-                {!numOfElements && (showMore ?
+                {(showMore ?
                     <span className='mb-3'>
                         {description}
                         {description?.length > 100 ? <span className="ml-2 text-sky-500 cursor-pointer" onClick={()=> setShowMore((n)=>!n)}>{showMore ? '(Less)'  : '(More)'}</span> : ''}
@@ -198,7 +196,12 @@ function WhitelistCard({
                     </span>)
                 }
 
-                {!numOfElements && <div className="whitelistInfo grid grid-cols-2">
+                {numOfElements
+                ? <div className="whitelistInfo grid grid-cols-2">
+                    <p>Claimed State </p>
+                    <p>{'Yes'}</p>
+                </div>
+                : <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>
                     <p>{type.toUpperCase()}</p>
 
@@ -321,7 +324,7 @@ function WhitelistCard({
 
                 }
 
-                {!expired && iMod && <IonButton css={css`
+                {!numOfElements && !expired && iMod && <IonButton css={css`
 					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
 				`} className="my-2 self-center"
                      onClick={async () => {
