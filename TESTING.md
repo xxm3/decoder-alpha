@@ -395,6 +395,13 @@ ex. INSERT INTO whitelistClaims(id, createdAt, updatedAt, whitelist_id, user_id,
 - After you authorize, you are redirected to /seamless page again. Now you can't see "Twitter Login" button anymore.
 - If you check users table in DB, you will be able to see that relevant twitterId is added for you
 
+### Seamless - Grouping cards that have same source server
+- go to /manageserver
+- create several seamless for same mint server with various expiration dates, twitter urls, images, etc.
+- go to /seamless
+- check if these created seamlesses are grouped into one card. Latest expiring seamless info is shown on this grouping card. On upper part, there is a label button that shows how many seamlesses are grouped into this card.
+- at bottom area, there is an "Expand" button, which shows popup of grouped seamless cards. In case you've already claimed whitelist in this mint server, the button gets grayed out, but still clickable.
+
 ### Configure bot packages
 
  - when you enable or disable on module in server module page under the section configure bot packages at that time only once system will send one web hook message.
