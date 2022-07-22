@@ -177,7 +177,7 @@ function WhitelistCard({
 
                     <div className="w-full">
                         <p className="text-lg font-bold">{sourceServer?.name}</p>
-                        {!numOfElements && <p className="text-xs italic">must be in "{targetServer?.name}" DAO</p>}
+                        <p className="text-xs italic">must be in "{targetServer?.name}" DAO</p>
                         <p className="text-xs italic"> Type: Whitelist </p>
                     </div>
 
@@ -198,8 +198,8 @@ function WhitelistCard({
 
                 {numOfElements
                 ? <div className="whitelistInfo grid grid-cols-2">
-                    <p>Claimed State </p>
-                    <p>{'Yes'}</p>
+                    <p>Claimed </p>
+                    <p>{claimed ? 'Yes' : 'No'}</p>
                 </div>
                 : <div className="whitelistInfo grid grid-cols-2">
                     <p>Type </p>
@@ -250,137 +250,147 @@ function WhitelistCard({
                 }
 
                 {/* button! */}
-				{!numOfElements && expired !== undefined && !iMod && <IonButton css={css`
-					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
-				`} className="my-2 self-center"
-
-                     // when you click the button!
-                     onClick={async () => {
-                        setClaiming(true);
-
-                        try {
-
-                            // submit form!
-                            // await instance.post("/whitelistClaims", {
-                            await instance.post("/createWhitelistClaims", {
-                                whitelist_id : id,
-                                type
-                            });
-                            setIsExploding&&setIsExploding(true)
-                            queryClient.setQueryData(
-                                ['whitelistPartnerships'],
-                                (queryData) => (queryData as IWhitelist[]).map(
-                                    (whitelist) => {
-                                        if (whitelist.id === id) {
-                                            whitelist.claimed = true;
-                                            whitelist.claimCounts += 1
-                                        }
-                                        return whitelist;
-                                    }
-                                )
-                            );
-
-                            // success!
-                            if(isFcfs) {
-                                setIsExploding && setIsExploding(true);
-                            }
-
-                            const message = isFcfs ?
-                                `Whitelist claimed successfully! You are now whitelisted in ${sourceServer.name}` :
-                                `Entered whitelist raffle successfully! You are now waiting for the results in ${sourceServer.name}`;
-                            present({
-                                message,
-                                color: 'success',
-                                duration: 10_000,
-                            });
-
-                        // if error!
-                        } catch (error) {
-                            console.error(error);
-
-                            if(isAxiosError(error) && error.response?.data){
-                                present({
-                                    message: error.response?.data.body,
-                                    color: 'danger',
-                                    duration: 5000,
-                                });
-                            }
-                            else {
-                                present({
-                                    message: "Something went wrong",
-                                    color: 'danger',
-                                    duration: 5000,
-                                });
-                            }
-                        } finally {
-                            setClaiming(false);
-                        }
-                    }}
-                     hidden={iMod || !myLiveDAO}
-                     disabled={ expired || claiming || claimed || full || showLive || isDemo||tabButton == 'live'}
+                {numOfElements
+                ? <IonButton css={css`
+                    --background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
+                `} className="my-2 self-center"
+                    onClick={()=> setSourceServerData && setSourceServerData({id: sourceServer.id, category})}
+                    // when you click the 
                     >
-                        {getClaimButtonText(expired,claiming,claimed, full, claims, showLive)}
-                    </IonButton>
+                        Expand
+                </IonButton>
+                : <>
+                    {expired !== undefined && !iMod && <IonButton css={css`
+                        --background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
+                        `} className="my-2 self-center"
 
-                }
+                        // when you click the button!
+                        onClick={async () => {
+                            setClaiming(true);
 
-                {!numOfElements && !expired && iMod && <IonButton css={css`
-					--background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
-				`} className="my-2 self-center"
-                     onClick={async () => {
-                        setApproving(true);
+                            try {
 
-                        try {
-                            await instance.post(`/guilds/${sourceServer?.discordGuildId}/setInitiateApproved`, {});
-
-                            // success!
-                            present({
-                                message: 'Whitelist approved. This will be automatically approved later on',
-                                color: 'success',
-                                duration: 10000,
-                            });
-
-                            queryClient.setQueryData(
-                                ['whitelistPartnerships'],
-                                (queryData:any) => {
-                                    return (queryData as IWhitelist[]).map(
+                                // submit form!
+                                // await instance.post("/whitelistClaims", {
+                                await instance.post("/createWhitelistClaims", {
+                                    whitelist_id : id,
+                                    type
+                                });
+                                setIsExploding&&setIsExploding(true)
+                                queryClient.setQueryData(
+                                    ['whitelistPartnerships'],
+                                    (queryData) => (queryData as IWhitelist[]).map(
                                         (whitelist) => {
                                             if (whitelist.id === id) {
-                                                whitelist.iMod = false;
+                                                whitelist.claimed = true;
+                                                whitelist.claimCounts += 1
                                             }
                                             return whitelist;
                                         }
-                                    );
+                                    )
+                                );
+
+                                // success!
+                                if(isFcfs) {
+                                    setIsExploding && setIsExploding(true);
                                 }
-                            );
 
-                        // if error!
-                        } catch (error) {
-                            console.error(error);
+                                const message = isFcfs ?
+                                    `Whitelist claimed successfully! You are now whitelisted in ${sourceServer.name}` :
+                                    `Entered whitelist raffle successfully! You are now waiting for whitelist raffle in ${sourceServer.name}`;
+                                present({
+                                    message,
+                                    color: 'success',
+                                    duration: 10_000,
+                                });
 
-                            if(isAxiosError(error) && error.response?.data){
-                                present({
-                                    message: error.response?.data.body,
-                                    color: 'danger',
-                                    duration: 5000,
-                                });
+                            // if error!
+                            } catch (error) {
+                                console.error(error);
+
+                                if(isAxiosError(error) && error.response?.data){
+                                    present({
+                                        message: error.response?.data.body,
+                                        color: 'danger',
+                                        duration: 5000,
+                                    });
+                                }
+                                else {
+                                    present({
+                                        message: "Something went wrong",
+                                        color: 'danger',
+                                        duration: 5000,
+                                    });
+                                }
+                            } finally {
+                                setClaiming(false);
                             }
-                            else {
-                                present({
-                                    message: "Something went wrong",
-                                    color: 'danger',
-                                    duration: 5000,
-                                });
-                            }
-                        } finally {
-                            setApproving(false);
-                        }
-                    }}
-                    hidden={!approving && (!iMod || expired)}
-                    >
-                        {getApproveButtonText(iMod, approving)}
+                        }}
+                        hidden={iMod || !myLiveDAO}
+                        disabled={ expired || claiming || claimed || full || showLive || isDemo||tabButton == 'live'}
+                        >
+                            {getClaimButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>
-                }
+                    }
+                    {!expired && iMod && <IonButton css={css`
+                        --background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
+                    `} className="my-2 self-center"
+                        onClick={async () => {
+                            setApproving(true);
+
+                            try {
+                                await instance.post(`/guilds/${sourceServer?.discordGuildId}/setInitiateApproved`, {});
+
+                                // success!
+                                present({
+                                    message: 'Whitelist approved. This will be automatically approved later on',
+                                    color: 'success',
+                                    duration: 10000,
+                                });
+
+                                queryClient.setQueryData(
+                                    ['whitelistPartnerships'],
+                                    (queryData:any) => {
+                                        return (queryData as IWhitelist[]).map(
+                                            (whitelist) => {
+                                                if (whitelist.id === id) {
+                                                    whitelist.iMod = false;
+                                                }
+                                                return whitelist;
+                                            }
+                                        );
+                                    }
+                                );
+
+                            // if error!
+                            } catch (error) {
+                                console.error(error);
+
+                                if(isAxiosError(error) && error.response?.data){
+                                    present({
+                                        message: error.response?.data.body,
+                                        color: 'danger',
+                                        duration: 5000,
+                                    });
+                                }
+                                else {
+                                    present({
+                                        message: "Something went wrong",
+                                        color: 'danger',
+                                        duration: 5000,
+                                    });
+                                }
+                            } finally {
+                                setApproving(false);
+                            }
+                        }}
+                        hidden={!approving && (!iMod || expired)}
+                        >
+                            {getApproveButtonText(iMod, approving)}
+                    </IonButton>
+                    }
+                </>}
+                
                 {/* end button! */}
 
                 {/* <IonButton css={css`

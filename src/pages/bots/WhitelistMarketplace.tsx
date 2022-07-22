@@ -349,7 +349,7 @@ function WhitelistMarketplace() {
                                     {
                                         myDoaWhiteList.length > 0 ? myDoaWhiteList.slice(0 ,rowsPerPage).map((whitelistArray:any) => {
                                             return whitelistArray.length>1
-                                                ? (<WhitelistCard {...whitelistArray[0]} numOfElements={whitelistArray.length} setSourceServerData={setSourceServerData} category={constants().whitelistGroupCategory.mydao} tabButton={isTabButton} key={whitelistArray[0].sourceServer.id} deleteWhiteList={deleteWhiteList} />)
+                                                ? (<WhitelistCard {...whitelistArray[0]} numOfElements={whitelistArray.length} claimed={whitelistArray.some((wl:IWhitelist) => wl.claimed)} setSourceServerData={setSourceServerData} category={constants().whitelistGroupCategory.mydao} tabButton={isTabButton} key={whitelistArray[0].sourceServer.id} deleteWhiteList={deleteWhiteList} />)
                                                 : (<WhitelistCard {...whitelistArray[0]} isExploding={isExploding} setIsExploding={setIsExploding} tabButton={isTabButton} key={whitelistArray[0].id} deleteWhiteList={deleteWhiteList} />)
                                         }) : <div className='text-xl'> There are no whitelists available</div>
                                     }
