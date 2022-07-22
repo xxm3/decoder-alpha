@@ -253,6 +253,7 @@ function WhitelistCard({
                 {numOfElements
                 ? <IonButton css={css`
                     --background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
+                    ${claimed ? 'opacity: 0.5;' : ''}
                 `} className="my-2 self-center"
                     onClick={()=> setSourceServerData && setSourceServerData({id: sourceServer.id, category})}
                     // when you click the 
