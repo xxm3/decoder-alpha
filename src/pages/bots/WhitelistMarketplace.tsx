@@ -6,8 +6,8 @@ import WhitelistCard from '../../components/WhitelistCard';
 import { IWhitelist, sourceServerData } from '../../types/IWhitelist';
 import usePersistentState from '../../hooks/usePersistentState';
 import Loader from '../../components/Loader';
-import {IonButton, IonCol, IonContent, IonGrid, IonItem, IonLabel, IonModal, IonRow, IonSkeletonText, useIonToast, IonIcon} from '@ionic/react';
-import { logoTwitter } from "ionicons/icons";
+import {IonTitle, IonButtons, IonButton, IonCol, IonContent, IonGrid, IonItem, IonLabel, IonModal, IonRow, IonSkeletonText, useIonToast, IonIcon, IonHeader, IonToolbar} from '@ionic/react';
+import { logoTwitter, close } from "ionicons/icons";
 import './SeamlessDetail.scss';
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector } from 'react-redux';
@@ -479,11 +479,20 @@ function WhitelistMarketplace() {
             </IonModal>
 
             <IonModal isOpen={modalWhitelist.length>0} onDidDismiss={() => setSourceServerData({id: '', category:''})} >
-                <IonContent className="flex items-center">
-                    <div id="scrollableDiv" style={{ height: '100%', overflow: "auto" }}>
-                        <div className="flex flex-row justify-center w-full mt-9">
+                <IonHeader>
+                    <IonToolbar>
+                        <IonTitle>
                             {modalWhitelist[0] && <span className='text-xl font-semibold mb-1'>Whitelists for "{modalWhitelist[0].sourceServer?.name}"</span>}
-                        </div>
+                        </IonTitle>
+                        <IonButtons slot="end">
+                            <IonButton strong={true} onClick={() => setSourceServerData({id: '', category:''})}>
+                                <IonIcon icon={close} className="h-6 w-6"/>
+                            </IonButton>
+                        </IonButtons>
+                    </IonToolbar>
+                </IonHeader>
+                <IonContent className="flex items-center">
+                    <div id="scrollableDiv" style={{ height: '100%', overflow: "auto" }}>                            
                         <InfiniteScroll
                             dataLength={modalWhitelist.slice(0,rowsPerPage).length}
                             next={()=>fetchMoreData(modalWhitelist)}
