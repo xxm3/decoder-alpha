@@ -261,7 +261,9 @@ function WhitelistCard({
                         Expand
                 </IonButton>
                 : <>
-                    {expired !== undefined && !iMod && <IonButton css={css`
+                    {/* iMod reflects whether current user is Moderator. It is only set if current Seamless is very first created by the mint server */}
+                    {/* When the Seamless is approved by the Mod, it is reset to false */}
+                    {expired !== undefined && !iMod && myLiveDAO && <IonButton css={css`
                         --background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
                         `} className="my-2 self-center"
 
@@ -298,7 +300,7 @@ function WhitelistCard({
 
                                 const message = isFcfs ?
                                     `Whitelist claimed successfully! You are now whitelisted in ${sourceServer.name}` :
-                                    `Entered whitelist raffle successfully! You are now waiting for whitelist raffle in ${sourceServer.name}`;
+                                    `Entered whitelist raffle successfully! You are now waiting for the results in ${sourceServer.name}`;
                                 present({
                                     message,
                                     color: 'success',
@@ -327,13 +329,12 @@ function WhitelistCard({
                                 setClaiming(false);
                             }
                         }}
-                        hidden={iMod || !myLiveDAO}
                         disabled={ expired || claiming || claimed || full || showLive || isDemo||tabButton == 'live'}
                         >
                             {getClaimButtonText(expired,claiming,claimed, full, claims, showLive)}
                     </IonButton>
                     }
-                    {!expired && iMod && <IonButton css={css`
+                    {(!expired && iMod || approving) && <IonButton css={css`
                         --background: linear-gradient(93.86deg, #6FDDA9 0%, #6276DF 100%);
                     `} className="my-2 self-center"
                         onClick={async () => {
@@ -354,7 +355,7 @@ function WhitelistCard({
                                     (queryData:any) => {
                                         return (queryData as IWhitelist[]).map(
                                             (whitelist) => {
-                                                if (whitelist.id === id) {
+                                                if (whitelist.sourceServer?.discordGuildId === sourceServer?.discordGuildId) {
                                                     whitelist.iMod = false;
                                                 }
                                                 return whitelist;
@@ -385,7 +386,6 @@ function WhitelistCard({
                                 setApproving(false);
                             }
                         }}
-                        hidden={!approving && (!iMod || expired)}
                         >
                             {getApproveButtonText(iMod, approving)}
                     </IonButton>
